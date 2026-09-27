@@ -1,0 +1,571 @@
+// ============================================================================
+//  Oracle-text grammar — MTG Foundations set
+//  Convention: UPPERCASE = terminals (raw tokens / regex), lowercase = rules.
+//  No card names, numbers or colors are hardcoded into structural rules.
+//  Targets / subjects / objects are decomposed into atomic components:
+//    quantifier | otherness | status | color | card_kind | controller | zone
+// ============================================================================
+
+start: sentence+
+
+// ----------------------------------------------------------------------------
+//  sentence dispatch (deterministic by prefix)
+// ----------------------------------------------------------------------------
+sentence: loyalty_sentence
+        | modal_sentence
+        | activated_sentence
+        | as_long_sentence
+        | as_cost_sentence
+        | during_sentence
+        | until_sentence
+        | triggered_sentence
+        | if_sentence
+        | static_sentence
+        | static_keyword_sentence
+        | effect_sentence
+
+// ----------------------------------------------------------------------------
+//  conditional static ability:  "If <condition>, <effect>."
+// ----------------------------------------------------------------------------
+if_sentence: V_IF any_text "," effect
+            | V_IF any_text "," any_text
+            | V_IF any_text
+
+// ----------------------------------------------------------------------------
+//  static restrictions / one-liners that aren't keyword lists
+// ----------------------------------------------------------------------------
+static_sentence: "Activate" "only" "as" "a" "sorcery"
+               | "Activate" "only" "once" ("each" | "per") "turn"
+               | "Activate" "only" "if" any_text
+               | "This" "ability" "triggers" "only" "once" ("each" | "per") "turn"
+               | "This" "spell" "can't" "be" "countered"
+               | "It's" "still" "a" GENERIC_TYPE
+               | "This" "card" "is" "still" "a" GENERIC_TYPE
+               | "You" "can't" "lose" "the" "game"
+               | "Your" "opponents" "can't" "win" "the" "game"
+               | "You" "can't" "lose" "the" "game" "and" "your" "opponents" "can't" "win" "the" "game"
+               | "Players" "can't" "gain" "life"
+               | "Each" "player" "loses" "the" "game"
+               | "You" "win" "the" "game"
+
+// ----------------------------------------------------------------------------
+//  loyalty   [+1]: <effect>   [−4]: <effect>
+// ----------------------------------------------------------------------------
+loyalty_sentence: LOY_COST ":" effect (xdef_clause)?
+LOY_COST: /\[[\-\u2212+]\d+\]/
+
+// ----------------------------------------------------------------------------
+//  modal     "Choose one"  /  "Choose one that hasn't been chosen"
+// ----------------------------------------------------------------------------
+modal_sentence: "Choose one"
+              | "Choose one that hasn't been chosen"
+              | "Choose" WORD
+
+// ----------------------------------------------------------------------------
+//  activated ability
+//    <cost>, <cost>, ... : <effect>
+//    cost item: mana | {T} | {Q} | Sacrifice <card> | Remove <counter> |
+//                Tap <card> | Exile <card> | Pay <n> life
+// ----------------------------------------------------------------------------
+activated_sentence: cost_list ":" if_clause? effect
+cost_list: cost_item ("," cost_item)*
+cost_item: MANA+
+         | MANA+ "and" MANA+
+         | "{T}"
+         | "{Q}"
+         | V_SACRIFICE card_target
+         | V_REMOVE counter_amount "counter" "from" card_target
+         | V_REMOVE "a" counter_name "counter" "from" card_target
+         | V_REMOVE amount counter_name "counters" "from" card_target
+         | V_TAP card_target
+         | V_EXILE card_target
+         | V_PAY amount "life"
+         | V_PAY amount "mana"
+         | V_RETURN card_target "to" "its" "owner's" "hand"
+
+// ----------------------------------------------------------------------------
+//  triggered ability
+//    <trigger clause> [if <condition>], <effect>
+// ----------------------------------------------------------------------------
+triggered_sentence: trigger_clause "," if_clause? effect trailing_if?
+as_long_sentence: "As" "long" "as" any_text "," effect
+during_sentence: "During" during_time "," effect
+until_sentence: "Until" "end" "of" "turn" "," effect
+as_cost_sentence: "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," effect
+during_time: "your" "turn" | "each" "of" "your" "turns" | "combat"
+trigger_clause: trig_when event?
+              | COND_KEYWORD EMDASH trig_when event?
+              | COND_KEYWORD EMDASH event?
+              | COND_KEYWORD EMDASH static_text
+trig_when: V_WHEN | V_WHATEVER | V_AT "the" "beginning" "of" AT_WHEN | V_AS
+AT_WHEN: /your upkeep|your end step|each end step|each of your turns|combat on your turn|combat|your untap step|each player's draw step/
+event: event_subject EVENT_VERB event_object?
+      | V_YOU EVENT_VERB event_object?
+      | V_YOU V_PUT counter_amount counter_kind "on" card_target
+      | event_subject "is" "put" "into" zone
+event_subject: card_target "or" card_target | card_target | player
+EVENT_VERB: /enters or dies|enters|dies|attacks|deals|becomes|casts|cast|discards|draws|draw|gains|gain|loses|lose|taps|untaps|fights|is countered|leaves|resolves|becomes tapped|is dealt|attacks for the first time each turn|is put/
+event_object: ("combat" "damage" "to" (player | card_target))?
+            | ("combat" | "noncombat") "damage" "to" (player | card_target)
+            | ("combat" | "noncombat") "damage" "during" "your" "turn"
+            | "your" "second" "card" "each" "turn"
+            | "a" "card"
+            | "a" "spell"
+            | "a" "noncreature" "spell"
+            | "an" "instant" "or" "sorcery" "spell"
+            | "a" "noncreature" "or" CARDNAME "spell"
+            | "an" "instant" "or" "sorcery"
+            | "a" "sorcery" "spell"
+            | "a" "land"
+            | "life"
+            | "damage" "to" (player | card_target)
+            | card_target
+if_clause: V_IF any_text ","
+trailing_if: V_IF any_text
+
+// ----------------------------------------------------------------------------
+//  static keyword list (optionally with a modifier: Ward {4}, Kicker {2}, ...)
+// ----------------------------------------------------------------------------
+static_keyword_sentence: kw_with_mod
+                       | kw_list
+                       | kw_list_mod
+                       | kw_list "," kw_with_mod
+                       | kw_with_mod "," kw_list
+kw_list_mod: kw_item ("," kw_item)* ("," "and" kw_item)?
+kw_item: KEYWORD (MANA+ | "from" colors)?
+kw_with_mod: MOD_KEYWORD (MANA+ | "for" card_target | "from" (colors | "instants" | "sorceries" | GENERIC_TYPE) | number)?
+            | MOD_KEYWORD EMDASH V_PAY amount "life"
+            | "Protection" "from" (colors | "everything")
+            | "Hexproof" "from" (colors | "instants")
+
+// ----------------------------------------------------------------------------
+//  generic effect sentence
+// ----------------------------------------------------------------------------
+effect_sentence: ("Then" | "And")? effect (xdef_clause)?
+
+// ----------------------------------------------------------------------------
+//  effect = one or more actions joined by and / then / ,
+// ----------------------------------------------------------------------------
+effect: action (JOIN action)*
+JOIN: /,\s*(then|and)\b|\bthen\b|\band\b|,/
+
+// ----------------------------------------------------------------------------
+//  actions — each built from atomic pieces (card_target, amount, zone, ...)
+// ----------------------------------------------------------------------------
+action: add_mana_action
+       | create_token_action
+       | put_counter_action
+       | remove_counter_action
+       | search_action
+       | draw_action
+       | gain_life_action
+       | lose_life_action
+       | deal_damage_action
+       | counter_spell_action
+       | return_action
+       | put_zone_action
+       | exile_action
+       | destroy_action
+       | tap_action
+       | untap_action
+       | sacrifice_action
+       | gain_control_action
+       | scry_action
+       | surveil_action
+       | mill_action
+       | fight_action
+       | attach_action
+       | stat_action
+       | gain_kw_action
+       | become_action
+       | gain_quote_action
+       | prevent_action
+       | look_action
+       | reveal_action
+       | discard_action
+       | shuffle_action
+       | cast_action
+       | play_action
+       | enters_action
+       | enchant_action
+       | cant_action
+       | no_max_hand_action
+       | can_gain_life_action
+       | attacks_each_combat_action
+       | choose_action
+       | may_action
+       | cost_mod_action
+       | double_action
+       | separate_action
+       | spend_mana_action
+       | pay_action
+       | stat_define_action
+       | emblem_action
+
+// ---- individual actions ----
+
+add_mana_action: V_ADD mana_amount
+mana_amount: "one" "mana" "of" "any" "color"
+           | "one" "mana" "of" "the" "chosen" "color"
+           | "three" "mana" "of" "any" "one" "color"
+           | "two" "mana" "of" "any" "one" "color"
+           | "G" "for" "each" card_target
+           | MANA+ ("or" MANA+)*
+           | MANA+ "for" "each" card_target
+
+create_token_action: (who)? V_CREATE token ("if" any_text)?
+token: "a" "token" "that's" "a" "copy" "of" card_target token_except?
+      | token_num POWER_T? colors? token_types? ("creature" | "card")? "token" "s"? ("named" ("~'s" CARDNAME | CARDNAME))? ("with" kw_list)?
+      | "a" "number" "of" POWER_T? colors? token_types? "creature" "tokens" "equal" "to" xdef
+token_num: "a" | "an" | "that" "many" | amount
+token_types: CARDNAME+
+token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
+             | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
+
+put_counter_action: V_PUT counter_amount counter_kind "on" card_target
+remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
+counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
+counter_amount: amount | "one" "or" "more" | "that" "many" | "a" | "an"
+counter_name: WORD+
+
+search_action: V_SEARCH zone "for" card_target ("reveal" "it")? ("put" "it" "into" zone)? ("then" "shuffle")?
+             | V_SEARCH zone "for" card_target ("put" "it" "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
+             | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
+             | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle")?
+
+draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target
+            | (who)? V_DRAW draw_amount "card" "s"? ("for" "each" "different" "mana" "value" "among" card_target)?
+           | (who)? V_DRAW draw_amount "card" "s"?
+           | (who)? V_DRAW "cards" "equal" "to" "its" "power"
+draw_amount: amount | "a" | "an" | "that" "many" | "that" "much"
+
+gain_life_action: who V_GAIN life_amount ("for" "each" card_target)?
+                | who V_GAIN "life" "equal" "to" xdef
+life_amount: amount "life" | "that" "much" "life" | "that" "many" "life" | "life" "equal" "to" "the" "life" "lost" "this" "way"
+lose_life_action: who V_LOSE life_amount
+                | player V_LOSE life_amount
+
+deal_damage_action: card_target V_DEAL amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")?
+                  | card_target V_DEAL amount? "damage" "to" damage_who ("and" amount? "damage" "to" damage_who)?
+                  | amount? "damage" "to" damage_who
+                  | card_target V_DEAL amount? "damage" "equal" "to" "its" "power" "to" damage_who
+                  | card_target V_DEAL amount "damage" "divided" "as" "you" "choose" "among" "any" "number" "of" damage_who
+damage_who: card_target "or" card_target
+          | card_target
+          | "any" V_TARGET
+          | "each" "of" "up to" amount "other" "target" "s"?
+          | "each" "opponent"
+          | "each" "player"
+          | "each" "creature" "without" "flying"
+
+counter_spell_action: V_COUNTER card_target "spell"
+
+return_action: V_RETURN card_target "to" ("its" "owner's" "hand" | "the" "battlefield" | "your" "hand")
+             | V_RETURN card_target "to" "the" "battlefield" "tapped"
+             | V_RETURN card_target "to" "the" "battlefield" "under" "its" "owner's" "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+             | V_RETURN card_target "with" "mana" "value" mv_cmp ("from" "your" "graveyard")? "to" "the" "battlefield"
+mv_cmp: amount "or" ("less" | "more")
+       | ("less" | "greater") "than" "or" "equal" "to" (card_target | V_THIS | V_THAT) "'s" ("power" | "mana" "value")
+             | V_RETURN card_target "to" "its" "owner's" "hand" "tapped"
+             | V_RETURN card_target "to" "its" "owner's" "hand" "and" "you" V_CREATE "a" "Treasure" "token"
+
+put_zone_action: V_PUT card_target "into" zone ("in" "a" "random" "order")?
+               | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? ("in" "a" "random" "order")?
+               | "the" "rest" "on" "the" "bottom" ("of" "your" "library")? ("in" "a" "random" "order")?
+               | V_PUT "the" "rest" "into" zone
+               | V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")?
+               | V_PUT card_target "on" "top" "of" "your" "library"
+               | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
+
+exile_action: V_EXILE card_target ("until" "this" "enchantment" "leaves" "the" "battlefield")?
+            | V_EXILE "the" "top" amount "cards" "of" "your" "library"
+            | V_EXILE "the" "top" "card" "of" "your" "library"
+            | V_EXILE "the" "top" "card" "of" "each" "player's" "library"
+            | V_EXILE card_target "from" zone ("with" "a" counter_name "counter" "on" "it")?
+            | V_EXILE "all" "other" card_target "tokens" "you" "control"
+
+destroy_action: V_DESTROY card_target
+              | V_DESTROY card_target "and" "all" "other" "permanents" "with" "the" "same" "name" "as" "that" "permanent"
+
+tap_action: V_TAP card_target
+untap_action: V_UNTAP card_target
+sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")?
+gain_control_action: V_GAIN "control" "of" card_target ("until" "end" "of" "turn")?
+scry_action: V_SCRY amount
+surveil_action: V_SURVEIL amount
+mill_action: V_MILL amount "cards"
+           | player V_MILL amount "cards"
+fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
+            | ("it" | card_target)? V_FIGHT ("up to" "one")? V_TARGET card_target ("you" "don't" "control")?
+            | "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
+attach_action: V_ATTACH "it" "to" card_target ("you" "control")?
+
+stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")?
+stat_change: POWER_MOD ("and" ("has" | "gains" | "have" | "gain") kw_list)?
+           | ("has" | "gains" | "have" | "gain") kw_list
+gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)?
+
+become_action: card_target (V_IS | "becomes") (V_A | V_AN) (POWER_T)? (CARDNAME+ | types) ("in" "addition" "to" "its" "other" "types")? ("with" any_text)?
+
+prevent_action: V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" card_target ("this" "turn")?
+              | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
+
+look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" ("any" "time")?
+           | V_LOOK "at" "an" "opponent's" "hand"
+reveal_action: V_REVEAL card_target ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library")? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
+             | V_REVEAL "the" "top" amount "cards" "of" "your" "library"
+             | card_target V_REVEAL "their" "hand"
+             | V_REVEAL card_target "from" "the" "top" "of" "your" "library" "until" "you" V_REVEAL "a" "land" "card"
+discard_action: (who)? V_DISCARD card_target
+              | "You" V_MAY V_DISCARD card_target
+shuffle_action: V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
+cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" "their" "mana" "costs")? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
+play_action: V_PLAY ("an" "additional" "land" | card_target) ("this" "turn")? ("on" "each" "of" "your" "turns")?
+choose_action: (player)? V_CHOOSE amount? choose_obj
+choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
+           | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text
+
+may_action: V_YOU V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
+        | gain_life_action | lose_life_action | exile_action | attach_action | cast_action
+        | play_action | scry_action | surveil_action | create_token_action | reveal_action
+        | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
+        | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action)
+
+cost_mod_action: card_target V_COST cost_amount "less" "to" "cast"
+               | "The" WORD "cost" "is" "equal" "to" any_text
+               | card_target V_COST "an" "additional" MANA+ "to" "cast"
+cost_amount: amount | MANA+
+               | card_target "costs" "double" "what" "they" "normally" "would"
+               | card_target "cost" "the" "same" "amount" "as" "its" "base" "mana" "cost"
+
+double_action: V_DOUBLE "the" "number" "of" any_text
+separate_action: V_SEPARATE "them" "into" "a" "face-down" "pile" "and" "a" "face-up" "pile"
+spend_mana_action: (V_YOU "can")? V_SPEND ("this" "mana" | "mana" "of" "any" "type") ("only")? "to" "cast" card_target
+pay_action: V_PAY MANA+
+stat_define_action: "~'s" "power" "and" "toughness" "are" "each" "equal" "to" xdef
+gain_quote_action: (card_target)? V_GAIN QUOTE
+
+emblem_action: V_YOU "get" "an" "emblem" "with" QUOTE
+             | "You" "get" "an" "emblem"
+
+enters_action: card_target V_ENTERS ("tapped" | "with" counter_amount counter_kind "on" "it") ("for" "each" any_text)? ("if" any_text)?
+enchant_action: V_ENCHANT enchant_target
+enchant_target: GENERIC_TYPE ("," GENERIC_TYPE)* ("or" GENERIC_TYPE)?
+cant_action: card_target V_CANT ("be" "countered" | "block" | "attack" | "attack" "or" "block" | "be" "blocked" ("by" card_target)? | "lose" "this" "mana" | "untap" "during" "your" "untap" "step") ("this" "turn")?
+no_max_hand_action: "You" "have" "no" "maximum" "hand" "size"
+can_gain_life_action: "Players" V_CANT V_GAIN "life"
+attacks_each_combat_action: card_target "attacks" "each" "combat" "if" "able"
+
+// permissive free text used only inside condition / keyword-trigger contexts
+any_text: ANYWORD+
+ANYWORD: /[a-zA-Z0-9+{}\/.\'~-]+/
+
+// ----------------------------------------------------------------------------
+//  X definition clause:  "where X is <something>"
+// ----------------------------------------------------------------------------
+xdef_clause: (",")? "where" "X" "is" xdef
+xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target
+    | "the" "total" "power" "of" card_target
+    | "its" "power"
+    | "its" "toughness"
+    | "the" "mana" "value" "of" "that" "spell"
+    | "that" "card's" "mana" "cost"
+    | "the" "amount" "of" "excess" "damage" "dealt" "to" "that" "creature" "this" "way"
+    | "the" "greatest" "power" "among" "other" "creatures" "you" "control"
+    | "your" "life" "total"
+    | "the" "life" "lost" "this" "way"
+    | "the" "amount" "of" "life" "you" "gained" "this" "turn"
+    | "the" "number" "of" "cards" "in" "your" "opponents'" "graveyards"
+    | "the" "number" "of" "attacking" "creatures"
+    | CARDNAME "and" CARDNAME "'s" "power"
+    | "the" "number" "of" "soul" "counters" "on" "this" "artifact"
+
+// ----------------------------------------------------------------------------
+//  ATOMIC PIECES
+// ----------------------------------------------------------------------------
+
+//  amount: a count
+amount: NUMBER | "X" | "one" | "two" | "three" | "four" | "five" | "six" | "seven" | "eight" | "nine" | "ten" | "eleven" | "twelve" | "thirteen" | "fourteen" | "fifteen" | "sixteen" | "seventeen" | "eighteen" | "nineteen" | "twenty"
+       | "seven" | "eight" | "nine" | "ten" | "eleven" | "twelve" | "thirteen"
+
+//  zone: a game zone (optionally owned)
+zone: (OWNER)? (ZONE_WORD)
+ZONE_WORD: /battlefield|graveyard|hand|library|exile/
+OWNER: /your|their|an opponent's|the|a|its owner's/
+
+//  player reference
+player: (V_EACH | V_AN | V_TARGET | V_ANOTHER | V_THAT)? ("opponent" | "player" | V_YOU)
+
+//  WHO: an actor that gains/loses life etc.
+who: player | card_target | ("Its" | "its") "controller"
+
+//  colors
+colors: color (("," | "and") color)*
+color: COLOR
+COLOR: /white|blue|black|red|green/i
+
+//  card types (generic + proper-noun subtypes resolved in the transformer)
+types: GENERIC_TYPE | CARDNAME
+GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorceries?|basic|nonbasic|nontoken|walls?/i
+INSTANT_SORCERY: /\b[iI]nstant and sorcery\b/
+
+//  the star: an atomic card reference
+card_target: this_that? otherness? quantifier? nontoken? status_list? colors? possessive? card_kind? with_modifier? controller? with_modifier? in_zone? with_modifier?
+            | quantifier "of" card_target
+this_that: V_THIS | V_THAT | V_IT | "those" | "these"
+possessive: "your" | "its" | "their" | "an opponent's" | "that player's" | "that opponent's"
+otherness: V_OTHER | V_ANOTHER
+nontoken: NONTYPE ("," NONTYPE)*
+NONTYPE: /non(?:token|creature|land|basic)|non-[A-Z][a-zA-Z]+/i
+quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of"
+          | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET
+          | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount | V_A | V_AN
+status_list: STATUS+
+STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|face-up|face-down/i
+card_kind: THIS_CARD | types
+         | "basic" THIS_CARD
+         | "basic" "land" | "basic" "land" "card" | "basic" "land" "cards"
+         | "source" | "sources"
+         | types "or" types
+         | types "," "or" types
+         | types "," types "," "or" types
+         | types "," types "," "and" types
+         | CARDNAME ("creature" "card" | "creature" "cards" | "creature" | "creatures" | "spell" | "spells" | "card" | "cards" | "permanent" | "permanents")
+         | "card" | "cards" | "creature" | "creatures" | "spell" | "spells"
+         | "creature" "card" | "creature" "cards" | "land" | "land" "card" | "permanent" | "permanent" "card" | "permanent" "cards"
+         | "artifact" "card" | "enchantment" "card" | "planeswalker" "card"
+         | "creature" "spells" | "permanent" "spells" | "artifact" "spells" | "enchantment" "spells" | "land" "spells"
+         | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
+         | "it" | "them"
+         | INSTANT_SORCERY "spell" "s"?
+         | "instant" "or" "sorcery" "card" "s"?
+         | "creature" "or" "land" "card" "s"?
+with_modifier: "with" (kw_list | "power" amount CMP? | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | "a" POWER_MOD "counter" "on" "it" | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
+             | "that" "are" types
+             | "that" "is" GENERIC_TYPE
+             | "of" "the" "chosen" ("type" | "color")
+             | "named" CARDNAME
+             | "that" "wasn't" "put" "onto" "the" "battlefield"
+             | "that" "was" "put" "there" "this" "turn"
+             | "that" "was" "put" "there" "this" "instant"
+             | "whose" "controller" "was" "dealt" "combat" "damage" "by" "this" "creature" "this" "turn"
+             | "of" "each" "permanent" "type"
+CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i
+controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "control"
+          | "you" "don't" "control" | "you" "own" | "an" "opponent" "owns" | "its" "controller"
+          | "controlled" "by" "different" "players" | "you" "already" "control"
+          | "you" "cast" | "you" "played"
+in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "library" | "from" "your" "graveyard"
+        | "in" "a" "graveyard" | "in" "exile" | "from" "a" "graveyard" | "from" "their" "graveyard"
+        | "from" "a" "single" "graveyard" | "from" "all" "graveyards" | "in" "your" "graveyard" | "on" "the" "battlefield"
+
+//  keyword list
+kw_list: KEYWORD (kw_sep KEYWORD)*
+kw_sep: "and" | "," | "," "and"
+KEYWORD: /\b(flying|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch)\b/i
+
+//  modified static keywords (Ward {4}, Kicker {2}, Crew 3, ...)
+MOD_KEYWORD: /ward|kicker|crew|flashback|affinity|protection|hexproof|equip/i
+COND_KEYWORD: /raid|threshold|landfall|morbid|formidable|ferocious|alliance/i
+static_text: any_text
+
+//  quoted oracle text (opaque)
+QUOTE: /"[^"]*"/
+EMDASH: /—|–/
+
+//  case-insensitive verb terminals (word-bounded)
+//  (a verb can be sentence-initial (capitalised) or mid-sentence (lowercase))
+V_ADD: /\badd\b/i
+V_CREATE: /\bcreate(s?)\b/i
+V_PUT: /\bput\b/i
+V_REMOVE: /\bremove\b/i
+V_SEARCH: /\bsearch\b/i
+V_DRAW: /\bdraws?\b/i
+V_GAIN: /\bgain(s?)\b/i
+V_LOSE: /\blose(s?)\b/i
+V_DEAL: /\bdeal(s?)\b/i
+V_COUNTER: /\bcounter\b/i
+V_RETURN: /\breturn\b/i
+V_EXILE: /\bexile\b/i
+V_DESTROY: /\bdestroy\b/i
+V_TAP: /\btap\b/i
+V_UNTAP: /\buntap\b/i
+V_SACRIFICE: /\bsacrifice(s?)\b/i
+V_SCRY: /\bscry\b/i
+V_SURVEIL: /\bsurveil\b/i
+V_MILL: /\bmill(s?)\b/i
+V_FIGHT: /\bfight(s?)\b/i
+V_ATTACH: /\battach\b/i
+V_GET: /\bget(s?)\b/i
+V_HAS: /\bha[vs]e\b/i
+V_PREVENT: /\bprevent\b/i
+V_LOOK: /\blook(s?)\b/i
+V_SEPARATE: /\bseparate(s?)\b/i
+V_REVEAL: /\breveal(s?)\b/i
+V_DISCARD: /\bdiscard(s?)\b/i
+V_SHUFFLE: /\bshuffle\b/i
+V_CAST: /\bcast(s?)\b/i
+V_PLAY: /\bplay(s?)\b/i
+V_ENCHANT: /\benchant\b/i
+V_ENTERS: /\benters\b/i
+V_CANT: /\bcan't\b/i
+V_MAY: /\bmay\b/i
+V_PAY: /\bpay(s?)\b/i
+V_DOUBLE: /\bdouble\b/i
+V_CHANGE: /\bchange\b/i
+V_SPEND: /\b(spend|spent)\b/i
+V_COST: /\bcost(s?)\b/i
+V_END: /\bend(s?)\b/i
+V_WIN: /\bwin\b/i
+
+//  case-insensitive function words (sentence-initial forms are capitalised)
+V_WHEN: /\bwhen\b/i
+V_WHATEVER: /\bwhenever\b/i
+V_IF: /\bif\b/i
+V_IN: /\bin\b/i
+V_AT: /\bat\b/i
+V_AS: /\bas\b/i
+V_THIS: /\bthis\b/i
+V_THAT: /\bthat\b/i
+V_YOU: /\byou\b/i
+V_EACH: /\beach\b/i
+V_OTHER: /\bother\b/i
+V_EQUIPPED: /\bequipped\b/i
+V_ENCHANTED: /\benchanted\b/i
+V_ALL: /\ball\b/i
+V_TARGET: /\btarget\b/i
+V_CHOOSE: /\bchoose(s?)\b/i
+V_NONTOKEN: /\bnontoken\b/i
+V_INTO: /\binto\b/i
+V_ONTO: /\bonto\b/i
+V_ON: /\bon\b/i
+V_FROM: /\bfrom\b/i
+V_TO: /\bto\b/i
+V_OF: /\bof\b/i
+V_FOR: /\bfor\b/i
+V_WITH: /\bwith\b/i
+V_AND: /\band\b/i
+V_OR: /\bor\b/i
+V_BY: /\bby\b/i
+V_IS: /\bis\b/i
+V_WAS: /\bwas\b/i
+V_BE: /\bbe\b/i
+V_HAD: /\bhad\b/i
+V_UP: /\bup\b/i
+V_A: /\ba\b/i
+V_AN: /\ban\b/i
+V_ANOTHER: /\banother\b/i
+V_IT: /\bit\b/i
+
+//  names / words / misc
+THIS_CARD: "~"
+CARDNAME: /[A-Z][a-zA-Z']+(?:'s)?/
+WORD: /[a-zA-Z]+(?:'s|')?/
+MANA: /\{[^}]*\}/
+POWER_T: /\d+\/\d+/
+POWER_MOD: /[+-](\d+|X)\/[+-](\d+|X)/
+NUMBER: /\d+/
+number: NUMBER
+
+%ignore WS
+WS: /[\s\u00A0]+/

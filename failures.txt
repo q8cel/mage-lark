@@ -1,0 +1,167 @@
+Whenever you attack with three or more creatures, put a +1/+1 counter on target creature you control
+Whenever you gain life for the first time during each of your turns, create a 1/1 white Cat creature token
+When this creature enters, create a number of 1/1 white Rabbit creature tokens equal to the number of other creatures you control named ~
+A deck can have any number of cards named ~
+During your turn, creatures you control with +1/+1 counters on them have first strike
+Whenever you gain life for the first time each turn, surveil 1
+Threshold — This creature can't be blocked as long as there are seven or more cards in your graveyard
+When you do, tap target creature an opponent controls
+Threshold — Whenever ~ attacks, if there are seven or more cards in your graveyard, you may create Scion of the Deep, a legendary 8/8 blue Octopus creature token
+Target creature's owner puts it on their choice of the top or bottom of their library
+Threshold — This creature gets +2/+1 as long as there are seven or more cards in your graveyard
+You may pay {B} rather than pay this spell's mana cost if there are thirteen or more creatures on the battlefield
+You may put one of those cards back on top of your library
+It's a Demon in addition to its other types
+{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn
+When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
+Create a tapped 1/1 black Rat creature token for each creature card in your graveyard
+During your turn, you may play cards you don't own with stash counters on them from exile, and mana of any type can be spent to cast those spells
+Whenever you attack, target creature you control gets +1/+0 and gains menace until end of turn
+Double target creature's power until end of turn
+[−4]: ~ deals 8 damage divided as you choose among any number of target creatures and/or planeswalkers
+Whenever this creature attacks while you control a creature with power 4 or greater, this creature gets +1/+0 and gains menace until end of turn
+Exile up to one target Equipment attached to that creature
+Raid — This creature enters with a +1/+1 counter on it if you attacked this turn
+This creature doesn't untap during your untap step
+Until the end of your next turn, you may play that card
+Whenever another nontoken creature you control dies, you may reveal cards from the top of your library until you reveal a creature card
+Whenever this creature attacks, another target creature you control gains trample and gets +X/+X until end of turn, where X is this creature's power
+Whenever this creature enters or attacks, draw a card, then discard a card
+Threshold — This creature gets +1/+1 and has deathtouch as long as there are seven or more cards in your graveyard
+As long as your life total is greater than your starting life total, ~ gets +1/+1 and has menace. ~ gets an additional +5/+5 as long as your life total is at least 10 greater than your starting life total
+Raid — At the beginning of your end step, if you attacked this turn, each opponent loses 3 life unless that player sacrifices a nonland permanent of their choice or discards a card
+Equipped creature has "{1}, {T}, Tap ~: Put a bait counter on ~."
+{4}, {T}, Sacrifice this artifact: Each opponent loses life equal to the number of soul counters on this artifact
+When this creature enters, exile target player's graveyard
+Creatures your opponents control enter tapped
+Each other Angel you control enters with an additional +1/+1 counter on it for each Angel you already control
+Return all attacking creatures to their owner's hand
+Whenever you cast a spell during an opponent's turn, put a +1/+1 counter on this creature
+Enchant creature, land, or planeswalker
+Enchanted permanent is a colorless land with "{T}: Add {C}" and loses all other card types and abilities
+Return those creatures to their owners' hands
+End the turn
+This spell costs {1} less to cast for each instant and sorcery card in your graveyard
+Enchanted creature loses all abilities and is a green and white Citizen creature with base power and toughness 1/1 named Legitimate Businessperson
+As an additional cost to cast this spell, sacrifice a creature or pay {3}{B}
+Whenever an opponent casts a spell, that player loses 5 life unless they discard a card
+For each land you control, create a Treasure token
+{T}: Create X 1/1 red Goblin creature tokens, where X is the number of Goblins you control
+Then put all cards revealed this way that weren't put onto the battlefield into your graveyard
+Activate only once
+Whenever one or more +1/+1 counters are put on another non-Hydra creature you control, put a +1/+1 counter on this creature
+Whenever you cast a spell, each opponent reveals cards from the top of their library until they reveal a land card, then puts those cards into their graveyard
+During each of your turns, you may play a land and cast a permanent spell of each permanent type from your graveyard
+Whenever ~ attacks while you control a creature with power 4 or greater, ~ gets +2/+2 until end of turn
+Whenever you cast an instant or sorcery spell, copy it for each other instant and sorcery spell you've cast before it this turn
+You may choose new targets for the copies
+When this creature enters, you may search your library for a basic land card, reveal it, then shuffle and put that card on top
+Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the chosen type
+Each other Angel you control enters with an additional +1/+1 counter on it for each Angel you already control
+Threshold — Whenever ~ attacks, if there are seven or more cards in your graveyard, you may create Scion of the Deep, a legendary 8/8 blue Octopus creature token
+You may pay {B} rather than pay this spell's mana cost if there are thirteen or more creatures on the battlefield
+When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
+During your turn, you may play cards you don't own with stash counters on them from exile, and mana of any type can be spent to cast those spells
+Then put all cards revealed this way that weren't put onto the battlefield into your graveyard
+Whenever another nontoken creature you control dies, you may reveal cards from the top of your library until you reveal a creature card
+Whenever this creature attacks, another target creature you control gains trample and gets +X/+X until end of turn, where X is this creature's power
+As long as your life total is greater than your starting life total, ~ gets +1/+1 and has menace. ~ gets an additional +5/+5 as long as your life total is at least 10 greater than your starting life total
+[−4]: ~ deals 8 damage divided as you choose among any number of target creatures and/or planeswalkers
+Each other Angel you control enters with an additional +1/+1 counter on it for each Angel you already control
+Threshold — Whenever ~ attacks, if there are seven or more cards in your graveyard, you may create Scion of the Deep, a legendary 8/8 blue Octopus creature token
+You may pay {B} rather than pay this spell's mana cost if there are thirteen or more creatures on the battlefield
+When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
+During your turn, you may play cards you don't own with stash counters on them from exile, and mana of any type can be spent to cast those spells
+Then put all cards revealed this way that weren't put onto the battlefield into your graveyard
+Whenever another nontoken creature you control dies, you may reveal cards from the top of your library until you reveal a creature card
+Whenever this creature attacks, another target creature you control gains trample and gets +X/+X until end of turn, where X is this creature's power
+As long as your life total is greater than your starting life total, ~ gets +1/+1 and has menace. ~ gets an additional +5/+5 as long as your life total is at least 10 greater than your starting life total
+[−4]: ~ deals 8 damage divided as you choose among any number of target creatures and/or planeswalkers
+During each of your turns, you may play a land and cast a permanent spell of each permanent type from your graveyard
+During each of your turns, you may play a land and cast a permanent spell of each permanent type from your graveyard
+Threshold — Whenever ~ attacks, if there are seven or more cards in your graveyard, you may create Scion of the Deep, a legendary 8/8 blue Octopus creature token
+You may pay {B} rather than pay this spell's mana cost if there are thirteen or more creatures on the battlefield
+When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
+During your turn, you may play cards you don't own with stash counters on them from exile, and mana of any type can be spent to cast those spells
+Whenever another nontoken creature you control dies, you may reveal cards from the top of your library until you reveal a creature card
+Whenever this creature attacks, another target creature you control gains trample and gets +X/+X until end of turn, where X is this creature's power
+As long as your life total is greater than your starting life total, ~ gets +1/+1 and has menace. ~ gets an additional +5/+5 as long as your life total is at least 10 greater than your starting life total
+Whenever one or more creatures you control attack, you gain 1 life for each attacking creature
+{3}{W}{W}: Attacking creatures you control get +X/+X until end of turn, where X is the number of attacking creatures
+Enchanted creature loses all abilities and is a black Skeleton creature with base power and toughness 1/1
+Enchanted creature doesn't untap during its controller's untap step
+Whenever a Vampire you control dies, you may pay 2 life
+Skeletons you control and other Zombies you control get +1/+1 and have deathtouch
+At the beginning of combat on your turn, you may have target creature get +2/+0 until end of turn
+{R}: Until end of turn, another target Goblin you control gains flying and "When this creature deals combat damage, sacrifice it."
+When this creature enters, it deals damage to target creature an opponent controls equal to the number of Goblins you control
+Distribute three +1/+1 counters among one, two, or three target creatures, then double the number of +1/+1 counters on each of those creatures
+Each creature you control gets +3/+3 until end of turn and must be blocked this turn if able
+Enchanted land has "{T}: Add two mana of any one color."
+Kithkin spells and Soldier spells you cast cost {1} less to cast
+Return it to the battlefield under your control at the beginning of the next end step
+Exile target creature or planeswalker that's black or red
+You gain 1 life for each creature destroyed this way
+This creature gets +1/+0 as long as any player controls a black permanent
+Destroy target creature with toughness 4 or greater
+Then discard a card unless you attacked this turn
+At the beginning of each player's draw step, that player draws an additional card
+If X is 10 or more, instead shuffle your graveyard into your library, draw X cards, untap up to five lands, and you have no maximum hand size for the rest of the game
+Counter target red or green spell
+Search your library for an instant card or a card with flash, reveal it, put it into your hand, then shuffle
+Return all nonland permanents target player controls to their owner's hand
+Destroy target green or white creature
+You lose the game
+At the beginning of each combat, any opponent may sacrifice a creature of their choice
+For each creature card put into a graveyard this way, you create a tapped 2/2 black Zombie creature token
+You choose a noncreature, nonland card from it
+This creature gets +1/+0 as long as any player controls a white permanent
+Whenever a nontoken creature you control dies, this creature deals 1 damage to you and you draw a card
+Remove a divinity counter from ~: Each opponent discards their hand
+You gain life equal to that creature's toughness
+An opponent gains control of this artifact
+Activate only during your turn
+At the beginning of the end step, sacrifice this creature
+Change the target of target spell or ability with a single target
+Whenever this creature deals combat damage to a player, each player discards their hand, then draws seven cards
+Target opponent gains control of target permanent you control
+When this creature dies, you may put the exiled card into its owner's hand
+Whenever an opponent casts a white or blue instant or sorcery spell, this creature deals 2 damage to that player
+At the beginning of your upkeep, this creature deals 1 damage to you
+When this creature enters, create two 1/1 black Rat creature tokens with "This token can't block."
+Search your library for up to two basic land cards and/or Gate cards, put them onto the battlefield tapped, then shuffle
+Whenever a creature you control with deathtouch deals combat damage to a player, that player gets two poison counters
+Whenever you cast a spell that targets this creature, draw a card
+{2}{G}{G}: Put X +1/+1 counters on this creature, where X is its power
+Whenever an opponent casts a blue or black spell, you may put a +1/+1 counter on this creature
+Then if it has three or more +1/+1 counters on it, sacrifice this Aura
+When you sacrifice this Aura, search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle
+Whenever a creature dealt damage by this creature this turn dies, put a +1/+1 counter on this creature
+Whenever you cast a creature spell, create a 3/3 green Beast creature token
+When you do, put X +1/+1 counters on this creature
+Whenever ~ attacks for the first time each turn, untap all creatures you control
+After this phase, there is an additional combat phase
+{1}, Sacrifice another creature: You gain life equal to the sacrificed creature's toughness
+~'s power is equal to the number of instant and sorcery cards in your graveyard
+Otherwise, ~ deals 1 damage to each opponent
+At the beginning of combat on your turn, put X +1/+1 counters on another target creature you control, where X is ~'s power
+Ward—{3}, Pay 3 life
+Whenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the mana value of that spell
+Until end of turn, you don't lose this mana as steps and phases end
+When you next cast an instant or sorcery spell this turn, copy that spell
+You may choose new targets for the copy
+Whenever this creature deals combat damage to a player, you may destroy target artifact or enchantment that player controls
+{T}, Put a page counter on this artifact: Scry 1
+{2}, {T}, Put a page counter on this artifact: Draw a card
+When there are four or more page counters on this artifact, exile it
+When that mana is spent to cast a red instant or sorcery spell, copy that spell and you may choose new targets for the copy
+Whenever you cast a spell, put a +1/+1 counter on ~ for each of that spell's colors
+Remove five +1/+1 counters from ~: Add {W}{W}{U}{U}{B}{B}{R}{R}{G}{G}
+Activated abilities of sources with the chosen name can't be activated unless they're mana abilities
+{T}, Sacrifice this artifact: Exile each opponent's graveyard
+Then you may have it become a 0/0 Elemental creature until end of turn
+That land's controller may search their library for a basic land card, put it onto the battlefield, then shuffle
+This creature gets +2/+2 as long as you have 25 or more life
+You control enchanted permanent
+You lose life equal to that permanent's mana value
+This creature is the chosen type in addition to its other types

@@ -1,0 +1,772 @@
+Total sentences: 1669
+Unique sentences: 769
+
+[113] Flying
+[36] Flash
+[32] This land enters tapped.
+[27] Trample
+[12] Lifelink
+[12] Reach
+[12] First strike
+[11] {T}: Add {C}.
+[10] Enchant creature
+[10] This spell can't be countered.
+[10] When this land enters, you gain 1 life.
+[10] When this land enters, scry 1.
+[9] Vigilance
+[9] Whenever you gain life, put a +1/+1 counter on this creature.
+[9] Deathtouch
+[9] Choose one —
+[8] Defender
+[7] Draw a card, then discard a card.
+[7] Activate only as a sorcery.
+[7] Draw a card.
+[6] You can't lose the game and your opponents can't win the game.
+[6] Instant and sorcery spells you cast cost {1} less to cast.
+[6] Flying, deathtouch
+[6] Whenever an opponent loses life, you gain that much life.
+[6] Menace
+[6] If a source you control would deal damage to an opponent or a permanent an opponent controls, it deals double that damage instead.
+[5] Whenever you put one or more +1/+1 counters on this creature, draw a card.
+[5] This ability triggers only once each turn.
+[5] Whenever a creature you control deals combat damage to a player, put a loyalty counter on Kaito.
+[5] [+1]: Up to one target creature you control can't be blocked this turn.
+[5] [−2]: Create a 2/1 blue Ninja creature token.
+[5] [−9]: You get an emblem with "Whenever a player casts a spell, you create a 2/1 blue Ninja creature token."
+[5] Flying, vigilance
+[5] Whenever this creature attacks, you may sacrifice another creature.
+[5] Equip {2}
+[5] It's still a land.
+[5] Haste
+[5] Double strike
+[4] Other Cats you control get +1/+1.
+[4] Whenever Arahbo or another nontoken Cat you control enters, create a 1/1 white Cat creature token.
+[4] When this Equipment enters, attach it to target creature you control.
+[4] That creature gains hexproof and indestructible until end of turn.
+[4] Equipped creature gets +2/+0 and has flying.
+[4] Equip {3}{W}
+[4] You have hexproof.
+[4] Prevent all noncombat damage that would be dealt to other creatures you control.
+[4] Return all creature cards with mana value 2 or less from your graveyard to the battlefield.
+[4] Whenever another creature you control enters, put a +1/+1 counter on this creature.
+[4] As long as this creature has three or more +1/+1 counters on it, it has flying and is a Knight in addition to its other types.
+[4] Put the rest on the bottom of your library in a random order.
+[4] Whenever a nontoken, non-Angel creature you control dies, return that card to the battlefield under its owner's control with a +1/+1 counter on it.
+[4] It has flying and is an Angel in addition to its other types.
+[4] Whenever you cast an instant or sorcery spell, draw a card.
+[4] When this creature enters, look at the top five cards of your library and separate them into a face-down pile and a face-up pile.
+[4] An opponent chooses one of those piles.
+[4] Put that pile into your hand and the other into your graveyard.
+[4] Vigilance, prowess
+[4] Whenever this creature deals combat damage to a player, put that many incubation counters on it.
+[4] Remove three incubation counters from this creature: Create a 2/2 blue Drake creature token with flying.
+[4] Prowess
+[4] You may cast spells as though they had flash.
+[4] Whenever you draw your second card each turn, create a token that's a copy of this creature.
+[4] When Kiora enters, draw two cards, then discard two cards.
+[4] Threshold — Whenever Kiora attacks, if there are seven or more cards in your graveyard, you may create Scion of the Deep, a legendary 8/8 blue Octopus creature token.
+[4] Draw a card for each different mana value among nonland permanents you control.
+[4] Whenever this creature attacks, target instant or sorcery card in your graveyard gains flashback until end of turn.
+[4] The flashback cost is equal to that card's mana cost.
+[4] {T}: Exile target creature card from a graveyard that was put there this turn.
+[4] Create a token that's a copy of it, except it's a Nightmare in addition to its other types.
+[4] Then exile all other Nightmare tokens you control.
+[4] You may pay {B} rather than pay this spell's mana cost if there are thirteen or more creatures on the battlefield.
+[4] Each player sacrifices thirteen creatures of their choice.
+[4] If you do, put a +1/+1 counter on this creature.
+[4] Whenever another nontoken creature dies, draw a card.
+[4] This creature enters with eight revival counters on it if you cast it.
+[4] When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step.
+[4] Whenever an opponent discards a card, exile it from their graveyard with a stash counter on it.
+[4] During your turn, you may play cards you don't own with stash counters on them from exile, and mana of any type can be spent to cast those spells.
+[4] {3}{B}, {T}: Each opponent discards a card.
+[4] This creature can't block.
+[4] Ward—Pay 2 life.
+[4] {T}: You may cast target Zombie creature card from your graveyard this turn.
+[4] You may play that card this turn.
+[4] Create a token that's a copy of target creature you control, except it has haste and "At the beginning of the end step, sacrifice this token."
+[4] Flashback {2}{R}{R}
+[4] {1}{R}: If Kellan is a Scout, it becomes a Human Faerie Detective and gains "Whenever Kellan deals combat damage to a player, exile the top card of your library.
+[4] You may play that card this turn."
+[4] {2}{R}: If Kellan is a Detective, it becomes a 3/2 Human Faerie Rogue and gains double strike.
+[4] Whenever you cast an instant or sorcery spell, create a 5/5 red Dragon creature token with flying.
+[4] Raid — At the beginning of your end step, if you attacked this turn, create a 1/1 red Goblin creature token.
+[4] You may play an additional land on each of your turns.
+[4] {4}{G}{G}, {T}: Look at the top six cards of your library.
+[4] You may reveal a creature card with mana value less than or equal to the number of lands you control from among them and put it onto the battlefield.
+[4] Put the rest on the bottom in a random order.
+[4] This creature enters with a +1/+1 counter on it.
+[4] Landfall — Whenever a land you control enters, double the number of +1/+1 counters on this creature.
+[4] Creatures you control get +10/+10 and gain vigilance until end of turn.
+[4] Whenever a creature you control deals combat damage during your turn, put that many +1/+1 counters on it.
+[4] You may cast this card from your graveyard by removing six counters from among creatures you control in addition to paying its other costs.
+[4] Whenever another nontoken creature you control dies, you may reveal cards from the top of your library until you reveal a creature card.
+[4] Put that card into your hand and the rest on the bottom of your library in a random order.
+[4] At the beginning of your end step, choose one —
+[4] • Put a +1/+1 counter on target creature you control.
+[4] • Create a 3/3 green Raccoon creature token if you control a creature with power 4 or greater.
+[4] Whenever Alesha attacks, put a +1/+1 counter on it.
+[4] Raid — At the beginning of your end step, if you attacked this turn, return target creature card with mana value less than or equal to Alesha's power from your graveyard to the battlefield.
+[4] Creatures you control get +1/+1.
+[4] Whenever this creature attacks, another target creature you control gains trample and gets +X/+X until end of turn, where X is this creature's power.
+[4] Lifelink, hexproof from instants
+[4] As long as your life total is greater than your starting life total, Elenda gets +1/+1 and has menace.
+[4] Elenda gets an additional +5/+5 as long as your life total is at least 10 greater than your starting life total.
+[4] Trample, ward {4}
+[4] Whenever Koma deals combat damage to a player, create four 3/3 blue Serpent creature tokens named Koma's Coil.
+[4] Whenever you cast a noncreature spell, choose one —
+[4] • Exile another target creature you control.
+[4] Return that card to the battlefield under its owner's control at the beginning of the next end step.
+[4] • Create a 1/1 white Spirit creature token with flying.
+[4] You have no maximum hand size.
+[4] Whenever a source you control deals noncombat damage to an opponent, you draw that many cards.
+[4] At the beginning of combat on your turn, put a +1/+1 counter on each of up to two target creatures you control.
+[4] {G}{U}, {T}: Double the number of each kind of counter on up to two target creatures and/or artifacts you control.
+[4] As this artifact enters, choose a creature type.
+[4] This artifact enters with a fellowship counter on it for each creature you control of the chosen type.
+[4] Creatures you control of the chosen type get +1/+1 for each fellowship counter on this artifact.
+[4] If this card is in your opening hand, you may begin the game with it on the battlefield.
+[4] Equipped creature gets +1/+1 and has double strike and trample.
+[4] Equip {3}
+[4] At the beginning of your upkeep, each player draws a card.
+[4] Whenever an opponent draws a card, that player loses 1 life.
+[4] {4}: This land becomes a 3/3 creature with vigilance and all creature types.
+[4] Destroy all creatures.
+[4] Flashback {2}{U}
+[4] At the beginning of your upkeep, you draw a card and you lose 1 life.
+[4] {T}: Add {G}.
+[4] If ~ would be put into a graveyard from anywhere, reveal ~ and shuffle it into its owner's library instead.
+[4] {T}: Add {R} or {G}.
+[4] Equip {1}
+[4] You gain 2 life.
+[3] Reach, first strike
+[3] Vigilance, menace
+[3] Trample, lifelink
+[3] Ward—Pay 7 life.
+[3] Whenever another creature you control enters, you gain 1 life.
+[3] Counter target spell.
+[3] [+2]: Add {R}{R}{R}.
+[3] Exile the top three cards of your library.
+[3] Choose one.
+[3] [+1]: Create a token that's a copy of target creature you control, except it has haste and "At the beginning of the end step, sacrifice this token."
+[3] [−4]: Chandra deals 8 damage divided as you choose among any number of target creatures and/or planeswalkers.
+[3] If you do, draw a card.
+[3] [+1]: Put a +1/+1 counter on up to one target creature.
+[3] [−3]: Target creature gains flying and double strike until end of turn.
+[3] [−8]: Create X 2/2 white Cat creature tokens, where X is your life total.
+[3] Each other Angel you control enters with an additional +1/+1 counter on it for each Angel you already control.
+[3] {T}: Add {W}.
+[3] Spend this mana only to cast an Angel spell.
+[3] Counter target noncreature spell.
+[3] You may cast spells from your hand without paying their mana costs.
+[3] Whenever a creature you control dies, draw a card.
+[3] [+1]: Create a 2/2 black Zombie creature token.
+[3] [−4]: Each player sacrifices two creatures of their choice.
+[3] [−9]: Each opponent chooses a permanent they control of each permanent type and sacrifices the rest.
+[3] Put all creature cards from all graveyards onto the battlefield under your control.
+[3] Whenever Etali attacks, exile the top card of each player's library, then you may cast any number of spells from among those cards without paying their mana costs.
+[3] Draw two cards.
+[3] If an effect would create one or more tokens under your control, it creates twice that many of those tokens instead.
+[3] If an effect would put one or more counters on a permanent you control, it puts twice that many of those counters on that permanent instead.
+[3] Reveal the top X cards of your library.
+[3] You may put any number of permanent cards with mana value X or less from among them onto the battlefield.
+[3] Then put all cards revealed this way that weren't put onto the battlefield into your graveyard.
+[3] This spell costs {X} less to cast, where X is the total power of creatures you control.
+[3] [+1]: Look at the top four cards of your library.
+[3] You may reveal a creature or land card from among them and put it into your hand.
+[3] [−3]: Destroy target artifact, enchantment, or creature with flying.
+[3] [−8]: You get an emblem with "Creatures you control get +2/+2 and have vigilance, trample, and indestructible."
+[3] Whenever Lathril deals combat damage to a player, create that many 1/1 green Elf Warrior creature tokens.
+[3] {T}, Tap ten untapped Elves you control: Each opponent loses 10 life and you gain 10 life.
+[3] During each of your turns, you may play a land and cast a permanent spell of each permanent type from your graveyard.
+[3] Protection from everything
+[3] {T}: Add {B} or {R}.
+[3] {T}: Add {G} or {W}.
+[3] {T}: Add {U} or {B}.
+[3] {T}: Add {B} or {G}.
+[3] {T}: Add {W} or {B}.
+[3] {T}: Add {U} or {R}.
+[3] {T}: Add {G} or {U}.
+[3] {T}: Add {W} or {U}.
+[3] {T}: Add {R} or {W}.
+[3] {T}: Add {R}.
+[3] Activate only once each turn.
+[2] ~ deals 3 damage to target attacking or blocking creature.
+[2] Destroy target creature.
+[2] When this creature enters, return target creature an opponent controls to its owner's hand.
+[2] When this creature enters, draw a card, then discard a card.
+[2] {T}: Surveil 1.
+[2] Raid — When this creature enters, if you attacked this turn, draw a card.
+[2] {1}{U}, {T}: Draw a card, then discard a card.
+[2] • Target opponent discards two cards.
+[2] Target creature gets -2/-2 until end of turn.
+[2] When this creature enters, return target creature card from your graveyard to your hand.
+[2] Whenever this creature or another creature you control dies, target opponent loses 1 life and you gain 1 life.
+[2] If that creature would die this turn, exile it instead.
+[2] When this creature enters, choose one —
+[2] Ward {2}
+[2] Put a +1/+1 counter on target creature you control.
+[2] {1}, Sacrifice this creature: Destroy target artifact or enchantment.
+[2] Whenever another Angel you control enters, put a +1/+1 counter on this creature.
+[2] Its controller creates two Treasure tokens.
+[2] {3}{U}: Draw a card.
+[2] Destroy target creature or planeswalker.
+[2] Target opponent reveals their hand.
+[2] That player discards that card.
+[2] • ~ deals 3 damage to target creature.
+[2] • Destroy target artifact.
+[2] Whenever Drakuseth attacks, it deals 4 damage to any target and 3 damage to each of up to two other targets.
+[2] Whenever you cast a noncreature or Dragon spell, this creature deals 1 damage to each opponent.
+[2] This creature attacks each combat if able.
+[2] {R}: This creature gets +1/+0 until end of turn.
+[2] As an additional cost to cast this spell, discard a card.
+[2] Other Elf creatures you control get +1/+1.
+[2] When this creature enters, you may destroy target artifact or enchantment.
+[2] {T}: Add one mana of the chosen color.
+[2] When this creature enters, you may search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+[2] When this creature dies, you may draw a card.
+[2] Equipped creature has hexproof and haste.
+[2] {T}: Add one mana of any color.
+[2] Whenever this creature attacks, you gain 2 life.
+[2] When this creature enters, you gain 1 life and draw a card.
+[2] When this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield.
+[2] This creature has flying as long as it's attacking.
+[2] Scry 1.
+[2] When this creature enters, if an opponent lost life this turn, each opponent discards a card.
+[2] If that mana is spent on a Dragon creature spell, it gains haste until end of turn.
+[2] As long as you control a Dragon, this creature has flying.
+[2] If that creature or planeswalker would die this turn, exile it instead.
+[2] When this creature enters, creatures you control gain double strike until end of turn.
+[2] ~'s power and toughness are each equal to the number of creatures you control.
+[2] Whenever a white creature you control attacks, you gain 1 life.
+[2] {T}: Draw three cards.
+[2] {2}{U}{U}: Return Arcanis to its owner's hand.
+[2] Hexproof
+[2] Instant and sorcery spells you control can't be countered.
+[2] This creature gets +1/+0 for each basic Island you control.
+[2] Return target creature to its owner's hand.
+[2] Whenever this creature or another Vampire you control dies, you may pay {B}.
+[2] If you do, target player loses 2 life and you gain 2 life.
+[2] Whenever this creature attacks, each opponent loses 1 life.
+[2] Changeling
+[2] Indestructible
+[2] Target creature you control gets +X/+X until end of turn.
+[2] Then it fights up to one target creature you don't control.
+[2] When this creature enters, you may sacrifice a land.
+[2] If you do, search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle.
+[2] Formidable — At the beginning of combat on your turn, if creatures you control have total power 8 or greater, target creature you control gains haste until end of turn.
+[2] You may look at the top card of your library any time.
+[2] You may cast creature spells from the top of your library.
+[2] You can spend mana of any type to cast creature spells.
+[2] As this creature enters, choose a color.
+[2] Whenever you cast a spell of the chosen color, you gain 1 life.
+[2] {1}, {T}, Sacrifice this land: Draw a card.
+[2] Activate only if you control five or more lands.
+[2] Other Angels you control get +1/+1 and have lifelink.
+[2] Kicker {B}
+[2] When this creature enters, if it was kicked, target player sacrifices a creature of their choice.
+[2] When this creature enters, creatures your opponents control get -2/-2 until end of turn.
+[2] Whenever a creature an opponent controls dies, that player loses 2 life.
+[2] When this creature enters, you gain 7 life.
+[2] When this creature dies, draw a card.
+[1] Whenever you attack with three or more creatures, put a +1/+1 counter on target creature you control.
+[1] When this creature enters, create a Food token.
+[1] Whenever you gain life for the first time during each of your turns, create a 1/1 white Cat creature token.
+[1] Affinity for Cats
+[1] Creatures you control get +2/+2 until end of turn.
+[1] Whenever this creature attacks, creatures you control get +1/+1 until end of turn.
+[1] Kicker {2}{W}
+[1] Target creature you control gains indestructible until end of turn.
+[1] If this spell was kicked, instead any number of target creatures you control gain indestructible until end of turn.
+[1] When this creature enters, put a +1/+1 counter on each of up to two other target creatures you control.
+[1] Put a +1/+1 counter on target creature.
+[1] It gains flying until end of turn.
+[1] Prevent all combat damage that would be dealt to it this turn.
+[1] When this creature enters, create two 3/3 white Knight creature tokens.
+[1] When this creature enters, create a number of 1/1 white Rabbit creature tokens equal to the number of other creatures you control named ~.
+[1] A deck can have any number of cards named ~.
+[1] When this creature enters, draw a card.
+[1] During your turn, this creature has first strike.
+[1] During your turn, creatures you control with +1/+1 counters on them have first strike.
+[1] You gain 1 life.
+[1] This spell costs {3} less to cast if it targets a tapped creature.
+[1] When this creature enters, create a 1/1 white Cat creature token.
+[1] {2}{W}: Look at the top four cards of your library.
+[1] You may reveal a creature card with power 2 or less from among them and put it into your hand.
+[1] Kicker {1}{W}
+[1] When this creature enters, if it was kicked, return target nonland permanent card with mana value 2 or less from your graveyard to the battlefield.
+[1] Enchanted creature has double strike.
+[1] Whenever you gain life for the first time each turn, surveil 1.
+[1] This spell costs {1} less to cast if you control a Wizard.
+[1] Draw three cards.
+[1] When this creature enters, surveil 3.
+[1] Threshold — This creature can't be blocked as long as there are seven or more cards in your graveyard.
+[1] Whenever you draw a card, put a +1/+1 counter on this creature.
+[1] Whenever you draw your second card each turn, put a +1/+1 counter on this creature.
+[1] Create two 1/1 blue Faerie creature tokens with flying.
+[1] When you do, tap target creature an opponent controls.
+[1] Landfall — Whenever a land you control enters, tap target creature an opponent controls and put a stun counter on it.
+[1] Mill three cards, then return an instant or sorcery card from your graveyard to your hand.
+[1] Flashback {5}{U}{U}
+[1] Whenever you draw your second card each turn, create a 1/1 blue Faerie creature token with flying.
+[1] Target creature's owner puts it on their choice of the top or bottom of their library.
+[1] Surveil 1.
+[1] As an additional cost to cast this spell, sacrifice a creature.
+[1] When this creature enters, each opponent discards a card and loses 2 life.
+[1] You draw a card and gain 2 life.
+[1] When this creature enters, mill three cards.
+[1] Threshold — This creature gets +2/+1 as long as there are seven or more cards in your graveyard.
+[1] Threshold — Whenever this creature attacks, if there are seven or more cards in your graveyard, this creature gets +2/+0 until end of turn.
+[1] Raid — When this creature enters, if you attacked this turn, look at the top three cards of your library.
+[1] You may put one of those cards back on top of your library.
+[1] Put the rest into your graveyard.
+[1] {1}, Sacrifice another creature: Put a +1/+1 counter on this creature.
+[1] When this creature dies, if it wasn't a Demon, return it to the battlefield under its owner's control with two +1/+1 counters on it.
+[1] It's a Demon in addition to its other types.
+[1] When this creature dies, create a 1/1 black and green Insect creature token with flying.
+[1] Raid — At the beginning of your end step, if you attacked this turn, create a Food token.
+[1] {2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn.
+[1] Create a tapped 1/1 black Rat creature token for each creature card in your graveyard.
+[1] Flashback {2}{B}{B}
+[1] Whenever this creature attacks, each opponent loses 1 life and you gain 1 life.
+[1] • Creatures your opponents control get -1/-1 until end of turn.
+[1] When this creature enters, exile up to two target cards from a single graveyard.
+[1] If at least one creature card was exiled this way, each opponent loses 2 life and you gain 2 life.
+[1] Morbid — When this creature enters, target creature an opponent controls gets -1/-1 until end of turn.
+[1] If a creature died this turn, that creature gets -13/-13 until end of turn instead.
+[1] If you do, draw a card and this creature can't be blocked this turn.
+[1] Whenever you attack, target creature you control gets +1/+0 and gains menace until end of turn.
+[1] ~ deals 3 damage to each opponent.
+[1] Double target creature's power until end of turn.
+[1] Flashback {4}{R}{R}
+[1] Whenever this creature attacks while you control a creature with power 4 or greater, this creature gets +1/+0 and gains menace until end of turn.
+[1] Whenever you cast a noncreature spell, this creature gets +3/+0 until end of turn.
+[1] When this creature enters, create a 4/4 red Dragon creature token with flying.
+[1] ~ deals 5 damage to target creature.
+[1] Exile up to one target Equipment attached to that creature.
+[1] Raid — This creature enters with a +1/+1 counter on it if you attacked this turn.
+[1] ~ deals X damage to target creature.
+[1] Create a number of 1/1 red Goblin creature tokens equal to the amount of excess damage dealt to that creature this way.
+[1] Raid — When this creature enters, if you attacked this turn, this creature deals 2 damage to any target.
+[1] ~ deals 6 damage to target creature.
+[1] You may discard a card.
+[1] This creature doesn't untap during your untap step.
+[1] Morbid — At the beginning of each end step, if a creature died this turn, untap this creature.
+[1] {2}{R}: Target creature can't block this turn.
+[1] Raid — When this creature enters, if you attacked this turn, exile the top two cards of your library.
+[1] Choose one of them.
+[1] Until the end of your next turn, you may play that card.
+[1] When this creature enters, exile up to one target card from a graveyard.
+[1] • Put two +1/+1 counters on target creature you control.
+[1] • You gain 4 life.
+[1] Whenever another creature you control enters, this creature gets +1/+0 until end of turn.
+[1] Morbid — At the beginning of your end step, if a creature died this turn, put a +1/+1 counter on this creature.
+[1] Whenever this creature deals combat damage to a player, create a Food token.
+[1] Landfall — Whenever a land you control enters, create a 1/1 green Elf Warrior creature token.
+[1] When this creature enters, return target permanent card from your graveyard to your hand.
+[1] Then that creature deals damage equal to its power to target creature an opponent controls.
+[1] Morbid — At the beginning of your end step, if a creature died this turn, put two +1/+1 counters on target creature you control.
+[1] {2}{G}: Put a +1/+1 counter on target creature you control.
+[1] Whenever this creature enters or attacks, draw a card, then discard a card.
+[1] Threshold — This creature gets +1/+1 and has deathtouch as long as there are seven or more cards in your graveyard.
+[1] When this creature dies, return another target non-Bear creature card with mana value less than or equal to this creature's power from your graveyard to the battlefield.
+[1] Raid — At the beginning of your end step, if you attacked this turn, each opponent loses 3 life unless that player sacrifices a nonland permanent of their choice or discards a card.
+[1] Morbid — At the beginning of your end step, if a creature died this turn, choose one —
+[1] • You gain 2 life.
+[1] • You draw a card and you lose 1 life.
+[1] Equipped creature has "{1}, {T}, Tap ~: Put a bait counter on ~."
+[1] Whenever equipped creature becomes untapped, remove a bait counter from this Equipment.
+[1] If you do, create a 1/1 blue Fish creature token.
+[1] During your turn, equipped creature gets +2/+0 and has first strike.
+[1] {1}, {T}, Sacrifice a creature: Draw a card and put a soul counter on this artifact.
+[1] {4}, {T}, Sacrifice this artifact: Each opponent loses life equal to the number of soul counters on this artifact.
+[1] When this creature enters, exile target player's graveyard.
+[1] Creatures your opponents control enter tapped.
+[1] Whenever a creature an opponent controls enters, you gain 1 life.
+[1] When this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield.
+[1] Destroy target artifact, enchantment, or creature with power 4 or greater.
+[1] When this creature enters, return up to one other target permanent you control to its owner's hand.
+[1] When this creature enters, create a 1/1 white Soldier creature token.
+[1] Destroy target nonland permanent.
+[1] Its controller creates a 1/1 white Human creature token.
+[1] Return all attacking creatures to their owner's hand.
+[1] Whenever you cast a spell during an opponent's turn, put a +1/+1 counter on this creature.
+[1] Counter target creature spell.
+[1] At the beginning of your upkeep, create a token that's a copy of another target nonland permanent you control.
+[1] Target creature gets -1/-0 until end of turn.
+[1] Enchant creature, land, or planeswalker
+[1] Enchanted permanent is a colorless land with "{T}: Add {C}" and loses all other card types and abilities.
+[1] When this creature enters, surveil 2.
+[1] When this creature enters, you may search your library for an instant or sorcery card with mana value 1, reveal it, put it into your hand, then shuffle.
+[1] Choose two target creatures controlled by different players.
+[1] Return those creatures to their owners' hands.
+[1] Create a token that's a copy of target creature you control.
+[1] Flashback {3}{U}
+[1] End the turn.
+[1] This spell costs {1} less to cast for each instant and sorcery card in your graveyard.
+[1] Enchanted creature loses all abilities and is a green and white Citizen creature with base power and toughness 1/1 named Legitimate Businessperson.
+[1] Create a Food token.
+[1] When this creature enters, each opponent discards a card.
+[1] This creature enters tapped.
+[1] As an additional cost to cast this spell, sacrifice a creature or pay {3}{B}.
+[1] Exile target creature or planeswalker.
+[1] Each opponent loses X life.
+[1] You gain life equal to the life lost this way.
+[1] Until end of turn, target creature gets +2/+0 and gains "When this creature dies, return it to the battlefield tapped under its owner's control and you create a Treasure token."
+[1] Return up to two target creature cards from your graveyard to your hand, then discard a card.
+[1] Whenever you gain life, each opponent loses 1 life.
+[1] Whenever an opponent casts a spell, that player loses 5 life unless they discard a card.
+[1] You choose a nonland card from it.
+[1] {1}{B}: Return this card from your graveyard to the battlefield tapped.
+[1] When this creature enters, search your library for a card, put it into your hand, then shuffle.
+[1] At the beginning of your end step, if an opponent lost life this turn, put a +1/+1 counter on target Vampire you control.
+[1] Return target creature card from your graveyard to the battlefield.
+[1] {T}: Target creature gains haste until end of turn.
+[1] For each land you control, create a Treasure token.
+[1] Kicker {4}
+[1] ~ deals 2 damage to any target.
+[1] If this spell was kicked, it deals 4 damage instead.
+[1] {T}, Sacrifice this creature: It deals 1 damage to any target.
+[1] Whenever you cast a noncreature spell, this creature deals 1 damage to each opponent.
+[1] Flying, haste
+[1] Ferocious — At the beginning of combat on your turn, if you control a creature with power 4 or greater, you may pay {R}.
+[1] If you do, return this card from your graveyard to the battlefield.
+[1] Whenever this creature attacks, you may pay {R}.
+[1] If you do, target creature can't block this turn.
+[1] • Creatures you control get +2/+0 until end of turn.
+[1] • Create two 1/1 red Goblin creature tokens.
+[1] {R}, Sacrifice this creature: It deals damage equal to its power to target creature or planeswalker.
+[1] If target player has exactly 10 life, ~ deals 10 damage to that player.
+[1] Gain control of target creature until end of turn.
+[1] Untap that creature.
+[1] It gains haste until end of turn.
+[1] Create a Treasure token.
+[1] {T}: Create X 1/1 red Goblin creature tokens, where X is the number of Goblins you control.
+[1] ~ deals 2 damage to each creature without flying.
+[1] • ~ deals 3 damage to each creature.
+[1] • ~ deals 3 damage to each player.
+[1] Landfall — Whenever a land you control enters, this creature deals 1 damage to each opponent.
+[1] Target creature gets +3/+0 and gains first strike until end of turn.
+[1] When this creature enters, you may have it fight target creature you don't control.
+[1] Target creature you control deals damage equal to its power to target creature or planeswalker you don't control.
+[1] Enchanted creature gets +1/+1 for each Forest you control.
+[1] Destroy target artifact, enchantment, or creature with flying.
+[1] • Search your library for a basic land card, reveal it, put it into your hand, then shuffle.
+[1] • Target creature you control fights target creature you don't control.
+[1] Whenever Dwynen attacks, you gain 1 life for each attacking Elf you control.
+[1] When this creature enters, if you control another Elf, create a 1/1 green Elf Warrior creature token.
+[1] {T}: Add {G} for each Elf you control.
+[1] When this enchantment enters, if you control a creature with power 4 or greater, draw a card.
+[1] Creatures you control have trample.
+[1] Whenever a creature you control with power 4 or greater enters, draw a card.
+[1] Target creature gets +3/+3 until end of turn.
+[1] Kicker {2}{G}
+[1] If this creature was kicked, it enters with two +1/+1 counters on it.
+[1] Each creature you control with a +1/+1 counter on it has trample.
+[1] Kicker {2}
+[1] Search your library for a basic land card, put it onto the battlefield, then shuffle.
+[1] If this spell was kicked, instead search your library for two basic land cards, put them onto the battlefield, then shuffle.
+[1] Draw a card for each creature you control with a +1/+1 counter on it.
+[1] Those creatures gain indestructible until end of turn.
+[1] {3}{G}: This creature becomes a Werewolf.
+[1] Put two +1/+1 counters on it and you draw a card.
+[1] Activate only once.
+[1] At the beginning of combat on your turn, if you control another creature with power 4 or greater, put a +1/+1 counter on this creature.
+[1] Creatures you control get +3/+3 and gain trample until end of turn.
+[1] {G}: Exile target card from a graveyard.
+[1] If it was a creature card, put a +1/+1 counter on this creature and you gain 1 life.
+[1] It gains hexproof until end of turn.
+[1] When this creature enters or dies, surveil 1.
+[1] This creature enters with X +1/+1 counters on it.
+[1] Whenever one or more +1/+1 counters are put on another non-Hydra creature you control, put a +1/+1 counter on this creature.
+[1] Whenever you cast an instant or sorcery spell, creatures you control get +1/+0 and gain trample until end of turn.
+[1] ~'s power and toughness are each equal to the number of cards in your opponents' graveyards.
+[1] Whenever you cast a spell, each opponent reveals cards from the top of their library until they reveal a land card, then puts those cards into their graveyard.
+[1] Other creatures you control with flying get +1/+1.
+[1] Whenever another creature you control enters, put a +1/+1 counter on that creature.
+[1] Create two 1/1 white Soldier creature tokens.
+[1] Until end of turn, creatures you control get +1/+1 and gain haste.
+[1] Whenever Ruby attacks while you control a creature with power 4 or greater, Ruby gets +2/+2 until end of turn.
+[1] Landfall — Whenever a land you control enters, you gain 1 life and draw a card.
+[1] Whenever you cast an instant or sorcery spell, copy it for each other instant and sorcery spell you've cast before it this turn.
+[1] You may choose new targets for the copies.
+[1] Landfall — Whenever a land you control enters, equipped creature gets +2/+2 until end of turn.
+[1] {3}, Sacrifice this creature: Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle.
+[1] When this creature enters, you may search your library for a basic land card, reveal it, then shuffle and put that card on top.
+[1] When this creature dies, create a Treasure token.
+[1] Equipped creature gets +1/+1.
+[1] Whenever equipped creature deals combat damage to a player, create a Treasure token.
+[1] As this artifact enters, choose a color.
+[1] Creatures you control of the chosen color get +1/+0.
+[1] This creature can't be blocked by Walls.
+[1] When this creature enters, destroy target nonland permanent an opponent controls.
+[1] {T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+[1] {4}, {T}: Target creature can't be blocked this turn.
+[1] As this land enters, choose a creature type.
+[1] Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the chosen type.
+[1] Target creature gets +2/+2 and gains indestructible until end of turn.
+[1] Whenever one or more creatures you control attack, you gain 1 life for each attacking creature.
+[1] Exile target creature or enchantment.
+[1] ~ deals 3 damage to target tapped creature and you gain 2 life.
+[1] {3}{W}: Put a +1/+1 counter on another target attacking creature you control.
+[1] If that creature is a Cat, it gains first strike until end of turn.
+[1] {3}{W}{W}: Attacking creatures you control get +X/+X until end of turn, where X is the number of attacking creatures.
+[1] At the beginning of combat on your turn, if you control three or more creatures, this creature gets +1/+1 until end of turn and you gain 1 life.
+[1] Target creature gets +2/+2 until end of turn.
+[1] Enchanted creature can't attack or block.
+[1] As long as you have 25 or more life, this creature has double strike.
+[1] When this creature enters, target creature an opponent controls gets -1/-0 until end of turn.
+[1] When this creature enters, create a Treasure token.
+[1] Other Pirates you control get +1/+1.
+[1] Enchanted creature loses all abilities and is a black Skeleton creature with base power and toughness 1/1.
+[1] Kicker {1}{U}
+[1] Return target nonland permanent to its owner's hand.
+[1] If this spell was kicked, draw a card.
+[1] {3}{U}{U}: Draw two cards.
+[1] When this Aura enters, tap enchanted creature.
+[1] Enchanted creature doesn't untap during its controller's untap step.
+[1] Return target creature card from your graveyard to your hand.
+[1] If it's a Zombie card, draw a card.
+[1] Attacking Vampires you control have deathtouch and lifelink.
+[1] Whenever a Vampire you control dies, you may pay 2 life.
+[1] When this creature enters or dies, mill two cards.
+[1] • Destroy target creature or planeswalker.
+[1] • Return target Zombie creature card from your graveyard to the battlefield tapped.
+[1] Skeletons you control and other Zombies you control get +1/+1 and have deathtouch.
+[1] When this creature dies, create two 2/2 black Zombie creature tokens.
+[1] Target creature gains deathtouch and indestructible until end of turn.
+[1] When this creature enters, it deals 1 damage to any target.
+[1] {4}{B}{B}, Exile this card from your graveyard: Create two 2/2 black Zombie creature tokens.
+[1] Until end of turn, target creature gains "When this creature dies, return it to the battlefield tapped under its owner's control with a +1/+1 counter on it."
+[1] Enchanted creature gets +2/+1 and has menace.
+[1] {2}, {T}: Each opponent loses 1 life and you gain 1 life.
+[1] When this creature enters, each opponent loses 2 life and you gain 2 life.
+[1] At the beginning of combat on your turn, you may have target creature get +2/+0 until end of turn.
+[1] Create two 1/1 red Goblin creature tokens.
+[1] Dragon spells you cast cost {1} less to cast.
+[1] Other Goblins you control get +1/+1.
+[1] {R}: Until end of turn, another target Goblin you control gains flying and "When this creature deals combat damage, sacrifice it."
+[1] Attacking creatures you control get +1/+0.
+[1] {T}: Another target creature with power 2 or less can't be blocked this turn.
+[1] Target creature gets +1/+0 and gains first strike until end of turn.
+[1] When this creature enters, create two Treasure tokens.
+[1] ~ deals 3 damage to target creature or planeswalker.
+[1] Draw two cards and create a Treasure token.
+[1] When this creature enters, it deals damage to target creature an opponent controls equal to the number of Goblins you control.
+[1] Other creatures you control have trample.
+[1] Distribute three +1/+1 counters among one, two, or three target creatures, then double the number of +1/+1 counters on each of those creatures.
+[1] Each creature you control gets +3/+3 until end of turn and must be blocked this turn if able.
+[1] Enchant land
+[1] When this Aura enters, put a +1/+1 counter on target creature you control.
+[1] Enchanted land has "{T}: Add two mana of any one color."
+[1] {8}: Target creature gets +5/+5 and gains trample until end of turn.
+[1] {7}, {T}, Sacrifice this artifact: Destroy target permanent.
+[1] When this Equipment enters, attach it to target Pirate you control.
+[1] Equipped creature gets +2/+1.
+[1] As it enters, choose a color.
+[1] Enchanted creature gets +4/+4, has flying and first strike, and is an Angel in addition to its other types.
+[1] When enchanted creature dies, return this card to its owner's hand.
+[1] When this creature enters, you gain 2 life for each Gate you control.
+[1] Kithkin spells and Soldier spells you cast cost {1} less to cast.
+[1] • Scry 2.
+[1] • You gain 3 life.
+[1] • Exile another target creature you own.
+[1] Return it to the battlefield under your control at the beginning of the next end step.
+[1] {4}{W}: Creatures you control get +1/+1 until end of turn.
+[1] Exile target creature or planeswalker that's black or red.
+[1] Destroy target artifact or enchantment.
+[1] Sacrifice this creature: Destroy target enchantment.
+[1] Landfall — Whenever a land you control enters, choose one —
+[1] • Create a 2/2 white Cat Beast creature token.
+[1] • Put a +1/+1 counter on each creature you control.
+[1] Those creatures gain vigilance until end of turn.
+[1] You gain 1 life for each creature destroyed this way.
+[1] Hexproof from black
+[1] This creature gets +1/+0 as long as any player controls a black permanent.
+[1] Whenever another creature you control with power 2 or less enters, you may pay {1}.
+[1] Other Cats you control get +1/+1 and have lifelink.
+[1] When this creature enters, create two 1/1 white Cat creature tokens with lifelink.
+[1] Create four 1/1 white Dog creature tokens.
+[1] When this enchantment enters, exile target creature an opponent controls until this enchantment leaves the battlefield.
+[1] Whenever Syr Alin attacks, other creatures you control get +1/+1 until end of turn.
+[1] • Target creature gains indestructible until end of turn.
+[1] • Destroy target creature with toughness 4 or greater.
+[1] Flying, double strike, vigilance, trample, indestructible
+[1] Then discard a card unless you attacked this turn.
+[1] At the beginning of each player's draw step, that player draws an additional card.
+[1] Target creature you control gets +0/+3 and gains hexproof until end of turn.
+[1] Draw X cards.
+[1] If X is 10 or more, instead shuffle your graveyard into your library, draw X cards, untap up to five lands, and you have no maximum hand size for the rest of the game.
+[1] Exile ~.
+[1] Counter target red or green spell.
+[1] Prevent all combat damage that would be dealt to and dealt by this creature.
+[1] Whenever a Gate you control enters, this creature can't be blocked this turn.
+[1] Whenever this creature deals combat damage to a player, draw a card.
+[1] You may cast this spell as though it had flash if you pay {2} more to cast it.
+[1] When this creature enters, you may return target tapped creature an opponent controls to its owner's hand.
+[1] Search your library for an instant card or a card with flash, reveal it, put it into your hand, then shuffle.
+[1] Flashback {5}{B}
+[1] Return all nonland permanents target player controls to their owner's hand.
+[1] When this creature enters, return target instant or sorcery card from your graveyard to your hand.
+[1] When this creature enters, counter target artifact or creature spell.
+[1] Destroy target green or white creature.
+[1] At the beginning of your upkeep, choose one that hasn't been chosen —
+[1] • This enchantment deals 4 damage to any target and you gain 4 life.
+[1] • Draw two cards.
+[1] • You lose the game.
+[1] At the beginning of each combat, any opponent may sacrifice a creature of their choice.
+[1] If a player does, tap this creature and put a +1/+1 counter on it.
+[1] Each player mills X cards.
+[1] For each creature card put into a graveyard this way, you create a tapped 2/2 black Zombie creature token.
+[1] When this creature dies, return target creature card with mana value 2 or less from your graveyard to the battlefield.
+[1] You choose a noncreature, nonland card from it.
+[1] Hexproof from white
+[1] This creature gets +1/+0 as long as any player controls a white permanent.
+[1] Whenever a nontoken creature you control dies, this creature deals 1 damage to you and you draw a card.
+[1] ~ enters with a divinity counter on it if you cast it from your hand.
+[1] ~ has indestructible as long as it has a divinity counter on it.
+[1] Remove a divinity counter from ~: Each opponent discards their hand.
+[1] Kicker {3}{B}
+[1] When this creature enters, if it was kicked, return target creature card from your graveyard to the battlefield.
+[1] This spell costs {3} less to cast if you've gained 3 or more life this turn.
+[1] Return up to two target creature cards from your graveyard to your hand.
+[1] Target opponent sacrifices a creature of their choice.
+[1] You gain life equal to that creature's toughness.
+[1] {1}{B}, Sacrifice a creature: You gain 1 life and draw a card.
+[1] When this creature enters, search your library for a card, put that card into your graveyard, then shuffle.
+[1] This artifact enters with three wish counters on it.
+[1] {1}, {T}, Remove a wish counter from this artifact: Search your library for a card, put it into your hand, then shuffle.
+[1] An opponent gains control of this artifact.
+[1] Activate only during your turn.
+[1] At the beginning of the end step, sacrifice this creature.
+[1] This spell costs {3} less to cast if you control a creature with power 4 or greater.
+[1] Change the target of target spell or ability with a single target.
+[1] Creatures you control gain trample until end of turn.
+[1] Whenever this creature deals combat damage to a player, each player discards their hand, then draws seven cards.
+[1] At the beginning of your upkeep, if you control six or more lands, create a 5/5 red Dragon creature token with flying.
+[1] As long as there are two or more instant and/or sorcery cards in your graveyard, this creature gets +1/+0 and has haste.
+[1] Players can't gain life.
+[1] Target opponent gains control of target permanent you control.
+[1] When this creature enters, you may search your library for an artifact card, exile it, then shuffle.
+[1] When this creature dies, you may put the exiled card into its owner's hand.
+[1] Whenever another nontoken Dragon you control enters, create a 5/5 red Dragon creature token with flying.
+[1] {1}{R}: Dragons you control get +1/+0 until end of turn.
+[1] Whenever an opponent casts a white or blue instant or sorcery spell, this creature deals 2 damage to that player.
+[1] ~ deals 4 damage to target creature or planeswalker.
+[1] At the beginning of your upkeep, this creature deals 1 damage to you.
+[1] When this creature enters, create two 1/1 black Rat creature tokens with "This token can't block."
+[1] At the beginning of your upkeep, you may sacrifice another creature.
+[1] If you do, put a +1/+1 counter on this creature and exile the top card of your library.
+[1] This creature can't be blocked by Humans.
+[1] Whenever this creature deals combat damage to a player, put a +1/+1 counter on it.
+[1] Whenever an opponent casts a spell, you may put a +1/+1 counter on this creature.
+[1] When this creature enters, it deals 2 damage to target player or planeswalker.
+[1] Search your library for up to two basic land cards and/or Gate cards, put them onto the battlefield tapped, then shuffle.
+[1] When this creature enters, you may search your library for a creature card with mana value 6 or greater, reveal it, put it into your hand, then shuffle.
+[1] Whenever a creature you control with deathtouch deals combat damage to a player, that player gets two poison counters.
+[1] Whenever you cast a spell that targets this creature, draw a card.
+[1] This creature enters with four +1/+1 counters on it.
+[1] {2}{G}{G}: Put X +1/+1 counters on this creature, where X is its power.
+[1] Whenever an opponent casts a blue or black spell, you may put a +1/+1 counter on this creature.
+[1] Whenever enchanted creature attacks, put a +1/+1 counter on it.
+[1] Then if it has three or more +1/+1 counters on it, sacrifice this Aura.
+[1] When you sacrifice this Aura, search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle.
+[1] Whenever this creature attacks, put a +1/+1 counter on it.
+[1] Whenever a creature dealt damage by this creature this turn dies, put a +1/+1 counter on this creature.
+[1] Whenever you cast a creature spell, create a 3/3 green Beast creature token.
+[1] Whenever you cast a noncreature spell, put three +1/+1 counters on target creature you control.
+[1] Landfall — Whenever a land you control enters, you gain 3 life.
+[1] Landfall — Whenever a land you control enters, create a 4/4 green Beast creature token.
+[1] Alliance — Whenever another creature you control enters, this creature gains deathtouch until end of turn.
+[1] If this is the second time this ability has resolved this turn, all creatures you control gain deathtouch until end of turn.
+[1] Whenever another non-Human creature you control enters, you may pay {X}.
+[1] When you do, put X +1/+1 counters on this creature.
+[1] Flying, vigilance, haste
+[1] Whenever Aurelia attacks for the first time each turn, untap all creatures you control.
+[1] After this phase, there is an additional combat phase.
+[1] {1}, Sacrifice another creature: You gain life equal to the sacrificed creature's toughness.
+[1] {1}{W}{B}, Sacrifice another creature: Exile target nonland permanent.
+[1] Activate only if you have at least 10 life more than your starting life total.
+[1] When this creature enters, you gain 2 life and draw two cards.
+[1] Each player sacrifices a creature or planeswalker of their choice.
+[1] If you sacrificed a permanent this way, you may return another permanent card from your graveyard to your hand.
+[1] Whenever you gain life, draw a card.
+[1] If an instant or sorcery card would be put into a graveyard from anywhere, exile it instead.
+[1] ~'s power is equal to the number of instant and sorcery cards in your graveyard.
+[1] Whenever another creature you control dies, draw a card if it was attacking.
+[1] Otherwise, Garna deals 1 damage to each opponent.
+[1] At the beginning of combat on your turn, put X +1/+1 counters on another target creature you control, where X is Halana and Alena's power.
+[1] That creature gains haste until end of turn.
+[1] Whenever this creature becomes tapped, exile up to one target card from a graveyard and put a +1/+1 counter on this creature.
+[1] Sacrifice another creature: This creature gains indestructible until end of turn.
+[1] Tap it.
+[1] Destroy target nonland permanent and all other permanents with the same name as that permanent.
+[1] Destroy target creature or enchantment.
+[1] Ward—{3}, Pay 3 life.
+[1] Whenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the mana value of that spell.
+[1] They gain haste until end of turn.
+[1] ~ enters with X +1/+1 counters on it, where X is the greatest power among other creatures you control.
+[1] When ~ enters, draw cards equal to its power.
+[1] Whenever this creature attacks, add {R}{R}{R}{G}{G}{G}.
+[1] Until end of turn, you don't lose this mana as steps and phases end.
+[1] When you next cast an instant or sorcery spell this turn, copy that spell.
+[1] You may choose new targets for the copy.
+[1] Whenever this creature deals combat damage to a player, you may destroy target artifact or enchantment that player controls.
+[1] Other green creatures you control get +1/+1.
+[1] Other white creatures you control get +1/+1.
+[1] If a spell or ability an opponent controls causes you to discard this card, put it onto the battlefield instead of putting it into your graveyard.
+[1] Equipped creature has deathtouch and lifelink.
+[1] Crew 3
+[1] {T}, Exile this artifact: Shuffle your graveyard into your library.
+[1] Equipped creature has double strike.
+[1] Affinity for Gates
+[1] This creature can't be blocked by creatures with power 2 or less.
+[1] Whenever a Gate you control enters, you may put this card from your graveyard on top of your library.
+[1] {T}, Put a page counter on this artifact: Scry 1.
+[1] {2}, {T}, Put a page counter on this artifact: Draw a card.
+[1] When there are four or more page counters on this artifact, exile it.
+[1] If you do, you gain 4 life.
+[1] When that mana is spent to cast a red instant or sorcery spell, copy that spell and you may choose new targets for the copy.
+[1] Whenever you cast a spell, put a +1/+1 counter on Ramos for each of that spell's colors.
+[1] Remove five +1/+1 counters from Ramos: Add {W}{W}{U}{U}{B}{B}{R}{R}{G}{G}.
+[1] As this artifact enters, look at an opponent's hand, then choose any card name.
+[1] Activated abilities of sources with the chosen name can't be activated unless they're mana abilities.
+[1] When this artifact enters, exile target card from a graveyard.
+[1] {T}, Sacrifice this artifact: Exile each opponent's graveyard.
+[1] {1}, {T}, Sacrifice this artifact: Draw a card.
+[1] {2}: This creature gets +1/+0 until end of turn.
+[1] {X}: Destroy each nonland permanent with mana value X whose controller was dealt combat damage by this creature this turn.
+[1] {1}: Add one mana of any color.
+[1] {4}: Put two +1/+1 counters on this land.
+[1] Then you may have it become a 0/0 Elemental creature until end of turn.
+[1] {2}, {T}, Sacrifice this land: Destroy target nonbasic land an opponent controls.
+[1] That land's controller may search their library for a basic land card, put it onto the battlefield, then shuffle.
+[1] You may search your library for a basic land card, put it onto the battlefield, then shuffle.
+[1] If you would gain life, you gain that much life plus 1 instead.
+[1] This creature gets +2/+2 as long as you have 25 or more life.
+[1] Creatures you control get +1/+0 and gain indestructible until end of turn.
+[1] Enchant permanent
+[1] You control enchanted permanent.
+[1] Kicker {5}
+[1] Create a token that's a copy of target creature.
+[1] If this spell was kicked, create five of those tokens instead.
+[1] Destroy target creature or enchantment an opponent controls.
+[1] You lose life equal to that permanent's mana value.
+[1] If a creature you control would deal damage to a permanent or player, it deals double that damage instead.
+[1] Whenever you cast an instant or sorcery spell, this creature deals 2 damage to each opponent.
+[1] Whenever a creature you control enters, this enchantment deals 1 damage to each opponent.
+[1] Other Elves you control get +1/+1.
+[1] {G}, {T}: Create a 1/1 green Elf Warrior creature token.
+[1] • ~ deals 4 damage to target player or planeswalker.
+[1] • Permanents you control gain indestructible until end of turn.
+[1] • Target creature gains double strike until end of turn.
+[1] Enchanted creature gets +2/+2 and has trample and lifelink.
+[1] As this creature enters, choose a creature type.
+[1] This creature is the chosen type in addition to its other types.
+[1] Other creatures you control of the chosen type get +1/+1.
+[1] {2}, {T}, Sacrifice this artifact: Search your library for a land card, reveal it, put it into your hand, then shuffle.
+[1] {T}: Add three mana of any one color.
+[1] {T}: Add {C}{C}.
+[1] {2}, {T}, Sacrifice this artifact: Draw two cards.
+[1] {3}, {T}, Return this land to its owner's hand: Search your library for a Gate card, put it onto the battlefield, then shuffle.
+[1] If you control ten or more Gates with different names, you win the game.
