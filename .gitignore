@@ -8,3 +8,7 @@ run.log
 progress.log
 failures*.txt
 dl.log
+failures*.txt
+run.log
+progress.log
+dl.log
