@@ -79,6 +79,16 @@ class Interpreter:
         f = self._find(children, name)
         return f[0] if f else None
 
+    def _find_all(self, children, name):
+        """Recursively find every Tree named `name` anywhere in the subtree."""
+        out = []
+        for c in children:
+            if isinstance(c, Tree):
+                if c.data == name:
+                    out.append(c)
+                out.extend(self._find_all(c.children, name))
+        return out
+
     def _first_number(self, children):
         for ch in children:
             if isinstance(ch, Token) and ch.type == 'NUMBER':
@@ -123,17 +133,21 @@ class Interpreter:
     # ------------------------------------------------------------------ card target
     def i_card_target(self, children):
         d = {}
-        mapping = {
-            'this_that': 'this_that', 'possessive': 'possessive',
-            'quantifier': 'quantifier', 'otherness': 'otherness',
-            'nontoken': 'nontoken', 'status_list': 'status',
-            'colors': 'colors', 'card_kind': 'card_type',
-            'with_modifier': 'modifier', 'controller': 'controller',
-            'in_zone': 'zone', 'zone': 'zone',
-        }
-        for ch in children:
-            if isinstance(ch, Tree) and ch.data in mapping:
-                d[mapping[ch.data]] = self.interp(ch)
+        # Fields are grouped under lead/core/zone_mod; search the whole subtree
+        # so the grouping is transparent.  Order of the mapping is the precedence
+        # when a key can be produced by more than one rule name.
+        mapping = [
+            ('this_that', 'this_that'), ('possessive', 'possessive'),
+            ('quantifier', 'quantifier'), ('otherness', 'otherness'),
+            ('nontoken', 'nontoken'), ('status_list', 'status'),
+            ('colors', 'colors'), ('card_kind', 'card_type'),
+            ('with_modifier', 'modifier'), ('controller', 'controller'),
+            ('in_zone', 'zone'),
+        ]
+        for name, key in mapping:
+            found = self._find_all(children, name)
+            if found:
+                d[key] = self.interp(found[0])
         return d
 
     def i_card_kind(self, children):
@@ -427,6 +441,48 @@ class Interpreter:
 
     def i_life_amount(self, children):
         return self._text(children) or (self.interp(children[0]) if children else None)
+
+    def i_end_turn_action(self, children):
+        return {'verb': 'end_turn'}
+
+    def i_distribute_action(self, children):
+        d = {'verb': 'distribute'}
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            d['text'] = self.interp(at)
+        return d
+
+    def i_copy_action(self, children):
+        d = {'verb': 'copy'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['target'] = self.interp(ct)
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            d['for_each'] = self.interp(at)
+        elif any(str(c) == 'it' for c in children if not isinstance(c, Tree)):
+            d['target'] = {'kind': 'this_card'}
+        return d
+
+    def i_choose_new_targets_action(self, children):
+        d = {'verb': 'choose_new_targets'}
+        may = any(isinstance(c, Token) and str(c).lower() == 'may' for c in children)
+        if may:
+            d['modal'] = 'may'
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            d['for'] = self.interp(at)
+        return d
+
+    def i_gain_poison_action(self, children):
+        d = {'verb': 'gain_poison'}
+        who = self._find_one(children, 'who')
+        if who is not None:
+            d['who'] = self.interp(who)
+        am = self._find_one(children, 'amount')
+        if am is not None:
+            d['amount'] = self.interp(am)
+        return d
 
     def i_deal_damage_action(self, children):
         d = {'verb': 'deal_damage'}

@@ -12,8 +12,8 @@ downstream NLP pipelines (not human display).
 source myenv/bin/activate          # Python 3.13, Lark 1.3.1
 
 python debug.py "Draw a card" "Tap an untapped creature you control"
-python quick_test.py -n 150        # ~2-4 min sampled coverage (fast iteration)
-python test_parse.py --dump failures.txt   # full corpus (~40 min, source of truth)
+python quick_test.py -n 150        # ~1-2 min sampled coverage (fast iteration)
+python test_parse.py --dump failures.txt   # full corpus (~15-20 min, source of truth)
 ```
 
 ## Layout
@@ -47,12 +47,20 @@ python test_parse.py --dump failures.txt   # full corpus (~40 min, source of tru
 - **Case-insensitive verb/function terminals** (`V_DRAW`, `V_THIS`, …) with
   `\b` boundaries: MTG capitalizes the first word of each sentence, so
   literals like `"draw"` would miss `"Draw"`.
-- **Atomic `card_target`**: `quantifier status_list? colors? possessive?
-  card_kind? modifier? controller? zone?`. E.g.
+- **Atomic `card_target`**: the fields (`this_that / quantifier / otherness /
+  nontoken / status_list / colors / possessive / card_kind / with_modifier /
+  controller / in_zone`) are all optional and order-sensitive. E.g.
   `"all attacking creatures"` →
   `{quantifier:'all', status:'attacking', card_type:'creature'}`.
   A proper-noun subtype can prefix the noun inside `card_kind`
   (`"Zombie creature card"` → `card_type:'Zombie creature'`).
+  For **performance** the 13 optional fields are grouped into three wrappers —
+  `lead` (this_that/quantifier/otherness/nontoken), `core` (status_list/colors/
+  possessive/card_kind), `zone_mod` (with_modifier/controller/in_zone) — which
+  preserves the exact left-to-right order but stops the Earley chart from
+  combinatorially exploding over 13 independent optionals. The interpreter
+  finds each field **by name anywhere in the subtree** (recursive `_find_all`),
+  so the grouping is invisible to the output.
 - `~` (tilde) = the card itself → `{'kind':'this_card'}`.
 - **Sentence types**: `activated` (`{T}: …`), `loyalty` (`[+1]: …`),
   `triggered` (`When/Whenever/As …, …`), `static`, `static_keyword`,
@@ -69,12 +77,20 @@ python test_parse.py --dump failures.txt   # full corpus (~40 min, source of tru
   prefer terminal-level solutions or restructure. (E.g. the `JOIN` terminal
   `/,\\s*(then|and)\\b|\\bthen\\b|\\band\\b|,/` handles comma/`then`/`and`
   joins, which a rule-form `"," ("then"|"and")?` did not.)
-- **Performance**: the grammar's size + ambiguity makes Earley ~1.2–1.5 s /
-  sentence (full corpus ≈ 40 min). Greedy `CARDNAME+` as a standalone
-  optional field was a major slowdown; type prefixes are therefore folded
-  into `card_kind` (tied to a required noun) to keep the search space small.
-  `quick_test.py` (sampled) is for fast iteration; `test_parse.py` is the
-  source of truth.
+- **Performance**: the original grammar hit **pathological Earley blowup** —
+  a single keyword sentence took ~2 s and complex ones 30 s+ (≈ 2 h full
+  run). The cause was `card_target`'s 13 independent optional *complex*
+  fields: the Earley chart grew to ~1M items per sentence. Grouping them into
+  the three `lead`/`core`/`zone_mod` wrappers (above) cut parse time ~20×
+  (a keyword sentence is now ~0.1 s; full corpus ≈ 15–20 min at ~0.6 s/item).
+  Greedy `CARDNAME+` as a standalone optional field was an earlier slowdown;
+  type prefixes are folded into `card_kind` (tied to a required noun) for the
+  same reason.
+- **Sentence splitting is `~`-aware**: after name-normalization a card's name
+  becomes `~` (a tilde, not an uppercase letter), so a period boundary like
+  `"…has menace. ~ gets +5/+5…"` is only recognised as a new sentence because
+  the splitter also treats `~` as a sentence-start (alongside uppercase and
+  `(`). Periods inside double-quoted granted abilities are still not splits.
 
 ## Status
 
@@ -85,7 +101,20 @@ Coverage on the 1,665 segmented FDN sentences:
 | initial baseline | 17.2 % |
 | after case-insensitivity + atomic targets | 48.6 % |
 | after sentence-structure + verb expansion | 69.3 % (full) |
-| after atomic-decomposition fix (Interpreter) + pattern batches | ~80–88 % (sample; full run in progress) |
+| after Interpreter fix + pattern batches | 83.6 % (full) |
+| after `card_target` performance fix + pattern batches | 89.9 % (full) |
+| after token/deal-damage/counter/verb-terminal batches | 93.8 % (full) |
+| after cast/spend/draw/search + event batches | 96.9 % (full) |
+| after copy/return/exile/Ward/trigger batches | 98.4 % (full) |
+
+The remaining ~27 failures (1.6 %) are all **unique** complex one-offs —
+multi-clause effects with internal commas ("…put them onto the battlefield,
+then shuffle"), nested X-defs, "for each / for each other" distributions,
+"loses all abilities and is a X with base power and toughness 1/1" (the leading
+greedy `card_target` over-consumes), and a handful of novel constructions.
+They no longer share common sub-patterns, so further gains require
+sentence-specific rules.
+| after split/loyalty/`and-or`/`as-long-as` batches | **92.7 % (full, 1543/1665)** |
 
 Remaining failures are a long tail of diverse patterns (complex returns,
 "as long as … where X is …" definitions, multi-part emblems, custom keyword

@@ -51,7 +51,7 @@ def split_sentences(line):
             j = i + 1
             while j < n and line[j].isspace():
                 j += 1
-            if j < n and (line[j].isupper() or line[j] == '('):
+            if j < n and (line[j].isupper() or line[j] == '(' or line[j] == '~'):
                 in_quote = (quote_count % 2 == 1)
                 if ch == '"' or ch == '\u201d':
                     in_quote = False  # this is the closing quote

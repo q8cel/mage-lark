@@ -1,0 +1,10 @@
+myenv/
+__pycache__/
+*.pyc
+.cache/
+Standard.json
+Standard.json.gz
+run.log
+progress.log
+failures*.txt
+dl.log
