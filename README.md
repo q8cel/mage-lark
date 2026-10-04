@@ -40,6 +40,11 @@ unchanged grammar is near-instant.
 | `run.py` | **Main runner**: cached + parallel coverage over a whole set/bundle |
 | `test_parse.py`, `test_parallel.py` | Earlier (uncached) runners |
 | `debug.py`, `show.py` | Parse + dump the tree for raw sentences |
+| `demo_output.py` | Show the **actual interpreted dicts** for example sentences/cards |
+| `content_check.py` | **Content-preservation** discovery: input content units vs. output |
+| `check_interp_grammar.py` | Static interpreter↔grammar rule-name sync checker |
+| `test_output.py` | 15 **golden output tests** (regression guard for the interpreter) |
+| `audit_output.py` | Flag suspicious outputs (empty dict, pronoun-as-type, …) |
 | `quick_test.py`, `analyze.py`, `vocab.py` | Sampling / corpus exploration helpers |
 
 ## Design
@@ -82,6 +87,29 @@ unchanged grammar is near-instant.
 - **Saga chapters & levelers**: the `III — …` (saga) and `12+ | …` (leveler)
   prefixes are stripped in preprocessing; the body is an ordinary ability.
   (The chapter/level number is dropped for now.)
+
+## Output quality (content preservation)
+
+Parse *coverage* (can we parse the sentence?) is **not** the same as output
+*quality* (does the structured dict actually capture the sentence's content?). A
+sentence can parse fine yet silently drop numbers, zones, keywords, or colors.
+
+`content_check.py` measures this. It extracts the "hard content" of each parsed
+sentence (numbers, power/toughness, mana symbols, colors, zones, type words,
+keywords, named cards → `~`) and verifies every unit survives in the interpreted
+output. This is the discovery engine for *silent bugs* — it finds the
+"parses but the output is wrong/incomplete" cases without enumerating them by hand.
+
+```bash
+python content_check.py classic.json          # % of parsed sentences that lose content
+python content_check.py classic.json --dump   # write all (unit, sentence) pairs to content_missing.tsv
+python test_output.py                         # golden tests: 15/15 must pass
+python check_interp_grammar.py                # interpreter handlers vs. grammar rules
+```
+
+The interpreter was hardened against every class this surfaced; content loss on
+the classic set's parsed sentences went from ~32% down to ~2%. The remaining
+misses are a small per-pattern long tail (see `content_missing.tsv`).
 
 ## Performance
 

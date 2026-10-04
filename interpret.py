@@ -430,6 +430,53 @@ class Interpreter:
     def i_gain_control_action(self, children):
         return self._card_action('gain_control', children)
 
+    def i_extra_turns_action(self, children):
+        d = {'verb': 'extra_turns'}
+        who = self._find_one(children, 'who')
+        if who is not None:
+            d['actor'] = self.interp(who)
+        am = self._first_number(children)
+        if am:
+            d['amount'] = am
+        else:
+            toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+            if 'a' in toks or 'an' in toks:
+                d['amount'] = 1
+        return d
+
+    def i_block_do_so_action(self, children):
+        d = {'verb': 'block_do_so'}
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['subject'] = self.interp(cts[0])
+            if len(cts) > 1:
+                d['block'] = self.interp(cts[1])
+        return d
+
+    def i_phase_action(self, children):
+        d = {'verb': 'phase'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['card'] = self.interp(ct)
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        d['direction'] = 'in' if 'in' in toks else 'out'
+        return d
+
+    def i_enchant_action(self, children):
+        d = {'verb': 'enchant'}
+        et = self._find_one(children, 'enchant_target')
+        if et is not None:
+            d['targets'] = [c.value for c in et.children
+                            if isinstance(c, Token) and c.type == 'GENERIC_TYPE']
+        return d
+
+    def i_change_target_action(self, children):
+        d = {'verb': 'change_target'}
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            d['of'] = self.interp(at)
+        return d
+
     def i_counter_spell_action(self, children):
         d = self._card_action('counter', children, key='spell')
         at = self._find_one(children, 'any_text')
