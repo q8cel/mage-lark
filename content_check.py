@@ -36,6 +36,25 @@ ZONES = {'hand', 'library', 'battlefield', 'graveyard', 'exile', 'stack',
 # words that are content but legitimately may be transformed, so we check a
 # normalized form; anything here is REQUIRED to appear in the output.
 
+_RE_CACHE = {}
+def _kw_patterns(kws):
+    """Precompiled (keyword, regex) pairs, cached by the keyword set."""
+    key = ('kw', frozenset(kws))
+    if key not in _RE_CACHE:
+        _RE_CACHE[key] = [(kw, re.compile(r'\b' + re.escape(kw.lower()) + r'\b'))
+                          for kw in sorted(kws, key=len, reverse=True)]
+    return _RE_CACHE[key]
+
+def _name_pattern(names):
+    """One combined any-match regex for all card names, cached by the name set."""
+    key = ('nm', frozenset(names))
+    if key not in _RE_CACHE:
+        ns = sorted(names, key=len, reverse=True)
+        _RE_CACHE[key] = (re.compile(r'\b(?:' +
+                           '|'.join(re.escape(n.lower()) for n in ns) + r')\b')
+                          if ns else None)
+    return _RE_CACHE[key]
+
 def content_units(raw, names, types, kws):
     """Return the set of content tokens (canonical form) that must survive."""
     units = set()
@@ -63,25 +82,34 @@ def content_units(raw, names, types, kws):
     for w in words:
         if w in types:
             units.add(w)
-    # keywords (single- and multi-word)
-    for kw in kws:
-        if re.search(r'\b' + re.escape(kw.lower()) + r'\b', low):
+    # keywords (single- and multi-word) — precompiled patterns
+    for kw, cre in _kw_patterns(kws):
+        if cre.search(low):
             units.add(kw.lower())
-    # card names -> the self token
-    for name in names:
-        if re.search(r'\b' + re.escape(name.lower()) + r'\b', low):
-            units.add('~')
+    # card names -> the self token (one combined regex, any match)
+    nr = _name_pattern(names)
+    if nr is not None and nr.search(low):
+        units.add('~')
     return units
 
 _parser = None
 _interp = None
 _ctx = None
+UNPARSED = "\x00unparsed"   # sentinel cache value for sentences that don't parse
 def init(t, n, kws):
     global _parser, _interp, _ctx
     _parser = Lark.open(GRAMMAR, parser='earley', start='start',
                         ambiguity='resolve', keep_all_tokens=True)
     _interp = Interpreter(types=t, names=n)
     _ctx = (set(n), t, kws)
+
+def present(u, blob):
+    if u in blob:
+        return True
+    # a number is preserved if its word form appears (e.g. "two" for "2")
+    if u.isdigit() and DIGIT_WORD.get(u, '') in blob:
+        return True
+    return False
 
 def work(sent):
     names, types, kws = _ctx
@@ -92,15 +120,8 @@ def work(sent):
         return (0, sent, [], None)
     out = _interp.interp(tree)
     blob = json.dumps(out, ensure_ascii=False).lower()
-    def present(u):
-        if u in blob:
-            return True
-        # a number is preserved if its word form appears (e.g. "two" for "2")
-        if u.isdigit() and DIGIT_WORD.get(u, '') in blob:
-            return True
-        return False
-    missing = [u for u in content_units(sent, names, types, kws) if not present(u)]
-    return (1, sent, missing, out)
+    missing = [u for u in content_units(sent, names, types, kws) if not present(u, blob)]
+    return (1, sent, missing, blob)
 
 def main():
     args = [a for a in sys.argv[1:]]
@@ -124,9 +145,35 @@ def main():
         for seg in segment(text, names):
             if seg['text'] and seg['text'] not in seen and not seg['modal']:
                 seen.add(seg['text']); unique.append(seg['text'])
-    print(f'content-checking {len(unique)} unique sentences from {data}...')
-    with Pool(24, initializer=init, initargs=(types, names, kws)) as pool:
-        res = pool.map(work, unique, chunksize=8)
+    # output cache: keyed by grammar + interpret.py hashes; the first run
+    # populates it, later runs are instant until either file changes
+    import hashlib
+    def fhash(p):
+        return hashlib.sha1(open(p, 'rb').read()).hexdigest()[:12]
+    os.makedirs(os.path.join(BASE, '.cache'), exist_ok=True)
+    oc_path = os.path.join(BASE, '.cache',
+                           f'out_{fhash(GRAMMAR)}_{fhash(os.path.join(BASE, "interpret.py"))}.json')
+    oc = json.load(open(oc_path)) if os.path.exists(oc_path) else {}
+    n_cached = sum(1 for s in unique if s in oc)
+    print(f'content-checking {len(unique)} unique sentences from {data}... ({n_cached} cached)')
+
+    todo = [s for s in unique if s not in oc]
+    res = []
+    for s in unique:
+        if s in oc:
+            if oc[s] == UNPARSED:
+                res.append((0, s, [], None))
+            else:
+                missing = [u for u in content_units(s, names, types, kws)
+                           if not present(u, oc[s])]
+                res.append((1, s, missing, oc[s]))
+    if todo:
+        with Pool(24, initializer=init, initargs=(types, names, kws)) as pool:
+            new = pool.map(work, todo, chunksize=8)
+        for r in new:
+            oc[r[1]] = r[3] if r[0] == 1 else UNPARSED
+        res.extend(new)
+        json.dump(oc, open(oc_path, 'w'))
 
     ok = [r for r in res if r[0] == 1]
     miss_counter = Counter()
