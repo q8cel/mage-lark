@@ -23,12 +23,25 @@ def strip_reminders(text):
             out.append(ch)
     return re.sub(r'[ \t]*\n[ \t]*', '\n', ''.join(out)).strip()
 
+_NAME_RE_CACHE = {}
+
+def _name_re(names):
+    """Compile a single alternation regex for the name set (cached by set id).
+    Longest names first so they win in leftmost-alternation, avoiding partial
+    clobbering. One combined sub is far faster than one sub per name."""
+    key = frozenset(names)
+    pat = _NAME_RE_CACHE.get(key)
+    if pat is None:
+        alts = sorted((n for n in names if n), key=len, reverse=True)
+        pat = re.compile('|'.join(re.escape(n) for n in alts)) if alts else None
+        _NAME_RE_CACHE[key] = pat
+    return pat
+
 def normalize_names(text, names=None):
     names = names or name_set()
-    # replace longest names first to avoid partial clobbering
-    for n in sorted(names, key=len, reverse=True):
-        if n:
-            text = re.sub(re.escape(n), '~', text)
+    pat = _name_re(names)
+    if pat is not None:
+        text = pat.sub('~', text)
     return text
 
 def split_sentences(line):
