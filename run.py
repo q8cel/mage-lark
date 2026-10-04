@@ -101,20 +101,33 @@ def main():
         sets = [s for s in sets if s in keep]
         print(f"filtered to sets {sets}: {len(items)} cards")
 
-    # segment
+    # segment (cached: keyed by data hash + preprocess.py hash, so a change to
+    # the segmentation logic invalidates it automatically)
+    import preprocess as _pp
+    # sent-cache is only valid for the full (unfiltered) corpus
+    seg_key = dh + '_' + file_hash(os.path.join(BASE, 'preprocess.py'))
+    seg_cache2 = os.path.join(CACHE, f'sent_{seg_key}.pkl')
     t = time.time()
-    work = []
-    for name, text, code in items:
-        for d in segment(text):
-            s = d['text']
-            if s and not d['modal']:
-                work.append(s)
+    use_sent_cache = not args.no_cache and not args.sets
+    if use_sent_cache and os.path.exists(seg_cache2):
+        work = pickle.load(open(seg_cache2, 'rb'))
+        print(f"[sent-cache HIT] {time.time()-t:.1f}s")
+    else:
+        work = []
+        for name, text, code in items:
+            for d in segment(text):
+                s = d['text']
+                if s and not d['modal']:
+                    work.append(s)
+        if use_sent_cache:
+            pickle.dump(work, open(seg_cache2, 'wb'))
+        print(f"[sent-cache {'store' if use_sent_cache else 'skip'}] segmented in {time.time()-t:.1f}s")
     total_occ = len(work)
     if args.n:
         work = work[:args.n]
         total_occ = len(work)
     uniq = sorted(set(work))
-    print(f"occurrences={total_occ}  unique_texts={len(uniq)}  (segment in {time.time()-t:.1f}s)")
+    print(f"occurrences={total_occ}  unique_texts={len(uniq)}")
 
     # ---- parse cache ----
     gh = file_hash(GRAMMAR)
