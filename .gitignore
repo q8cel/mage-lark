@@ -1,14 +1,14 @@
-myenv/
+# large reproducible data (Standard is the 21-set Standard rotation bundle from
+# https://mtgjson.com/api/v5/Standard.json)
+Standard.json
+*.json.gz
+
+# caches and run artifacts
+.cache/
+*.log
+failures*.txt
+
+# python
 __pycache__/
 *.pyc
-.cache/
-Standard.json
-Standard.json.gz
-run.log
-progress.log
-failures*.txt
-dl.log
-failures*.txt
-run.log
-progress.log
-dl.log
+myenv/

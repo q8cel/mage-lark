@@ -82,6 +82,11 @@ def segment(text, names=None):
             s_body = s[1:].strip() if bullet else s
             # strip trailing sentence punctuation (period / em-dash) — not structure
             s_body = s_body.rstrip('.—').strip()
+            # strip saga-chapter prefix ("III — ") and leveler prefix ("12+ | ")
+            # — the body is an ordinary ability; the marker is dropped for now
+            s_body = re.sub(r'^(?:I{1,3}|IV|V|VI{0,3}|IX|X)\s*\u2014\s+', '', s_body)
+            s_body = re.sub(r'^\d+\s*\+\s*\|\s*', '', s_body)
+            s_body = s_body.strip()
             if not s_body:
                 continue
             modal = bool(re.match(r'^(Choose one|Choose [a-z]+)$', s_body))

@@ -41,7 +41,6 @@ def load(path):
     d = json.load(open(path))
     data = d['data']
     items, types, names = [], set(), set()
-    seen = set()
     sets = []
 
     cards_iter = []
@@ -59,20 +58,16 @@ def load(path):
         name, text, t = _card_fields(c)
         if not text:
             continue
-        key = (name, text)
-        if key in seen:
-            continue
-        seen.add(key)
         names.add(name)
         names.add(name.split(',')[0].strip())
         types.update(t)
-        items.append((name, text))
+        items.append((name, text, code))
 
     for x in ('Legendary', 'Basic', 'Soul', 'Snow', 'Snowman'):
         types.discard(x)
     return items, types, names, sets
 
-# backward-compatible 3-tuple loader
+# backward-compatible loader (items as 2-tuples)
 def load3(path):
     items, types, names, _ = load(path)
-    return items, types, names
+    return [(n, t) for n, t, _ in items], types, names

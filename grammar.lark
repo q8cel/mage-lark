@@ -55,7 +55,8 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | "You" "lose" "the" "game"
                | "It's" "a" CARDNAME "in" "addition" "to" "its" "other" "types"
                | "This" "creature" "is" "the" "chosen" "type" "in" "addition" "to" "its" "other" "types"
-               | card_target "enter" "tapped"
+               | card_target "enter" "tapped" ("unless" any_text)?
+               | "It's" ("a" | "an") GENERIC_TYPE
                | V_YOU "control" card_target
                | card_target "loses" "all" "abilities" "and" "is" "a" colors? CARDNAME? GENERIC_TYPE "creature" "with" "base" "power" "and" "toughness" POWER_T ("named" CARDNAME)?
 
@@ -111,7 +112,7 @@ trigger_clause: trig_when event?
               | COND_KEYWORD EMDASH event?
               | COND_KEYWORD EMDASH static_text
 trig_when: V_WHEN | V_WHATEVER | V_AT "the" "beginning" "of" AT_WHEN | V_AS
-AT_WHEN: /the end step|each end step of the game|your upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step/
+AT_WHEN: /the end step|each end step of the game|your upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step|your main phase|your first main phase|each player's main phase|each player's first main phase|each player's upkeep|your combat step|your first upkeep/
 event: event_subject EVENT_VERB event_object?
       | V_YOU EVENT_VERB event_object?
       | V_YOU V_PUT counter_amount counter_kind "on" card_target
@@ -145,6 +146,7 @@ event_object: ("combat" "damage" "to" (player | card_target))?
             | "life" "for" "the" "first" "time" ("each" "turn" | "during" "each" "of" "your" "turns")
             | "life"
             | "damage" "to" (player | card_target)
+            | "the" "battlefield"
             | card_target
 if_clause: V_IF any_text ","
 trailing_if: V_IF any_text
@@ -157,6 +159,9 @@ static_keyword_sentence: kw_with_mod
                        | kw_list_mod
                        | kw_list "," kw_with_mod
                        | kw_with_mod "," kw_list
+                       | generic_kw_list
+generic_kw_list: generic_kw (kw_sep generic_kw)*
+generic_kw: CARDNAME (MANA+ | number | EMDASH effect)?
 kw_list_mod: kw_item ("," kw_item)* ("," "and" kw_item)?
 kw_item: KEYWORD (MANA+ | "from" colors)?
 kw_with_mod: MOD_KEYWORD (MANA+ | "for" card_target | "from" (colors | "instants" | "sorceries" | GENERIC_TYPE) | number)?
@@ -286,6 +291,7 @@ lose_life_action: who V_LOSE life_amount ("unless" any_text)?
 gain_poison_action: who V_GET amount "poison" "counters"
 
 deal_damage_action: card_target V_DEAL amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")?
+                  | ("it" | "they") V_DEAL amount? "damage" "to" damage_who
                   | card_target V_DEAL amount? "damage" "to" damage_who ("and" amount? "damage" "to" damage_who)?
                   | amount? "damage" "to" damage_who
                   | card_target V_DEAL amount? "damage" "equal" "to" "its" "power" "to" damage_who
@@ -305,8 +311,8 @@ counter_spell_action: V_COUNTER card_target "spell"
 
 return_action: V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands")
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
-             | V_RETURN card_target "to" "the" "battlefield" "tapped"
-             | V_RETURN card_target "to" "the" "battlefield" "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+             | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")?
+             | V_RETURN card_target "to" "the" "battlefield" "transformed"? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "with" "mana" "value" mv_cmp ("from" "your" "graveyard")? "to" "the" "battlefield"
 mv_cmp: amount "or" ("less" | "more")
        | ("less" | "greater") "than" "or" "equal" "to" (card_target | V_THIS | V_THAT) "'s" ("power" | "mana" "value")
@@ -380,7 +386,7 @@ choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_tex
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text
 
-may_action: V_YOU V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
+may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent")? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
         | gain_life_action | lose_life_action | exile_action | attach_action | cast_action
         | play_action | scry_action | surveil_action | create_token_action | reveal_action
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
@@ -414,7 +420,7 @@ gain_quote_action: (card_target)? (V_GAIN | "has" | "have") QUOTE
 emblem_action: V_YOU "get" "an" "emblem" "with" QUOTE
              | "You" "get" "an" "emblem"
 
-enters_action: card_target V_ENTERS ("tapped" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it") ("for" "each" any_text)? ("if" any_text)?
+enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
 enchant_action: V_ENCHANT enchant_target
 enchant_target: GENERIC_TYPE (("," | "or" | "," "or") GENERIC_TYPE)*
 cant_action: (card_target)? V_CANT ("be" "countered" | "block" | "attack" | "attack" "or" "block" | "be" "blocked" ("by" card_target)? | "lose" "this" "mana" | "untap" "during" "your" "untap" "step" | "untap" "during" "its" "controller's" "untap" "step") ("this" "turn")?
@@ -547,7 +553,7 @@ in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "libr
 //  keyword list
 kw_list: KEYWORD (kw_sep KEYWORD)*
 kw_sep: "and" | "," | "," "and"
-KEYWORD: /\b(flying|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch)\b/i
+KEYWORD: /\b(flying|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|job select|land cycling|basic landcycling|landcycling)\b/i
 
 //  modified static keywords (Ward {4}, Kicker {2}, Crew 3, ...)
 MOD_KEYWORD: /ward|kicker|crew|flashback|affinity|protection|hexproof|equip/i
