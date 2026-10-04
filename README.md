@@ -122,14 +122,15 @@ distributions, "loses all abilities and is a X with base power and toughness"
 where the greedy leading `card_target` over-consumes). No common sub-pattern
 remains.
 
-**Standard generalization** (22,196 sentences, 21 sets):
+**Standard generalization** (22,179 sentences, 21 sets):
 
 | stage | coverage |
 |---|---|
 | as-tuned-on-FDN (no changes) | 62.7 % |
-| + open keyword fallback, "enters the battlefield", main-phase timing, "return … transformed", saga/leveler prefix strip | **70.0 % (15,541/22,196)** |
+| + open keyword fallback, "enters the battlefield", main-phase timing, "return … transformed", saga/leveler prefix strip | 70.0 % (15,541/22,196) |
+| + classic-set grammar work (walk keywords, tokens, can't/can, cost mods, loyalty effects, …) + name-normalization data fix | **71.7 % (15,902/22,179)** |
 
-The gap between FDN (98.5 %) and Standard (70.0 %) is the key finding. It is
+The gap between FDN (98.5 %) and Standard (71.7 %) is the key finding. It is
 **not** caused by hardcoded cases — the grammar has no card names, numbers, or
 colors baked in. It is caused by **FDN being a narrow set**: the 21 published
 sets use many more keywords, mechanics, and syntax constructions than FDN
