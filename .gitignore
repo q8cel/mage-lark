@@ -13,3 +13,4 @@ failures*.txt
 __pycache__/
 *.pyc
 myenv/
+content_missing.tsv

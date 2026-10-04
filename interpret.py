@@ -55,7 +55,17 @@ class Interpreter:
             return {'kind': 'type', 'value': 'instant or sorcery'}
         return t.value
 
+    ANAPHORA = {'it', 'them', 'its', "it's", 'they', 'their'}
+    WORD_NUM = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6,
+                'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11,
+                'twelve': 12, 'thirteen': 13, 'fourteen': 14, 'fifteen': 15,
+                'sixteen': 16, 'seventeen': 17, 'eighteen': 18, 'nineteen': 19,
+                'twenty': 20}
     def _resolve_kind(self, name):
+        # Pronouns are references to an entity in context, NOT card types.
+        # We mark them honestly; cross-sentence resolution is a later discourse pass.
+        if name.lower() in self.ANAPHORA:
+            return {'ref': 'anaphora', 'raw': name}
         if name in self._types:
             return {'kind': 'type', 'value': name}
         if name in self._names:
@@ -91,8 +101,15 @@ class Interpreter:
 
     def _first_number(self, children):
         for ch in children:
-            if isinstance(ch, Token) and ch.type == 'NUMBER':
-                return int(ch.value)
+            if isinstance(ch, Token):
+                if ch.type == 'NUMBER':
+                    try:
+                        return int(ch.value)
+                    except ValueError:
+                        return ch.value
+                v = ch.value.lower()
+                if v in self.WORD_NUM:
+                    return self.WORD_NUM[v]
             if isinstance(ch, Tree) and ch.data == 'amount':
                 return self.interp(ch)
         return None
@@ -168,6 +185,8 @@ class Interpreter:
             return base
         if toks[0].type == 'INSTANT_SORCERY':
             return {'kind': 'type', 'value': 'instant or sorcery'}
+        if toks[0].value.lower() in self.ANAPHORA:
+            return {'ref': 'anaphora', 'raw': toks[0].value}
         return {'kind': 'type', 'value': toks[0].value.lower()}
 
     def i_types(self, children):
@@ -242,6 +261,10 @@ class Interpreter:
         return {'prep': prep, 'zone': zone}
 
     def i_zone(self, children):
+        # prefer the ZONE_WORD (hand/library/...), not a leading OWNER (your/...)
+        for ch in children:
+            if isinstance(ch, Token) and ch.type == 'ZONE_WORD':
+                return ch.value
         for ch in children:
             if isinstance(ch, Token):
                 return ch.value
@@ -252,9 +275,15 @@ class Interpreter:
         for ch in children:
             if isinstance(ch, Token):
                 if ch.type == 'NUMBER':
-                    return int(ch.value)
+                    try:
+                        return int(ch.value)
+                    except ValueError:
+                        return ch.value
                 if ch.value == 'X':
                     return 'X'
+                v = ch.value.lower()
+                if v in self.WORD_NUM:
+                    return self.WORD_NUM[v]
                 return ch.value
             if isinstance(ch, Tree):
                 return self.interp(ch)
@@ -324,6 +353,17 @@ class Interpreter:
                 return self.interp(ch)
         return self._default(children)
 
+    ZONE_WORDS = ('library', 'hand', 'graveyard', 'battlefield', 'exile', 'stack',
+                  'piles', 'tombstone', 'zone', 'anywhere')
+
+    def _zone_from_tokens(self, children):
+        toks = [str(ch).lower() for ch in children
+                if isinstance(ch, Token) and not ch.type.startswith('V_')]
+        for z in self.ZONE_WORDS:
+            if z in toks:
+                return z
+        return None
+
     def _card_action(self, verb, children, key='card'):
         d = {'verb': verb}
         ct = self._find_one(children, 'card_target')
@@ -332,6 +372,16 @@ class Interpreter:
         amt = self._find_one(children, 'amount')
         if amt is not None:
             d['amount'] = self.interp(amt)
+        zn = self._find_one(children, 'zone') or self._find_one(children, 'in_zone')
+        if zn is not None:
+            d['zone'] = self.interp(zn)
+        else:
+            z = self._zone_from_tokens(children)
+            if z is not None:
+                d['zone'] = z
+        wm = self._find_one(children, 'with_modifier')
+        if wm is not None:
+            d['modifier'] = self.interp(wm)
         return d
 
     def i_cast_action(self, children):
@@ -345,7 +395,7 @@ class Interpreter:
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['cards'] = self.interp(ct)
-        amt = self._find_one(children, 'amount')
+        amt = self._find_one(children, 'draw_amount')
         if amt is not None:
             d['amount'] = self.interp(amt)
         return d
@@ -381,7 +431,11 @@ class Interpreter:
         return self._card_action('gain_control', children)
 
     def i_counter_spell_action(self, children):
-        return self._card_action('counter', children, key='spell')
+        d = self._card_action('counter', children, key='spell')
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            d['unless'] = self.interp(at)
+        return d
 
     def i_reveal_action(self, children):
         return self._card_action('reveal', children)
@@ -393,13 +447,56 @@ class Interpreter:
         return self._card_action('fight', children, key='target')
 
     def i_cant_action(self, children):
-        return self._card_action("can't", children)
+        d = {'verb': "can't"}
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['card'] = self.interp(cts[0])
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'countered' in toks:
+            d['predicate'] = 'be countered'
+        elif 'blocked' in toks:
+            d['predicate'] = 'be blocked'
+        elif 'attack' in toks and 'block' in toks:
+            d['predicate'] = 'attack or block'
+        elif 'attack' in toks:
+            d['predicate'] = 'attack'
+        elif 'block' in toks:
+            d['predicate'] = 'block'
+        if 'except' in toks and len(cts) > 1:
+            d['except_by'] = self.interp(cts[-1])
+        elif 'by' in toks and len(cts) > 1:
+            d['blocked_by'] = self.interp(cts[-1])
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            if 'unless' in toks:
+                d['unless'] = self.interp(at)
+            elif 'as' in toks:
+                d['condition'] = self.interp(at)
+        return d
 
     def i_attacks_each_combat_action(self, children):
         return self._card_action('attacks_each_combat', children)
 
     def i_enters_action(self, children):
-        return self._card_action('enters', children)
+        d = self._card_action('enters', children)
+        ca = self._find_one(children, 'counter_amount')
+        ck = self._find_one(children, 'counter_kind')
+        pm = [ch for ch in children if isinstance(ch, Token) and ch.type == 'POWER_MOD']
+        if ca is not None or ck is not None or pm:
+            w = {}
+            if ca is not None:
+                w['count'] = self.interp(ca)
+            if ck is not None:
+                w['counter'] = self._text(ck.children) if isinstance(ck, Tree) else str(ck)
+            if pm:
+                w['counter'] = pm[0].value + ' counter'
+            d['with'] = w
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'tapped' in toks:
+            d['tapped'] = True
+        if 'prepared' in toks:
+            d['prepared'] = True
+        return d
 
     def i_gain_kw_action(self, children):
         d = {'verb': 'gain_kw'}
@@ -425,13 +522,35 @@ class Interpreter:
                 d['type'] = self.interp(tp)
         if any(isinstance(c, Token) and c.value == 'addition' for c in children):
             d['in_addition'] = True
+        pt = [c for c in children if isinstance(c, Token) and c.type in ('POWER_T', 'POWER_MOD')]
+        if pt:
+            d['pt'] = pt[0].value
+        wm = self._find_one(children, 'with_modifier') or self._find_one(children, 'any_text')
+        if wm is not None and any(isinstance(c, Token) and c.value == 'with' for c in children):
+            d['modifier'] = self.interp(wm)
         return d
 
     def i_stat_action(self, children):
         d = {'verb': 'stat_change'}
-        ct = self._find_one(children, 'card_target')
-        if ct is not None:
-            d['target'] = self.interp(ct)
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['target'] = self.interp(cts[0])   # the subject
+        # "for each X" modifier: a card_target/any_text appearing after 'for'
+        for_idx = next((i for i, ch in enumerate(children)
+                        if isinstance(ch, Token) and str(ch).lower() == 'for'), None)
+        if for_idx is not None:
+            for ch in children[for_idx:]:
+                if isinstance(ch, Tree) and ch.data in ('card_target', 'any_text'):
+                    d['for_each'] = self.interp(ch)
+                    break
+        # "as long as X" condition
+        as_idx = next((i for i, ch in enumerate(children)
+                       if isinstance(ch, Token) and str(ch).lower() == 'as'), None)
+        if as_idx is not None:
+            for ch in children[as_idx:]:
+                if isinstance(ch, Tree) and ch.data == 'any_text':
+                    d['condition'] = self.interp(ch)
+                    break
         sc = self._find_one(children, 'stat_change')
         if sc is not None:
             d['change'] = self.interp(sc)
@@ -507,15 +626,25 @@ class Interpreter:
 
     def i_deal_damage_action(self, children):
         d = {'verb': 'deal_damage'}
-        ct = self._find_one(children, 'card_target')
-        if ct is not None:
-            d['source_or_target'] = self.interp(ct)
-        da = self._find_one(children, 'damage_amount')
-        if da is not None:
-            d['amount'] = self.interp(da)
-        dt = self._find_one(children, 'damage_target')
-        if dt is not None:
-            d['to'] = self.interp(dt)
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['amount'] = self.interp(amt)
+        # source = a card_target that is a DIRECT child (the dealer)
+        for ch in children:
+            if isinstance(ch, Tree) and ch.data == 'card_target':
+                d['source'] = self.interp(ch)
+                break
+        if 'source' not in d:
+            toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+            if any(t in ('it', 'they') for t in toks):
+                d['source'] = {'ref': 'anaphora'}
+        # target(s) = damage_who
+        dw = self._find(children, 'damage_who')
+        if dw:
+            d['to'] = self.interp(dw[0]) if len(dw) == 1 else [self.interp(x) for x in dw]
+        xd = self._find_one(children, 'xdef')
+        if xd is not None:
+            d['amount'] = {'xdef': self.interp(xd)}
         return d
 
     def i_damage_amount(self, children):
@@ -531,7 +660,10 @@ class Interpreter:
             d['on'] = self.interp(ct)
         ca = self._find_one(children, 'counter_amount')
         if ca is not None:
-            d['counters'] = self.interp(ca)
+            d['count'] = self.interp(ca)
+        ck = self._find_one(children, 'counter_kind')
+        if ck is not None:
+            d['counter'] = self._text(ck.children)
         return d
 
     def i_remove_counter_action(self, children):
@@ -541,11 +673,19 @@ class Interpreter:
             d['from'] = self.interp(ct)
         ca = self._find_one(children, 'counter_amount')
         if ca is not None:
-            d['counters'] = self.interp(ca)
+            d['count'] = self.interp(ca)
+        ck = self._find_one(children, 'counter_kind')
+        if ck is not None:
+            d['counter'] = self._text(ck.children)
         return d
 
     def i_counter_amount(self, children):
-        return self._text(children) or (self.interp(children[0]) if children else None)
+        t = self._text(children).strip().lower()
+        if t in self.WORD_NUM:
+            return self.WORD_NUM[t]
+        if t.isdigit():
+            return int(t)
+        return t or None
 
     def i_create_token_action(self, children):
         d = {'verb': 'create_token'}
@@ -559,22 +699,54 @@ class Interpreter:
 
     def i_token(self, children):
         d = {}
+        types = []
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'card_target':
                     d['copy_of'] = self.interp(ch)
                 elif ch.data == 'kw_list':
                     d.setdefault('kw', []).append(self.interp(ch))
-                elif ch.data == 'colors':
-                    d['colors'] = self.interp(ch)
-                elif ch.data in ('token_types', 'token_num', 'xdef'):
-                    d[ch.data] = self.interp(ch)
+                elif ch.data == 'tok_colors':
+                    d['colors'] = self._text(ch.children).strip()
+                elif ch.data == 'token_types':
+                    v = self.interp(ch)
+                    types.extend(v if isinstance(v, list) else [v])
+                elif ch.data == 'token_num':
+                    q = self.interp(ch)
+                    if q not in (None, 'a', 'an'):
+                        d['count'] = q
+                elif ch.data == 'xdef':
+                    d['xdef'] = self.interp(ch)
+                elif ch.data == 'in_zone':
+                    d['zone'] = self.interp(ch)
+                elif ch.data == 'token_tail':
+                    self._token_tail(ch, d)
             elif isinstance(ch, Token):
                 if ch.type == 'POWER_T':
                     d['power_toughness'] = ch.value
+                elif ch.type == 'COLOR':
+                    d.setdefault('colors', ch.value)
                 elif ch.type == 'CARDNAME':
-                    d.setdefault('types', []).append(ch.value)
+                    types.append(ch.value)
+                elif ch.value.lower() in self.SUPERTYPES:
+                    types.append(ch.value.lower())
+        if types:
+            d['types'] = types
         return d
+
+    def _token_tail(self, ch, d):
+        """Extract 'with <kw>' / 'named X' / 'tapped' / zone from a token_tail."""
+        for sub in ch.children:
+            if isinstance(sub, Tree):
+                if sub.data == 'kw_list':
+                    d.setdefault('kw', []).append(self.interp(sub))
+                elif sub.data == 'in_zone':
+                    d['zone'] = self.interp(sub)
+            elif isinstance(sub, Token):
+                if sub.value.lower() == 'tapped':
+                    d['tapped'] = True
+                if sub.type == 'CARDNAME':
+                    d.setdefault('named', []).append(sub.value)
 
     def i_token_num(self, children):
         return self.interp(children[0]) if children else None
@@ -619,6 +791,12 @@ class Interpreter:
                     d['card'] = self.interp(ch)
                 elif ch.data == 'amount':
                     d['amount'] = self.interp(ch)
+                elif ch.data in ('zone', 'in_zone'):
+                    d['zone'] = self.interp(ch)
+        if 'zone' not in d:
+            z = self._zone_from_tokens(children)
+            if z is not None:
+                d['zone'] = z
         return d
 
     def i_look_action(self, children):
@@ -627,6 +805,9 @@ class Interpreter:
             if isinstance(ch, Tree):
                 if ch.data == 'amount':
                     d['amount'] = self.interp(ch)
+        z = self._zone_from_tokens(children)
+        if z is not None:
+            d['zone'] = z
         return d
 
     def i_shuffle_action(self, children):
@@ -734,10 +915,21 @@ class Interpreter:
     def i_prevent_action(self, children):
         return self._card_action('prevent_damage', children)
 
+    SUPERTYPES = {'creature', 'artifact', 'enchantment', 'land', 'plane',
+                  'phenomenon', 'module', 'card', 'saga', 'vanguard', 'cop'}
+
     def i_put_zone_action(self, children):
         d = {'verb': 'put'}
-        d['args'] = [self.interp(c) for c in children if isinstance(c, Tree)]
-        d['rest'] = self._text([c for c in children if isinstance(c, Token)])
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['card'] = self.interp(ct)
+        zn = self._find_one(children, 'zone')
+        if zn is not None:
+            d['zone'] = self.interp(zn)
+        else:
+            z = self._zone_from_tokens(children)
+            if z is not None:
+                d['zone'] = z
         return d
 
     # ------------------------------------------------------------------ triggered
