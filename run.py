@@ -104,8 +104,10 @@ def main():
     # segment (cached: keyed by data hash + preprocess.py hash, so a change to
     # the segmentation logic invalidates it automatically)
     import preprocess as _pp
-    # sent-cache is only valid for the full (unfiltered) corpus
-    seg_key = dh + '_' + file_hash(os.path.join(BASE, 'preprocess.py'))
+    # sent-cache is only valid for the full (unfiltered) corpus; keyed by data
+    # + segmentation logic (preprocess.py) + name source (setdata.py)
+    seg_key = (dh + '_' + file_hash(os.path.join(BASE, 'preprocess.py'))
+               + '_' + file_hash(os.path.join(BASE, 'setdata.py')))
     seg_cache2 = os.path.join(CACHE, f'sent_{seg_key}.pkl')
     t = time.time()
     use_sent_cache = not args.no_cache and not args.sets
@@ -115,7 +117,7 @@ def main():
     else:
         work = []
         for name, text, code in items:
-            for d in segment(text):
+            for d in segment(text, names):
                 s = d['text']
                 if s and not d['modal']:
                     work.append(s)

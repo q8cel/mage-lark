@@ -1,7 +1,8 @@
-# large reproducible data (Standard is the 21-set Standard rotation bundle from
-# https://mtgjson.com/api/v5/Standard.json)
+# large reproducible data (downloaded from https://mtgjson.com/api/v5/)
 Standard.json
 *.json.gz
+classic.json
+sets/
 
 # caches and run artifacts
 .cache/

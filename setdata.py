@@ -16,6 +16,32 @@ import json, os
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
+# Card names that are also common MTG vocabulary. These must NOT be normalized
+# to '~': in ability text the word refers to the common concept (a land type or
+# a keyword), not a specific card. E.g. M10 has an enchantment literally named
+# "Lifelink" and the basic lands are cards; normalizing them would clobber the
+# keyword "lifelink" and walk keywords like "Swampwalk". Only basic lands and
+# keywords are excluded (the words that are both real card names AND common
+# ability-text vocabulary); ordinary card names still normalize.
+_STOPWORDS = {
+    # the five basic lands (cards whose names are also land types)
+    'plains', 'island', 'swamp', 'mountain', 'forest',
+    # real MTG keywords (a card may be named after one)
+    'flying', 'first strike', 'double strike', 'trample', 'deathtouch',
+    'lifelink', 'reach', 'vigilance', 'haste', 'defender', 'hexproof',
+    'indestructible', 'menace', 'prowess', 'infect', 'blight', 'wither',
+    'toxic', 'flashback', 'flash', 'ward', 'changeling', 'cumulative',
+    'cascade', 'delirium', 'delve', 'enrage', 'evoke', 'exalt', 'exalted',
+    'exorcism', 'exert', 'explore', 'foretell', 'fortitude', 'guardian',
+    'heroic', 'hellbent', 'highland', 'horizon', 'husk', 'ichor',
+    'islandwalk', 'swampwalk', 'forestwalk', 'mountainwalk', 'plainswalk',
+    'phasing', 'proliferate', 'landfall', 'morbid', 'annihilate', 'banding',
+}
+
+
+def _is_common_word(name):
+    return name.lower() in _STOPWORDS
+
 def _card_fields(c):
     """Yield (name, text, [type strings]) from a card dict of either format."""
     name = c.get('name') or ''
@@ -62,6 +88,10 @@ def load(path):
         names.add(name.split(',')[0].strip())
         types.update(t)
         items.append((name, text, code))
+
+    # drop card names that are common MTG words (basic lands / keywords) so
+    # they don't get normalized to '~' and clobber the common vocabulary
+    names = {n for n in names if n and not _is_common_word(n)}
 
     for x in ('Legendary', 'Basic', 'Soul', 'Snow', 'Snowman'):
         types.discard(x)

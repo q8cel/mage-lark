@@ -140,6 +140,29 @@ other 2024–26 mechanics). Each is a separate, legitimate MTG pattern that FDN
 simply didn't exercise. Closing the gap means either adding those patterns or
 tuning on a more representative set.
 
+**Classic generalization** (4,279 sentences, 9 core sets: M10–M15 + M19–M21,
+2,586 cards, downloaded via mtgjson): classic sets are a more representative
+test than FDN but predate the 2024–26 mechanics that dominate Standard.
+
+| stage | coverage |
+|---|---|
+| as-tuned-on-FDN (pre data-fix) | 76.3 % |
+| + basic-land/keyword name-normalization fix, walk keywords, token keywords, protection, can't/can patterns, phase/extra-turn, cost modifiers | **79.2 % (3,388/4,279, 609 unique failures)** |
+
+A **data bug** was the single biggest win: card names that were also basic-
+land or keyword vocabulary (Plains, Island, …, Lifelink, Trample, …) were
+being turned into `~` during name normalization, which clobbered walk keywords
+(`Swampwalk` → `~walk`) and keyword text (`has lifelink` → `has ~`).
+`setdata.py` now excludes that shared vocabulary from the per-set name list,
+which is why keyword-named cards must not be in the stoplist — it is a
+small curated set of the 5 basic lands + real MTG keywords, not a dump of
+random words.
+
+The remaining classic failures are a long tail (609 unique, mostly 1× each):
+triggered / activated / loyalty **effects** (the trigger and cost clauses
+parse; the effects are the open tail), plus diverse statics. They are genuine
+MTG constructions, not regressions.
+
 ## Parser notes / caveats
 
 - **Earley + `ambiguity='resolve'`**: the grammar is deliberately ambiguous
