@@ -261,8 +261,29 @@ class Interpreter:
         return None
 
     def i_kw_list(self, children):
-        return [ch.value for ch in children
-                if isinstance(ch, Token) and ch.type == 'KEYWORD']
+        # Keywords may be nested under kw_list_item/kw_item, so collect KEYWORD
+        # tokens recursively; also capture "protection from X" items as text.
+        out = []
+        def walk(n):
+            if isinstance(n, Token):
+                if n.type == 'KEYWORD':
+                    out.append(n.value)
+                return
+            low = [c.value.lower() for c in n.children if isinstance(c, Token)]
+            if 'protection' in low:
+                out.append(self._text(n.children))
+                return
+            for c in n.children:
+                walk(c)
+        for ch in children:
+            walk(ch)
+        return out
+
+    # kw_list_mod / kw_item are parallel keyword-list rules -> same extraction.
+    i_kw_list_mod = i_kw_list
+    def i_kw_item(self, children):
+        v = self.i_kw_list(children)
+        return v[0] if v else None
 
     def i_kw_with_mod(self, children):
         key = None
