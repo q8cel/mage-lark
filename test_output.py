@@ -79,6 +79,15 @@ add("if-decomposed", "If you control three or more creatures, draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
                   and isinstance(d.get('effect'), dict)
                   and d['effect'].get('verb') == 'draw'))
+add("if-instead", "If a card would be put into an opponent's graveyard from anywhere, exile it instead",
+    lambda o: has(o, lambda d: d.get('type') == 'if' and d.get('instead') is True
+                  and d.get('effect', {}).get('verb') == 'exile'))
+add("if-relative-life", "If you would gain life, you gain twice that much life instead",
+    lambda o: has(o, lambda d: d.get('effect', {}).get('verb') == 'gain_life'
+                  and 'twice' in str(d.get('effect', {}).get('amount', ''))))
+add("put-with-subject", "that player puts it into their hand",
+    lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'hand'
+                  and d.get('who') == 'that player'))
 
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'

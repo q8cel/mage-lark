@@ -629,6 +629,12 @@ class Interpreter:
     def i_life_amount(self, children):
         return self._text(children) or (self.interp(children[0]) if children else None)
 
+    def i_dmg_amount(self, children):
+        # a bare number/word keeps its structured (int) value; relative forms -> text
+        if len(children) == 1 and isinstance(children[0], Tree) and children[0].data == 'amount':
+            return self.interp(children[0])
+        return self._text(children)
+
     def i_end_turn_action(self, children):
         return {'verb': 'end_turn'}
 
@@ -673,9 +679,13 @@ class Interpreter:
 
     def i_deal_damage_action(self, children):
         d = {'verb': 'deal_damage'}
-        amt = self._find_one(children, 'amount')
-        if amt is not None:
-            d['amount'] = self.interp(amt)
+        da = self._find_one(children, 'dmg_amount')
+        if da is not None:
+            d['amount'] = self.interp(da)
+        else:
+            amt = self._find_one(children, 'amount')
+            if amt is not None:
+                d['amount'] = self.interp(amt)
         # source = a card_target that is a DIRECT child (the dealer)
         for ch in children:
             if isinstance(ch, Tree) and ch.data == 'card_target':
@@ -967,6 +977,9 @@ class Interpreter:
 
     def i_put_zone_action(self, children):
         d = {'verb': 'put'}
+        wh = self._find_one(children, 'who')
+        if wh is not None and wh.data != 'card_target':
+            d['who'] = self.interp(wh)
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['card'] = self.interp(ct)
@@ -1112,6 +1125,11 @@ class Interpreter:
                     eff = self.interp(ch)
                 elif ch.data == 'any_text':
                     texts.append(self._text([ch]).strip())
+                elif ch.data == 'instead_suffix':
+                    d['instead'] = True
+                    for sub in ch.children:
+                        if isinstance(sub, Tree) and sub.data == 'any_text':
+                            d['instead_of'] = self._text([sub]).strip()
         if eff is not None:
             if texts:
                 d['condition'] = texts[0]

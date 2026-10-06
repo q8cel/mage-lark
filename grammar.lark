@@ -30,9 +30,10 @@ sentence: loyalty_sentence
 // ----------------------------------------------------------------------------
 //  conditional static ability:  "If <condition>, <effect>."
 // ----------------------------------------------------------------------------
-if_sentence: V_IF any_text "," effect
+if_sentence: V_IF any_text "," effect instead_suffix?
             | V_IF any_text "," any_text
             | V_IF any_text
+instead_suffix: INSTEAD ("of" any_text)?
 
 // ----------------------------------------------------------------------------
 //  static restrictions / one-liners that aren't keyword lists
@@ -304,17 +305,22 @@ draw_amount: amount | "a" | "an" | "an" "additional" | "that" "many" | "that" "m
 
 gain_life_action: who V_GAIN life_amount ("for" "each" card_target)?
                 | who V_GAIN "life" "equal" "to" xdef
-life_amount: amount "life" | "that" "much" "life" | "that" "many" "life" | "life" "equal" "to" "the" "life" "lost" "this" "way"
+life_amount: amount "life" | "twice" "that" "much" "life" | "double" "that" "much" "life"
+           | "that" "much" "life" ("plus" amount)? | "that" "many" "life"
+           | "life" "equal" "to" "the" "life" "lost" "this" "way"
+dmg_amount: amount | "that" "much" | "double" "that" | "double" "that" "much"
+           | "that" "much" "plus" amount | "double" "that" "plus" amount | "double" "that" "much" "plus" amount
 lose_life_action: who V_LOSE life_amount ("unless" any_text)?
                 | player V_LOSE life_amount ("unless" any_text)?
                 | who V_LOSE "life" "equal" "to" xdef
                 | player V_LOSE "life" "equal" "to" xdef
 gain_poison_action: who V_GET amount "poison" "counters"
 
-deal_damage_action: card_target V_DEAL amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")?
-                  | ("it" | "they") V_DEAL amount? "damage" "to" damage_who
-                  | card_target V_DEAL amount? "damage" "to" damage_who ("and" amount? "damage" "to" damage_who)?
-                  | amount? "damage" "to" damage_who
+deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")?
+                  | ("it" | "they") V_DEAL dmg_amount? "damage" "to" damage_who
+                  | ("it" | "they") V_DEAL dmg_amount "damage"
+                  | card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" dmg_amount? "damage" "to" damage_who)?
+                  | dmg_amount? "damage" "to" damage_who
                   | card_target V_DEAL amount? "damage" "equal" "to" "its" "power" "to" damage_who
                   | card_target V_DEAL "damage" "to" damage_who "equal" "to" xdef
                   | card_target V_DEAL amount "damage" "divided" "as" "you" "choose" "among" "any" "number" "of" damage_who
@@ -333,18 +339,19 @@ counter_spell_action: V_COUNTER card_target "spell" ("unless" any_text)?
 return_action: V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands")
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")?
-             | V_RETURN card_target "to" "the" "battlefield" "transformed"? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+             | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "with" "mana" "value" mv_cmp ("from" "your" "graveyard")? "to" "the" "battlefield"
 mv_cmp: amount "or" ("less" | "more")
        | ("less" | "greater") "than" "or" "equal" "to" (card_target | V_THIS | V_THAT) "'s" ("power" | "mana" "value")
              | V_RETURN card_target "to" "its" "owner's" "hand" "tapped"
              | V_RETURN card_target "to" "its" "owner's" "hand" "and" "you" V_CREATE "a" "Treasure" "token"
 
-put_zone_action: V_PUT card_target "into" zone ("in" "a" "random" "order")?
+put_zone_action: (who)? V_PUT card_target "into" zone ("in" "a" "random" "order")?
+               | (who)? V_PUT card_target "on" "the" "bottom" ("of" zone)? ("in" "a" "random" "order")?
                | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? ("in" "a" "random" "order")?
                | "the" "rest" "on" "the" "bottom" ("of" "your" "library")? ("in" "a" "random" "order")?
                | V_PUT "the" "rest" "into" zone
-               | V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")?
+               | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")?
                | V_PUT card_target "on" "top" "of" "your" "library"
                | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
                | V_PUT "the" "exiled" "card" "into" zone
@@ -497,7 +504,7 @@ ZONE_WORD: /battlefield|graveyard|hand|library|exile/
 OWNER: /your|their|an opponent's|the|a|its owner's/
 
 //  player reference
-player: (V_EACH | V_AN | V_TARGET | V_ANOTHER | V_THAT)? ("opponent" | "player" | V_YOU)
+player: (V_EACH | V_AN | V_TARGET | V_ANOTHER | V_THAT | "the")? ("opponent" | "player" | V_YOU)
 
 //  WHO: an actor that gains/loses life etc.
 who: player | card_target | ("Its" | "its") "controller"
@@ -596,7 +603,7 @@ EMDASH: /—|–/
 //  (a verb can be sentence-initial (capitalised) or mid-sentence (lowercase))
 V_ADD: /\badd\b/i
 V_CREATE: /\bcreate(s?)\b/i
-V_PUT: /\bput\b/i
+V_PUT: /\bput(s)?\b/i
 V_REMOVE: /\bremove\b/i
 V_SEARCH: /\bsearch\b/i
 V_DRAW: /\bdraws?\b/i
@@ -645,6 +652,7 @@ V_WIN: /\bwin\b/i
 V_WHEN: /\bwhen\b/i
 V_WHATEVER: /\bwhenever\b/i
 V_IF: /\bif\b/i
+INSTEAD: /\binstead\b/i
 V_IN: /\bin\b/i
 V_AT: /\bat\b/i
 V_AS: /\bas\b/i
