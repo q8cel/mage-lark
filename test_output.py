@@ -75,6 +75,10 @@ add("become-pt", "Target land you control becomes a 4/4 Elemental creature with 
 add("stat-condition", "This creature gets +4/+4 as long as an opponent has ten or more cards in their graveyard",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and 'graveyard' in str(d.get('condition', ''))))
+add("if-decomposed", "If you control three or more creatures, draw a card",
+    lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
+                  and isinstance(d.get('effect'), dict)
+                  and d['effect'].get('verb') == 'draw'))
 
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'

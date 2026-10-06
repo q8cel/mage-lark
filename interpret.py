@@ -1104,7 +1104,24 @@ class Interpreter:
         return d
 
     def i_if_sentence(self, children):
-        return {'type': 'if', 'text': self._text(children)}
+        d = {'type': 'if'}
+        texts, eff = [], None
+        for ch in children:
+            if isinstance(ch, Tree):
+                if ch.data == 'effect':
+                    eff = self.interp(ch)
+                elif ch.data == 'any_text':
+                    texts.append(self._text([ch]).strip())
+        if eff is not None:
+            if texts:
+                d['condition'] = texts[0]
+            d['effect'] = eff
+        elif len(texts) >= 2:
+            d['condition'] = texts[0]
+            d['effect'] = {'verb': 'raw', 'text': texts[1]}
+        else:
+            d['text'] = self._text(children)
+        return d
 
     def _cond_effect_sentence(self, stype, children):
         d = {'type': stype}
