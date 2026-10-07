@@ -600,11 +600,33 @@ class Interpreter:
                     break
         sc = self._find_one(children, 'stat_change')
         if sc is not None:
-            d['change'] = self.interp(sc)
+            r = self.interp(sc)
+            if isinstance(r, dict):
+                d.update(r)          # compound stat: change + gained/lost keywords
+            else:
+                d['change'] = r
         return d
 
     def i_stat_change(self, children):
-        return self._text(children)
+        # stat_change: POWER_MOD ("and" (loses|gains|has) kw_list)?
+        # Decompose the compound form into stat value + gained/lost keywords.
+        kw = None
+        kw_verb = None
+        pt = None
+        for ch in children:
+            if isinstance(ch, Token) and ch.type == 'POWER_MOD':
+                pt = ch.value
+            elif isinstance(ch, Token) and str(ch).lower() in ('loses', 'lose', 'gains', 'gain', 'has', 'have'):
+                kw_verb = str(ch).lower()
+            elif isinstance(ch, Tree) and ch.data == 'kw_list':
+                kw = self.interp(ch)
+        if kw is None:
+            return self._text(children)   # plain stat -> keep as string (backward compat)
+        d = {}
+        if pt:
+            d['change'] = pt
+        d[kw_verb if kw_verb else 'change_kw'] = kw
+        return d
 
     def i_gain_life_action(self, children):
         d = {'verb': 'gain_life'}
@@ -657,6 +679,25 @@ class Interpreter:
             d['target'] = {'kind': 'this_card'}
         return d
 
+    def i_trigger_extra_action(self, children):
+        d = {'verb': 'trigger_extra'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['target'] = self.interp(ct)
+        else:
+            toks = [str(c) for c in children if isinstance(c, Token)]
+            if 'triggers' in toks:
+                d['target'] = ' '.join(toks[:toks.index('triggers')]).strip()
+        return d
+
+    def i_lose_game_action(self, children):
+        d = {'verb': 'lose_game'}
+        for ch in children:
+            if isinstance(ch, Tree) and ch.data in ('who', 'player', 'card_target'):
+                d['who'] = self.interp(ch)
+                break
+        return d
+
     def i_choose_new_targets_action(self, children):
         d = {'verb': 'choose_new_targets'}
         may = any(isinstance(c, Token) and str(c).lower() == 'may' for c in children)
@@ -680,8 +721,18 @@ class Interpreter:
     def i_deal_damage_action(self, children):
         d = {'verb': 'deal_damage'}
         da = self._find_one(children, 'dmg_amount')
-        if da is not None:
-            d['amount'] = self.interp(da)
+        base = self.interp(da) if da is not None else None
+        plus_idx = next((i for i, c in enumerate(children)
+                         if isinstance(c, Token) and str(c).lower() == 'plus'), None)
+        if plus_idx is not None:
+            extra = None
+            for c in children[plus_idx + 1:]:
+                if isinstance(c, Tree) and c.data == 'amount':
+                    extra = self.interp(c); break
+            d['amount'] = (f"{base} plus {extra}" if base is not None
+                           else (f"plus {extra}" if extra is not None else None))
+        elif da is not None:
+            d['amount'] = base
         else:
             amt = self._find_one(children, 'amount')
             if amt is not None:

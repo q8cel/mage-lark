@@ -243,6 +243,8 @@ action: add_mana_action
        | end_turn_action
        | distribute_action
        | copy_action
+       | trigger_extra_action
+       | lose_game_action
        | choose_new_targets_action
        | change_target_action
        | stat_define_action
@@ -257,6 +259,7 @@ extra_turns_action: (who)? V_TAKE ("a" | "an" | amount) "extra" ("turn" | "turns
 
 add_mana_action: V_ADD mana_amount
 mana_amount: "one" "mana" "of" "any" "color"
+           | amount "mana" "of" "any" "one" "color"
            | amount "mana" "in" "any" "combination" "of" "colors"
            | "one" "mana" "of" "the" "chosen" "color"
            | "three" "mana" "of" "any" "one" "color"
@@ -309,6 +312,7 @@ life_amount: amount "life" | "twice" "that" "much" "life" | "double" "that" "muc
            | "that" "much" "life" ("plus" amount)? | "that" "many" "life"
            | "life" "equal" "to" "the" "life" "lost" "this" "way"
 dmg_amount: amount | "that" "much" | "double" "that" | "double" "that" "much"
+           | "triple" "that" | "triple" "that" "much"
            | "that" "much" "plus" amount | "double" "that" "plus" amount | "double" "that" "much" "plus" amount
 lose_life_action: who V_LOSE life_amount ("unless" any_text)?
                 | player V_LOSE life_amount ("unless" any_text)?
@@ -320,6 +324,7 @@ deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("an
                   | ("it" | "they") V_DEAL dmg_amount? "damage" "to" damage_who
                   | ("it" | "they") V_DEAL dmg_amount "damage"
                   | card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" dmg_amount? "damage" "to" damage_who)?
+                  | ("it" | "they" | card_target) V_DEAL dmg_amount "damage" "plus" amount "to" damage_who
                   | dmg_amount? "damage" "to" damage_who
                   | card_target V_DEAL amount? "damage" "equal" "to" "its" "power" "to" damage_who
                   | card_target V_DEAL "damage" "to" damage_who "equal" "to" xdef
@@ -327,6 +332,7 @@ deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("an
 damage_who: card_target "or" card_target
           | card_target "and/or" card_target
           | card_target
+          | "itself"
           | "you"
           | "any" V_TARGET
           | "each" "of" "up to" amount "other" "target" "s"?
@@ -372,7 +378,7 @@ destroy_action: V_DESTROY card_target
 
 tap_action: V_TAP card_target
 untap_action: V_UNTAP card_target
-sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")?
+sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
 gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")?
 scry_action: V_SCRY amount
@@ -382,7 +388,7 @@ mill_action: V_MILL amount "cards"
 fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
             | ("it" | card_target)? V_FIGHT ("up to" "one")? V_TARGET card_target ("you" "don't" "control")?
             | "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
-attach_action: V_ATTACH "it" "to" card_target ("you" "control")?
+attach_action: V_ATTACH "it" "to" (card_target | "the" "token") ("you" "control")?
 
 stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("as" "long" "as" any_text)?
            | ("you")? "have" card_target V_GET stat_change ("until" "end" "of" "turn")?
@@ -395,6 +401,7 @@ become_action: card_target (V_IS | "becomes") (V_A | V_AN) (POWER_T)? (CARDNAME+
 
 prevent_action: V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" card_target ("this" "turn")?
               | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
+              | V_PREVENT (amount "of" "that" | "that") "damage"
 
 look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" ("any" "time")?
            | V_LOOK "at" "an" "opponent's" "hand"
@@ -407,10 +414,12 @@ discard_action: (who)? V_DISCARD card_target ("unless" any_text)?
               | (who)? V_DISCARD ("your" | "their") "hand"
               | "You" V_MAY V_DISCARD card_target ("unless" any_text)?
 shuffle_action: V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
-cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" "their" "mana" "costs")? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
+cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("this" "turn")? ("on" "each" "of" "your" "turns")?
 choose_action: (player)? V_CHOOSE amount? choose_obj
-copy_action: V_COPY (card_target | "it" | V_THAT "spell") ("for" "each" any_text)?
+copy_action: V_COPY (card_target | "it" | V_THAT "spell" | V_THAT "ability") ("for" "each" any_text)?
+trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
+lose_game_action: (who | player) V_LOSE "the" "game"
 choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_text
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text
@@ -474,6 +483,7 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "its" "power"
     | "its" "toughness"
     | "the" "mana" "value" "of" "that" "spell"
+    | ("that" | "a" | "its") "creature's" "mana" "value"
     | "that" "card's" "mana" "cost"
     | "the" "amount" "of" "excess" "damage" "dealt" "to" "that" "creature" "this" "way"
     | "the" "greatest" "power" "among" "other" "creatures" "you" "control"
@@ -529,7 +539,7 @@ lead: this_that? quantifier? otherness? nontoken? | this_that? otherness? quanti
 core: status_list? colors? possessive? card_kind?
 zone_mod: with_modifier? controller? with_modifier? in_zone? with_modifier?
             | quantifier "of" card_target
-this_that: V_THIS | V_THAT | V_IT | "those" | "these"
+this_that: V_THIS | V_THAT | V_IT | "those" | "these" | "the"
 possessive: "your" | "its" | "their" | "an opponent's" | "that player's" | "that opponent's"
 otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*

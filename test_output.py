@@ -88,6 +88,16 @@ add("if-relative-life", "If you would gain life, you gain twice that much life i
 add("put-with-subject", "that player puts it into their hand",
     lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'hand'
                   and d.get('who') == 'that player'))
+add("stat-loses-kw", "Equipped creature gets +10/+10 and loses flying",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_change' and d.get('change') == '+10/+10'
+                  and 'flying' in d.get('loses', [])))
+add("prevent-that-damage", "If a source would deal damage to you, prevent that damage",
+    lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'))
+add("deal-damage-plus", "it deals that much damage plus 2 to that creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
+                  and 'plus 2' in str(d.get('amount', ''))))
+add("lose-game", "that player loses the game",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_game' and d.get('who') == 'that player'))
 
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'
