@@ -31,6 +31,7 @@ WORD_AMT  = {'a', 'an', 'x', 'two', 'three', 'four', 'five', 'six', 'seven', 'ei
 PT_RE     = re.compile(r'^[+-]?(x|\d+)/[+-]?(x|\d+)$')         # 2/2, +1/+1, -x/-x, +10/+10
 MANA_RE   = re.compile(r'^\{[^{}]+\}(\s*\{[^{}]+\})*$')        # {1}, {R}, {1}{B}, {2} {U}
 NUNIT_RE  = re.compile(r'^[0-9x]+\s+\w+$')                     # "1 life", "X damage"
+REL_AMT   = re.compile(r'\b(that|these|this|such|equal to)\b')  # relative: "double that", "...plus 1"
 
 
 def load_my_outputs():
@@ -68,7 +69,8 @@ def check(out, sent, flags):
                 elif k == 'amount' and isinstance(v, str):
                     a = v.strip()
                     if (a.lower() not in WORD_AMT and not a.isdigit()
-                            and not MANA_RE.match(a) and not NUNIT_RE.match(a)):
+                            and not MANA_RE.match(a) and not NUNIT_RE.match(a)
+                            and not REL_AMT.search(a)):
                         flags.append(('bad_amount', sent, f"amount={v!r}"))
                 elif k in ('card_type', 'card') and isinstance(v, dict):
                     if not any(x in v for x in ('kind', 'value', 'type', 'card_type', 'this_that', 'ref')):
@@ -78,6 +80,17 @@ def check(out, sent, flags):
             for x in o:
                 walk(x)
     walk(out)
+
+
+def flagged(my_out):
+    """{sentence: sorted list of flag-type strings} for structurally-suspect (parsed-wrong) sentences."""
+    res = {}
+    for s, o in my_out.items():
+        fl = []
+        check(o, s, fl)
+        if fl:
+            res[s] = sorted({f[0] for f in fl})
+    return res
 
 
 def main():

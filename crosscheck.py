@@ -23,6 +23,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
 from setdata import load
 from preprocess import segment
+import invariant_check
 
 ENDPOINT = os.environ.get('LLM_ENDPOINT', 'http://127.0.0.1:8080/chat/completions')
 MODEL    = os.environ.get('LLM_MODEL', 'Qwen3.8-27B-UD-Q6_K')
@@ -87,7 +88,7 @@ def llm_decode(sent):
     with _llm_lock:
         if key in _llm:
             return _llm[key]
-    body = json.dumps({"model": MODEL, "temperature": 0, "top_p": 1, "max_tokens": 400,
+    body = json.dumps({"model": MODEL, "temperature": 0, "top_p": 1, "max_tokens": 900,
                        "messages": [{"role": "system", "content": SYSTEM},
                                     {"role": "user", "content": prompt_for(sent)}]}).encode()
     j = None
@@ -102,7 +103,8 @@ def llm_decode(sent):
         except Exception:
             time.sleep(2)
     with _llm_lock:
-        _llm[key] = j
+        if j is not None:      # don't cache failures -> they get retried next run
+            _llm[key] = j
     return j
 
 # ---- extract comparable fields from OUR output ----
@@ -178,7 +180,7 @@ def compare(sent, out, llm, types_lower):
           if isinstance(x, str) and str(x).lower() != 'battlefield'}
     mz = lz - zones
     if mz:
-        issues.append(('zone', f"llm={sorted(mz)}", f"mine={sorted(zones) or '-'}"))
+        issues.append(('zone~', f"llm={sorted(mz)}", f"mine={sorted(zones) or '-'}"))
     return issues
 
 # ---- locate our output cache (built by content_check.py) ----
@@ -226,7 +228,6 @@ def main():
     print(f"my outputs: {len(my_out)}   llm cache: {len(_llm)}   endpoint={ENDPOINT} model={MODEL}")
 
     sents = list(my_out.keys())
-    # stratify by a coarse type keyword in the sentence for category coverage
     def bucket(s):
         ls = s.lower()
         for tag, pat in [('triggered', ('when ', 'whenever', 'at the beginning', 'at the start', 'at end of')),
@@ -235,19 +236,26 @@ def main():
             if any(p in ls for p in pat):
                 return tag
         return 'static'
+    # ALWAYS include the invariant-flagged (parsed-wrong) sentences, then fill the
+    # budget with bucket-stratified randoms to discover NEW mis-parses the free
+    # invariant checker cannot see (wrong verb/amount that still looks well-formed).
+    fl = invariant_check.flagged(my_out)
+    flagged_set = set(fl)
+    rest = [s for s in sents if s not in flagged_set]
     by_b = {}
-    for s in sents:
+    for s in rest:
         by_b.setdefault(bucket(s), []).append(s)
-    sample = []
     if args.all:
         sample = sents
     else:
-        per = max(1, args.n // len(by_b))
+        budget = max(0, args.n - len(flagged_set))
+        per = max(1, budget // max(1, len(by_b)))
+        fill = []
         for b in ('triggered', 'activated', 'loyalty', 'static'):
-            sample += by_b.get(b, [])[:per]
-        sample = sample[:args.n]
-    print(f"sample: {len(sample)}  (by bucket: "
-          + ", ".join(f"{b}={len(by_b.get(b,[]))}" for b in ('triggered','activated','loyalty','static')) + ")")
+            fill += by_b.get(b, [])[:per]
+        sample = sorted(flagged_set) + fill[:budget]
+    print(f"sample: {len(sample)}  (invariant-flagged: {len(flagged_set)} always included; "
+          f"+ {len(sample)-len(flagged_set)} random-sampled)")
 
     todo = [s for s in sample if hashlib.sha1(s.encode()).hexdigest()[:16] not in _llm]
     print(f"to-call LLM: {len(todo)}   (cached: {len(sample)-len(todo)})")
@@ -284,6 +292,18 @@ def main():
     fc = Counter(r[1] for r in hard)
     for f, c in fc.most_common():
         print(f"  {c:4d}  {f}")
+
+    print(f"\n== invariant-flagged sentences ({len(flagged_set)}) -- LLM decode = suggested fix ==")
+    for s in sorted(flagged_set, key=lambda x: (fl[x], x)):
+        llm = _llm.get(hashlib.sha1(s.encode()).hexdigest()[:16])
+        if llm:
+            hint = f"llm_verb={llm.get('verb','?')}"
+            if isinstance(llm.get('amount'), int):
+                hint += f" amount={llm.get('amount')}"
+        else:
+            hint = "LLM_FAILED (will retry)"
+        print(f"  [{','.join(fl[s])}] {hint}")
+        print(f"      {s}")
 
     with open('crosscheck_missing.tsv', 'w') as fh:
         for s, field, mine, llm_v in rows:
