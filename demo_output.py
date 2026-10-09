@@ -4,10 +4,11 @@ successful parses, using a real set's name/type vocabulary (so card names
 become `~`).
 
 Usage:
-    python demo_output.py                       # built-in examples on classic.json
-    python demo_output.py FDN.json              # use FDN names/types
-    python demo_output.py classic.json "Draw a card" "Flying, first strike"
-    python demo_output.py classic.json --cards 5   # first 5 parsing cards verbatim
+    python demo_output.py                        # built-in examples (classic.json)
+    python demo_output.py "Draw a card" "Flying, first strike"
+    python demo_output.py FDN.json "Draw a card"   # .json arg = data file
+    python demo_output.py --data FDN.json "Draw a card"
+    python demo_output.py --cards 5               # first 5 fully-parsing cards
 """
 import sys, os, json
 from lark import Lark, LarkError
@@ -62,6 +63,8 @@ def main():
             flags['cards'] = True
             if i+1 < len(args) and args[i+1].isdigit():
                 flags['ncards'] = args[i+1]; i += 1
+        elif a.endswith('.json'):
+            data = a                      # positional data file
         else:
             examples.append(a)
         i += 1
