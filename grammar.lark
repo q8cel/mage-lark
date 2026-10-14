@@ -67,7 +67,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
 //  loyalty   [+1]: <effect>   [−4]: <effect>
 // ----------------------------------------------------------------------------
 loyalty_sentence: LOY_COST ":" effect (xdef_clause)?
-LOY_COST: /\[[\-\u2212+]\d+\]/
+LOY_COST: /\[[\-\u2212+]?\d+\]/
 
 // ----------------------------------------------------------------------------
 //  modal     "Choose one"  /  "Choose one that hasn't been chosen"
@@ -273,7 +273,7 @@ mana_amount: "one" "mana" "of" "any" "color"
            | MANA+ ("or" MANA+)*
            | MANA+ "for" "each" card_target
 
-create_token_action: (who)? V_CREATE token ("if" any_text)?
+create_token_action: (who)? V_CREATE token ("if" any_text)? ("for" "each" card_target ("that" "died" "this" "turn")?)?
 token: "a" "token" "that's" "a" "copy" "of" card_target token_except?
       | token_num ("tapped")? POWER_T? tok_colors? token_types? ("artifact")? ("creature" | "card")? "token" "s"? token_tail*
       | token_proper "," "a" "legendary" POWER_T? tok_colors? token_types? "creature" "token"
@@ -300,7 +300,7 @@ counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
 counter_amount: amount | "one" "or" "more" | "that" "many" | "a" | "an"
 counter_name: WORD+
 
-search_action: V_SEARCH zone "for" card_target ("reveal" "it")? ("put" "it" "into" zone)? ("then" "shuffle")?
+search_action: V_SEARCH zone ("and/or" zone)? "for" card_target ("reveal" "it")? ("and"? "put" "it" "into" zone)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("put" "it" "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle")?
@@ -311,7 +311,7 @@ draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target
            | (who)? V_DRAW "cards" "equal" "to" "its" "power"
 draw_amount: amount | "a" | "an" | "an" "additional" | "that" "many" | "that" "much"
 
-gain_life_action: who V_GAIN life_amount ("for" "each" card_target)?
+gain_life_action: who V_GAIN life_amount ("for" "each" card_target ("that" "died" "this" "turn")?)?
                 | who V_GAIN "life" "equal" "to" xdef
 life_amount: amount "life" | "twice" "that" "much" "life" | "double" "that" "much" "life"
            | "that" "much" "life" ("plus" amount)? | "that" "many" "life"
@@ -350,7 +350,7 @@ damage_who: card_target "or" card_target
           | "each" "player" "and" "each" "creature"
 divided_rest: (ANYWORD | ",")+
 
-counter_spell_action: V_COUNTER card_target "spell" ("unless" any_text)?
+counter_spell_action: V_COUNTER card_target ("spell" | "ability") ("with" any_text)? ("unless" any_text)?
 
 return_action: V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands")
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
@@ -393,7 +393,7 @@ untap_action: V_UNTAP card_target
 sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
 gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")?
-scry_action: V_SCRY amount
+scry_action: ("each" "player" | who)? V_SCRY amount
 surveil_action: V_SURVEIL amount
 mill_action: (who)? V_MILL (("a" | "an" | amount | "that" "many") ("card" | "cards") | "half" ("their" | "his" | "her" | "a" | "the") "library" (","? "rounded" "down")?)
            | player V_MILL amount "cards"
@@ -419,7 +419,7 @@ prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "woul
 
 look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" ("any" "time")?
            | V_LOOK "at" "an" "opponent's" "hand"
-reveal_action: V_REVEAL card_target ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
+reveal_action: V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
              | V_REVEAL "the" "top" amount "cards" "of" "your" "library"
             | V_REVEAL "the" "top" "card" "of" "your" "library"
              | card_target V_REVEAL "their" "hand"
@@ -475,8 +475,7 @@ stat_define_action: "~'s" "power" "and" "toughness" "are" "each" "equal" "to" xd
 change_target_action: "Change" "the" "target" "of" any_text
 gain_quote_action: (card_target)? (V_GAIN | "has" | "have") QUOTE
 
-emblem_action: V_YOU "get" "an" "emblem" "with" QUOTE
-             | "You" "get" "an" "emblem"
+emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))?
 
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
 enchant_action: V_ENCHANT enchant_target
@@ -572,9 +571,9 @@ card_kind: THIS_CARD types? | types
          | "basic" THIS_CARD
          | "basic" "land" | "basic" "land" "card" | "basic" "land" "cards"
          | "source" | "sources"
-         | types "or" types
-         | types "," "or" types
-         | types "," types "," "or" types
+         | types "or" types "card"?
+         | types "," "or" types "card"?
+         | types "," types "," "or" types "card"?
          | types "," types "," "and" types
          | CARDNAME ("creature" "card" | "creature" "cards" | "creature" | "creatures" | "spell" | "spells" | "card" | "cards" | "permanent" | "permanents")
          | "card" | "cards" | "creature" | "creatures" | "spell" | "spells"
