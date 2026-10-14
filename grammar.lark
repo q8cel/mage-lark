@@ -137,6 +137,7 @@ event_object: ("combat" "damage" "to" (player | card_target))?
             | ("combat" | "noncombat") "damage" "during" "your" "turn"
             | "your" "second" "card" "each" "turn"
             | "the" "target" "of" "a" "spell" "or" "ability"
+            | ("you" | player) "or" ("a" | "an")? "planeswalker" "you" "control"
             | "a" "card"
             | "a" "spell" "that" "targets" card_target
             | "a" "spell"
@@ -356,13 +357,13 @@ mv_cmp: amount "or" ("less" | "more")
              | V_RETURN card_target "to" "its" "owner's" "hand" "tapped"
              | V_RETURN card_target "to" "its" "owner's" "hand" "and" "you" V_CREATE "a" "Treasure" "token"
 
-put_zone_action: (who)? V_PUT card_target "into" zone order_mod?
+put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "from" "the" "top")? order_mod?
                | (who)? V_PUT card_target "on" "the" "bottom" ("of" zone)? order_mod?
                | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
                | "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
                | V_PUT "the" "rest" "into" zone
                | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")?
-               | V_PUT card_target "on" "top" "of" "your" "library"
+               | V_PUT card_target "on" "top" "of" zone
                | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
                | V_PUT "the" "exiled" "card" "into" zone
                | V_PUT "one" "of" "those" "cards" "back" "on" "top" "of" "your" "library"
@@ -401,9 +402,10 @@ stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target
 stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
            | ("has" | "gains" | "have" | "gain") kw_list
 gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)?
-base_pt_action: card_target ("has" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("until" "end" "of" "turn")?
+base_pt_action: card_target ("has" | "gains" "gets") "base" "power" "and" "toughness" POWER_T ("until" "end" "of" "turn")?
+pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
-become_action: card_target (V_IS | "becomes") (V_A | V_AN)? colors? (POWER_T)? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" any_text)?
+become_action: card_target (V_IS | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" any_text)? ("for" "as" "long" "as" any_text)?
              | ("you")? "have" card_target "become" (V_A | V_AN) (POWER_T)? (CARDNAME+ (GENERIC_TYPE)? | types) ("until" "end" "of" "turn")?
 
 prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | card_target) (("and" | "or") ("you" | card_target))*)? ("this" "turn")?
@@ -421,6 +423,7 @@ discard_action: (who)? V_DISCARD card_target ("unless" any_text)?
               | (who)? V_DISCARD ("your" | "their") "hand"
               | "You" V_MAY V_DISCARD card_target ("unless" any_text)?
 shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
+             | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
 cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("this" "turn")? ("on" "each" "of" "your" "turns")?
 choose_action: (player)? V_CHOOSE amount? choose_obj
@@ -518,7 +521,7 @@ amount: NUMBER | "X" | "one" | "two" | "three" | "four" | "five" | "six" | "seve
 //  zone: a game zone (optionally owned)
 zone: (OWNER)? (ZONE_WORD)
 ZONE_WORD: /battlefield|graveyard|hand|library|exile/
-OWNER: /your|their|an opponent's|the|a|its owner's/
+OWNER: /your|their owner's|their|an opponent's|the|a|its owner's/
 
 //  player reference
 player: (V_EACH | V_AN | V_TARGET | V_ANOTHER | V_THAT | "the" | "defending" | "attacking" | "active")? ("opponent" | "player" | V_YOU)

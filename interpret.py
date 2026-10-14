@@ -580,8 +580,26 @@ class Interpreter:
         if any(isinstance(c, Token) and c.value == 'addition' for c in children):
             d['in_addition'] = True
         pt = [c for c in children if isinstance(c, Token) and c.type in ('POWER_T', 'POWER_MOD')]
+        if not pt:
+            pcm = self._find_one(children, 'pt_color_mod')
+            if pcm is not None:
+                pt = [c for c in pcm.children if isinstance(c, Token) and c.type in ('POWER_T', 'POWER_MOD')]
         if pt:
             d['pt'] = pt[0].value
+        pcm = self._find_one(children, 'pt_color_mod')
+        if pcm is not None:
+            def _colors(node):
+                out = []
+                for c in node.children:
+                    if isinstance(c, Token):
+                        if c.type == 'COLOR':
+                            out.append(c.value)
+                    else:
+                        out.extend(_colors(c))
+                return out
+            cols = _colors(pcm)
+            if cols:
+                d['colors'] = cols
         wm = self._find_one(children, 'with_modifier') or self._find_one(children, 'any_text')
         if wm is not None and any(isinstance(c, Token) and c.value == 'with' for c in children):
             d['modifier'] = self.interp(wm)
