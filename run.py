@@ -84,7 +84,11 @@ def main():
     t0 = time.time()
     # ---- segment cache ----
     dh = file_hash(args.data)
-    seg_cache = os.path.join(CACHE, f'seg_{dh}.pkl')
+    # the load() result (esp. the `names` normalization set) depends on
+    # setdata.py's logic, so key the cache by setdata.py too -- otherwise a
+    # change to the name-exclusion stoplist serves a stale `names` set.
+    _sdh = file_hash(os.path.join(BASE, 'setdata.py'))
+    seg_cache = os.path.join(CACHE, f'seg_{dh}_{_sdh}.pkl')
     items, types, names, sets = None, None, None, None
     if not args.no_cache and os.path.exists(seg_cache):
         t = time.time()

@@ -555,6 +555,16 @@ class Interpreter:
             d['keywords'] = self.interp(kw)
         return d
 
+    def i_base_pt_action(self, children):
+        d = {'verb': 'set_base_pt'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['target'] = self.interp(ct)
+        pt = [c for c in children if isinstance(c, Token) and c.type == 'POWER_T']
+        if pt:
+            d['base_pt'] = pt[0].value
+        return d
+
     def i_become_action(self, children):
         d = {'verb': 'become'}
         ct = self._find_one(children, 'card_target')
