@@ -296,12 +296,13 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
 
 put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("for" "each" "of" card_target "'s" "colors")?
 remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
+             | (who)? V_LOSE "all" counter_kind
 counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
 counter_amount: amount | "one" "or" "more" | "that" "many" | "a" | "an"
 counter_name: WORD+
 
-search_action: V_SEARCH zone ("and/or" zone)? "for" card_target ("reveal" "it")? ("and"? "put" "it" "into" zone)? ("then" "shuffle")?
-             | V_SEARCH zone "for" card_target ("put" "it" "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
+search_action: V_SEARCH zone ("and/or" zone)? "for" card_target ("named" (THIS_CARD | CARDNAME))? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? ("then" "shuffle")?
+             | V_SEARCH zone "for" card_target ("named" (THIS_CARD | CARDNAME))? ("put" ("it" | "them") "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle")?
 
@@ -350,7 +351,7 @@ damage_who: card_target "or" card_target
           | "each" "player" "and" "each" "creature"
 divided_rest: (ANYWORD | ",")+
 
-counter_spell_action: V_COUNTER card_target ("spell" | "ability") ("with" any_text)? ("unless" any_text)?
+counter_spell_action: V_COUNTER card_target ("spell" | "ability")? ("with" any_text)? ("unless" any_text)?
 
 return_action: V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands")
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
@@ -410,7 +411,7 @@ gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until"
 base_pt_action: card_target ("has" | "gains" "gets") "base" "power" "and" "toughness" POWER_T ("until" "end" "of" "turn")?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
-become_action: card_target (V_IS | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" any_text)? ("for" "as" "long" "as" any_text)?
+become_action: card_target (V_IS | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" any_text)? ("that's" any_text)? ("for" "as" "long" "as" any_text)?
              | ("you")? "have" card_target "become" (V_A | V_AN) (POWER_T)? (CARDNAME+ (GENERIC_TYPE)? | types) ("until" "end" "of" "turn")?
 
 prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | card_target) (("and" | "or") ("you" | card_target))*)? ("this" "turn")?
@@ -562,7 +563,7 @@ possessive: "your" | "its" | "their" | "an opponent's" | "that player's" | "that
 otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*
 NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolored)|non-[A-Z][a-zA-Z]+/i
-quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amount
+quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
 status_list: STATUS+
