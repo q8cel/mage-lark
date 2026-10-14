@@ -488,7 +488,17 @@ class Interpreter:
         return self._card_action('reveal', children)
 
     def i_attach_action(self, children):
-        return self._card_action('attach', children, key='to')
+        d = {'verb': 'attach'}
+        cts = self._find(children, 'card_target')
+        token = any(isinstance(c, Token) and str(c).lower() == 'token' for c in children)
+        if len(cts) >= 2:
+            d['object'] = self.interp(cts[0])
+            d['to'] = self.interp(cts[1])
+        elif cts:
+            d['object'] = self.interp(cts[0])
+            if token:
+                d['to'] = {'card_type': {'kind': 'type', 'value': 'token'}}
+        return d
 
     def i_fight_action(self, children):
         return self._card_action('fight', children, key='target')
@@ -719,11 +729,36 @@ class Interpreter:
         return d
 
     def i_lose_game_action(self, children):
-        d = {'verb': 'lose_game'}
+        verb = 'lose_game'
+        for ch in children:
+            if isinstance(ch, Token) and getattr(ch, 'type', None) == 'V_WIN':
+                verb = 'win_game'
+                break
+        d = {'verb': verb}
         for ch in children:
             if isinstance(ch, Tree) and ch.data in ('who', 'player', 'card_target'):
                 d['who'] = self.interp(ch)
                 break
+        return d
+
+    def i_count_action(self, children):
+        d = {'verb': 'count'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['target'] = self.interp(ct)
+        return d
+
+    def i_have_deal_action(self, children):
+        d = {'verb': 'deal_damage'}
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['by'] = self.interp(cts[0])
+        da = self._find_one(children, 'dmg_amount')
+        if da is not None:
+            d['amount'] = self.interp(da)
+        dw = self._find_one(children, 'damage_who')
+        if dw is not None:
+            d['to'] = self.interp(dw)
         return d
 
     def i_choose_new_targets_action(self, children):

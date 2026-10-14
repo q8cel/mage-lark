@@ -248,6 +248,8 @@ action: add_mana_action
        | copy_action
        | trigger_extra_action
        | lose_game_action
+       | count_action
+       | have_deal_action
        | choose_new_targets_action
        | change_target_action
        | stat_define_action
@@ -343,6 +345,9 @@ damage_who: card_target "or" card_target
           | "each" "opponent"
           | "each" "player"
           | "each" "creature" "without" "flying"
+          | "each" "creature" "and" "each" "player"
+          | "each" "opponent" "and" "each" "planeswalker" "they" "control"
+          | "each" "player" "and" "each" "creature"
 divided_rest: (ANYWORD | ",")+
 
 counter_spell_action: V_COUNTER card_target "spell" ("unless" any_text)?
@@ -385,7 +390,7 @@ destroy_action: V_DESTROY card_target ("at" "random")?
 
 tap_action: V_TAP card_target
 untap_action: V_UNTAP card_target
-sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("unless" any_text)?
+sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
 gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")?
 scry_action: V_SCRY amount
@@ -395,7 +400,7 @@ mill_action: (who)? V_MILL (("a" | "an" | amount | "that" "many") ("card" | "car
 fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
             | ("it" | card_target)? V_FIGHT ("up to" "one")? V_TARGET card_target ("you" "don't" "control")?
             | "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
-attach_action: V_ATTACH "it" "to" (card_target | "the" "token") ("you" "control")?
+attach_action: V_ATTACH card_target "to" (card_target | "the" "token") ("you" "control")?
 
 stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("as" "long" "as" any_text)?
            | ("you")? "have" card_target V_GET stat_change ("until" "end" "of" "turn")?
@@ -419,7 +424,7 @@ reveal_action: V_REVEAL card_target ("from" "among" "them" | "from" "the" "top" 
             | V_REVEAL "the" "top" "card" "of" "your" "library"
              | card_target V_REVEAL "their" "hand"
              | V_REVEAL card_target "from" "the" "top" "of" "your" "library" "until" "you" V_REVEAL "a" "land" "card"
-discard_action: (who)? V_DISCARD card_target ("unless" any_text)?
+discard_action: (who)? V_DISCARD card_target ("at" "random")? ("unless" any_text)?
               | (who)? V_DISCARD ("your" | "their") "hand"
               | "You" V_MAY V_DISCARD card_target ("unless" any_text)?
 shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
@@ -429,7 +434,9 @@ play_action: V_PLAY ("an" "additional" "land" | card_target) ("this" "turn")? ("
 choose_action: (player)? V_CHOOSE amount? choose_obj
 copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability") ("for" "each" any_text)?
 trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
-lose_game_action: (who | player) V_LOSE "the" "game"
+lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
+count_action: V_COUNT "the" "number" "of" card_target
+have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" "to" damage_who
 choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_text
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text
@@ -439,7 +446,7 @@ may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent")? V_MAY
         | play_action | scry_action | surveil_action | create_token_action | reveal_action
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
         | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action
-        | stat_action | become_action)
+        | stat_action | become_action | count_action | have_deal_action)
 
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual*
                | "The" WORD "cost" "is" "equal" "to" any_text
@@ -561,7 +568,7 @@ quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amou
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
 status_list: STATUS+
 STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|face-up|face-down/i
-card_kind: THIS_CARD | types
+card_kind: THIS_CARD types? | types
          | "basic" THIS_CARD
          | "basic" "land" | "basic" "land" "card" | "basic" "land" "cards"
          | "source" | "sources"
@@ -633,6 +640,7 @@ V_SEARCH: /\bsearch\b/i
 V_DRAW: /\bdraws?\b/i
 V_GAIN: /\bgain(s?)\b/i
 V_LOSE: /\blose(s?)\b/i
+V_COUNT: /\bcount(s?)\b/i
 V_DEAL: /\bdeal(s?)\b/i
 V_COUNTER: /\bcounter\b/i
 V_RETURN: /\breturn\b/i
