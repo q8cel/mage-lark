@@ -187,6 +187,7 @@ effect_sentence: ("Then" | "And" | "Otherwise" ",")? effect (xdef_clause)? trail
 // ----------------------------------------------------------------------------
 effect: (effect_timing)? action (JOIN action)*
 effect_timing: "Until" "end" "of" "turn" ","
+              | ("During" | "Until") OWNER? "next" "turn" ","
               | "Until" "the" "end" "of" "your" "next" "turn" ","
 JOIN: /,\s*(then|and)\b|\bthen\b|\band\b|,/
 
@@ -294,7 +295,7 @@ token_types: CARDNAME+
 token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
 
-put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("for" "each" "of" card_target "'s" "colors")?
+put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")?
 remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
              | (who)? V_LOSE "all" counter_kind
 counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
@@ -386,6 +387,7 @@ exile_action: V_EXILE card_target ("from" zone)? ("until" any_text)?
             | V_EXILE player "'s" "graveyard"
             | V_EXILE card_target "or" card_kind "that's" colors
             | V_EXILE card_target "attached" "to" card_target
+            | V_EXILE "all" "but" "the" "bottom" "card" "of" zone
 
 destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "random")?
               | V_DESTROY card_target "and" "all" "other" "permanents" "with" "the" "same" "name" "as" "that" "permanent"
@@ -484,7 +486,7 @@ emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
 enchant_action: V_ENCHANT enchant_target
 enchant_target: STATUS* GENERIC_TYPE (("," | "or" | "," "or") GENERIC_TYPE)*
-cant_action: (card_target)? V_CANT ("be" "countered" | "be" "regenerated" | "be" "activated" | "block" | "attack" | "attack" "or" "block" "alone"? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")?
+cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "block" | "attack" | "attack" "or" "block" "alone"? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")?
 no_max_hand_action: "You" "have" "no" "maximum" "hand" "size"
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
 attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" | "you" "this" "turn" | "this" "turn") "if" "able"
@@ -573,6 +575,7 @@ quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amou
 status_list: STATUS+
 STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|chosen|revealed|sacrificed|discarded|returned|created|milled|blocked|unblocked|face-up|face-down/i
 card_kind: THIS_CARD types? | types
+         | "activated" "or" "triggered" "ability" "s"? | "triggered" "ability" "s"? | "activated" "ability" "s"?
          | GENERIC_TYPE+ "card"?
          | "basic" THIS_CARD
          | "basic" "land" | "basic" "land" "card" | "basic" "land" "cards"
