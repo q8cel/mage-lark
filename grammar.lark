@@ -418,9 +418,10 @@ become_action: card_target (V_IS | "becomes") (V_A | V_AN)? pt_color_mod? (CARDN
              | ("you")? "have" card_target "become" (V_A | V_AN) (POWER_T)? (CARDNAME+ (GENERIC_TYPE)? | types) ("until" "end" "of" "turn")?
              | card_target (V_IS | "becomes") V_A V_COPY "of" card_target ("until" "end" "of" "turn")?
 
-prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | card_target) (("and" | "or") ("you" | card_target))*)? ("this" "turn")?
+prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | "him" | "her" | "them" | card_target) (("and" | "or") ("you" | "him" | "her" | "them" | card_target))*)? ("this" "turn")?
               | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
               | V_PREVENT (amount "of" "that" | "that") "damage"
+              | V_PREVENT "all" ("combat" | "noncombat")? "damage" "that" "would" "be" "dealt" "by" card_target ("this" "turn")?
 
 look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" ("any" "time")?
            | V_LOOK "at" "an" "opponent's" "hand"
@@ -735,7 +736,7 @@ THIS_CARD: "~"
 CARDNAME: /[A-Z][a-zA-Z']+(?:'s)?/
 WORD: /[a-zA-Z]+(?:'s|')?/
 MANA: /\{[^}]*\}/
-POWER_T: /\d+\/\d+/
+POWER_T: /\b[0-9X]+\s*\/\s*[0-9X]+\b/i
 POWER_MOD: /[+-](\d+|X)\/[+-](\d+|X)/
 NUMBER: /\d+/
 number: NUMBER
