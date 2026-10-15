@@ -377,7 +377,7 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
 
 order_mod: "in" ("a" "random" | "any") "order"
 
-exile_action: V_EXILE card_target ("until" any_text)?
+exile_action: V_EXILE card_target ("from" zone)? ("until" any_text)?
             | V_EXILE "the" "top" amount "cards" "of" "your" "library"
             | V_EXILE "the" "top" "card" "of" "your" "library"
             | V_EXILE "the" "top" "card" "of" "each" "player's" "library"
@@ -387,7 +387,7 @@ exile_action: V_EXILE card_target ("until" any_text)?
             | V_EXILE card_target "or" card_kind "that's" colors
             | V_EXILE card_target "attached" "to" card_target
 
-destroy_action: V_DESTROY card_target ("at" "random")?
+destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "random")?
               | V_DESTROY card_target "and" "all" "other" "permanents" "with" "the" "same" "name" "as" "that" "permanent"
 
 tap_action: V_TAP card_target
@@ -483,7 +483,7 @@ emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))
 
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
 enchant_action: V_ENCHANT enchant_target
-enchant_target: GENERIC_TYPE (("," | "or" | "," "or") GENERIC_TYPE)*
+enchant_target: STATUS* GENERIC_TYPE (("," | "or" | "," "or") GENERIC_TYPE)*
 cant_action: (card_target)? V_CANT ("be" "countered" | "be" "regenerated" | "be" "activated" | "block" | "attack" | "attack" "or" "block" "alone"? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")?
 no_max_hand_action: "You" "have" "no" "maximum" "hand" "size"
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
@@ -548,7 +548,7 @@ COLOR: /white|blue|black|red|green|colorless|multicolored/i
 
 //  card types (generic + proper-noun subtypes resolved in the transformer)
 types: GENERIC_TYPE | CARDNAME
-GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorceries?|basic|nonbasic|nontoken|walls?/i
+GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorceries?|basic|nonbasic|nontoken|legendary|nonlegendary|walls?/i
 INSTANT_SORCERY: /\b[iI]nstant and sorcery\b/
 
 //  the star: an atomic card reference
@@ -573,6 +573,7 @@ quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amou
 status_list: STATUS+
 STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|chosen|revealed|sacrificed|discarded|returned|created|milled|blocked|unblocked|face-up|face-down/i
 card_kind: THIS_CARD types? | types
+         | GENERIC_TYPE+ "card"?
          | "basic" THIS_CARD
          | "basic" "land" | "basic" "land" "card" | "basic" "land" "cards"
          | "source" | "sources"
@@ -580,6 +581,7 @@ card_kind: THIS_CARD types? | types
          | types "," "or" types "card"?
          | types "," types "," "or" types "card"?
          | types "," types "," "and" types
+         | types "and" types "card"?
          | CARDNAME ("creature" "card" | "creature" "cards" | "creature" | "creatures" | "spell" | "spells" | "card" | "cards" | "permanent" | "permanents")
          | "card" | "cards" | "creature" | "creatures" | "spell" | "spells"
          | "creature" "card" | "creature" "cards" | "land" | "land" "card" | "permanent" | "permanent" "card" | "permanent" "cards"
