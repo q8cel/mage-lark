@@ -964,6 +964,12 @@ class Interpreter:
                     d['amount'] = self.interp(ch)
                 elif ch.data in ('zone', 'in_zone'):
                     d['zone'] = self.interp(ch)
+                elif ch.data == 'zones':
+                    # zones wraps one or more zone nodes; take the first as the source
+                    for zc in ch.children:
+                        if isinstance(zc, Tree) and zc.data in ('zone', 'in_zone'):
+                            d['zone'] = self.interp(zc)
+                            break
         if 'zone' not in d:
             z = self._zone_from_tokens(children)
             if z is not None:

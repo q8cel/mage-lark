@@ -301,7 +301,7 @@ counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
 counter_amount: amount | "one" "or" "more" | "that" "many" | "a" | "an"
 counter_name: WORD+
 
-search_action: V_SEARCH zone ("and/or" zone)? "for" card_target ("named" (THIS_CARD | CARDNAME))? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? ("then" "shuffle")?
+search_action: V_SEARCH zones "for" card_target ("named" (THIS_CARD | CARDNAME))? ("with" "the" "same" "name")? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("named" (THIS_CARD | CARDNAME))? ("put" ("it" | "them") "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle")?
@@ -377,7 +377,7 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
 
 order_mod: "in" ("a" "random" | "any") "order"
 
-exile_action: V_EXILE card_target ("until" "this" "enchantment" "leaves" "the" "battlefield")?
+exile_action: V_EXILE card_target ("until" any_text)?
             | V_EXILE "the" "top" amount "cards" "of" "your" "library"
             | V_EXILE "the" "top" "card" "of" "your" "library"
             | V_EXILE "the" "top" "card" "of" "each" "player's" "library"
@@ -414,6 +414,7 @@ pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
 become_action: card_target (V_IS | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" any_text)? ("that's" any_text)? ("for" "as" "long" "as" any_text)?
              | ("you")? "have" card_target "become" (V_A | V_AN) (POWER_T)? (CARDNAME+ (GENERIC_TYPE)? | types) ("until" "end" "of" "turn")?
+             | card_target (V_IS | "becomes") V_A V_COPY "of" card_target ("until" "end" "of" "turn")?
 
 prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | card_target) (("and" | "or") ("you" | card_target))*)? ("this" "turn")?
               | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
@@ -529,8 +530,9 @@ amount: NUMBER | "X" | "one" | "two" | "three" | "four" | "five" | "six" | "seve
 
 //  zone: a game zone (optionally owned)
 zone: (OWNER)? (ZONE_WORD)
+zones: zone ("," zone)* (","? ("and" | "and/or") zone)?
 ZONE_WORD: /battlefield|graveyard|hand|library|exile/
-OWNER: /your|their owner's|their|an opponent's|the|a|its owner's/
+OWNER: /target player's|that player's|each player's|target opponent's|that opponent's|an opponent's|opponent's|a player's|your|their owner's|their|the|a|its owner's/
 
 //  player reference
 player: (V_EACH | V_AN | V_TARGET | V_ANOTHER | V_THAT | "the" | "defending" | "attacking" | "active")? ("opponent" | "player" | V_YOU)
@@ -569,7 +571,7 @@ quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amou
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
 status_list: STATUS+
-STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|face-up|face-down/i
+STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|chosen|revealed|sacrificed|discarded|returned|created|milled|blocked|unblocked|face-up|face-down/i
 card_kind: THIS_CARD types? | types
          | "basic" THIS_CARD
          | "basic" "land" | "basic" "land" "card" | "basic" "land" "cards"
