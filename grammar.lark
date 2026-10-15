@@ -200,7 +200,7 @@ action: add_mana_action
        | search_action
        | draw_action
        | gain_life_action
-       | lose_life_action
+       | lose_life_action | lose_kw_action
        | gain_poison_action
        | deal_damage_action
        | counter_spell_action
@@ -309,12 +309,12 @@ search_action: V_SEARCH zone ("and/or" zone)? "for" card_target ("named" (THIS_C
 draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target
             | (who)? V_DRAW draw_amount "card" "s"? ("for" "each" "different" "mana" "value" "among" card_target)?
            | (who)? V_DRAW draw_amount "card" "s"?
-           | (who)? V_DRAW "cards" "equal" "to" "its" "power"
+           | (who)? V_DRAW "cards" "equal" "to" ("its" "power" | "half" "the" "number" "of" "cards" "in" zone | xdef)
 draw_amount: amount | "a" | "an" | "an" "additional" | "that" "many" | "that" "much"
 
 gain_life_action: who V_GAIN life_amount ("for" "each" card_target ("that" "died" "this" "turn")?)?
                 | who V_GAIN "life" "equal" "to" xdef
-life_amount: amount "life" | "twice" "that" "much" "life" | "double" "that" "much" "life"
+life_amount: amount "life" | "twice" "that" "much" "life" | "double" "that" "much" "life" | "half" ("their" | "a" | "your" | "his" | "her" | "an" "'opponent'" "s") "life"
            | "that" "much" "life" ("plus" amount)? | "that" "many" "life"
            | "life" "equal" "to" "the" "life" "lost" "this" "way"
 dmg_amount: amount | "that" "much" | "double" "that" | "double" "that" "much"
@@ -324,6 +324,7 @@ lose_life_action: who V_LOSE life_amount ("unless" any_text)?
                 | player V_LOSE life_amount ("unless" any_text)?
                 | who V_LOSE "life" "equal" "to" xdef
                 | player V_LOSE "life" "equal" "to" xdef
+lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" "abilities" | "all" "keyword" "abilities") ("until" "end" "of" "turn")?
 gain_poison_action: who V_GET amount "poison" "counters"
 
 deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")?
@@ -403,7 +404,7 @@ fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "do
             | "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
 attach_action: V_ATTACH card_target "to" (card_target | "the" "token") ("you" "control")?
 
-stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("as" "long" "as" any_text)?
+stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)?
            | ("you")? "have" card_target V_GET stat_change ("until" "end" "of" "turn")?
 stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
            | ("has" | "gains" | "have" | "gain") kw_list
@@ -428,6 +429,7 @@ reveal_action: V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "f
 discard_action: (who)? V_DISCARD card_target ("at" "random")? ("unless" any_text)?
               | (who)? V_DISCARD ("your" | "their") "hand"
               | "You" V_MAY V_DISCARD card_target ("unless" any_text)?
+              | (who)? V_DISCARD "half" "the" "cards" "in" zone
 shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
 cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
