@@ -302,7 +302,7 @@ counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
 counter_amount: amount | "one" "or" "more" | "that" "many" | "a" | "an"
 counter_name: WORD+
 
-search_action: V_SEARCH zones "for" card_target ("named" (THIS_CARD | CARDNAME))? ("with" "the" "same" "name")? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? ("then" "shuffle")?
+search_action: V_SEARCH zones "for" card_target ("named" (THIS_CARD | CARDNAME) (("and" | "or" | "and/or") card_target)*)? ("with" "the" "same" "name" ("as" (THIS_CARD | CARDNAME))?)? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("named" (THIS_CARD | CARDNAME))? ("put" ("it" | "them") "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle")?
@@ -373,6 +373,7 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
                | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")?
                | V_PUT card_target "on" "top" "of" zone
                | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
+                | V_PUT ("them" | "it") "back" "in" "any" "order"
                | V_PUT "the" "exiled" "card" "into" zone
                | V_PUT "one" "of" "those" "cards" "back" "on" "top" "of" "your" "library"
 
@@ -437,6 +438,7 @@ discard_action: (who)? V_DISCARD card_target ("at" "random")? ("unless" any_text
               | (who)? V_DISCARD "half" "the" "cards" "in" zone
 shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
+             | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library"
 cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("this" "turn")? ("on" "each" "of" "your" "turns")?
 choose_action: (player)? V_CHOOSE amount? choose_obj
@@ -674,7 +676,7 @@ V_LOOK: /\blook(s?)\b/i
 V_SEPARATE: /\bseparate(s?)\b/i
 V_REVEAL: /\breveal(s?)\b/i
 V_DISCARD: /\bdiscard(s?)\b/i
-V_SHUFFLE: /\bshuffle\b/i
+V_SHUFFLE: /\bshuffles?\b/i
 V_CAST: /\bcast(s?)\b/i
 V_PLAY: /\bplay(s?)\b/i
 V_ENCHANT: /\benchant\b/i
