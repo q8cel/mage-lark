@@ -230,6 +230,7 @@ action: add_mana_action
        | shuffle_action
        | cast_action
        | play_action
+       | reveal_top_action
        | enters_action
        | enchant_action
        | cant_action
@@ -330,6 +331,7 @@ lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" "abilities" | "all" "key
 gain_poison_action: who V_GET amount "poison" "counters"
 
 deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")?
+                   | card_target V_DEAL "damage" "equal" "to" any_text "to" damage_who
                   | ("it" | "they") V_DEAL dmg_amount? "damage" "to" damage_who
                   | ("it" | "they") V_DEAL dmg_amount "damage"
                   | card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" dmg_amount? "damage" "to" damage_who)?
@@ -442,6 +444,7 @@ shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library" | (who)? V_SHUFFLE card_target "and" "your" "graveyard" "into" zone
 cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("without" "paying" "its" "mana" "cost")? ("this" "turn")? ("on" "each" "of" "your" "turns")?
+reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
 choose_action: (player)? V_CHOOSE amount? choose_obj
 copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability") ("for" "each" any_text)?
 trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
@@ -456,7 +459,7 @@ choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one
 
 may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent")? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
         | gain_life_action | lose_life_action | exile_action | attach_action | cast_action
-        | play_action | scry_action | surveil_action | create_token_action | reveal_action
+        | play_action | scry_action | surveil_action | create_token_action | shuffle_action | reveal_action
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
         | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action
         | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
@@ -494,7 +497,7 @@ emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
 enchant_action: V_ENCHANT enchant_target
 enchant_target: STATUS* GENERIC_TYPE (("," | "or" | "," "or") GENERIC_TYPE)*
-cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")?
+cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
 no_max_hand_action: "You" "have" "no" "maximum" "hand" "size"
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
 attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" | "you" "this" "turn" | "this" "turn") "if" "able"
