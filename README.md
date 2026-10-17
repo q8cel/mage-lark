@@ -21,6 +21,10 @@ python run.py --data Standard.json --dump failures_std.txt
 python run.py --data Standard.json --sets OTJ,WOE     # subset of sets
 ```
 
+**Start here:** `PIPELINE.md` documents the full data flow, the three parser
+configurations, the caches, and where the coreference pass sits.
+`DETERMINISTIC-COREF.md` documents the anaphora resolver design and numbers.
+
 `run.py` is the main entry point. It is **cached and parallel** (see
 *Performance*): a first Standard check takes ~15–20 min; any re-run with an
 unchanged grammar is near-instant.
@@ -46,6 +50,21 @@ unchanged grammar is near-instant.
 | `test_output.py` | 15 **golden output tests** (regression guard for the interpreter) |
 | `audit_output.py` | Flag suspicious outputs (empty dict, pronoun-as-type, …) |
 | `quick_test.py`, `analyze.py`, `vocab.py` | Sampling / corpus exploration helpers |
+| **Coreference (deterministic)** | |
+| `anaphora.py` | Lexical anaphor enumeration over raw text: `it/its/they/them/their`, `that X`, `the rest` |
+| `mentions.py` | Candidate mention spans: regex ∪ parser spans, bare pronouns filtered |
+| `ptree.py` | **The** parse: one tree per text (`keep_all_tokens=True` + `propagate_positions=True`) yielding mention spans **and** structure (`role`, `verb`, `predicate`, `in_condition`). Disk-cached, parallel precompute, regex fallback per unparseable segment |
+| `pmentions.py`, `pstruct.py` | Thin shims over `ptree`, kept for existing callers |
+| `refs.py` | Mention **inventory**: maximal-span cleaning + `head_type`, `number`, `definiteness`, `is_self`, `is_target`, `sentence`, `clause` |
+| `rulecoref.py` | **Deterministic resolver**: filters → possessive binding → recency → entity clustering → `rewritten_text`; also `--eval` / `--bench` |
+| `test_coref.py` | 14 golden tests for the resolver (behaviour + documented limitations) |
+| `DETERMINISTIC-COREF.md` | Design analysis, measurements, rejected rules |
+| **Coreference (experimental, needs torch)** | |
+| `label_cases.py` | Offline teacher harness: builds per-anaphor cases, labels with an LLM |
+| `validate_teacher.py` | Teacher agreement / candidate recall against human gold |
+| `train_head.py` | Frozen-encoder mention ranker (baseline comparator) |
+| `sweep_head.py` | Hyperparameter sweep for the ranker |
+| `resolve.py` | Attention-over-mentions baseline + `--eval` |
 
 ## Design
 

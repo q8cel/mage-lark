@@ -97,6 +97,31 @@ def load(path):
         types.discard(x)
     return items, types, names, sets
 
+_TEXTS = {}
+
+
+def card_text(name, path=None):
+    """Normalized oracle text for `name`: reminders stripped, card names masked
+    to `~`, whitespace collapsed. Cached per data file. Torch-free, so the
+    deterministic coref path can use it without importing resolve.py."""
+    path = path or os.path.join(BASE, 'FDN.json')
+    if path not in _TEXTS:
+        from preprocess import normalize_names, strip_reminders
+        items, _, names, _ = load(path)
+        _TEXTS[path] = {
+            n: ' '.join(normalize_names(strip_reminders(t), names).split())
+            for n, t, _ in items if t
+        }
+    d = _TEXTS[path]
+    if name in d:
+        return d[name]
+    low = name.lower()
+    for k, v in d.items():
+        if k.lower() == low:
+            return v
+    return None
+
+
 # backward-compatible loader (items as 2-tuples)
 def load3(path):
     items, types, names, _ = load(path)
