@@ -438,7 +438,7 @@ discard_action: (who)? V_DISCARD card_target ("at" "random")? ("unless" any_text
               | (who)? V_DISCARD "half" "the" "cards" "in" zone
 shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
-             | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library"
+             | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library" | (who)? V_SHUFFLE card_target "and" "your" "graveyard" "into" zone
 cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("this" "turn")? ("on" "each" "of" "your" "turns")?
 choose_action: (player)? V_CHOOSE amount? choose_obj
@@ -447,17 +447,18 @@ trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_ta
 lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
 count_action: V_COUNT "the" "number" "of" card_target
 have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" "to" damage_who
-have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" "as" "a" "copy" "of" card_target)
+have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" "as" "a" "copy" "of" ("any" card_target | card_target))
+activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
 choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_text
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
-           | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text
+           | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text | "a" any_text ("," any_text)* ("card" | "cards") "from" ("it" | zone)
 
 may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent")? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
         | gain_life_action | lose_life_action | exile_action | attach_action | cast_action
         | play_action | scry_action | surveil_action | create_token_action | reveal_action
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
         | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action
-        | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action
+        | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
         | (V_TAP "or" V_UNTAP | V_UNTAP "or" V_TAP) card_target)
 
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual*
@@ -653,6 +654,7 @@ V_PUT: /\bput(s)?\b/i
 V_REMOVE: /\bremove\b/i
 V_SEARCH: /\bsearch\b/i
 V_DRAW: /\bdraws?\b/i
+V_ACTIVATE: /\bactivate(s?)\b/i
 V_GAIN: /\bgain(s?)\b/i
 V_LOSE: /\blose(s?)\b/i
 V_COUNT: /\bcount(s?)\b/i
