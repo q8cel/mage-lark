@@ -110,6 +110,27 @@ def _container(struct, start):
     return best
 
 
+def resolve_auto(text, anaphors, rewrite=True, rules=None, parse_ok=None):
+    """Level 0-3 first (regex mentions, no parse tree); escalate to the parser only
+    if some anaphor ends up `ambiguous` or `no-resolution`.
+
+    Measured on the 71-case human bench: parser mentions buy 1 case (77% vs 76%),
+    but every escalation costs a real parse (trivial sentences take 12-20s here), so
+    paying for the tree on *every* card is a bad trade. This pays only where the
+    rules say they are unsure.
+    """
+    fast = resolve(text, refs.build(text, parser=False), anaphors,
+                   rewrite=rewrite, rules=rules)
+    unsure = any(a["status"] != "resolved" for a in fast["anaphors"])
+    if not unsure:
+        fast["mentions_source"] = "regex"
+        return fast
+    slow = resolve(text, refs.build(text, parser=True), anaphors,
+                   rewrite=rewrite, rules=rules)
+    slow["mentions_source"] = "regex+parser"
+    return slow
+
+
 def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             parse_ok=None):
     """Resolve every anaphor occurrence in `text`.
@@ -580,7 +601,7 @@ def eval_dataset(path, verbose=0, rewrite=False, rules=None, require_struct=Fals
     return scaled
 
 
-def eval_benchmark(path=None, verbose=0):
+def eval_benchmark(path=None, verbose=0, parser=True):
     """Score the rules on the 72-case human gold (coref_benchmark.json).
 
     Gold here is a surface string, not a candidate index, so we match by
@@ -607,7 +628,10 @@ def eval_benchmark(path=None, verbose=0):
             skip += 1
             continue
         # resolve the WHOLE card: later anaphors chain through earlier ones
-        res = resolve(text, refs.build(text), all_anas, rewrite=False)
+        if parser == "auto":
+            res = resolve_auto(text, all_anas, rewrite=False)
+        else:
+            res = resolve(text, refs.build(text, parser=parser), all_anas, rewrite=False)
         pred = next(p for p in res["anaphors"]
                     if (p["start"], p["end"]) == span)
         g = gold.lower()
@@ -635,6 +659,11 @@ def main():
     ap.add_argument("--eval", default=None, metavar="DATASET.json")
     ap.add_argument("--bench", nargs="?", const="", default=None,
                     metavar="BENCH.json", help="score on the human gold set")
+    ap.add_argument("--no-parser", action="store_true",
+                    help="use regex mentions only (no parse tree) - the level-0/1 coref path")
+    ap.add_argument("--parser", choices=("always", "auto", "never"), default="always",
+                    help="mention source: always=parse every card, auto=parse only "
+                         "when a decision is unsure, never=regex only")
     ap.add_argument("--show-misses", type=int, default=0)
     ap.add_argument("--structured-only", action="store_true",
                     help="evaluate only cards already in the pstruct cache")
@@ -655,7 +684,10 @@ def main():
                      require_struct=args.structured_only)
         return
     if args.bench is not None:
-        eval_benchmark(args.bench or None, verbose=args.show_misses or 20)
+        parser = {"always": True, "never": False, "auto": "auto"}[args.parser]
+        if args.no_parser:
+            parser = False
+        eval_benchmark(args.bench or None, verbose=args.show_misses or 20, parser=parser)
         return
     if not args.card:
         ap.error("give a card name or --eval DATASET.json")
