@@ -72,6 +72,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
 //  loyalty   [+1]: <effect>   [−4]: <effect>
 // ----------------------------------------------------------------------------
 loyalty_sentence: LOY_COST ":" effect (xdef_clause)?
+          | LOY_COST ":" "Whenever" event "," effect (xdef_clause)?
 LOY_COST: /\[[\-\u2212+]?(?:\d+|X)\]/
 
 // ----------------------------------------------------------------------------
@@ -142,6 +143,7 @@ event: event_subject EVENT_VERB event_object?
       | card_target "dealt" "damage" "by" card_target "this" "turn" "dies"
       | V_YOU "cast" "a" "spell" "during" any_text
       | ("one" "or" "more")? card_target "attack"
+      | ("one" "or" "more")? card_target "attack" "this" "turn"
       | V_YOU "next" "cast" event_object ("this" "turn")?
       | V_YOU V_SACRIFICE card_target
       | V_THAT "mana" "is" "spent" "to" "cast" event_object
@@ -440,6 +442,7 @@ fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "do
 attach_action: V_ATTACH card_target "to" (card_target | "the" "token") ("you" "control")?
 
 stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)?
+           | card_target "and" ("other" )? card_target (V_GET | V_GAIN) stat_change ("until" "end" "of" "turn")?
            | ("you")? "have" card_target V_GET stat_change ("until" "end" "of" "turn")?
 stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
            | ("has" | "gains" | "have" | "gain") kw_list
