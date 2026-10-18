@@ -101,6 +101,54 @@ Consequences that have bitten us already:
 Any new consumer must state which configuration it needs. Do not "reuse" the
 coverage cache for structure.
 
+## Grammar performance: the `any_text` trap
+
+`any_text` is `ANYWORD+`, i.e. **unbounded**. Putting it inside an optional group of a
+rule that is reachable from most sentences makes Earley explore that group at every
+position, and the cost is paid by *every* sentence — including ones that cannot
+possibly match.
+
+Measured before the fix:
+
+| sentence | parse |
+|---|---|
+| `Flying` | 16.5 s |
+| `Draw a card` | 25.7 s |
+| `~ deals 5 damage to target creature` | 37.0 s |
+
+Cost was nearly **length-independent** (~44 s for a 6-character sentence), which is
+the signature: it is not input size, it is chart exploration.
+
+### How it was found
+
+Ablate one rule at a time and time a trivial sentence:
+
+1. replace `sentence:` with each of its alternatives, one at a time → every branch
+   was instant alone except `effect_sentence`;
+2. same for `action:` → `become_action` alone cost 25.1 s, and removing it took six
+   sample sentences from 232 s to 16.6 s.
+
+`become_action` ended with `("with" any_text)? ("that's" any_text)? ("for" "as" "long"
+"as" any_text)?`, and it starts with a nullable `card_target`. Those tails are now
+closed phrases (`become_tail`), which took parses to:
+
+| | before | after |
+|---|---|---|
+| `Flying` | 16.5 s | **1.66 s** |
+| `Draw a card` | 25.7 s | **2.54 s** |
+| regression gate (143 sentences) | 15m29s | **1m27s** |
+| FDN cache rebuild | ~40 min | **5m44s** |
+
+Coverage was unchanged (143/143 baseline sentences, bench 77%, dev 73.0%).
+
+### Rule for the grammar
+
+When a rule is slow, it is usually `any_text` (or another unbounded repetition) in a
+position that is reachable from the start symbol, not the phrase you were trying to
+add. Prefer closed alternatives; if a family of phrases is genuinely open-ended, put
+it in its own *sentence-level* alternative that fails on its first token rather than
+in the tail of a rule shared by everything.
+
 ## Where coreference sits
 
 `rulecoref` is a **post-segmentation discourse pass, parallel to interpretation —
@@ -255,8 +303,9 @@ eager (no progress until done) and the CPU cost is the Earley parse, so budget
 
 ## Rebuild status: done (drift 0)
 
-The unified cache is built: **2,497 texts**, 78.5 min on 27 workers (~1 CPU-minute
-per card text), and
+The unified cache is built and, after the `become_action` fix, rebuilds in **~35 min
+for the full dev corpus** (2,139 texts / 4,034 sentences) and **5m44s for FDN**
+(762 sentences), on 14 workers. Earlier it took **78.5 min on 27 workers**, and
 `python ptree.py --verify` reports **0 drifting texts** against the legacy span
 cache. Note the two traps the verifier caught:
 
@@ -274,8 +323,8 @@ Coverage after the rebuild:
 |---|---|
 | texts with at least one parsed mention | 1,758 / 2,497 (70.4%) |
 | texts parsed nowhere (regex fallback only) | 739 (29.6%) |
-| mention records with `role`/`verb` | 37.9% |
-| anaphors whose sentence yields structure | **48.2%** |
+| mention records with `role`/`verb` | 48.0% |
+| anaphors whose sentence yields structure | **58.0%** |
 
 ## Original rebuild instructions
 

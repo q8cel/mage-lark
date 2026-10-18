@@ -385,7 +385,15 @@ types, fight each other, until-your-next-end-step / at-the-beginning timing, sus
 search-...-with-that-name-and-exile-them) each fix 1-3 sentences, with 0 regressions
 on a 143-sentence frequency sample.
 
-**Implication for planning:** the frequent patterns are gone (master's 12 commits
+After the parse-speed fix (become_action; see PIPELINE.md) and the line-break fix
+the numbers moved to: dev sentences 54.3% parse, anaphors with structure **58.0%**
+(was 48.2%), mention records with a role 48.0% (was 37.9%). Coverage keeps improving,
+but the structural rules still do not: with structure at 58% the lexical verb prior
+is still negative (72.2% vs 73.0%) and `drop-predicate-nominals` is still inert.
+
+**Implication for planning:** grammar coverage is no longer what limits coreference
+accuracy - the parse tree buys 1 bench case. It is a product goal (parsing cards), not
+a coref-accuracy goal. The frequent patterns are also gone (master's 12 commits
 ate them); what remains is a long tail. Grammar work now fixes a handful of
 occurrences per rule, so rules must be batched and gated, and the payoff per turn is
 measured in a few tenths of a point of structure coverage.
@@ -443,9 +451,9 @@ anaphors have a container role.** The reason is coverage, not logic:
 
 | measurement (dev, 3,403 occurrences) | value |
 |---|---|
-| anaphors whose sentence yields any structure | **48.2%** (1,782 / 3,697) |
+| anaphors whose sentence yields any structure | **58.0%** (1,617 / 2,790) |
 | possessive anaphors with a container role | 6 / 755 |
-| mention records that come from the regex fallback | 49.4% |
+| mention records that come from the regex fallback | ~35% |
 | card texts that parse nowhere | 739 / 2,497 (29.6%) |
 | accuracy on texts that parse | 73.6% |
 | accuracy on texts that do not parse | 71.5% |
