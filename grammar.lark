@@ -193,6 +193,9 @@ effect_sentence: ("Then" | "And" | "Otherwise" ",")? effect (xdef_clause)? trail
 // ----------------------------------------------------------------------------
 effect: (effect_timing)? action (JOIN action)*
 effect_timing: "Until" "end" "of" "turn" ","
+             | "Until" ("your" | "their") "next" ("end" "step" | "turn") ","
+             | "At" "the" "beginning" "of" ("your" | "the" | "their") "next" "end" "step" ","
+             | "At" "the" "beginning" "of" (OWNER)? "next" "end" "step" ","
               | ("During" | "Until") OWNER? "next" "turn" ","
               | "Until" "the" "end" "of" "your" "next" "turn" ","
 JOIN: /,\s*(then|and)\b|\bthen\b|\band\b|,/
@@ -227,6 +230,7 @@ action: add_mana_action
        | surveil_action
        | mill_action
        | fight_action
+       | suspect_action
        | attach_action
        | stat_action
        | base_pt_action
@@ -316,6 +320,7 @@ counter_name: WORD+
 search_action: V_SEARCH zones "for" card_target ("named" (THIS_CARD | CARDNAME) (("and" | "or" | "and/or") card_target)*)? ("with" "the" "same" "name" ("as" (THIS_CARD | CARDNAME))?)? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
              | V_SEARCH zone "for" card_target ("named" (THIS_CARD | CARDNAME))? ("put" ("it" | "them") "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
+             | V_SEARCH zones "for" card_target "with" "that" "name" "and" "exile" ("them" | "it")
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
              | V_SEARCH zone "for" card_target ","? V_PUT ("it" | "them") "onto" "the" "battlefield" "tapped"? ","? "then" "shuffle"
 
@@ -431,7 +436,10 @@ scry_action: ("each" "player" | who)? V_SCRY amount
 surveil_action: V_SURVEIL amount
 mill_action: (who)? V_MILL (("a" | "an" | amount | "that" "many") ("card" | "cards") | "half" ("their" | "his" | "her" | "a" | "the") "library" (","? "rounded" "down")?)
            | player V_MILL amount "cards"
+suspect_action: ("Otherwise" ",")? V_SUSPECT card_target
 fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
+            | card_target V_FIGHT "each" "other"
+            | ("Then" | "then")? card_target V_FIGHT card_target
             | ("it" | card_target)? V_FIGHT ("up to" "one")? V_TARGET card_target ("you" "don't" "control")?
             | "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
 attach_action: V_ATTACH card_target "to" (card_target | "the" "token") ("you" "control")?
@@ -444,7 +452,8 @@ gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until"
 base_pt_action: card_target ("has" | "gains" "gets") "base" "power" "and" "toughness" POWER_T ("until" "end" "of" "turn")?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
-become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" ("base" "power" "and" "toughness" POWER_T | any_text))? ("that's" any_text)? ("for" "as" "long" "as" any_text)?
+become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE (("in" "addition" "to" ("its" | "their") "other" "types") | ("with" any_text))? (("until" "end" "of" "turn") | ("until" "your" "next" "turn") | ("for" "as" "long" "as" any_text))?
+             | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" ("base" "power" "and" "toughness" POWER_T | any_text))? ("that's" any_text)? (("for" "as" "long" "as" any_text) | ("until" "end" "of" "turn") | ("until" "your" "next" "turn"))?
              | ("you")? "have" card_target "become" (V_A | V_AN) (POWER_T)? (CARDNAME+ (GENERIC_TYPE)? | types) ("until" "end" "of" "turn")?
              | card_target (V_IS | "becomes") V_A V_COPY "of" card_target ("until" "end" "of" "turn")?
 
@@ -705,6 +714,7 @@ V_SCRY: /\bscry\b/i
 V_SURVEIL: /\bsurveil\b/i
 V_MILL: /\bmill(s?)\b/i
 V_FIGHT: /\bfight(s?)\b/i
+V_SUSPECT: /\bsuspect(s?)\b/i
 V_ATTACH: /\battach\b/i
 V_GET: /\bget(s?)\b/i
 V_HAS: /\bha[vs]e\b/i
