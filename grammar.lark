@@ -26,10 +26,15 @@ sentence: loyalty_sentence
         | static_sentence
         | static_keyword_sentence
         | effect_sentence
+        | deck_rule
+        | round_up_sentence
 
 // ----------------------------------------------------------------------------
 //  conditional static ability:  "If <condition>, <effect>."
 // ----------------------------------------------------------------------------
+deck_rule: "A" "deck" "can" "have" ("any" "number" "of" | amount) "cards" "named" (THIS_CARD | CARDNAME)
+round_up_sentence: "Round" "up" "each" "time"
+
 if_sentence: V_IF any_text "," effect instead_suffix?
             | V_IF any_text "," any_text
             | V_IF any_text
@@ -312,6 +317,7 @@ search_action: V_SEARCH zones "for" card_target ("named" (THIS_CARD | CARDNAME) 
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
 
 draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target
+            | ("Any" | "any") "number" "of" "target" "players" "each" V_DRAW draw_amount "card" "s"?
             | (who)? V_DRAW draw_amount "card" "s"? ("for" "each" "different" "mana" "value" "among" card_target)?
            | (who)? V_DRAW draw_amount "card" "s"?
            | (who)? V_DRAW "cards" "equal" "to" ("its" "power" | "half" "the" "number" "of" "cards" "in" zone | xdef)
@@ -333,7 +339,7 @@ lose_life_action: who V_LOSE life_amount ("unless" any_text)?
 lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" "abilities" | "all" "keyword" "abilities") ("until" "end" "of" "turn")?
 gain_poison_action: who V_GET amount "poison" "counters"
 
-deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")?
+deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")? ("and" dmg_amount "damage" "to" "that" "creature's" "controller")?
                    | card_target V_DEAL "damage" "equal" "to" any_text "to" damage_who
                   | ("it" | "they") V_DEAL dmg_amount? "damage" "to" damage_who
                   | ("it" | "they") V_DEAL dmg_amount "damage"
