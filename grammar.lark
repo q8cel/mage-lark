@@ -126,6 +126,8 @@ event: event_subject EVENT_VERB event_object?
       | V_YOU EVENT_VERB event_object?
       | V_YOU V_PUT counter_amount counter_kind "on" card_target
       | event_subject "is" "put" "into" zone
+      | event_subject "is" "dealt" ("noncombat" | "combat")? "damage"
+      | V_YOU "control" card_target
       | event_subject EVENT_VERB "while" any_text
       | V_YOU "attack" "with" ("one" "or" "more" | amount ("or" "more")?) "creatures"
       | V_YOU "do"
@@ -450,7 +452,7 @@ prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "woul
 
 look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" ("any" "time")?
            | V_LOOK "at" "an" "opponent's" "hand"
-reveal_action: V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
+reveal_action: (who)? V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
              | V_REVEAL "the" "top" amount "cards" "of" "your" "library"
             | V_REVEAL "the" "top" "card" "of" "your" "library"
              | card_target V_REVEAL "their" "hand"
@@ -501,6 +503,7 @@ double_action: V_DOUBLE "the" "number" "of" any_text
 distribute_action: V_DISTRIBUTE any_text
 separate_action: V_SEPARATE "them" "into" "a" "face-down" "pile" "and" "a" "face-up" "pile"
 spend_mana_action: (V_YOU "can")? V_SPEND ("this" "mana" | "mana" "of" "any" "type") ("only")? "to" "cast" card_target
+               | (V_YOU "can")? V_SPEND ("only")? (COLOR | "colorless") ("or" (COLOR | "colorless"))* "mana" "on" "X"
                   | "mana" "of" "any" "type" "can" "be" "spent" "to" "cast" card_target
 pay_action: V_PAY MANA+ ("rather" "than" "pay" ("this" "spell's" | "its") "mana" "cost")?
            | V_PAY amount "life"
@@ -601,7 +604,7 @@ possessive: "your" | "its" | "their" | "an opponent's" | "that player's" | "that
 otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*
 NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolored)|non-[A-Z][a-zA-Z]+/i
-quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
+quantifier: V_ALL | V_EACH | "every" | V_TARGET | "no" | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET | amount "or" "more"
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
 status_list: STATUS+
