@@ -60,7 +60,9 @@ _DIRTY = False
 _LEGACY = None
 _SENT = None
 _SENT_DIRTY = False
-TIMEOUT = 60          # per-sentence wall-clock cap; 0 disables
+TIMEOUT = 0           # per-sentence wall-clock cap; 0 = off. Measured: a
+                      # 60s cap saves ~28% build time but costs 3 points of
+                      # benchmark accuracy (parses legitimately need 20-60s)
 
 
 def _grammar_hash():
@@ -275,7 +277,8 @@ def _sentence_records(sentence):
     ent = cache.get(k)
     if ent is None:
         recs, timed_out = _extract_segment(sentence, 0)
-        ent = {"status": "timeout" if timed_out else "ok", "recs": recs}
+        ent = {"status": "timeout" if timed_out else "ok", "cap": TIMEOUT,
+               "recs": recs}
         cache[k] = ent
         _SENT_DIRTY = True
     return ent["recs"]
@@ -427,8 +430,10 @@ def seed_from(seed_path, texts, workers=None, sample=40, quiet=False):
 
 
 def _parse_sentence(sentence):
-    """Worker: parse one sentence, return its (relative-offset) records."""
-    return sentence, _sentence_records(sentence)
+    """Worker: parse one sentence -> (sentence, entry) with relative offsets."""
+    recs, timed_out = _extract_segment(sentence, 0)
+    return sentence, {"status": "timeout" if timed_out else "ok",
+                      "cap": TIMEOUT, "recs": recs}
 
 
 def precompute(texts, workers=None, quiet=False, timeout=None):
@@ -459,7 +464,15 @@ def precompute(texts, workers=None, quiet=False, timeout=None):
             if s and s not in seen:
                 seen.add(s)
                 uniq.append(s)
-    todo = [s for s in uniq if key(s) not in sent]
+    # A time-outed sentence is not a failure: with a larger cap (or no cap) it may
+    # parse. Retry it then, otherwise the cap would silently degrade the cache.
+    def _needs_work(s):
+        e = sent.get(key(s))
+        if e is None:
+            return True
+        return e.get("status") == "timeout" and (not TIMEOUT or TIMEOUT > e.get("cap", 0))
+
+    todo = [s for s in uniq if _needs_work(s)]
     workers = workers or max(1, (os.cpu_count() or 4) - 1)
     if not quiet:
         print(f"[ptree] {len(todo_texts)} texts, {len(uniq)} sentences, "
@@ -470,8 +483,8 @@ def precompute(texts, workers=None, quiet=False, timeout=None):
     done = 0
     if todo:
         with mp.Pool(workers, initializer=_init_worker, initargs=(TIMEOUT,)) as pool:
-            for sentence, recs in pool.imap(_parse_sentence, todo, chunksize=1):
-                sent[key(sentence)] = {"status": "ok", "recs": recs}
+            for sentence, entry in pool.imap(_parse_sentence, todo, chunksize=1):
+                sent[key(sentence)] = entry
                 done += 1
                 _SENT_DIRTY = True
                 if not quiet and done % 50 == 0:
@@ -589,9 +602,13 @@ def main():
     ap.add_argument("--sample", default=None, help="dataset json to take texts from")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--workers", type=int, default=0)
-    ap.add_argument("--timeout", type=float, default=60,
-                    help="per-sentence parse cap in seconds (0 = no cap)")
+    ap.add_argument("--timeout", type=float, default=0,
+                    help="per-sentence parse cap in seconds (0 = no cap). A cap "
+                         "saves build time but drops parses that need longer")
     ap.add_argument("--status", action="store_true", help="cache coverage report")
+    ap.add_argument("--force", action="store_true",
+                    help="drop the text cache for these texts and re-assemble them "
+                         "(needed to retry sentences that previously timed out)")
     ap.add_argument("--seed", default=None,
                     help="older ptree_<hash>.json to seed from (verified by sampling)")
     ap.add_argument("--verify", action="store_true",
@@ -626,6 +643,17 @@ def main():
 
     if args.build:
         texts = card_texts(args.data, args.sample, args.limit)
+        if args.force:
+            globals()["TIMEOUT"] = args.timeout
+            c = _load_cache()
+            n = 0
+            for t in texts:
+                if c.pop(key(t), None) is not None:
+                    n += 1
+            if n:
+                globals()["_DIRTY"] = True
+                save_cache()
+            print(f"[force] dropped {n} cached texts")
         if args.seed:
             seed_from(args.seed, texts, workers=args.workers or None)
         n = precompute(texts, workers=args.workers or None, timeout=args.timeout)

@@ -112,9 +112,12 @@ def t_no_candidate_abstains():
 
 
 def t_known_limitation_blasphemous_edict():
-    # KNOWN WRONG: "their" belongs to the subject "Each player"; we pick the
-    # nearest plural ("thirteen creatures") because subject binding needs the
-    # object-NP-position distinction. Fix -> update DETERMINISTIC-COREF.md.
+    # KNOWN WRONG (asserted on purpose): "their" belongs to the clause SUBJECT
+    # ("Each player sacrifices thirteen creatures of their choice"), but the
+    # possessive rule falls back to recency and picks the nearest plural. Fixing
+    # it needs subject binding; update DETERMINISTIC-COREF.md when it lands.
+    # NB: a cap-degraded parse cache once made this look fixed ("Each player") -
+    # it was the degraded mention inventory, not the rule.
     _, res = resolve_card("Blasphemous Edict")
     got = [a["canonical"] for a in res["anaphors"] if a["surface"].lower() == "their"]
     assert got == ["thirteen creatures"], got
