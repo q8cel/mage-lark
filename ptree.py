@@ -277,6 +277,64 @@ def lookup(recs, start, end=None):
     return best
 
 
+FIELDS = ("start", "end", "node", "role", "verb", "predicate", "in_condition")
+
+
+def _same_records(a, b):
+    """True if two record lists are identical field for field."""
+    if len(a) != len(b):
+        return False
+    for x, y in zip(a, b):
+        for f in FIELDS:
+            if x.get(f) != y.get(f):
+                return False
+    return True
+
+
+def seed_from(seed_path, texts, workers=None, sample=40, quiet=False):
+    """Reuse an older ptree cache for texts whose parse is provably unchanged.
+
+    An additive grammar edit usually leaves every previously-parsed text with the
+    same tree, but `ambiguity='resolve'` may legitimately pick a different
+    derivation, so structure cannot be trusted wholesale. We parse a random
+    sample of the seedable texts and compare records field for field; only if
+    they are *identical* do we copy the seed's records for the rest.
+
+    Returns the number of texts seeded (0 means "not safe, parse everything").
+    """
+    import random
+    try:
+        seed = json.load(open(seed_path))
+    except Exception:
+        return 0
+    cache = _load_cache()
+    seedable = [t for t in texts if key(t) in seed and key(t) not in cache]
+    if not seedable:
+        return 0
+    pick = random.Random(1234).sample(seedable, min(sample, len(seedable)))
+    if not quiet:
+        print(f"[seed] {len(seedable)} seedable texts; verifying structure on {len(pick)}")
+    import multiprocessing as mp
+    workers = workers or max(1, (os.cpu_count() or 4) - 1)
+    with mp.Pool(workers) as pool:
+        got = pool.map(_compute, pick, chunksize=1)
+    bad = [t for t, recs in zip(pick, got) if not _same_records(seed[key(t)], recs)]
+    if bad:
+        print(f"[seed] structure changed on {len(bad)}/{len(pick)} sampled texts "
+              f"-> refusing to seed, full parse required")
+        for t in bad[:3]:
+            print(f"        {t[:90]}")
+        return 0
+    for t in seedable:
+        cache[key(t)] = seed[key(t)]
+    global _DIRTY
+    _DIRTY = True
+    save_cache()
+    if not quiet:
+        print(f"[seed] verified identical structure on the sample; seeded {len(seedable)} texts")
+    return len(seedable)
+
+
 def precompute(texts, workers=None, quiet=False):
     """Fill the cache for `texts` in parallel. Eager: no progress until chunks land."""
     import multiprocessing as mp
@@ -398,6 +456,8 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--workers", type=int, default=0)
     ap.add_argument("--status", action="store_true", help="cache coverage report")
+    ap.add_argument("--seed", default=None,
+                    help="older ptree_<hash>.json to seed from (verified by sampling)")
     ap.add_argument("--verify", action="store_true",
                     help="compare the new cache against the legacy span cache")
     ap.add_argument("--rebuild-stale", action="store_true",
@@ -430,6 +490,8 @@ def main():
 
     if args.build:
         texts = card_texts(args.data, args.sample, args.limit)
+        if args.seed:
+            seed_from(args.seed, texts, workers=args.workers or None)
         n = precompute(texts, workers=args.workers or None)
         print(f"parsed {n} new / {len(texts)} texts -> {cache_path()}")
         return
