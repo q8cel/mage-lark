@@ -35,6 +35,11 @@ import refs
 from anaphora import find_anaphors
 
 POSSESSIVE = {"its", "their", "itself", "themselves"}
+# Direction of the type lattice used for demonstratives ("that creature"):
+#   lattice  - candidate type must be inside LATTICE[anaphor]  (current default)
+#   expected - anaphor type must be inside LATTICE[candidate]  (the "is a" direction)
+#   either   - union of both
+TYPE_MODE = "either"
 # First words that are determiners, not proper nouns: their case can be adapted
 # to the slot they are substituted into ("if This spell" -> "if this spell").
 CASE_FREE = {"this", "that", "those", "these", "the", "a", "an", "target",
@@ -244,8 +249,24 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append(f"number={anum}")
+        def _type_ok(cand_type):
+            if atype is None or cand_type is None:
+                return True
+            if TYPE_MODE == "lattice":
+                return refs.type_compatible(atype, cand_type)
+            if TYPE_MODE == "expected":
+                return refs.type_expected(atype, cand_type)
+            return (refs.type_compatible(atype, cand_type)
+                    or refs.type_expected(atype, cand_type))
+
         if on["type"] and atype:
-            f = [i for i in pool if refs.type_compatible(atype, ms[i]["head_type"])]
+            # A demonstrative names its own head ("that card"), so a mention whose
+            # head type is unknown (a bare "You", "~", a fragment) is a much worse
+            # fit than any typed mention - prefer typed ones whenever they exist.
+            f = [i for i in pool
+                 if ms[i]["head_type"] is not None and _type_ok(ms[i]["head_type"])]
+            if not f:
+                f = [i for i in pool if _type_ok(ms[i]["head_type"])]
             if f:
                 pool = f
                 evidence.append(f"type={atype}")
@@ -661,6 +682,10 @@ def main():
                     metavar="BENCH.json", help="score on the human gold set")
     ap.add_argument("--no-parser", action="store_true",
                     help="use regex mentions only (no parse tree) - the level-0/1 coref path")
+    ap.add_argument("--type-mode", choices=("lattice", "expected", "either"),
+                    default="either",
+                    help="direction of the type lattice for demonstratives; `either` "
+                         "(union) measured best and is safest with a coarse vocabulary")
     ap.add_argument("--parser", choices=("always", "auto", "never"), default="always",
                     help="mention source: always=parse every card, auto=parse only "
                          "when a decision is unsure, never=regex only")
@@ -684,6 +709,7 @@ def main():
                      require_struct=args.structured_only)
         return
     if args.bench is not None:
+        globals()["TYPE_MODE"] = args.type_mode
         parser = {"always": True, "never": False, "auto": "auto"}[args.parser]
         if args.no_parser:
             parser = False

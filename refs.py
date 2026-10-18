@@ -103,16 +103,28 @@ def head_type(surface):
     return None
 
 
+# Pronouns carry their number intrinsically; the "ends with s" heuristic below
+# must not touch them. It classified `its` as plural (and would mis-handle any
+# future word ending in -s), which silently broke every singular possessive.
+PRONOUN_NUMBER = {
+    "it": "sg", "its": "sg", "it's": "sg", "itself": "sg",
+    "they": "pl", "them": "pl", "their": "pl", "theirs": "pl",
+    "themselves": "pl",
+}
+
+
 def number(surface):
     """'pl' / 'sg' / None (unknown)."""
-    w = surface.lower().split()
+    w = surface.lower().replace("\u2019", "'").split()
     if not w:
         return None
-    if w[0] in PLURAL_DET:
-        return "pl"
+    if len(w) == 1 and w[0] in PRONOUN_NUMBER:
+        return PRONOUN_NUMBER[w[0]]
     ht = head_type(surface)
     if ht:
         return "pl" if re.search(rf"\b{ht}s\b", surface.lower()) else "sg"
+    if w[0] in PLURAL_DET:
+        return "pl"
     return "pl" if w[-1].endswith("s") and not w[-1].endswith("ss") else "sg"
 
 
