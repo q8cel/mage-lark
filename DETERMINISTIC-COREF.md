@@ -324,7 +324,7 @@ default (`--ablate` can enable it for experiments).
 
 | measurement | value |
 |---|---|
-| dev: 3,403 teacher labels, entity-aware | **72.9%** |
+| dev: 3,395 teacher labels, entity-aware | **73.0%** |
 | human bench: 71 resolvable cases, entity-aware | **79%** (56/71) |
 | nearest-mention baseline (same protocol) | 56% |
 | raw encoder attention | 67% |
@@ -433,6 +433,26 @@ the merged parse, while the rules themselves were unchanged — the gain came fr
 candidates (pronoun spans now kept, the zero-node regex fallback) and from
 sentences that now parse. The structural rules still contribute nothing because
 only 48% of anaphors sit in a parsed sentence.
+
+### 4e. Dataset repair (contaminated dev texts)
+
+91 dev records carried the `~ch` clobbering. `repair_dataset.py` rebuilds each
+one from the ORIGINAL oracle text (identity check: re-running the *buggy*
+normalizer on the source must reproduce the stored text exactly), then remaps
+spans with a diff-based offset map.
+
+The subtle part: the clobbered `~ch` also produced a **bogus `~` mention** in the
+candidate list (it looked like the card self-reference). Those spans no longer
+reproduce their surface after the repair, so they are dropped and the teacher's
+indices remapped.
+
+| | |
+|---|---|
+| records repaired | 93 (91 unique cards) |
+| bogus mentions dropped | 113 |
+| teacher labels lost (pointed at a bogus mention) | 8 |
+| clobbered tokens remaining | **0** |
+| dev after repair | 73.0% on 3,395 occurrences (was 72.9% on 3,403) |
 
 The rewrite path works and round-trips: every resolution carries the entity's
 canonical surface, so a resolved card can be re-parsed with the pronouns

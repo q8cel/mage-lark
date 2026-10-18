@@ -56,6 +56,8 @@ unchanged grammar is near-instant.
 | `ptree.py` | **The** parse: one tree per text (`keep_all_tokens=True` + `propagate_positions=True`) yielding mention spans **and** structure (`role`, `verb`, `predicate`, `in_condition`). Disk-cached, parallel precompute, regex fallback per unparseable segment |
 | `pmentions.py`, `pstruct.py` | Thin shims over `ptree`, kept for existing callers |
 | `refs.py` | Mention **inventory**: maximal-span cleaning + `head_type`, `number`, `definiteness`, `is_self`, `is_target`, `sentence`, `clause` |
+| `resolve_pipeline.py` | `--resolve` seam: rewrite -> re-parse -> interpret; measures how many anaphora markers disappear from the output |
+| `repair_dataset.py` | Repair the card-name clobbering in a labelled dataset (`~ch` -> `Search`) with span remapping |
 | `rulecoref.py` | **Deterministic resolver**: filters → possessive binding → recency → entity clustering → `rewritten_text`; also `--eval` / `--bench` |
 | `test_coref.py` | 14 golden tests for the resolver (behaviour + documented limitations) |
 | `DETERMINISTIC-COREF.md` | Design analysis, measurements, rejected rules |

@@ -35,6 +35,11 @@ import refs
 from anaphora import find_anaphors
 
 POSSESSIVE = {"its", "their", "itself", "themselves"}
+# First words that are determiners, not proper nouns: their case can be adapted
+# to the slot they are substituted into ("if This spell" -> "if this spell").
+CASE_FREE = {"this", "that", "those", "these", "the", "a", "an", "target",
+             "each", "every", "all", "any", "no", "another", "other", "up",
+             "you", "your", "its", "their", "one", "two", "three"}
 POSSESSED_RE = re.compile(
     r"^\s*(?:'s\s+)?(owner|controller|power|toughness|mana value|mana cost|"
     r"color|colors|name|type|types|abilities|subtypes)", re.I)
@@ -105,7 +110,8 @@ def _container(struct, start):
     return best
 
 
-def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None):
+def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
+            parse_ok=None):
     """Resolve every anaphor occurrence in `text`.
 
     mentions: annotated mention dicts (refs.build). Anaphor spans are appended
@@ -156,6 +162,27 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None):
         rec = _as_anaphor_record(a, text)
         box = _container(struct, rec["start"])
         rec["container_role"] = box["role"] if box else None
+        # Is the anaphor itself occupying a nominal slot (a whole card_target /
+        # player / token node), and not merely embedded in a larger NP's modifier
+        # ("from among them") or in a place where a pronoun is grammatically
+        # required ("as though they had flash")? Only nominal slots may be
+        # rewritten to a concrete NP.
+        rec["slot"] = None
+        if struct:
+            tight = None
+            for r in struct:
+                if r["start"] <= rec["start"] and rec["end"] <= r["end"]:
+                    if tight is None or (r["end"] - r["start"]) < (tight["end"] - tight["start"]):
+                        tight = r
+            if tight is not None:
+                if (tight["node"] in ("card_target", "player", "token")
+                        and (tight["end"] - tight["start"]) <= (rec["end"] - rec["start"]) + 2):
+                    rec["slot"] = "nominal"
+                else:
+                    # the anaphor sits inside a larger NP's modifier
+                    # ("from among them") -> substituting an NP there produces
+                    # nonsense, always skip
+                    rec["slot"] = "embedded"
         key = (rec["start"], rec["end"])
         if key not in span_index:
             env = refs.annotate(text, [{"surface": rec["surface"], "start": key[0],
@@ -344,42 +371,104 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None):
         "anaphors": out_anas,
     }
     if rewrite:
-        result["rewritten_text"] = rewrite_text(text, out_anas)
+        result["rewrite_stats"] = {}
+        result["rewritten_text"] = rewrite_text(text, out_anas, parse_ok=parse_ok,
+                                                stats=result["rewrite_stats"])
     return result
 
 
-def rewrite_text(text, anas, require_number_match=True):
+def rewrite_text(text, anas, require_number_match=True, parse_ok=None, stats=None):
     """Replace resolved anaphors with their antecedent surface.
 
     Possessive pronouns are left alone: the grammar only accepts `its/their/
     your/...` in possessor position, so `target creature's owner` would not
-    parse. Everything else becomes a concrete NP the parser already handles.
+    parse. Everything else becomes a concrete NP.
+
+    `parse_ok` (optional callable: sentence -> bool) enables per-sentence
+    validation: a sentence whose edit breaks the parse is reverted as a whole.
+    Resolution should only ever claim rewrites that compile.
     """
-    edits = []
+    if stats is None:
+        stats = {}
+    for k in ("applied", "reverted", "skip_possessive", "skip_set",
+              "skip_number", "skip_slot"):
+        stats.setdefault(k, 0)
+    sents = refs.sentence_spans(text)
+
+    def sent_of(pos):
+        for a, b in sents:
+            if a <= pos < b:
+                return a, b
+        return 0, len(text)
+
+    by_sent = {}
     for a in anas:
         if a["status"] == "no-resolution" or not a.get("antecedent"):
             continue
         surf = a["surface"].lower()
-        if surf in POSSESSIVE or a["kind"] == "phrase":
+        if surf in POSSESSIVE:
+            stats["skip_possessive"] += 1
+            continue
+        if a["kind"] == "phrase":
+            stats["skip_set"] += 1
+            continue
+        if a.get("slot") == "embedded":
+            stats["skip_slot"] += 1
             continue
         ant = a.get("canonical") or a["antecedent"]["surface"]
         if require_number_match:
             an, nn = refs.number(ant), a.get("number")
             if nn and an and nn != an:
+                stats["skip_number"] += 1
                 continue
-        edits.append((a["start"], a["end"], ant))
-    if not edits:
-        return text
-    edits.sort()
-    out, cur = [], 0
-    for s, e, rep in edits:
-        if s < cur:
+        # fit the case to the slot: sentence-initial gets a capital, mid-sentence
+        # a determiner-led antecedent gets lowercased (proper nouns untouched)
+        before = text[:a["start"]].rstrip()
+        initial = (not before) or before[-1] in ".!?\u2014"
+        head = ant.split(" ", 1)[0].lower().strip("'")
+        if initial:
+            ant = ant[:1].upper() + ant[1:] if ant[:1].islower() else ant
+        elif head in CASE_FREE:
+            ant = ant[:1].lower() + ant[1:]
+        by_sent.setdefault(sent_of(a["start"]), []).append((a["start"], a["end"], ant))
+
+    out, reverted, applied = [], 0, 0
+    for a, b in sents:
+        edits = sorted(by_sent.get((a, b), []))
+        if not edits:
             continue
-        out.append(text[cur:s])
-        out.append(rep)
-        cur = e
-    out.append(text[cur:])
-    return "".join(out)
+        piece, cur, ok = [], a, True
+        for s0, e0, rep in edits:
+            if s0 < cur:
+                continue
+            piece.append(text[cur:s0])
+            piece.append(rep)
+            cur = e0
+        piece.append(text[cur:b])
+        candidate = "".join(piece)
+        if parse_ok is not None:
+            try:
+                ok = bool(parse_ok(candidate))
+            except Exception:
+                ok = False
+        if ok:
+            applied += len(edits)
+            stats["applied"] += len(edits)
+        else:
+            reverted += len(edits)
+            stats["reverted"] += len(edits)
+            candidate = text[a:b]
+        out.append((a, b, candidate))
+
+    if not out:
+        return text
+    result, cur = [], 0
+    for a, b, piece in out:
+        result.append(text[cur:a])
+        result.append(piece)
+        cur = b
+    result.append(text[cur:])
+    return "".join(result)
 
 
 # ------------------------------------------------------------------- evaluation

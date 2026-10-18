@@ -47,6 +47,7 @@ parser configurations a caller uses.
 | 4d | tree structure | `ptree.structure(text)` | `role` (subject/object), `verb`, `predicate`, `in_condition` | same as 4b (cache-read only, never parses) |
 | 5 | inventory | `refs.clean` → `refs.annotate` | `+ head_type, number, definiteness, is_self, is_target, sentence, clause`, and `role`/`verb`/`predicate` when struct is supplied | — |
 | 6 | resolve | `rulecoref.resolve(text, mentions, anaphors)` | entities, per-anaphor status, `rewritten_text` | — |
+| 6b | resolve + re-parse (`--resolve`) | `resolve_pipeline.py`: rewrite -> `segment` -> `Lark` -> `Interpreter` | semantic dicts with the anaphora markers replaced by concrete mentions | — |
 | 7 | label (offline) | `label_cases.py` → Qwen 27B on `:9000` | `coref_dataset.json`, `coref_standard.json` | `.cache/label_cases/` (prompt hash) |
 | 8 | train (offline) | `train_head.py` | frozen MiniLM + tiny MLP | `enc_<model>_L<layer>.pkl` |
 
@@ -117,7 +118,40 @@ python rulecoref.py --bench                       # test: 72 human gold
 python rulecoref.py --eval X.json --ablate number,type
 ```
 
-### The two integration seams (designed, only one exercised)
+### Verified seam: resolution feeds the compiler (`--resolve`)
+
+`resolve_pipeline.py` measures it; `demo_output.py --resolve` shows it:
+
+```
+python demo_output.py --data FDN.json --resolve "Fiery Annihilation deals 5 damage to target creature. ..."
+python resolve_pipeline.py --data FDN.json --limit 158
+```
+
+Measured on all 158 FDN cards that contain an anaphor (269 occurrences):
+
+| | before | after |
+|---|---|---|
+| anaphora markers in the semantic output | 57 | **7** |
+| unparsed sentences | 28 | **28** (no regression) |
+| cards rewritten | — | 92 / 158 |
+
+Rewrite decisions: 121 edits applied, 49 reverted (the substitution broke that
+sentence's parse), 23 skipped because the anaphor is *embedded* in a larger NP's
+modifier (`from among them`), 52 possessive, 11 number-mismatch, 6 set-valued.
+
+Two rules make this safe:
+
+1. **per-sentence validation** — `rewrite_text(..., parse_ok=...)` reverts a
+   sentence whose edit stops parsing, so a rewrite is only claimed if it compiles;
+2. **slot gating** — an anaphor whose containing mention is much larger than the
+   anaphor itself is skipped (`slot == "embedded"`); substituting an NP inside a
+   modifier produces nonsense even when it parses.
+
+Possessives (`its owner's hand`) and set anaphora (`the rest`) are never rewritten:
+the grammar accepts only `its/their/...` in possessor position, and a set needs a
+partitive ("the rest of the top five cards"), not a plain NP.
+
+### The second integration seam (not built)
 
 1. **Pre-parse rewrite** — `rulecoref` emits pronoun-free text, which is fed back
    through `segment` → `Lark.parse` → `Interpreter`. Verified on Fiery
