@@ -130,7 +130,7 @@ event: event_subject EVENT_VERB event_object?
       | event_subject "is" "dealt" ("noncombat" | "combat")? "damage"
       | V_YOU "control" card_target
       | event_subject "taps" card_target ("for" "mana")?
-      | card_target "is" ("tapped" | "untapped")
+      | card_target "is" ("tapped" | "untapped") ("for" "mana")?
       | counter_amount counter_kind "is" "removed" "from" card_target
       | counter_amount counter_kind "is" "put" "on" card_target
       | event_subject EVENT_VERB "while" any_text
@@ -285,7 +285,7 @@ extra_turns_action: (who)? V_TAKE ("a" | "an" | amount) "extra" ("turn" | "turns
 
 // ---- individual actions ----
 
-add_mana_action: V_ADD mana_amount
+add_mana_action: (who)? V_ADD ("an" "additional" )? mana_amount
 mana_amount: "one" "mana" "of" "any" "color" | amount MANA
            | amount "mana" "of" "any" "one" "color"
            | amount "mana" "in" "any" "combination" "of" "colors"
@@ -533,7 +533,7 @@ emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
 enchant_action: V_ENCHANT enchant_target
 enchant_target: STATUS* GENERIC_TYPE (("," | "or" | "," "or") GENERIC_TYPE)*
-cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
+cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" ("by" card_target)? | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
 no_max_hand_action: "You" "have" "no" "maximum" "hand" "size"
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
 attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" | "you" "this" "turn" | "this" "turn") "if" "able"
@@ -692,7 +692,7 @@ EMDASH: /—|–/
 
 //  case-insensitive verb terminals (word-bounded)
 //  (a verb can be sentence-initial (capitalised) or mid-sentence (lowercase))
-V_ADD: /\badd\b/i
+V_ADD: /\badd(s)?\b/i
 V_CREATE: /\bcreate(s?)\b/i
 V_PUT: /\bput(s)?\b/i
 V_REMOVE: /\bremove\b/i
