@@ -141,12 +141,16 @@ python rulecoref.py --eval X.json --ablate number,type
                  "spans": [ {"surface","start","end","is_anaphor"} ]} ],
   "anaphors": [ {"surface","start","end","kind","status","entity",
                  "antecedent": {"surface","start","end"} | null,
-                 "canonical", "antecedent_src", "evidence", "candidates"} ],
+                 "canonical", "antecedent_src", "evidence", "candidates",
+                 "set_valued", "op"} ],
   "rewritten_text": "..."
 }
 ```
 
 - `status` ∈ `resolved` | `ambiguous` | `no-resolution`
+- `set_valued: true` + `op: "minus"` for collection anaphors (`the rest`): the
+  entity named is the collection, and the resolution means "that collection minus
+  the subset just singled out"
 - `entity` is the cluster id (entity ids, not candidate indices — a correct
   answer that picked a different mention of the same object is still correct)
 - `antecedent_src` maps back to the caller's own candidate numbering (used by
@@ -175,7 +179,7 @@ Known reference points (entity-aware, no leakage):
 |---|---|---|
 | nearest mention | — | 56% |
 | raw encoder attention (`resolve.py --eval`) | — | 67% |
-| deterministic rules (`rulecoref`) | 71.3% | 73% |
+| deterministic rules (`rulecoref`) | 72.9% | **79%** |
 | frozen-encoder mention ranker (`train_head`) | — | 85% |
 | teacher (Qwen 27B) | 89% | 88% |
 
@@ -200,7 +204,8 @@ eager (no progress until done) and the CPU cost is the Earley parse, so budget
 
 ## Rebuild status: done (drift 0)
 
-The unified cache is built: **2,497 texts**, 76.5 min on 27 workers, and
+The unified cache is built: **2,497 texts**, 78.5 min on 27 workers (~1 CPU-minute
+per card text), and
 `python ptree.py --verify` reports **0 drifting texts** against the legacy span
 cache. Note the two traps the verifier caught:
 
@@ -218,8 +223,8 @@ Coverage after the rebuild:
 |---|---|
 | texts with at least one parsed mention | 1,758 / 2,497 (70.4%) |
 | texts parsed nowhere (regex fallback only) | 739 (29.6%) |
-| mention records with `role`/`verb` | 38.5% |
-| anaphors whose sentence yields structure | **45.3%** |
+| mention records with `role`/`verb` | 37.9% |
+| anaphors whose sentence yields structure | **48.2%** |
 
 ## Original rebuild instructions
 

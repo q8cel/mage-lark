@@ -120,6 +120,21 @@ def t_known_limitation_blasphemous_edict():
     assert got == ["thirteen creatures"], got
 
 
+def t_set_anaphora_is_set_valued():
+    # "the rest" denotes a collection minus a subset, so the output must be
+    # flagged and must bind to a plural collection NP, not the last mention.
+    text = ("Look at the top five cards of your library. Put one into your hand "
+            "and the rest on the bottom of your library.")
+    anas = [a for a in find_anaphors(text)]
+    rest = [a for a in anas if a["kind"] == "phrase"]
+    assert rest, [a["surface"] for a in anas]
+    res = rulecoref.resolve(text, refs.build(text, parser=False), anas)
+    got = [a for a in res["anaphors"] if a["kind"] == "phrase"][0]
+    assert got["set_valued"] is True, got
+    assert got["op"] == "minus", got
+    assert refs.number(got["canonical"]) == "pl", got["canonical"]
+
+
 # ----------------------------------------------------------------- unit rules
 def t_clean_is_maximal_and_junk_free():
     text = "Exile up to one target Equipment attached to that creature"

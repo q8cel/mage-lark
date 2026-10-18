@@ -324,14 +324,15 @@ default (`--ablate` can enable it for experiments).
 
 | measurement | value |
 |---|---|
-| dev: 3,403 teacher labels, entity-aware | **71.3%** |
-| human bench: 71 resolvable cases, entity-aware | **73%** (52/71) |
+| dev: 3,403 teacher labels, entity-aware | **72.9%** |
+| human bench: 71 resolvable cases, entity-aware | **79%** (56/71) |
 | nearest-mention baseline (same protocol) | 56% |
 | raw encoder attention | 67% |
 | frozen-encoder mention-ranker (same protocol) | **85%** (61/72) |
 | teacher (Qwen 27B) | 88% |
 
-Per anaphor kind (dev): pronoun 73%, demonstrative 71%, `the rest` 32%.
+Per anaphor kind (dev): pronoun 73%, demonstrative 71%, `the rest` **90%**
+(set rule, see §4c).
 
 Status mix on dev: 94.5% resolved, 5.0% ambiguous, 0.5% no-resolution. Of the
 294 occurrences the teacher marked "no antecedent", the rules abstained on 69.
@@ -340,6 +341,55 @@ Residual (dev): 615 type mismatch, 231 wrong pick with the same type, 119 gold
 spans absorbed by cleaning. The type-mismatch bucket is where the 12-point gap
 to the neural head lives: it needs **syntactic role**, i.e. the parse tree —
 which is exactly why the surface verb prior above does not close it.
+
+### 4c. Set-valued anaphora - implemented
+
+`the rest` does not denote a mention; it denotes *a collection minus the subset
+just singled out*. The shipped rule (`set_rest` in `rulecoref.py`):
+
+1. a set anaphor has **no number agreement**, so the number filter is skipped
+   (without this, `the rest` was pushed into singular candidates),
+2. the antecedent is the most recent preceding **plural collection NP**
+   (a mention with `number == pl` and a head noun),
+3. the result is flagged `set_valued: true, op: "minus"` — additive to the
+   contract, so consumers that ignore it are unaffected.
+
+| metric | before | after |
+|---|---|---|
+| `the rest` (96 occurrences) | 31/96 = 32% | **86/96 = 90%** |
+| dev overall | 71.3% | **72.9%** |
+
+Set support is deliberately single-hop: the output names the *collection* and the
+subtraction, not the resulting membership (that needs the game state, e.g. "the
+top five cards" minus "the one you put into your hand").
+
+### 4d. Grammar work - what it bought
+
+Sentences that parse gain structure (roles), and their mentions stop falling back
+to regex. Seven patterns were added (`put_library_action` with `owner_subject`,
+comma-joined tutor chains, `tapped and transformed`, `until the end of your next
+turn`, `one of them ... and the rest/other into ...`, `you may choose ... from
+it`, `sacrifice ... at the beginning of your next end step`, `life equal to its
+mana value`).
+
+| measurement | value |
+|---|---|
+| FDN unique sentences re-checked | 703 |
+| coverage before -> after | 85.5% -> **85.9%** |
+| newly parsing | 3 |
+| **newly failing (regressions)** | **0** |
+
+Regression gate: parse every sentence with the `HEAD` grammar and with the new
+one, diff the outcomes. Worth running on every grammar change — the first cut of
+this batch silently broke three `return ... under its owner's control` sentences
+by dropping a `?`.
+
+A second, more important finding: **`normalize_names` had no word boundaries**, so
+45 Standard card names that are word prefixes (`Sear`, `Ash`, `Burn`, `Opt`, ...)
+clobbered ordinary words — `Search your library` became `~ch your library` in 91
+dev card texts. Fixed with letter/digit lookarounds; output on all 763 FDN cards
+is byte-identical. The stored dev texts keep the old corruption, so ~12 of the
+remaining parse failures are artefacts of the old dataset, not grammar.
 
 ### Structural features (ptree, pilot)
 
@@ -366,20 +416,23 @@ anaphors have a container role.** The reason is coverage, not logic:
 
 | measurement (dev, 3,403 occurrences) | value |
 |---|---|
-| anaphors whose sentence yields any structure | **45.3%** (1,676 / 3,697) |
+| anaphors whose sentence yields any structure | **48.2%** (1,782 / 3,697) |
 | possessive anaphors with a container role | 6 / 755 |
 | mention records that come from the regex fallback | 49.4% |
 | card texts that parse nowhere | 739 / 2,497 (29.6%) |
-| accuracy on texts that parse | 71.5% |
-| accuracy on texts that do not parse | 71.1% |
+| accuracy on texts that parse | 73.6% |
+| accuracy on texts that do not parse | 71.5% |
 
 So structure currently buys **nothing**, and not because the rules are wrong: the
 constructions that decide the hard cases (`Each player exiles the top seven cards
 of **their** library`) do not parse. The rule was removed.
 
-**Conclusion: the next lever is grammar coverage for anaphor-bearing clauses,
-not more resolver rules.** Until those sentences parse, no amount of tree
-reasoning can help, and the deterministic resolver sits at ~71% dev / 73% bench.
+**Conclusion: grammar coverage and mention-inventory quality are the levers, not
+more resolver rules.** The bench went 73% -> **79%** across the grammar batch and
+the merged parse, while the rules themselves were unchanged — the gain came from
+candidates (pronoun spans now kept, the zero-node regex fallback) and from
+sentences that now parse. The structural rules still contribute nothing because
+only 48% of anaphors sit in a parsed sentence.
 
 The rewrite path works and round-trips: every resolution carries the entity's
 canonical surface, so a resolved card can be re-parsed with the pronouns
@@ -395,7 +448,7 @@ target creature instead.`).
 | type mismatch (card↔opponent, creature↔card, card↔player, creature↔token, …) | 149 | verb/type prior + type lattice |
 | partial/qualifier span (`target creature` vs `target creature you control`) | 60 | maximality + longest-match |
 | other | 110 | — |
-| `the rest` (kind=phrase) | 78 | set rule |
+| `the rest` (kind=phrase) | 78 -> **10** | set rule (**done**, see §4c) |
 
 Every bucket in that table maps to a rule in §2. None of them requires a model.
 
@@ -451,5 +504,4 @@ optional comparator behind a separate flag.
    strictly text+tree? (Recommendation: text+tree first, `interpret` later.)
 3. Do we want the rule engine to abstain (emit `no-resolution`) or always
    produce a best guess? Abstention is what makes the residual measurable.
-4. Is `the rest` / set-valued resolution in scope for v1, or deferred
-   (96 occurrences, 2.8%)?
+4. ~~Is `the rest` / set-valued resolution in scope for v1?~~ **Done** — see §4c.
