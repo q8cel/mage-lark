@@ -38,7 +38,7 @@ parser configurations a caller uses.
 | # | stage | function | output | cache file |
 |---|---|---|---|---|
 | 1 | load | `setdata.load(path)` | `items (name, text, code)`, `types`, `names`, `sets` | `seg_<data>_<setdata>.pkl` |
-| 2 | normalise + segment | `preprocess.segment(text, names)` | `[{text, modal, bullet}]` | `sent_<data>_<preprocess>_<setdata>.pkl` |
+| 2 | normalise + segment | `setdata.normalize_text` -> `preprocess.segment` | `[{text, modal, bullet}]` | `sent_<data>_<preprocess>_<setdata>.pkl` |
 | 3 | parse | `Lark.open(grammar.lark, earley, ambiguity='resolve')` | tree | `parse_<grammarhash>.json` (coverage only: 1/0 per sentence) |
 | 4a | interpret | `Interpreter.interp(tree)` | typed dicts (`effect`, `if`, …) | — |
 | 4b | parse once | `ptree.nodes(text)` | records `{start, end, node, role, verb, predicate, in_condition}`, regex fallback per unparseable segment | `ptree_<grammarhash>.json` |
@@ -53,6 +53,23 @@ parser configurations a caller uses.
 
 Stages 1–3 are shared. Stage 4 splits into three parallel consumers that do not
 depend on each other.
+
+## Text normalisation invariants (`setdata.normalize_text`)
+
+One function produces every canonical text, and it has to satisfy two properties:
+
+1. **Line breaks are preserved.** Oracle text puts one ability per line. Collapsing
+   them merges `Trample, haste` with the `When this Vehicle enters, ...` trigger
+   that follows, and the result parses as neither — measured as the single largest
+   cause of parse failure for anaphora-bearing sentences (35 of 179 failures).
+2. **The transform is exactly length-preserving**: a whitespace run becomes one
+   space, or one newline where the line break was. Verified over all 10,446
+   FDN+Standard cards: zero length changes, and the only differing characters are
+   space -> newline (10,134). This is what makes a dataset upgrade a character
+   swap (`upgrade_texts.py`) instead of a span remapping.
+
+Anything that re-derives text must go through this function — several call sites
+had the whitespace collapse inlined, which is how the two forms drifted apart.
 
 ## The three parser configurations (the main gotcha)
 

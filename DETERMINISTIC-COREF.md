@@ -363,7 +363,34 @@ Set support is deliberately single-hop: the output names the *collection* and th
 subtraction, not the resulting membership (that needs the game state, e.g. "the
 top five cards" minus "the one you put into your hand").
 
-### 4d. Grammar work - what it bought
+### 4d. Where the remaining parse failures are
+
+A census over 400 sampled anaphor-bearing dev sentences (current grammar, after the
+line-break fix): **165 fail (41%)**, and the failures are *flat-weighted* — each
+exact sentence accounts for 1-2 anaphor occurrences. Clustering by pattern instead
+of exact text is what makes them actionable:
+
+| pattern | count (of 179 pre-fix failures) | cause |
+|---|---|---|
+| keyword blob (`Trample, haste When this ...`) | 35 | **fixed**: line breaks are now preserved |
+| `until end of turn` | 20 | grammar (/`become` + multi-word types) |
+| `each player / each opponent` | 20 | grammar |
+| `counters on it/them` | 18 | grammar |
+| `you may cast` | 11 | grammar |
+| mid-sentence `•` bullets | 10 | **fixed** by the same line-break change |
+
+After the line-break fix the fail rate went 45% -> **41%**, i.e. 179 -> 165 of 400.
+The six rules added in the same round (become-until-end-of-turn with multi-word
+types, fight each other, until-your-next-end-step / at-the-beginning timing, suspect,
+search-...-with-that-name-and-exile-them) each fix 1-3 sentences, with 0 regressions
+on a 143-sentence frequency sample.
+
+**Implication for planning:** the frequent patterns are gone (master's 12 commits
+ate them); what remains is a long tail. Grammar work now fixes a handful of
+occurrences per rule, so rules must be batched and gated, and the payoff per turn is
+measured in a few tenths of a point of structure coverage.
+
+### 4e. Grammar work - what it bought
 
 Sentences that parse gain structure (roles), and their mentions stop falling back
 to regex. Seven patterns were added (`put_library_action` with `owner_subject`,
