@@ -128,6 +128,10 @@ event: event_subject EVENT_VERB event_object?
       | event_subject "is" "put" "into" zone
       | event_subject "is" "dealt" ("noncombat" | "combat")? "damage"
       | V_YOU "control" card_target
+      | event_subject "taps" card_target ("for" "mana")?
+      | card_target "is" ("tapped" | "untapped")
+      | counter_amount counter_kind "is" "removed" "from" card_target
+      | counter_amount counter_kind "is" "put" "on" card_target
       | event_subject EVENT_VERB "while" any_text
       | V_YOU "attack" "with" ("one" "or" "more" | amount ("or" "more")?) "creatures"
       | V_YOU "do"
@@ -311,7 +315,7 @@ TOK_TYPE_WORD: /[A-Z][a-zA-Z]+/
 token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
 
-put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")?
+put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
 remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
              | (who)? V_LOSE "all" counter_kind
 counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
@@ -359,6 +363,7 @@ deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("an
                   | card_target V_DEAL amount "damage" "divided" "as" "you" "choose" "among" "any" "number" "of" damage_who
                   | card_target V_DEAL dmg_amount "damage" "divided" divided_rest
 damage_who: card_target "or" card_target
+          | "each" "of" "up" "to" amount "targets"
           | card_target "and/or" card_target
           | card_target
           | "itself"
@@ -435,7 +440,7 @@ stat_action: card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target
            | ("you")? "have" card_target V_GET stat_change ("until" "end" "of" "turn")?
 stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
            | ("has" | "gains" | "have" | "gain") kw_list
-gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)?
+gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("for"? "as" "long" "as" any_text)?
 base_pt_action: card_target ("has" | "gains" "gets") "base" "power" "and" "toughness" POWER_T ("until" "end" "of" "turn")?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
@@ -502,6 +507,7 @@ double_action: V_DOUBLE "the" "number" "of" any_text
              | V_DOUBLE card_target "'s" "power" ("until" "end" "of" "turn")?
 distribute_action: V_DISTRIBUTE any_text
 separate_action: V_SEPARATE "them" "into" "a" "face-down" "pile" "and" "a" "face-up" "pile"
+              | (who)? V_SEPARATE card_target "into" "two" "piles"
 spend_mana_action: (V_YOU "can")? V_SPEND ("this" "mana" | "mana" "of" "any" "type") ("only")? "to" "cast" card_target
                | (V_YOU "can")? V_SPEND ("only")? (COLOR | "colorless") ("or" (COLOR | "colorless"))* "mana" "on" "X"
                   | "mana" "of" "any" "type" "can" "be" "spent" "to" "cast" card_target
