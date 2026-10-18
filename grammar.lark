@@ -212,6 +212,7 @@ action: add_mana_action
        | tap_action
        | untap_action
        | sacrifice_action
+       | regenerate_action
        | gain_control_action
        | scry_action
        | surveil_action
@@ -399,6 +400,7 @@ destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "rand
 tap_action: V_TAP card_target
 untap_action: V_UNTAP card_target
 sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
+regenerate_action: (who)? V_REGENERATE card_target
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
 gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")?
 scry_action: ("each" "player" | who)? V_SCRY amount
@@ -670,6 +672,7 @@ V_DESTROY: /\bdestroy\b/i
 V_TAP: /\btap\b/i
 V_UNTAP: /\buntap\b/i
 V_SACRIFICE: /\bsacrifice(s?)\b/i
+V_REGENERATE: /\bregenerates?\b/i
 V_SCRY: /\bscry\b/i
 V_SURVEIL: /\bsurveil\b/i
 V_MILL: /\bmill(s?)\b/i

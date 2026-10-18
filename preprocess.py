@@ -37,8 +37,14 @@ def _name_re(names):
         _NAME_RE_CACHE[key] = pat
     return pat
 
+# Card names that double as common action verbs: replacing them with ~ would
+# clobber the verb (e.g. "{G}: Regenerate this creature" -> "~ this creature").
+# "Regenerate" is only ever used as a verb in the corpus, never as a name ref.
+_NAME_EXCLUDE = frozenset({"Regenerate"})
+
 def normalize_names(text, names=None):
     names = names or name_set()
+    names = set(names) - _NAME_EXCLUDE
     pat = _name_re(names)
     if pat is not None:
         text = pat.sub('~', text)
