@@ -65,6 +65,18 @@ TIMEOUT = 0           # per-sentence wall-clock cap; 0 = off. Measured: a
                       # benchmark accuracy (parses legitimately need 20-60s)
 
 
+def default_workers():
+    """Physical cores, not logical: measured on this Xeon, 14 workers beat 27 by 12%
+    in wall time (7.5 vs 8.5 min for the same 60 sentences; efficiency 55% vs 39%)
+    because hyperthreads contend for cache/memory on a parse this memory-heavy."""
+    logical = os.cpu_count() or 4
+    try:
+        physical = len(os.sched_getaffinity(0)) // 2 or 1
+    except Exception:
+        physical = logical // 2 or 1
+    return max(1, min(logical // 2, physical))
+
+
 def _grammar_hash():
     with open(os.path.join(BASE, "grammar.lark"), "rb") as fh:
         return hashlib.sha1(fh.read()).hexdigest()[:10]
@@ -409,7 +421,7 @@ def seed_from(seed_path, texts, workers=None, sample=40, quiet=False):
     if not quiet:
         print(f"[seed] {len(seedable)} seedable texts; verifying structure on {len(pick)}")
     import multiprocessing as mp
-    workers = workers or max(1, (os.cpu_count() or 4) - 1)
+    workers = workers or default_workers()
     with mp.Pool(workers, initializer=_init_worker, initargs=(TIMEOUT,)) as pool:
         got = pool.map(_compute, pick, chunksize=1)
     bad = [t for t, recs in zip(pick, got) if not _same_records(seed[key(t)], recs)]
@@ -472,7 +484,7 @@ def precompute(texts, workers=None, quiet=False, timeout=None):
         return e.get("status") == "timeout" and (not TIMEOUT or TIMEOUT > e.get("cap", 0))
 
     todo = [s for s in uniq if _needs_work(s)]
-    workers = workers or max(1, (os.cpu_count() or 4) - 1)
+    workers = workers or default_workers()
     if not quiet:
         print(f"[ptree] {len(todo_texts)} texts, {len(uniq)} sentences, "
               f"{len(uniq)-len(todo)} cached, {len(todo)} to parse "
