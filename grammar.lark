@@ -72,7 +72,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
 //  loyalty   [+1]: <effect>   [−4]: <effect>
 // ----------------------------------------------------------------------------
 loyalty_sentence: LOY_COST ":" effect (xdef_clause)?
-LOY_COST: /\[[\-\u2212+]?\d+\]/
+LOY_COST: /\[[\-\u2212+]?(?:\d+|X)\]/
 
 // ----------------------------------------------------------------------------
 //  modal     "Choose one"  /  "Choose one that hasn't been chosen"
@@ -130,6 +130,7 @@ event: event_subject EVENT_VERB event_object?
       | V_YOU "do"
       | "there" "are" amount "or" "more" counter_name "counters" "on" card_target
       | ("one" "or" "more")? counter_amount counter_kind "are" "put" "on" card_target
+      | V_YOU "cast" card_target "or" card_target "enters"
       | V_YOU "cast" "a" "spell" "during" any_text
       | ("one" "or" "more")? card_target "attack"
       | V_YOU "next" "cast" event_object ("this" "turn")?
@@ -334,6 +335,7 @@ dmg_amount: amount | "that" "much" | "double" "that" | "double" "that" "much"
            | "that" "much" "plus" amount | "double" "that" "plus" amount | "double" "that" "much" "plus" amount
 lose_life_action: who V_LOSE life_amount ("unless" any_text)?
                 | player V_LOSE life_amount ("unless" any_text)?
+                | player "who" V_CANT V_LOSE life_amount
                 | who V_LOSE "life" "equal" "to" xdef
                 | player V_LOSE "life" "equal" "to" xdef
 lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" "abilities" | "all" "keyword" "abilities") ("until" "end" "of" "turn")?
@@ -399,6 +401,7 @@ exile_action: V_EXILE card_target ("from" zone)? ("until" any_text)?
             | V_EXILE "all" "other" card_target "tokens" "you" "control"
             | V_EXILE player "'s" "graveyard"
             | V_EXILE card_target "or" card_kind "that's" colors
+            | V_EXILE card_target "that's" ("one" "or" "more")? "colors"
             | V_EXILE card_target "attached" "to" card_target
             | V_EXILE "all" "but" "the" "bottom" "card" "of" zone
 
@@ -436,6 +439,7 @@ become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? p
 
 prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | "him" | "her" | "them" | card_target) (("and" | "or") ("you" | "him" | "her" | "them" | card_target))*)? ("this" "turn")?
               | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
+              | V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" "this" "turn" "to" ("you" | "him" | "her" | "them" | card_target)
               | ("The")? "damage" V_CANT "be" "prevented"
               | V_PREVENT (amount "of" "that" | "that") "damage"
               | V_PREVENT "all" ("combat" | "noncombat")? "damage" "that" "would" "be" "dealt" "by" card_target ("this" "turn")?
