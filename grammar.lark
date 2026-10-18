@@ -206,6 +206,7 @@ action: add_mana_action
        | counter_spell_action
        | return_action
        | put_zone_action
+       | put_library_action
        | exile_action
        | destroy_action
        | tap_action
@@ -304,6 +305,7 @@ counter_name: WORD+
 search_action: V_SEARCH zones "for" card_target ("named" (THIS_CARD | CARDNAME))? ("with" "the" "same" "name")? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("named" (THIS_CARD | CARDNAME))? ("put" ("it" | "them") "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
+             | V_SEARCH zone "for" card_target ","? V_PUT ("it" | "them") "onto" "the" "battlefield" "tapped"? ","? "then" "shuffle"
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle")?
 
 draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target
@@ -323,6 +325,7 @@ dmg_amount: amount | "that" "much" | "double" "that" | "double" "that" "much"
 lose_life_action: who V_LOSE life_amount ("unless" any_text)?
                 | player V_LOSE life_amount ("unless" any_text)?
                 | who V_LOSE "life" "equal" "to" xdef
+                | who V_LOSE "life" "equal" "to" ("its" | "their") ("mana" "value" | "power" | "toughness")
                 | player V_LOSE "life" "equal" "to" xdef
 lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" "abilities" | "all" "keyword" "abilities") ("until" "end" "of" "turn")?
 gain_poison_action: who V_GET amount "poison" "counters"
@@ -357,18 +360,26 @@ counter_spell_action: V_COUNTER card_target ("spell" | "ability")? ("with" any_t
 return_action: V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands")
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")?
-             | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+             | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "transformed" | "transformed" "and" "tapped" | "tapped" | "transformed")? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "with" "mana" "value" mv_cmp ("from" "your" "graveyard")? "to" "the" "battlefield"
 mv_cmp: amount "or" ("less" | "more")
        | ("less" | "greater") "than" "or" "equal" "to" (card_target | V_THIS | V_THAT) "'s" ("power" | "mana" "value")
              | V_RETURN card_target "to" "its" "owner's" "hand" "tapped"
              | V_RETURN card_target "to" "its" "owner's" "hand" "and" "you" V_CREATE "a" "Treasure" "token"
 
+// "X's owner puts it on their choice of the top or bottom of their library"
+put_library_action: owner_subject V_PUT ("it" | card_target) "on" put_library_dest
+                  | owner_subject V_PUT ("it" | card_target) "into" ("their" "hand" | "their" "graveyard")
+put_library_dest: "their" "choice" "of" "the" "top" "or" "bottom" "of" "their" "library"
+                | "the" ("top" | "bottom") "of" "their" "library"
+owner_subject: card_target "'s" ("owner" | "owners'")
 put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "from" "the" "top")? order_mod?
                | (who)? V_PUT card_target "on" "the" "bottom" ("of" zone)? order_mod?
                | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
                | "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
                | V_PUT "the" "rest" "into" zone
+               | V_PUT card_target "into" zone "and" "the" "rest" "into" zone
+               | V_PUT card_target "into" zone "and" "the" "other" "into" zone
                | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")?
                | V_PUT card_target "on" "top" "of" zone
                | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
@@ -392,7 +403,7 @@ destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "rand
 
 tap_action: V_TAP card_target
 untap_action: V_UNTAP card_target
-sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
+sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" ("the" | "your") "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
 gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")?
 scry_action: ("each" "player" | who)? V_SCRY amount
@@ -435,7 +446,9 @@ shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
 cast_action: V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("this" "turn")? ("on" "each" "of" "your" "turns")?
+           | V_PLAY ("an" "additional" "land" | card_target) "until" "the" "end" "of" "your" "next" "turn"
 choose_action: (player)? V_CHOOSE amount? choose_obj
+             | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
 copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability") ("for" "each" any_text)?
 trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
 lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
@@ -445,7 +458,7 @@ choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_tex
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text
 
-may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent")? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
+may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent" | controller_subject | owner_subject)? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
         | gain_life_action | lose_life_action | exile_action | attach_action | cast_action
         | play_action | scry_action | surveil_action | create_token_action | reveal_action
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
@@ -538,7 +551,7 @@ OWNER: /target player's|that player's|each player's|target opponent's|that oppon
 player: (V_EACH | V_AN | V_TARGET | V_ANOTHER | V_THAT | "the" | "defending" | "attacking" | "active")? ("opponent" | "player" | V_YOU)
 
 //  WHO: an actor that gains/loses life etc.
-who: player | card_target | controller_subject
+who: player | card_target | controller_subject | owner_subject
 controller_subject: ("Its" | "its") "controller" | (V_THAT | "this" | "the" | "a" | "an")? ("creature" | "source" | "spell" | "permanent" | "land" | "artifact" | "enchantment" | "planeswalker" | "token" | "attacker" | "blocker" | "aura" | "object" | "ability") "'s" "controller"
 
 //  colors

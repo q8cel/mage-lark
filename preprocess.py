@@ -28,12 +28,21 @@ _NAME_RE_CACHE = {}
 def _name_re(names):
     """Compile a single alternation regex for the name set (cached by set id).
     Longest names first so they win in leftmost-alternation, avoiding partial
-    clobbering. One combined sub is far faster than one sub per name."""
+    clobbering. One combined sub is far faster than one sub per name.
+
+    Each alternative is fenced with letter/digit lookarounds: card names that are
+    also word prefixes must not fire inside ordinary words. Without this, a card
+    named `Sear` turns `Search your library` into `~ch your library`, `Opt` turns
+    `Options` into `~ions`, and so on (45 such names exist in the Standard set,
+    affecting 91 dev card texts)."""
     key = frozenset(names)
     pat = _NAME_RE_CACHE.get(key)
     if pat is None:
         alts = sorted((n for n in names if n), key=len, reverse=True)
-        pat = re.compile('|'.join(re.escape(n) for n in alts)) if alts else None
+        pat = (re.compile(r'(?<![A-Za-z0-9])(?:' +
+                          '|'.join(re.escape(n) for n in alts) +
+                          r')(?![A-Za-z0-9])')
+               if alts else None)
         _NAME_RE_CACHE[key] = pat
     return pat
 

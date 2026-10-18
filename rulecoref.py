@@ -116,6 +116,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None):
               'type': False, 'nonentity': False}.
     """
     on = {"possessive": True, "number": True, "type": True, "nonentity": True,
+          "set_rest": True,
           "verb": False,      # lexical verb prior: measured to hurt, opt-in only
           # structural rule, needs the parse tree (ptree): a copula complement
           # ("it's an artifact") is a description, never an antecedent.
@@ -179,7 +180,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None):
     for rec in anas:
         a_from = rec["_mi"]
         atype = rec["head_type"]
-        anum = rec["number"]
+        anum = None if rec["kind"] == "phrase" else rec["number"]
 
         # ---- candidate pool: strictly preceding, never the anaphor itself
         pool = [i for i, m in enumerate(ms) if m["end"] <= rec["start"] and i != a_from]
@@ -225,6 +226,15 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None):
 # (a "self mention as clause subject wins" rule was measured here: it fired 18x
 #  on the structured sample, changed 8 picks, fixed 4 and broke 4. Removed.)
 
+        # ---- set-valued anaphors ("the rest", "the others")
+        # The referent is a COLLECTION minus what was just singled out, so the
+        # antecedent is the last plural collection NP, not the last mention.
+        if on["set_rest"] and rec["kind"] == "phrase":
+            f = [i for i in pool if ms[i]["number"] == "pl" and ms[i]["head_type"]]
+            if f:
+                pool = f
+                evidence.append("set-rest")
+
         # ---- possessive binding
         # `their` inside an object NP ("the top N cards of their library") belongs
         # to the clause SUBJECT; a possessive beside the object ("to its owner's
@@ -263,6 +273,9 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None):
                 evidence.append("recency")
             uf.union(a_from, pred)
 
+        rec["set_valued"] = rec["kind"] == "phrase"
+        if rec["set_valued"]:
+            rec["op"] = "minus"     # <collection> minus the singled-out subset
         rec["status"] = status
         rec["_pred"] = pred
         rec["evidence"] = evidence
