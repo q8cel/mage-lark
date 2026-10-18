@@ -75,6 +75,10 @@ def main():
     ap.add_argument('--dump', default=None)
     ap.add_argument('--n', type=int, default=0)
     ap.add_argument('--no-cache', action='store_true')
+    ap.add_argument('--seed', default=None,
+                    help='path to an older parse_<hash>.json; for strictly-additive '
+                         'grammar edits, trust its passing (1) sentences and re-parse only '
+                         'the old failures (spot-checked for safety)')
     args = ap.parse_args()
     os.makedirs(CACHE, exist_ok=True)
 
@@ -143,12 +147,34 @@ def main():
         cache = json.load(open(parse_cache_path))
         print(f"[parse-cache] {len(cache)} entries from grammar hash {gh}")
 
+    # --seed: additive-grammar optimization. When this edit only ADDED parse
+    # alternatives, the new grammar's parseable set is a superset of the seed's,
+    # so every previously-passing sentence still parses. We trust the seed's 1s
+    # and re-parse only the old failures, plus a small spot-check of the trusted
+    # 1s to confirm the edit really was additive.
+    seed_sample = []
+    if args.seed and os.path.exists(args.seed) and not args.no_cache:
+        seed = json.load(open(args.seed))
+        uniq_set = set(uniq)
+        new_passes = [t for t, v in seed.items() if v == 1 and t in uniq_set and t not in cache]
+        if new_passes:
+            import random
+            seed_sample = random.Random(1234).sample(new_passes, min(40, len(new_passes)))
+            for t in new_passes:
+                cache[t] = 1
+            print(f"[seed] trusting {len(new_passes)} old passes ({os.path.basename(args.seed)}); spot-check {len(seed_sample)}")
+
     todo = [s for s in uniq if s not in cache]
+    if seed_sample:
+        todo_set = set(todo)
+        todo += [s for s in seed_sample if s not in todo_set]
     print(f"cache hits={len(uniq)-len(todo)}  to-parse={len(todo)}  workers={args.workers}")
 
-    if todo:
+    def _parse_batch(texts):
+        if not texts:
+            return
         t = time.time()
-        batches = list(_chunked(todo, args.chunk))
+        batches = list(_chunked(texts, args.chunk))
         with mp.Pool(args.workers, initializer=_init,
                      initargs=(GRAMMAR, types, names)) as pool:
             for i, res in enumerate(pool.imap_unordered(_work, batches), 1):
@@ -157,12 +183,23 @@ def main():
                 if i % max(1, len(batches)//10) == 0:
                     print(f"  ...{i}/{len(batches)} batches, {time.time()-t:.0f}s",
                           file=sys.stderr, flush=True)
-        if not args.no_cache:
-            json.dump(cache, open(parse_cache_path, 'w'))
-            print(f"[parse-cache] saved {len(cache)} entries in {time.time()-t:.0f}s")
-        else:
-            print(f"parsed in {time.time()-t:.0f}s (no cache write)")
-    else:
+        print(f"[parse] {len(texts)} texts in {time.time()-t:.0f}s")
+
+    _parse_batch(todo)
+
+    # seed safety: if any spot-check sample regressed, the edit was NOT purely
+    # additive -> discard trusted 1s and re-parse the whole dataset.
+    if seed_sample:
+        regressed = [s for s in seed_sample if not cache.get(s)]
+        if regressed:
+            print(f"[seed] WARNING: {len(regressed)}/{len(seed_sample)} spot-check REGRESSED -> not additive; full re-parse")
+            cache = {}
+            _parse_batch([s for s in uniq])
+
+    if not args.no_cache:
+        json.dump(cache, open(parse_cache_path, 'w'))
+        print(f"[parse-cache] saved {len(cache)} entries")
+    elif not cache:
         print("all unique texts cached -> nothing to parse")
 
     # ---- roll up to occurrences ----
