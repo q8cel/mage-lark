@@ -327,6 +327,7 @@ search_action: V_SEARCH zones "for" card_target ("named" (THIS_CARD | CARDNAME) 
              | V_SEARCH zone "for" card_target ("named" (THIS_CARD | CARDNAME))? ("put" ("it" | "them") "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target ("exile" "it")? ("then" "shuffle")?
              | V_SEARCH zone "for" card_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
+             | V_SEARCH zones "for" card_target "," V_REVEAL card_target ("," "put" "one" "onto" "the" "battlefield" "tapped" "and" "the" "other" "into" "your" "hand")? ("," "then" "shuffle")?
 
 draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target
             | ("Any" | "any") "number" "of" "target" "players" "each" V_DRAW draw_amount "card" "s"?
@@ -637,6 +638,7 @@ card_kind: THIS_CARD types? | types
          | "creature" "spell" | "permanent" "spell" | "artifact" "spell" | "enchantment" "spell" | "land" "spell"
          | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
          | "it" | "them"
+         | "copy" "of" card_target
          | INSTANT_SORCERY "spell" "s"?
          | "instant" "or" "sorcery" "card" "s"?
          | "instant" "or" "sorcery" "spell" "s"?
