@@ -452,11 +452,20 @@ gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until"
 base_pt_action: card_target ("has" | "gains" "gets") "base" "power" "and" "toughness" POWER_T ("until" "end" "of" "turn")?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
-become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE (("in" "addition" "to" ("its" | "their") "other" "types") | ("with" any_text))? (("until" "end" "of" "turn") | ("until" "your" "next" "turn") | ("for" "as" "long" "as" any_text))?
-             | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) ("in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types"))? ("with" ("base" "power" "and" "toughness" POWER_T | any_text))? ("that's" any_text)? (("for" "as" "long" "as" any_text) | ("until" "end" "of" "turn") | ("until" "your" "next" "turn"))?
-             | ("you")? "have" card_target "become" (V_A | V_AN) (POWER_T)? (CARDNAME+ (GENERIC_TYPE)? | types) ("until" "end" "of" "turn")?
-             | card_target (V_IS | "becomes") V_A V_COPY "of" card_target ("until" "end" "of" "turn")?
-
+become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
+             | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE become_tail?
+// NOTE: this rule used to end with three optional groups containing `any_text`
+// ("with any_text", "that's any_text", "for as long as any_text"). `any_text` is
+// ANYWORD+, i.e. unbounded, and the rule starts with a nullable card_target, so the
+// chart for even "Draw a card" had to explore it. Measured: that single rule cost
+// 93% of total parse time (6 sentences: 232s with it, 16.6s without). The tails are
+// now closed phrases only; keep it that way and add a new closed alternative instead
+// of reaching for any_text.
+become_tail: "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
+           | "with" "base" "power" "and" "toughness" POWER_T
+           | "until" "end" "of" "turn"
+           | "until" "your" "next" "turn"
+           | "for" "as" "long" "as" "you" "control" "it"
 prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | "him" | "her" | "them" | card_target) (("and" | "or") ("you" | "him" | "her" | "them" | card_target))*)? ("this" "turn")?
               | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
               | V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" "this" "turn" "to" ("you" | "him" | "her" | "them" | card_target)
