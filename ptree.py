@@ -58,6 +58,9 @@ _P = None
 _CACHE = None
 _DIRTY = False
 _LEGACY = None
+_SENT = None
+_SENT_DIRTY = False
+TIMEOUT = 60          # per-sentence wall-clock cap; 0 disables
 
 
 def _grammar_hash():
@@ -77,6 +80,16 @@ def _parser():
 
 def cache_path():
     return os.path.join(BASE, ".cache", f"ptree_{_grammar_hash()}.json")
+
+
+def sent_cache_path():
+    """Sentence-level cache: the unit of parsing is a sentence, not a card text.
+
+    Two wins: (a) the same sentence recurs across cards (FDN: 703 unique from
+    ~1,650 occurrences), so it is parsed once; (b) a card only needs re-assembly,
+    which is milliseconds.
+    """
+    return os.path.join(BASE, ".cache", f"psent_{_grammar_hash()}.json")
 
 
 def legacy_path():
@@ -103,6 +116,16 @@ def _load_legacy():
     return _LEGACY
 
 
+def _load_sent():
+    global _SENT
+    if _SENT is None:
+        try:
+            _SENT = json.load(open(sent_cache_path()))
+        except Exception:
+            _SENT = {}
+    return _SENT
+
+
 def save_cache():
     global _DIRTY
     if _CACHE is None or not _DIRTY:
@@ -113,6 +136,13 @@ def save_cache():
         json.dump(_CACHE, fh)
     os.replace(tmp, cache_path())
     _DIRTY = False
+    global _SENT_DIRTY
+    if _SENT is not None and _SENT_DIRTY:
+        tmp = sent_cache_path() + ".tmp"
+        with open(tmp, "w") as fh:
+            json.dump(_SENT, fh)
+        os.replace(tmp, sent_cache_path())
+        _SENT_DIRTY = False
 
 
 def key(text):
@@ -140,19 +170,54 @@ def _verb_index(action):
     return None, None
 
 
+class _ParseTimeout(Exception):
+    pass
+
+
+def _alarm(sig, frm):
+    raise _ParseTimeout()
+
+
+def _parse_with_timeout(sentence):
+    """Parse one sentence, honouring the per-sentence cap.
+
+    Returns (tree_or_None, timed_out). A timed-out parse may leave the Lark
+    parser in an inconsistent state, so the parser is dropped and rebuilt on the
+    next call (a grammar compile costs ~1s, far less than the runaway parse).
+    """
+    global _P
+    if not TIMEOUT:
+        try:
+            return _parser().parse(sentence), False
+        except Exception:
+            return None, False
+    import signal
+    old = signal.signal(signal.SIGALRM, _alarm)
+    signal.setitimer(signal.ITIMER_REAL, TIMEOUT)
+    try:
+        return _parser().parse(sentence), False
+    except _ParseTimeout:
+        _P = None
+        return None, True
+    except Exception:
+        return None, False
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old)
+
+
 def _extract_segment(sentence, base):
     from lark import Tree
-    try:
-        tree = _parser().parse(sentence)
-    except Exception:
-        tree = None
+    tree, timed_out = _parse_with_timeout(sentence)
+    if timed_out:
+        return [], True
 
     if tree is None:
         # regex fallback for a segment the grammar cannot handle
         return [{"start": base + m["start"], "end": base + m["end"],
                  "node": None, "role": None, "verb": None,
                  "predicate": False, "in_condition": False}
-                for m in _regex_mentions(sentence)]
+                for m in _regex_mentions(sentence)], False
 
     parent = {}
     for n, p in _walk(tree):
@@ -188,7 +253,7 @@ def _extract_segment(sentence, base):
                     "node": str(n.data), "role": role, "verb": verb,
                     "predicate": predicate, "in_condition": in_cond})
     if out:
-        return out
+        return out, False
     # A parse can SUCCEED while yielding no mention node (e.g. "If you do, that
     # creature gains first strike..." parses as predicate material). The legacy
     # extractor fell back to regex in that case and the merged module must too,
@@ -196,7 +261,24 @@ def _extract_segment(sentence, base):
     return [{"start": base + m["start"], "end": base + m["end"],
              "node": None, "role": None, "verb": None,
              "predicate": False, "in_condition": False}
-            for m in _regex_mentions(sentence)]
+            for m in _regex_mentions(sentence)], False
+
+
+def _sentence_records(sentence):
+    """Records for one sentence, offsets relative to the sentence start.
+
+    Cached — including failures and timeouts, which are the expensive ones.
+    """
+    global _SENT_DIRTY
+    cache = _load_sent()
+    k = key(sentence)
+    ent = cache.get(k)
+    if ent is None:
+        recs, timed_out = _extract_segment(sentence, 0)
+        ent = {"status": "timeout" if timed_out else "ok", "recs": recs}
+        cache[k] = ent
+        _SENT_DIRTY = True
+    return ent["recs"]
 
 
 def _compute(text):
@@ -209,7 +291,11 @@ def _compute(text):
         if pos < 0:
             pos = cursor
         cursor = pos + len(s)
-        out.extend(_extract_segment(s, pos))
+        for r in _sentence_records(s):
+            rec = dict(r)
+            rec["start"] = r["start"] + pos
+            rec["end"] = r["end"] + pos
+            out.append(rec)
     return out
 
 
@@ -280,6 +366,11 @@ def lookup(recs, start, end=None):
 FIELDS = ("start", "end", "node", "role", "verb", "predicate", "in_condition")
 
 
+def _init_worker(timeout):
+    global TIMEOUT
+    TIMEOUT = timeout
+
+
 def _same_records(a, b):
     """True if two record lists are identical field for field."""
     if len(a) != len(b):
@@ -316,7 +407,7 @@ def seed_from(seed_path, texts, workers=None, sample=40, quiet=False):
         print(f"[seed] {len(seedable)} seedable texts; verifying structure on {len(pick)}")
     import multiprocessing as mp
     workers = workers or max(1, (os.cpu_count() or 4) - 1)
-    with mp.Pool(workers) as pool:
+    with mp.Pool(workers, initializer=_init_worker, initargs=(TIMEOUT,)) as pool:
         got = pool.map(_compute, pick, chunksize=1)
     bad = [t for t, recs in zip(pick, got) if not _same_records(seed[key(t)], recs)]
     if bad:
@@ -335,26 +426,69 @@ def seed_from(seed_path, texts, workers=None, sample=40, quiet=False):
     return len(seedable)
 
 
-def precompute(texts, workers=None, quiet=False):
-    """Fill the cache for `texts` in parallel. Eager: no progress until chunks land."""
+def _parse_sentence(sentence):
+    """Worker: parse one sentence, return its (relative-offset) records."""
+    return sentence, _sentence_records(sentence)
+
+
+def precompute(texts, workers=None, quiet=False, timeout=None):
+    """Build the cache for `texts`.
+
+    The unit of work is the SENTENCE, not the card text: the same sentence recurs
+    across cards (FDN 1.08x, dev corpus 1.24x) and, more importantly, a sentence
+    cache survives text-set changes, so adding cards later only parses the
+    sentences that are genuinely new.
+
+    Assembly (segmentation + offset stitching) then happens in the parent and
+    costs milliseconds per card.
+    """
     import multiprocessing as mp
+    if timeout is not None:
+        globals()["TIMEOUT"] = timeout
+    texts = sorted({t.strip() for t in texts if t and t.strip()} - {""})
     cache = _load_cache()
-    todo = sorted({t.strip() for t in texts if t and t.strip()} - {""})
-    todo = [t for t in todo if key(t) not in cache]
-    if not todo:
+    todo_texts = [t for t in texts if key(t) not in cache]
+    if not todo_texts:
         return 0
+
+    sent = _load_sent()
+    uniq, seen = [], set()
+    for t in todo_texts:
+        for it in segment(t):
+            s = it["text"]
+            if s and s not in seen:
+                seen.add(s)
+                uniq.append(s)
+    todo = [s for s in uniq if key(s) not in sent]
     workers = workers or max(1, (os.cpu_count() or 4) - 1)
+    if not quiet:
+        print(f"[ptree] {len(todo_texts)} texts, {len(uniq)} sentences, "
+              f"{len(uniq)-len(todo)} cached, {len(todo)} to parse "
+              f"(timeout={TIMEOUT}s, workers={workers})", flush=True)
+
+    global _SENT_DIRTY
     done = 0
-    with mp.Pool(workers) as pool:
-        for text, recs in zip(todo, pool.imap(_compute, todo, chunksize=1)):
-            cache[key(text)] = recs
-            done += 1
-            if not quiet and done % 25 == 0:
-                print(f"  ...parsed {done}/{len(todo)}", flush=True)
+    if todo:
+        with mp.Pool(workers, initializer=_init_worker, initargs=(TIMEOUT,)) as pool:
+            for sentence, recs in pool.imap(_parse_sentence, todo, chunksize=1):
+                sent[key(sentence)] = {"status": "ok", "recs": recs}
+                done += 1
+                _SENT_DIRTY = True
+                if not quiet and done % 50 == 0:
+                    print(f"  ...parsed {done}/{len(todo)} sentences", flush=True)
+        save_cache()
+
+    # assemble texts from the sentence cache (parent, cheap)
+    for t in todo_texts:
+        cache[key(t)] = _compute(t)
+    _DIRTY_GLOBAL()
+    save_cache()
+    return len(todo_texts)
+
+
+def _DIRTY_GLOBAL():
     global _DIRTY
     _DIRTY = True
-    save_cache()
-    return done
 
 
 def card_texts(data="FDN.json", dataset=None, limit=0):
@@ -455,6 +589,8 @@ def main():
     ap.add_argument("--sample", default=None, help="dataset json to take texts from")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--workers", type=int, default=0)
+    ap.add_argument("--timeout", type=float, default=60,
+                    help="per-sentence parse cap in seconds (0 = no cap)")
     ap.add_argument("--status", action="store_true", help="cache coverage report")
     ap.add_argument("--seed", default=None,
                     help="older ptree_<hash>.json to seed from (verified by sampling)")
@@ -492,7 +628,7 @@ def main():
         texts = card_texts(args.data, args.sample, args.limit)
         if args.seed:
             seed_from(args.seed, texts, workers=args.workers or None)
-        n = precompute(texts, workers=args.workers or None)
+        n = precompute(texts, workers=args.workers or None, timeout=args.timeout)
         print(f"parsed {n} new / {len(texts)} texts -> {cache_path()}")
         return
 
