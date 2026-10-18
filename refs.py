@@ -208,14 +208,25 @@ def predicate_type(text, start, end):
 
 # ---------------------------------------------------------------- text layout
 def sentence_spans(text):
-    """[(start, end)] for each sentence, in order."""
-    out, cur = [], 0
-    for s in split_sentences(text):
-        i = text.find(s, cur)
-        if i < 0:
-            i = cur
-        out.append((i, i + len(s)))
-        cur = i + len(s)
+    """[(start, end)] for each sentence, in order.
+
+    Line breaks are sentence boundaries: oracle text puts one ability per line,
+    and `setdata.normalize_text` preserves the newline for exactly this reason.
+    """
+    out = []
+    pos = 0
+    for line in text.split("\n"):
+        start = pos
+        pos += len(line) + 1
+        if not line.strip():
+            continue
+        cur = start
+        for s in split_sentences(line):
+            i = text.find(s, cur)
+            if i < 0:
+                i = cur
+            out.append((i, i + len(s)))
+            cur = i + len(s)
     if not out:
         out = [(0, len(text))]
     return out

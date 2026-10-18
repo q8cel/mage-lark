@@ -209,17 +209,18 @@ def _parse_with_timeout(sentence):
 
 
 def _extract_segment(sentence, base):
+    """-> (records, status) where status is 'ok' | 'fail' | 'timeout'."""
     from lark import Tree
     tree, timed_out = _parse_with_timeout(sentence)
     if timed_out:
-        return [], True
+        return [], "timeout"
 
     if tree is None:
         # regex fallback for a segment the grammar cannot handle
         return [{"start": base + m["start"], "end": base + m["end"],
                  "node": None, "role": None, "verb": None,
                  "predicate": False, "in_condition": False}
-                for m in _regex_mentions(sentence)], False
+                for m in _regex_mentions(sentence)], "fail"
 
     parent = {}
     for n, p in _walk(tree):
@@ -255,7 +256,7 @@ def _extract_segment(sentence, base):
                     "node": str(n.data), "role": role, "verb": verb,
                     "predicate": predicate, "in_condition": in_cond})
     if out:
-        return out, False
+        return out, "ok"
     # A parse can SUCCEED while yielding no mention node (e.g. "If you do, that
     # creature gains first strike..." parses as predicate material). The legacy
     # extractor fell back to regex in that case and the merged module must too,
@@ -263,7 +264,7 @@ def _extract_segment(sentence, base):
     return [{"start": base + m["start"], "end": base + m["end"],
              "node": None, "role": None, "verb": None,
              "predicate": False, "in_condition": False}
-            for m in _regex_mentions(sentence)], False
+            for m in _regex_mentions(sentence)], "fail"
 
 
 def _sentence_records(sentence):
@@ -276,9 +277,8 @@ def _sentence_records(sentence):
     k = key(sentence)
     ent = cache.get(k)
     if ent is None:
-        recs, timed_out = _extract_segment(sentence, 0)
-        ent = {"status": "timeout" if timed_out else "ok", "cap": TIMEOUT,
-               "recs": recs}
+        recs, status = _extract_segment(sentence, 0)
+        ent = {"status": status, "cap": TIMEOUT, "recs": recs}
         cache[k] = ent
         _SENT_DIRTY = True
     return ent["recs"]
@@ -431,9 +431,8 @@ def seed_from(seed_path, texts, workers=None, sample=40, quiet=False):
 
 def _parse_sentence(sentence):
     """Worker: parse one sentence -> (sentence, entry) with relative offsets."""
-    recs, timed_out = _extract_segment(sentence, 0)
-    return sentence, {"status": "timeout" if timed_out else "ok",
-                      "cap": TIMEOUT, "recs": recs}
+    recs, status = _extract_segment(sentence, 0)
+    return sentence, {"status": status, "cap": TIMEOUT, "recs": recs}
 
 
 def precompute(texts, workers=None, quiet=False, timeout=None):
@@ -513,8 +512,8 @@ def card_texts(data="FDN.json", dataset=None, limit=0):
         from preprocess import normalize_names, strip_reminders
         from setdata import load
         items, _, names, _ = load(data)
-        texts = sorted({(" ".join(normalize_names(strip_reminders(t), names).split())).strip()
-                        for _, t, _ in items if t} - {""})
+        from setdata import normalize_text
+        texts = sorted({normalize_text(t, names) for _, t, _ in items if t} - {""})
     if limit and limit < len(texts):
         stride = max(1, len(texts) // limit)
         texts = texts[::stride][:limit]

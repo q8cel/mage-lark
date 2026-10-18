@@ -55,8 +55,8 @@ def main():
         raw = [by_name.get(c) or by_name.get(c.lower()) for c in args.card]
     else:
         raw = [t for _, t, _ in items]
-    texts = [" ".join(normalize_names(strip_reminders(t), names).split())
-             for t in raw if t]
+    from setdata import normalize_text
+    texts = [normalize_text(t, names) for t in raw if t]
     texts = [t for t in texts if t]
     n = precompute(texts, workers=args.workers or None, quiet=True)
     print(f"computed {n} new / {len(texts)} texts -> {ptree.cache_path()}")

@@ -167,7 +167,8 @@ def main():
     for name, raw, _code in items:
         if not raw:
             continue
-        t = " ".join(normalize_names(strip_reminders(raw), names).split())
+        from setdata import normalize_text
+        t = normalize_text(raw, names)
         if t in seen or not find_anaphors(t):
             continue
         seen.add(t)

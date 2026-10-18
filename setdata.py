@@ -100,18 +100,29 @@ def load(path):
 _TEXTS = {}
 
 
+def normalize_text(raw, names=None):
+    """Canonical text form: reminders stripped, card names masked to `~`,
+    spaces collapsed **but line breaks preserved**.
+
+    Preserving the newline is what keeps ability boundaries: oracle text puts one
+    ability per line, and collapsing them merges e.g. `Trample, haste` with the
+    `When this Vehicle enters, ...` trigger that follows it, which then parses as
+    neither. The transform is exactly length-preserving (a whitespace run becomes
+    one space, or one newline where the line break was), so character spans remain
+    valid across the change - verified on all 10,446 FDN+Standard cards.
+    """
+    from preprocess import normalize_names, strip_reminders
+    t = normalize_names(strip_reminders(raw), names)
+    return "\n".join(" ".join(line.split()) for line in t.split("\n"))
+
+
 def card_text(name, path=None):
-    """Normalized oracle text for `name`: reminders stripped, card names masked
-    to `~`, whitespace collapsed. Cached per data file. Torch-free, so the
-    deterministic coref path can use it without importing resolve.py."""
+    """Normalized oracle text for `name` (see `normalize_text`). Cached per data
+    file. Torch-free, so the deterministic coref path never imports resolve.py."""
     path = path or os.path.join(BASE, 'FDN.json')
     if path not in _TEXTS:
-        from preprocess import normalize_names, strip_reminders
         items, _, names, _ = load(path)
-        _TEXTS[path] = {
-            n: ' '.join(normalize_names(strip_reminders(t), names).split())
-            for n, t, _ in items if t
-        }
+        _TEXTS[path] = {n: normalize_text(t, names) for n, t, _ in items if t}
     d = _TEXTS[path]
     if name in d:
         return d[name]

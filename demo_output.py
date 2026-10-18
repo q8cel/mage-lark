@@ -42,7 +42,8 @@ def _resolve(raw, names):
     import refs, rulecoref
     from anaphora import find_anaphors
     from preprocess import normalize_names, strip_reminders
-    text = " ".join(normalize_names(strip_reminders(raw), names).split())
+    from setdata import normalize_text
+    text = normalize_text(raw, names)
     res = rulecoref.resolve(text, refs.build(text), find_anaphors(text))
     return res, text
 
