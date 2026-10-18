@@ -94,6 +94,7 @@ cost_item: MANA+
          | "{T}"
          | "{Q}"
          | V_SACRIFICE card_target
+         | V_DISCARD card_target
          | V_REMOVE counter_amount "counter" "from" card_target
          | V_REMOVE "a" counter_name "counter" "from" card_target
          | V_REMOVE amount counter_name "counters" "from" card_target
@@ -131,6 +132,8 @@ event: event_subject EVENT_VERB event_object?
       | "there" "are" amount "or" "more" counter_name "counters" "on" card_target
       | ("one" "or" "more")? counter_amount counter_kind "are" "put" "on" card_target
       | V_YOU "cast" card_target "or" card_target "enters"
+      | event_subject EVENT_VERB "this" "turn"
+      | card_target "dealt" "damage" "by" card_target "this" "turn" "dies"
       | V_YOU "cast" "a" "spell" "during" any_text
       | ("one" "or" "more")? card_target "attack"
       | V_YOU "next" "cast" event_object ("this" "turn")?
@@ -301,7 +304,8 @@ token_tail: ("named" ("~'s" CARDNAME | CARDNAME))
 token_proper: CARDNAME token_proper_tail*
 token_proper_tail: "of" "the" CARDNAME | "of" CARDNAME | "and" CARDNAME
 token_num: "a" | "an" | "that" "many" | amount
-token_types: CARDNAME+
+token_types: CARDNAME+ | TOK_TYPE_WORD+
+TOK_TYPE_WORD: /[A-Z][a-zA-Z]+/
 token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
 
@@ -578,7 +582,7 @@ COLOR: /white|blue|black|red|green|colorless|multicolored/i
 
 //  card types (generic + proper-noun subtypes resolved in the transformer)
 types: GENERIC_TYPE | CARDNAME
-GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorceries?|basic|nonbasic|nontoken|legendary|nonlegendary|walls?/i
+GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorcery|sorceries|basic|nonbasic|nontoken|legendary|nonlegendary|walls?/i
 INSTANT_SORCERY: /\b[iI]nstant and sorcery\b/
 
 //  the star: an atomic card reference
@@ -598,7 +602,7 @@ otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*
 NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolored)|non-[A-Z][a-zA-Z]+/i
 quantifier: V_ALL | V_EACH | "every" | V_TARGET | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
-          | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET
+          | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET | amount "or" "more"
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
 status_list: STATUS+
 STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|chosen|revealed|sacrificed|discarded|returned|created|milled|blocked|unblocked|face-up|face-down/i
@@ -625,6 +629,7 @@ card_kind: THIS_CARD types? | types
          | "instant" "or" "sorcery" "card" "s"?
          | "instant" "or" "sorcery" "spell" "s"?
          | "instant" "and" "sorcery" "card" "s"?
+         | "instant" "and/or" "sorcery" "card" "s"?
          | "creature" "or" "land" "card" "s"?
 with_modifier: "with" (kw_list | "power" amount CMP? | "toughness" amount CMP? | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
              | "that" "are" types
