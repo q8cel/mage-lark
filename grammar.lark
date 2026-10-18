@@ -147,7 +147,7 @@ event: event_subject EVENT_VERB event_object?
       | V_THAT "mana" "is" "spent" "to" "cast" event_object
 event_subject: card_target "or" card_target | card_target | player
 EVENT_VERB: /enters or dies|enters or attacks|attacks for the first time each turn|is countered|is dealt|is put|enters|dies|attacks|attack|deals|becomes|casts|cast|discards|draws|draw|gains|gain|loses|lose|taps|untaps|blocks|block|fights|leaves|resolves/
-event_object: ("combat" "damage" "to" (player | card_target))?
+event_object: ("combat" "damage" "to" (player | card_target) | player)?
             | ("combat" | "noncombat") "damage" "to" (player | card_target)
             | ("combat" | "noncombat") "damage" "during" "your" "turn"
             | "your" "second" "card" "each" "turn"
@@ -231,6 +231,7 @@ action: add_mana_action
        | sacrifice_action
        | regenerate_action
        | gain_control_action
+       | exchange_control_action
        | scry_action
        | surveil_action
        | mill_action
@@ -427,6 +428,7 @@ sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" 
 regenerate_action: (who)? V_REGENERATE card_target
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
 gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")?
+exchange_control_action: (who)? "Exchange" "control" "of" card_target
 scry_action: ("each" "player" | who)? V_SCRY amount
 surveil_action: V_SURVEIL amount
 mill_action: (who)? V_MILL (("a" | "an" | amount | "that" "many") ("card" | "cards") | "half" ("their" | "his" | "her" | "a" | "the") "library" (","? "rounded" "down")?)
@@ -545,6 +547,7 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "the" "total" "power" "of" card_target
     | "its" "power"
     | "its" "toughness"
+    | "the" "greatest" "power" "among" card_target
     | "the" "mana" "value" "of" "that" "spell"
     | ("that" | "a" | "its") "creature's" "mana" "value"
     | "that" "card's" "mana" "cost"
@@ -658,6 +661,7 @@ controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "c
           | "you" "don't" "control" | "you" "own" | "you" "don't" "own" | "an" "opponent" "owns" | "its" "controller"
           | "controlled" "by" "different" "players" | "you" "already" "control"
           | "you" "cast" | "you" "played"
+          | "defending" "player" "controls" | "attacking" "player" "controls"
           | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "target" "player" "controls"
           | "its" "owner" | "the" "player" "who" "cast" "it"
 in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "library" | "from" "your" "graveyard"
