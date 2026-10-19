@@ -472,6 +472,89 @@ Two practical consequences:
   put onto the battlefield. That label is left untouched pending a second annotator,
   rather than edited to match my own output.
 
+### 4h. The measurement instrument (and why dev understates the resolver)
+
+Three label sources exist, and they are not interchangeable:
+
+| set | size | labels | what it measures |
+|---|---|---|---|
+| `coref_benchmark.json` | 72 (71 resolvable) | human | correctness |
+| `coref_standard.json` (dev) | 3,395 occurrences / 2,139 cards | teacher (Qwen 27B) | agreement with the teacher |
+| FDN dataset | 261 cards | teacher | same |
+
+70 of the 72 bench cases also exist in dev, so three things can be scored on the
+*same* cases:
+
+| on those 70 cases | score |
+|---|---|
+| teacher vs human gold | 89% (62/70) |
+| **resolver vs human gold** | **97%** (68/70) |
+
+So dev = 77.3% does not mean the resolver is 77% correct: it agrees with an
+89%-accurate annotator on a harder distribution. Optimising dev means converging on
+the teacher, i.e. shedding the advantage.
+
+**Can a better local annotator fix that?** Tested with an ensemble of three runs of the
+same model (reasoning `low`, `high`, and a step-by-step prompt) on the bench:
+
+| annotator | vs human gold (surface scoring) |
+|---|---|
+| `low` | 85% |
+| `high` | 87% |
+| `step` | 88% |
+| majority of 3 (>=2 agree) | 91% |
+| **majority, entity-scored** (same metric as the resolver) | **97%** |
+| unanimous subset (3/3), entity-scored | **98%** |
+
+Surface scoring penalises "a different mention of the same entity" (`it` -> `that
+creature` when the entity *is* `target creature`); under the resolver's own
+entity-aware metric the ensemble reaches the resolver's level, and unanimity is
+slightly better (58/59, the single error being the disputed Genesis Wave label).
+
+Conclusions that follow, and that shape the next step:
+
+1. **No local ensemble exceeds the resolver**, so no local annotator can serve as the
+   yardstick for it. Only human adjudication can raise the instrument above 97%.
+2. **Unanimity is the best local confidence signal** (~98%): cases where all three
+   annotators agree can be used as labels, and the rest are exactly the cases worth a
+   human's attention.
+3. Reasoning helps on semantic cases (it fixed the `the rest` set case, pile
+   references and a condition-scope case) but **not** on the granted-ability idiom,
+   which the resolver now gets right - further evidence that the resolver encodes
+   MTG-specific knowledge the teacher lacks.
+
+**Stratified sample.** `strat_sample.py` draws from dev across anaphor kind x
+whether the sentence yields parser structure, because the distribution is skewed:
+
+| stratum | occurrences |
+|---|---|
+| pronoun + structure | 1,601 |
+| pronoun, no structure | **1,051** |
+| demonstrative + structure | 369 |
+| demonstrative, no structure | 278 |
+| "the rest", no structure | 71 |
+| "the rest" + structure | 25 |
+
+31% of dev occurrences (all of the no-structure pronouns) sit in sentences the grammar
+cannot parse - which is why structure coverage and resolver accuracy move
+independently.
+
+**Workflow** (all tooling is in the repo):
+
+```bash
+python strat_sample.py 400                      # draw the stratified sample
+python ensemble_label.py /tmp/opencode/strat_sample.json \
+       --out /tmp/opencode/strat_labels.json    # 3 annotators, resumable
+python analyze_strat.py                         # accuracy estimate + review queue
+```
+
+`ensemble_label.py` health-checks the endpoint first and aborts cleanly if
+`llama-server` is down (it checks `~/teacher.sh`'s port 9000, plain HTTP, no key), keeps
+completed cases across restarts, and refuses to count a case with fewer than two votes
+as done. `analyze_strat.py` writes `review_queue.json`: every case where the resolver
+disagrees with the ensemble or the ensemble itself is split - the human pass, when it
+happens, is only over that queue.
+
 ### 4e. Grammar work - what it bought
 
 Sentences that parse gain structure (roles), and their mentions stop falling back
