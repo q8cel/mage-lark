@@ -111,16 +111,14 @@ def t_no_candidate_abstains():
     assert res["anaphors"][0]["antecedent"] is None
 
 
-def t_known_limitation_blasphemous_edict():
-    # KNOWN WRONG (asserted on purpose): "their" belongs to the clause SUBJECT
-    # ("Each player sacrifices thirteen creatures of their choice"), but the
-    # possessive rule falls back to recency and picks the nearest plural. Fixing
-    # it needs subject binding; update DETERMINISTIC-COREF.md when it lands.
-    # NB: a cap-degraded parse cache once made this look fixed ("Each player") -
-    # it was the degraded mention inventory, not the rule.
+def t_possessive_binds_to_the_clause_subject():
+    # "Each player sacrifices thirteen creatures of their choice": the possessive
+    # follows "of", which points at the clause SUBJECT. Needed two fixes - the
+    # distributive determiner must count as plural for agreement, and the
+    # possessive must use the role derived from the introducing phrase.
     _, res = resolve_card("Blasphemous Edict")
     got = [a["canonical"] for a in res["anaphors"] if a["surface"].lower() == "their"]
-    assert got == ["thirteen creatures"], got
+    assert got == ["Each player"], got
 
 
 def t_set_anaphora_is_set_valued():

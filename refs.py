@@ -120,11 +120,14 @@ def number(surface):
         return None
     if len(w) == 1 and w[0] in PRONOUN_NUMBER:
         return PRONOUN_NUMBER[w[0]]
+    # Distributive determiners agree plurally for anaphora ("Each player ...
+    # their library"), so they must be checked before the head noun: "Each
+    # player" is not singular just because "player" has no -s.
+    if w[0] in PLURAL_DET:
+        return "pl"
     ht = head_type(surface)
     if ht:
         return "pl" if re.search(rf"\b{ht}s\b", surface.lower()) else "sg"
-    if w[0] in PLURAL_DET:
-        return "pl"
     return "pl" if w[-1].endswith("s") and not w[-1].endswith("ss") else "sg"
 
 

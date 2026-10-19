@@ -398,6 +398,34 @@ ate them); what remains is a long tail. Grammar work now fixes a handful of
 occurrences per rule, so rules must be batched and gated, and the payoff per turn is
 measured in a few tenths of a point of structure coverage.
 
+### 4f. Three resolver bugs found by auditing the bench misses
+
+Dumping each miss with its candidate pool and fired evidence (instead of just the
+final answer) exposed bugs, not missing rules:
+
+1. **Pronoun number.** `number()` fell back to "ends with s -> plural", so `its` was
+   plural and every singular possessive was filtered against plural candidates.
+   Pronouns now carry their number explicitly.
+2. **Distributive determiners.** The fix above reordered the checks so `head_type`
+   short-circuited before the determiner test: `Each player` became singular, which
+   broke "Each player ... their library". Determiners (`each/every/all/those/these`)
+   are now checked first.
+3. **Type lattice direction.** `type_compatible('card','creature')` was False (a
+   creature mention could not be "that card") while `type_compatible('creature',
+   'card')` was True (a generic card could be "that creature"). Unknown-type
+   mentions (a bare `You`) also satisfied any requirement. The filter now prefers
+   typed candidates and accepts either direction (`--type-mode`).
+
+Plus a new rule: the possessive's antecedent role comes from its introducing phrase
+(corpus-derived over 755 possessives — `of their choice`, `equal to its power` ->
+subject; `under its owner's control`, `into their graveyard` -> object).
+
+| | before | after |
+|---|---|---|
+| dev (3,395) | 73.0% | **75.8%** |
+| human bench (71) | 77% | **83%** (59/71) |
+| per kind | pronoun 73 / demonstrative 71 / rest 90 | 73 / **79** / **93** |
+
 ### 4e. Grammar work - what it bought
 
 Sentences that parse gain structure (roles), and their mentions stop falling back
@@ -500,6 +528,7 @@ target creature instead.`).
 | bucket | count | needs |
 |---|---|---|
 | picked another mention, gold is self (`~`/`this X`) | 234 | self-reference rule (stage 4.2) |
+| pronoun number / type-lattice direction / possessive role | fixed | see §4f |
 | type mismatch (card↔opponent, creature↔card, card↔player, creature↔token, …) | 149 | verb/type prior + type lattice |
 | partial/qualifier span (`target creature` vs `target creature you control`) | 60 | maximality + longest-match |
 | other | 110 | — |
