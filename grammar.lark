@@ -461,7 +461,9 @@ become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? p
 // 93% of total parse time (6 sentences: 232s with it, 16.6s without). The tails are
 // now closed phrases only; keep it that way and add a new closed alternative instead
 // of reaching for any_text.
-become_tail: "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
+become_tail: "with" kw_list
+           | "with" kw_list_mod
+           | "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
            | "with" "base" "power" "and" "toughness" POWER_T
            | "until" "end" "of" "turn"
            | "until" "your" "next" "turn"
