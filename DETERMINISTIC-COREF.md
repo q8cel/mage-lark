@@ -424,14 +424,22 @@ Plus two rules from the same audit:
 - **argument type**: `put a counter on it` requires a permanent (a player cannot
   take counters), and `except it ...` inside a copy-token clause binds to the token.
 
+- **quoted granted abilities**: `target creature gains "When this creature dies,
+  return it ..."` - an anaphor inside the quote belongs to the ability's own scope,
+  and if that scope has no mentions it belongs to the *recipient* of the grant. The
+  subtler half: a `this X` mention inside a quote is **not** a self-reference to the
+  card, so it must be aliased to the recipient instead of being unioned into the
+  card's entity. That single aliasing bug was making both Fake Your Own Death
+  anaphors resolve to the card.
+
 The audit also exposed a harness bug: `--ablate` never reached the benchmark path
 (it called `resolve()` without `rules`), so earlier bench ablations were silently
 comparing a rule against itself. Fixed; every number above is now ablation-checked.
 
 | | before | after |
 |---|---|---|
-| dev (3,395) | 73.0% | **76.2%** |
-| human bench (71) | 77% | **85%** (60/71) |
+| dev (3,395) | 73.0% | **76.3%** |
+| human bench (71) | 77% | **87%** (62/71) |
 | per kind | pronoun 73 / demonstrative 71 / rest 90 | 73 / **79** / **93** |
 
 ### 4e. Grammar work - what it bought

@@ -98,10 +98,21 @@ def t_plural_pronoun_agrees():
 
 
 def t_ambiguous_is_reported_not_guessed():
-    # Fake Your Own Death: "it" is genuinely undecidable without role info.
-    # We want the engine to SAY so (this is where a model fallback would run).
+    # Two same-type candidates in the anaphor's own sentence: the engine must say
+    # it is unsure (this is where a model fallback would run) instead of guessing.
+    text = ("Target creature deals damage to target creature, then it gains flying")
+    res = rulecoref.resolve(text, refs.build(text, parser=False), find_anaphors(text))
+    assert res["anaphors"][0]["status"] == "ambiguous", res["anaphors"][0]
+
+
+def t_granted_ability_binds_to_recipient():
+    # `target creature gets +2/+0 and gains "When this creature dies, return it ..."`
+    # Everything inside the quote refers to the RECIPIENT, not to the card - so
+    # "this creature" inside a quote must not be treated as a self-reference.
     _, res = resolve_card("Fake Your Own Death")
-    assert any(a["status"] == "ambiguous" for a in res["anaphors"]), anas(res)
+    assert res["anaphors"], "no anaphors"
+    for a in res["anaphors"]:
+        assert a["canonical"] == "target creature", (a["surface"], a["canonical"])
 
 
 def t_no_candidate_abstains():

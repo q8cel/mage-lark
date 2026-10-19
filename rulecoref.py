@@ -70,6 +70,23 @@ _COPY_EXCEPT = re.compile(r"except\s*$", re.I)
 PERMANENTS = {"creature", "artifact", "enchantment", "land", "planeswalker",
               "battle", "permanent", "token", "equipment", "aura"}
 
+QUOTE_CHARS = '"\u201c\u201d'
+
+
+def quoted_region(text, pos):
+    """(open, close) of the quoted ability containing `pos`, or None.
+
+    MTG grants abilities as quoted text: `target creature gains "When this
+    creature dies, return it to ..."`. Inside that quote, `this creature`/`it`
+    refer to the GRANTED-TO permanent, not to the card.
+    """
+    q = [i for i, ch in enumerate(text) if ch in QUOTE_CHARS]
+    for k in range(0, len(q) - 1, 2):
+        if q[k] < pos < q[k + 1]:
+            return (q[k], q[k + 1])
+    return None
+
+
 POSSESSED_RE = re.compile(
     r"^\s*(?:'s\s+)?(owner|controller|power|toughness|mana value|mana cost|"
     r"color|colors|name|type|types|abilities|subtypes)", re.I)
@@ -175,6 +192,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
     on = {"possessive": True, "number": True, "type": True, "nonentity": True,
           "set_rest": True,
           "argtype": True,
+          "granted": True,
           "verb": False,      # lexical verb prior: measured to hurt, opt-in only
           # structural rule, needs the parse tree (ptree): a copula complement
           # ("it's an artifact") is a description, never an antecedent.
@@ -251,11 +269,29 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         anas.append(rec)
 
     uf = UF(len(ms))
-    # every self-reference in a card denotes the same object (the card), so it is
-    # sound to cluster them before any prediction: `~` twice is one entity.
-    selfs = [i for i, m in enumerate(ms) if m.get("is_self")]
+    # Every self-reference in a card denotes the same object (the card) - EXCEPT
+    # inside a granted ability: `target creature gains "When this creature dies,
+    # return it ..."` - there, "this creature" is the recipient of the grant, not
+    # the card. Those mentions are aliased to the recipient instead.
+    selfs = []
+    for i, m in enumerate(ms):
+        if not m.get("is_self"):
+            continue
+        if quoted_region(text, m["start"]):
+            continue
+        selfs.append(i)
     for i in selfs[1:]:
         uf.union(selfs[0], i)
+    if on.get("granted"):
+        for i, m in enumerate(ms):
+            if not m.get("is_self"):
+                continue
+            reg = quoted_region(text, m["start"])
+            if not reg:
+                continue
+            recips = [j for j, o in enumerate(ms) if o["end"] <= reg[0]]
+            if recips:
+                uf.union(i, max(recips, key=lambda j: ms[j]["end"]))
 
     for rec in anas:
         a_from = rec["_mi"]
@@ -330,6 +366,23 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("set-rest")
+
+        # ---- quoted granted ability
+        if on["granted"]:
+            reg = quoted_region(text, rec["start"])
+            if reg:
+                # 1) the ability's own mentions first ("that player" inside the
+                #    quoted trigger refers to something the trigger introduces)
+                f = [i for i in pool if ms[i]["start"] > reg[0]]
+                if f:
+                    pool = f
+                    evidence.append("quote-local")
+                else:
+                    # 2) otherwise the recipient of the grant
+                    f = [i for i in pool if ms[i]["end"] <= reg[0]]
+                    if f:
+                        pool = f
+                        evidence.append("granted-recipient")
 
         # ---- argument-type rules (narrow, from the bench miss audit)
         if on["argtype"] and atype is None:
