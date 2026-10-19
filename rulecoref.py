@@ -63,6 +63,13 @@ def possessive_role(text, start):
     return None
 
 
+# "put a +1/+1 counter on it" - counters go on permanents, not on players.
+_COUNTER_ON = re.compile(r"counters?\s+on\s*$", re.I)
+# "create a token that's a copy of X, except it ..." - the "it" is the new token.
+_COPY_EXCEPT = re.compile(r"except\s*$", re.I)
+PERMANENTS = {"creature", "artifact", "enchantment", "land", "planeswalker",
+              "battle", "permanent", "token", "equipment", "aura"}
+
 POSSESSED_RE = re.compile(
     r"^\s*(?:'s\s+)?(owner|controller|power|toughness|mana value|mana cost|"
     r"color|colors|name|type|types|abilities|subtypes)", re.I)
@@ -167,6 +174,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
     """
     on = {"possessive": True, "number": True, "type": True, "nonentity": True,
           "set_rest": True,
+          "argtype": True,
           "verb": False,      # lexical verb prior: measured to hurt, opt-in only
           # structural rule, needs the parse tree (ptree): a copula complement
           # ("it's an artifact") is a description, never an antecedent.
@@ -322,6 +330,20 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("set-rest")
+
+        # ---- argument-type rules (narrow, from the bench miss audit)
+        if on["argtype"] and atype is None:
+            before = text[max(0, rec["start"] - 18):rec["start"]]
+            if _COUNTER_ON.search(before):
+                f = [i for i in pool if ms[i]["head_type"] in PERMANENTS]
+                if f:
+                    pool = f
+                    evidence.append("counter-target-is-permanent")
+            elif _COPY_EXCEPT.search(before):
+                f = [i for i in pool if "token" in ms[i]["surface"].lower()]
+                if f:
+                    pool = f
+                    evidence.append("copy-token")
 
         # ---- possessive binding
         # `their` inside an object NP ("the top N cards of their library") belongs
@@ -648,7 +670,7 @@ def eval_dataset(path, verbose=0, rewrite=False, rules=None, require_struct=Fals
     return scaled
 
 
-def eval_benchmark(path=None, verbose=0, parser=True):
+def eval_benchmark(path=None, verbose=0, parser=True, rules=None):
     """Score the rules on the 72-case human gold (coref_benchmark.json).
 
     Gold here is a surface string, not a candidate index, so we match by
@@ -676,9 +698,10 @@ def eval_benchmark(path=None, verbose=0, parser=True):
             continue
         # resolve the WHOLE card: later anaphors chain through earlier ones
         if parser == "auto":
-            res = resolve_auto(text, all_anas, rewrite=False)
+            res = resolve_auto(text, all_anas, rewrite=False, rules=rules)
         else:
-            res = resolve(text, refs.build(text, parser=parser), all_anas, rewrite=False)
+            res = resolve(text, refs.build(text, parser=parser), all_anas,
+                          rewrite=False, rules=rules)
         pred = next(p for p in res["anaphors"]
                     if (p["start"], p["end"]) == span)
         g = gold.lower()
@@ -726,11 +749,12 @@ def main():
     ap.add_argument("--json", action="store_true", help="dump full JSON result")
     args = ap.parse_args()
 
+    off = {r.strip() for r in args.ablate.split(",") if r.strip()}
+    ons = {r.strip() for r in args.enable.split(",") if r.strip()}
+    rules = {k: False for k in off}
+    rules.update({k: True for k in ons})
+
     if args.eval:
-        off = {r.strip() for r in args.ablate.split(",") if r.strip()}
-        ons = {r.strip() for r in args.enable.split(",") if r.strip()}
-        rules = {k: False for k in off}
-        rules.update({k: True for k in ons})
         eval_dataset(args.eval, verbose=args.show_misses, rules=rules,
                      require_struct=args.structured_only)
         return
@@ -739,7 +763,8 @@ def main():
         parser = {"always": True, "never": False, "auto": "auto"}[args.parser]
         if args.no_parser:
             parser = False
-        eval_benchmark(args.bench or None, verbose=args.show_misses or 20, parser=parser)
+        eval_benchmark(args.bench or None, verbose=args.show_misses or 20,
+                       parser=parser, rules=rules)
         return
     if not args.card:
         ap.error("give a card name or --eval DATASET.json")

@@ -416,14 +416,22 @@ final answer) exposed bugs, not missing rules:
    mentions (a bare `You`) also satisfied any requirement. The filter now prefers
    typed candidates and accepts either direction (`--type-mode`).
 
-Plus a new rule: the possessive's antecedent role comes from its introducing phrase
-(corpus-derived over 755 possessives — `of their choice`, `equal to its power` ->
-subject; `under its owner's control`, `into their graveyard` -> object).
+Plus two rules from the same audit:
+
+- **possessive role from the introducing phrase** (corpus-derived over 755
+  possessives — `of their choice`, `equal to its power` -> subject;
+  `under its owner's control`, `into their graveyard` -> object);
+- **argument type**: `put a counter on it` requires a permanent (a player cannot
+  take counters), and `except it ...` inside a copy-token clause binds to the token.
+
+The audit also exposed a harness bug: `--ablate` never reached the benchmark path
+(it called `resolve()` without `rules`), so earlier bench ablations were silently
+comparing a rule against itself. Fixed; every number above is now ablation-checked.
 
 | | before | after |
 |---|---|---|
-| dev (3,395) | 73.0% | **75.8%** |
-| human bench (71) | 77% | **83%** (59/71) |
+| dev (3,395) | 73.0% | **76.2%** |
+| human bench (71) | 77% | **85%** (60/71) |
 | per kind | pronoun 73 / demonstrative 71 / rest 90 | 73 / **79** / **93** |
 
 ### 4e. Grammar work - what it bought
