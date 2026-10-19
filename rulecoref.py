@@ -67,6 +67,11 @@ def possessive_role(text, start):
 _COUNTER_ON = re.compile(r"counters?\s+on\s*$", re.I)
 # "create a token that's a copy of X, except it ..." - the "it" is the new token.
 _COPY_EXCEPT = re.compile(r"except\s*$", re.I)
+# "create a token that's a copy of IT" - the anaphor is the copied thing, so the
+# newly created token must not be its own antecedent.
+_COPY_OF = re.compile(r"copy\s+of\s*$", re.I)
+# "a source would deal damage ..., it deals double that damage instead"
+_DMG_SUBJECT = re.compile(r"^\s*(deals?|would\s+deal)\b", re.I)
 PERMANENTS = {"creature", "artifact", "enchantment", "land", "planeswalker",
               "battle", "permanent", "token", "equipment", "aura"}
 
@@ -397,6 +402,16 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 if f:
                     pool = f
                     evidence.append("copy-token")
+            elif _COPY_OF.search(before):
+                f = [i for i in pool if "token" not in ms[i]["surface"].lower()]
+                if f:
+                    pool = f
+                    evidence.append("copy-of-not-the-token")
+            elif _DMG_SUBJECT.match(text[rec["end"]:rec["end"] + 22]):
+                f = [i for i in pool if ms[i]["head_type"] == "source"]
+                if f:
+                    pool = f
+                    evidence.append("damage-source")
 
         # ---- possessive binding
         # `their` inside an object NP ("the top N cards of their library") belongs
