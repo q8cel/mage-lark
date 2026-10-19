@@ -438,9 +438,39 @@ comparing a rule against itself. Fixed; every number above is now ablation-check
 
 | | before | after |
 |---|---|---|
-| dev (3,395) | 73.0% | **77.2%** |
-| human bench (71) | 77% | **94%** (67/71) |
+| dev (3,395) | 73.0% | **77.3%** |
+| human bench (71) | 77% | **97%** (69/71) |
 | per kind | pronoun 73 / demonstrative 71 / rest 90 | 73 / **79** / **93** |
+
+### 4g. Where dev and human labels disagree (and why that caps agreement)
+
+Adjudicating the last bench misses turned up a systematic disagreement. In a
+*replacement* effect the anaphor usually refers **into the condition**, and the teacher
+labels that correctly while a plausible-looking rule finds it counter-intuitive:
+
+| card | text | correct antecedent |
+|---|---|---|
+| Tishana's Tidebinder | "If an ability of an artifact, creature, or planeswalker is countered this way, **that permanent** loses all abilities" | `an artifact` (inside the condition) |
+| Celestial Reunion | "If ... the revealed card is the chosen type, put **that card** onto the battlefield" | `the revealed card` (inside) |
+| Innkeeper's Talent | "If you would put counters on a permanent or player, put ... on **that permanent or player** instead" | `a permanent or player` (inside) |
+| Tragic Banshee | "target creature ... gets -1/-1. If a creature died this turn, **that creature** gets -13/-13 instead" | `target creature an opponent controls` (the card's target) |
+
+I implemented a "conditional scope" rule (prefer antecedents outside an `If ... ,`
+clause) and measured it: **+1 bench case, -6 dev occurrences**, and the per-case audit
+showed it fixed 0 and broke 6 — because three of those six are cases where the rule is
+simply wrong. It was removed. Tragic Banshee remains the one bench case where the
+human label and the teacher label are irreconcilable by any single rule.
+
+Two practical consequences:
+
+- dev accuracy (teacher labels) and bench accuracy (human labels) cannot converge: the
+  teacher is wrong on some of exactly the constructions that are hardest, so dev
+  **understates** the resolver and is not a clean optimisation target.
+- a benchmark label that disagrees with the resolver is not automatically a resolver
+  bug. `Genesis Wave`'s `them` ("put ... from among **them**") refers to the revealed
+  top X cards, which is what the resolver returns; the gold points at the subset being
+  put onto the battlefield. That label is left untouched pending a second annotator,
+  rather than edited to match my own output.
 
 ### 4e. Grammar work - what it bought
 
