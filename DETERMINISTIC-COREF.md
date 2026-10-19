@@ -438,8 +438,8 @@ comparing a rule against itself. Fixed; every number above is now ablation-check
 
 | | before | after |
 |---|---|---|
-| dev (3,395) | 73.0% | **76.3%** |
-| human bench (71) | 77% | **87%** (62/71) |
+| dev (3,395) | 73.0% | **77.2%** |
+| human bench (71) | 77% | **94%** (67/71) |
 | per kind | pronoun 73 / demonstrative 71 / rest 90 | 73 / **79** / **93** |
 
 ### 4e. Grammar work - what it bought

@@ -312,11 +312,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         pool = [i for i in pool if not ms[i]["is_pronoun"]]
         if len(pool) != n0:
             evidence.append("drop-pronoun-aliases")
-        if anum and on["number"]:
-            f = [i for i in pool if ms[i]["number"] == anum]
-            if f:
-                pool = f
-                evidence.append(f"number={anum}")
+
         def _type_ok(cand_type):
             if atype is None or cand_type is None:
                 return True
@@ -327,10 +323,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             return (refs.type_compatible(atype, cand_type)
                     or refs.type_expected(atype, cand_type))
 
-        if on["type"] and atype:
-            # A demonstrative names its own head ("that card"), so a mention whose
-            # head type is unknown (a bare "You", "~", a fragment) is a much worse
-            # fit than any typed mention - prefer typed ones whenever they exist.
+        def _apply_type():
+            nonlocal pool
             f = [i for i in pool
                  if ms[i]["head_type"] is not None and _type_ok(ms[i]["head_type"])]
             if not f:
@@ -338,30 +332,28 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append(f"type={atype}")
-        elif on["nonentity"]:
-            f = [i for i in pool if ms[i]["head_type"] not in refs.NON_ENTITY]
-            if f and len(f) != len(pool):
-                pool = f
-                evidence.append("drop-non-entities")
 
-        # ---- predicate prior: the governing verb narrows what the pronoun is
-        if on["verb"] and atype is None:
-            vtype = rec.get("verb_type")
-            if vtype:
-                f = [i for i in pool if refs.type_expected(vtype, ms[i]["head_type"])]
-                if f and len(f) != len(pool):
-                    pool = f
-                    evidence.append(f"verb={vtype}")
-
-        # ---- structural rules (need the parse tree; skipped without it)
-        if on["predicate"] and any(ms[i].get("predicate") for i in pool):
-            f = [i for i in pool if not ms[i].get("predicate")]
+        def _apply_number():
+            nonlocal pool
+            f = [i for i in pool if ms[i]["number"] == anum]
             if f:
                 pool = f
-                evidence.append("drop-predicate-nominals")
+                evidence.append(f"number={anum}")
 
-# (a "self mention as clause subject wins" rule was measured here: it fired 18x
-#  on the structured sample, changed 8 picks, fixed 4 and broke 4. Removed.)
+        # A demonstrative names its own head ("those cards"), which is a stronger
+        # constraint than number; for a bare pronoun number is all we have.
+        if on["type"] and atype:
+            _apply_type()
+            if anum and on["number"]:
+                _apply_number()
+        else:
+            if anum and on["number"]:
+                _apply_number()
+            if on["nonentity"]:
+                f = [i for i in pool if ms[i]["head_type"] not in refs.NON_ENTITY]
+                if f and len(f) != len(pool):
+                    pool = f
+                    evidence.append("drop-non-entities")
 
         # ---- set-valued anaphors ("the rest", "the others")
         # The referent is a COLLECTION minus what was just singled out, so the
