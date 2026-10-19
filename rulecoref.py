@@ -92,6 +92,13 @@ def quoted_region(text, pos):
     return None
 
 
+# "Choose one of them. ... you may play that card." - the anaphor is an ELEMENT of
+# that collection, so the collection is its antecedent even though the collection is
+# plural and the anaphor is singular.
+_ONE_OF = re.compile(r"\bone\s+of\s+(them|those|these)\b", re.I)
+COLLECTION_TYPES = {"card", "creature", "permanent", "artifact", "land",
+                    "enchantment", "token", "spell", "pile"}
+
 POSSESSED_RE = re.compile(
     r"^\s*(?:'s\s+)?(owner|controller|power|toughness|mana value|mana cost|"
     r"color|colors|name|type|types|abilities|subtypes)", re.I)
@@ -198,6 +205,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
           "set_rest": True,
           "argtype": True,
           "granted": True,
+          "set_element": True,
           "verb": False,      # lexical verb prior: measured to hurt, opt-in only
           # structural rule, needs the parse tree (ptree): a copula complement
           # ("it's an artifact") is a description, never an antecedent.
@@ -306,6 +314,14 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # ---- candidate pool: strictly preceding, never the anaphor itself
         pool = [i for i, m in enumerate(ms) if m["end"] <= rec["start"] and i != a_from]
         evidence = []
+
+        # ---- element of a collection ("choose one of them ... that card")
+        if on["set_element"] and _ONE_OF.search(text[max(0, rec["start"] - 130):rec["start"]]):
+            f = [i for i in pool if ms[i]["number"] == "pl"
+                 and ms[i]["head_type"] in COLLECTION_TYPES]
+            if f:
+                pool = f
+                evidence.append("element-of-collection")
 
         # ---- hard filters
         n0 = len(pool)
