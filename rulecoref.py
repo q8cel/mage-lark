@@ -709,6 +709,16 @@ def eval_dataset(path, verbose=0, rewrite=False, rules=None, require_struct=Fals
                 continue
             src = out.get("antecedent_src")
             ok = src is not None and gold_uf.find(src) == gold_uf.find(g)
+            # Soft agreement: the teacher's chosen mention lies inside the entity we
+            # bound to. Different mention, same object - our canonical often keeps the
+            # quantifier ("up to one target creature") where the teacher stored the
+            # shorter span ("target creature"), which strict scoring counts as a miss.
+            eid = out.get("entity")
+            spans = ([sp["surface"] for sp in res["entities"][eid]["spans"]]
+                     if eid is not None else [])
+            gsurf = cands[g]["surface"].lower()
+            soft = any(sp and (gsurf in sp.lower() or sp.lower() in gsurf) for sp in spans)
+            stats["soft"] += soft
             stats["correct"] += ok
             per_kind[gold["kind"]]["correct"] += ok
             if not ok:
@@ -726,7 +736,9 @@ def eval_dataset(path, verbose=0, rewrite=False, rules=None, require_struct=Fals
 
     n = stats["total"]
     scaled = stats["correct"] / max(1, n)
-    print(f"n={n}  correct={stats['correct']} = {100*scaled:.1f}%   (teacher labels)")
+    print(f"n={n}  correct={stats['correct']} = {100*scaled:.1f}%   (teacher labels, strict)")
+    print(f"  soft (teacher's pick inside our entity): {stats['soft']}/{n} = "
+          f"{100*stats['soft']/max(1,n):.1f}%   [same object, different span]")
     print(f"  gold span dropped by inventory cleaning: {n - stats['gold_span_survived']}")
     print(f"  gold said 'no antecedent': {stats['gold_none']}  "
           f"(we abstained on {stats['gold_none_abstained']})")

@@ -494,6 +494,23 @@ So dev = 77.3% does not mean the resolver is 77% correct: it agrees with an
 89%-accurate annotator on a harder distribution. Optimising dev means converging on
 the teacher, i.e. shedding the advantage.
 
+Part of the remaining gap is bookkeeping, not error. Strict scoring counts "the teacher
+picked a different mention of the same object" as a miss, and the evaluator now reports
+both:
+
+| dev scoring | score |
+|---|---|
+| strict (mention-index within the teacher's cluster) | 77.3% |
+| **soft** (the teacher's mention lies inside the entity we bound) | **81.5%** |
+| gold spans dropped by our inventory cleaning (counted as misses) | 119 (3.5%) |
+| teacher said "no antecedent" (excluded from the denominator) | 302 |
+
+The soft/strict gap (4.2%) is dominated by one systematic difference: our canonical
+mention keeps the quantifier (`up to one target creature`) where the stored teacher
+label is the shorter span (`target creature`). Those are the same object and our form is
+arguably more complete, so the strict number understates the resolver by roughly
+4-8 points depending on how the cleaning losses are counted.
+
 **Can a better local annotator fix that?** Tested with an ensemble of three runs of the
 same model (reasoning `low`, `high`, and a step-by-step prompt) on the bench:
 

@@ -269,6 +269,10 @@ substitute its own list as long as it has `surface`/`start`/`end`.
 
 Scoring is **entity-aware**: build a union-find over the gold labels and accept a
 prediction if the picked mention shares a gold cluster with the gold antecedent.
+`--eval` also reports a **soft** figure: the teacher's chosen mention lies inside the
+entity we bound. The two differ by ~4 points on dev, because our canonical keeps the
+quantifier (`up to one target creature`) while the stored label is the shorter span
+(`target creature`) - same object, different span.
 Index-based scoring understates every method — 14% of gold antecedents have a
 same-surface twin.
 
