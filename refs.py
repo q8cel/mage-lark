@@ -285,6 +285,32 @@ def clean(cands):
             for i, s, e, surf in kept]
 
 
+# The grammar's card_target can swallow a whole clause:
+#   "a token that's a copy of target creature you control, except it has haste and ..."
+# A mention that long is never a single entity; trim it at the idiom boundary.
+_TRIM = [
+    re.compile(r"^(.*?)\s+that's\s+a\s+copy\s+of\s+", re.I),
+    re.compile(r"^(.*?)\s+except\s+", re.I),
+    re.compile(r"^(.*?)\s+and\s+gains?\s+", re.I),
+]
+TRIM_MIN = 42
+
+
+def trim_long(text, m):
+    """Shorten an over-consumed mention to its head phrase (or return it as is)."""
+    surf = m["surface"]
+    if len(surf) < TRIM_MIN:
+        return m
+    for rx in _TRIM:
+        hit = rx.match(surf)
+        if hit and hit.group(1).strip():
+            head = hit.group(1).strip()
+            if 2 <= len(head) < len(surf):
+                return {"surface": head, "start": m["start"],
+                        "end": m["start"] + len(head), "src": m.get("src")}
+    return m
+
+
 def annotate(text, mentions, struct=None):
     """Add head_type / number / definiteness / flags / sentence / clause.
 
@@ -334,7 +360,8 @@ def annotate(text, mentions, struct=None):
 def build(text, parser=True, struct=None):
     """Live inventory for a card text (regex ∪ parse-tree spans, then clean)."""
     raw = candidate_mentions(text, parser=parser)
-    return annotate(text, clean(raw), struct=struct)
+    cleaned = [trim_long(text, m) for m in clean(raw)]
+    return annotate(text, cleaned, struct=struct)
 
 
 def anaphor_mentions(text, annotate_them=True):
