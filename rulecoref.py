@@ -45,6 +45,24 @@ TYPE_MODE = "either"
 CASE_FREE = {"this", "that", "those", "these", "the", "a", "an", "target",
              "each", "every", "all", "any", "no", "another", "other", "up",
              "you", "your", "its", "their", "one", "two", "three"}
+# Which entity a possessive refers to, by the phrase that introduces it. Derived
+# from the corpus (755 possessive occurrences with a gold antecedent):
+#   "creatures of their choice", "damage equal to its power"  -> the clause SUBJECT
+#   "under its owner's control", "into their graveyard"       -> the OBJECT
+_POSS_SUBJECT = re.compile(r"(\bof|\bequal\s+to|\bwith|\bfor)\s*$", re.I)
+_POSS_OBJECT = re.compile(r"(\bunder|\binto|\bonto)\s*$", re.I)
+
+
+def possessive_role(text, start):
+    """Preferred antecedent role for a possessive anaphor at `start`, or None."""
+    before = text[max(0, start - 24):start]
+    if _POSS_OBJECT.search(before):
+        return "object"
+    if _POSS_SUBJECT.search(before):
+        return "subject"
+    return None
+
+
 POSSESSED_RE = re.compile(
     r"^\s*(?:'s\s+)?(owner|controller|power|toughness|mana value|mana cost|"
     r"color|colors|name|type|types|abilities|subtypes)", re.I)
@@ -152,6 +170,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
           "verb": False,      # lexical verb prior: measured to hurt, opt-in only
           # structural rule, needs the parse tree (ptree): a copula complement
           # ("it's an artifact") is a description, never an antecedent.
+          "possessive_role": True,
           # sound but inert in practice: only 2 mention records corpus-wide are
           # copula complements. Kept because it can only ever remove noise.
           "predicate": True}
@@ -313,12 +332,19 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # subject") was implemented and measured here: -1 occurrence on dev, and
         # its precondition held for only 6 of 755 possessive anaphors, because
         # those clauses do not parse at all (see DETERMINISTIC-COREF.md).
-        if on["possessive"] and rec["is_possessive"] and rec["possesses"]:
+        if on["possessive"] and rec["is_possessive"]:
             f = [i for i in pool if ms[i]["sentence"] == rec["sentence"]
                  and ms[i]["clause"] == rec["clause"]]
             if f:
                 pool = f
                 evidence.append("possessive-same-clause")
+            if on["possessive_role"]:
+                want = possessive_role(text, rec["start"])
+                if want:
+                    g = [i for i in pool if ms[i].get("role") == want]
+                    if g:
+                        pool = g
+                        evidence.append(f"possessive-{want}")
 
         # ---- decision
         status, pred = None, None
