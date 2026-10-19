@@ -1,74 +1,434 @@
 [
- ["Luminous Rebuke","it",0,"tapped creature"],
- ["Skyknight Squire","it",0,"this creature"],
- ["Skyknight Squire","it",1,"this creature"],
- ["Bigfin Bouncer","its",0,"target creature an opponent"],
- ["Drake Hatcher","it",0,"this creature"],
- ["Grappling Kraken","it",0,"target creature an opponent"],
- ["Sphinx of Forgotten Lore","that card",0,"instant or sorcery card"],
- ["Abyssal Harvester","it",0,"target creature card"],
- ["Blasphemous Edict","their",0,"Each player"],
- ["Nine-Lives Familiar","it",0,"This creature"],
- ["Nine-Lives Familiar","it",1,"This creature"],
- ["Nine-Lives Familiar","it",2,"This creature"],
- ["Tragic Banshee","that creature",0,"target creature an opponent"],
- ["Chandra, Flameshaper","that card",0,"the top three cards"],
- ["Chandra, Flameshaper","it",0,"a token"],
- ["Electroduplicate","it",0,"a token"],
- ["Fiery Annihilation","that creature",0,"target creature"],
- ["Fiery Annihilation","it",0,"target creature"],
- ["Goblin Negotiation","that creature",0,"target creature"],
- ["Kellan, Planar Trailblazer","it",0,"~"],
- ["Twinflame Tyrant","it",0,"a source"],
- ["Felling Blow","that creature",0,"target creature you control"],
- ["Felling Blow","its",0,"that creature"],
- ["Mossborn Hydra","it",0,"This creature"],
- ["Quilled Greatwurm","it",0,"a creature"],
- ["Quilled Greatwurm","its",0,"this card"],
- ["Kykar, Zephyr Awakener","that card",0,"another target creature"],
- ["Banner of Kinship","it",0,"this artifact"],
- ["Soulstone Sanctuary","It",0,"This land"],
- ["Mischievous Pup","its",0,"other target permanent"],
- ["Micromancer","it",0,"instant or sorcery card"],
- ["Run Away Together","those creatures",0,"target creatures"],
- ["Run Away Together","their",0,"target creatures"],
- ["Fake Your Own Death","it",0,"target creature"],
- ["Fake Your Own Death","its",0,"target creature"],
- ["Painful Quandary","that player",0,"an opponent"],
- ["Pilfer","their",0,"Target opponent"],
- ["Pilfer","That player",0,"Target opponent"],
- ["Pilfer","that card",0,"a nonland card"],
- ["Rune-Scarred Demon","it",0,"a card"],
- ["Burst Lightning","it",0,"this spell"],
- ["Affectionate Indrik","it",0,"this creature"],
- ["Bite Down","its",0,"Target creature you control"],
- ["Etali, Primal Storm","those cards",0,"the top card"],
- ["Heartfire Immolator","It",0,"this creature"],
- ["Heartfire Immolator","its",0,"this creature"],
- ["Squad Rallier","them",0,"the top four cards"],
- ["Squad Rallier","it",0,"a creature card"],
- ["Squad Rallier","the rest",0,"the top four cards"],
- ["Gutless Plunderer","those cards",0,"the top three cards"],
- ["Gutless Plunderer","the rest",0,"the top three cards"],
- ["Strongbox Raider","them",0,"the top two cards"],
- ["Strongbox Raider","that card",0,"the top two cards"],
- ["Spinner of Souls","that card",0,"a creature card"],
- ["Loot, Exuberant Explorer","them",0,"the top six cards"],
- ["Loot, Exuberant Explorer","it",0,"a creature card"],
- ["Loot, Exuberant Explorer","the rest",0,"the top six cards"],
- ["Curator of Destinies","them",0,"the top five cards"],
- ["Curator of Destinies","that pile",0,"those piles"],
- ["Valkyrie's Call","that card",0,"a nontoken, non-Angel creature"],
- ["Valkyrie's Call","It",0,"that card"],
- ["Involuntary Employment","that creature",0,"target creature"],
- ["Involuntary Employment","It",0,"target creature"],
- ["Celestial Armor","it",0,"this Equipment"],
- ["Celestial Armor","That creature",0,"target creature"],
- ["Fleeting Flight","It",0,"target creature"],
- ["Snakeskin Veil","It",0,"target creature"],
- ["Inspiring Call","Those creatures",0,"each creature"],
- ["Genesis Wave","them",0,"any number of permanent cards"],
- ["Grow from the Ashes","it",0,"a basic land card"],
- ["Vivien Reid","it",0,"a creature or land card"],
- ["Vivien Reid","the rest",0,"the top four cards"]
+ [
+  "Luminous Rebuke",
+  "it",
+  0,
+  "This spell"
+ ],
+ [
+  "Skyknight Squire",
+  "it",
+  0,
+  "this creature"
+ ],
+ [
+  "Skyknight Squire",
+  "it",
+  1,
+  "this creature"
+ ],
+ [
+  "Bigfin Bouncer",
+  "its",
+  0,
+  "target creature an opponent"
+ ],
+ [
+  "Drake Hatcher",
+  "it",
+  0,
+  "this creature"
+ ],
+ [
+  "Grappling Kraken",
+  "it",
+  0,
+  "target creature an opponent"
+ ],
+ [
+  "Sphinx of Forgotten Lore",
+  "that card",
+  0,
+  "instant or sorcery card"
+ ],
+ [
+  "Abyssal Harvester",
+  "it",
+  0,
+  "target creature card"
+ ],
+ [
+  "Blasphemous Edict",
+  "their",
+  0,
+  "Each player"
+ ],
+ [
+  "Nine-Lives Familiar",
+  "it",
+  0,
+  "This creature"
+ ],
+ [
+  "Nine-Lives Familiar",
+  "it",
+  1,
+  "This creature"
+ ],
+ [
+  "Nine-Lives Familiar",
+  "it",
+  2,
+  "This creature"
+ ],
+ [
+  "Tragic Banshee",
+  "that creature",
+  0,
+  "target creature an opponent"
+ ],
+ [
+  "Chandra, Flameshaper",
+  "that card",
+  0,
+  "the top three cards"
+ ],
+ [
+  "Chandra, Flameshaper",
+  "it",
+  0,
+  "a token"
+ ],
+ [
+  "Electroduplicate",
+  "it",
+  0,
+  "a token"
+ ],
+ [
+  "Fiery Annihilation",
+  "that creature",
+  0,
+  "target creature"
+ ],
+ [
+  "Fiery Annihilation",
+  "it",
+  0,
+  "target creature"
+ ],
+ [
+  "Goblin Negotiation",
+  "that creature",
+  0,
+  "target creature"
+ ],
+ [
+  "Kellan, Planar Trailblazer",
+  "it",
+  0,
+  "~"
+ ],
+ [
+  "Twinflame Tyrant",
+  "it",
+  0,
+  "a source"
+ ],
+ [
+  "Felling Blow",
+  "that creature",
+  0,
+  "target creature you control"
+ ],
+ [
+  "Felling Blow",
+  "its",
+  0,
+  "that creature"
+ ],
+ [
+  "Mossborn Hydra",
+  "it",
+  0,
+  "This creature"
+ ],
+ [
+  "Quilled Greatwurm",
+  "it",
+  0,
+  "a creature"
+ ],
+ [
+  "Quilled Greatwurm",
+  "its",
+  0,
+  "this card"
+ ],
+ [
+  "Kykar, Zephyr Awakener",
+  "that card",
+  0,
+  "another target creature"
+ ],
+ [
+  "Banner of Kinship",
+  "it",
+  0,
+  "this artifact"
+ ],
+ [
+  "Soulstone Sanctuary",
+  "It",
+  0,
+  "This land"
+ ],
+ [
+  "Mischievous Pup",
+  "its",
+  0,
+  "other target permanent"
+ ],
+ [
+  "Micromancer",
+  "it",
+  0,
+  "instant or sorcery card"
+ ],
+ [
+  "Run Away Together",
+  "those creatures",
+  0,
+  "target creatures"
+ ],
+ [
+  "Run Away Together",
+  "their",
+  0,
+  "target creatures"
+ ],
+ [
+  "Fake Your Own Death",
+  "it",
+  0,
+  "target creature"
+ ],
+ [
+  "Fake Your Own Death",
+  "its",
+  0,
+  "target creature"
+ ],
+ [
+  "Painful Quandary",
+  "that player",
+  0,
+  "an opponent"
+ ],
+ [
+  "Pilfer",
+  "their",
+  0,
+  "Target opponent"
+ ],
+ [
+  "Pilfer",
+  "That player",
+  0,
+  "Target opponent"
+ ],
+ [
+  "Pilfer",
+  "that card",
+  0,
+  "a nonland card"
+ ],
+ [
+  "Rune-Scarred Demon",
+  "it",
+  0,
+  "a card"
+ ],
+ [
+  "Burst Lightning",
+  "it",
+  0,
+  "this spell"
+ ],
+ [
+  "Affectionate Indrik",
+  "it",
+  0,
+  "this creature"
+ ],
+ [
+  "Bite Down",
+  "its",
+  0,
+  "Target creature you control"
+ ],
+ [
+  "Etali, Primal Storm",
+  "those cards",
+  0,
+  "the top card"
+ ],
+ [
+  "Heartfire Immolator",
+  "It",
+  0,
+  "this creature"
+ ],
+ [
+  "Heartfire Immolator",
+  "its",
+  0,
+  "this creature"
+ ],
+ [
+  "Squad Rallier",
+  "them",
+  0,
+  "the top four cards"
+ ],
+ [
+  "Squad Rallier",
+  "it",
+  0,
+  "a creature card"
+ ],
+ [
+  "Squad Rallier",
+  "the rest",
+  0,
+  "the top four cards"
+ ],
+ [
+  "Gutless Plunderer",
+  "those cards",
+  0,
+  "the top three cards"
+ ],
+ [
+  "Gutless Plunderer",
+  "the rest",
+  0,
+  "the top three cards"
+ ],
+ [
+  "Strongbox Raider",
+  "them",
+  0,
+  "the top two cards"
+ ],
+ [
+  "Strongbox Raider",
+  "that card",
+  0,
+  "the top two cards"
+ ],
+ [
+  "Spinner of Souls",
+  "that card",
+  0,
+  "a creature card"
+ ],
+ [
+  "Loot, Exuberant Explorer",
+  "them",
+  0,
+  "the top six cards"
+ ],
+ [
+  "Loot, Exuberant Explorer",
+  "it",
+  0,
+  "a creature card"
+ ],
+ [
+  "Loot, Exuberant Explorer",
+  "the rest",
+  0,
+  "the top six cards"
+ ],
+ [
+  "Curator of Destinies",
+  "them",
+  0,
+  "the top five cards"
+ ],
+ [
+  "Curator of Destinies",
+  "that pile",
+  0,
+  "those piles"
+ ],
+ [
+  "Valkyrie's Call",
+  "that card",
+  0,
+  "a nontoken, non-Angel creature"
+ ],
+ [
+  "Valkyrie's Call",
+  "It",
+  0,
+  "that card"
+ ],
+ [
+  "Involuntary Employment",
+  "that creature",
+  0,
+  "target creature"
+ ],
+ [
+  "Involuntary Employment",
+  "It",
+  0,
+  "target creature"
+ ],
+ [
+  "Celestial Armor",
+  "it",
+  0,
+  "this Equipment"
+ ],
+ [
+  "Celestial Armor",
+  "That creature",
+  0,
+  "target creature"
+ ],
+ [
+  "Fleeting Flight",
+  "It",
+  0,
+  "target creature"
+ ],
+ [
+  "Snakeskin Veil",
+  "It",
+  0,
+  "target creature"
+ ],
+ [
+  "Inspiring Call",
+  "Those creatures",
+  0,
+  "each creature"
+ ],
+ [
+  "Genesis Wave",
+  "them",
+  0,
+  "any number of permanent cards"
+ ],
+ [
+  "Grow from the Ashes",
+  "it",
+  0,
+  "a basic land card"
+ ],
+ [
+  "Vivien Reid",
+  "it",
+  0,
+  "a creature or land card"
+ ],
+ [
+  "Vivien Reid",
+  "the rest",
+  0,
+  "the top four cards"
+ ]
 ]
