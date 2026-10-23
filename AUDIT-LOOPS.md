@@ -60,3 +60,52 @@ This is a known collection/owner inventory gap, not a parse failure.
 - `test_output.py FDN.json`: 44/44.
 - Dev coreference: **90.4% entity-aware / 84.4% exact** (was 90.1 / 84.1).
 - Bench coreference: **94.1% regex / 93.0% parser** (unchanged).
+
+## Loop 2 — seed 20261024
+
+Cards:
+
+`Festering Newt`, `Chandra's Firemaw`, `Might Makes Right`,
+`Amulet of Safekeeping`, `Furious Rise`, `Yanling's Harbinger`,
+`Burning Anger`, `Chandra, the Firebrand`, `Patient Rebuilding`,
+`Waker of Waves`, `Vial of Dragonfire`, `Phylactery Lich`,
+`Rotfeaster Maggot`, `Verdant Haven`, `Encrust`, `Feline Sovereign`,
+`Thieves' Guild Enforcer`, `Sleep`, `Transmogrify`, `Leyline of Punishment`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Festering Newt | `a creature named ~` and `-4/-4 instead if ...` | allowed `THIS_CARD` in the `named` modifier and allowed `instead if ...` as a trailing condition |
+| Furious Rise | `You may play that card until you exile another card ...` | added `V_PLAY card_target "until" any_text` |
+| Chandra, the Firebrand | loyalty effect beginning with a triggered clause (`[−2]: When you next cast ...`) | allowed `triggered_sentence` under `loyalty_sentence` and interpreted it as the loyalty effect |
+| Patient Rebuilding | `draw a card for each land card put into their graveyard this way` | added the `put into <zone> this way` suffix to the draw-per-card rule |
+
+### Coreference/output fixes found and fixed
+
+- **Sleep**: `all creatures target player controls` swallowed the embedded
+  `target player`. Player/opponent sub-mentions are now kept when they are the
+  target of the controlling phrase; `that player` binds to `target player`.
+- **Transmogrify**: `That creature's controller` was missing as a player
+  mention, and `their library` bound to the card collection. Added controller
+  mentions, `possessive-zone-owner`, and controller-aware player-subject rules.
+  `That player` now binds to the controller.
+- **Amulet of Safekeeping**: `that spell` had no antecedent because the inner
+  `a spell` was buried in `target of a spell`. Added nested spell/ability
+  candidates; `that spell` -> `a spell`.
+- **Chandra, the Firebrand**: added `instant or sorcery spell` to the spell
+  candidate pattern so `that spell` binds to the spell, not to Chandra.
+- **Encrust / Oppressive Rays**: `its controller` and `its activated abilities`
+  bound to the controller mention. Added `possessive-object-controller` and
+  `possessive-object-attribute`, which keep the possessor as the object.
+- **Status/owner inventory**: added owner-controller detection and preserved
+  only the nested mentions needed for these cases, avoiding the broad
+  inventory regression that initially lowered dev.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16 (test texts rebuilt into the new grammar-hash cache).
+- Dev coreference: **90.4% entity-aware / 84.5% exact** (was 90.4 / 84.4).
+- Bench coreference: **94.1% regex / 93.0% parser** (unchanged).

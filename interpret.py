@@ -1401,7 +1401,7 @@ class Interpreter:
         for ch in children:
             if isinstance(ch, Token) and ch.type == 'LOY_COST':
                 cost = ch.value
-            elif isinstance(ch, Tree) and ch.data == 'effect':
+            elif isinstance(ch, Tree) and ch.data in ('effect', 'triggered_sentence'):
                 eff = self.interp(ch)
         return {'type': 'loyalty', 'cost': cost, 'effect': eff}
 

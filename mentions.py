@@ -25,12 +25,37 @@ CAND = re.compile(
     rf"(?:~'s)|(?:~)|\b(?:{DET})\s+{_MID}(?:{HEADS})\b|\bthe rest\b",
     re.I,
 )
+# Player NPs are often embedded in a larger permanent NP ("all creatures
+# target player controls"); capture them separately so "that player" can bind
+# to the player, not to the creature collection.
+PLAYER_CAND = re.compile(
+    rf"\b(?:{DET})\s+(?:players?|opponents?)\b", re.I)
+CONTROLLER_CAND = re.compile(
+    rf"\b(?:{DET}|its|their)\s+(?:[A-Za-z][\w'\-]*\s+){{0,2}}controllers?\b", re.I)
+# A spell/ability is often embedded in a larger event NP ("the target of a
+# spell"); keep the inner NP so "that spell" has a real antecedent.
+SPELL_CAND = re.compile(
+    r"\b(?:a|an|the|that|this|those|these)\s+"
+    r"(?:(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+)?"
+    r"(?:[A-Za-z][\w'\-]*\s+){0,2}(?:spells?|abilities?)\b", re.I)
 
 
 def _regex_mentions(text):
     """Ordered, de-duplicated candidate mention spans in `text`."""
     out = []
     for m in CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in PLAYER_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in CONTROLLER_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in SPELL_CAND.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})

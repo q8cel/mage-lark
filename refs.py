@@ -102,6 +102,10 @@ def surface_head(surface):
 def head_type(surface):
     """Type of the mention, by specificity order (equipment beats artifact)."""
     low = surface.lower()
+    # "that creature's controller" / "its controller" denotes a player, not
+    # the creature that owns/controls the permanent.
+    if re.search(r"\bcontrollers?\b", low):
+        return "player"
     for t in TYPE_ORDER:
         if _TYPE_RE[t].search(low):
             return t
@@ -283,7 +287,13 @@ def clean(cands):
             k != i and s2 <= s and e <= e2 and (s2, e2) != (s, e)
             for k, s2, e2, _ in tagged)
         if dominated:
-            continue
+            # A player/opponent NP can be embedded inside a larger permanent
+            # collection NP ("all creatures target player controls").  It is
+            # still a distinct entity and is the antecedent for "that player".
+            if not (head_type(surf) in ("player", "opponent")
+                    and re.match(r"target (?:player|opponent)\b", surf, re.I)) \
+                    and surf.lower() not in ("a spell", "an ability"):
+                continue
         if any(s2 == s and e2 == e for _, s2, e2, _ in kept):
             continue
         kept.append((i, s, e, surf))

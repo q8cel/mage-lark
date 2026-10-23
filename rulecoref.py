@@ -96,6 +96,15 @@ _ATTACH_TO_LEAD = re.compile(r"\battach(?:ed|ing)?\b[^.;]*\bto\s*$", re.I)
 _LIFE_EQUAL_ITS = re.compile(r"\bgain(?:s)?\s+life\s+equal\s+to\s*$", re.I)
 # "this creature deals 2 damage to it": the object cannot be the subject.
 _DAMAGE_TO_LEAD = re.compile(r"\bdamage\s+to\s*$", re.I)
+# "their library/hand/graveyard" belongs to the player, even when the recent
+# candidate is the card collection being revealed or milled.
+_POSSESSIVE_ZONE = re.compile(r"^\s*(?:libraries|library|hands?|graveyards?|deck)\b", re.I)
+# "its controller" / "its owner" belongs to the object, not to a player NP
+# introduced by that very phrase.
+_POSSESSED_CONTROLLER = re.compile(r"^\s*(?:controller|owner)\b", re.I)
+_POSSESSED_ATTRIBUTE = re.compile(
+    r"^\s*(?:(?:activated\s+)?abilities|power|toughness|mana\s+value|"
+    r"card\s+types?|types?|colors?)\b", re.I)
 _OBJECT_VERB_LEAD = re.compile(
     r"\b(?:exile|exiles|exiled|sacrifice|sacrifices|sacrificed|return|returns|"
     r"returned|destroy|destroys|destroyed|put|puts|tap|taps|tapped|untap|"
@@ -610,7 +619,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if rec["kind"] == "pronoun" and rec["surface"].lower() == "they":
             si = rec.get("sentence")
             s0 = sents[si][0] if si is not None and si < len(sents) else 0
-            if re.search(r"\b(?:players?|opponents?)\b", text[s0:rec["start"]], re.I):
+            if re.search(r"\b(?:players?|opponents?|controllers?)\b", text[s0:rec["start"]], re.I):
                 f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
                 if f:
                     pool = f
@@ -651,6 +660,34 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("life-equal-object")
+
+        # ---- "its controller/owner": the possessor is the object
+        if (rec["kind"] == "pronoun" and rec["is_possessive"]
+                and _POSSESSED_CONTROLLER.match(text[rec["end"]:])):
+            f = [i for i in pool
+                 if ms[i]["head_type"] not in ("player", "opponent")
+                 and not re.search(r"\bcontrollers?\b", ms[i]["surface"], re.I)]
+            if f:
+                pool = f
+                evidence.append("possessive-object-controller")
+
+        # ---- "its activated abilities/power/type": the possessor is the object
+        if (rec["kind"] == "pronoun" and rec["is_possessive"]
+                and _POSSESSED_ATTRIBUTE.match(text[rec["end"]:])):
+            f = [i for i in pool
+                 if ms[i]["head_type"] not in ("player", "opponent")
+                 and not re.search(r"\bcontrollers?\b", ms[i]["surface"], re.I)]
+            if f:
+                pool = f
+                evidence.append("possessive-object-attribute")
+
+        # ---- possessive before a zone: "their library" belongs to a player
+        if (rec["kind"] == "pronoun" and rec["is_possessive"]
+                and _POSSESSIVE_ZONE.match(text[rec["end"]:])):
+            f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
+            if f:
+                pool = f
+                evidence.append("possessive-zone-owner")
 
         # ---- possessive binding
         # `their` inside an object NP ("the top N cards of their library") belongs

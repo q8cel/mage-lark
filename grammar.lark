@@ -84,6 +84,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
 //  loyalty   [+1]: <effect>   [−4]: <effect>
 // ----------------------------------------------------------------------------
 loyalty_sentence: LOY_COST ":" effect (xdef_clause)?
+               | LOY_COST ":" triggered_sentence
 LOY_COST: /\[[\-\u2212+]?(?:\d+|X)\]/
 
 // ----------------------------------------------------------------------------
@@ -210,6 +211,8 @@ event_object: ("combat" "damage" "to" (player | card_target))?
             | card_target
 if_clause: V_IF any_text ","
 trailing_if: V_IF any_text
+           | INSTEAD V_IF any_text
+           | INSTEAD
 
 // ----------------------------------------------------------------------------
 //  static keyword list (optionally with a modifier: Ward {4}, Kicker {2}, ...)
@@ -407,7 +410,7 @@ search_action: V_SEARCH zones "for" search_target ("named" (THIS_CARD | CARDNAME
              | V_SEARCH zones "for" search_target ","? "reveal" ("those" "cards" | "them") ","? "put" "one" "onto" "the" "battlefield" "tapped"? "and" "the" "other" "into" zone ","? "then" "shuffle"
 search_target: card_target (("or" | "and/or" | "and") card_target)*
 
-draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target
+draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target ("put" "into" zone "this" "way")?
             | ("Any" | "any") "number" "of" "target" "players" "each" V_DRAW draw_amount "card" "s"?
             | (who)? V_DRAW draw_amount "card" "s"? ("for" "each" "different" "mana" "value" "among" card_target)? ("for" "each" "color" "among" card_target)?
            | (who)? V_DRAW draw_amount "card" "s"?
@@ -608,6 +611,7 @@ cast_action: V_CAST card_target "from" "your" "graveyard" "by" "paying" amount "
            | V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)? ("for" "as" "long" "as" any_text)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "way")? ("without" "paying" "its" "mana" "cost")? ("this" "turn")? ("on" "each" "of" "your" "turns")?
            | V_PLAY ("an" "additional" "land" | card_target) "until" "the" "end" "of" "your" "next" "turn"
+           | V_PLAY card_target "until" any_text
 reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
 choose_action: (player)? V_CHOOSE amount? choose_obj
              | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
@@ -815,7 +819,7 @@ with_modifier: "with" (kw_list | "power" amount CMP? | "toughness" amount CMP? |
              | "with" "the" "chosen" "name"
              | "other" "than" card_target
              | "of" "that" "type"
-             | "named" CARDNAME+
+             | "named" (THIS_CARD | CARDNAME+)
              | "that" "wasn't" "put" "onto" "the" "battlefield"
              | "that" "was" "put" "there" "this" "turn"
              | "that" "was" "put" "there" "this" "instant"
