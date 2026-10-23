@@ -78,6 +78,11 @@ PLURAL_DET = {"those", "these", "they", "them", "their", "theirs", "themselves",
 DET_JUNK = re.compile(
     r"^(target|that|this|those|these|the|a|an|another|each|every|all|other|"
     r"any|no|some|both|one|two|three)$", re.I)
+# Parser spans sometimes start mid-NP at a preposition/conjunction, e.g.
+# "without flying" out of "target creature without flying".  Such a fragment is
+# not an entity mention and only competes with the real NP.
+BAD_LEAD = re.compile(
+    r"^(?:without|with|from|of|in|on|to|and|or|for|at|by|as)\b", re.I)
 
 CLAUSE_SEP = re.compile(r"[,;:]\s+|\s+\u2014\s+|\s+--\s+")
 
@@ -268,6 +273,8 @@ def clean(cands):
     for i, c in enumerate(cands):
         surf = (c.get("surface") or "").strip()
         if not surf or DET_JUNK.match(surf):
+            continue
+        if BAD_LEAD.match(surf) and head_type(surf) is None:
             continue
         tagged.append((i, c["start"], c["end"], surf))
     kept = []

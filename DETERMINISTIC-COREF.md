@@ -10,9 +10,12 @@ anaphor occurrences in `coref_standard.json`, using the existing `mentions.py` /
 entity-aware clusters over a fixed candidate pool shared by every resolver.
 `remap_dataset.py` rebuilt old texts/spans from source with `normalize_with_map`
 (55 records changed). `coref_standard.json` now validates both standalone and
-against `Standard.json`. Current rule result: **85.5% entity-aware / 79.6% exact
+against `Standard.json`. Current rule result: **88.3% entity-aware / 82.2% exact
 on 3,380 valid labels**; human bench: **93.0% entity-aware (parser pool) / 94.1%
-(regex pool)**. Historical strict/soft numbers below are from the old harness.
+(regex pool)**. The evaluator maps a gold sub-span such as `target creature` to the
+maximal containing runtime mention (`up to one target creature`); only 4 gold
+spans are now truly unscoreable. Historical strict/soft numbers below are from
+the old harness.
 
 ---
 
@@ -289,7 +292,8 @@ understates every method, the neural head included).
 > that has to cluster from its own predictions. See "Implemented (v1)" below for
 > the leak-free numbers.
 
-n = 3,284 (119 gold spans are absorbed by maximal-span cleaning).
+n = 3,284 (historical: 119 gold sub-spans were treated as absorbed; the current
+harness maps them to the containing maximal mention).
 
 | rules | accuracy |
 |---|---|

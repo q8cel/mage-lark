@@ -588,7 +588,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     if g:
                         pool = g
                         evidence.append(f"possessive-{want}")
-                    elif want == "subject" and not any(ms[i].get("role") for i in pool):
+                    elif want == "subject" and pool and not any(ms[i].get("role") for i in pool):
                         # No parse structure cached: the subject is normally the
                         # earliest candidate in the clause ("Each player exiles
                         # the top seven cards of their library").

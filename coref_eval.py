@@ -126,7 +126,19 @@ def load_dataset_cases(path, require_struct=False):
         for old_i, cand in enumerate(raw):
             if not isinstance(cand, dict):
                 continue
-            idx = _exact_index(pool, (cand.get("start"), cand.get("end")))
+            span = (cand.get("start"), cand.get("end"))
+            idx = _exact_index(pool, span)
+            if idx is None:
+                # `refs.clean` keeps maximal spans, so a gold sub-span such as
+                # "target creature" is usually contained in the runtime mention
+                # "up to one target creature".  They are the same entity; map
+                # the label to the containing candidate instead of declaring the
+                # gold span lost.
+                idx = _overlap_index(pool, span)
+                if idx is not None:
+                    p = pool[idx]
+                    if not (p["start"] <= span[0] and span[1] <= p["end"]):
+                        idx = None
             if idx is not None:
                 raw_to_pool[old_i] = idx
 
