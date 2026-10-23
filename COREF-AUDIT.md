@@ -12,7 +12,7 @@ antecedents, and entities were inspected by hand.
 | 1 | Chandra, Awakened Inferno | anaphora OK; fixed own-name normalization |
 | 2 | Grim Return | PASS |
 | 3 | Vaevictis Asmadi, the Dire | PASS (6/6) |
-| 4 | Mindclaw Shaman | mitigated: `those cards` -> player fallback; proper anchor is the revealed hand collection |
+| 4 | Mindclaw Shaman | limitation: `those cards` now abstains; proper anchor is the revealed hand collection |
 | 5 | Chandra's Incinerator | PASS |
 | 6 | Belltower Sphinx | `that many` separated as a quantity anaphor, not an entity anaphor |
 | 7 | Soul Bleed | limitation: no `enchanted creature's controller` candidate |
@@ -35,9 +35,9 @@ antecedents, and entities were inspected by hand.
 - Scalar anaphors such as `that many` / `that much` are now exposed by
   `find_quantity_anaphors` and kept out of the entity inventory; they are real
   anaphors, just not entity anaphors.
-- `from among those cards` after a player reveals a hand falls back to the
-  player/opponent when no card NP exists, instead of an unrelated creature.
-  This is a mitigation, not the full collection resolution.
+- Removed the wrong player substitution for `those cards`: card demonstratives
+  now use a card/non-player entity or abstain.  The proper collection anchor is
+  still missing, so Mindclaw Shaman abstains instead of naming the opponent.
 - `the rest` abstains when no plural collection candidate exists, instead of
   binding to the singled-out card. The correct resolution still needs a
   hand/collection mention.
@@ -57,5 +57,5 @@ antecedents, and entities were inspected by hand.
   such as `their hand` / `the top N cards`; resolving them to a player is only a
   fallback, not the semantic antecedent.
 
-Dev metrics were unchanged by these audit fixes: 90.1% entity-aware / 84.2%
-exact; bench 94.1% regex / 93.0% parser.
+Dev metrics after the audit fixes: 90.1% entity-aware / 84.1% exact; bench
+94.1% regex / 93.0% parser.

@@ -363,19 +363,6 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("drop-amount-phrases")
 
-        # ---- demonstrative card NP with no card antecedent in inventory:
-        # "from among those cards" after a player reveals their hand.
-        if (rec["kind"] == "demonstrative" and "card" in rec["surface"].lower()
-                and re.search(r"\b(?:from\s+)?among\s*$",
-                              text[max(0, rec["start"] - 24):rec["start"]], re.I)):
-            has_card = [i for i in pool if "card" in ms[i]["surface"].lower()]
-            if not has_card:
-                players = [i for i in pool
-                           if ms[i]["head_type"] in ("player", "opponent")]
-                if players:
-                    pool = players
-                    evidence.append("card-demonstrative-player-early")
-
         # ---- element of a collection ("choose one of them ... that card")
         if on["set_element"] and _ONE_OF.search(text[max(0, rec["start"] - 130):rec["start"]]):
             f = [i for i in pool if ms[i]["number"] == "pl"
@@ -449,20 +436,22 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("drop-self-for-demonstrative")
             surf = rec["surface"].lower()
-            if "card" in surf:
+            if re.match(r"^(?:that|this|those|these)\s+cards?\b", surf):
                 f = [i for i in pool if "card" in ms[i]["surface"].lower()]
+                if not f:
+                    plural = surf.startswith(("those", "these"))
+                    f = [i for i in pool
+                         if ms[i]["head_type"] not in ("player", "opponent")
+                         and (not plural or ms[i]["number"] == "pl")]
                 if f:
                     pool = f
                     evidence.append("card-demonstrative")
                 else:
-                    # "from among those cards" after a player reveals a hand:
-                    # there is no card NP in inventory, but the player/zone is
-                    # a much better anchor than an unrelated creature.
-                    f = [i for i in pool
-                         if ms[i]["head_type"] in ("player", "opponent")]
-                    if f:
-                        pool = f
-                        evidence.append("card-demonstrative-player")
+                    # Collection/card NP with neither a card nor a compatible
+                    # entity/collection in inventory: abstain, do not substitute
+                    # a player or unrelated creature.
+                    pool = []
+                    evidence.append("card-demonstrative-no-collection")
 
         # ---- set-valued anaphors ("the rest", "the others")
         # The referent is a COLLECTION minus what was just singled out, so the
