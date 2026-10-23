@@ -26,6 +26,12 @@ PHRASES = {
     "the rest",
 }
 
+# Scalar anaphors. These are real anaphors, but their antecedent is a quantity
+# expression / event amount ("deals 3 damage ... mills that many cards"), not an
+# entity candidate. They are deliberately not part of the entity inventory.
+QUANTITIES = ("that many", "that much", "this many", "this much",
+              "that few", "that little")
+
 # Demonstrative determiners + a head noun (e.g. "that creature", "those
 # cards"). "this" is excluded by default: "this creature"/"this artifact"
 # normally names the card itself, not a previous mention.
@@ -41,15 +47,16 @@ _DEM_RE = re.compile(
     rf"\b(?:{DEMONSTRATIVE_DET})\s+(?:[\w,'\-]+\s+){{0,2}}(?:{HEADS})\b",
     re.I,
 )
-_QUANTITY = re.compile(r"^(?:that|this)\s+(?:many|much|few|little)\b", re.I)
+_QUANTITY = re.compile(r"\b(?:that|this)\s+(?:many|much|few|little)\b", re.I)
 
 
 def find_anaphors(text, phrases=True, demonstratives=True):
     """Return every anaphor occurrence in `text`, in order of appearance.
 
     Each entry: {"surface", "start", "end", "kind"} where kind is one of
-    "pronoun", "phrase", "demonstrative". Overlapping matches are resolved by
-    keeping the earliest-starting, longest match.
+    "pronoun", "phrase", "demonstrative". Scalar anaphors such as "that many"
+    are real anaphors but are returned by `find_quantity_anaphors` instead:
+    they resolve to amounts/events, not to entity mentions.
     """
     hits = []
     for m in _PRON_RE.finditer(text):
@@ -70,6 +77,20 @@ def find_anaphors(text, phrases=True, demonstratives=True):
             continue
         last_end = end
         out.append({"surface": surface, "start": start, "end": end, "kind": kind})
+    return out
+
+
+def find_quantity_anaphors(text):
+    """Return scalar anaphors such as `that many` / `that much`.
+
+    These are kept out of `find_anaphors` because the entity resolver must not
+    bind them to a creature/card mention. A quantity pass would resolve them to
+    the governing amount expression (damage, count, etc.).
+    """
+    out = []
+    for m in _QUANTITY.finditer(text):
+        out.append({"surface": m.group(0), "start": m.start(),
+                    "end": m.end(), "kind": "quantity"})
     return out
 
 
