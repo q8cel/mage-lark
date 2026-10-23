@@ -394,7 +394,16 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
 
         def _apply_number():
             nonlocal pool
-            f = [i for i in pool if ms[i]["number"] == anum]
+            # MTG uses singular they/their for a singular player/opponent
+            # ("target opponent ... their hand"), so don't let number agreement
+            # remove player/opponent candidates from a plural pronoun's pool.
+            allow_singular_players = (rec["kind"] == "pronoun"
+                                      and rec["surface"].lower()
+                                      in ("they", "their", "theirs", "themselves"))
+            f = [i for i in pool
+                 if ms[i]["number"] == anum
+                 or (allow_singular_players
+                     and ms[i]["head_type"] in ("player", "opponent"))]
             if f:
                 pool = f
                 evidence.append(f"number={anum}")
@@ -530,7 +539,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     evidence.append("self-before-another")
 
         # ---- plural pronoun with an explicit player subject in the clause
-        if rec["kind"] == "pronoun" and rec["surface"].lower() in ("they", "them", "their"):
+        if rec["kind"] == "pronoun" and rec["surface"].lower() == "they":
             si = rec.get("sentence")
             s0 = sents[si][0] if si is not None and si < len(sents) else 0
             if re.search(r"\b(?:players?|opponents?)\b", text[s0:rec["start"]], re.I):
@@ -558,8 +567,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     break
                 if any(ms[i].get("sentence") == si - back for i in pool):
                     break
-        if (token_ctx and rec["kind"] == "pronoun"
-                and not rec["is_possessive"]):
+        if token_ctx and rec["kind"] == "pronoun":
             f = [i for i in pool
                  if "token" in ms[i]["surface"].lower() or ms[i]["head_type"] == "token"]
             if f:
