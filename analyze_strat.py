@@ -6,14 +6,17 @@ Scoring is entity-aware, exactly as the resolver's own evaluation: the ensemble 
 a mention, we map it to the resolver's entity, and match that entity's spans against
 the ensemble majority.
 """
-import collections, json, sys
-sys.path.insert(0, "/home/q6/Documents/mage-attn")
+import collections, json, os, sys
+BASE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE)
 import refs, rulecoref
 from anaphora import find_anaphors
 
-LAB = "/tmp/opencode/strat_labels.json"
-SAMPLE = "/tmp/opencode/strat_sample.json"
-DEV = "/home/q6/Documents/mage-attn/coref_standard.json"
+CACHE = os.path.join(BASE, ".cache")
+LAB = os.path.join(CACHE, "strat_labels.json")
+SAMPLE = os.path.join(CACHE, "strat_sample.json")
+DEV = os.path.join(BASE, "coref_standard.json")
+REVIEW = os.path.join(CACHE, "review_queue.json")
 
 
 def match(x, g):
@@ -82,8 +85,10 @@ def main():
     print("  by stratum:")
     for s, c in sorted(by_stratum.items(), key=lambda kv: -kv[1]["total"]):
         print(f"    {s:<28} {c['ok']:>3}/{c['total']:<3} = {100*c['ok']/max(1,c['total']):5.1f}%")
-    json.dump(review, open("/tmp/opencode/review_queue.json", "w"), indent=1)
-    print(f"\nreview queue: {len(review)} cases -> /tmp/opencode/review_queue.json")
+    os.makedirs(CACHE, exist_ok=True)
+    with open(REVIEW, "w") as fh:
+        json.dump(review, fh, indent=1)
+    print(f"\nreview queue: {len(review)} cases -> {REVIEW}")
     print("  (sorted by how much the ensemble disagrees with us)")
     for r in sorted(review, key=lambda r: r["resolver_matches_majority"])[:8]:
         print(f"    {r['card'][:22]:<22} {r['surface']!r:<16} ours={r['our_answer']!r:<26} "

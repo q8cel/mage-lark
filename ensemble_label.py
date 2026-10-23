@@ -10,12 +10,13 @@ Resumable: results are appended and re-read on restart.
 import argparse, json, os, re, sys, time, urllib.request
 from urllib.error import URLError
 from concurrent.futures import ThreadPoolExecutor
-sys.path.insert(0, "/home/q6/Documents/mage-attn")
+BASE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE)
 import refs
 from setdata import card_text
 
-EP = "http://127.0.0.1:9000/v1/chat/completions"
-MODEL = "/models/Qwen3.8-27B-UD-Q6_K.gguf"
+EP = os.environ.get("LLM_ENDPOINT", "http://127.0.0.1:9000/v1/chat/completions")
+MODEL = os.environ.get("LLM_MODEL", "/models/Qwen3.8-27B-UD-Q6_K.gguf")
 SYS = ("You resolve anaphora in Magic: The Gathering oracle text. Given a card's text, "
        "one anaphor occurrence, and a numbered list of earlier mentions, reply with JSON "
        '{"antecedent": <index>}, or -1 if none of the listed mentions is the antecedent.')

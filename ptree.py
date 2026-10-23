@@ -85,10 +85,8 @@ def _grammar_hash():
 def _parser():
     global _P
     if _P is None:
-        from lark import Lark
-        _P = Lark.open(os.path.join(BASE, "grammar.lark"), parser="earley",
-                       start="start", ambiguity="resolve",
-                       keep_all_tokens=True, propagate_positions=True)
+        from larkparser import build_parser
+        _P = build_parser("ptree")
     return _P
 
 

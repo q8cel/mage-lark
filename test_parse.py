@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
 """Run the parser over every oracle sentence; report coverage and dump failures."""
-import sys, os, json, argparse
-from lark import Lark, Transformer, v_args, LarkError
+import sys, json, argparse
 from preprocess import segment
 from mtd import all_oracle_text, card_type_set, name_set
+from larkparser import build_parser
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-GRAMMAR = os.path.join(BASE, 'grammar.lark')
-
-def build_parser():
-    parser = Lark.open(GRAMMAR, parser='earley', start='start',
-                       ambiguity='resolve', keep_all_tokens=True)
-    return parser
-
-def collect_items():
+def collect_items(names):
     out = []
     for name, text in all_oracle_text():
-        for it in segment(text):
+        for it in segment(text, names):
             out.append((name, it))
     return out
 
@@ -27,7 +19,7 @@ def main():
     ap.add_argument('--dump', default=None, help='dump failures to file')
     args = ap.parse_args()
 
-    parser = build_parser()
+    parser = build_parser("interp")
     types = card_type_set()
     names = name_set()
 
@@ -39,7 +31,7 @@ def main():
     shown = 0
     import time
     t0 = time.time()
-    for name, it in collect_items():
+    for name, it in collect_items(names):
         s = it['text']
         total += 1
         if total % 100 == 0:
@@ -52,11 +44,8 @@ def main():
             if args.show and shown < args.show and not args.fail:
                 shown += 1
                 print(f"=== {s}\n{json.dumps(result, indent=1, ensure_ascii=False)[:600]}\n")
-        except LarkError as e:
+        except Exception as e:
             fails.append((name, s, str(e).split('\n')[0][:120]))
-            if not args.fail or True:
-                if len(fails) <= (0 if args.dump else 200):
-                    pass
 
     print(f"\n==== COVERAGE: {ok}/{total} = {100*ok/total:.1f}% ====")
     print(f"Failures: {len(fails)}")

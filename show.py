@@ -5,18 +5,15 @@ Usage:  python show.py "Draw a card" "Tap an untapped creature you control"
 Runs preprocessing (sentence split) + parse + transform, prints JSON.
 """
 import sys, json
-from lark import Lark, LarkError
+from lark import LarkError
 from preprocess import segment
 from mtd import card_type_set, name_set
 from interpret import Interpreter
-import os
+from larkparser import build_parser
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-GRAMMAR = os.path.join(BASE, 'grammar.lark')
-
-parser = Lark.open(GRAMMAR, parser='earley', start='start',
-                   ambiguity='resolve', keep_all_tokens=True)
-interp = Interpreter(types=card_type_set(), names=name_set())
+parser = build_parser('interp')
+NAMES = name_set()
+interp = Interpreter(types=card_type_set(), names=NAMES)
 
 
 def clean(o):
@@ -34,7 +31,7 @@ def clean(o):
 
 for raw in sys.argv[1:]:
     print(f"\n===== {raw} =====")
-    for it in segment(raw):
+    for it in segment(raw, NAMES):
         s = it['text']
         try:
             tree = parser.parse(s)

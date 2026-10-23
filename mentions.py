@@ -19,7 +19,7 @@ DET = r"this|that|these|those|the|a|an|another|each|all|other|target|any|no"
 # at most two, so spans don't swallow clause boundaries.
 _MID = r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
 CAND = re.compile(
-    rf"(?:~)|(?:~'s)|\b(?:{DET})\s+{_MID}(?:{HEADS})\b|\bthe rest\b",
+    rf"(?:~'s)|(?:~)|\b(?:{DET})\s+{_MID}(?:{HEADS})\b|\bthe rest\b",
     re.I,
 )
 

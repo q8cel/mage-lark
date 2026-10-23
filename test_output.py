@@ -10,8 +10,7 @@ Usage:  python test_output.py [data.json]      # default classic.json
 import sys, os
 BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
-from lark import Lark, LarkError
-GRAMMAR = os.path.join(BASE, 'grammar.lark')
+from larkparser import build_parser
 from setdata import load
 from preprocess import segment
 from interpret import Interpreter
@@ -43,6 +42,10 @@ add("anaphora-not-type", "It gains haste until end of turn",
     lambda o: has(o, lambda d: d.get('ref') == 'anaphora'))
 add("draw-amount-int", "Draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 2))
+add("draw-amount-article", "Draw a card",
+    lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 1))
+add("draw-who", "You draw two cards",
+    lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('who')))
 add("deal-damage", "this enchantment deals 2 damage to that player",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage' and d.get('amount') == 2 and d.get('to')))
 add("enters-counters", "This creature enters with three wish counters on it",
@@ -98,13 +101,50 @@ add("deal-damage-plus", "it deals that much damage plus 2 to that creature",
                   and 'plus 2' in str(d.get('amount', ''))))
 add("lose-game", "that player loses the game",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_game' and d.get('who') == 'that player'))
+add("regenerate-target", "Regenerate target creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'regenerate'))
+add("suspect-target", "Suspect target creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'suspect'))
+add("can-block-any", "Target creature can block any number of creatures",
+    lambda o: has(o, lambda d: d.get('verb') == 'can_block' and d.get('blocker')))
+add("investigate", "Investigate",
+    lambda o: has(o, lambda d: d.get('verb') == 'investigate'))
+add("exile-all-graveyards", "Exile all graveyards",
+    lambda o: has(o, lambda d: d.get('verb') == 'exile'))
+add("cant-cast-or-activate", "Your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments",
+    lambda o: has(o, lambda d: d.get('verb') == "can't" and 'activate' in str(d.get('predicate'))))
+add("additional-phase", "After this phase, there is an additional combat phase",
+    lambda o: has(o, lambda d: d.get('verb') == 'additional_phase'))
+add("must-block", "Creatures you control must be blocked this turn if able",
+    lambda o: has(o, lambda d: d.get('verb') == 'must_block'))
+add("gift", "Gift a card",
+    lambda o: has(o, lambda d: d.get('verb') == 'gift'))
+add("manifest-dread", "Manifest dread",
+    lambda o: has(o, lambda d: d.get('verb') == 'manifest_dread'))
+add("start-engines", "Start your engines!",
+    lambda o: has(o, lambda d: 'Start your engines' in str(d.get('text', ''))))
+add("ability-word-activated", "Max speed — {3}, Exile this card from your graveyard: Draw a card",
+    lambda o: has(o, lambda d: d.get('type') == 'activated'))
+add("ability-word-if", "Flare Star — If a Wizard you control would deal damage to a permanent or player, it deals double that damage instead",
+    lambda o: has(o, lambda d: d.get('type') == 'if'))
+add("empower", "When ~ enters, empower Jace 5",
+    lambda o: has(o, lambda d: d.get('verb') == 'empower'))
+add("collect-evidence", "As an additional cost to cast this spell, you may collect evidence 6",
+    lambda o: has(o, lambda d: d.get('verb') == 'collect_evidence'))
+add("cloak", "Cloak a card from your hand",
+    lambda o: has(o, lambda d: d.get('verb') == 'cloak'))
+add("enter-untapped", "Lands you control enter untapped",
+    lambda o: has(o, lambda d: d.get('verb') == 'enters'))
+add("gain-control-as-long", "When this Vehicle enters, gain control of target creature an opponent controls for as long as you control this Vehicle",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_control'))
+add("spend-mana-chosen-type", "Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the chosen type",
+    lambda o: has(o, lambda d: d.get('verb') == 'spend_mana_only_to_cast'))
 
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'
     items, types, card_names, sets = load(data)
     names = sorted(card_names, key=len, reverse=True)
-    parser = Lark(open(GRAMMAR), start='start', parser='earley',
-                  ambiguity='resolve', keep_all_tokens=True)
+    parser = build_parser('interp')
     interp = Interpreter(types=types, names=card_names)
     passed = failed = 0
     for name, sent, pred in T:

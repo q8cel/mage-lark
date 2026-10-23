@@ -26,25 +26,54 @@ def grammar_rules():
             rules.add(m.group(1))
     return rules
 
+def _method_bodies(src):
+    """{method_name: body} for every indented method in the Interpreter class."""
+    out = {}
+    for m in re.finditer(
+            r'\n    def ([A-Za-z_]\w*)\(self(?:, [^)]*)?\):\n(.*?)(?=\n    def |\nclass |\Z)',
+            src, re.S):
+        out[m.group(1)] = m.group(2)
+    return out
+
+
+def _direct_refs(body):
+    refs = set()
+    for r in re.finditer(r"_find(?:_one|_all)?\(children,\s*'([^']+)'\)", body):
+        refs.add(r.group(1))
+    for r in re.finditer(r"\.data\s*(?:==|in)\s*\(?'([a-z_][a-z0-9_]*)'?", body):
+        refs.add(r.group(1))
+    for r in re.finditer(r"\.data\s+in\s+\(([^)]*)\)", body):
+        for s in re.finditer(r"'([^']+)'", r.group(1)):
+            refs.add(s.group(1))
+    return refs
+
+
 def interp_lookups():
-    """Return {handler_name: set(referenced rule names)} from interpret.py."""
+    """Return {handler_name: set(referenced rule names)} from interpret.py.
+
+    A handler can delegate to a helper (e.g. `i_exile_action` -> `_card_action`),
+    so references are expanded through `self._helper(...)` calls.  Without this,
+    the checker reports dozens of false "missing" sub-rules for actions that use
+    `_card_action`.
+    """
     src = open(INTERP).read()
-    # split into methods i_*
-    handlers = {}
-    # find each def i_name(self, children): and capture until next 'def '
-    for m in re.finditer(r'\n    def (i_\w+)\(self, children\):\n(.*?)(?=\n    def |\nclass |\Z)',
-                         src, re.S):
-        name, body = m.group(1), m.group(2)
-        refs = set()
-        for r in re.finditer(r"_find(?:_one|_all)?\(children,\s*'([^']+)'\)", body):
-            refs.add(r.group(1))
-        for r in re.finditer(r"\.data\s*(?:==|in)\s*\(?'([a-z_][a-z0-9_]*)'?", body):
-            refs.add(r.group(1))
-        for r in re.finditer(r"\.data\s+in\s+\(([^)]*)\)", body):
-            for s in re.finditer(r"'([^']+)'", r.group(1)):
-                refs.add(s.group(1))
-        handlers[name] = refs
-    return handlers
+    bodies = _method_bodies(src)
+    direct = {name: _direct_refs(body) for name, body in bodies.items()}
+    calls = {name: set(re.findall(r'self\.([A-Za-z_]\w*)\(', body))
+             for name, body in bodies.items()}
+
+    def expand(name, seen=None):
+        seen = set() if seen is None else seen
+        if name in seen:
+            return set()
+        seen.add(name)
+        refs = set(direct.get(name, ()))
+        for helper in calls.get(name, ()):
+            if helper in bodies:
+                refs |= expand(helper, seen)
+        return refs
+
+    return {name: expand(name) for name in bodies if name.startswith('i_')}
 
 def rule_subrules(grammar_text):
     """rule name -> set of lower-case rule names it directly references."""

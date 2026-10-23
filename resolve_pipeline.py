@@ -42,10 +42,9 @@ _INIT = {}
 
 
 def _init(_unused=None):
-    from lark import Lark
     from interpret import Interpreter
-    _P["lark"] = Lark.open(_INIT["grammar"], parser="earley", start="start",
-                           ambiguity="resolve", keep_all_tokens=True)
+    from larkparser import build_parser
+    _P["lark"] = build_parser("interp", _INIT["grammar"])
     _T["interp"] = Interpreter(types=_INIT["types"], names=_INIT["names"])
 
 

@@ -6,7 +6,6 @@
 - segment each line into sentence items with light typing (modal/bullet detection)
 """
 import re
-from mtd import name_set
 
 def strip_reminders(text):
     """Remove all parenthetical (reminder) groups, handling nested parens."""
@@ -46,15 +45,26 @@ def _name_re(names):
         _NAME_RE_CACHE[key] = pat
     return pat
 
+
+def name_pattern(names):
+    """Compiled card-name alternation with the same exclusions as
+    `normalize_names`, exposed so `setdata.normalize_with_map` can replace names
+    while keeping an offset map."""
+    if not names:
+        return None
+    return _name_re(set(names) - _NAME_EXCLUDE)
+
+
 # Card names that double as common action verbs: replacing them with ~ would
 # clobber the verb (e.g. "{G}: Regenerate this creature" -> "~ this creature").
 # "Regenerate" is only ever used as a verb in the corpus, never as a name ref.
 _NAME_EXCLUDE = frozenset({"Regenerate"})
 
 def normalize_names(text, names=None):
-    names = names or name_set()
-    names = set(names) - _NAME_EXCLUDE
-    pat = _name_re(names)
+    # No implicit FDN fallback: callers working with Standard/classic data must
+    # pass that loader's name set, otherwise a card name can be masked with the
+    # wrong vocabulary (or not masked at all).
+    pat = name_pattern(names)
     if pat is not None:
         text = pat.sub('~', text)
     return text
@@ -66,24 +76,33 @@ def split_sentences(line):
     boundary, so `gains "...library. You may play..."` stays one sentence."""
     parts = []
     start = 0
-    quote_count = 0  # number of straight double-quotes seen so far
+    in_quote = False
     i = 0
     n = len(line)
     while i < n:
         ch = line[i]
+        # Track both straight and curly quotes.  Oracle text uses curly quotes
+        # in some printings; treating only '"' as an opening quote split the
+        # granted ability at its internal periods.
         if ch == '"':
-            quote_count += 1
-            i += 1
-            continue
-        if ch in '.)"\u201d' and i + 1 < n:
+            in_quote = not in_quote
+        elif ch == '\u201c':
+            in_quote = True
+        elif ch == '\u201d':
+            in_quote = False
+        # An opening quote is quoted text, not a boundary; a closing quote is a
+        # boundary.  For straight quotes `in_quote` has just been toggled, so
+        # this distinguishes the opening occurrence from the closing one.
+        is_open_quote = (ch == '\u201c' or (ch == '"' and in_quote))
+        if ch in '.)"\u201d' and not is_open_quote and i + 1 < n:
             j = i + 1
             while j < n and line[j].isspace():
                 j += 1
             if j < n and (line[j].isupper() or line[j] == '(' or line[j] == '~'):
-                in_quote = (quote_count % 2 == 1)
-                if ch == '"' or ch == '\u201d':
-                    in_quote = False  # this is the closing quote
-                if not in_quote:
+                # A closing quote is itself a valid sentence boundary; a period
+                # inside a quoted ability is not.
+                quoted = in_quote
+                if not quoted:
                     parts.append(line[start:i + 1].strip())
                     start = j
                     i = j

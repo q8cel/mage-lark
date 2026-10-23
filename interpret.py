@@ -366,6 +366,11 @@ class Interpreter:
 
     def _card_action(self, verb, children, key='card'):
         d = {'verb': verb}
+        who = self._find_one(children, 'who')
+        if who is not None:
+            who_value = self.interp(who)
+            if who_value:
+                d['who'] = who_value
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d[key] = self.interp(ct)
@@ -392,12 +397,23 @@ class Interpreter:
 
     def i_draw_action(self, children):
         d = {'verb': 'draw'}
+        who = self._find_one(children, 'who')
+        if who is not None:
+            who_value = self.interp(who)
+            if who_value:
+                d['who'] = who_value
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['cards'] = self.interp(ct)
         amt = self._find_one(children, 'draw_amount')
         if amt is not None:
-            d['amount'] = self.interp(amt)
+            value = self.interp(amt)
+            # "Draw a card" is one card; keep the numeric contract consistent
+            # with "Draw two cards" instead of emitting the article "a".
+            d['amount'] = 1 if value in ('a', 'an') else value
+        xd = self._find_one(children, 'xdef')
+        if xd is not None:
+            d['amount'] = self.interp(xd)
         return d
 
     def i_discard_action(self, children):
@@ -453,6 +469,9 @@ class Interpreter:
                 d['block'] = self.interp(cts[1])
         return d
 
+    def i_after_phase_action(self, children):
+        return {'verb': 'additional_phase'}
+
     def i_phase_action(self, children):
         d = {'verb': 'phase'}
         ct = self._find_one(children, 'card_target')
@@ -487,6 +506,58 @@ class Interpreter:
     def i_reveal_action(self, children):
         return self._card_action('reveal', children)
 
+    def i_investigate_action(self, children):
+        return {'verb': 'investigate'}
+
+    def i_gift_action(self, children):
+        return self._card_action('gift', children)
+
+    def i_explore_action(self, children):
+        return {'verb': 'explore'}
+
+    def i_manifest_action(self, children):
+        return {'verb': 'manifest_dread'}
+
+    def i_empower_action(self, children):
+        d = self._card_action('empower', children, key='target')
+        num = self._first_number(children)
+        if num is not None:
+            d['amount'] = num
+        return d
+
+    def i_collect_evidence_action(self, children):
+        d = {'verb': 'collect_evidence'}
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['amount'] = self.interp(amt)
+        xd = self._find_one(children, 'xdef')
+        if xd is not None:
+            d['amount'] = self.interp(xd)
+        return d
+
+    def i_cloak_action(self, children):
+        return self._card_action('cloak', children)
+
+    def i_exchange_control_action(self, children):
+        d = {'verb': 'exchange_control'}
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['object'] = self.interp(cts[0])
+        if len(cts) > 1:
+            d['with'] = self.interp(cts[1])
+        elif cts:
+            d['with'] = self.interp(cts[0])
+        return d
+
+    def i_must_block_action(self, children):
+        d = self._card_action('must_block', children)
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'this' in toks and 'turn' in toks:
+            d['this_turn'] = True
+        if 'if' in toks and 'able' in toks:
+            d['if_able'] = True
+        return d
+
     def i_attach_action(self, children):
         d = {'verb': 'attach'}
         cts = self._find(children, 'card_target')
@@ -519,6 +590,12 @@ class Interpreter:
             d['predicate'] = 'attack'
         elif 'block' in toks:
             d['predicate'] = 'block'
+        elif 'activate' in toks and 'cast' in toks:
+            d['predicate'] = 'cast spells or activate abilities'
+        elif 'activate' in toks:
+            d['predicate'] = 'activate abilities'
+        elif 'lose' in toks and 'mana' in toks:
+            d['predicate'] = 'lose mana'
         if 'except' in toks and len(cts) > 1:
             d['except_by'] = self.interp(cts[-1])
         elif 'by' in toks and len(cts) > 1:
@@ -533,6 +610,74 @@ class Interpreter:
 
     def i_attacks_each_combat_action(self, children):
         return self._card_action('attacks_each_combat', children)
+
+    def i_activate_action(self, children):
+        return self._card_action('activate', children, key='target')
+
+    def i_can_block_action(self, children):
+        d = {'verb': 'can_block'}
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['blocker'] = self.interp(cts[0])
+        if len(cts) > 1:
+            d['attacker'] = self.interp(cts[-1])
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['max_blockers'] = self.interp(amt)
+        return d
+
+    def i_no_untap_action(self, children):
+        return self._card_action('no_untap', children)
+
+    def i_regenerate_action(self, children):
+        return self._card_action('regenerate', children)
+
+    def i_suspect_action(self, children):
+        return self._card_action('suspect', children)
+
+    def i_reveal_top_action(self, children):
+        return {'verb': 'reveal_top'}
+
+    def i_put_library_action(self, children):
+        d = {'verb': 'put_library'}
+        for name, key in (('owner_subject', 'owner'),
+                          ('card_target', 'card'),
+                          ('put_library_dest', 'destination')):
+            node = self._find_one(children, name)
+            if node is not None:
+                d[key] = self.interp(node)
+        if 'card' not in d:
+            d['text'] = self._text(children)
+        return d
+
+    def i_lose_kw_action(self, children):
+        d = {'verb': 'lose_keywords'}
+        kind = self._find_one(children, 'card_kind')
+        if kind is not None:
+            d['target'] = self.interp(kind)
+        kws = self._find_one(children, 'kw_list')
+        if kws is not None:
+            d['keywords'] = self.interp(kws)
+        else:
+            d['all_abilities'] = True
+        return d
+
+    def i_have_action(self, children):
+        d = {'verb': 'have'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['target'] = self.interp(ct)
+        life = self._find_one(children, 'life_amount')
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if life is not None:
+            d['effect'] = {'verb': 'lose_life', 'amount': self.interp(life)}
+        elif 'mill' in toks:
+            d['effect'] = {'verb': 'mill'}
+        elif 'copy' in toks:
+            d['effect'] = {'verb': 'copy'}
+        else:
+            d['text'] = self._text(children)
+        return d
 
     def i_enters_action(self, children):
         d = self._card_action('enters', children)
@@ -928,8 +1073,19 @@ class Interpreter:
 
     def i_add_mana_action(self, children):
         d = {'verb': 'add_mana'}
-        if children:
-            d['amount'] = self.interp(children[-1])
+        who = self._find_one(children, 'who')
+        if who is not None:
+            who_value = self.interp(who)
+            if who_value:
+                d['who'] = who_value
+        for name in ('mana_amount', 'xdef', 'amount'):
+            node = self._find_one(children, name)
+            if node is not None:
+                d['amount'] = self.interp(node)
+                break
+        else:
+            if children:
+                d['amount'] = self.interp(children[-1])
         return d
 
     def i_scry_action(self, children):
@@ -1077,6 +1233,9 @@ class Interpreter:
 
     def i_stat_define_action(self, children):
         d = {'verb': 'stat_define', 'stat': 'power_and_toughness', 'relation': 'each_equal_to'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['target'] = self.interp(ct)
         xd = self._find_one(children, 'xdef')
         if xd is not None:
             d['value'] = self.interp(xd)
@@ -1161,8 +1320,6 @@ class Interpreter:
                     d['when'] = self.interp(ch)
                 elif ch.data == 'event':
                     d['event'] = self.interp(ch)
-                elif ch.data == 'condition':
-                    d['condition'] = self.interp(ch)
                 elif ch.data == 'static_text':
                     d['text'] = self.interp(ch)
             elif isinstance(ch, Token):
@@ -1234,6 +1391,12 @@ class Interpreter:
         d = {'type': 'static_keyword'}
         if children:
             d['keywords'] = self.interp(children[0])
+            kw = d['keywords']
+            value = kw.get('value') if isinstance(kw, dict) else kw
+            # The open keyword fallback can claim a one-word keyword action.
+            # Preserve its semantic class instead of emitting a fake keyword.
+            if isinstance(value, str) and value.lower() == 'investigate':
+                return {'verb': 'investigate'}
         return d
 
     def i_if_sentence(self, children):
@@ -1294,16 +1457,13 @@ class Interpreter:
 
 def interpret(sentence, types=None, names=None, interp=None):
     """Convenience: interpret a raw oracle sentence string -> list of dicts."""
-    from lark import Lark
-    import os
+    from larkparser import build_parser
     if interp is None:
         interp = Interpreter(types=types, names=names)
-    base = os.path.dirname(os.path.abspath(__file__))
-    parser = Lark.open(os.path.join(base, 'grammar.lark'), parser='earley',
-                       start='start', ambiguity='resolve', keep_all_tokens=False)
+    parser = build_parser('interp')
     from preprocess import segment
     out = []
-    for it in segment(sentence):
+    for it in segment(sentence, names):
         try:
             tree = parser.parse(it['text'])
             out.extend(interp.interp(tree))

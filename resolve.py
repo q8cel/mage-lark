@@ -10,31 +10,17 @@ sys.path.insert(0, BASE)
 import torch
 from transformers import AutoModel, AutoTokenizer
 
-from preprocess import normalize_names, strip_reminders
 from mentions import candidate_mentions
 from anaphora import find_anaphors
 
 DEFAULT_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+DEFAULT_DATA = os.path.join(BASE, "FDN.json")
 
 
-_FDN = None
-
-
-def _load_fdn():
-    global _FDN
-    if _FDN is None:
-        from setdata import load
-        _FDN = load(os.path.join(BASE, "FDN.json"))
-    return _FDN
-
-
-def card_text(name):
-    items, types, names, sets = _load_fdn()
-    for n, text, code in items:
-        if n == name or n.lower() == name.lower():
-            t = " ".join(normalize_names(strip_reminders(text), names).split())
-            return t
-    return None
+def card_text(name, data_path=None):
+    """Normalized text from the same loader the deterministic path uses."""
+    from setdata import card_text as _card_text
+    return _card_text(name, data_path or DEFAULT_DATA)
 
 
 def anaphora(text):
@@ -49,11 +35,12 @@ def nearest_baseline(cands, aspan):
 
 
 class AttentionResolver:
-    def __init__(self, model=DEFAULT_MODEL, layer=2, head="max"):
+    def __init__(self, model=DEFAULT_MODEL, layer=2, head="max", max_length=512):
         self.tok = AutoTokenizer.from_pretrained(model)
         self.enc = AutoModel.from_pretrained(model, attn_implementation="eager").eval()
         self.layer = layer
         self.head = head
+        self.max_length = max_length
 
     @staticmethod
     def _tokens_in(offs, span):
@@ -62,7 +49,8 @@ class AttentionResolver:
 
     @torch.no_grad()
     def score(self, text, aspan, cspans):
-        e = self.tok(text, return_offsets_mapping=True)
+        e = self.tok(text, return_offsets_mapping=True,
+                     truncation=True, max_length=self.max_length)
         ids = torch.tensor([e["input_ids"]])
         offs = e["offset_mapping"]
         out = self.enc(ids, output_attentions=True)
@@ -95,48 +83,21 @@ class AttentionResolver:
         return result
 
 
-def eval_benchmark(resolver, bench_path=None):
-    bench_path = bench_path or os.path.join(BASE, "coref_benchmark.json")
-    with open(bench_path) as fh:
-        labels = json.load(fh)
-    cases = []
-    for card, ana, occ, gold in labels:
-        text = card_text(card)
-        if not text:
-            continue
-        ms = [m for m in re.finditer(r"(?<![A-Za-z])" + re.escape(ana) + r"(?![A-Za-z])", text, re.I)]
-        if len(ms) <= occ:
-            continue
-        aspan = (ms[occ].start(), ms[occ].end())
-        cands = [c for c in candidate_mentions(text, parser=True) if not (c["start"] == aspan[0] and c["end"] == aspan[1])]
-        g = gold.lower()
-        gi = None
-        for i, c in enumerate(cands):
-            ss = c["surface"].lower()
-            if (g in ss or ss in g) and c["end"] <= aspan[0]:
-                gi = i
-                break
-        if gi is None:
-            for i, c in enumerate(cands):
-                ss = c["surface"].lower()
-                if g in ss or ss in g:
-                    gi = i
-                    break
-        if gi is None:
-            continue
-        cases.append((text, aspan, cands, gi))
-    ok = 0
-    bl = 0
-    for text, aspan, cands, gi in cases:
-        sc = resolver.score(text, aspan, [(c["start"], c["end"]) for c in cands])
-        if max(range(len(cands)), key=lambda i: sc[i]) == gi:
-            ok += 1
-        nb = nearest_baseline(cands, aspan)
-        if nb is not None and nb["surface"] == cands[gi]["surface"]:
-            bl += 1
-    n = len(cases)
-    print(f"cases={n}  attention={ok}/{n}={100*ok/max(n,1):.0f}%  baseline={bl}/{n}={100*bl/max(n,1):.0f}%")
-    return ok, bl, n
+def eval_benchmark(resolver, bench_path=None, data_path=None):
+    """Unified benchmark scoring for the attention baseline.
+
+    Delegates to coref_eval so the attention path and the deterministic rules
+    use the same fixed candidate pool and entity-aware metrics.
+    """
+    from coref_eval import load_bench_cases, evaluate_cases, attention_predictions
+
+    cases, extra = load_bench_cases(bench_path, data_path=data_path,
+                                    mentions="parser")
+    stats = evaluate_cases(
+        cases, lambda case: attention_predictions(case, resolver),
+        resolver="attention", verbose=8)
+    print(f"  skipped={extra['skipped']}  duplicate_cases={extra['duplicate_cases']}")
+    return stats["entity"], stats["exact"], stats["total"]
 
 
 def main():
@@ -146,14 +107,16 @@ def main():
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--layer", type=int, default=2)
     ap.add_argument("--head", default="max")
+    ap.add_argument("--data", default=DEFAULT_DATA)
+    ap.add_argument("--max-length", type=int, default=512)
     args = ap.parse_args()
-    r = AttentionResolver(args.model, args.layer, args.head)
+    r = AttentionResolver(args.model, args.layer, args.head, args.max_length)
     if args.eval:
-        eval_benchmark(r)
+        eval_benchmark(r, data_path=args.data)
         return
     if not args.card:
         ap.error("provide a card name or --eval")
-    text = card_text(args.card)
+    text = card_text(args.card, args.data)
     if not text:
         print("card not found")
         return

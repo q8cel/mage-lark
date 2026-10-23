@@ -4,25 +4,17 @@
 Use this between full runs to get quick feedback (~2 min instead of ~35 min).
 The full run (test_parse.py) remains the source of truth for coverage.
 """
-import sys, os, time, argparse, random
-from lark import Lark, LarkError
+import time, argparse, random
+from lark import LarkError
 from preprocess import segment
-from mtd import all_oracle_text, card_type_set, name_set
-from transformer import OracleTransformer
-
-BASE = os.path.dirname(os.path.abspath(__file__))
-GRAMMAR = os.path.join(BASE, 'grammar.lark')
+from mtd import all_oracle_text, name_set
+from larkparser import build_parser
 
 
-def build_parser():
-    return Lark.open(GRAMMAR, parser='earley', start='start',
-                     ambiguity='resolve', keep_all_tokens=False)
-
-
-def collect_items():
+def collect_items(names):
     out = []
     for name, text in all_oracle_text():
-        for it in segment(text):
+        for it in segment(text, names):
             out.append((name, it))
     return out
 
@@ -34,15 +26,15 @@ def main():
     ap.add_argument('--all', action='store_true', help='run the whole corpus')
     args = ap.parse_args()
 
-    items = collect_items()
+    names = name_set()
+    items = collect_items(names)
     if args.all:
         sample = items
     else:
         random.seed(args.seed)
         sample = random.sample(items, min(args.n, len(items)))
 
-    parser = build_parser()
-    tr = OracleTransformer(types=card_type_set(), names=name_set())
+    parser = build_parser("interp")
 
     ok = 0
     fails = []

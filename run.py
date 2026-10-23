@@ -32,24 +32,59 @@ CACHE = os.path.join(BASE, '.cache')
 
 _P = None
 _I = None
+_TIMEOUT = 0
 
-def _init(grammar_path, types, names):
-    global _P, _I
-    from lark import Lark
+
+class _ParseTimeout(Exception):
+    pass
+
+
+def _alarm(sig, frm):
+    raise _ParseTimeout()
+
+
+def _init(grammar_path, types, names, timeout=0):
+    global _P, _I, _TIMEOUT
     from interpret import Interpreter
-    _P = Lark.open(grammar_path, parser='earley', start='start',
-                   ambiguity='resolve', keep_all_tokens=True)
+    from larkparser import build_parser
+    _P = build_parser("interp", grammar_path)
     _I = Interpreter(types=types, names=names)
+    _TIMEOUT = timeout
+
+
+def _parse_one(s):
+    global _P
+    if not _TIMEOUT:
+        return _P.parse(s)
+    import signal
+    old = signal.signal(signal.SIGALRM, _alarm)
+    signal.setitimer(signal.ITIMER_REAL, _TIMEOUT)
+    try:
+        return _P.parse(s)
+    except _ParseTimeout:
+        # A timed-out Earley parse can leave internal state inconsistent.
+        _P = None
+        raise
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old)
+
 
 def _work(texts):
-    """texts: list[str] -> list[(text, 1/0)]."""
+    """texts: list[str] -> list[(text, 1/0, timed_out)]."""
+    global _P
     out = []
+    from larkparser import build_parser
     for s in texts:
+        if _P is None:
+            _P = build_parser("interp")
         try:
-            _P.parse(s)
-            out.append((s, 1))
+            _parse_one(s)
+            out.append((s, 1, False))
+        except _ParseTimeout:
+            out.append((s, 0, True))
         except Exception:
-            out.append((s, 0))
+            out.append((s, 0, False))
     return out
 
 def _chunked(seq, n):
@@ -75,6 +110,10 @@ def main():
     ap.add_argument('--dump', default=None)
     ap.add_argument('--n', type=int, default=0)
     ap.add_argument('--no-cache', action='store_true')
+    ap.add_argument('--checkpoint', type=int, default=50,
+                    help='save the parse cache every N batches (0 = only at end)')
+    ap.add_argument('--timeout', type=float, default=0,
+                    help='per-sentence parse cap in seconds (0 = no cap)')
     ap.add_argument('--seed', default=None,
                     help='path to an older parse_<hash>.json; for strictly-additive '
                          'grammar edits, trust its passing (1) sentences and re-parse only '
@@ -170,22 +209,40 @@ def main():
         todo += [s for s in seed_sample if s not in todo_set]
     print(f"cache hits={len(uniq)-len(todo)}  to-parse={len(todo)}  workers={args.workers}")
 
+    def _save_parse_cache():
+        if args.no_cache:
+            return
+        tmp = parse_cache_path + '.tmp'
+        with open(tmp, 'w') as fh:
+            json.dump(cache, fh)
+        os.replace(tmp, parse_cache_path)
+
     def _parse_batch(texts):
         if not texts:
             return
         t = time.time()
         batches = list(_chunked(texts, args.chunk))
         with mp.Pool(args.workers, initializer=_init,
-                     initargs=(GRAMMAR, types, names)) as pool:
+                     initargs=(GRAMMAR, types, names, args.timeout)) as pool:
             for i, res in enumerate(pool.imap_unordered(_work, batches), 1):
-                for s, ok in res:
+                for s, ok, _timed_out in res:
                     cache[s] = ok
                 if i % max(1, len(batches)//10) == 0:
                     print(f"  ...{i}/{len(batches)} batches, {time.time()-t:.0f}s",
                           file=sys.stderr, flush=True)
+                if args.checkpoint and i % args.checkpoint == 0:
+                    _save_parse_cache()
+                    print(f"  [checkpoint] {len(cache)} cached",
+                          file=sys.stderr, flush=True)
         print(f"[parse] {len(texts)} texts in {time.time()-t:.0f}s")
 
-    _parse_batch(todo)
+    try:
+        _parse_batch(todo)
+    except KeyboardInterrupt:
+        _save_parse_cache()
+        print(f"\n[interrupted] saved {len(cache)} cache entries",
+              file=sys.stderr, flush=True)
+        raise
 
     # seed safety: if any spot-check sample regressed, the edit was NOT purely
     # additive -> discard trusted 1s and re-parse the whole dataset.
@@ -197,7 +254,7 @@ def main():
             _parse_batch([s for s in uniq])
 
     if not args.no_cache:
-        json.dump(cache, open(parse_cache_path, 'w'))
+        _save_parse_cache()
         print(f"[parse-cache] saved {len(cache)} entries")
     elif not cache:
         print("all unique texts cached -> nothing to parse")

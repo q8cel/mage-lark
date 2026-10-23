@@ -1,8 +1,18 @@
 # Deterministic anaphora resolution — design analysis
 
-Status: analysis only, nothing implemented. Everything below is measured against
-the 3,403 teacher-labelled anaphor occurrences in `coref_standard.json`, using
-the existing `mentions.py` / `anaphora.py` inventory. No model, no LLM.
+Status: implemented in `rulecoref.py` / `refs.py`. This document keeps the
+original design analysis and measurements; the numbers below are historical
+unless marked current. Everything is measured against the teacher-labelled
+anaphor occurrences in `coref_standard.json`, using the existing `mentions.py` /
+`anaphora.py` inventory. No model, no LLM.
+
+**Current measurement note:** the canonical harness is `coref_eval.py`. It scores
+entity-aware clusters over a fixed candidate pool shared by every resolver.
+`remap_dataset.py` rebuilt old texts/spans from source with `normalize_with_map`
+(55 records changed). `coref_standard.json` now validates both standalone and
+against `Standard.json`. Current rule result: **80.3% entity-aware / 74.3% exact
+on 3,380 valid labels**; human bench: **93.0% entity-aware (parser pool) / 91.2%
+(regex pool)**. Historical strict/soft numbers below are from the old harness.
 
 ---
 
@@ -559,9 +569,9 @@ independently.
 **Workflow** (all tooling is in the repo):
 
 ```bash
-python strat_sample.py 400                      # draw the stratified sample
-python ensemble_label.py /tmp/opencode/strat_sample.json \
-       --out /tmp/opencode/strat_labels.json    # 3 annotators, resumable
+python strat_sample.py 400                      # .cache/strat_sample.json
+python ensemble_label.py .cache/strat_sample.json \
+       --out .cache/strat_labels.json           # 3 annotators, resumable
 python analyze_strat.py                         # accuracy estimate + review queue
 ```
 
@@ -699,8 +709,9 @@ Both are written (v1). CLI:
 python refs.py --card "Fiery Annihilation"        # inspect the inventory
 python rulecoref.py "Fiery Annihilation"         # resolve one card
 python rulecoref.py "Fiery Annihilation" --json  # full JSON contract
-python rulecoref.py --eval coref_standard.json   # dev: 3,403 teacher labels
-python rulecoref.py --bench                      # test: 72 human gold
+python coref_eval.py --dataset coref_standard.json       # unified, entity-aware
+python coref_eval.py --bench --mentions parser           # human gold, parser pool
+python coref_eval.py --bench --mentions regex            # human gold, regex pool
 python rulecoref.py --eval X.json --ablate number,type   # ablations
 ```
 
@@ -712,7 +723,7 @@ resolver.
 
 ### Evaluation protocol (no LLM needed, reuses existing labels)
 
-- dev: 3,403 teacher labels in `coref_standard.json` (no model, so no leakage)
+- dev: 3,380 valid teacher labels in `coref_standard.json` (no model, so no leakage)
 - test: the 72 human-gold cases in `coref_benchmark.json` (touch once per change)
 - scoring: **entity** match (alias-aware), report per kind and per failure bucket
 - always report the `-1`/no-antecedent prediction rate; the rule engine must be

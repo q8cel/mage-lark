@@ -1,50 +1,39 @@
 #!/usr/bin/env python3
-"""Load FDN.json: extract card names, creature/card types, and oracle lines."""
-import json, re, os
+"""FDN convenience accessors, backed by the unified `setdata` loader.
+
+Kept for the FDN-only survey/test tools (`test_parse`, `quick_test`, `debug`,
+`vocab`).  New code should use `setdata.load(path)` directly; in particular,
+do not use this module as an implicit default for Standard/classic data.
+"""
+
+import os
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FDN = os.path.join(BASE, 'FDN.json')
+FDN = os.path.join(BASE, "FDN.json")
 
 _data = None
 
-def load_cards():
+
+def _load():
     global _data
-    if _data is not None:
-        return _data
-    d = json.load(open(FDN))
-    cards = d['data']['cards']
-    _data = {
-        'cards': cards,
-        'names': sorted({c['name'] for c in cards}),
-        'short_names': sorted({n.split(',')[0].strip() for c in cards for n in [c['name']]}),
-    }
+    if _data is None:
+        from setdata import load
+
+        items, types, names, _sets = load(FDN)
+        _data = (items, types, names)
     return _data
 
+
 def name_set():
-    """Set of strings (full + short names) to replace with ~."""
-    d = load_cards()
-    s = set()
-    for n in d['names']:
-        s.add(n)
-        s.add(n.split(',')[0].strip())
-    return s
+    """Set of FDN names (already filtered for basic lands/keyword collisions)."""
+    return set(_load()[2])
+
 
 def card_type_set():
-    """Set of all creature types + card types + supertypes appearing in the set."""
-    d = load_cards()
-    types = set()
-    for c in d['cards']:
-        types.update(c.get('types') or [])
-        types.update(c.get('subtypes') or [])
-        types.update(c.get('supertypes') or [])
-    # drop basic card-type words that clash with grammar keywords
-    types.discard('Legendary')
-    types.discard('Basic')
-    types.discard('Soul')
-    types.discard('Snow')
-    types.discard('Snowman')
-    return types
+    """Set of FDN card types, subtypes and supertypes."""
+    return set(_load()[1])
+
 
 def all_oracle_text():
-    d = load_cards()
-    return [ (c['name'], c.get('text') or '') for c in d['cards'] ]
+    """[(card_name, raw_oracle_text)] for every FDN card with text."""
+    return [(name, text) for name, text, _code in _load()[0]]

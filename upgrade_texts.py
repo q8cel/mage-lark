@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Re-derive dataset texts with line breaks preserved (ability boundaries).
 
+Historical: `remap_dataset.py` supersedes this for general text/span changes,
+because it uses `setdata.normalize_with_map` instead of assuming a
+length-preserving character swap.  Keep this only for the old newline-only case.
+
 `setdata.normalize_text` keeps the newline that separates abilities; the old
 normalizer collapsed it, merging e.g. `Trample, haste` with the trigger line that
 follows. The change is exactly length-preserving, so this is a *character swap*:

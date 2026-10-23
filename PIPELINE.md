@@ -1,8 +1,9 @@
 # Pipeline: how the pieces fit
 
 What runs, in what order, on what data, and which caches it touches. Read this
-before changing any module: most surprises here come from *which* of the three
-parser configurations a caller uses.
+before changing any module: parser construction is centralized in
+`larkparser.py`; use `build_parser("interp")` for interpretation/coverage and
+`build_parser("ptree")` when you need position metadata.
 
 ```
                       setdata.load(path)
@@ -20,9 +21,9 @@ parser configurations a caller uses.
         │                     │                      │                        resolve.py
         ▼                     ▼                      ▼                          │
   Lark.parse            Lark.parse             anaphora.find_anaphors(text)      │
-  keep_all_tokens=      keep_all_tokens=      + ptree.nodes(text)               │
-    True                  False (API) /         ONE parse → spans + structure    │
-                          True (demo)          (regex fallback per segment)      │
+  build_parser(         build_parser(        + ptree.nodes(text)               │
+    "interp")             "interp")            ONE parse → spans + structure    │
+                                                (regex fallback per segment)      │
         │                     │                      │                          │
         ▼                     ▼                      ▼                          │
   parsed / failed      Interpreter.interp      refs.clean → refs.annotate        │
@@ -38,8 +39,8 @@ parser configurations a caller uses.
 | # | stage | function | output | cache file |
 |---|---|---|---|---|
 | 1 | load | `setdata.load(path)` | `items (name, text, code)`, `types`, `names`, `sets` | `seg_<data>_<setdata>.pkl` |
-| 2 | normalise + segment | `setdata.normalize_text` -> `preprocess.segment` | `[{text, modal, bullet}]` | `sent_<data>_<preprocess>_<setdata>.pkl` |
-| 3 | parse | `Lark.open(grammar.lark, earley, ambiguity='resolve')` | tree | `parse_<grammarhash>.json` (coverage only: 1/0 per sentence) |
+| 2 | normalise + segment | `setdata.normalize_with_map` / `normalize_text` -> `preprocess.segment` | `[{text, modal, bullet}]` + optional `OffsetMap` | `sent_<data>_<preprocess>_<setdata>.pkl` |
+| 3 | parse | `larkparser.build_parser(kind)` | tree | `parse_<grammarhash>.json` (coverage only: 1/0 per sentence) |
 | 4a | interpret | `Interpreter.interp(tree)` | typed dicts (`effect`, `if`, …) | — |
 | 4b | parse once | `ptree.nodes(text)` | records `{start, end, node, role, verb, predicate, in_condition}`, regex fallback per unparseable segment | `ptree_<grammarhash>.json` |
 | 4b' | mention spans | `mentions.candidate_mentions(text, parser=True)` → `ptree.mentions` | `{surface, start, end}` (derived from 4b) | same as 4b |
@@ -49,7 +50,9 @@ parser configurations a caller uses.
 | 6 | resolve | `rulecoref.resolve(text, mentions, anaphors)` | entities, per-anaphor status, `rewritten_text` | — |
 | 6b | resolve + re-parse (`--resolve`) | `resolve_pipeline.py`: rewrite -> `segment` -> `Lark` -> `Interpreter` | semantic dicts with the anaphora markers replaced by concrete mentions | — |
 | 7 | label (offline) | `label_cases.py` → Qwen 27B on `:9000` | `coref_dataset.json`, `coref_standard.json` | `.cache/label_cases/` (prompt hash) |
+| 7b | validate / remap labels | `dataset_validation.py` (`--source`), `remap_dataset.py` | span/gold report; source-grounded text/spans | — |
 | 8 | train (offline) | `train_head.py` | frozen MiniLM + tiny MLP | `enc_<model>_L<layer>.pkl` |
+| 9 | evaluate | `coref_eval.py` | unified entity-aware metrics for rule/attention | — |
 
 Stages 1–3 are shared. Stage 4 splits into three parallel consumers that do not
 depend on each other.
@@ -62,31 +65,29 @@ One function produces every canonical text, and it has to satisfy two properties
    them merges `Trample, haste` with the `When this Vehicle enters, ...` trigger
    that follows, and the result parses as neither — measured as the single largest
    cause of parse failure for anaphora-bearing sentences (35 of 179 failures).
-2. **The transform is exactly length-preserving**: a whitespace run becomes one
-   space, or one newline where the line break was. Verified over all 10,446
-   FDN+Standard cards: zero length changes, and the only differing characters are
-   space -> newline (10,134). This is what makes a dataset upgrade a character
-   swap (`upgrade_texts.py`) instead of a span remapping.
+2. **Offsets are mapped, not guessed.** Reminder stripping and name masking change
+   text length, so normalized coordinates are not original coordinates. Use
+   `setdata.normalize_with_map(raw, names) -> (text, OffsetMap)`: `text` is the
+   canonical form and the map translates any normalized span back to the original
+   oracle text. `normalize_text` is the same function without the map.
 
-Anything that re-derives text must go through this function — several call sites
-had the whitespace collapse inlined, which is how the two forms drifted apart.
+Anything that re-derives text must go through this function. Historical datasets
+were built with an earlier normalizer, so `remap_dataset.py` maps old text/span
+coordinates -> source -> current text/span deterministically (no surface search).
 
-## The three parser configurations (the main gotcha)
+## Canonical parser configurations
 
-Same grammar, several `Lark` settings, and **no shared cache**:
+Same grammar, two supported `Lark` settings, both built by `larkparser.py`:
 
-| caller | `keep_all_tokens` | `propagate_positions` | what it can do |
+| kind | `keep_all_tokens` | `propagate_positions` | used by |
 |---|---|---|---|
-| `ptree.py` — the coref path | **True** | **True** | mention spans **and** structure from one parse |
-| `run.py` | True | False | coverage only (no spans) |
-| `interpret.py` library API | False | False | typed dicts; anaphor becomes `null` |
-| `demo_output.py` | True | False | typed dicts; anaphor becomes `{"ref":"anaphora"}` |
+| `interp` | True | False | coverage, interpreter, content checks, debug/show/demo |
+| `ptree` | True | True | mention spans **and** structure from one parse |
 
-`ptree` replaced the earlier pair (`pmentions` with `keep_all_tokens=False` for
-spans + `pstruct` with `True` for structure), which parsed every sentence twice.
-Verified equivalent: both configurations produce **byte-identical mention spans**,
-and `True` has the bonus that a bare pronoun keeps its span instead of collapsing
-to an empty `card_target`. `pmentions.py` and `pstruct.py` are now thin shims.
+All callers must go through `build_parser(kind)`; opening `grammar.lark` directly
+is how the old `keep_all_tokens=False` paths drifted (a bare pronoun disappeared
+from the tree and became `{"card_type": null}`). `pmentions.py` and
+`pstruct.py` are thin shims over `ptree`.
 
 Consequences that have bitten us already:
 
@@ -170,17 +171,17 @@ Why not consume `interpret()` output:
 ### Current state: not wired in
 
 Nothing in `run.py`, `interpret.py`, `demo_output.py` or `resolve.py` imports
-`refs`/`rulecoref`; the only import is `train_head.py` reusing `gold_clusters`
-for a shared metric. There is **no `--resolve` flag yet**. Today it is a
-standalone CLI:
+`refs`/`rulecoref`; `coref_eval.py` is the shared, entity-aware harness for both
+the rules and the attention baseline. Today it is a standalone CLI:
 
 ```bash
 python refs.py --card "Fiery Annihilation"        # inspect the inventory
 python rulecoref.py "Fiery Annihilation"          # resolve one card
 python rulecoref.py "Fiery Annihilation" --json   # full JSON contract
-python rulecoref.py --eval coref_standard.json    # dev: 3,403 teacher labels
-python rulecoref.py --bench                       # test: 72 human gold
-python rulecoref.py --eval X.json --ablate number,type
+python coref_eval.py --dataset coref_standard.json       # dev, fixed dataset pool
+python coref_eval.py --bench --mentions parser           # 72 human gold
+python coref_eval.py --bench --mentions regex
+python rulecoref.py --eval X.json --ablate number,type   # ablations
 ```
 
 ### Verified seam: resolution feeds the compiler (`--resolve`)
@@ -263,9 +264,16 @@ substitute its own list as long as it has `surface`/`start`/`end`.
 
 | set | what it is | use |
 |---|---|---|
-| `coref_standard.json` | 3,403 teacher-labelled occurrences (dev) | iterate freely |
+| `coref_standard.json` | 3,697 teacher-labelled occurrences (dev); 3,380 have a valid gold label after span repair | iterate freely |
 | `coref_benchmark.json` | 72 human-gold cases, 49 cards (test) | touch once per change |
-| `test_coref.py` | 14 golden/characterization tests over the rules | run before committing |
+| `test_coref.py` | 16 golden/characterization tests over the rules | run before committing |
+
+Run `python dataset_validation.py coref_standard.json` before trusting a dataset
+change. Both datasets now pass a source check: `coref_standard.json --source
+Standard.json` and `coref_dataset.json --source FDN.json` (every text/span is
+reproducible via `normalize_with_map`). The span repair moved 20 stale candidates
+and dropped 45 bogus ones; 15 labels that pointed at unrepairable spans are now
+`-1`.
 
 Scoring is **entity-aware**: build a union-find over the gold labels and accept a
 prediction if the picked mention shares a gold cluster with the gold antecedent.
@@ -282,7 +290,7 @@ Known reference points (entity-aware, no leakage):
 |---|---|---|
 | nearest mention | — | 56% |
 | raw encoder attention (`resolve.py --eval`) | — | 67% |
-| deterministic rules (`rulecoref`) | 72.9% | **79%** |
+| deterministic rules (`rulecoref`, unified harness) | **80.3%** | **93.0%** |
 | frozen-encoder mention ranker (`train_head`) | — | 85% |
 | teacher (Qwen 27B) | 89% | 88% |
 
@@ -300,6 +308,7 @@ Deleting the directory is always safe, never wrong — only slow.
 | `pmentions_<grammar>.json` | grammar + text | **legacy, read-only** span cache being migrated away from |
 | `enc_<model>_L<layer>.pkl` | model + layer | per-text hidden states (features) |
 | `label_cases/` | model + prompt | teacher responses |
+| `out_<data>_<grammar>_<interpret>_<setdata>_<preprocess>.json` | data + all text/parse logic | content-check interpreted output |
 
 `pmentions.precompute(texts, workers)` fills the span cache in parallel; it is
 eager (no progress until done) and the CPU cost is the Earley parse, so budget

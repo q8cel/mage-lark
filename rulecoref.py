@@ -34,7 +34,8 @@ sys.path.insert(0, BASE)
 import refs
 from anaphora import find_anaphors
 
-POSSESSIVE = {"its", "their", "itself", "themselves"}
+POSSESSIVE = {"its", "their"}
+REFLEXIVE = {"itself", "themselves"}
 # Direction of the type lattice used for demonstratives ("that creature"):
 #   lattice  - candidate type must be inside LATTICE[anaphor]  (current default)
 #   expected - anaphor type must be inside LATTICE[candidate]  (the "is a" direction)
@@ -151,7 +152,9 @@ def _as_anaphor_record(a, text):
         rec["clause"] = env["clause"]
     rec["head_type"] = refs.head_type(rec["surface"]) if rec["kind"] == "demonstrative" else None
     rec["number"] = refs.number(rec["surface"])
-    rec["is_possessive"] = rec["surface"].lower() in POSSESSIVE
+    lower = rec["surface"].lower()
+    rec["is_possessive"] = lower in POSSESSIVE
+    rec["is_reflexive"] = lower in REFLEXIVE
     rec["possesses"] = bool(POSSESSED_RE.match(text[e:e + 32]))
     rec["verb_type"] = refs.predicate_type(text, s, e)
     return rec
@@ -572,7 +575,7 @@ def rewrite_text(text, anas, require_number_match=True, parse_ok=None, stats=Non
         if a["status"] == "no-resolution" or not a.get("antecedent"):
             continue
         surf = a["surface"].lower()
-        if surf in POSSESSIVE:
+        if surf in POSSESSIVE or surf in REFLEXIVE:
             stats["skip_possessive"] += 1
             continue
         if a["kind"] == "phrase":
@@ -664,150 +667,32 @@ def gold_clusters(cands, anaphors):
 
 
 def eval_dataset(path, verbose=0, rewrite=False, rules=None, require_struct=False):
-    """Score the rules against teacher labels, entity-aware.
+    """Unified entity-aware evaluation (see coref_eval.py)."""
+    from coref_eval import load_dataset_cases, evaluate_cases, rule_predictions
 
-    A prediction is correct when the predicted antecedent belongs to the same
-    gold cluster as the gold antecedent — so a correct answer that picked a
-    different mention of the same object still counts.
-    """
-    rules = rules or {}
-    data = json.load(open(path))
-    stats = defaultdict(int)
-    per_kind = defaultdict(lambda: defaultdict(int))
-    buckets = defaultdict(int)
-    misses = []
-    if require_struct:
-        import ptree
-        data = [c for c in data if ptree.has_structure(c["text"])]
-
-    for case in data:
-        text, cands = case["text"], case["candidates"]
-        gold_uf = gold_clusters(cands, case["anaphors"])
-
-        ms = refs.annotate(text, refs.clean(cands))
-        live = {m["src"] for m in ms}
-        res = resolve(text, ms, case["anaphors"], rewrite=rewrite, rules=rules)
-
-        for out, gold in zip(res["anaphors"], case["anaphors"]):
-            g = gold.get("antecedent")
-            st = out["status"]
-            if g is None or g < 0:
-                # gold says "no antecedent": the only thing to measure is
-                # whether we abstained too
-                stats["gold_none"] += 1
-                stats["gold_none_abstained"] += (st == "no-resolution")
-                continue
-            stats["total"] += 1
-            gj = _cand_for(cands, (gold["start"], gold["end"]))
-            gold_ok = g in live
-            stats["gold_span_survived"] += gold_ok
-            stats[f"status_{st}"] += 1
-            per_kind[gold["kind"]]["total"] += 1
-            per_kind[gold["kind"]][f"status_{st}"] += 1
-            if not gold_ok:
-                buckets["gold span dropped by cleaning"] += 1
-                continue
-            src = out.get("antecedent_src")
-            ok = src is not None and gold_uf.find(src) == gold_uf.find(g)
-            # Soft agreement: the teacher's chosen mention lies inside the entity we
-            # bound to. Different mention, same object - our canonical often keeps the
-            # quantifier ("up to one target creature") where the teacher stored the
-            # shorter span ("target creature"), which strict scoring counts as a miss.
-            eid = out.get("entity")
-            spans = ([sp["surface"] for sp in res["entities"][eid]["spans"]]
-                     if eid is not None else [])
-            gsurf = cands[g]["surface"].lower()
-            soft = any(sp and (gsurf in sp.lower() or sp.lower() in gsurf) for sp in spans)
-            stats["soft"] += soft
-            stats["correct"] += ok
-            per_kind[gold["kind"]]["correct"] += ok
-            if not ok:
-                if src is None:
-                    buckets["no-resolution"] += 1
-                elif refs.head_type(cands[g]["surface"]) != refs.head_type(cands[src]["surface"]):
-                    buckets["type mismatch"] += 1
-                else:
-                    buckets["wrong pick, same type"] += 1
-                if len(misses) < verbose:
-                    misses.append((text, gold["surface"],
-                                   cands[g]["surface"],
-                                   cands[src]["surface"] if src is not None else None,
-                                   out["status"], out["evidence"]))
-
-    n = stats["total"]
-    scaled = stats["correct"] / max(1, n)
-    print(f"n={n}  correct={stats['correct']} = {100*scaled:.1f}%   (teacher labels, strict)")
-    print(f"  soft (teacher's pick inside our entity): {stats['soft']}/{n} = "
-          f"{100*stats['soft']/max(1,n):.1f}%   [same object, different span]")
-    print(f"  gold span dropped by inventory cleaning: {n - stats['gold_span_survived']}")
-    print(f"  gold said 'no antecedent': {stats['gold_none']}  "
-          f"(we abstained on {stats['gold_none_abstained']})")
-    for st in ("resolved", "ambiguous", "no-resolution"):
-        c = stats[f"status_{st}"]
-        print(f"  status {st:<14} {c:>5}  ({100*c/max(1,n):4.1f}%)")
-    print("  per kind:")
-    for k, d in sorted(per_kind.items(), key=lambda kv: -kv[1]["total"]):
-        print(f"    {k:<14} {d['correct']}/{d['total']} = "
-              f"{100*d['correct']/max(1,d['total']):4.0f}%   "
-              f"({d['status_ambiguous']} ambiguous, {d['status_no-resolution']} none)")
-    print("  residual buckets:")
-    for k, c in sorted(buckets.items(), key=lambda kv: -kv[1]):
-        print(f"    {c:>5}  {k}")
-    for m in misses:
-        print(f"    MISS {m[1]!r} gold={m[2]!r} pred={m[3]!r} ({m[4]})")
-    return scaled
+    cases = load_dataset_cases(path, require_struct=require_struct)
+    stats = evaluate_cases(
+        cases, lambda case: rule_predictions(case, rules),
+        resolver="rule", verbose=verbose)
+    return stats["entity"] / max(1, stats["total"])
 
 
 def eval_benchmark(path=None, verbose=0, parser=True, rules=None):
-    """Score the rules on the 72-case human gold (coref_benchmark.json).
+    """Unified entity-aware benchmark evaluation (see coref_eval.py).
 
-    Gold here is a surface string, not a candidate index, so we match by
-    containment (the same rule resolve.eval_benchmark uses).
+    `parser` controls the common candidate pool: False/'never' -> regex,
+    True/'always'/'auto' -> parser mentions.  Both candidate pools are fixed
+    before scoring, so every resolver sees the same mentions.
     """
-    path = path or os.path.join(BASE, "coref_benchmark.json")
-    from setdata import card_text
-    labels = json.load(open(path))
-    ok = miss = skip = 0
-    rows = []
-    for card, ana, occ, gold in labels:
-        text = card_text(card)
-        if not text:
-            skip += 1
-            continue
-        hits = [m for m in re.finditer(r"(?<![A-Za-z])" + re.escape(ana) + r"(?![A-Za-z])",
-                                       text, re.I)]
-        if len(hits) <= occ:
-            skip += 1
-            continue
-        span = (hits[occ].start(), hits[occ].end())
-        all_anas = find_anaphors(text)
-        if not any((a["start"], a["end"]) == span for a in all_anas):
-            skip += 1
-            continue
-        # resolve the WHOLE card: later anaphors chain through earlier ones
-        if parser == "auto":
-            res = resolve_auto(text, all_anas, rewrite=False, rules=rules)
-        else:
-            res = resolve(text, refs.build(text, parser=parser), all_anas,
-                          rewrite=False, rules=rules)
-        pred = next(p for p in res["anaphors"]
-                    if (p["start"], p["end"]) == span)
-        g = gold.lower()
-        got = (pred["canonical"] or "").lower()
-        eid = pred.get("entity")
-        surfaces = ([sp["surface"].lower() for sp in res["entities"][eid]["spans"]]
-                    if eid is not None else ([got] if got else []))
-        hit = any(s and (g in s or s in g) for s in surfaces)
-        if hit:
-            ok += 1
-        else:
-            miss += 1
-            rows.append((card, ana, gold, pred["canonical"], pred["status"]))
-    n = ok + miss
-    print(f"bench: n={n} (skipped {skip})  rules={ok}/{n} = {100*ok/max(1,n):.0f}%")
-    for card, ana, gold, got, st in rows[:verbose]:
-        print(f"  MISS {card[:28]:<28} {ana!r:<10} gold={gold!r:<30} got={got!r} ({st})")
-    return ok, n
+    from coref_eval import load_bench_cases, evaluate_cases, rule_predictions
+
+    mentions = "regex" if parser is False or parser == "never" else "parser"
+    cases, extra = load_bench_cases(path, mentions=mentions)
+    stats = evaluate_cases(
+        cases, lambda case: rule_predictions(case, rules),
+        resolver="rule", verbose=verbose)
+    print(f"  skipped={extra['skipped']}  duplicate_cases={extra['duplicate_cases']}")
+    return stats["entity"], stats["total"]
 
 
 def main():

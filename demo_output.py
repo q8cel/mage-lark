@@ -11,9 +11,9 @@ Usage:
     python demo_output.py --cards 5               # first 5 fully-parsing cards
 """
 import sys, os, json
-from lark import Lark, LarkError
+from lark import LarkError
 BASE = os.path.dirname(os.path.abspath(__file__))
-GRAMMAR = os.path.join(BASE, 'grammar.lark')
+from larkparser import build_parser
 from setdata import load
 from preprocess import segment
 from interpret import Interpreter
@@ -100,8 +100,7 @@ def main():
         i += 1
 
     items, types, names, sets = load(data)
-    parser = Lark.open(GRAMMAR, parser='earley', start='start',
-                       ambiguity='resolve', keep_all_tokens=True)
+    parser = build_parser('interp')
     interp = Interpreter(types=types, names=names)
 
     if flags.get('resolve'):

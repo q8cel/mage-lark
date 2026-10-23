@@ -4,12 +4,17 @@ Strata: anaphor kind x whether the anaphor's sentence yields parser structure.
 That keeps the sample representative of what the resolver actually faces instead of
 being dominated by the (easy, common) pronouns-with-structure cases.
 """
-import json, collections, sys
-sys.path.insert(0, "/home/q6/Documents/mage-attn")
+import json, collections, os, sys
+BASE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE)
 import refs, ptree
 
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 400
-d = json.load(open("/home/q6/Documents/mage-attn/coref_standard.json"))
+DEV = os.path.join(BASE, "coref_standard.json")
+OUT = (sys.argv[2] if len(sys.argv) > 2
+       else os.path.join(BASE, ".cache", "strat_sample.json"))
+with open(DEV) as fh:
+    d = json.load(fh)
 buckets = collections.defaultdict(list)
 for case in d:
     text = case["text"]
@@ -41,5 +46,7 @@ for k in sorted(buckets):
     v = buckets[k]
     stride = max(1, len(v) // per)
     sample.extend(v[::stride][:per])
-json.dump(sample, open("/tmp/opencode/strat_sample.json", "w"))
-print(f"\nsampled {len(sample)} (target {N}, {per}/stratum)")
+os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
+with open(OUT, "w") as fh:
+    json.dump(sample, fh)
+print(f"\nsampled {len(sample)} (target {N}, {per}/stratum) -> {OUT}")

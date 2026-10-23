@@ -32,8 +32,7 @@ sys.path.insert(0, BASE)
 
 from anaphora import find_anaphors
 from mentions import candidate_mentions
-from preprocess import normalize_names, strip_reminders
-from setdata import load
+from setdata import load, normalize_text
 
 ENDPOINT = os.environ.get("LLM_ENDPOINT", "http://127.0.0.1:8080/v1/chat/completions")
 MODEL = os.environ.get("LLM_MODEL", "local-model")
@@ -52,7 +51,7 @@ def card_texts(data_path):
     items, types, names, sets = load(data_path)
     out = []
     for name, text, code in items:
-        t = " ".join(normalize_names(strip_reminders(text), names).split())
+        t = normalize_text(text, names)
         if t:
             out.append((name, t))
     return out

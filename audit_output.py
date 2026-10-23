@@ -12,8 +12,9 @@ from multiprocessing import Pool
 from functools import partial
 BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
-from lark import Lark, LarkError
+from lark import LarkError
 GRAMMAR = os.path.join(BASE, 'grammar.lark')
+from larkparser import build_parser
 from setdata import load
 from preprocess import segment, normalize_names
 from interpret import Interpreter
@@ -25,8 +26,7 @@ _interp = None
 
 def init(t, n):
     global _parser, _interp
-    _parser = Lark.open(GRAMMAR, parser='earley', start='start',
-                        ambiguity='resolve', keep_all_tokens=True)
+    _parser = build_parser('interp')
     _interp = Interpreter(types=t, names=n)
 
 def _flag(obj, acc):
@@ -71,7 +71,8 @@ def main():
                 seen.add(seg['text']); unique.append(seg['text'])
     print(f'auditing {len(unique)} unique parsed sentences from {data}...')
     fn = partial(work, names=names, t=types, n=names)
-    with Pool(24, initializer=init, initargs=(types, names)) as pool:
+    workers = max(1, (os.cpu_count() or 4) - 2)
+    with Pool(workers, initializer=init, initargs=(types, names)) as pool:
         res = pool.map(fn, unique, chunksize=8)
 
     ok = [r for r in res if r[0] == 1]
