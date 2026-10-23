@@ -68,6 +68,7 @@ unchanged grammar is near-instant.
 | `test_coref.py` | 16 golden tests for the resolver (behaviour + documented limitations) |
 | `test_normalize_map.py` | Tests for normalized-text ↔ original-offset mapping |
 | `DETERMINISTIC-COREF.md` | Design analysis, measurements, rejected rules |
+| `COREF-AUDIT.md` | 20-card out-of-dev audit, fixed bugs, known inventory limitations |
 | **Coreference (experimental, needs torch)** | |
 | `label_cases.py` | Offline teacher harness: builds per-anaphor cases, labels with an LLM |
 | `validate_teacher.py` | Teacher agreement / candidate recall against human gold |

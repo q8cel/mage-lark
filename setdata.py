@@ -279,7 +279,18 @@ def card_text(name, path=None):
     path = path or os.path.join(BASE, 'FDN.json')
     if path not in _TEXTS:
         items, _, names, _ = load(path)
-        _TEXTS[path] = {n: normalize_text(t, names) for n, t, _ in items if t}
+        by_name = {}
+        for n, t, _code in items:
+            if not t:
+                continue
+            # Normalize the card's own name even when it collides with a
+            # type/subtype word (e.g. the short name "Chandra").  The global
+            # name set excludes type words to protect ordinary type text; the
+            # card's own text should still use `~`.
+            own = {x for x in (n, n.split(',')[0].strip())
+                   if x and not _is_common_word(x)}
+            by_name[n] = normalize_text(t, names | own)
+        _TEXTS[path] = by_name
     d = _TEXTS[path]
     if name in d:
         return d[name]

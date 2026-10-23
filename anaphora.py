@@ -41,6 +41,7 @@ _DEM_RE = re.compile(
     rf"\b(?:{DEMONSTRATIVE_DET})\s+(?:[\w,'\-]+\s+){{0,2}}(?:{HEADS})\b",
     re.I,
 )
+_QUANTITY = re.compile(r"^(?:that|this)\s+(?:many|much|few|little)\b", re.I)
 
 
 def find_anaphors(text, phrases=True, demonstratives=True):
@@ -58,6 +59,8 @@ def find_anaphors(text, phrases=True, demonstratives=True):
             hits.append((m.start(), m.end(), m.group(0), "phrase"))
     if demonstratives:
         for m in _DEM_RE.finditer(text):
+            if _QUANTITY.match(m.group(0)):
+                continue
             hits.append((m.start(), m.end(), m.group(0), "demonstrative"))
     hits.sort(key=lambda h: (h[0], -(h[1] - h[0])))
     out = []
