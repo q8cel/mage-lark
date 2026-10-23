@@ -439,8 +439,20 @@ class Interpreter:
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['card'] = self.interp(ct)
-        d['to'] = self._text([c for c in children
-                              if not (isinstance(c, Tree) and c.data == 'card_target')])
+        # Stay with the existing string field (`to`), but drop the leading verb
+        # that `_text` includes;  callers expect the destination phrase.
+        to = self._text([c for c in children
+                         if not (isinstance(c, Tree) and c.data == 'card_target')])
+        if to.lower().startswith('return '):
+            to = to[7:]
+        d['to'] = to
+        ca = self._find_one(children, 'counter_amount')
+        ck = self._find_one(children, 'counter_kind')
+        if ck is not None:
+            w = {'counter': self._text(ck.children)}
+            if ca is not None:
+                w['count'] = self.interp(ca)
+            d['with'] = w
         return d
 
     def i_gain_control_action(self, children):
@@ -1259,16 +1271,41 @@ class Interpreter:
         wh = self._find_one(children, 'who')
         if wh is not None and wh.data != 'card_target':
             d['who'] = self.interp(wh)
-        ct = self._find_one(children, 'card_target')
-        if ct is not None:
-            d['card'] = self.interp(ct)
-        zn = self._find_one(children, 'zone')
-        if zn is not None:
-            d['zone'] = self.interp(zn)
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['card'] = self.interp(cts[0])
+            if len(cts) > 1:
+                d['cards'] = [self.interp(c) for c in cts]
+        zns = self._find(children, 'zone')
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if zns:
+            d['zone'] = self.interp(zns[0])
+            # "put a card onto the battlefield and the rest into your
+            # graveyard": the first destination is a bare token, while only
+            # the second is a `zone` tree.
+            if 'battlefield' in toks and 'rest' in toks:
+                d['zone'] = 'battlefield'
+            if len(zns) > 1 or ('rest' in toks and 'battlefield' in toks):
+                d['rest_zone'] = self.interp(zns[-1])
         else:
-            z = self._zone_from_tokens(children)
-            if z is not None:
-                d['zone'] = z
+            # "onto the battlefield and the rest into your graveyard" encodes
+            # the destinations as bare tokens, not `zone` trees.  Keep the
+            # token order (battlefield first, graveyard second) instead of the
+            # ZONE_WORDS priority order.
+            aliases = {}
+            for z in self.ZONE_WORDS:
+                aliases[z] = z
+                aliases[z + 's'] = z
+            aliases['libraries'] = 'library'
+            found = [aliases[t] for t in toks if t in aliases]
+            if found:
+                d['zone'] = found[0]
+                if len(found) > 1 and ('rest' in toks or len(cts) > 1):
+                    d['rest_zone'] = found[-1]
+            else:
+                z = self._zone_from_tokens(children)
+                if z is not None:
+                    d['zone'] = z
         return d
 
     # ------------------------------------------------------------------ triggered

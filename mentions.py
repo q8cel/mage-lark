@@ -14,7 +14,10 @@ HEADS = (
     r"enchantments?|spells?|planeswalkers?|players?|opponents?|piles?|sources?|"
     r"objects?|auras?|counters?"
 )
-DET = r"this|that|these|those|the|a|an|another|each|all|other|target|any|no"
+DET = (r"this|that|these|those|the|a|an|another|each|all|other|target|any|no|"
+       r"enchanted|equipped|attacking|blocking|tapped|untapped|chosen|"
+       r"revealed|exiled|sacrificed|discarded|returned|created|milled|"
+       r"blocked|unblocked|face-up|face-down")
 # intervening modifiers: alphabetic words only (no commas / clause punctuation),
 # at most two, so spans don't swallow clause boundaries.
 _MID = r"(?:[A-Za-z][\w'\-]*\s+){0,2}"

@@ -88,6 +88,14 @@ _CONTAINER_LEAD = re.compile(r"\b(?:from|in|into|of)\s*$", re.I)
 _AMOUNT_PHRASE = re.compile(r"^(?:the\s+)?(?:number|total|amount)\b", re.I)
 _MODIFIER_LEAD = re.compile(r"\b(?:with|from|in|of|on|under)\s*$", re.I)
 _PUT_LEAD = re.compile(r"\bputs?(?:ting)?\s*$", re.I)
+# "attach this Equipment to it": the pronoun is the destination, not the
+# Equipment being attached (which is the object of "attach").
+_ATTACH_TO_LEAD = re.compile(r"\battach(?:ed|ing)?\b[^.;]*\bto\s*$", re.I)
+# "You gain life equal to its toughness" after a destruction effect: the
+# possessive is the destroyed object, not the player gaining life.
+_LIFE_EQUAL_ITS = re.compile(r"\bgain(?:s)?\s+life\s+equal\s+to\s*$", re.I)
+# "this creature deals 2 damage to it": the object cannot be the subject.
+_DAMAGE_TO_LEAD = re.compile(r"\bdamage\s+to\s*$", re.I)
 _OBJECT_VERB_LEAD = re.compile(
     r"\b(?:exile|exiles|exiled|sacrifice|sacrifices|sacrificed|return|returns|"
     r"returned|destroy|destroys|destroyed|put|puts|tap|taps|tapped|untap|"
@@ -534,6 +542,16 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("subject-not-player")
 
+        # ---- attachment destination: "attach this Equipment to it" refers to
+        # the recipient (usually a creature/token), not to the Equipment.
+        if (rec["kind"] == "pronoun"
+                and _ATTACH_TO_LEAD.search(text[max(0, rec["start"] - 64):rec["start"]])):
+            f = [i for i in pool
+                 if ms[i]["head_type"] not in ("equipment", "aura", "player", "opponent")]
+            if f:
+                pool = f
+                evidence.append("attachment-destination")
+
         # ---- attachment verbs: "attached it" / "unattach it" refers to the
         # Equipment/Aura, never to the creature it is attached to.
         if rec["kind"] == "pronoun" and re.search(
@@ -543,6 +561,16 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("attachment-object")
+
+        # ---- "deals damage to it": the object is not the damage source
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "it"
+                and _DAMAGE_TO_LEAD.search(text[max(0, rec["start"] - 18):rec["start"]])
+                and re.search(r"\bdeal(?:s|t)?\b",
+                              text[max(0, rec["start"] - 64):rec["start"]], re.I)):
+            f = [i for i in pool if not ms[i].get("is_self")]
+            if f:
+                pool = f
+                evidence.append("damage-object-not-self")
 
         # ---- direct object of a verb: singular "it" is not a player
         if (rec["kind"] == "pronoun"
@@ -613,6 +641,16 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("created-token")
+
+        # ---- "gain life equal to its toughness" after destruction
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "its"
+                and _LIFE_EQUAL_ITS.search(text[max(0, rec["start"] - 32):rec["start"]])):
+            f = [i for i in pool
+                 if ms[i]["head_type"] not in ("player", "opponent")
+                 and ms[i]["surface"].strip().lower() not in ("you", "your", "you're")]
+            if f:
+                pool = f
+                evidence.append("life-equal-object")
 
         # ---- possessive binding
         # `their` inside an object NP ("the top N cards of their library") belongs
