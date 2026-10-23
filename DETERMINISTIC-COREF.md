@@ -10,7 +10,7 @@ anaphor occurrences in `coref_standard.json`, using the existing `mentions.py` /
 entity-aware clusters over a fixed candidate pool shared by every resolver.
 `remap_dataset.py` rebuilt old texts/spans from source with `normalize_with_map`
 (55 records changed). `coref_standard.json` now validates both standalone and
-against `Standard.json`. Current rule result: **89.1% entity-aware / 83.2% exact
+against `Standard.json`. Current rule result: **90.1% entity-aware / 84.2% exact
 on 3,380 valid labels**; human bench: **93.0% entity-aware (parser pool) / 94.1%
 (regex pool)**. The evaluator maps a gold sub-span such as `target creature` to the
 maximal containing runtime mention (`up to one target creature`); only 4 gold

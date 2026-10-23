@@ -290,7 +290,7 @@ Known reference points (entity-aware, no leakage):
 |---|---|---|
 | nearest mention | — | 56% |
 | raw encoder attention (`resolve.py --eval`) | — | 67% |
-| deterministic rules (`rulecoref`, unified harness) | **89.1%** | **93.0%** |
+| deterministic rules (`rulecoref`, unified harness) | **90.1%** | **93.0%** |
 | frozen-encoder mention ranker (`train_head`) | — | 85% |
 | teacher (Qwen 27B) | 89% | 88% |
 

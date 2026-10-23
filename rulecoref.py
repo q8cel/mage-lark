@@ -51,7 +51,7 @@ CASE_FREE = {"this", "that", "those", "these", "the", "a", "an", "target",
 #   "creatures of their choice", "damage equal to its power"  -> the clause SUBJECT
 #   "under its owner's control", "into their graveyard"       -> the OBJECT
 _POSS_SUBJECT = re.compile(r"(\bof|\bequal\s+to|\bwith|\bfor)\s*$", re.I)
-_POSS_OBJECT = re.compile(r"(\bunder|\binto|\bonto)\s*$", re.I)
+_POSS_OBJECT = re.compile(r"(\bunder|\binto|\bonto|\bto)\s*$", re.I)
 
 
 def possessive_role(text, start):
@@ -77,7 +77,7 @@ _DMG_SUBJECT = re.compile(r"^\s*(deals?|would\s+deal)\b", re.I)
 # artifact", "if it was a creature".  These NPs describe the current object;
 # they are not introduced antecedents for the pronoun that precedes them.
 _PREDICATE_LEAD = re.compile(
-    r"\b(?:is|was|are|were|becomes?|be|it's|that's|they're)\s+"
+    r"\b(?:is|was|are|were|isn't|aren't|wasn't|weren't|becomes?|be|it's|that's|they're)\s+"
     r"(?:(?:not|no\s+longer)\s+)?(?:a|an|the|another|one|each|all)?\s*$", re.I)
 # A card name after "named" is a name reference, not the card itself.
 _NAMED_LEAD = re.compile(r"\bnamed\s+$", re.I)
@@ -92,6 +92,11 @@ _OBJECT_VERB_LEAD = re.compile(
     r"\b(?:exile|exiles|exiled|sacrifice|sacrifices|sacrificed|return|returns|"
     r"returned|destroy|destroys|destroyed|put|puts|tap|taps|tapped|untap|"
     r"untaps|untapped)\s*$", re.I)
+_SUBJECT_VERB = re.compile(
+    r"^\s+(?:gains?|has|have|deals?|gets?|becomes?|is|isn't|can|cannot|can't|"
+    r"attacks?|blocks?|enters?|leaves?|dies?|draws?|puts?|exiles?|returns?|"
+    r"sacrifices?|creates?|mills?|discards?|reveals?|taps?|untaps?|fights?|"
+    r"targets?|triggers?|costs?)\b", re.I)
 PERMANENTS = {"creature", "artifact", "enchantment", "land", "planeswalker",
               "battle", "permanent", "token", "equipment", "aura"}
 
@@ -504,6 +509,25 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("put-object")
 
+        # ---- singular pronoun in subject position: not a player
+        if (rec["kind"] == "pronoun"
+                and rec["surface"].lower() in ("it", "it's", "itself")
+                and _SUBJECT_VERB.match(text[rec["end"]:rec["end"] + 24])):
+            f = [i for i in pool if ms[i]["head_type"] not in ("player", "opponent")]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("subject-not-player")
+
+        # ---- attachment verbs: "attached it" / "unattach it" refers to the
+        # Equipment/Aura, never to the creature it is attached to.
+        if rec["kind"] == "pronoun" and re.search(
+                r"\b(?:attach(?:ed|ing)?|unattach(?:ed|ing)?)\b",
+                text[max(0, rec["start"] - 48):rec["start"]], re.I):
+            f = [i for i in pool if ms[i]["head_type"] in ("equipment", "aura")]
+            if f:
+                pool = f
+                evidence.append("attachment-object")
+
         # ---- direct object of a verb: singular "it" is not a player
         if (rec["kind"] == "pronoun"
                 and rec["surface"].lower() in ("it", "its", "it's", "itself")
@@ -603,6 +627,14 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         g = [min(pool, key=lambda i: ms[i]["start"])]
                         pool = g
                         evidence.append("possessive-subject-earliest")
+                    elif (want == "object" and pool
+                          and rec["surface"].lower() in ("its", "itself")
+                          and not any(ms[i].get("role") for i in pool)):
+                        f = [i for i in pool
+                             if ms[i]["head_type"] not in ("player", "opponent")]
+                        if f:
+                            pool = f
+                            evidence.append("possessive-object-nonplayer")
 
         # ---- decision
         status, pred = None, None
