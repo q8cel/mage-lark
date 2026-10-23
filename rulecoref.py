@@ -73,6 +73,21 @@ _COPY_EXCEPT = re.compile(r"except\s*$", re.I)
 _COPY_OF = re.compile(r"copy\s+of\s*$", re.I)
 # "a source would deal damage ..., it deals double that damage instead"
 _DMG_SUBJECT = re.compile(r"^\s*(deals?|would\s+deal)\b", re.I)
+# Lexical copula-complement detection: "If it's a land card", "except it's an
+# artifact", "if it was a creature".  These NPs describe the current object;
+# they are not introduced antecedents for the pronoun that precedes them.
+_PREDICATE_LEAD = re.compile(
+    r"\b(?:is|was|are|were|becomes?|be|it's|that's|they're)\s+"
+    r"(?:(?:not|no\s+longer)\s+)?(?:a|an|the|another|one|each|all)?\s*$", re.I)
+# A card name after "named" is a name reference, not the card itself.
+_NAMED_LEAD = re.compile(r"\bnamed\s+$", re.I)
+# "from it" / "in it" normally points at a container/player, not the object NP
+# immediately before the preposition.
+_CONTAINER_LEAD = re.compile(r"\b(?:from|in|into|of)\s*$", re.I)
+# "the number of artifacts", "the total power of ..." are quantities, not entities.
+_AMOUNT_PHRASE = re.compile(r"^(?:the\s+)?(?:number|total|amount)\b", re.I)
+_MODIFIER_LEAD = re.compile(r"\b(?:with|from|in|of|on|under)\s*$", re.I)
+_PUT_LEAD = re.compile(r"\bputs?(?:ting)?\s*$", re.I)
 PERMANENTS = {"creature", "artifact", "enchantment", "land", "planeswalker",
               "battle", "permanent", "token", "equipment", "aura"}
 
@@ -218,6 +233,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
           "predicate": True}
     on.update(rules or {})
     struct = _struct_for(text, struct)
+    sents = refs.sentence_spans(text)
     ms = [dict(m) for m in mentions]
     if struct:
         for m in ms:
@@ -318,6 +334,26 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         pool = [i for i, m in enumerate(ms) if m["end"] <= rec["start"] and i != a_from]
         evidence = []
 
+        # ---- lexical predicate/nominal filters
+        if on["predicate"]:
+            f = [i for i in pool
+                 if not _PREDICATE_LEAD.search(text[max(0, ms[i]["start"] - 18):ms[i]["start"]])]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("drop-predicate-nominals")
+        f = [i for i in pool
+             if not (ms[i]["surface"].strip() == "~"
+                     and _NAMED_LEAD.search(text[max(0, ms[i]["start"] - 12):ms[i]["start"]]))]
+        if f and len(f) != len(pool):
+            pool = f
+            evidence.append("drop-named-self")
+        if on["nonentity"]:
+            f = [i for i in pool
+                 if not _AMOUNT_PHRASE.match(ms[i]["surface"].strip())]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("drop-amount-phrases")
+
         # ---- element of a collection ("choose one of them ... that card")
         if on["set_element"] and _ONE_OF.search(text[max(0, rec["start"] - 130):rec["start"]]):
             f = [i for i in pool if ms[i]["number"] == "pl"
@@ -374,6 +410,20 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = f
                     evidence.append("drop-non-entities")
 
+        # ---- demonstratives: "that/those X" normally points at a previous
+        # mention, not at the card itself, and "those cards" prefers a card NP.
+        if rec["kind"] == "demonstrative" and on["type"]:
+            f = [i for i in pool if not ms[i].get("is_self")]
+            if f:
+                pool = f
+                evidence.append("drop-self-for-demonstrative")
+            surf = rec["surface"].lower()
+            if "card" in surf:
+                f = [i for i in pool if "card" in ms[i]["surface"].lower()]
+                if f:
+                    pool = f
+                    evidence.append("card-demonstrative")
+
         # ---- set-valued anaphors ("the rest", "the others")
         # The referent is a COLLECTION minus what was just singled out, so the
         # antecedent is the last plural collection NP, not the last mention.
@@ -424,6 +474,60 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = f
                     evidence.append("damage-source")
 
+        # ---- "from it" points at a container/player, not the object NP
+        if rec["kind"] == "pronoun" and _CONTAINER_LEAD.search(text[max(0, rec["start"] - 10):rec["start"]]):
+            f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("container-player")
+
+        # ---- object of "put": skip NPs that are only PP modifiers
+        if rec["kind"] == "pronoun" and _PUT_LEAD.search(
+                text[max(0, rec["start"] - 14):rec["start"]]):
+            f = [i for i in pool
+                 if not _MODIFIER_LEAD.search(
+                     text[max(0, ms[i]["start"] - 14):ms[i]["start"]])]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("put-object")
+
+        # ---- plural pronoun with an explicit player subject in the clause
+        if rec["kind"] == "pronoun" and rec["surface"].lower() in ("they", "them", "their"):
+            si = rec.get("sentence")
+            s0 = sents[si][0] if si is not None and si < len(sents) else 0
+            if re.search(r"\b(?:players?|opponents?)\b", text[s0:rec["start"]], re.I):
+                f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
+                if f:
+                    pool = f
+                    evidence.append("player-subject")
+
+        # ---- created/copied token context
+        si = rec.get("sentence")
+        s0 = sents[si][0] if si is not None and si < len(sents) else 0
+        before = text[s0:rec["start"]].lower()
+        token_ctx = ("token" in before and ("create" in before or "copy" in before))
+        # Pronouns in the sentence after a token-creation sentence usually still
+        # refer to that token ("Create a token ... It gains haste").
+        if (not token_ctx and si is not None and si > 0
+                and not any(ms[i].get("sentence") == si for i in pool)):
+            for back in (1, 2):
+                if si - back < 0:
+                    break
+                p0, p1 = sents[si - back]
+                prev = text[p0:p1].lower()
+                if "token" in prev and ("create" in prev or "copy" in prev):
+                    token_ctx = True
+                    break
+                if any(ms[i].get("sentence") == si - back for i in pool):
+                    break
+        if (token_ctx and rec["kind"] == "pronoun"
+                and not rec["is_possessive"]):
+            f = [i for i in pool
+                 if "token" in ms[i]["surface"].lower() or ms[i]["head_type"] == "token"]
+            if f:
+                pool = f
+                evidence.append("created-token")
+
         # ---- possessive binding
         # `their` inside an object NP ("the top N cards of their library") belongs
         # to the clause SUBJECT; a possessive beside the object ("to its owner's
@@ -446,6 +550,13 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     if g:
                         pool = g
                         evidence.append(f"possessive-{want}")
+                    elif want == "subject" and not any(ms[i].get("role") for i in pool):
+                        # No parse structure cached: the subject is normally the
+                        # earliest candidate in the clause ("Each player exiles
+                        # the top seven cards of their library").
+                        g = [min(pool, key=lambda i: ms[i]["start"])]
+                        pool = g
+                        evidence.append("possessive-subject-earliest")
 
         # ---- decision
         status, pred = None, None

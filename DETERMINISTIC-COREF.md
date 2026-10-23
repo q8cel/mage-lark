@@ -10,8 +10,8 @@ anaphor occurrences in `coref_standard.json`, using the existing `mentions.py` /
 entity-aware clusters over a fixed candidate pool shared by every resolver.
 `remap_dataset.py` rebuilt old texts/spans from source with `normalize_with_map`
 (55 records changed). `coref_standard.json` now validates both standalone and
-against `Standard.json`. Current rule result: **80.3% entity-aware / 74.3% exact
-on 3,380 valid labels**; human bench: **93.0% entity-aware (parser pool) / 91.2%
+against `Standard.json`. Current rule result: **84.9% entity-aware / 79.0% exact
+on 3,380 valid labels**; human bench: **93.0% entity-aware (parser pool) / 94.1%
 (regex pool)**. Historical strict/soft numbers below are from the old harness.
 
 ---
