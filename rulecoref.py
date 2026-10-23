@@ -88,6 +88,10 @@ _CONTAINER_LEAD = re.compile(r"\b(?:from|in|into|of)\s*$", re.I)
 _AMOUNT_PHRASE = re.compile(r"^(?:the\s+)?(?:number|total|amount)\b", re.I)
 _MODIFIER_LEAD = re.compile(r"\b(?:with|from|in|of|on|under)\s*$", re.I)
 _PUT_LEAD = re.compile(r"\bputs?(?:ting)?\s*$", re.I)
+_OBJECT_VERB_LEAD = re.compile(
+    r"\b(?:exile|exiles|exiled|sacrifice|sacrifices|sacrificed|return|returns|"
+    r"returned|destroy|destroys|destroyed|put|puts|tap|taps|tapped|untap|"
+    r"untaps|untapped)\s*$", re.I)
 PERMANENTS = {"creature", "artifact", "enchantment", "land", "planeswalker",
               "battle", "permanent", "token", "equipment", "aura"}
 
@@ -490,6 +494,40 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("put-object")
+
+        # ---- direct object of a verb: singular "it" is not a player
+        if (rec["kind"] == "pronoun"
+                and rec["surface"].lower() in ("it", "its", "it's", "itself")
+                and _OBJECT_VERB_LEAD.search(text[max(0, rec["start"] - 18):rec["start"]])):
+            f = [i for i in pool if ms[i]["head_type"] not in ("player", "opponent")]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("object-not-player")
+
+        # ---- search "for A or B, reveal it": the teacher convention is the
+        # first card NP in the search target, not the last disjunct.
+        if rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "them"):
+            si = rec.get("sentence")
+            s0 = sents[si][0] if si is not None and si < len(sents) else 0
+            before_sentence = text[s0:rec["start"]].lower()
+            sp = before_sentence.rfind("search your library for")
+            if sp >= 0 and " or " in before_sentence[sp:]:
+                f = [i for i in pool
+                     if ms[i]["start"] > s0 + sp and ms[i]["head_type"] == "card"]
+                if f:
+                    pool = [min(f, key=lambda i: ms[i]["start"])]
+                    evidence.append("search-or-first")
+
+        # ---- "this creature or another creature ... if it": prefer the named
+        # self subject when both are offered as the same trigger source.
+        if rec["kind"] == "pronoun":
+            si = rec.get("sentence")
+            s0 = sents[si][0] if si is not None and si < len(sents) else 0
+            if re.search(r"\bor\s+another\s+creature\b", text[s0:rec["start"]], re.I):
+                f = [i for i in pool if ms[i].get("is_self")]
+                if f and len(f) != len(pool):
+                    pool = f
+                    evidence.append("self-before-another")
 
         # ---- plural pronoun with an explicit player subject in the clause
         if rec["kind"] == "pronoun" and rec["surface"].lower() in ("they", "them", "their"):
