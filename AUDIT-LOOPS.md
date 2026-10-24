@@ -555,7 +555,7 @@ Cards:
 |---|---|---|
 | Tezzeret, Cruel Machinist | `put any number of cards ... onto the battlefield face down` | allowed face-down puts |
 | Tezzeret / token text | `They're 5/5 artifact creatures` | added the plural static token form |
-| Mistcaller | activated ability whose effect is `Until end of turn, if ...` | allowed until/if sentences as activated effects |
+| Mistcaller | activated ability whose effect is `Until end of turn, if ...` | **not fixed**: the broad until/if form caused a parser blow-up and was reverted; documented as a limitation |
 | Mutavault | `creature with all creature types until end of turn` | allowed the duration on the all-creature-types become tail |
 
 ### Coreference/output fixes found and fixed

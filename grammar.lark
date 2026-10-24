@@ -110,7 +110,7 @@ modal_sentence: "Choose one"
 //    cost item: mana | {T} | {Q} | Sacrifice <card> | Remove <counter> |
 //                Tap <card> | Exile <card> | Pay <n> life
 // ----------------------------------------------------------------------------
-activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence | until_sentence) xdef_clause?
+activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence) xdef_clause?
 cost_list: cost_item ("," cost_item)*
 cost_item: MANA+
          | MANA+ "and" MANA+
@@ -139,7 +139,7 @@ ability_word_prefix: (CARDNAME | WORD)+ EMDASH
 triggered_sentence: ability_word_prefix? trigger_clause "," if_clause? effect xdef_clause? (trailing_if | trailing_unless)?
 as_long_sentence: "As" "long" "as" any_text "," effect
 during_sentence: ability_word_prefix? "During" during_time "," effect
-until_sentence: "Until" "end" "of" "turn" "," (effect | if_sentence)
+until_sentence: "Until" "end" "of" "turn" "," effect
               | "Until" "the" "end" "of" "your" "next" "turn" "," effect
 as_cost_sentence: "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," effect
 during_time: "your" "turn" | "each" "of" "your" "turns" | "combat"
@@ -757,7 +757,7 @@ attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" 
 block_do_so_action: card_target "able" "to" "block" card_target "do" "so"
 
 // permissive free text used only inside condition / keyword-trigger contexts
-any_text: (ANYWORD | NONTYPE | COLOR | V_IT | V_THEY)+
+any_text: (ANYWORD | NONTYPE | COLOR)+
 ANYWORD: /[a-zA-Z0-9+{}\/.\'~-]+/
 
 // ----------------------------------------------------------------------------
