@@ -47,6 +47,11 @@ BARE_COLLECTION = re.compile(
     r"\b(?:with|control(?:s)?)\s+"
     r"(creatures|permanents|cards|lands|artifacts|enchantments|spells|tokens)\b",
     re.I)
+INSTANT_SORCERY_SPELL = re.compile(
+    r"\b(?:a|an|the|that|this|those|these|target)\s+"
+    r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
+    r"(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+spells?\b",
+    re.I)
 INSTANT_SORCERY_CARD = re.compile(
     r"\b(?:a|an|the|that|this|those|these|target)\s+"
     r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
@@ -70,6 +75,10 @@ def _regex_mentions(text):
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in SPELL_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in INSTANT_SORCERY_SPELL.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})

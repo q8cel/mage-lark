@@ -249,3 +249,38 @@ sample cards).
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.5% entity-aware / 84.6% exact** (was 90.4 / 84.5).
 - Bench coreference: **94.3% regex / 93.0% parser** (unchanged).
+
+## Loop 6 — seed 20261028
+
+Cards:
+
+`Risen Reef`, `Primeval Titan`, `Smallpox`, `Stormtide Leviathan`, `Rancor`,
+`Barrin, Tolarian Archmage`, `Quickling`, `Skyrider Patrol`, `Dub`,
+`Augur of Bolas`, `Necromentia`, `Phantasmal Bear`, `Containment Priest`,
+`Wild Ricochet`, `Fell Specter`, `Aether Adept`, `Mark of Mutiny`,
+`Ember Hauler`, `Riddlemaster Sphinx`, `Xathrid Gorgon`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Xathrid Gorgon | `Its activated abilities can't be activated` | added plural `activated/triggered abilities` card kinds; also added the exact static form so the leading `Its` is not split into a fake keyword sentence |
+
+### Coreference/output fixes found and fixed
+
+- **Wild Ricochet**: `that spell` had no antecedent because the phrase
+  `target instant or sorcery spell` was missing from the spell-candidate
+  inventory. Added the instant/sorcery-spell pattern; `that spell` now binds to
+  the target spell.
+- Checked all other anaphors: Risen Reef's top card chain, Smallpox's two
+  players, Stormtide Leviathan's land types, Rancor/Quickling/Skyrider
+  possessives, Containment Priest's nontoken creature, and Xathrid's
+  target-creature chain are all correct.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.5% entity-aware / 84.6% exact** (unchanged).
+- Bench coreference: **94.3% regex / 93.0% parser** (unchanged).

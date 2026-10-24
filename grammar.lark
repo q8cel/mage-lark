@@ -69,6 +69,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | "Your" "opponents" "can't" "win" "the" "game"
                | "You" "can't" "lose" "the" "game" "and" "your" "opponents" "can't" "win" "the" "game"
                | "Players" "can't" "gain" "life"
+               | ("Its" | "Their") "activated" "abilities" "can't" "be" "activated"
                | "Each" "player" "loses" "the" "game"
                | "You" "win" "the" "game"
                | "You" "lose" "the" "game"
@@ -800,7 +801,10 @@ quantifier: V_ALL | V_EACH | "every" | V_TARGET | "one" "or" "more" | "any numbe
 status_list: STATUS+
 STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|chosen|revealed|sacrificed|discarded|returned|created|milled|blocked|unblocked|face-up|face-down/i
 card_kind: THIS_CARD types? | types
-         | "activated" "or" "triggered" "ability" "s"? | "triggered" "ability" "s"? | "activated" "ability" "s"?
+         | "activated" "or" "triggered" "ability" "s"?
+         | "triggered" "ability" "s"? | "activated" "ability" "s"?
+         | "activated" "abilities" | "triggered" "abilities"
+         | "activated" "or" "triggered" "abilities"
          | "spell" "or" "ability" | "spells" "or" "abilities"
          | GENERIC_TYPE+ "card"?
          | "basic" THIS_CARD
