@@ -45,6 +45,8 @@ instead_suffix: INSTEAD ("of" any_text)?
 //  static restrictions / one-liners that aren't keyword lists
 // ----------------------------------------------------------------------------
 static_sentence: "Activate" "only" "as" "a" "sorcery"
+               | card_target "lose" "all" "land" "types" "and" "abilities" ","? "and" "they" "gain" QUOTE
+               | card_target V_CAN "attack" "as" "though" ("it" | "they") ("didn't" | "did" "not") "have" KEYWORD
                | V_YOU V_CANT "choose" card_target "as" any_text
                | card_target "guesses" "whether" any_text
                | "The" "next" amount "damage" any_text "instead"
@@ -277,6 +279,7 @@ JOIN: /,\s*(then|and)\b|\bthen\b|\band\b|,/
 action: add_mana_action
        | create_token_action
        | put_counter_action
+       | replace_counter_action
        | remove_counter_action
        | search_action
        | draw_action
@@ -306,6 +309,7 @@ action: add_mana_action
        | stat_action
        | base_pt_action
        | gain_kw_action
+       | can_attack_as_though_action
        | become_action
        | gain_quote_action
        | prevent_action
@@ -421,7 +425,8 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
             | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
 
-put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+put_counter_action: V_PUT counter_amount counter_kind "on" card_target
+replace_counter_action: "that" "many" "plus" amount counter_kind "are" "put" "on" card_target "instead"? ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
 remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
              | (who)? V_LOSE "all" counter_kind
 counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
@@ -592,7 +597,8 @@ stat_action: card_target "and" card_target (V_GET | V_GAIN) stat_change ("for" "
 stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD "or" POWER_MOD
            | ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
            | ("has" | "gains" | "have" | "gain") kw_list
-gain_kw_action: card_target ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)?
+can_attack_as_though_action: card_target V_CAN "attack" "as" "though" ("it" | "they") ("didn't" | "did" "not") "have" KEYWORD
+gain_kw_action: card_target ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)?
 base_pt_action: card_target ("also")? ("has" | "have" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("and" "are" token_types "in" "addition" "to" "their" "other" "types")? ("until" ("end" "of" "turn" | "your" "next" "turn"))?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 

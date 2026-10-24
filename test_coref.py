@@ -198,6 +198,15 @@ def t_kitesail_hand_and_chosen_card():
     assert ("that card", "a noncreature, nonland card") in got, got
 
 
+def t_set_rest_prefers_source_collection():
+    text = ("Reveal the top four cards of your library. Put all Goblin cards "
+            "revealed this way into your hand and the rest on the bottom of "
+            "your library in any order.")
+    res = rulecoref.resolve(text, refs.build(text, parser=False), find_anaphors(text))
+    got = [a["canonical"] for a in res["anaphors"] if a["surface"].lower() == "the rest"]
+    assert got == ["the top four cards"], got
+
+
 def t_entity_ids_not_indices():
     # two spans of the same object must collapse to one entity id
     text = "~ deals 3 damage to target creature. ~ gains flying."

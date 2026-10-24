@@ -757,6 +757,21 @@ class Interpreter:
             d['prepared'] = True
         return d
 
+    def i_can_attack_as_though_action(self, children):
+        d = {'verb': 'can_attack_as_though'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['card'] = self.interp(ct)
+        kws = self._find_one(children, 'kw_list')
+        if kws is not None:
+            d['without_keywords'] = self.interp(kws)
+        else:
+            kws = [str(c) for c in children
+                   if isinstance(c, Token) and c.type == 'KEYWORD']
+            if kws:
+                d['without_keywords'] = kws
+        return d
+
     def i_gain_kw_action(self, children):
         d = {'verb': 'gain_kw'}
         ct = self._find_one(children, 'card_target')
@@ -1041,6 +1056,19 @@ class Interpreter:
 
     def i_damage_target(self, children):
         return self._text(children) or (self.interp(children[0]) if children else None)
+
+    def i_replace_counter_action(self, children):
+        d = {'verb': 'replace_counter', 'instead': True}
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['extra'] = self.interp(amt)
+        ck = self._find_one(children, 'counter_kind')
+        if ck is not None:
+            d['counter'] = self._text(ck.children) if isinstance(ck, Tree) else str(ck)
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['on'] = self.interp(ct)
+        return d
 
     def i_put_counter_action(self, children):
         d = {'verb': 'put_counter'}

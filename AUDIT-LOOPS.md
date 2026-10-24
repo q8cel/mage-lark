@@ -646,3 +646,49 @@ Cards:
 - Dev coreference: **90.7% entity-aware / 84.9% exact**.
 - Bench: **95.8% regex / 91.5% parser** entity-aware.
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 16 — seed 20261107
+
+Cards:
+
+`Pridemalkin`, `Sigiled Contender`, `Indestructibility`, `Liliana's Caress`,
+`Vial of Poison`, `Alpine Moon`, `Colossal Whale`, `Tempered Veteran`,
+`Sanctified Charge`, `Goblin Ringleader`, `Enlarge`, `Druidic Satchel`,
+`Spined Megalodon`, `Benalish Veteran`, `Poison-Tip Archer`, `Battle Mastery`,
+`Conclave Mentor`, `Drowsing Tyrannodon`, `Kinetic Augur`, `Blood Ogre`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Alpine Moon | `Lands ... lose all land types and abilities, and they gain "{T}: ..."` | added the static land-type-loss/gain form |
+| Sanctified Charge | `White creatures you control also gain first strike` | allowed `also` before `gain` in `gain_kw_action` |
+| Drowsing Tyrannodon | `this creature can attack as though it didn't have defender` | added `can_attack_as_though_action` and structured the missing keyword |
+| Conclave Mentor | `that many plus one +1/+1 counters are put on that creature instead` | added `replace_counter_action` |
+
+### Coreference/output fixes found and fixed
+
+- **Pridemalkin / Tempered Veteran**: a pronoun inside a modifier
+  (`... with a +1/+1 counter on it`) now binds to the containing creature NP.
+- **Alpine Moon**: `they` binds to `Lands your opponents control with the
+  chosen name`, not the embedded `your opponents` NP, via the
+  collection-subject rule.
+- **Druidic Satchel**: after `Reveal the top card ... If it's A ... If it's B`,
+  later `it's` conditions chain to the original top card instead of the token
+  created by the intervening effect.
+- **Drowsing Tyrannodon**: `as though it didn't have defender` binds to the
+  clause subject.
+- **Conclave Mentor**: the replacement effect is structured, with the quantity
+  anaphor kept separate from entity coreference.
+- **Goblin Ringleader**: `the rest` binds to `the top four cards`, the source
+  collection, not to the `all Goblin cards` subset just moved to hand.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py FDN.json`: 51/51.
+- `test_coref.py`: 18/18 after cache rebuild.
+- Dev coreference: **91.2% entity-aware / 85.2% exact** (was 90.7 / 84.9).
+- Bench: **95.8% regex / 91.5% parser** entity-aware.
+- `test_normalize_map.py`: 6/6; dataset span validation passes.

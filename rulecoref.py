@@ -532,6 +532,16 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if on["set_rest"] and rec["kind"] == "phrase":
             f = [i for i in pool if ms[i]["number"] == "pl" and ms[i]["head_type"]]
             if f:
+                # "Put all Goblin cards revealed this way into your hand and
+                # the rest ...": the last collection is the singled-out subset;
+                # prefer the source collection (the revealed top cards).
+                last = ms[f[-1]]
+                subset = (re.match(r"(?i)^all\b", last["surface"].strip())
+                          and ("revealed this way" in last["surface"].lower()
+                               or text[last["end"]:last["end"] + 24].lower()
+                               .lstrip().startswith("revealed this way")))
+                if len(f) > 1 and subset:
+                    f = [f[-2]]
                 pool = f
                 evidence.append("set-rest")
             else:
@@ -868,6 +878,63 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         if f:
                             pool = f
                             evidence.append("possessive-object-nonplayer")
+
+        # ---- modifier self-reference: "a creature with a counter on it"
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")
+                and re.search(r"\bon\s*$", text[max(0, rec["start"] - 8):rec["start"]], re.I)):
+            containers = [i for i, m in enumerate(ms)
+                          if not m.get("is_anaphor")
+                          and m["start"] < rec["start"] < m["end"]]
+            if len(containers) == 1:
+                pool = containers
+                evidence.append("modifier-container")
+
+        # ---- "as though it didn't have defender": the clause subject
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")
+                and re.search(r"\bas\s+(?:though|if)\s*$",
+                              text[max(0, rec["start"] - 20):rec["start"]], re.I)):
+            f = [i for i in pool if ms[i].get("is_self")]
+            if f:
+                pool = f
+                evidence.append("as-though-self")
+
+        # ---- plural subject that is a collection containing a player NP
+        # ("Lands your opponents control ... and they gain ...")
+        if rec["kind"] == "pronoun" and rec["surface"].lower() == "they":
+            colls = []
+            for i, m in enumerate(ms):
+                if (m["end"] > rec["start"] or m.get("is_anaphor")
+                        or m.get("number") != "pl"
+                        or m.get("head_type") in (None, "player", "opponent")):
+                    continue
+                if any(ms[j].get("head_type") in ("player", "opponent")
+                       and m["start"] <= ms[j]["start"] and ms[j]["end"] <= m["end"]
+                       for j in range(len(ms))):
+                    colls.append(i)
+            if colls:
+                pool = colls
+                evidence.append("collection-subject")
+
+        # ---- conditional chain: "Reveal the top card. If it's A, ... If it's B, ..."
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")
+                and _IT_PREDICATE.match(text[rec["end"]:])):
+            si = rec.get("sentence")
+            if si is not None and si < len(sents):
+                st = text[sents[si][0]:sents[si][1]].lstrip().lower()
+                if st.startswith("if "):
+                    for prev in reversed(anas):
+                        if prev.get("start", 0) >= rec["start"]:
+                            continue
+                        psi = prev.get("sentence")
+                        ptxt = (text[sents[psi][0]:sents[psi][1]].lower()
+                                if psi is not None and psi < len(sents) else "")
+                        if "reveal" not in ptxt and "if " not in ptxt:
+                            continue
+                        pidx = prev.get("_pred")
+                        if pidx is not None:
+                            pool = [pidx]
+                            evidence.append("condition-chain")
+                            break
 
         # ---- decision
         status, pred = None, None

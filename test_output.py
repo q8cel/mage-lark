@@ -158,6 +158,18 @@ add("coordinated-target", "When this creature enters, target creature gets +2/+0
                   and all(a.get('target') for a in d['effect']
                           if isinstance(a, dict))))
 
+add("also-gain-kw", "White creatures you control also gain first strike until end of turn",
+    lambda o: has(o, lambda d: d.get('keywords') == ['first strike']))
+add("can-attack-as-though",
+    "As long as you control a creature with power 4 or greater, this creature can attack as though it didn't have defender",
+    lambda o: has(o, lambda d: d.get('verb') == 'can_attack_as_though'
+                  and d.get('without_keywords') == ['defender']))
+add("replace-counter",
+    "If one or more +1/+1 counters would be put on a creature you control, that many plus one +1/+1 counters are put on that creature instead",
+    lambda o: has(o, lambda d: d.get('verb') == 'replace_counter'
+                  and d.get('extra') == 1
+                  and d.get('on', {}).get('card_type', {}).get('value') == 'creature'))
+
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'
     items, types, card_names, sets = load(data)
