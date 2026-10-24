@@ -36,6 +36,7 @@ TYPE_ORDER = (
     "equipment", "aura", "planeswalker", "battle", "creature", "token",
     "permanent", "card", "spell", "land", "artifact", "enchantment",
     "player", "opponent", "source", "object", "pile", "counter",
+    "hand", "graveyard", "library", "exile", "battlefield",
 )
 _TYPE_RE = {t: re.compile(rf"\b{t}s?\b", re.I) for t in TYPE_ORDER}
 
@@ -132,9 +133,11 @@ def number(surface):
     # Distributive determiners agree plurally for anaphora ("Each player ...
     # their library"), so they must be checked before the head noun: "Each
     # player" is not singular just because "player" has no -s.
+    ht = head_type(surface)
+    if ht in ("hand", "graveyard", "library", "exile"):
+        return "pl" if re.search(rf"\b{ht}s\b", surface.lower()) else "sg"
     if w[0] in PLURAL_DET:
         return "pl"
-    ht = head_type(surface)
     if ht:
         return "pl" if re.search(rf"\b{ht}s\b", surface.lower()) else "sg"
     return "pl" if w[-1].endswith("s") and not w[-1].endswith("ss") else "sg"

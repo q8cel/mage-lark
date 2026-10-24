@@ -353,6 +353,17 @@ class Interpreter:
         for ch in children:
             if isinstance(ch, Tree):
                 out.append(self.interp(ch))
+        # Coordinated actions often share one target: "target creature gets
+        # +2/+0 and gains first strike".  The second action's card_target is
+        # empty in the tree; carry the first action's target into it.
+        last_target = None
+        for action in out:
+            if not isinstance(action, dict):
+                continue
+            if action.get('target'):
+                last_target = action['target']
+            elif 'target' in action and not action['target'] and last_target:
+                action['target'] = dict(last_target)
         if len(out) == 1:
             return out[0]
         return out
@@ -1016,6 +1027,18 @@ class Interpreter:
     def i_damage_amount(self, children):
         return self._text(children) or (self.interp(children[0]) if children else None)
 
+    def i_damage_who(self, children):
+        cards = [self.interp(c) for c in children
+                 if isinstance(c, Tree) and c.data == 'card_target']
+        if not cards:
+            return self._text(children)
+        val = cards[0] if len(cards) == 1 else {'or': cards}
+        if any(isinstance(c, Token) and str(c).lower() == 'attacking'
+               for c in children):
+            val = dict(val) if isinstance(val, dict) else {'or': val}
+            val['attacking'] = True
+        return val
+
     def i_damage_target(self, children):
         return self._text(children) or (self.interp(children[0]) if children else None)
 
@@ -1216,6 +1239,11 @@ class Interpreter:
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             return self.interp(ct)
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            for t in at.children:
+                if isinstance(t, Token) and t.type == 'LISTTOK':
+                    return decode_list_token(t.value)
         return self._text(children)
 
     def i_may_action(self, children):
@@ -1500,6 +1528,27 @@ class Interpreter:
 
     def i_modal_sentence(self, children):
         return {'type': 'modal', 'text': self._text(children)}
+
+    def i_enchanted_sentence(self, children):
+        target = None
+        eff = None
+        for ch in children:
+            if isinstance(ch, Tree):
+                if ch.data == 'card_kind':
+                    target = self.interp(ch)
+                elif ch.data == 'effect':
+                    eff = self.interp(ch)
+        def attach(v):
+            if isinstance(v, dict):
+                if 'target' in v and not v['target'] and target is not None:
+                    v['target'] = dict(target)
+                for x in v.values():
+                    attach(x)
+            elif isinstance(v, list):
+                for x in v:
+                    attach(x)
+        attach(eff)
+        return {'type': 'static', 'target': target, 'effect': eff}
 
     def i_static_sentence(self, children):
         return {'type': 'static', 'text': self._text(children)}

@@ -584,7 +584,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # ---- "from it" points at a container/player, not the object NP
         if (rec["kind"] == "pronoun" and not rec["is_possessive"]
                 and _CONTAINER_LEAD.search(text[max(0, rec["start"] - 10):rec["start"]])):
-            f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
+            f = [i for i in pool if ms[i]["head_type"] in
+                 ("player", "opponent", "hand", "graveyard", "library", "exile")]
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("container-player")
@@ -593,7 +594,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if rec["kind"] == "pronoun" and _PUT_LEAD.search(
                 text[max(0, rec["start"] - 14):rec["start"]]):
             f = [i for i in pool
-                 if not _MODIFIER_LEAD.search(
+                 if ms[i]["head_type"] not in ("hand", "graveyard", "library", "exile")
+                 and not _MODIFIER_LEAD.search(
                      text[max(0, ms[i]["start"] - 14):ms[i]["start"]])]
             if f and len(f) != len(pool):
                 pool = f
@@ -603,7 +605,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if (rec["kind"] == "pronoun"
                 and rec["surface"].lower() in ("it", "it's", "itself")
                 and _SUBJECT_VERB.match(text[rec["end"]:rec["end"] + 24])):
-            f = [i for i in pool if ms[i]["head_type"] not in ("player", "opponent")]
+            f = [i for i in pool if ms[i]["head_type"] not in
+                 ("player", "opponent", "hand", "graveyard", "library", "exile")]
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("subject-not-player")
@@ -633,7 +636,9 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 and _DAMAGE_TO_LEAD.search(text[max(0, rec["start"] - 18):rec["start"]])
                 and re.search(r"\bdeal(?:s|t)?\b",
                               text[max(0, rec["start"] - 64):rec["start"]], re.I)):
-            f = [i for i in pool if not ms[i].get("is_self")]
+            f = [i for i in pool
+                 if not ms[i].get("is_self")
+                 and ms[i]["head_type"] not in ("hand", "graveyard", "library", "exile")]
             if f:
                 pool = f
                 evidence.append("damage-object-not-self")
@@ -667,7 +672,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # ---- "sacrifice it": the permanent being sacrificed, not the spell
         if (rec["kind"] == "pronoun" and rec["surface"].lower() == "it"
                 and _SACRIFICE_IT.search(text[max(0, rec["start"] - 18):rec["start"]])):
-            f = [i for i in pool if ms[i]["head_type"] not in ("spell", "player", "opponent")]
+            f = [i for i in pool if ms[i]["head_type"] not in
+                 ("spell", "player", "opponent", "hand", "graveyard", "library", "exile")]
             if f:
                 pool = f
                 evidence.append("sacrifice-object")
@@ -676,7 +682,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if (rec["kind"] == "pronoun"
                 and rec["surface"].lower() in ("it", "it's")
                 and _IT_PREDICATE.match(text[rec["end"]:])):
-            f = [i for i in pool if ms[i]["head_type"] not in ("player", "opponent")]
+            f = [i for i in pool if ms[i]["head_type"] not in
+                 ("player", "opponent", "hand", "graveyard", "library", "exile")]
             if f:
                 pool = f
                 evidence.append("it-predicate-not-player")
@@ -694,7 +701,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if (rec["kind"] == "pronoun"
                 and rec["surface"].lower() in ("it", "its", "it's", "itself")
                 and _OBJECT_VERB_LEAD.search(text[max(0, rec["start"] - 18):rec["start"]])):
-            f = [i for i in pool if ms[i]["head_type"] not in ("player", "opponent")]
+            f = [i for i in pool if ms[i]["head_type"] not in
+                 ("player", "opponent", "hand", "graveyard", "library", "exile")]
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("object-not-player")
@@ -729,7 +737,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             si = rec.get("sentence")
             s0 = sents[si][0] if si is not None and si < len(sents) else 0
             if re.search(r"\b(?:players?|opponents?|controllers?)\b", text[s0:rec["start"]], re.I):
-                f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
+                f = [i for i in pool if ms[i]["head_type"] in
+                 ("player", "opponent")]
                 if f:
                     pool = f
                     evidence.append("player-subject")
@@ -813,7 +822,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # ---- possessive before a zone: "their library" belongs to a player
         if (rec["kind"] == "pronoun" and rec["is_possessive"]
                 and _POSSESSIVE_ZONE.match(text[rec["end"]:])):
-            f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
+            f = [i for i in pool if ms[i]["head_type"] in
+                 ("player", "opponent")]
             if f:
                 pool = f
                 evidence.append("possessive-zone-owner")

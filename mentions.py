@@ -35,6 +35,15 @@ CONTROLLER_CAND = re.compile(
     rf"\b(?:{DET}|its|their)\s+(?:[A-Za-z][\w'\-]*\s+){{0,2}}controllers?\b", re.I)
 # A spell/ability is often embedded in a larger event NP ("the target of a
 # spell"); keep the inner NP so "that spell" has a real antecedent.
+LIST_CAND = re.compile(
+    r"\b(?:a|an|the|target|another|each|any|no|one or more)\s+"
+    r"(?:[A-Za-z][\w'\-]*\s*,\s*)+"
+    r"(?:[A-Za-z][\w'\-]*\s+){0,3}"
+    r"(?:cards?|creatures?|permanents?|spells?|artifacts?|enchantments?|"
+    r"lands?|planeswalkers?|tokens?)\b", re.I)
+ZONE_CAND = re.compile(
+    r"\b(?:your|their|its|his|her|our|my|a player's|target player's|target opponent's)\s+"
+    r"(?:hands?|graveyards?|librar(?:y|ies)|exile|battlefield)\b", re.I)
 SPELL_CAND = re.compile(
     r"\b(?:a|an|the|that|this|those|these)\s+"
     r"(?:(?:[A-Za-z][\w'\-]*\s+)?(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+)?"
@@ -76,6 +85,14 @@ def _regex_mentions(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in LIST_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in ZONE_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in SPELL_CAND.finditer(text):
         s = m.group(0).strip()
         if s:
@@ -97,6 +114,19 @@ def _regex_mentions(text):
         s = m.group(1)
         st = m.start(1)
         out.append({"surface": s, "start": st, "end": st + len(s)})
+    # A comma list after "choose" is often the selected card ("a
+    # noncreature, nonland card").  Expose that NP so a following "that card"
+    # can bind to it; do not add every list to every candidate pool.
+    try:
+        from lists import capture as _capture_lists
+        for st, en, _obj in _capture_lists(text):
+            prefix = text[max(0, st - 24):st].lower()
+            if re.search(r"\bchooses?\s+$", prefix):
+                s = text[st:en].strip()
+                if s:
+                    out.append({"surface": s, "start": st, "end": en})
+    except Exception:
+        pass
     return out
 
 

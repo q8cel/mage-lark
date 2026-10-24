@@ -140,6 +140,24 @@ add("gain-control-as-long", "When this Vehicle enters, gain control of target cr
 add("spend-mana-chosen-type", "Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the chosen type",
     lambda o: has(o, lambda d: d.get('verb') == 'spend_mana_only_to_cast'))
 
+add("scorch-relative-damage",
+    "Whenever this creature attacks, it deals 1 damage to the player or planeswalker it's attacking",
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
+                  and isinstance(d.get('to'), dict)
+                  and d['to'].get('attacking') is True
+                  and len(d['to'].get('or', [])) == 2))
+add("convoke-keyword", "Artifact spells you cast have convoke",
+    lambda o: has(o, lambda d: d.get('keywords') == ['convoke']))
+add("enchanted-target", "Enchanted creature gets +1/+0 and has trample",
+    lambda o: has(o, lambda d: d.get('type') == 'static'
+                  and d.get('target', {}).get('value') == 'creature'
+                  and all(a.get('target') for a in d.get('effect', [])
+                          if isinstance(a, dict))))
+add("coordinated-target", "When this creature enters, target creature gets +2/+0 and gains first strike until end of turn",
+    lambda o: has(o, lambda d: isinstance(d.get('effect'), list)
+                  and all(a.get('target') for a in d['effect']
+                          if isinstance(a, dict))))
+
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'
     items, types, card_names, sets = load(data)

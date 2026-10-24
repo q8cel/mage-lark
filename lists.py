@@ -47,7 +47,7 @@ PRED = re.compile(
     r'regenerate|skip|win|flip|roll|vote|separate|exchange|transform|convert)\b', re.I)
 COLORS = {'white','blue','black','red','green','colorless','multicolored'}
 ALLOWED_PREFIX_END = re.compile(
-    r'(?i)(?:^|[\s,;:])(?:if|when|whenever|unless|until|as long as|for each|is|are|was|were|it\'s|that\'s|control|controls|cast|casts|target|another|other|each|a|an|the|more|has|have|with|without|becomes?|become|enters?|attacks?|blocks?|deals?|destroy|exile|return|counter|sacrifice|discard|search|reveal|put|create|enchant|equip|attach|tap|untap|remove|mill)$')
+    r'(?i)(?:^|[\s,;:])(?:if|when|whenever|unless|until|as long as|for each|is|are|was|were|it\'s|that\'s|control|controls|cast|casts|target|another|other|each|a|an|the|more|has|have|with|without|becomes?|become|enters?|attacks?|blocks?|deals?|destroy|exile|return|counter|sacrifice|discard|search|reveal|put|create|choose|enchant|equip|attach|tap|untap|remove|mill)$')
 
 SUFFIX = re.compile(
     r'\s+(you control|an opponent controls|you don\'t control|'
@@ -296,9 +296,18 @@ def capture(text):
                 continue
             # shared suffix
             suffix=''
+            pp_cut=0
             sm = SUFFIX.search(last)
             if sm:
                 suffix=sm.group(1); last=last[:sm.start()].strip()
+            # A list NP can be followed by a source/location PP: "a
+            # noncreature, nonland card from it".  Keep the PP outside the
+            # list span.
+            pp = re.search(r'(?i)\s+(?:from|in|into|on|of)\s+', last)
+            if pp and _head(last[:pp.start()]):
+                before_pp = last
+                last = last[:pp.start()].strip()
+                pp_cut = len(before_pp) - len(last)
             # items text
             items=[first] + [chunks[k][0].strip() for k in range(i+1,j)] + [last]
             if any(not x for x in items):
@@ -319,7 +328,7 @@ def capture(text):
                 continue
             start = chunks[i][1] + trim
             body_start = chunks[j][1] + (conn_m.end() if conn_m else 0)
-            end = body_start + len(body[:cut].rstrip())
+            end = body_start + len(body[:cut].rstrip()) - pp_cut
             if start > 0 and text[start-1].isalpha():
                 continue
             if end < len(text) and text[end].isalpha():

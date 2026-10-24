@@ -601,3 +601,48 @@ refactor the permissive condition fallbacks (or add a deterministic fast path
 for fixed-form condition sentences), not to add another broad `any_text` rule.
 
 No card-fix commit was made for this loop.
+
+## Loop 15 — seed 20261106
+
+Cards:
+
+`Setessan Training`, `Archfiend's Vessel`, `Bonescythe Sliver`,
+`Charging Griffin`, `Elixir of Immortality`, `Acidic Slime`, `Scorch Spitter`,
+`Yarok's Wavecrasher`, `Goremand`, `Kitesail Freebooter`, `Flesh to Dust`,
+`Slumbering Dragon`, `Aegis Angel`, `Ajani's Influence`,
+`Cavalry Drillmaster`, `Drudge Skeletons`, `Fiery Emancipation`,
+`Chief Engineer`, `Crumbling Colossus`, `Goblin Motivator`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Scorch Spitter | `damage to the player or planeswalker it's attacking` | allowed the relative `it's/they're attacking` suffix on `damage_who`; interpreter now emits `{or: [...], attacking: true}` |
+| Chief Engineer | `Artifact spells you cast have convoke` | added `convoke` to the keyword terminal |
+| Setessan Training | `Enchanted creature gets +1/+0 and has trample` | added `i_enchanted_sentence`; applies the enchanted subject to both coordinated actions |
+| Cavalry Drillmaster | `target creature gets +2/+0 and gains first strike` | coordinated effect actions now inherit a shared target when the later tree target is empty |
+| Kitesail Freebooter | `choose a noncreature, nonland card from it` | cut the trailing source PP out of the list span and exposed the chosen card as a structured list object |
+
+### Coreference/output fixes found and fixed
+
+- **Kitesail Freebooter**: `it` in `choose ... from it` now binds to `their hand`,
+  not `target opponent`. Added possessive zone mentions and a container filter
+  for hand/graveyard/library/exile. `that card` now binds to
+  `a noncreature, nonland card` via a choose-context list mention.
+- **Archfiend's Vessel**: the new zone mentions initially stole `it` after
+  `cast`/`exile`; object/sacrifice filters now exclude zone containers. All
+  three `it` occurrences bind to `this creature`.
+- **Scorch Spitter**: `it's attacking` is represented as the damage recipient
+  relation, not loose tokens.
+- **Setessan Training / Cavalry Drillmaster**: coordinated stat/keyword actions
+  retain their shared target.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py FDN.json`: 48/48.
+- `test_coref.py`: 17/17 after cache rebuild.
+- Dev coreference: **90.7% entity-aware / 84.9% exact**.
+- Bench: **95.8% regex / 91.5% parser** entity-aware.
+- `test_normalize_map.py`: 6/6; dataset span validation passes.

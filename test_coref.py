@@ -188,6 +188,16 @@ def t_structure_never_parses():
     assert ptree.structure("Zzz qqq wubble florb") == []
 
 
+def t_kitesail_hand_and_chosen_card():
+    text = ("When this creature enters, target opponent reveals their hand. "
+            "You choose a noncreature, nonland card from it. Exile that card "
+            "until this creature leaves the battlefield.")
+    res = rulecoref.resolve(text, refs.build(text, parser=False), find_anaphors(text))
+    got = [(a["surface"], a["canonical"]) for a in res["anaphors"]]
+    assert ("it", "their hand") in got, got
+    assert ("that card", "a noncreature, nonland card") in got, got
+
+
 def t_entity_ids_not_indices():
     # two spans of the same object must collapse to one entity id
     text = "~ deals 3 damage to target creature. ~ gains flying."

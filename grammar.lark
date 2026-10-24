@@ -480,6 +480,7 @@ deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("an
                   | card_target V_DEAL "damage" "equal" "to" any_text "divided" "as" any_text "chooses" "among" any_text
                   | card_target V_DEAL dmg_amount "damage" "divided" divided_rest
 damage_who: card_target "or" card_target
+          | card_target "or" card_target ("it's" | "they're") "attacking"
           | "target" "player" "or" "planeswalker"
           | "each" "creature" "that" "player" "or" "that" "planeswalker's" "controller" "controls"
           | "target" "player" "or" "planeswalker" "and" "each" "creature" "that" "player" "or" "that" "planeswalker's" "controller" "controls"
@@ -920,7 +921,7 @@ kw_list_item: KEYWORD
             | "protection" "from" prot_obj (("and" | "," | "," "and") "from" prot_obj)*
 prot_obj: CARDNAME | colors | GENERIC_TYPE | "the" "color" "of" "your" "choice" | "each" "color" | "each" "player" | "anything"
 kw_sep: "and" | "," | "," "and"
-KEYWORD: /\b(flying|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted)\b/i
+KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted)\b/i
 
 //  modified static keywords (Ward {4}, Kicker {2}, Crew 3, ...)
 MOD_KEYWORD: /ward|kicker|crew|flashback|affinity|protection|hexproof|equip|firebending|web-slinging/i
