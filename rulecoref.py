@@ -504,6 +504,19 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = []
                     evidence.append("card-demonstrative-no-collection")
 
+        # ---- "that creature" after a target is normally the target, not a
+        # later indefinite creature in a condition.
+        if (rec["kind"] == "demonstrative"
+                and rec["surface"].lower() in ("that creature", "those creatures")):
+            # Prefer the target unless an earlier anaphor of the same surface
+            # is already in the chain; keep the chain in that case.
+            prior = [i for i in pool if ms[i].get("is_anaphor")
+                     and ms[i]["surface"].lower() == rec["surface"].lower()]
+            f = [i for i in pool if ms[i].get("is_target")]
+            if f and not prior:
+                pool = f
+                evidence.append("demonstrative-target")
+
         # ---- "a copy of that artifact": the demonstrative points at the
         # chosen/targeted object, not the later copy target.
         if (rec["kind"] == "demonstrative"

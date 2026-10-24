@@ -456,3 +456,44 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.6% entity-aware / 84.8% exact**.
 - Bench coreference: **94.3% regex / 93.0% parser** (unchanged).
+
+## Loop 11 — seed 20261102
+
+Cards:
+
+`Voracious Hydra`, `Cavalier of Gales`, `Pentavus`, `Embodiment of Agonies`,
+`Disperse`, `Ring of Evos Isle`, `Boonweaver Giant`, `Goblin Rabblemaster`,
+`Pursued Whale`, `Tenacious Dead`, `Secure the Scene`, `Garruk's Harbinger`,
+`Flood of Tears`, `Vivien's Invocation`, `Quicken`, `Void Snare`, `Sage Owl`,
+`Yawning Fissure`, `Megrim`, `Goblin Bangchuckers`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Cavalier of Gales | `put two cards ... on top of your library in any order` | added the order modifier to the on-top put form |
+| Boonweaver Giant | search graveyard/hand/library for an Aura and put it onto the battlefield attached to this creature | allowed plural `zones` in the put-attached search form and attached-put output |
+| Goblin Rabblemaster | `Other Goblin creatures you control attack each combat if able` | added plural attack-each-combat/this-turn if able |
+| Pursued Whale | `Spells your opponents cast that target this creature cost ...` | added the opponents-cast-that-target cost subject |
+| Garruk's Harbinger | `a creature card or Garruk planeswalker card` | allowed `or` in reveal lists and CARDNAME + planeswalker card |
+| Quicken | `The next sorcery spell you cast this turn can be cast as though it had flash` | added the next-spell flash static form |
+
+### Coreference/output fixes found and fixed
+
+- **Pursued Whale**: `that target this creature` was a false demonstrative from
+  a relative clause. The anaphor detector now rejects two determiners
+  (`target this/that/...`).
+- **Tragic Banshee / Fiery-style chains**: `that creature` now prefers a target
+  mention over a later indefinite creature, but keeps an earlier same-surface
+  anaphor so existing chains stay intact.
+- **Garruk's Harbinger**: the reveal alternatives and `them`/`the rest` map to
+  the coordinated card collection; singular `it` remains one legal alternative.
+- **Boonweaver Giant**: `it` binds to the searched Aura card.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.7% entity-aware / 84.8% exact**.
+- Bench coreference: **94.3% regex / 93.0% parser**.

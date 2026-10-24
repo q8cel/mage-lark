@@ -48,6 +48,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | V_YOU V_CANT "choose" card_target "as" any_text
                | card_target "guesses" "whether" any_text
                | "The" "next" amount "damage" any_text "instead"
+               | "The" "next" card_target "you" "cast" "this" "turn" "can" "be" "cast" "as" "though" "it" "had" KEYWORD
                | "Start" "your" "engines" "!"
                | "Do" "this" "only" "once" "each" "turn"
                | V_YOU "may" "choose" "the" "same" "mode" "more" "than" "once"
@@ -418,7 +419,7 @@ search_action: V_SEARCH zones "for" search_target ("named" (THIS_CARD | CARDNAME
              | V_SEARCH zone "for" search_target ("exile" "it")? ("then" "shuffle")?
              | V_SEARCH zones "for" search_target "with" "that" "name" "and" "exile" ("them" | "it")
              | V_SEARCH zones "for" search_target "and" V_EXILE ("them" | "it")
-             | V_SEARCH zone "for" search_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
+             | V_SEARCH zones "for" search_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"? ("attached" "to" card_target)?))? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
              | V_SEARCH zone "for" search_target ","? V_PUT ("it" | "them") "onto" "the" "battlefield" "tapped"? ","? "then" "shuffle"
              | V_SEARCH zones "for" search_target ","? "reveal" ("those" "cards" | "them") ","? "put" "one" "onto" "the" "battlefield" "tapped"? "and" "the" "other" "into" zone ","? "then" "shuffle"
              | "Each" "of" "them" V_SEARCH zones "for" search_target (","? "then" "shuffles" "and" "puts" "that" "card" "on" "top")?
@@ -515,8 +516,8 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
                | V_PUT card_target "onto" "the" "battlefield" "and" "the" "rest" "into" zone
                | V_PUT card_target "and" card_target "on" "top" "of" zone
                | V_PUT card_target "into" zone "and" "the" "other" "into" zone
-               | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")?
-               | V_PUT card_target "on" "top" "of" zone
+               | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")? ("attached" "to" card_target)?
+               | V_PUT card_target "on" "top" "of" zone order_mod?
                | V_PUT card_target "on" "top"
                | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
                 | V_PUT ("them" | "it") "back" "in" "any" "order"
@@ -615,7 +616,7 @@ look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" (
          | V_LOOK "at" "that" "many" "card" "s"? "from" "the" "top" "of" "your" "library"
          | V_LOOK "at" "target" "player's" "hand"
            | V_LOOK "at" "an" "opponent's" "hand"
-reveal_action: (who)? V_REVEAL card_target (("," | "and/or" | "and") card_target)+ ("from" "among" "them")? ("and" V_PUT "them" "into" "your" "hand")?
+reveal_action: (who)? V_REVEAL card_target (("," | "and/or" | "and" | "or") card_target)+ ("from" "among" "them")? ("and" V_PUT "them" "into" "your" "hand")?
              | (who)? V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
              | V_REVEAL "the" "top" amount "cards" "of" "your" "library"
             | V_REVEAL "the" "top" "card" "of" "your" "library"
@@ -678,6 +679,7 @@ cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" 
                | "The" WORD "cost" "is" "equal" "to" any_text
                | card_target V_COST "an" "additional" MANA+ "to" "cast"
 cost_subject: card_target "and" card_target ("you" "cast")?
+            | card_target ("you" | "your opponents") "cast" ("that" "target" card_target)?
             | card_target ("you" "cast")?
             | ("activated" | "other" | "mana")? "abilities" "of" card_target
 cost_qual: ("for" "each" any_text) | ("that" "target" any_text) | ("unless" any_text)
@@ -730,6 +732,7 @@ no_max_hand_action: V_YOU "have" "no" "maximum" "hand" "size" ("for" "the" "rest
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
 attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" | "you" "this" "turn" | "this" "turn") "if" "able"
                          | card_target "attack" ("~" | card_target) "if" "able"
+                         | card_target "attack" ("each" "combat" | "this" "turn") "if" "able"
 block_do_so_action: card_target "able" "to" "block" card_target "do" "so"
 
 // permissive free text used only inside condition / keyword-trigger contexts
@@ -840,7 +843,7 @@ card_kind: THIS_CARD types? | types
          | types ("," types)+ ("," "or" types)? "card"?
          | types "," types "," "and" types
          | types "and" types "card"?
-         | CARDNAME ("creature" "card" | "creature" "cards" | "creature" | "creatures" | "spell" | "spells" | "card" | "cards" | "permanent" | "permanents")
+         | CARDNAME ("creature" "card" | "creature" "cards" | "creature" | "creatures" | "spell" | "spells" | "card" | "cards" | "permanent" | "permanents" | "planeswalker" "card" | "planeswalker" "cards")
          | "card" | "cards" | "creature" | "creatures" | "spell" | "spells"
          | "creature" "card" | "creature" "cards" | "land" | "land" "card" | "permanent" | "permanent" "card" | "permanent" "cards"
          | "artifact" "card" | "enchantment" "card" | "planeswalker" "card"

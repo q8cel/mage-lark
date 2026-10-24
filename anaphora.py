@@ -68,6 +68,11 @@ def find_anaphors(text, phrases=True, demonstratives=True):
         for m in _DEM_RE.finditer(text):
             if _QUANTITY.match(m.group(0)):
                 continue
+            # "that target this creature" is a relative clause, not a
+            # demonstrative NP; two determiners cannot head one entity.
+            if re.search(r"\btarget\s+(?:this|that|a|an|the)\b",
+                         m.group(0), re.I):
+                continue
             hits.append((m.start(), m.end(), m.group(0), "demonstrative"))
     hits.sort(key=lambda h: (h[0], -(h[1] - h[0])))
     out = []
