@@ -284,3 +284,46 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.5% entity-aware / 84.6% exact** (unchanged).
 - Bench coreference: **94.3% regex / 93.0% parser** (unchanged).
+
+## Loop 7 — seed 20261029
+
+Cards:
+
+`Protean Hydra`, `Master of the Wild Hunt`, `Enthralling Hold`, `Skalla Wolf`,
+`Indulgent Tormentor`, `Miscast`, `Gideon Jura`, `Djinn of Wishes`,
+`Turn to Slag`, `Tezzeret's Gatebreaker`, `Militia Bugler`,
+`Thorncaster Sliver`, `Magma Phoenix`, `Capture Sphere`, `Garruk's Warsteed`,
+`Thran Golem`, `Frost Breath`, `Demanding Dragon`, `Lurking Predators`,
+`Squad Captain`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Master of the Wild Hunt | `Each Wolf tapped this way deals damage equal to its power divided ...` | added `tapped this way` and the damage-equal-to/divided-as form |
+| Enthralling Hold | `You can't choose an untapped creature as this spell's target ...` | added the static `can't choose ... as ... target` form |
+| Indulgent Tormentor | `... unless target opponent sacrifices ... or pays 3 life` | allowed sacrifice-or-pay-life and a trailing `unless` in triggered/effect sentences |
+| Gideon Jura | `During target opponent's next turn, ...`; `... creature that's still a planeswalker` | added owner-next-turn during phrases and `that's still a ...` become tails; added the attack-if-able action |
+| Demanding Dragon | `... unless that player sacrifices a creature ...` | covered by the trailing-`unless` support |
+
+### Coreference/output fixes found and fixed
+
+- **Master of the Wild Hunt**: the first `its` bound to the previously created
+  token. The possessive role for `equal to` was being read as the generic `to`
+  object cue; fixed that precedence. The subject fallback also now stays in the
+  anaphor's sentence. `Each Wolf tapped this way` is the antecedent.
+- **Distributive singular**: `Each Wolf tapped this way` has a singular head but
+  the old number heuristic marked it plural. Singular possessives may now keep
+  `each/every/any <singular>` candidates.
+- **Trailing unless**: moved the `unless` clause into the effect dict so
+  `counter target spell unless ...` keeps its condition in output.
+- **Thorncaster Sliver**: `it` inside the granted ability stays in the grant
+  recipient entity (plural canonical) by design; the referent class is correct.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44 (after fixing the trailing-unless output).
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.5% entity-aware / 84.7% exact** (was 90.5 / 84.6).
+- Bench coreference: **94.3% regex / 93.0% parser** (unchanged).

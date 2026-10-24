@@ -57,6 +57,10 @@ _POSS_OBJECT = re.compile(r"(\bunder|\binto|\bonto|\bto)\s*$", re.I)
 def possessive_role(text, start):
     """Preferred antecedent role for a possessive anaphor at `start`, or None."""
     before = text[max(0, start - 24):start]
+    # "equal to its power" ends in "to" but is a subject cue, not an object
+    # cue; handle it before the generic "to".
+    if re.search(r"\bequal\s+to\s*$", before, re.I):
+        return "subject"
     if _POSS_OBJECT.search(before):
         return "object"
     if _POSS_SUBJECT.search(before):
@@ -446,7 +450,11 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             f = [i for i in pool
                  if ms[i]["number"] == anum
                  or (allow_singular_players
-                     and ms[i]["head_type"] in ("player", "opponent"))]
+                     and ms[i]["head_type"] in ("player", "opponent"))
+                 or (anum == "sg"
+                     and re.match(r"^(?:each|every|any)\s+",
+                                  ms[i]["surface"].strip(), re.I)
+                     and not ms[i]["surface"].strip().lower().endswith("s"))]
             if f:
                 pool = f
                 evidence.append(f"number={anum}")
@@ -712,7 +720,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     break
                 if any(ms[i].get("sentence") == si - back for i in pool):
                     break
-        if token_ctx and rec["kind"] == "pronoun":
+        if token_ctx and rec["kind"] == "pronoun" and not rec["is_possessive"]:
             f = [i for i in pool
                  if "token" in ms[i]["surface"].lower() or ms[i]["head_type"] == "token"]
             if f:
@@ -781,11 +789,14 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         evidence.append(f"possessive-{want}")
                     elif want == "subject" and pool and not any(ms[i].get("role") for i in pool):
                         # No parse structure cached: the subject is normally the
-                        # earliest candidate in the clause ("Each player exiles
-                        # the top seven cards of their library").
-                        g = [min(pool, key=lambda i: ms[i]["start"])]
-                        pool = g
-                        evidence.append("possessive-subject-earliest")
+                        # earliest candidate in the *same sentence* ("Each player
+                        # exiles the top seven cards of their library").  Do not
+                        # reach into an earlier sentence (a prior token, etc.).
+                        same = [i for i in pool if ms[i]["sentence"] == rec["sentence"]]
+                        if same:
+                            g = [min(same, key=lambda i: ms[i]["start"])]
+                            pool = g
+                            evidence.append("possessive-subject-earliest")
                     elif (want == "object" and pool
                           and rec["surface"].lower() in ("its", "itself")
                           and not any(ms[i].get("role") for i in pool)):

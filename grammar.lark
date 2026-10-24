@@ -45,6 +45,7 @@ instead_suffix: INSTEAD ("of" any_text)?
 //  static restrictions / one-liners that aren't keyword lists
 // ----------------------------------------------------------------------------
 static_sentence: "Activate" "only" "as" "a" "sorcery"
+               | V_YOU V_CANT "choose" card_target "as" any_text
                | "Start" "your" "engines" "!"
                | "Do" "this" "only" "once" "each" "turn"
                | V_YOU "may" "choose" "the" "same" "mode" "more" "than" "once"
@@ -128,13 +129,14 @@ cost_item: MANA+
 //    <trigger clause> [if <condition>], <effect>
 // ----------------------------------------------------------------------------
 ability_word_prefix: (CARDNAME | WORD)+ EMDASH
-triggered_sentence: ability_word_prefix? trigger_clause "," if_clause? effect xdef_clause? trailing_if?
+triggered_sentence: ability_word_prefix? trigger_clause "," if_clause? effect xdef_clause? (trailing_if | trailing_unless)?
 as_long_sentence: "As" "long" "as" any_text "," effect
 during_sentence: ability_word_prefix? "During" during_time "," effect
 until_sentence: "Until" "end" "of" "turn" "," effect
               | "Until" "the" "end" "of" "your" "next" "turn" "," effect
 as_cost_sentence: "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," effect
 during_time: "your" "turn" | "each" "of" "your" "turns" | "combat"
+            | OWNER? "next" "turn"
 trigger_clause: trig_when event?
               | trig_when counter_amount counter_kind "is" "removed" "from" card_target
               | trig_when V_YOU "cast" "a" "spell" "that's" colors
@@ -217,6 +219,7 @@ if_clause: V_IF any_text ","
 trailing_if: V_IF any_text
            | INSTEAD V_IF any_text
            | INSTEAD
+trailing_unless: "unless" any_text
 
 // ----------------------------------------------------------------------------
 //  static keyword list (optionally with a modifier: Ward {4}, Kicker {2}, ...)
@@ -241,7 +244,7 @@ kw_with_mod: MOD_KEYWORD (MANA+ | "for" card_target | "from" (colors | "instants
 // ----------------------------------------------------------------------------
 //  generic effect sentence
 // ----------------------------------------------------------------------------
-effect_sentence: ("Then" | "And" | "Otherwise" ",")? effect (xdef_clause)? trailing_if?
+effect_sentence: ("Then" | "And" | "Otherwise" ",")? effect (xdef_clause)? (trailing_if | trailing_unless)?
               | ("Then" | "And") if_sentence
 
 // ----------------------------------------------------------------------------
@@ -452,6 +455,7 @@ deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("an
                   | (V_IT | V_THEY) V_DEAL "damage" "to" damage_who "equal" "to" xdef
                   | (V_IT | V_THEY) V_DEAL "damage" "equal" "to" xdef
                   | card_target V_DEAL amount "damage" "divided" "as" "you" "choose" "among" "any" "number" "of" damage_who
+                  | card_target V_DEAL "damage" "equal" "to" any_text "divided" "as" any_text "chooses" "among" any_text
                   | card_target V_DEAL dmg_amount "damage" "divided" divided_rest
 damage_who: card_target "or" card_target
           | "target" "player" "or" "planeswalker"
@@ -536,7 +540,8 @@ tap_action: V_TAP card_target
 untap_action: V_UNTAP card_target
 no_untap_action: card_target "doesn't" "untap" "during" "its" "controller's" "next"? "untap" "step" ("for" "as" "long" "as" any_text)? (","? "and" "its" "activated" "abilities" "can't" "be" "activated")?
 can_block_action: card_target "can" "block" ("any" "number" "of" | "up" "to" amount)? card_target
-sacrifice_action: (who)? V_SACRIFICE card_target "or" V_PAY MANA+
+sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? "or" V_PAY MANA+
+                | (who)? V_SACRIFICE card_target ("of" "their" "choice")? "or" V_PAY amount "life"
                 | (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" ("the" | "your") "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
 regenerate_action: (who)? V_REGENERATE card_target
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
@@ -583,6 +588,7 @@ become_tail: "with" QUOTE "and" "loses" "all" "other" "card" "types" "and" "abil
            | "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
            | "with" "base" "power" "and" "toughness" POWER_T ("named" CARDNAME+)?
            | "until" "end" "of" "turn"
+           | "that's" "still" ("a" | "an")? GENERIC_TYPE
            | "until" "your" "next" "turn"
            | "for" "as" "long" "as" "you" "control" "it"
            | "for" "as" "long" "as" any_text
@@ -708,6 +714,7 @@ cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target |
 no_max_hand_action: V_YOU "have" "no" "maximum" "hand" "size" ("for" "the" "rest" "of" "the" "game")?
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
 attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" | "you" "this" "turn" | "this" "turn") "if" "able"
+                         | card_target "attack" ("~" | card_target) "if" "able"
 block_do_so_action: card_target "able" "to" "block" card_target "do" "so"
 
 // permissive free text used only inside condition / keyword-trigger contexts
@@ -849,6 +856,7 @@ with_modifier: "with" (kw_list | "power" amount CMP? | "toughness" amount CMP? |
              | "that" "weren't" "put" "onto" "the" "battlefield"
              | "that" "weren't" "cast" "this" "way"
              | "exiled" "this" "way"
+             | "tapped" "this" "way"
              | "attached" "to" card_target
              | "destroyed" "this" "way"
 CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i

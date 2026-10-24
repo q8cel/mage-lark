@@ -1377,6 +1377,15 @@ class Interpreter:
                     d['if'] = self.interp(ch)
                 elif ch.data == 'trailing_if':
                     d['trailing_if'] = self.interp(ch)
+                elif ch.data == 'trailing_unless':
+                    val = self.interp(ch)
+                    eff = d.get('effect')
+                    if isinstance(eff, dict):
+                        eff['unless'] = val
+                    elif isinstance(eff, list) and eff:
+                        eff[-1]['unless'] = val
+                    else:
+                        d['unless'] = val
                 elif ch.data == 'effect':
                     d['effect'] = self.interp(ch)
         return d
@@ -1417,7 +1426,20 @@ class Interpreter:
                     d['effect'] = self.interp(ch)
                 elif ch.data == 'xdef_clause':
                     d['xdef'] = self.interp(ch)
+                elif ch.data == 'trailing_unless':
+                    val = self.interp(ch)
+                    eff = d.get('effect')
+                    if isinstance(eff, dict):
+                        eff['unless'] = val
+                    elif isinstance(eff, list) and eff:
+                        eff[-1]['unless'] = val
+                    else:
+                        d['unless'] = val
         return d
+
+    def i_trailing_unless(self, children):
+        at = self._find_one(children, 'any_text')
+        return self.interp(at) if at is not None else self._text(children)
 
     def i_xdef_sentence(self, children):
         xd = self._find_one(children, 'xdef')
