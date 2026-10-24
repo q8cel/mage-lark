@@ -959,7 +959,11 @@ class Interpreter:
             d['modal'] = 'may'
         at = self._find_one(children, 'any_text')
         if at is not None:
-            d['for'] = self.interp(at)
+            val = self.interp(at)
+            if isinstance(val, str) and val.strip().lower() == 'the copy':
+                d['for'] = {'kind': 'copy', 'text': val.strip()}
+            else:
+                d['for'] = val
         return d
 
     def i_gain_poison_action(self, children):

@@ -128,6 +128,10 @@ def main():
     assert out[0]['effect']['verb'] == 'set_base_pt'
     assert out[0]['effect']['base_pt'] == '2/2'
 
+    # 'the copy' is an object, not an opaque string.
+    out = parse('You may choose new targets for the copy')
+    assert out[0]['effect']['for'] == {'kind': 'copy', 'text': 'the copy'}
+
     print('list tests passed')
 
 
