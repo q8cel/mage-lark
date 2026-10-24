@@ -7,6 +7,8 @@
 """
 import re
 
+from lists import protect as protect_lists
+
 def strip_reminders(text):
     """Remove all parenthetical (reminder) groups, handling nested parens."""
     out = []
@@ -137,5 +139,5 @@ def segment(text, names=None):
             if not s_body:
                 continue
             modal = bool(re.match(r'^(Choose one|Choose [a-z]+)$', s_body))
-            items.append({'text': s_body, 'modal': modal, 'bullet': bullet})
+            items.append({'text': protect_lists(s_body), 'modal': modal, 'bullet': bullet})
     return items

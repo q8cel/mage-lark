@@ -742,7 +742,7 @@ emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
             | card_target V_ENTERS ("the" "battlefield")? "with" "a" "number" "of" (POWER_MOD | counter_name) "counters" "on" "it" "equal" "to" any_text
 enchant_action: V_ENCHANT enchant_target
-enchant_target: STATUS* (GENERIC_TYPE | CARDNAME) (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
+enchant_target: LISTTOK | STATUS* (GENERIC_TYPE | CARDNAME) (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
 cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? ("unless" any_text)? | "be" "blocked" ("this" "turn")? ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
             | (card_target)? V_CANT "cast" "spells" "or" "activate" "abilities" "of" card_target ("or" card_target)*
             | (card_target)? V_CANT "cast" "spells" ("during" OWNER? "turn")?
@@ -757,8 +757,9 @@ attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" 
 block_do_so_action: card_target "able" "to" "block" card_target "do" "so"
 
 // permissive free text used only inside condition / keyword-trigger contexts
-any_text: (ANYWORD | NONTYPE | COLOR)+
+any_text: (ANYWORD | NONTYPE | COLOR | LISTTOK)+
 ANYWORD: /[a-zA-Z0-9+{}\/.\'~-]+/
+LISTTOK: /@@L[0-9a-f]+@@/
 
 // ----------------------------------------------------------------------------
 //  X definition clause:  "where X is <something>"
@@ -821,12 +822,12 @@ color: COLOR
 COLOR: /white|blue|black|red|green|colorless|multicolored/i
 
 //  card types (generic + proper-noun subtypes resolved in the transformer)
-types: GENERIC_TYPE | CARDNAME
+types: GENERIC_TYPE | CARDNAME | LISTTOK
 GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorceries?|basic|nonbasic|nontoken|legendary|nonlegendary|walls?/i
 INSTANT_SORCERY: /\b[iI]nstant and sorcery\b/
 
 //  the star: an atomic card reference
-card_target: lead? core? zone_mod?
+card_target: LISTTOK | lead? core? zone_mod?
 //  NOTE: card_target's fields are grouped into lead/core/zone_mod (preserving the
 //  exact left-to-right order) so the Earley chart doesn't combinatorially explode
 //  over 13 independent optional fields.  The interpreter finds each field by name

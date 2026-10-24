@@ -16,6 +16,8 @@ Usage:
     out = it.interp(parser.parse(sentence)) # -> list of sentence dicts
 """
 from lark import Token, Tree
+
+from lists import decode as decode_list_token
 from mtd import card_type_set, name_set
 
 
@@ -149,6 +151,9 @@ class Interpreter:
 
     # ------------------------------------------------------------------ card target
     def i_card_target(self, children):
+        for ch in children:
+            if isinstance(ch, Token) and ch.type == 'LISTTOK':
+                return decode_list_token(ch.value)
         d = {}
         # Fields are grouped under lead/core/zone_mod; search the whole subtree
         # so the grouping is transparent.  Order of the mapping is the precedence
@@ -169,6 +174,9 @@ class Interpreter:
 
     def i_card_kind(self, children):
         toks = [c for c in children if isinstance(c, Token)]
+        for t in toks:
+            if t.type == 'LISTTOK':
+                return decode_list_token(t.value)
         trees = [c for c in children if isinstance(c, Tree)]
         if trees:
             return self.interp(trees[0])
@@ -192,6 +200,8 @@ class Interpreter:
     def i_types(self, children):
         for ch in children:
             if isinstance(ch, Token):
+                if ch.type == 'LISTTOK':
+                    return decode_list_token(ch.value)
                 if ch.type == 'CARDNAME':
                     return self._resolve_kind(ch.value)
                 return {'kind': 'type', 'value': ch.value.lower()}
@@ -1337,6 +1347,8 @@ class Interpreter:
                     d['subject'] = self.interp(ch)
                 elif ch.data == 'event_object':
                     d['object'] = self.interp(ch)
+                elif ch.data == 'card_target':
+                    d.setdefault('object', self.interp(ch))
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
         return d
@@ -1358,9 +1370,15 @@ class Interpreter:
         return self.interp(children[0]) if children else None
 
     def i_if_clause(self, children):
+        for ch in children:
+            if isinstance(ch, Tree) and ch.data == 'any_text':
+                return self.interp(ch)
         return self._text(children)
 
     def i_trailing_if(self, children):
+        for ch in children:
+            if isinstance(ch, Tree) and ch.data == 'any_text':
+                return self.interp(ch)
         return self._text(children)
 
     def i_static_text(self, children):
@@ -1376,6 +1394,14 @@ class Interpreter:
                     d['event'] = self.interp(ch)
                 elif ch.data == 'static_text':
                     d['text'] = self.interp(ch)
+                elif ch.data == 'any_text':
+                    val = self.interp(ch)
+                    if isinstance(val, dict) and val.get('lists'):
+                        d['event'] = {'subject': val['lists'][0]}
+                        if val.get('text'):
+                            d['text'] = val['text']
+                    else:
+                        d['text'] = val
             elif isinstance(ch, Token):
                 d.setdefault('keywords', []).append(ch.value)
         return d
@@ -1487,7 +1513,7 @@ class Interpreter:
                 if ch.data == 'effect':
                     eff = self.interp(ch)
                 elif ch.data == 'any_text':
-                    texts.append(self._text([ch]).strip())
+                    texts.append(self.interp(ch))
                 elif ch.data == 'instead_suffix':
                     d['instead'] = True
                     for sub in ch.children:
@@ -1529,6 +1555,16 @@ class Interpreter:
         return self._cond_effect_sentence('additional_cost', children)
 
     def i_any_text(self, children):
+        toks = [c for c in children if isinstance(c, Token) and c.type == 'LISTTOK']
+        if toks:
+            lists = [decode_list_token(t.value) for t in toks]
+            parts = []
+            for c in children:
+                if isinstance(c, Token) and c.type == 'LISTTOK':
+                    parts.append(decode_list_token(c.value).get('text', c.value))
+                else:
+                    parts.append(str(c))
+            return {'text': ' '.join(parts).strip(), 'lists': lists}
         return self._text(children)
 
     def i_raw_action(self, children):
