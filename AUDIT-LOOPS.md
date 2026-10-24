@@ -578,3 +578,26 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.7% entity-aware / 84.9% exact**.
 - Bench: **95.7% regex / 93.0% parser**.
+
+## Loop 14 — seed 20261105 (halted)
+
+The sample began cleanly, but `Sanctum of All`'s second ability
+
+```text
+If a triggered ability of another Shrine you control triggers while you
+control six or more Shrines, that ability triggers an additional time.
+```
+
+made the Earley parser spend over a minute on one sentence even after adding a
+targeted rule; the ambiguity came from the existing permissive `if_sentence` /
+`any_text` alternatives, not from the card-specific phrase.  A previous attempt
+to solve this by allowing `it`/`they` in `any_text` and `if_sentence` under
+`until_sentence` had already been reverted in `df02271` because it made simple
+parses globally slow.
+
+Loop 14 is therefore halted rather than committed with a workaround that would
+hide a parser-ambiguity/performance problem.  The next useful work is to
+refactor the permissive condition fallbacks (or add a deterministic fast path
+for fixed-form condition sentences), not to add another broad `any_text` rule.
+
+No card-fix commit was made for this loop.
