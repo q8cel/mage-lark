@@ -525,6 +525,9 @@ class Interpreter:
     def i_investigate_action(self, children):
         return {'verb': 'investigate'}
 
+    def i_flip_action(self, children):
+        return {'verb': 'flip_coin'}
+
     def i_gift_action(self, children):
         return self._card_action('gift', children)
 

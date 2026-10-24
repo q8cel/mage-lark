@@ -46,6 +46,7 @@ instead_suffix: INSTEAD ("of" any_text)?
 // ----------------------------------------------------------------------------
 static_sentence: "Activate" "only" "as" "a" "sorcery"
                | V_YOU V_CANT "choose" card_target "as" any_text
+               | card_target "guesses" "whether" any_text
                | "Start" "your" "engines" "!"
                | "Do" "this" "only" "once" "each" "turn"
                | V_YOU "may" "choose" "the" "same" "mode" "more" "than" "once"
@@ -338,6 +339,7 @@ action: add_mana_action
        | after_phase_action
        | must_block_action
        | investigate_action
+       | flip_action
        | gift_action
        | explore_action
        | manifest_action
@@ -347,6 +349,7 @@ action: add_mana_action
        | exchange_control_action
 
 investigate_action: V_INVESTIGATE
+flip_action: V_FLIP "a" "coin"
 gift_action: "Gift" ("a" | "an")? card_target
 explore_action: (V_IT)? "explore" "s"?
 manifest_action: V_MANIFEST "dread"
@@ -384,7 +387,7 @@ token: "a" "token" "that's" "a" "copy" "of" card_target token_except?
       | token_proper "," "a" "legendary" POWER_T? tok_colors? token_types? "creature" "token"
       | "a" "number" "of" POWER_T? tok_colors? token_types? "creature" "tokens" "equal" "to" xdef ("named" ("~" | CARDNAME))?
 tok_colors: (COLOR | "colorless" | "multicolored") (("," | "and" | "or") (COLOR | "colorless" | "multicolored"))*
-token_tail: ("named" ("~'s" CARDNAME | CARDNAME))
+token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
            | ("with" kw_with_mod)
            | ("with" (kw_list | QUOTE))
            | ("that" "are" "tapped" ("and" "attacking")?)
@@ -474,6 +477,8 @@ damage_who: card_target "or" card_target
           | "each" "creature" "without" "flying"
           | "each" "creature" "and" "each" "player"
           | "each" "opponent" "and" "each" "planeswalker" "they" "control"
+          | "each" "opponent" "and" "each" "creature" "your" "opponents" "control"
+          | "each" "creature" "your" "opponents" "control"
           | "each" "player" "and" "each" "creature"
 divided_rest: (ANYWORD | ",")+
 
@@ -571,6 +576,7 @@ pt_color_mod: colors (POWER_T)? | POWER_T colors?
 become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
              | card_target "becomes" "equal" "to" any_text
              | card_target "becomes" "your" "choice" "of" any_text ("," any_text)*
+             | card_target "becomes" "a" "copy" "of" card_target ("until" "end" "of" "turn")?
              | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE become_tail?
 // NOTE: this rule used to end with three optional groups containing `any_text`
 // ("with any_text", "that's any_text", "for as long as any_text"). `any_text` is
@@ -585,6 +591,7 @@ become_tail: "with" QUOTE "and" "loses" "all" "other" "card" "types" "and" "abil
            | "with" kw_list
            | "with" "all" "creature" "types"
            | "with" kw_list_mod
+           | "with" kw_list "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types") ("until" "end" "of" "turn")?
            | "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
            | "with" "base" "power" "and" "toughness" POWER_T ("named" CARDNAME+)?
            | "until" "end" "of" "turn"
@@ -651,6 +658,7 @@ may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent" | contr
         | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action
         | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
         | investigate_action
+       | flip_action
        | gift_action
        | explore_action
        | manifest_action
@@ -734,6 +742,7 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "its" "toughness"
     | "the" "mana" "value" "of" "that" "spell"
     | ("that" | "a" | "its") "creature's" "mana" "value"
+    | card_target "'s" ("power" | "toughness")
     | "that" "card's" "mana" "cost"
     | "the" "amount" "of" "excess" "damage" "dealt" "to" "that" "creature" "this" "way"
     | "the" "greatest" "power" "among" "other" "creatures" "you" "control"
@@ -936,6 +945,7 @@ V_MAY: /\bmay\b/i
 V_PAY: /\bpay(s?)\b/i
 V_UNTIL: /\buntil\b/i
 V_INVESTIGATE: /\binvestigate(s|d)?\b/i
+V_FLIP: /\bflip(s|ped)?\b/i
 V_MANIFEST: /\bmanifest\b/i
 V_CYCLE: /\bcycle\b/i
 V_CLOAK: /\bcloak\b/i

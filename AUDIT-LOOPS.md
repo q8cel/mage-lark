@@ -327,3 +327,47 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.5% entity-aware / 84.7% exact** (was 90.5 / 84.6).
 - Bench coreference: **94.3% regex / 93.0% parser** (unchanged).
+
+## Loop 8 — seed 20261030
+
+Cards:
+
+`Rupture Spire`, `Explosive Apparatus`, `Sarkhan, Dragonsoul`, `Into the Wilds`,
+`Master of Predicaments`, `Barkhide Troll`, `Riddleform`, `Shared Summons`,
+`Ghostly Pilferer`, `Teferi's Wavecaster`, `Goblin Kaboomist`, `Condemn`,
+`Jace's Mindseeker`, `Gruesome Scourger`, `Masterful Replication`,
+`Dark-Dweller Oracle`, `Totally Lost`, `Demonic Embrace`,
+`Disciple of Bolas`, `Captivating Gyre`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Sarkhan, Dragonsoul | `each opponent and each creature your opponents control` | added the combined damage recipient |
+| Master of Predicaments | `That player guesses whether ...` | added the guess-whether static form |
+| Riddleform | `become a 3/3 Sphinx creature with flying in addition to ... until end of turn` | added the keyword + in-addition-to become tail with an optional duration |
+| Goblin Kaboomist | two-word token name `Land Mine` followed by a quoted ability; `Then flip a coin` | allowed multi-word token names and added a flip-coin action |
+| Masterful Replication | `becomes a copy of that artifact until end of turn` | added the become-a-copy form |
+| Disciple of Bolas | `X is that creature's power` | added possessive power/toughness to xdef |
+
+### Coreference/output fixes found and fixed
+
+- **Masterful Replication**: `that artifact` bound to the later `Each other
+  artifact`; added `copy-of-target` so the demonstrative points at the chosen
+  target.
+- **Jace's Mindseeker**: `them` had no milled-card candidate. Bare counts after
+  mill/exile/reveal/discard/draw are now inventoried; `them` -> `cards`.
+- **Demonic Embrace / Jace's Mindseeker**: `its mana cost`/`its other costs`
+  bound to the wrong card. Added `its-cost-card`, preferring a spell/card and
+  then the self card when present.
+- **Captivating Gyre**: `their owners' hands` correctly binds to the target
+  creatures; the possessive antecedent is the creatures, not a separate owner
+  entity.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.7% entity-aware / 84.9% exact** (was 90.5 / 84.7).
+- Bench coreference: **94.3% regex / 93.0% parser** (unchanged).

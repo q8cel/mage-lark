@@ -44,7 +44,8 @@ SPELL_CAND = re.compile(
 # Bare plural after "with"/"controls" is an event collection ("attacks with
 # creatures", "two or more of those creatures").
 BARE_COLLECTION = re.compile(
-    r"\b(?:with|control(?:s)?)\s+"
+    r"\b(?:with|control(?:s)?|mills?|exiles?|reveals?|discards?|draws?)\s+"
+    r"(?:[A-Za-z0-9]+\s+)?"
     r"(creatures|permanents|cards|lands|artifacts|enchantments|spells|tokens)\b",
     re.I)
 INSTANT_SORCERY_SPELL = re.compile(

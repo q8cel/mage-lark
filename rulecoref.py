@@ -109,6 +109,7 @@ _STILL_LAND = re.compile(r"^\s*still\s+(?:a|an)?\s*land\b", re.I)
 _FOR_EACH_OTHER_WITH_IT = re.compile(
     r"\bfor\s+each\s+other\b[^.;]*\bwith\s*$", re.I)
 _SACRIFICE_IT = re.compile(r"\bsacrifices?\s*$", re.I)
+_ITS_COST = re.compile(r"^\s*(?:other\s+costs|mana\s+cost)\b", re.I)
 # "this creature deals 2 damage to it": the object cannot be the subject.
 _DAMAGE_TO_LEAD = re.compile(r"\bdamage\s+to\s*$", re.I)
 # "their library/hand/graveyard" belongs to the player, even when the recent
@@ -499,6 +500,15 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = []
                     evidence.append("card-demonstrative-no-collection")
 
+        # ---- "a copy of that artifact": the demonstrative points at the
+        # chosen/targeted object, not the later copy target.
+        if (rec["kind"] == "demonstrative"
+                and _COPY_OF.search(text[max(0, rec["start"] - 20):rec["start"]])):
+            f = [i for i in pool if ms[i].get("is_target")]
+            if f:
+                pool = f
+                evidence.append("copy-of-target")
+
         # ---- set-valued anaphors ("the rest", "the others")
         # The referent is a COLLECTION minus what was just singled out, so the
         # antecedent is the last plural collection NP, not the last mention.
@@ -736,6 +746,15 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("life-equal-object")
+
+        # ---- "its other costs"/"its mana cost": the spell/card itself
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "its"
+                and _ITS_COST.match(text[rec["end"]:])):
+            f = [i for i in pool if ms[i]["head_type"] in ("spell", "card")]
+            if f:
+                own = [i for i in f if ms[i].get("is_self")]
+                pool = own or f
+                evidence.append("its-cost-card")
 
         # ---- "its controller/owner": the possessor is the object
         if (rec["kind"] == "pronoun" and rec["is_possessive"]
