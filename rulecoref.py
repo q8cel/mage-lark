@@ -124,7 +124,7 @@ _POSSESSED_ATTRIBUTE = re.compile(
 _OBJECT_VERB_LEAD = re.compile(
     r"\b(?:exile|exiles|exiled|sacrifice|sacrifices|sacrificed|return|returns|"
     r"returned|destroy|destroys|destroyed|put|puts|tap|taps|tapped|untap|"
-    r"untaps|untapped)\s*$", re.I)
+    r"untaps|untapped|shuffle|shuffles|shuffled)\s*$", re.I)
 _SUBJECT_VERB = re.compile(
     r"^\s+(?:gains?|has|have|deals?|gets?|becomes?|is|isn't|can|cannot|can't|"
     r"attacks?|blocks?|enters?|leaves?|dies?|draws?|puts?|exiles?|returns?|"
@@ -379,7 +379,10 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # ---- lexical predicate/nominal filters
         if on["predicate"]:
             f = [i for i in pool
-                 if not _PREDICATE_LEAD.search(text[max(0, ms[i]["start"] - 18):ms[i]["start"]])]
+                 if not (_PREDICATE_LEAD.search(text[max(0, ms[i]["start"] - 18):ms[i]["start"]])
+                         and not re.match(
+                             r"^(?:blocked|attached|target|dealt|put|chosen|equipped|enchanted)\b",
+                             ms[i]["surface"], re.I))]
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("drop-predicate-nominals")

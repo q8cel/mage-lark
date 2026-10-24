@@ -104,7 +104,7 @@ def head_type(surface):
     low = surface.lower()
     # "that creature's controller" / "its controller" denotes a player, not
     # the creature that owns/controls the permanent.
-    if re.search(r"\bcontrollers?\b", low):
+    if re.search(r"\b(?:controllers?|owners?)\b", low):
         return "player"
     for t in TYPE_ORDER:
         if _TYPE_RE[t].search(low):
@@ -278,6 +278,14 @@ def clean(cands):
         surf = (c.get("surface") or "").strip()
         if not surf or DET_JUNK.match(surf):
             continue
+        # Parser spans can start with the relation that introduced the NP
+        # ("blocked by a creature", "attached to target creature").  Keep the
+        # actual NP and shift its start.
+        rel = re.match(r"^(?:blocked by|attached to)\s+(.+)$", surf, re.I)
+        if rel and rel.group(1).strip():
+            s0 = c["start"] + (len(surf) - len(rel.group(1)))
+            surf = rel.group(1).strip()
+            c = {**c, "start": s0, "surface": surf}
         if BAD_LEAD.match(surf) and head_type(surf) is None:
             continue
         tagged.append((i, c["start"], c["end"], surf))
@@ -380,7 +388,52 @@ def build(text, parser=True, struct=None):
     """Live inventory for a card text (regex ∪ parse-tree spans, then clean)."""
     raw = candidate_mentions(text, parser=parser)
     cleaned = [trim_long(text, m) for m in clean(raw)]
-    return annotate(text, cleaned, struct=struct)
+    cleaned = merge_coordinated(text, cleaned)
+    ms = annotate(text, cleaned, struct=struct)
+    for m in ms:
+        if m.get("coordinated"):
+            m["number"] = "pl"
+    return ms
+
+
+def merge_coordinated(text, mentions):
+    """Merge adjacent entity mentions joined by and/or into one collection.
+
+    Coordinated targets ("target instant or sorcery card ... and target ...")
+    need one collection antecedent for "those cards"/"their owners".  The
+    grammar reports each conjunct separately, so merge only clearly coordinated
+    entity NPs and keep the original mentions too.
+    """
+    out = []
+    sep = re.compile(
+        r"\s*(?:(?:from|in)\s+[^.;]+?\s+)?(?:,\s*)?(?:and/or|and|or|,)\s*",
+        re.I)
+
+    def coord_ok(a, b):
+        sa, sb = a["surface"].lower(), b["surface"].lower()
+        if head_type(a["surface"]) is None or head_type(b["surface"]) is None:
+            return False
+        lead = re.compile(r"^(?:target|each|all|another|up to|any number|one or more)\b", re.I)
+        return (lead.match(sa) or lead.match(sb)
+                or "card" in sa or "card" in sb
+                or a.get("is_target") or b.get("is_target"))
+
+    i = 0
+    while i < len(mentions):
+        j = i
+        while j + 1 < len(mentions):
+            a, b = mentions[j], mentions[j + 1]
+            between = text[a["end"]:b["start"]]
+            if not (sep.fullmatch(between) and coord_ok(a, b)):
+                break
+            j += 1
+        out.extend(mentions[i:j + 1])
+        if j > i:
+            out.append({"surface": text[mentions[i]["start"]:mentions[j]["end"]],
+                        "start": mentions[i]["start"], "end": mentions[j]["end"],
+                        "src": mentions[i].get("src"), "coordinated": True})
+        i = j + 1
+    return out
 
 
 def anaphor_mentions(text, annotate_them=True):

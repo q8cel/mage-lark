@@ -371,3 +371,49 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.7% entity-aware / 84.9% exact** (was 90.5 / 84.7).
 - Bench coreference: **94.3% regex / 93.0% parser** (unchanged).
+
+## Loop 9 — seed 20261031
+
+Cards:
+
+`Inferno Hellion`, `Generator Servant`, `Mana Leak`, `Brightwood Tracker`,
+`Sabertooth Mauler`, `Basri Ket`, `Faith's Fetters`, `Gloom Sower`,
+`Radiating Lightning`, `Flameblast Dragon`, `Undergrowth Scavenger`,
+`Diviner's Lockbox`, `Chromium, the Mutable`, `Spelltwine`, `Stone Giant`,
+`Atemsis, All-Seeing`, `Harm's Way`, `Frost Titan`, `Capricious Efreet`,
+`Sorin's Guide`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Undergrowth Scavenger | `enters with a number of +1/+1 counters ... equal to ...` | added the counted-counter enters form |
+| Chromium, the Mutable | `base power and toughness 1/1, loses all abilities, and gains hexproof` | extended the base-power/toughness become tail |
+| Spelltwine | coordinated exile targets | added coordinated exile |
+| Stone Giant | `toughness less than this creature's power`; destroy at next end step | added comparative power/toughness modifiers and the destroy timing suffix |
+| Harm's Way | `The next 2 damage ... is dealt ... instead` | added the static replacement-damage form |
+
+### Coreference/output fixes found and fixed
+
+- **Inferno Hellion**: `shuffles it` bound to `its owner`; shuffling is now an
+  object verb and `owner` is typed as a player, so `it` stays the creature.
+- **Gloom Sower**: `that creature` bound to `this creature` because
+  `blocked by a creature` was dropped as a copula complement. The predicate
+  filter now keeps relational NPs, and the relation prefix is stripped to
+  `a creature`.
+- **Spelltwine**: `those cards`/`their` had only one conjunct. Added
+  `merge_coordinated`, which keeps the individual mentions and adds one
+  coordinated collection span; the collection can now be the antecedent.
+- **Harm's Way**: `that a source` was a false demonstrative from the relative
+  clause. The demonstrative regex now rejects an article immediately after
+  `that/this/those/these`.
+- **Owner type**: `its owner` / `their owners` now count as player mentions.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.6% entity-aware / 84.8% exact** (owner typing and
+  coordinated spans changed a few dev candidate choices).
+- Bench coreference: **94.3% regex / 93.0% parser** (unchanged).

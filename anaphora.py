@@ -44,7 +44,7 @@ _PRON_RE = re.compile(
 )
 _PHRASE_RE = re.compile(r"\bthe rest\b", re.I)
 _DEM_RE = re.compile(
-    rf"\b(?:{DEMONSTRATIVE_DET})\s+(?:[\w,'\-]+\s+){{0,2}}(?:{HEADS})\b",
+    rf"\b(?:{DEMONSTRATIVE_DET})\s+(?!(?:a|an|the)\b)(?:[\w,'\-]+\s+){{0,2}}(?:{HEADS})\b",
     re.I,
 )
 _QUANTITY = re.compile(r"\b(?:that|this)\s+(?:many|much|few|little)\b", re.I)

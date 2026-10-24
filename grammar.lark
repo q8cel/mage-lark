@@ -47,6 +47,7 @@ instead_suffix: INSTEAD ("of" any_text)?
 static_sentence: "Activate" "only" "as" "a" "sorcery"
                | V_YOU V_CANT "choose" card_target "as" any_text
                | card_target "guesses" "whether" any_text
+               | "The" "next" amount "damage" any_text "instead"
                | "Start" "your" "engines" "!"
                | "Do" "this" "only" "once" "each" "turn"
                | V_YOU "may" "choose" "the" "same" "mode" "more" "than" "once"
@@ -525,6 +526,7 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
 order_mod: "in" ("a" "random" | "any") "order"
 
 exile_action: (who)? V_EXILE card_target ("from" zone)? ("until" any_text)?
+            | (who)? V_EXILE card_target ("from" zone)? "and" card_target ("from" zone)?
             | (who)? V_EXILE card_target "from" "the" "top" "of" zone ("until" any_text)?
             | V_EXILE "all" "graveyards"
             | V_EXILE "the" "top" amount "cards" "of" "your" "library"
@@ -538,7 +540,7 @@ exile_action: (who)? V_EXILE card_target ("from" zone)? ("until" any_text)?
             | V_EXILE card_target "attached" "to" card_target
             | V_EXILE "all" "but" "the" "bottom" "card" "of" zone
 
-destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "random")?
+destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "random")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
               | V_DESTROY card_target "and" "all" "other" "permanents" "with" "the" "same" "name" "as" "that" "permanent"
 
 tap_action: V_TAP card_target
@@ -593,7 +595,7 @@ become_tail: "with" QUOTE "and" "loses" "all" "other" "card" "types" "and" "abil
            | "with" kw_list_mod
            | "with" kw_list "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types") ("until" "end" "of" "turn")?
            | "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
-           | "with" "base" "power" "and" "toughness" POWER_T ("named" CARDNAME+)?
+           | "with" "base" "power" "and" "toughness" POWER_T ("named" CARDNAME+)? ("," "loses" "all" "abilities")? (","? "and" ("gains"|"has") kw_list)?
            | "until" "end" "of" "turn"
            | "that's" "still" ("a" | "an")? GENERIC_TYPE
            | "until" "your" "next" "turn"
@@ -711,6 +713,7 @@ gain_quote_action: (card_target)? (V_GAIN | "has" | "have") QUOTE
 emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))?
 
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
+            | card_target V_ENTERS ("the" "battlefield")? "with" "a" "number" "of" (POWER_MOD | counter_name) "counters" "on" "it" "equal" "to" any_text
 enchant_action: V_ENCHANT enchant_target
 enchant_target: STATUS* (GENERIC_TYPE | CARDNAME) (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
 cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? ("unless" any_text)? | "be" "blocked" ("this" "turn")? ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
@@ -847,7 +850,7 @@ card_kind: THIS_CARD types? | types
          | "instant" "or" "sorcery" "spell" "s"?
          | "instant" "and" "sorcery" "card" "s"?
          | "creature" "or" "land" "card" "s"?
-with_modifier: "with" (kw_list | "power" amount CMP? | "toughness" amount CMP? | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
+with_modifier: "with" (kw_list | "power" amount CMP? | "power" CMP card_target "'s" "power" | "toughness" amount CMP? | "toughness" CMP card_target "'s" "power" | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
              | "that" "are" types
              | "that" "is" GENERIC_TYPE
              | "of" "the" "chosen" ("type" | "color")
