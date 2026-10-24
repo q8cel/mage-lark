@@ -48,6 +48,7 @@ BARE_COLLECTION = re.compile(
     r"(?:[A-Za-z0-9]+\s+)?"
     r"(creatures|permanents|cards|lands|artifacts|enchantments|spells|tokens)\b",
     re.I)
+STATUS_NAME = re.compile(r"\b(?:Enchanted|Equipped)\s+[A-Z][\w'\-]+\b")
 INSTANT_SORCERY_SPELL = re.compile(
     r"\b(?:a|an|the|that|this|those|these|target)\s+"
     r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
@@ -76,6 +77,10 @@ def _regex_mentions(text):
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in SPELL_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in STATUS_NAME.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})

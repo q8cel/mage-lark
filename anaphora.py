@@ -73,6 +73,8 @@ def find_anaphors(text, phrases=True, demonstratives=True):
             if re.search(r"\btarget\s+(?:this|that|a|an|the)\b",
                          m.group(0), re.I):
                 continue
+            if re.search(r"\btargets?\b", m.group(0), re.I):
+                continue
             hits.append((m.start(), m.end(), m.group(0), "demonstrative"))
     hits.sort(key=lambda h: (h[0], -(h[1] - h[0])))
     out = []

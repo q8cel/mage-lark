@@ -646,6 +646,11 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                  and ms[i]["surface"].lower().startswith("target ")]
             if not f:
                 f = [i for i in pool if ms[i]["head_type"] == "land"]
+            if not f:
+                # "Enchanted Mountain is a ... It's still a land": no type word
+                # in the subject, so keep the non-indefinite subject mention.
+                f = [i for i in pool if not ms[i].get("is_self")
+                     and not ms[i]["surface"].lower().startswith(("a ", "an "))]
             if f:
                 pool = f
                 evidence.append("still-land-target")

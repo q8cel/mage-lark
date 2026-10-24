@@ -537,3 +537,44 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.7% entity-aware / 84.9% exact**.
 - Bench: **95.7% regex / 93.0% parser**.
+
+## Loop 13 — seed 20261104
+
+Cards:
+
+`Index`, `Peer into the Abyss`, `Rise from the Grave`, `Yeva, Nature's Herald`,
+`Apex of Power`, `Kurkesh, Onakke Ancient`, `Satyr Wayfinder`,
+`Ajani Goldmane`, `Chromatic Orrery`, `Tidebinder Mage`, `Roaring Primadox`,
+`Awaken the Ancient`, `Tezzeret, Cruel Machinist`, `Forge Devil`,
+`Urborg, Tomb of Yawgmoth`, `Leyline of Combustion`, `Druid of Horns`,
+`Mistcaller`, `Mutavault`, `Into the Void`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Tezzeret, Cruel Machinist | `put any number of cards ... onto the battlefield face down` | allowed face-down puts |
+| Tezzeret / token text | `They're 5/5 artifact creatures` | added the plural static token form |
+| Mistcaller | activated ability whose effect is `Until end of turn, if ...` | allowed until/if sentences as activated effects |
+| Mutavault | `creature with all creature types until end of turn` | allowed the duration on the all-creature-types become tail |
+
+### Coreference/output fixes found and fixed
+
+- **Mistcaller**: the `if a nontoken creature would enter and it wasn't
+  cast ...` condition needed `it` inside `any_text`; `it` now remains the
+  entering nontoken creature (ambiguous but correct class).
+- **Awaken the Ancient**: `Enchanted Mountain` was missing from inventory.
+  Added status+card-name mentions; `It's still a land` binds to the Mountain.
+- **Druid of Horns / Pursued Whale**: `that targets this creature` is a
+  relative clause, not a demonstrative; the detector now skips surfaces with
+  `target(s)`.
+- **Peer into the Abyss / Index / Ajani**: collection and token anaphors checked
+  and correct.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.7% entity-aware / 84.9% exact**.
+- Bench: **95.7% regex / 93.0% parser**.

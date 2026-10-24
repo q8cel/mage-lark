@@ -50,6 +50,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | "The" "next" amount "damage" any_text "instead"
                | "The" "next" card_target "you" "cast" "this" "turn" "can" "be" "cast" "as" "though" "it" "had" KEYWORD
                | "your" "life" "total" "becomes" amount
+               | "They're" POWER_T tok_colors? ("artifact")? ("creature" "s"?)
                | "damage" any_text "reduces" "it" "to" amount "instead"
                | card_target "assigns" "combat" "damage" "equal" "to" "its" "toughness" "rather" "than" "its" "power"
                | "Start" "your" "engines" "!"
@@ -109,7 +110,7 @@ modal_sentence: "Choose one"
 //    cost item: mana | {T} | {Q} | Sacrifice <card> | Remove <counter> |
 //                Tap <card> | Exile <card> | Pay <n> life
 // ----------------------------------------------------------------------------
-activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence) xdef_clause?
+activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence | until_sentence) xdef_clause?
 cost_list: cost_item ("," cost_item)*
 cost_item: MANA+
          | MANA+ "and" MANA+
@@ -138,7 +139,7 @@ ability_word_prefix: (CARDNAME | WORD)+ EMDASH
 triggered_sentence: ability_word_prefix? trigger_clause "," if_clause? effect xdef_clause? (trailing_if | trailing_unless)?
 as_long_sentence: "As" "long" "as" any_text "," effect
 during_sentence: ability_word_prefix? "During" during_time "," effect
-until_sentence: "Until" "end" "of" "turn" "," effect
+until_sentence: "Until" "end" "of" "turn" "," (effect | if_sentence)
               | "Until" "the" "end" "of" "your" "next" "turn" "," effect
 as_cost_sentence: "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," effect
 during_time: "your" "turn" | "each" "of" "your" "turns" | "combat"
@@ -531,7 +532,7 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
                | V_PUT card_target "onto" "the" "battlefield" "and" "the" "rest" "into" zone
                | V_PUT card_target "and" card_target "on" "top" "of" zone
                | V_PUT card_target "into" zone "and" "the" "other" "into" zone
-               | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control")? ("attached" "to" card_target)?
+               | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control" | "face" "down")? ("attached" "to" card_target)?
                | V_PUT card_target "on" "top" "of" zone order_mod?
                | V_PUT card_target "on" "top"
                | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
@@ -609,7 +610,7 @@ become_tail: "with" QUOTE "and" "loses" "all" "other" "card" "types" "and" "abil
            | "with" QUOTE
            | "with" kw_list "and" "all" "creature" "types"
            | "with" kw_list
-           | "with" "all" "creature" "types"
+           | "with" "all" "creature" "types" ("until" "end" "of" "turn")?
            | "with" kw_list_mod
            | "with" kw_list "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types") ("until" "end" "of" "turn")?
            | "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
@@ -756,7 +757,7 @@ attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" 
 block_do_so_action: card_target "able" "to" "block" card_target "do" "so"
 
 // permissive free text used only inside condition / keyword-trigger contexts
-any_text: (ANYWORD | NONTYPE | COLOR)+
+any_text: (ANYWORD | NONTYPE | COLOR | V_IT | V_THEY)+
 ANYWORD: /[a-zA-Z0-9+{}\/.\'~-]+/
 
 // ----------------------------------------------------------------------------
