@@ -528,6 +528,16 @@ class Interpreter:
     def i_flip_action(self, children):
         return {'verb': 'flip_coin'}
 
+    def i_life_total_action(self, children):
+        amt = self._find_one(children, 'amount')
+        return {'verb': 'life_total', 'amount': self.interp(amt) if amt is not None else None}
+
+    def i_damage_reduce_action(self, children):
+        return {'verb': 'damage_reduce'}
+
+    def i_assign_combat_action(self, children):
+        return self._card_action('assign_combat', children)
+
     def i_gift_action(self, children):
         return self._card_action('gift', children)
 

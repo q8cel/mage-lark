@@ -497,3 +497,43 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.7% entity-aware / 84.8% exact**.
 - Bench coreference: **94.3% regex / 93.0% parser**.
+
+## Loop 12 — seed 20261103
+
+Cards:
+
+`Conspicuous Snoop`, `Elvish Clancaller`, `Fauna Shaman`, `Growth Cycle`,
+`Elderscale Wurm`, `Call to the Grave`, `Wall of Frost`, `Leyline of Abundance`,
+`Underworld Dreams`, `Distress`, `Gauntlets of Light`, `Soul Sear`,
+`Grasping Scoundrel`, `Nexus of Fate`, `Traumatize`,
+`Mu Yanling, Celestial Wind`, `Necrotic Plague`, `Soul of Shandalar`,
+`Obstinate Baloth` (and the repeated sample card).
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Conspicuous Snoop | `has all activated abilities of that card` | added the has-all-activated-abilities action |
+| Elderscale Wurm | `your life total becomes 7`; `damage ... reduces it to 7 instead` | added life-total and damage-reduction actions |
+| Leyline of Abundance | `add an additional {G}` | allowed additional symbol mana |
+| Gauntlets of Light | `assigns combat damage equal to its toughness ...` | added the assign-combat-damage action |
+| Necrotic Plague | controller chooses `target creature one of their opponents controls`; return from a graveyard attached | added the choose-object form and the from-zone attached return |
+| Soul of Shandalar | `up to one target creature that player or that planeswalker's controller controls` | added the damage recipient |
+
+### Coreference/output fixes found and fixed
+
+- **Necrotic Plague**: `its owner's graveyard` bound to `its controller` because
+  the generic `from ...` container rule ran on a possessive. Container-player
+  binding now skips possessives; the antecedent is `this card`.
+- **Distress**: `that card` binds to the chosen nonland card; `it`/`that player`
+  stay on the target player/hand proxy.
+- **Soul of Shandalar**: `It` binds to `this card` (the card exiled from the
+  graveyard), with the zone kept in the mention surface.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.7% entity-aware / 84.9% exact**.
+- Bench: **95.7% regex / 93.0% parser**.

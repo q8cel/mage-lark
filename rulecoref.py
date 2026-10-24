@@ -582,7 +582,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     evidence.append("damage-source")
 
         # ---- "from it" points at a container/player, not the object NP
-        if rec["kind"] == "pronoun" and _CONTAINER_LEAD.search(text[max(0, rec["start"] - 10):rec["start"]]):
+        if (rec["kind"] == "pronoun" and not rec["is_possessive"]
+                and _CONTAINER_LEAD.search(text[max(0, rec["start"] - 10):rec["start"]])):
             f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
             if f and len(f) != len(pool):
                 pool = f

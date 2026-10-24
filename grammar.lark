@@ -49,6 +49,9 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | card_target "guesses" "whether" any_text
                | "The" "next" amount "damage" any_text "instead"
                | "The" "next" card_target "you" "cast" "this" "turn" "can" "be" "cast" "as" "though" "it" "had" KEYWORD
+               | "your" "life" "total" "becomes" amount
+               | "damage" any_text "reduces" "it" "to" amount "instead"
+               | card_target "assigns" "combat" "damage" "equal" "to" "its" "toughness" "rather" "than" "its" "power"
                | "Start" "your" "engines" "!"
                | "Do" "this" "only" "once" "each" "turn"
                | V_YOU "may" "choose" "the" "same" "mode" "more" "than" "once"
@@ -343,6 +346,10 @@ action: add_mana_action
        | must_block_action
        | investigate_action
        | flip_action
+       | has_abilities_action
+       | life_total_action
+       | damage_reduce_action
+       | assign_combat_action
        | gift_action
        | explore_action
        | manifest_action
@@ -353,6 +360,11 @@ action: add_mana_action
 
 investigate_action: V_INVESTIGATE
 flip_action: V_FLIP "a" "coin"
+has_abilities_action: card_target "has" "all" "activated" "abilities" "of" card_target
+life_total_action: "your" "life" "total" "becomes" amount
+                | "your" "life" "total" "becomes" "equal" "to" amount
+damage_reduce_action: "damage" any_text "reduces" "it" "to" amount "instead"
+assign_combat_action: card_target "assigns" "combat" "damage" "equal" "to" "its" "toughness" "rather" "than" "its" "power"
 gift_action: "Gift" ("a" | "an")? card_target
 explore_action: (V_IT)? "explore" "s"?
 manifest_action: V_MANIFEST "dread"
@@ -373,6 +385,7 @@ add_mana_action: (who)? V_ADD mana_amount
                 | (who)? V_ADD amount "mana" "of" "the" "chosen" "color" ("for" "each" card_target)?
                 | (who)? V_ADD amount "mana" "of" "the" "chosen" "color" "for" "each" any_text
                 | (who)? V_ADD "an" "additional" "one" "mana" "of" "any" "color"
+                | (who)? V_ADD "an" "additional" MANA+
 mana_amount: "one" "mana" "of" "any" "color" | amount MANA
            | amount "mana" "of" "any" "one" "color"
            | amount "mana" "in" "any" "combination" "of" "colors"
@@ -483,6 +496,7 @@ damage_who: card_target "or" card_target
           | "each" "opponent" "and" "each" "planeswalker" "they" "control"
           | "each" "opponent" "and" "each" "creature" "your" "opponents" "control"
           | "each" "creature" "your" "opponents" "control"
+          | "up" "to" "one" "target" "creature" "that" "player" "or" "that" "planeswalker's" "controller" "controls"
           | "each" "player" "and" "each" "creature"
 divided_rest: (ANYWORD | ",")+
 
@@ -491,6 +505,7 @@ counter_spell_action: V_COUNTER card_target ("spell" | "ability")? ("with" any_t
 return_action: V_RETURN "all" card_target "from" zone "to" "the" "battlefield" "under" "their" "owners'" "control"
              | V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands") ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" "with" counter_amount counter_kind "on" "it"
+             | V_RETURN card_target "from" zone "to" "the" "battlefield" "attached" "to" card_target
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "transformed" | "transformed" "and" "tapped" | "tapped" | "transformed")? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
@@ -643,7 +658,7 @@ play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "w
            | V_PLAY ("an" "additional" "land" | card_target) "until" "the" "end" "of" "your" "next" "turn"
            | V_PLAY card_target "until" any_text
 reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
-choose_action: (player)? V_CHOOSE amount? choose_obj
+choose_action: (player | controller_subject)? V_CHOOSE amount? choose_obj
              | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
 copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability" | V_THAT "spell" "or" "ability") ("twice")? ("for" "each" any_text)?
 trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
@@ -656,6 +671,7 @@ activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities"
                | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?
 choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_text
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
+           | ("target" "creature") "one" "of" "their" "opponents" "controls"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text | "a" any_text ("," any_text)* ("card" | "cards") "from" ("it" | zone)
 
 may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent" | controller_subject | owner_subject)? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
@@ -666,6 +682,10 @@ may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent" | contr
         | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
         | investigate_action
        | flip_action
+       | has_abilities_action
+       | life_total_action
+       | damage_reduce_action
+       | assign_combat_action
        | gift_action
        | explore_action
        | manifest_action
