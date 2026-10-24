@@ -417,3 +417,42 @@ Cards:
 - Dev coreference: **90.6% entity-aware / 84.8% exact** (owner typing and
   coordinated spans changed a few dev candidate choices).
 - Bench coreference: **94.3% regex / 93.0% parser** (unchanged).
+
+## Loop 10 — seed 20261101
+
+Cards:
+
+`Chord of Calling`, `Cruel Sadist`, `Ogre Battledriver`, `Bramble Creeper`,
+`Blastfire Bolt`, `Bogbrew Witch`, `Glimpse the Future`,
+`Infernal Reckoning`, `Liliana's Shade`, `Diabolic Revelation`, `Dissipate`,
+`Repeated Reverberation`, `The Chain Veil`, `Scapeshift`,
+`Dismiss into Dream`, `Wild Evocation`, `Abnormal Endurance`, `Merfolk Spy`,
+`Arachnus Web`, `Scheming Symmetry`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Repeated Reverberation | coordinated `cast an instant spell, cast a sorcery spell, or activate a loyalty ability`; `copy that spell or ability twice` | added the coordinated trigger and copy-spell-or-ability form; `instant spell`/`sorcery spell` card kinds |
+| The Chain Veil | activated ability whose effect is `For each planeswalker ...`; `activate one of its loyalty abilities` | allowed `for_each_sentence` under activated abilities and added the one-of-its-loyalty-abilities activate form |
+| Wild Evocation | `the player casts it ... if able` | added player-subject cast and the `if able` tail |
+| Scheming Symmetry | third-person `searches`; `then shuffles and puts that card on top` | made `V_SEARCH` accept `searches`, added the third-person shuffle/put tail and the `Each of them` actor |
+
+### Coreference/output fixes found and fixed
+
+- **Wild Evocation**: `the player casts it` bound `it` to the player. `cast` is
+  now an object verb, so `it` binds to `a card`.
+- **The Chain Veil**: `one of its loyalty abilities` bound `its` to `you`.
+  Added `its-quantified-object`, which prefers the quantified non-player object.
+- **Repeated Reverberation**: `that spell or ability` remains ambiguous among
+  the instant/sorcery/ability alternatives; the canonical shown is one of the
+  valid spell branches.
+- **Scheming Symmetry**: the search/put chain and `that card` are correct.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.6% entity-aware / 84.8% exact**.
+- Bench coreference: **94.3% regex / 93.0% parser** (unchanged).

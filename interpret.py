@@ -1407,7 +1407,7 @@ class Interpreter:
             if isinstance(ch, Tree):
                 if ch.data == 'cost_list':
                     cost = self.interp(ch)
-                elif ch.data == 'effect':
+                elif ch.data in ('effect', 'for_each_sentence'):
                     eff = self.interp(ch)
         return {'type': 'activated', 'cost': cost, 'effect': eff}
 

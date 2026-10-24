@@ -110,6 +110,7 @@ _FOR_EACH_OTHER_WITH_IT = re.compile(
     r"\bfor\s+each\s+other\b[^.;]*\bwith\s*$", re.I)
 _SACRIFICE_IT = re.compile(r"\bsacrifices?\s*$", re.I)
 _ITS_COST = re.compile(r"^\s*(?:other\s+costs|mana\s+cost)\b", re.I)
+_ITS_OF_QUANT = re.compile(r"\b(?:one|none|each|any|all)\s+of\s*$", re.I)
 # "this creature deals 2 damage to it": the object cannot be the subject.
 _DAMAGE_TO_LEAD = re.compile(r"\bdamage\s+to\s*$", re.I)
 # "their library/hand/graveyard" belongs to the player, even when the recent
@@ -124,7 +125,7 @@ _POSSESSED_ATTRIBUTE = re.compile(
 _OBJECT_VERB_LEAD = re.compile(
     r"\b(?:exile|exiles|exiled|sacrifice|sacrifices|sacrificed|return|returns|"
     r"returned|destroy|destroys|destroyed|put|puts|tap|taps|tapped|untap|"
-    r"untaps|untapped|shuffle|shuffles|shuffled)\s*$", re.I)
+    r"untaps|untapped|shuffle|shuffles|shuffled|cast|casts|casting)\s*$", re.I)
 _SUBJECT_VERB = re.compile(
     r"^\s+(?:gains?|has|have|deals?|gets?|becomes?|is|isn't|can|cannot|can't|"
     r"attacks?|blocks?|enters?|leaves?|dies?|draws?|puts?|exiles?|returns?|"
@@ -749,6 +750,17 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("life-equal-object")
+
+        # ---- "one of its loyalty abilities": the quantified object, not the
+        # player who may activate it.
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "its"
+                and _ITS_OF_QUANT.search(text[max(0, rec["start"] - 20):rec["start"]])):
+            f = [i for i in pool
+                 if ms[i]["head_type"] not in ("player", "opponent")
+                 and ms[i]["surface"].strip().lower() not in ("you", "your")]
+            if f:
+                pool = f
+                evidence.append("its-quantified-object")
 
         # ---- "its other costs"/"its mana cost": the spell/card itself
         if (rec["kind"] == "pronoun" and rec["surface"].lower() == "its"

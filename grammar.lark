@@ -105,7 +105,7 @@ modal_sentence: "Choose one"
 //    cost item: mana | {T} | {Q} | Sacrifice <card> | Remove <counter> |
 //                Tap <card> | Exile <card> | Pay <n> life
 // ----------------------------------------------------------------------------
-activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? effect xdef_clause?
+activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence) xdef_clause?
 cost_list: cost_item ("," cost_item)*
 cost_item: MANA+
          | MANA+ "and" MANA+
@@ -145,6 +145,7 @@ trigger_clause: trig_when event?
               | trig_when "enchanted" "land" "is" "tapped" "for" "mana"
               | trig_when any_text
               | V_WHEN V_YOU "next" "cast" any_text
+              | V_WHEN V_YOU "next" "cast" card_target "," "cast" card_target (","? "or" "activate" "a" "loyalty" "ability")? ("this" "turn")?
               | V_WHEN V_YOU ("control" | "have") any_text
               | COND_KEYWORD EMDASH trig_when event?
               | COND_KEYWORD EMDASH event?
@@ -420,6 +421,7 @@ search_action: V_SEARCH zones "for" search_target ("named" (THIS_CARD | CARDNAME
              | V_SEARCH zone "for" search_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
              | V_SEARCH zone "for" search_target ","? V_PUT ("it" | "them") "onto" "the" "battlefield" "tapped"? ","? "then" "shuffle"
              | V_SEARCH zones "for" search_target ","? "reveal" ("those" "cards" | "them") ","? "put" "one" "onto" "the" "battlefield" "tapped"? "and" "the" "other" "into" zone ","? "then" "shuffle"
+             | "Each" "of" "them" V_SEARCH zones "for" search_target (","? "then" "shuffles" "and" "puts" "that" "card" "on" "top")?
 search_target: card_target (("or" | "and/or" | "and") card_target)*
 
 draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target ("put" "into" zone "this" "way")?
@@ -632,7 +634,8 @@ shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE "all" "permanents" "they" "own" "into" "their" "library"
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
              | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library" | (who)? V_SHUFFLE card_target "and" "your" "graveyard" "into" zone
-cast_action: V_CAST card_target "from" "your" "graveyard" "by" "paying" amount "life" "and" "discarding" card_target ("in" "addition" "to" "paying" "its" "other" "costs")?
+cast_action: player V_CAST card_target ("without" "paying" "its" "mana" "cost")? ("if" "able")?
+           | V_CAST card_target "from" "your" "graveyard" "by" "paying" amount "life" "and" "discarding" card_target ("in" "addition" "to" "paying" "its" "other" "costs")?
            | V_CAST "the" "copy" ("without" "paying" "its" "mana" "cost")?
            | V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)? ("for" "as" "long" "as" any_text)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "way")? ("without" "paying" "its" "mana" "cost")? ("this" "turn")? ("on" "each" "of" "your" "turns")?
@@ -641,7 +644,7 @@ play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "w
 reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
 choose_action: (player)? V_CHOOSE amount? choose_obj
              | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
-copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability") ("for" "each" any_text)?
+copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability" | V_THAT "spell" "or" "ability") ("twice")? ("for" "each" any_text)?
 trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
 lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
 count_action: V_COUNT "the" "number" "of" card_target
@@ -649,6 +652,7 @@ have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" 
 have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" "as" "a" "copy" "of" ("any" card_target | card_target))
            | "have" become_action
 activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
+               | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?
 choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_text
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text | "a" any_text ("," any_text)* ("card" | "cards") "from" ("it" | zone)
@@ -784,7 +788,7 @@ OWNER: /target player's|that player's|each player's|target opponent's|that oppon
 player: (V_EACH | V_A | V_AN | V_TARGET | V_ANOTHER | V_THAT | "those" | "the" | "defending" | "attacking" | "active")? ("opponent" | "player" | V_YOU)
 
 //  WHO: an actor that gains/loses life etc.
-who: player | card_target | controller_subject | owner_subject
+who: player | card_target | controller_subject | owner_subject | "each" "of" "them"
 controller_subject: ("Its" | "its") "controller" | (V_THAT | "this" | "the" | "a" | "an")? ("creature" | "source" | "spell" | "permanent" | "land" | "artifact" | "enchantment" | "planeswalker" | "token" | "attacker" | "blocker" | "aura" | "object" | "ability") "'s" "controller"
 
 //  colors
@@ -845,6 +849,7 @@ card_kind: THIS_CARD types? | types
          | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
          | "it" | "them" | "they"
          | INSTANT_SORCERY "spell" "s"?
+         | "instant" "spell" "s"? | "sorcery" "spell" "s"?
          | "instant" "or" "sorcery" "card" "s"?
          | "instant" "and/or" "sorcery" "card" "s"?
          | "instant" "or" "sorcery" "spell" "s"?
@@ -906,7 +911,7 @@ V_ADD: /\badd(s?)\b/i
 V_CREATE: /\bcreate(s?)\b/i
 V_PUT: /\bput(s)?\b/i
 V_REMOVE: /\bremove\b/i
-V_SEARCH: /\bsearch\b/i
+V_SEARCH: /\bsearch(?:es|ed)?\b/i
 V_DRAW: /\bdraws?\b/i
 V_ACTIVATE: /\bactivate(s?)\b/i
 V_ACTIVATED: /\bactivated\b/i
