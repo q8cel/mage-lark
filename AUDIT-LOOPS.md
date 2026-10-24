@@ -109,3 +109,47 @@ Cards:
 - `test_coref.py`: 16/16 (test texts rebuilt into the new grammar-hash cache).
 - Dev coreference: **90.4% entity-aware / 84.5% exact** (was 90.4 / 84.4).
 - Bench coreference: **94.1% regex / 93.0% parser** (unchanged).
+
+## Loop 3 — seed 20261025
+
+Cards:
+
+`Sphinx Ambassador`, `Roaming Ghostlight`, `Ice Cage`, `Goblin Arsonist`,
+`Telepathy`, `Chandra Nalaar`, `Siege Dragon`, `Resolute Archangel`,
+`Elite Arcanist`, `Drawn from Dreams`, `Borderland Ranger`, `Ponder`,
+`Sylvan Ranger`, `Sarkhan's Dragonfire`, `Chandra, Flame's Catalyst`,
+`Rampant Growth`, `Chaos Wand`, `Wakeroot Elemental`, `Blightbeetle`,
+`Burning Earth`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Resolute Archangel | `it becomes equal to your starting life total` had no non-type become form | added `card_target "becomes" "equal" "to" any_text` |
+| Elite Arcanist | `You may cast the copy ...` and standalone `X is the mana value of the exiled card` | added `cast the copy` and `X is xdef`; added `the mana value of card_target` to `xdef` |
+| Chaos Wand | third-person `exiles` was not a `V_EXILE` form; `from the top of ... until ...`; `that weren't cast this way`; `that library` | made `V_EXILE` accept `exiles`, added top-of-library-until, the cast-this-way modifier, and `that` as a zone owner |
+
+### Coreference/output fixes found and fixed
+
+- **Telepathy**: `Your opponents` was not a player candidate, so `their` had no
+  resolution. Added possessive player prefixes (`your`, `our`, `their`) and
+  defending/attacking/active players to the player inventory.
+- **Siege Dragon**: `that player` bound to `all Walls your opponents control`.
+  The missing `defending player` candidate now wins by type and recency.
+- **Chandra, Flame's Catalyst**: `that spell` had no antecedent because the
+  target was an instant/sorcery **card**. Added the disjunctive instant-or-
+  sorcery card pattern and allowed a spell anaphor to accept such a card.
+  `it` then chains to the same card.
+- **Chaos Wand**: `that card`/`its` bound to the opponent. The inner
+  `an instant or sorcery card` was missing from inventory; the new card pattern
+  lets `that card` and `its` bind to that card.
+- **V_EXILE forms**: accepting `exiles` also made third-person exile effects
+  parse instead of falling back to raw text.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.4% entity-aware / 84.5% exact** (unchanged).
+- Bench coreference: **94.3% regex / 93.0% parser**; regex exact 84.3%.

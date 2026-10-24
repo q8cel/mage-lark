@@ -1415,6 +1415,10 @@ class Interpreter:
                     d['xdef'] = self.interp(ch)
         return d
 
+    def i_xdef_sentence(self, children):
+        xd = self._find_one(children, 'xdef')
+        return {'verb': 'xdef', 'value': self.interp(xd) if xd is not None else None}
+
     def i_xdef_clause(self, children):
         return {'xdef': self.interp(children[-1]) if children else None}
 

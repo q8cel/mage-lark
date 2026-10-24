@@ -29,7 +29,8 @@ CAND = re.compile(
 # target player controls"); capture them separately so "that player" can bind
 # to the player, not to the creature collection.
 PLAYER_CAND = re.compile(
-    rf"\b(?:{DET})\s+(?:players?|opponents?)\b", re.I)
+    rf"\b(?:{DET}|your|our|their|defending|attacking|active)\s+"
+    rf"(?:players?|opponents?)\b", re.I)
 CONTROLLER_CAND = re.compile(
     rf"\b(?:{DET}|its|their)\s+(?:[A-Za-z][\w'\-]*\s+){{0,2}}controllers?\b", re.I)
 # A spell/ability is often embedded in a larger event NP ("the target of a
@@ -38,6 +39,13 @@ SPELL_CAND = re.compile(
     r"\b(?:a|an|the|that|this|those|these)\s+"
     r"(?:(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+)?"
     r"(?:[A-Za-z][\w'\-]*\s+){0,2}(?:spells?|abilities?)\b", re.I)
+# "an instant or sorcery card" / "target red instant or sorcery card": the
+# regular 0-2 modifier window is too short for the disjunction.
+INSTANT_SORCERY_CARD = re.compile(
+    r"\b(?:a|an|the|that|this|those|these|target)\s+"
+    r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
+    r"(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+cards?\b",
+    re.I)
 
 
 def _regex_mentions(text):
@@ -56,6 +64,10 @@ def _regex_mentions(text):
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in SPELL_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in INSTANT_SORCERY_CARD.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})

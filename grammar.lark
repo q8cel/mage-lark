@@ -27,6 +27,7 @@ sentence: loyalty_sentence
         | static_keyword_sentence
         | effect_sentence
         | deck_rule
+        | xdef_sentence
         | round_up_sentence
 
 // ----------------------------------------------------------------------------
@@ -509,7 +510,8 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
 
 order_mod: "in" ("a" "random" | "any") "order"
 
-exile_action: V_EXILE card_target ("from" zone)? ("until" any_text)?
+exile_action: (who)? V_EXILE card_target ("from" zone)? ("until" any_text)?
+            | (who)? V_EXILE card_target "from" "the" "top" "of" zone ("until" any_text)?
             | V_EXILE "all" "graveyards"
             | V_EXILE "the" "top" amount "cards" "of" "your" "library"
             | V_EXILE "the" "top" "card" "of" "your" "library"
@@ -557,6 +559,7 @@ base_pt_action: card_target ("has" | "have" | "gains" | "gets") "base" "power" "
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
 become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
+             | card_target "becomes" "equal" "to" any_text
              | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE become_tail?
 // NOTE: this rule used to end with three optional groups containing `any_text`
 // ("with any_text", "that's any_text", "for as long as any_text"). `any_text` is
@@ -608,6 +611,7 @@ shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
              | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library" | (who)? V_SHUFFLE card_target "and" "your" "graveyard" "into" zone
 cast_action: V_CAST card_target "from" "your" "graveyard" "by" "paying" amount "life" "and" "discarding" card_target ("in" "addition" "to" "paying" "its" "other" "costs")?
+           | V_CAST "the" "copy" ("without" "paying" "its" "mana" "cost")?
            | V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)? ("for" "as" "long" "as" any_text)?
 play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "way")? ("without" "paying" "its" "mana" "cost")? ("this" "turn")? ("on" "each" "of" "your" "turns")?
            | V_PLAY ("an" "additional" "land" | card_target) "until" "the" "end" "of" "your" "next" "turn"
@@ -705,8 +709,10 @@ ANYWORD: /[a-zA-Z0-9+{}\/.\'~-]+/
 // ----------------------------------------------------------------------------
 //  X definition clause:  "where X is <something>"
 // ----------------------------------------------------------------------------
+xdef_sentence: "X" "is" xdef
 xdef_clause: (",")? "where" "X" "is" xdef
 xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target | "the" "number" "of" any_text
+    | "the" "mana" "value" "of" card_target
     | "the" "total" "power" "of" card_target
     | "its" "power"
     | "its" "toughness"
@@ -744,7 +750,7 @@ zone: (OWNER)? (ZONE_WORD) | "all" ZONE_WORD
 zones: zone ("," zone)* (","? ("and" | "and/or") zone)?
      | zone "and" zone
 ZONE_WORD: /battlefields?|graveyards?|hands?|librar(?:y|ies)|exile/
-OWNER: /target player's|that player's|each player's|target opponent's|that opponent's|an opponent's|opponent's|a player's|your|their owner's|their owners'|their|the|a|its owner's/
+OWNER: /target player's|that player's|each player's|target opponent's|that opponent's|an opponent's|opponent's|a player's|your|their owner's|their owners'|their|that|the|a|its owner's/
 
 //  player reference
 player: (V_EACH | V_A | V_AN | V_TARGET | V_ANOTHER | V_THAT | "those" | "the" | "defending" | "attacking" | "active")? ("opponent" | "player" | V_YOU)
@@ -827,6 +833,7 @@ with_modifier: "with" (kw_list | "power" amount CMP? | "toughness" amount CMP? |
              | "of" "each" "permanent" "type"
              | "revealed" "this" "way"
              | "that" "weren't" "put" "onto" "the" "battlefield"
+             | "that" "weren't" "cast" "this" "way"
              | "destroyed" "this" "way"
 CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i
 controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "control"
@@ -873,7 +880,7 @@ V_COUNT: /\bcount(s?)\b/i
 V_DEAL: /\bdeal(s?)\b/i
 V_COUNTER: /\bcounter\b/i
 V_RETURN: /\breturn\b/i
-V_EXILE: /\bexile\b/i
+V_EXILE: /\bexiles?\b/i
 V_DESTROY: /\bdestroy\b/i
 V_TAP: /\btap\b/i
 V_UNTAP: /\buntap\b/i

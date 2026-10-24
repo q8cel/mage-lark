@@ -404,12 +404,22 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             return (refs.type_compatible(atype, cand_type)
                     or refs.type_expected(atype, cand_type))
 
+        def _type_ok_at(i):
+            # A card can be referred to as "that spell" once it is an
+            # instant/sorcery (e.g. cast from a graveyard); the card type
+            # lattice alone would reject it.
+            if (atype == "spell" and ms[i]["head_type"] == "card"
+                    and re.search(r"\b(?:instant|sorcery)\b",
+                                  ms[i]["surface"], re.I)):
+                return True
+            return _type_ok(ms[i]["head_type"])
+
         def _apply_type():
             nonlocal pool
             f = [i for i in pool
-                 if ms[i]["head_type"] is not None and _type_ok(ms[i]["head_type"])]
+                 if ms[i]["head_type"] is not None and _type_ok_at(i)]
             if not f:
-                f = [i for i in pool if _type_ok(ms[i]["head_type"])]
+                f = [i for i in pool if _type_ok_at(i)]
             if f:
                 pool = f
                 evidence.append(f"type={atype}")
