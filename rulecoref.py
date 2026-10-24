@@ -94,6 +94,13 @@ _ATTACH_TO_LEAD = re.compile(r"\battach(?:ed|ing)?\b[^.;]*\bto\s*$", re.I)
 # "You gain life equal to its toughness" after a destruction effect: the
 # possessive is the destroyed object, not the player gaining life.
 _LIFE_EQUAL_ITS = re.compile(r"\bgain(?:s)?\s+life\s+equal\s+to\s*$", re.I)
+# "it's a creature" / "it becomes a land": a predicate nominal excludes players.
+_IT_PREDICATE = re.compile(
+    r"^\s*(?:a|an|the)?\s*(?:creature|artifact|enchantment|land|permanent|"
+    r"planeswalker|spell|card|token|Aura|Equipment)\b", re.I)
+# "If <source> would deal damage ..., it deals ...": the source is not the
+# damage recipient.
+_SOURCE_DEALS = re.compile(r"\bwould\s+deal\s+damage\b", re.I)
 # "this creature deals 2 damage to it": the object cannot be the subject.
 _DAMAGE_TO_LEAD = re.compile(r"\bdamage\s+to\s*$", re.I)
 # "their library/hand/graveyard" belongs to the player, even when the recent
@@ -590,6 +597,24 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("damage-object-not-self")
+
+        # ---- predicate nominal after "it"/"it's": not a player
+        if (rec["kind"] == "pronoun"
+                and rec["surface"].lower() in ("it", "it's")
+                and _IT_PREDICATE.match(text[rec["end"]:])):
+            f = [i for i in pool if ms[i]["head_type"] not in ("player", "opponent")]
+            if f:
+                pool = f
+                evidence.append("it-predicate-not-player")
+
+        # ---- "If <source> would deal damage ..., it deals ..."
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "it"
+                and _SOURCE_DEALS.search(text[max(0, rec["start"] - 160):rec["start"]])):
+            f = [i for i in pool
+                 if ms[i]["head_type"] in ("spell", "planeswalker", "creature", "source")]
+            if f:
+                pool = f
+                evidence.append("damage-source-subject")
 
         # ---- direct object of a verb: singular "it" is not a player
         if (rec["kind"] == "pronoun"

@@ -153,3 +153,55 @@ Cards:
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.4% entity-aware / 84.5% exact** (unchanged).
 - Bench coreference: **94.3% regex / 93.0% parser**; regex exact 84.3%.
+
+## Loop 4 — seed 20261026
+
+Cards:
+
+`Brood Keeper`, `Sparktongue Dragon`, `Diffusion Sliver`,
+`Pyromancer's Gauntlet`, `Celestial Flare`, `Storm Caller`,
+`Leyline of Sanctity`, `Hellion Crucible`, `Mask of Immolation`,
+`Blood Seeker`, `Act of Treason`, `Sutured Ghoul`, `Haunting Echoes`,
+`Necrobite`, `Garruk, Savage Herald`, `Fraying Omnipotence`, `Frost Lynx`,
+`Cultivate`, `Portal of Sanctuary`, `Oblivion Ring`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Hellion Crucible | activation cost `Remove two counters from this land and sacrifice it` | added the combined remove-counter-and-sacrifice cost item |
+| Sutured Ghoul | `power ... and its toughness ...`, plus `their total toughness` | added the compound stat-definition form and the `their/its total power/toughness` xdef |
+| Haunting Echoes | `card exiled this way`; `all cards with the same name as that card and exile them` | added `exiled this way`, `attached to`, `with the same name as card_target`, and search-and-exile |
+| Fraying Omnipotence | `half the creatures they control` | added `half the` as a card-target quantifier |
+| Portal of Sanctuary | coordinated return `target creature ... and each Aura attached to it` | added the coordinated return form and the `attached to` modifier |
+
+### Coreference/output fixes found and fixed
+
+- **Pyromancer's Gauntlet**: `it deals that much damage` bound to the damage
+  recipient `a permanent or player`. Added a `damage-source-subject` rule for
+  the `If <source> would deal damage ..., it deals ...` construction.
+- **Blood Seeker**: `that player` bound to `a creature an opponent controls`.
+  The embedded `an opponent` is now preserved when its container has `controls`;
+  `that player` binds to the opponent.
+- **Player predicate guard**: with embedded opponents back in the inventory,
+  `it's a creature` must not bind to a player; added
+  `it-predicate-not-player`.
+- **Return output**: coordinated returns now keep both targets in `cards` and
+  no longer prepend `and` to the destination phrase.
+- Updated the Fiery Annihilation entity test: the new `attached to` modifier
+  makes the Equipment canonical span more specific.
+
+### Remaining limitation
+
+`Portal of Sanctuary`: `their owners' hands` refers to the owners of the
+coordinated returned permanents. There is still no combined collection mention
+for `target creature ... and each Aura ...`, so `their` binds to the Aura. This
+is the existing coordinated-collection/owner inventory gap, not a parse failure.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.4% entity-aware / 84.5% exact** (unchanged).
+- Bench coreference: **94.3% regex / 93.0% parser** (unchanged).

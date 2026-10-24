@@ -37,7 +37,7 @@ CONTROLLER_CAND = re.compile(
 # spell"); keep the inner NP so "that spell" has a real antecedent.
 SPELL_CAND = re.compile(
     r"\b(?:a|an|the|that|this|those|these)\s+"
-    r"(?:(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+)?"
+    r"(?:(?:[A-Za-z][\w'\-]*\s+)?(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+)?"
     r"(?:[A-Za-z][\w'\-]*\s+){0,2}(?:spells?|abilities?)\b", re.I)
 # "an instant or sorcery card" / "target red instant or sorcery card": the
 # regular 0-2 modifier window is too short for the disjunction.

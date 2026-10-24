@@ -436,15 +436,19 @@ class Interpreter:
 
     def i_return_action(self, children):
         d = {'verb': 'return'}
-        ct = self._find_one(children, 'card_target')
-        if ct is not None:
-            d['card'] = self.interp(ct)
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['card'] = self.interp(cts[0])
+            if len(cts) > 1:
+                d['cards'] = [self.interp(c) for c in cts]
         # Stay with the existing string field (`to`), but drop the leading verb
         # that `_text` includes;  callers expect the destination phrase.
         to = self._text([c for c in children
                          if not (isinstance(c, Tree) and c.data == 'card_target')])
         if to.lower().startswith('return '):
             to = to[7:]
+        if to.lower().startswith('and '):
+            to = to[4:]
         d['to'] = to
         ca = self._find_one(children, 'counter_amount')
         ck = self._find_one(children, 'counter_kind')

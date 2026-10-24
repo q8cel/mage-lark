@@ -283,16 +283,18 @@ def clean(cands):
         tagged.append((i, c["start"], c["end"], surf))
     kept = []
     for i, s, e, surf in tagged:
-        dominated = any(
-            k != i and s2 <= s and e <= e2 and (s2, e2) != (s, e)
-            for k, s2, e2, _ in tagged)
-        if dominated:
+        containers = [(s2, e2, surf2) for k, s2, e2, surf2 in tagged
+                      if k != i and s2 <= s and e <= e2 and (s2, e2) != (s, e)]
+        if containers:
             # A player/opponent NP can be embedded inside a larger permanent
-            # collection NP ("all creatures target player controls").  It is
-            # still a distinct entity and is the antecedent for "that player".
-            if not (head_type(surf) in ("player", "opponent")
-                    and re.match(r"target (?:player|opponent)\b", surf, re.I)) \
-                    and surf.lower() not in ("a spell", "an ability"):
+            # collection NP ("all creatures target player controls" or "a
+            # creature an opponent controls").  It is still a distinct entity
+            # and is the antecedent for "that player".
+            keep = (head_type(surf) in ("player", "opponent")
+                    and (re.match(r"target (?:player|opponent)\b", surf, re.I)
+                         or any(re.search(r"\bcontrols?\b", cs, re.I)
+                                for _, _, cs in containers)))
+            if not keep and surf.lower() not in ("a spell", "an ability"):
                 continue
         if any(s2 == s and e2 == e for _, s2, e2, _ in kept):
             continue

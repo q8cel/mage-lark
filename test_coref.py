@@ -68,7 +68,7 @@ def t_fiery_all_three_resolve_to_the_creature():
 def t_fiery_entities():
     _, res = resolve_card("Fiery Annihilation")
     canon = sorted(e["canonical"] for e in res["entities"])
-    assert canon == ["target creature", "up to one target Equipment", "~"], canon
+    assert canon == ["target creature", "up to one target Equipment attached to that creature", "~"], canon
 
 
 def t_fiery_chain_through_an_anaphor():

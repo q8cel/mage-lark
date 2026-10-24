@@ -112,6 +112,7 @@ cost_item: MANA+
          | V_REMOVE counter_amount "counter" "from" card_target
          | V_REMOVE "a" counter_name "counter" "from" card_target
          | V_REMOVE amount counter_name "counters" "from" card_target
+         | V_REMOVE counter_amount counter_kind "from" card_target "and" V_SACRIFICE card_target
          | V_TAP card_target
          | V_EXILE card_target
          | V_DISCARD card_target
@@ -406,6 +407,7 @@ search_action: V_SEARCH zones "for" search_target ("named" (THIS_CARD | CARDNAME
              | V_SEARCH zone "for" search_target ("named" (THIS_CARD | CARDNAME))? ("put" ("it" | "them") "onto" "the" "battlefield" "tapped"?)? ("then" "shuffle")?
              | V_SEARCH zone "for" search_target ("exile" "it")? ("then" "shuffle")?
              | V_SEARCH zones "for" search_target "with" "that" "name" "and" "exile" ("them" | "it")
+             | V_SEARCH zones "for" search_target "and" V_EXILE ("them" | "it")
              | V_SEARCH zone "for" search_target (",")? ("put" ("it" | "that" "card") ("into" zone | "onto" "the" "battlefield" "tapped"?))? ("then" "shuffle" ("and" "put" "that" "card" "on" "top")?)?
              | V_SEARCH zone "for" search_target ","? V_PUT ("it" | "them") "onto" "the" "battlefield" "tapped"? ","? "then" "shuffle"
              | V_SEARCH zones "for" search_target ","? "reveal" ("those" "cards" | "them") ","? "put" "one" "onto" "the" "battlefield" "tapped"? "and" "the" "other" "into" zone ","? "then" "shuffle"
@@ -477,6 +479,7 @@ return_action: V_RETURN "all" card_target "from" zone "to" "the" "battlefield" "
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "transformed" | "transformed" "and" "tapped" | "tapped" | "transformed")? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+             | V_RETURN card_target "and" card_target "to" (("its" | "their") "owner's" "hand" | ("its" | "their") "owners'" "hands")
              | V_RETURN card_target "with" "mana" "value" mv_cmp ("from" "your" "graveyard")? "to" "the" "battlefield"
 mv_cmp: amount "or" ("less" | "more")
        | ("less" | "greater") "than" "or" "equal" "to" (card_target | V_THIS | V_THAT) "'s" ("power" | "mana" "value")
@@ -678,6 +681,7 @@ for_each_sentence: "For" "each" card_target "," effect
 enchanted_sentence: "Enchanted" card_kind effect
 keyword_static_sentence: COND_KEYWORD EMDASH effect ("as" "long" "as" any_text | trailing_if)?
 stat_define_action: "~'s" "power" "and" "toughness" "are" "each" "equal" "to" xdef
+                   | "~'s" "power" "is" "equal" "to" xdef "and" ("its" | "their") "toughness" "is" "equal" "to" xdef
                    | card_target "'s" "power" "is" "equal" "to" xdef
                    | card_target "power" "is" "equal" "to" xdef
                    | card_target "power" "and" "toughness" "are" "each" "equal" "to" xdef
@@ -713,6 +717,7 @@ xdef_sentence: "X" "is" xdef
 xdef_clause: (",")? "where" "X" "is" xdef
 xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target | "the" "number" "of" any_text
     | "the" "mana" "value" "of" card_target
+    | ("their" | "its") "total" ("power" | "toughness")
     | "the" "total" "power" "of" card_target
     | "its" "power"
     | "its" "toughness"
@@ -786,6 +791,7 @@ otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*
 NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolored)|non-[A-Z][a-zA-Z]+/i
 quantifier: V_ALL | V_EACH | "every" | V_TARGET | "one" "or" "more" | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
+          | "half" "the"
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
 status_list: STATUS+
@@ -823,6 +829,7 @@ with_modifier: "with" (kw_list | "power" amount CMP? | "toughness" amount CMP? |
              | "that" "is" GENERIC_TYPE
              | "of" "the" "chosen" ("type" | "color")
              | "with" "the" "chosen" "name"
+             | "with" "the" "same" "name" "as" card_target
              | "other" "than" card_target
              | "of" "that" "type"
              | "named" (THIS_CARD | CARDNAME+)
@@ -834,6 +841,8 @@ with_modifier: "with" (kw_list | "power" amount CMP? | "toughness" amount CMP? |
              | "revealed" "this" "way"
              | "that" "weren't" "put" "onto" "the" "battlefield"
              | "that" "weren't" "cast" "this" "way"
+             | "exiled" "this" "way"
+             | "attached" "to" card_target
              | "destroyed" "this" "way"
 CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i
 controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "control"
