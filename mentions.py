@@ -41,6 +41,12 @@ SPELL_CAND = re.compile(
     r"(?:[A-Za-z][\w'\-]*\s+){0,2}(?:spells?|abilities?)\b", re.I)
 # "an instant or sorcery card" / "target red instant or sorcery card": the
 # regular 0-2 modifier window is too short for the disjunction.
+# Bare plural after "with"/"controls" is an event collection ("attacks with
+# creatures", "two or more of those creatures").
+BARE_COLLECTION = re.compile(
+    r"\b(?:with|control(?:s)?)\s+"
+    r"(creatures|permanents|cards|lands|artifacts|enchantments|spells|tokens)\b",
+    re.I)
 INSTANT_SORCERY_CARD = re.compile(
     r"\b(?:a|an|the|that|this|those|these|target)\s+"
     r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
@@ -71,6 +77,11 @@ def _regex_mentions(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in BARE_COLLECTION.finditer(text):
+        # Keep only the plural noun, not the introducing preposition/verb.
+        s = m.group(1)
+        st = m.start(1)
+        out.append({"surface": s, "start": st, "end": st + len(s)})
     return out
 
 

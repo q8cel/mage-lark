@@ -205,3 +205,47 @@ is the existing coordinated-collection/owner inventory gap, not a parse failure.
 - `test_coref.py`: 16/16.
 - Dev coreference: **90.4% entity-aware / 84.5% exact** (unchanged).
 - Bench coreference: **94.3% regex / 93.0% parser** (unchanged).
+
+## Loop 5 — seed 20261027
+
+Cards:
+
+`Coat of Arms`, `Awakener Druid`, `Time Reversal`, `Chandra, Heart of Fire`,
+`Brought Back`, `Doublecast`, `Departed Deckhand`, `Angelic Ascension`,
+`Nine Lives`, `Leafkin Avenger`, `Artificer's Hex`, `Angelic Guardian`,
+`Mangara, the Diplomat`, `Kaalia, Zenith Seeker`, `Primal Clay`,
+`Ajani's Sunstriker`, `Sleep Paralysis`, `Sarkhan's Catharsis` (and the remaining
+sample cards).
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Primal Clay | `it becomes your choice of a 3/3 ..., a 2/2 ..., or a 1/6 ...` | added the `becomes your choice of <list>` become form |
+| Departed Deckhand | `can't be blocked this turn except by Spirits` | allowed `this turn` before `except by` in the blocked form |
+| Angelic Guardian | `they gain indestructible until end of turn` | allowed `they` as a card target for the existing `gain kw_list` action |
+| Kaalia, Zenith Seeker | coordinated reveal `an Angel card, a Demon card, and/or a Dragon card ... put them` | added coordinated reveal targets and the put-them-into-hand tail |
+
+### Coreference/output fixes found and fixed
+
+- **Awakener Druid**: `It's still a land` bound to `this creature`. Added a
+  `still-land-target` rule that prefers the preceding target land.
+- **Departed Deckhand**: `sacrifice it` bound to the spell. Added
+  `sacrifice-object`, excluding spells/players.
+- **Coat of Arms**: `with it` was ambiguous with `each other creature`; added
+  `for-each-other-subject`, which selects the non-`other` subject.
+- **Angelic Guardian**: `they` now binds to `one or more creatures you control`
+  after the parser fix.
+- **Mangara, the Diplomat**: `those creatures` had no candidate because bare
+  `creatures` after `attacks with` was not inventoried. Added the
+  `BARE_COLLECTION` pattern; `those creatures` -> `creatures`.
+- **Card-target inventory**: the new `they` target form and collection pattern
+  are narrow; dev moved up rather than down.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py FDN.json`: 44/44.
+- `test_coref.py`: 16/16.
+- Dev coreference: **90.5% entity-aware / 84.6% exact** (was 90.4 / 84.5).
+- Bench coreference: **94.3% regex / 93.0% parser** (unchanged).

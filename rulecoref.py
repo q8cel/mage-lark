@@ -101,6 +101,10 @@ _IT_PREDICATE = re.compile(
 # "If <source> would deal damage ..., it deals ...": the source is not the
 # damage recipient.
 _SOURCE_DEALS = re.compile(r"\bwould\s+deal\s+damage\b", re.I)
+_STILL_LAND = re.compile(r"^\s*still\s+(?:a|an)?\s*land\b", re.I)
+_FOR_EACH_OTHER_WITH_IT = re.compile(
+    r"\bfor\s+each\s+other\b[^.;]*\bwith\s*$", re.I)
+_SACRIFICE_IT = re.compile(r"\bsacrifices?\s*$", re.I)
 # "this creature deals 2 damage to it": the object cannot be the subject.
 _DAMAGE_TO_LEAD = re.compile(r"\bdamage\s+to\s*$", re.I)
 # "their library/hand/graveyard" belongs to the player, even when the recent
@@ -597,6 +601,35 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("damage-object-not-self")
+
+        # ---- "It's still a land" after a target land becomes a creature
+        if (rec["kind"] == "pronoun"
+                and rec["surface"].lower() in ("it", "it's")
+                and _STILL_LAND.match(text[rec["end"]:])):
+            f = [i for i in pool if not ms[i].get("is_self")
+                 and ms[i]["surface"].lower().startswith("target ")]
+            if not f:
+                f = [i for i in pool if ms[i]["head_type"] == "land"]
+            if f:
+                pool = f
+                evidence.append("still-land-target")
+
+        # ---- "for each other creature ... with it": the subject, not the other
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "it"
+                and _FOR_EACH_OTHER_WITH_IT.search(
+                    text[max(0, rec["start"] - 120):rec["start"]])):
+            f = [i for i in pool if not re.search(r"\bother\b", ms[i]["surface"], re.I)]
+            if f:
+                pool = f
+                evidence.append("for-each-other-subject")
+
+        # ---- "sacrifice it": the permanent being sacrificed, not the spell
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "it"
+                and _SACRIFICE_IT.search(text[max(0, rec["start"] - 18):rec["start"]])):
+            f = [i for i in pool if ms[i]["head_type"] not in ("spell", "player", "opponent")]
+            if f:
+                pool = f
+                evidence.append("sacrifice-object")
 
         # ---- predicate nominal after "it"/"it's": not a player
         if (rec["kind"] == "pronoun"

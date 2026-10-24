@@ -147,6 +147,7 @@ trigger_clause: trig_when event?
 trig_when: V_WHEN | V_WHATEVER | V_AT "the" "beginning" "of" AT_WHEN | V_AS
 AT_WHEN: /the end step|each end step of the game|your upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step|each opponent's draw step|your main phase|your first main phase|each player's main phase|each player's first main phase|each player's upkeep|your combat step|your first upkeep/
 event: event_subject EVENT_VERB event_object?
+      | event_subject V_GAIN kw_list ("until" "end" "of" "turn")?
       | ("one" "or" "more")? ("players" | player) V_DISCARD ("one" "or" "more")? card_target
       | V_YOU EVENT_VERB event_object?
       | V_YOU V_PUT counter_amount counter_kind "on" card_target
@@ -185,7 +186,7 @@ event: event_subject EVENT_VERB event_object?
       | ("an" | "each") "opponent" "attacks" "with" "creatures"
       | V_YOU V_CYCLE card_target
       | V_THAT "mana" "is" "spent" "to" "cast" event_object
-event_subject: card_target "or" card_target | card_target | player
+event_subject: card_target "or" card_target | card_target | player | V_THEY
 EVENT_VERB: /enters or dies|enters or attacks|attacks for the first time each turn|is countered|is dealt|is put|enters|dies|attacks|attack|deals|deal|becomes|casts|cast|discards|draws|draw|gains|gain|loses|lose|taps|untaps|blocks|block|fights|leaves|resolves/
 event_object: ("combat" "damage" "to" (player | card_target))?
             | "noncombat" "damage"
@@ -563,6 +564,7 @@ pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
 become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
              | card_target "becomes" "equal" "to" any_text
+             | card_target "becomes" "your" "choice" "of" any_text ("," any_text)*
              | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE become_tail?
 // NOTE: this rule used to end with three optional groups containing `any_text`
 // ("with any_text", "that's any_text", "for as long as any_text"). `any_text` is
@@ -595,7 +597,8 @@ look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" (
          | V_LOOK "at" "that" "many" "card" "s"? "from" "the" "top" "of" "your" "library"
          | V_LOOK "at" "target" "player's" "hand"
            | V_LOOK "at" "an" "opponent's" "hand"
-reveal_action: (who)? V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
+reveal_action: (who)? V_REVEAL card_target (("," | "and/or" | "and") card_target)+ ("from" "among" "them")? ("and" V_PUT "them" "into" "your" "hand")?
+             | (who)? V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
              | V_REVEAL "the" "top" amount "cards" "of" "your" "library"
             | V_REVEAL "the" "top" "card" "of" "your" "library"
              | card_target V_REVEAL "their" "hand"
@@ -695,7 +698,7 @@ emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))
 enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" "it" | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" "it")? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
 enchant_action: V_ENCHANT enchant_target
 enchant_target: STATUS* (GENERIC_TYPE | CARDNAME) (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
-cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? ("unless" any_text)? | "be" "blocked" ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
+cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? ("unless" any_text)? | "be" "blocked" ("this" "turn")? ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
             | (card_target)? V_CANT "cast" "spells" "or" "activate" "abilities" "of" card_target ("or" card_target)*
             | (card_target)? V_CANT "cast" "spells" ("during" OWNER? "turn")?
             | (card_target)? V_CANT "activate" "abilities" "of" card_target ("or" card_target)*
@@ -817,7 +820,7 @@ card_kind: THIS_CARD types? | types
          | "creature" "spells" | "permanent" "spells" | "artifact" "spells" | "enchantment" "spells" | "land" "spells"
          | "creature" "spell" | "permanent" "spell" | "artifact" "spell" | "enchantment" "spell" | "land" "spell"
          | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
-         | "it" | "them"
+         | "it" | "them" | "they"
          | INSTANT_SORCERY "spell" "s"?
          | "instant" "or" "sorcery" "card" "s"?
          | "instant" "and/or" "sorcery" "card" "s"?
