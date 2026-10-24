@@ -691,8 +691,11 @@ class Interpreter:
 
     def i_lose_kw_action(self, children):
         d = {'verb': 'lose_keywords'}
+        ct = self._find_one(children, 'card_target')
         kind = self._find_one(children, 'card_kind')
-        if kind is not None:
+        if ct is not None:
+            d['target'] = self.interp(ct)
+        elif kind is not None:
             d['target'] = self.interp(kind)
         kws = self._find_one(children, 'kw_list')
         if kws is not None:
@@ -715,7 +718,11 @@ class Interpreter:
         elif 'copy' in toks:
             d['effect'] = {'verb': 'copy'}
         else:
-            d['text'] = self._text(children)
+            da = self._find_one(children, 'draw_action')
+            if da is not None:
+                d['effect'] = self.interp(da)
+            else:
+                d['text'] = self._text(children)
         return d
 
     def i_enters_action(self, children):

@@ -55,7 +55,7 @@ def main():
     # Shared quantifier and suffix.
     x = one('Whenever one or more other Rabbits, Bats, Birds, and/or Mice you control enter, scry 1')
     assert x['kind'] == 'set' and x['logic'] == 'union'
-    assert x['shared_prefix'] == 'other'
+    assert x['shared_prefix'] == 'one or more'
     assert x['shared_suffix'] == 'you control'
 
     # Chrome Replicator's asyndetic property list.
@@ -105,6 +105,28 @@ def main():
     out = parse('Whenever one or more other Rabbits, Bats, Birds, and/or Mice you control enter, scry 1')
     trig = out[0]['trigger']['event']['subject']
     assert trig['kind'] == 'set' and trig['logic'] == 'union'
+
+    # Alania: a condition list followed by a causative draw effect.
+    out = parse("Whenever you cast a spell, if it's the first instant spell, "
+                "the first sorcery spell, or the first Otter spell other than ~ "
+                "you've cast this turn, you may have target opponent draw a card")
+    assert out[0]['if']['lists'][0]['logic'] == 'union'
+    inner = out[0]['effect']['inner']
+    assert inner['verb'] == 'have'
+    assert inner['effect']['verb'] == 'draw'
+
+    # Azure: 'up to one target' stays in the list NP and decodes as a union.
+    out = parse('Whenever this creature attacks, up to one target artifact, '
+                'creature, or planeswalker an opponent controls loses all '
+                'abilities until your next turn')
+    target = out[0]['effect']['target']
+    assert target['kind'] == 'set' and target['logic'] == 'union'
+    assert target['shared_prefix'] == 'up to one'
+
+    out = parse("If it's a creature, it also has base power and toughness "
+                "2/2 until your next turn")
+    assert out[0]['effect']['verb'] == 'set_base_pt'
+    assert out[0]['effect']['base_pt'] == '2/2'
 
     print('list tests passed')
 

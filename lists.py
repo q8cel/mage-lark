@@ -126,6 +126,7 @@ BAD_ITEM = re.compile(r"\b(?:then|where|and then|or less|or more|or fewer|or gre
 CLAUSE_START = re.compile(r"^(?:when|whenever|if|at|as|during|until|for each|each|the next|put|create|draw|sacrifice|exile|return|destroy|discard|search|shuffle|reveal|choose|your|their|this spell|that spell|tap|untap|pay|discard|activate)\b", re.I)
 def _clean_type_np(s):
     s=s.strip()
+    s=re.sub(r'(?i)^(?:up to \w+|one or more|\w+ or more)\s+', '', s).strip()
     if not s or CLAUSE_START.search(s) or BAD_ITEM.search(s):
         return False
     if re.search(r'\b(?:and|or|and/or)\b', s):
@@ -229,7 +230,7 @@ def _two_item(text):
             continue
         for m in re.finditer(r'(?P<first>[^,;:.!?]+?)\s+(?P<conn>and/or|and|or)\s+(?P<last>[^,;:.!?]+)', chunk):
             raw_first=m.group('first').strip()
-            ms=list(ITEMS_START.finditer(raw_first)); trim=ms[-1].start() if ms else 0
+            ms=list(ITEMS_START.finditer(raw_first)); trim=ms[0].start() if ms else 0
             if re.match(r'(?i)^enchant\s+', raw_first[trim:]):
                 trim += len('Enchant ')
             first=raw_first[trim:].strip()
@@ -272,8 +273,9 @@ def capture(text):
         ms=list(ITEMS_START.finditer(raw_first))
         trim = 0
         if ms:
-            # use last plausible marker
-            trim = ms[-1].start()
+            # The earliest marker keeps a shared quantifier such as
+            # "up to one target ..." inside the list NP.
+            trim = ms[0].start()
         # "Enchant creature, land, or planeswalker": Enchant is the ability
         # verb, not part of the list NP.
         if re.match(r'(?i)^enchant\s+', raw_first[trim:]):
@@ -346,8 +348,14 @@ def _context_ok(text, start):
         return True
     # Do not treat mana/activation costs, chapter prefixes, or arbitrary
     # clause punctuation as list-introducing context.
-    if prefix[-1] in '},;:+—–-]':
+    if prefix[-1] in '};:+—–-]':
         return False
+    if prefix.endswith(','):
+        # A list may begin right after a trigger/condition comma when it starts
+        # with an explicit quantifier/determiner ("..., up to one target ...").
+        if (re.search(r'(?i)\b(?:when|whenever|if|as long as|for each|until)\b', prefix)
+                and re.match(r'(?i)^(?:up to|one or more|a|an|target|another|other|each)\b', text[start:start+24])):
+            return True
     # These slots expect a non-list object in the current grammar; leave the
     # source text intact so the existing parser can handle it.
     if re.search(r'(?i)(?:\bput(?:\s+a)?|\breveal)$', prefix):
