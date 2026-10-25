@@ -188,6 +188,34 @@ add("lose-life-per-card",
     "Target opponent loses 2 life for each creature card in their graveyard",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
                   and d.get('for_each', {}).get('card_type', {}).get('value') == 'creature'))
+add("cant-counter-duration",
+    "It can't have counters put on it for as long as this creature remains on the battlefield",
+    lambda o: has(o, lambda d: d.get('verb') == "can't"
+                  and 'remains on the battlefield' in str(d.get('condition', ''))))
+add("sacrifice-choice-modifier",
+    "Target opponent sacrifices a creature of their choice with flying",
+    lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'
+                  and 'flying' in str(d.get('modifier', ''))))
+add("upkeep-of-controller",
+    "At the beginning of the upkeep of enchanted creature's controller, that player loses 2 life",
+    lambda o: has(o, lambda d: d.get('type') == 'triggered'
+                  and "enchanted creature" in str(d.get('trigger', {}))
+                  and d.get('effect', {}).get('verb') == 'lose_life'))
+add("begin-game",
+    "If this card is in your opening hand, you may begin the game with it on the battlefield",
+    lambda o: has(o, lambda d: d.get('verb') == 'may'
+                  and d.get('inner', {}).get('verb') == 'begin_game'))
+add("draw-greatest-discarded",
+    "Each player discards their hand, then draws cards equal to the greatest number of cards a player discarded this way",
+    lambda o: has(o, lambda d: d.get('verb') == 'draw'
+                  and 'greatest' in str(d.get('amount', ''))))
+add("reveal-top-their",
+    "Then each player reveals the top card of their library",
+    lambda o: has(o, lambda d: d.get('verb') == 'reveal'
+                  and d.get('zone') == 'library'))
+add("spend-mana-cast-or-activate",
+    "Spend this mana only to cast artifact spells or activate abilities of artifacts",
+    lambda o: has(o, lambda d: d.get('verb') == 'spend_mana_only_to_cast'))
 
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'

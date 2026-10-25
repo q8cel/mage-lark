@@ -157,7 +157,7 @@ trigger_clause: trig_when event?
               | COND_KEYWORD EMDASH trig_when event?
               | COND_KEYWORD EMDASH event?
               | COND_KEYWORD EMDASH static_text
-trig_when: V_WHEN | V_WHATEVER | V_AT "the" "beginning" "of" AT_WHEN | V_AS
+trig_when: V_WHEN | V_WHATEVER | V_AT "the" "beginning" "of" AT_WHEN | V_AT "the" "beginning" "of" "the" "upkeep" "of" card_target "'s" "controller" | V_AS
 AT_WHEN: /the end step|each end step of the game|your upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step|each opponent's draw step|your main phase|your first main phase|each player's main phase|each player's first main phase|each player's upkeep|your combat step|your first upkeep/
 event: event_subject EVENT_VERB event_object?
       | event_subject V_GAIN kw_list ("until" "end" "of" "turn")?
@@ -338,6 +338,7 @@ action: add_mana_action
        | distribute_action
        | copy_action
        | trigger_extra_action
+       | begin_game_action
        | lose_game_action
        | count_action
        | have_deal_action
@@ -384,6 +385,8 @@ after_phase_action: "After" "this" ("main" | "combat" | "beginning" | "ending")?
 extra_turns_action: (who)? V_TAKE ("a" | "an" | amount) "extra" ("turn" | "turns") ("after" "this" ("one" | "turn"))?
 
 // ---- individual actions ----
+
+begin_game_action: "begin" "the" "game" "with" card_target "on" "the" "battlefield"
 
 add_mana_action: (who)? V_ADD mana_amount
                 | (who)? V_ADD "an" "amount" "of" "mana" "of" "that" "color" "equal" "to" xdef
@@ -576,7 +579,8 @@ tap_action: V_TAP card_target
 untap_action: V_UNTAP card_target
 no_untap_action: card_target "doesn't" "untap" "during" "its" "controller's" "next"? "untap" "step" ("for" "as" "long" "as" any_text)? (","? "and" "its" "activated" "abilities" "can't" "be" "activated")?
 can_block_action: card_target "can" "block" ("any" "number" "of" | "up" "to" amount)? card_target
-sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? "or" V_PAY MANA+
+sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? with_modifier
+                | (who)? V_SACRIFICE card_target ("of" "their" "choice")? "or" V_PAY MANA+
                 | (who)? V_SACRIFICE card_target ("of" "their" "choice")? "or" V_PAY amount "life"
                 | (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" ("the" | "your") "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
 regenerate_action: (who)? V_REGENERATE card_target
@@ -646,6 +650,7 @@ look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" (
 reveal_action: (who)? V_REVEAL card_target (("," | "and/or" | "and" | "or") card_target)+ ("from" "among" "them")? ("and" V_PUT "them" "into" "your" "hand")?
              | (who)? V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
              | V_REVEAL "the" "top" amount "cards" "of" "your" "library"
+            | (who)? V_REVEAL "the" "top" "card" "of" "their" "library"
             | V_REVEAL "the" "top" "card" "of" "your" "library"
              | card_target V_REVEAL "their" "hand"
              | V_REVEAL card_target "or" card_target "from" "among" "them" "and" V_PUT "it" "into" "your" "hand"
@@ -692,7 +697,7 @@ may_action: (V_YOU | "that" "player" | "each" "player" | "an" "opponent" | contr
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
         | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action
         | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
-        | investigate_action
+        | investigate_action | begin_game_action
        | flip_action
        | has_abilities_action
        | life_total_action
@@ -726,7 +731,8 @@ distribute_action: V_DISTRIBUTE any_text
 separate_action: V_SEPARATE "them" "into" "a" "face-down" "pile" "and" "a" "face-up" "pile"
                | "An" "opponent" "separates" "those" "cards" "into" "two" "piles"
                | V_SEPARATE card_target "into" "two" "piles"
-spend_mana_action: (V_YOU "can")? V_SPEND ("this" "mana" | "mana" "of" "any" "type") ("only")? "to" "cast" card_target
+spend_mana_action: (V_YOU "can")? V_SPEND ("this" "mana" | "mana" "of" "any" "type") ("only")? "to" "cast" card_target "or" "activate" "abilities" "of" card_target
+                  | (V_YOU "can")? V_SPEND ("this" "mana" | "mana" "of" "any" "type") ("only")? "to" "cast" card_target
                   | V_SPEND ("this" "mana" | "mana" "of" "any" "type") "only" "to" "activate" "abilities"
                   | V_SPEND ("this" "mana" | "mana" "of" "any" "type") "only" "to" "activate" "an" "ability" "of" card_target
                   | V_SPEND ("this" "mana" | "mana" "of" "any" "type") "only" "to" "cast" card_target "or" "activate" "an" "ability" "of" card_target
@@ -754,7 +760,8 @@ enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "untapped
             | card_target V_ENTERS ("the" "battlefield")? "with" "a" "number" "of" (POWER_MOD | counter_name) "counters" "on" "it" "equal" "to" any_text
 enchant_action: V_ENCHANT enchant_target
 enchant_target: LISTTOK | STATUS* (GENERIC_TYPE | CARDNAME) (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
-cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? ("unless" any_text)? | "be" "blocked" ("this" "turn")? ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
+cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind) "for" "as" "long" "as" any_text
+            | (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? ("unless" any_text)? | "be" "blocked" ("this" "turn")? ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
             | (card_target)? V_CANT "cast" "spells" "or" "activate" "abilities" "of" card_target ("or" card_target)*
             | (card_target)? V_CANT "cast" "spells" ("during" OWNER? "turn")?
             | (card_target)? V_CANT "activate" "abilities" "of" card_target ("or" card_target)*
@@ -790,6 +797,7 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "the" "amount" "of" "excess" "damage" "dealt" "to" "that" "creature" "this" "way"
     | "the" "greatest" "power" "among" "other" "creatures" "you" "control"
     | "the" "greatest" "power" "among" "creatures" "you" "control"
+    | "the" "greatest" "number" "of" "cards" "a" "player" "discarded" "this" "way"
     | "your" "devotion" "to" colors
     | "this" "creature's" "power"
     | "~'s" "power"

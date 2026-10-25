@@ -429,6 +429,9 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             # A card can be referred to as "that spell" once it is an
             # instant/sorcery (e.g. cast from a graveyard); the card type
             # lattice alone would reject it.
+            if atype == "spell" and re.search(r"\bspells?\b",
+                                              ms[i]["surface"], re.I):
+                return True
             if (atype == "spell" and ms[i]["head_type"] == "card"
                     and re.search(r"\b(?:instant|sorcery)\b",
                                   ms[i]["surface"], re.I)):
@@ -611,7 +614,17 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("put-object")
-
+            si0 = rec.get("sentence")
+            if (si0 is not None and si0 < len(sents)
+                    and re.search(r"\bsearch(?:es|ed|ing)?\b",
+                                  text[sents[si0][0]:rec["start"]], re.I)):
+                cards = [i for i in pool
+                         if not ms[i].get("is_self")
+                         and re.search(r"\bcards?\b",
+                                      ms[i].get("surface", ""), re.I)]
+                if len(cards) == 1 and len(pool) > 1:
+                    pool = cards
+                    evidence.append("put-object-search-card")
         # ---- singular pronoun in subject position: not a player
         if (rec["kind"] == "pronoun"
                 and rec["surface"].lower() in ("it", "it's", "itself")
@@ -908,10 +921,25 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")
                 and re.search(r"\bas\s+(?:though|if)\s*$",
                               text[max(0, rec["start"] - 20):rec["start"]], re.I)):
-            f = [i for i in pool if ms[i].get("is_self")]
-            if f:
-                pool = f
+            same_self = [i for i in pool
+                         if ms[i]["sentence"] == rec["sentence"]
+                         and ms[i].get("is_self")]
+            if same_self:
+                pool = same_self
                 evidence.append("as-though-self")
+            else:
+                same_nonself = [i for i in pool
+                                if ms[i]["sentence"] == rec["sentence"]
+                                and not ms[i].get("is_self")
+                                and ms[i]["end"] <= rec["start"]]
+                if same_nonself:
+                    pool = same_nonself
+                    evidence.append("as-though-subject")
+                else:
+                    f = [i for i in pool if ms[i].get("is_self")]
+                    if f:
+                        pool = f
+                        evidence.append("as-though-self")
 
         # ---- "they control" after each opponent: the player is the subject,
         # not the creature/planeswalker collection being controlled.
@@ -960,6 +988,27 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         if pidx is not None:
                             pool = [pidx]
                             evidence.append("condition-chain")
+                            break
+
+        # ---- "If it doesn't ...": continue with the object from the prior
+        # clause, not a destination zone such as "their hand".
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")
+                and re.match(r"^\s+doesn't\b", text[rec["end"]:rec["end"] + 16], re.I)):
+            si = rec.get("sentence")
+            if si is not None and si < len(sents):
+                st = text[sents[si][0]:sents[si][1]].lstrip().lower()
+                if st.startswith("if "):
+                    for prev in reversed(anas):
+                        if prev.get("start", 0) >= rec["start"]:
+                            continue
+                        pidx = prev.get("_pred")
+                        if pidx is None:
+                            continue
+                        ht = ms[pidx].get("head_type")
+                        if ht not in ("hand", "graveyard", "library", "exile",
+                                      "player", "opponent"):
+                            pool = [pidx]
+                            evidence.append("if-object-chain")
                             break
 
         # ---- "It deals 3 damage instead ...": the card/source is the

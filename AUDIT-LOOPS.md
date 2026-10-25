@@ -784,3 +784,97 @@ in Loop 1.
 - Dev coreference: **91.2% entity-aware / 85.3% exact**.
 - Bench: **95.8% regex / 91.5% parser** entity-aware.
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 19 — seed 20261110
+
+Cards:
+
+`Leyline of Vitality`, `Warstorm Surge`, `Ethereal Elk`, `Suncleanser`,
+`Run Afoul`, `Yarok's Fenlurker`, `Niambi, Esteemed Speaker`, `Liliana's Scorn`,
+`Fire Servant`, `Sublime Epiphany`, `Lofty Denial`, `Hooded Blightfang`,
+`Sparkmage Apprentice`, `Stab Wound`, `Pattern Matcher`, `Diabolic Tutor`,
+`Mitotic Slime`, `Track Down`, `Ring of Kalonia`, `Palladia-Mors, the Ruiner`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Leyline of Vitality | `you may begin the game with it on the battlefield` | added `begin_game_action` inside effects and may-actions, with an interpreter handler |
+| Suncleanser | `can't have counters put on it for as long as ...` | added the duration form of `cant_action` |
+| Run Afoul | `sacrifices a creature of their choice with flying` | allowed `with_modifier` on `sacrifice_action` |
+| Stab Wound | `At the beginning of the upkeep of enchanted creature's controller` | added the controller-upkeep form of `trig_when` |
+
+### Coreference/output fixes found and fixed
+
+- **Pattern Matcher**: both `it` occurrences now bind to the searched card, not
+  the nested `another creature you control`; the search context prefers the
+  matching card mention.
+- **Suncleanser**: `It` / `it` bind to `target creature`, and `That player` binds
+  to `Target opponent`.
+- **Hooded Blightfang**: `that planeswalker` binds to `a planeswalker`; the
+  typed demonstrative is locked with a regression test.
+- **Stab Wound**: `that player` binds to `enchanted creature's controller`.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py FDN.json`: 60/60.
+- `test_coref.py`: 23/23 after cache rebuild.
+- Dev coreference: **91.2% entity-aware / 85.3% exact** (3083/3380, 2883/3380).
+- Bench: **95.8% regex / 91.5% parser** entity-aware.
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 20 — seed 20261111
+
+Cards:
+
+`Renowned Weaponsmith`, `Jace's Archivist`, `Meteorite`, `Dwindle`,
+`Ring of Valkas`, `Liliana's Reaver`, `Waterknot`, `Thundermaw Hellkite`,
+`Conundrum Sphinx`, `Fire Servant`, `Cavalier of Flame`, `Belltower Sphinx`,
+`Salvager of Ruin`, `Savage Summoning`, `Hypnotic Specter`,
+`Dismissive Pyromancer`, `Lay of the Land`, `Monomania`, `Convolute`,
+`Unsubstantiate`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Renowned Weaponsmith | `Spend this mana only to cast artifact spells or activate abilities of artifacts` | added the plural coordinated cast/activate form of `spend_mana_action` |
+| Jace's Archivist | `cards equal to the greatest number of cards a player discarded this way` | added the matching `xdef` alternative |
+| Conundrum Sphinx | `each player reveals the top card of their library` | allowed a non-`your` possessor in the top-card `reveal_action` |
+
+### Coreference/output fixes found and fixed
+
+- **Savage Summoning**: `as though it` now prefers a same-sentence non-self
+  subject over the card itself. `it` and `That spell` bind to
+  `The next creature spell`.
+- **Savage Summoning**: spell-typed anaphors may bind to a candidate whose
+  surface contains `spell`, so `That spell` can select
+  `The next creature spell`.
+- **Conundrum Sphinx**: `If it doesn't ...` continues with the object from the
+  preceding clause (`the card a player`) instead of the destination `their hand`.
+- **Monomania**: `the rest` intentionally abstains. The text has no explicit
+  collection mention for the unchosen cards, and binding it to the chosen card
+  or the hand would be semantically wrong.
+
+### Remaining limitations
+
+- **Monomania**: `the rest` stays `no-resolution` (`set-rest-no-collection`),
+  as documented above.
+- **Jace's Archivist**: the draw effect omits its `who` field because the
+  optional `who` can match an empty `card_target`. This is pre-existing and
+  left as an accepted output limitation; the discard subject and the draw
+  amount are correct.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible,
+  apart from the documented abstentions.
+- `test_output.py FDN.json`: 63/63.
+- `test_coref.py`: 26/26 after cache rebuild.
+- Dev coreference: **91.3% entity-aware / 85.4% exact** (3086/3380, 2886/3380;
+  was 91.2 / 85.3).
+- Bench: **95.8% regex / 91.5% parser** entity-aware (unchanged from baseline).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.

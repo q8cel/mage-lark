@@ -40,6 +40,11 @@ CONTROLLER_CAND = re.compile(
 LIST_CAND = re.compile(
     r"\b(?:a|an|the|target|another|each|any|no|one or more)\s+"
     r"(?:[A-Za-z][\w'\-]*\s*,\s*)+"
+    r"(?!(?:destroy|exile|return|sacrifice|put|draw|discard|mill|create|target|"
+    r"deal|deals|damage|gain|lose|tap|untap|counter|reveal|search|shuffle|"
+    r"attach|choose|remove|add|copy|cast|play|scry|surveil|fight|become|"
+    r"get|gets|has|have|is|are|was|were|can|cannot|can't|with|from|into|onto|"
+    r"to|and|or)\b)"
     r"(?:[A-Za-z][\w'\-]*\s+){0,3}"
     r"(?:cards?|creatures?|permanents?|spells?|artifacts?|enchantments?|"
     r"lands?|planeswalkers?|tokens?)\b", re.I)

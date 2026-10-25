@@ -524,6 +524,13 @@ class Interpreter:
                 d['block'] = self.interp(cts[1])
         return d
 
+    def i_begin_game_action(self, children):
+        d = {'verb': 'begin_game'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['card'] = self.interp(ct)
+        return d
+
     def i_after_phase_action(self, children):
         return {'verb': 'additional_phase'}
 

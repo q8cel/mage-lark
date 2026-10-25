@@ -44,8 +44,8 @@ class Skip(Exception):
     pass
 
 
-def resolve_card(name):
-    text = card_text(name)
+def resolve_card(name, path=None):
+    text = card_text(name, path)
     assert text, f"card not found: {name}"
     if not (ptree.has_structure(text) or ptree.key(text) in ptree._load_legacy()):
         raise Skip("card text not in parse cache")
@@ -249,6 +249,42 @@ def t_entity_ids_not_indices():
     res = rulecoref.resolve(text, refs.build(text, parser=False), [])
     ids = [e["id"] for e in res["entities"] if e["canonical"] == "~"]
     assert len(ids) == 1, [e["canonical"] for e in res["entities"]]
+
+
+def t_planeswalker_demonstrative_not_player():
+    _, res = resolve_card("Hooded Blightfang", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "that planeswalker"]
+    assert len(got) == 1 and got[0]["canonical"] == "a planeswalker", anas(res)
+
+
+def t_search_put_pronoun_prefers_search_card():
+    _, res = resolve_card("Pattern Matcher", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "it"]
+    assert len(got) == 2, anas(res)
+    assert all(a["canonical"].lower().startswith("a card") for a in got), anas(res)
+
+
+def t_conditional_it_continues_with_object():
+    _, res = resolve_card("Conundrum Sphinx", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "it"]
+    assert len(got) == 3, anas(res)
+    assert all(a["canonical"] == "the card a player" for a in got), anas(res)
+
+
+def t_as_though_refers_to_sentence_subject():
+    _, res = resolve_card("Savage Summoning", "classic.json")
+    got = [(a["surface"].lower(), a["canonical"]) for a in res["anaphors"]]
+    assert ("it", "The next creature spell") in got, got
+    assert ("that spell", "The next creature spell") in got, got
+
+
+def t_rest_without_collection_abstains():
+    # Documented limitation: Monomania's "the rest" has no explicit collection
+    # mention (only the singled-out card and the hand zone).  Keep the honest
+    # abstention instead of binding it to the chosen card.
+    _, res = resolve_card("Monomania", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "the rest"]
+    assert len(got) == 1 and got[0]["status"] == "no-resolution", anas(res)
 
 
 CASES = [(k[2:], v) for k, v in sorted(globals().items()) if k.startswith("t_")]
