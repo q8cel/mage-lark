@@ -461,6 +461,7 @@ dmg_amount: amount | "that" "much" | "double" "that" | "double" "that" "much"
            | "triple" "that" | "triple" "that" "much"
            | "that" "much" "plus" amount | "double" "that" "plus" amount | "double" "that" "much" "plus" amount
 lose_life_action: who V_LOSE life_amount ("unless" any_text)?
+                | who V_LOSE life_amount "for" "each" card_target
                 | player V_LOSE life_amount ("unless" any_text)?
                 | player "who" V_CANT V_LOSE life_amount
                 | who V_LOSE "life" "equal" "to" xdef
@@ -553,14 +554,14 @@ put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "fro
 
 order_mod: "in" ("a" "random" | "any") "order"
 
-exile_action: (who)? V_EXILE card_target ("from" zone)? ("until" any_text)?
-            | (who)? V_EXILE card_target ("from" zone)? "and" card_target ("from" zone)?
+exile_action: (who)? V_EXILE card_target ("from" zones)? ("until" any_text)?
+            | (who)? V_EXILE card_target ("from" zones)? "and" card_target ("from" zones)?
             | (who)? V_EXILE card_target "from" "the" "top" "of" zone ("until" any_text)?
             | V_EXILE "all" "graveyards"
             | V_EXILE "the" "top" amount "cards" "of" "your" "library"
             | V_EXILE "the" "top" "card" "of" "your" "library"
             | V_EXILE "the" "top" "card" "of" "each" "player's" "library"
-            | V_EXILE card_target "from" zone ("with" "a" counter_name "counter" "on" "it")?
+            | V_EXILE card_target "from" zones ("with" "a" counter_name "counter" "on" "it")?
             | V_EXILE "all" "other" card_target "tokens" "you" "control"
             | V_EXILE player "'s" "graveyard"
             | V_EXILE card_target "or" card_kind "that's" colors

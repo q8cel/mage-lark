@@ -211,6 +211,29 @@ def t_owner_and_control_pronouns():
     assert ("they", "Each opponent") in got2, got2
 
 
+def t_possessive_attribute_across_sentences():
+    # "its mana value" describes the previously revealed top card, not the
+    # player who is losing life in the following sentence.
+    text = ("Reveal the top card of your library and put that card into your "
+            "hand. You lose life equal to its mana value.")
+    res = rulecoref.resolve(text, refs.build(text, parser=False), find_anaphors(text))
+    got = [(a["surface"], a["canonical"]) for a in res["anaphors"]]
+    assert ("its", "the top card") in got, got
+
+
+def t_set_element_does_not_capture_later_possessives():
+    # "one of them" refers only to its own instruction; it must not make the
+    # later possessive "its owner" or "their hand" bind to that card collection.
+    text = ("[+1]: Look at the top two cards of your library. Put one of them "
+            "into your graveyard. [\u22123]: Return another target nonland "
+            "permanent to its owner's hand. [\u22128]: Each player shuffles "
+            "their hand and graveyard into their library.")
+    res = rulecoref.resolve(text, refs.build(text, parser=False), find_anaphors(text))
+    got = [(a["surface"], a["canonical"]) for a in res["anaphors"]]
+    assert ("its", "another target nonland permanent") in got, got
+    assert got.count(("their", "Each player")) == 2, got
+
+
 def t_set_rest_prefers_source_collection():
     text = ("Reveal the top four cards of your library. Put all Goblin cards "
             "revealed this way into your hand and the rest on the bottom of "

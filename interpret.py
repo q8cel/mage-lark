@@ -280,6 +280,15 @@ class Interpreter:
                 return ch.value
         return None
 
+    def i_zones(self, children):
+        out = []
+        for ch in children:
+            if isinstance(ch, Tree) and ch.data == 'zone':
+                z = self.interp(ch)
+                if z:
+                    out.append(z)
+        return out
+
     # ------------------------------------------------------------------ amounts / keywords
     def i_amount(self, children):
         for ch in children:
@@ -398,13 +407,22 @@ class Interpreter:
         amt = self._find_one(children, 'amount')
         if amt is not None:
             d['amount'] = self.interp(amt)
-        zn = self._find_one(children, 'zone') or self._find_one(children, 'in_zone')
-        if zn is not None:
-            d['zone'] = self.interp(zn)
+        zns = self._find_one(children, 'zones')
+        if zns is not None:
+            zlist = self.interp(zns)
+            if zlist:
+                if len(zlist) == 1:
+                    d['zone'] = zlist[0]
+                else:
+                    d['zones'] = zlist
         else:
-            z = self._zone_from_tokens(children)
-            if z is not None:
-                d['zone'] = z
+            zn = self._find_one(children, 'zone') or self._find_one(children, 'in_zone')
+            if zn is not None:
+                d['zone'] = self.interp(zn)
+            else:
+                z = self._zone_from_tokens(children)
+                if z is not None:
+                    d['zone'] = z
         wm = self._find_one(children, 'with_modifier')
         if wm is not None:
             d['modifier'] = self.interp(wm)
@@ -901,6 +919,9 @@ class Interpreter:
         la = self._find_one(children, 'life_amount')
         if la is not None:
             d['amount'] = self.interp(la)
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['for_each'] = self.interp(ct)
         return d
 
     def i_life_amount(self, children):

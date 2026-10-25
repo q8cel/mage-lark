@@ -401,7 +401,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 evidence.append("drop-amount-phrases")
 
         # ---- element of a collection ("choose one of them ... that card")
-        if on["set_element"] and _ONE_OF.search(text[max(0, rec["start"] - 130):rec["start"]]):
+        if (on["set_element"] and not rec["is_possessive"]
+                and _ONE_OF.search(text[max(0, rec["start"] - 130):rec["start"]])):
             f = [i for i in pool if ms[i]["number"] == "pl"
                  and ms[i]["head_type"] in COLLECTION_TYPES]
             if f:
@@ -847,6 +848,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # subject") was implemented and measured here: -1 occurrence on dev, and
         # its precondition held for only 6 of 755 possessive anaphors, because
         # those clauses do not parse at all (see DETERMINISTIC-COREF.md).
+        pre_poss = list(pool)
         if on["possessive"] and rec["is_possessive"]:
             f = [i for i in pool if ms[i]["sentence"] == rec["sentence"]
                  and ms[i]["clause"] == rec["clause"]]
@@ -878,6 +880,19 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         if f:
                             pool = f
                             evidence.append("possessive-object-nonplayer")
+
+        # ---- "its mana value" / "its power" after an earlier effect: the
+        # attribute belongs to the object, not to the player in this sentence.
+        if (on["possessive"] and rec["is_possessive"]
+                and _POSSESSED_ATTRIBUTE.match(text[rec["end"]:rec["end"] + 32])):
+            f = [i for i in pre_poss
+                 if ms[i].get("head_type") not in
+                 ("player", "opponent", "hand", "graveyard", "library", "exile")
+                 and ms[i].get("surface", "").strip().lower()
+                 not in ("you", "your", "we", "our", "i", "my")]
+            if f:
+                pool = f
+                evidence.append("possessive-attribute-object")
 
         # ---- modifier self-reference: "a creature with a counter on it"
         if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")

@@ -180,6 +180,14 @@ add("scepter-instead-if",
     "It deals 3 damage instead if you control artifacts named Crown of Empires and Throne of Empires",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage')
                   and has(o, lambda d: d.get('if')))
+add("exile-coordinated-zones",
+    "Exile all noncreature, nonland cards from that player's hand and graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'exile'
+                  and d.get('zones') == ['hand', 'graveyard']))
+add("lose-life-per-card",
+    "Target opponent loses 2 life for each creature card in their graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
+                  and d.get('for_each', {}).get('card_type', {}).get('value') == 'creature'))
 
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'

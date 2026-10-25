@@ -732,3 +732,55 @@ Cards:
 - Dev coreference: **91.2% entity-aware / 85.2% exact**.
 - Bench: **95.8% regex / 91.5% parser** entity-aware.
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 18 — seed 20261109
+
+Cards:
+
+`Elvish Rejuvenator`, `Blood Reckoning`, `Polymorph`, `Icon of Ancestry`,
+`Stabbing Pain`, `Dark Tutelage`, `Mystifying Maze`, `Liliana, Waker of the Dead`,
+`Elvish Reclaimer`, `Ajani's Chosen`, `Peel from Reality`, `Chandra's Outrage`,
+`Excommunicate`, `Primordial Hydra`, `Farseek`, `Double Vision`,
+`Jace, the Living Guildpact`, `Thought Distortion`, `Invasive Species`,
+`Liliana, Death Mage`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Thought Distortion | `Exile ... cards from that player's hand and graveyard` | allowed a coordinated `zones` source and emitted `zones: [hand, graveyard]` |
+| Liliana, Death Mage | `Target opponent loses 2 life for each creature card in their graveyard` | added `V_LOSE life_amount for each card_target` and a structured `for_each` field |
+
+### Coreference/output fixes found and fixed
+
+- **Full-card resolution**: the audit now resolves the normalized card text as a
+  whole (preserving oracle newlines), so cross-sentence pronouns in `Polymorph`,
+  `Stabbing Pain`, and `Mystifying Maze` are exercised. They now bind to the
+  creature established in the previous sentence.
+- **Jace, the Living Guildpact**: a preceding `one of them` no longer captures
+  later possessives. `its owner` binds to `another target nonland permanent`, and
+  both `their hand` / `their library` bind to `Each player`.
+- **Dark Tutelage**: `its mana value` binds across the sentence boundary to
+  `the top card`, not to the player losing life.
+- **Ajani's Chosen**: `attach it to the token` binds `it` to the enchantment
+  being attached, not to the destination token.
+- **Liliana, Death Mage**: `Its controller` chains to the target creature from
+  the preceding destruction clause; `their graveyard` binds to the opponent.
+
+### Remaining limitation
+
+`Peel from Reality`: `their` in `their owners' hands` still binds to the
+coordinated creature collection, not to a separately invented owner-player
+mention. This is the known owner/collection inventory limitation first recorded
+in Loop 1.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible
+  (apart from the documented owner-collection limitation).
+- `test_output.py FDN.json`: 56/56.
+- `test_coref.py`: 21/21 after cache rebuild.
+- Dev coreference: **91.2% entity-aware / 85.3% exact**.
+- Bench: **95.8% regex / 91.5% parser** entity-aware.
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
