@@ -977,3 +977,109 @@ Cards:
   was 91.3 / 85.4).
 - Bench: **95.8% regex / 91.5% parser** entity-aware (unchanged from baseline).
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 23 — seed 20261114
+
+Cards:
+
+`Chandra's Flame Wave`, `Heliod's Pilgrim`, `Sorin Markov`, `Stain the Mind`,
+`Rites of Flourishing`, `See the Truth`, `Declare Dominance`,
+`Scuttling Doom Engine`, `Battalion Foot Soldier`, `Pithing Needle`,
+`Pitchburn Devils`, `Dungeon Geists`, `Phantasmal Dragon`,
+`Throne of Empires`, `Unchained Berserker`, `Silent Dart`,
+`Mwonvuli Beast Tracker`, `Odric, Master Tactician`, `Warp World`,
+`Hunt the Weak`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Chandra's Flame Wave | `deals 2 damage to target player and each creature that player controls` | added the player-plus-controlled-creatures damage recipient |
+| Sorin Markov | `Target opponent's life total becomes 10` | allowed a possessive player subject in `life_total_action` |
+| Sorin Markov | `You control target player during that player's next turn` | added `control_player_action` and its handler |
+| Rites of Flourishing | `Each player may play an additional land on each of their turns` | made the may-subject case-insensitive and allowed `their` turns in `play_action` |
+| Throne of Empires | `Create five of those tokens instead if ...` | added the amount-of-those-tokens token action with `instead` / condition |
+| Mwonvuli Beast Tracker | `creature card with deathtouch, hexproof, reach, or trample and reveal it` | allowed `or` in keyword lists and the `and reveal it` search tail |
+| Declare Dominance | `All creatures able to block it this turn do so` | allowed `this turn` in `block_do_so_action` |
+| Warp World | `artifact, creature, and land cards ... then does the same for enchantment cards` | allowed a trailing `cards` after a multi-type list and added `same_action` |
+
+### Coreference/output fixes found and fixed
+
+- **Stain the Mind**: `that player` skips the possessive zone mention
+  `target player's graveyard` and binds to `target player`.
+- **See the Truth**: `the rest` after `one of those cards` binds to the source
+  collection `the top three cards` instead of the singled-out subset.
+- Added output regressions for grouped damage, opponent life totals,
+  controlling a player, additional land plays, those-token creation, keyword
+  search, all-creatures blocking, and the elliptical `does the same` action.
+
+### Remaining limitations
+
+- **Odric, Master Tactician**: `those creatures` binds to `other creatures`
+  from the coordinated attacking subject; the canonical span does not include
+  Odric itself. The attacking group is understood, but the span is partial.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible,
+  apart from the documented span limitation.
+- `test_output.py classic.json`: 81/81.
+- `test_coref.py`: loop-23 regressions pass; combined run is 33/33 below.
+- Dev coreference: no regression; combined loop-24 figures are below.
+- Bench: **95.8% regex** entity-aware (unchanged); the full parser-mention
+  benchmark did not complete in this pass.
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 24 — seed 20261115
+
+Cards:
+
+`Manabarbs`, `Bogardan Hellkite`, `Tezzeret, Artifice Master`,
+`Garruk, Caller of Beasts`, `Phytotitan`, `Genesis Hydra`, `Sphinx of Uthuun`,
+`Golos, Tireless Pilgrim`, `Crown of Empires`, `Soul Bleed`, `Basri's Aegis`,
+`Dryad Greenseeker`, `Legion's End`, `Open the Vaults`, `Circle of Flame`,
+`Chandra, Flame's Fury`, `Boundless Realms`, `Lightwielder Paladin`,
+`Jace's Phantasm`, `Chandra, Pyromaster`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Phytotitan | `return it ... under its owner's control at the beginning of their next upkeep` | allowed `their next upkeep` as a return timing |
+| Golos, Tireless Pilgrim | `play them this turn without paying their mana costs` | added the plural play-without-paying form |
+| Legion's End | `exiles all cards with that name ...` | allowed `with that name` as a card modifier |
+| Open the Vaults | `Return all artifact and enchantment cards ... under their owners' control` | added the coordinated multi-type return form |
+| Boundless Realms | `search ... where X is ..., put them ...` | allowed an `xdef_clause` and the following put/shuffle tail in search |
+| Chandra, Pyromaster | `cast the copies without paying their mana costs` | added the plural copies / plural mana-cost cast form |
+
+### Coreference/output fixes found and fixed
+
+- **Dryad Greenseeker**: both `it` occurrences after `reveal` / `put` bind to
+  `the top card`, not to the source library. Added a reveal-object rule.
+- **Boundless Realms**: `up to X basic land cards` is now a candidate mention,
+  so `them` binds to the search target instead of `your library`.
+- **Open the Vaults**: the coordinated type list is captured as
+  `all artifact and enchantment cards`, so `their` keeps the card collection.
+- Added output regressions for return timing, multi-type returns, reveal/exile
+  coordination, search with an X definition, casting copies, and plural
+  play-without-paying costs.
+
+### Remaining limitations
+
+- **Chandra, Pyromaster**: `That creature` binds to the correct target
+  creature, but the canonical span stops at `target creature that player`,
+  omitting the trailing `or that planeswalker's controller controls`.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible,
+  apart from the documented span limitation.
+- `test_output.py classic.json`: 87/87.
+- `test_coref.py`: 33/33 after cache rebuild.
+- Dev coreference: **91.4% entity-aware / 85.6% exact** (3089/3380, 2892/3380;
+  entity unchanged, exact was 85.5).
+- Bench: **95.8% regex** entity-aware (unchanged); the full parser-mention
+  benchmark did not complete in this pass.
+- `test_normalize_map.py`: 6/6; dataset span validation passes.

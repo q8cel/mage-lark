@@ -92,6 +92,7 @@ _CONTAINER_LEAD = re.compile(r"\b(?:from|in|into|of)\s*$", re.I)
 _AMOUNT_PHRASE = re.compile(r"^(?:the\s+)?(?:number|total|amount)\b", re.I)
 _MODIFIER_LEAD = re.compile(r"\b(?:with|from|in|of|on|under)\s*$", re.I)
 _PUT_LEAD = re.compile(r"\bputs?(?:ting)?\s*$", re.I)
+_REVEAL_LEAD = re.compile(r"\breveals?\s*$", re.I)
 # "attach this Equipment to it": the pronoun is the destination, not the
 # Equipment being attached (which is the object of "attach").
 _ATTACH_TO_LEAD = re.compile(r"\battach(?:ed|ing)?\b[^.;]*\bto\s*$", re.I)
@@ -533,6 +534,30 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         # ---- set-valued anaphors ("the rest", "the others")
         # The referent is a COLLECTION minus what was just singled out, so the
         # antecedent is the last plural collection NP, not the last mention.
+        # Narrow exception: "one of those cards ... the rest" names a subset of
+        # an earlier collection; prefer that source collection.  Keep the
+        # existing fallback below unchanged for other "the rest" cases.
+        if (on["set_rest"] and rec["kind"] == "phrase"
+                and rec["surface"].lower() == "the rest"):
+            prior = sorted(
+                (i for i in pool
+                 if ms[i]["start"] < rec["start"]
+                 and not ms[i].get("is_anaphor")
+                 and ms[i]["number"] == "pl" and ms[i]["head_type"]),
+                key=lambda i: ms[i]["start"])
+            for k in range(len(prior) - 1, -1, -1):
+                i = prior[k]
+                if not re.match(r"(?i)^(?:one of|each of)\b",
+                                ms[i]["surface"].strip()):
+                    continue
+                src = [j for j in prior[:k]
+                       if ms[j]["start"] < ms[i]["start"]
+                       and ms[j].get("head_type") == "card"]
+                if src:
+                    pool = [src[-1]]
+                    evidence.append("rest-source-collection")
+                break
+
         if on["set_rest"] and rec["kind"] == "phrase":
             f = [i for i in pool if ms[i]["number"] == "pl" and ms[i]["head_type"]]
             if f:
@@ -617,6 +642,18 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("container-player")
+
+        # ---- object of "reveal": a following pronoun is the revealed card,
+        # not the library or hand it came from.
+        if (rec["kind"] == "pronoun" and not rec["is_possessive"]
+                and _REVEAL_LEAD.search(
+                    text[max(0, rec["start"] - 14):rec["start"]])):
+            f = [i for i in pool
+                 if ms[i]["head_type"] not in
+                 ("hand", "graveyard", "library", "exile", "player", "opponent")]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("reveal-object")
 
         # ---- object of "put": skip NPs that are only PP modifiers
         if rec["kind"] == "pronoun" and _PUT_LEAD.search(
@@ -1033,6 +1070,19 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("damage-subject-self")
+
+        # ---- demonstrative player: skip possessive zone containers such as
+        # "target player's graveyard" when a plain player NP is available.
+        if (rec["kind"] == "demonstrative"
+                and rec["surface"].lower() in
+                ("that player", "that opponent", "those players", "those opponents")):
+            f = [i for i in pool
+                 if ms[i].get("head_type") in ("player", "opponent")
+                 and not re.search(r"'s\s+(?:graveyard|hand|library|deck)\b",
+                                   ms[i]["surface"], re.I)]
+            if f:
+                pool = f
+                evidence.append("demonstrative-player-not-zone")
 
         # ---- decision
         status, pred = None, None

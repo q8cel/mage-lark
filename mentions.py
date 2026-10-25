@@ -54,6 +54,17 @@ COLOR_CARD_CAND = re.compile(
     r"(?:\s+(?:or|and/or)\s+(?:white|blue|black|red|green|colorless))+"
     r"\s+(?:creature|permanent|artifact|enchantment|land|planeswalker|"
     r"instant|sorcery|card)\s+cards?\b", re.I)
+UP_TO_CAND = re.compile(
+    r"\bup to (?:X|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+"
+    r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
+    r"(?:cards?|creatures?|permanents?|lands?|artifacts?|enchantments?|spells?|"
+    r"planeswalkers?|tokens?)\b", re.I)
+TYPE_CARD_CAND = re.compile(
+    r"\b(?:all|target|each|another|a|an|the|any)\s+"
+    r"(?:artifact|creature|enchantment|land|permanent|planeswalker|instant|sorcery)"
+    r"(?:\s*(?:,|and|or)\s*(?:artifact|creature|enchantment|land|permanent|"
+    r"planeswalker|instant|sorcery))+"
+    r"\s+cards?\b", re.I)
 ZONE_CAND = re.compile(
     r"\b(?:your|their|its|his|her|our|my|a player's|target player's|target opponent's)\s+"
     r"(?:hands?|graveyards?|librar(?:y|ies)|exile|battlefield)\b", re.I)
@@ -107,6 +118,14 @@ def _regex_mentions(text):
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in COLOR_CARD_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in UP_TO_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in TYPE_CARD_CAND.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})

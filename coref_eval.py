@@ -332,7 +332,7 @@ def evaluate_cases(cases, predict, resolver, verbose=0):
 
 def _make_predictor(args):
     if args.resolver == "rule":
-        rules = set()
+        rules = {}
         for chunk in args.ablate.split(","):
             chunk = chunk.strip()
             if chunk:

@@ -124,6 +124,63 @@ add("copy-with-exception",
     lambda o: has(o, lambda d: d.get('verb') == 'have'
                   and d.get('effect', {}).get('verb') == 'copy')
                   and has(o, lambda d: d.get('verb') == 'gain_quote'))
+add("damage-player-and-creatures",
+    "~ deals 2 damage to target player and each creature that player controls",
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
+                  and 'each creature that player controls' in str(d.get('to', ''))))
+add("opponent-life-total",
+    "Target opponent's life total becomes 10",
+    lambda o: has(o, lambda d: d.get('verb') == 'life_total'
+                  and d.get('amount') == 10
+                  and d.get('who') == 'Target opponent'))
+add("control-player-turn",
+    "You control target player during that player's next turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'control_player'
+                  and d.get('player') == 'target player'
+                  and d.get('during_next_turn') is True))
+add("additional-land-their-turns",
+    "Each player may play an additional land on each of their turns",
+    lambda o: has(o, lambda d: d.get('verb') == 'play'
+                  and d.get('additional_land') is True))
+add("those-tokens-instead-if",
+    "Create five of those tokens instead if you control artifacts named ~ and ~",
+    lambda o: has(o, lambda d: d.get('verb') == 'create_token'
+                  and d.get('count') == 5
+                  and d.get('of_those_tokens') is True
+                  and d.get('instead') is True))
+add("search-keyword-choice",
+    "When this creature enters, search your library for a creature card with deathtouch, hexproof, reach, or trample and reveal it",
+    lambda o: has(o, lambda d: d.get('verb') == 'search')
+                  and has(o, lambda d: d.get('verb') == 'reveal'))
+add("block-all-this-turn",
+    "All creatures able to block it this turn do so",
+    lambda o: has(o, lambda d: d.get('verb') == 'block_do_so'
+                  and d.get('this_turn') is True
+                  and d.get('subject', {}).get('card_type', {}).get('value') == 'creatures'))
+add("warp-same-action",
+    "Each player puts all artifact, creature, and land cards revealed this way onto the battlefield, then does the same for enchantment cards",
+    lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'battlefield')
+                  and has(o, lambda d: d.get('verb') == 'same'
+                          and d.get('card', {}).get('card_type', {}).get('value') == 'enchantment'))
+add("return-tapped-next-upkeep",
+    "When this creature dies, return it to the battlefield tapped under its owner's control at the beginning of their next upkeep",
+    lambda o: has(o, lambda d: d.get('verb') == 'return'))
+add("return-all-multi-types",
+    "Return all artifact and enchantment cards from all graveyards to the battlefield under their owners' control",
+    lambda o: has(o, lambda d: d.get('verb') == 'return'))
+add("reveal-then-exile-name",
+    "Then that player reveals their hand and exiles all cards with that name from their hand and graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'reveal')
+                  and has(o, lambda d: d.get('verb') == 'exile'))
+add("search-xdef-then-put",
+    "Search your library for up to X basic land cards, where X is the number of lands you control, put them onto the battlefield tapped, then shuffle",
+    lambda o: has(o, lambda d: d.get('verb') == 'search'))
+add("cast-copies-plural-cost",
+    "You may cast the copies without paying their mana costs",
+    lambda o: has(o, lambda d: d.get('verb') == 'cast'))
+add("play-without-paying-plural",
+    "You may play them this turn without paying their mana costs",
+    lambda o: has(o, lambda d: d.get('verb') == 'play'))
 add("if-decomposed", "If you control three or more creatures, draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
                   and isinstance(d.get('effect'), dict)

@@ -451,7 +451,11 @@ class Interpreter:
         return self._card_action('cast', children)
 
     def i_play_action(self, children):
-        return self._card_action('play', children)
+        d = self._card_action('play', children)
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'additional' in toks and 'land' in toks:
+            d['additional_land'] = True
+        return d
 
     def i_draw_action(self, children):
         d = {'verb': 'draw'}
@@ -524,6 +528,18 @@ class Interpreter:
             d['for_which_chosen'] = True
         return d
 
+    def i_control_player_action(self, children):
+        d = {'verb': 'control_player'}
+        pl = self._find_one(children, 'player')
+        if pl is not None:
+            d['player'] = self.interp(pl)
+        else:
+            ct = self._find_one(children, 'card_target')
+            if ct is not None:
+                d['player'] = self.interp(ct)
+        d['during_next_turn'] = True
+        return d
+
     def i_extra_turns_action(self, children):
         d = {'verb': 'extra_turns'}
         who = self._find_one(children, 'who')
@@ -545,6 +561,16 @@ class Interpreter:
             d['subject'] = self.interp(cts[0])
             if len(cts) > 1:
                 d['block'] = self.interp(cts[1])
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'this' in toks and 'turn' in toks:
+            d['this_turn'] = True
+        return d
+
+    def i_same_action(self, children):
+        d = {'verb': 'same'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['card'] = self.interp(ct)
         return d
 
     def i_begin_game_action(self, children):
@@ -643,7 +669,11 @@ class Interpreter:
 
     def i_life_total_action(self, children):
         amt = self._find_one(children, 'amount')
-        return {'verb': 'life_total', 'amount': self.interp(amt) if amt is not None else None}
+        d = {'verb': 'life_total', 'amount': self.interp(amt) if amt is not None else None}
+        pl = self._find_one(children, 'player')
+        if pl is not None:
+            d['who'] = self.interp(pl)
+        return d
 
     def i_damage_reduce_action(self, children):
         return {'verb': 'damage_reduce'}
@@ -1210,6 +1240,17 @@ class Interpreter:
         who = self._find_one(children, 'who')
         if who is not None:
             d['actor'] = self.interp(who)
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['count'] = self.interp(amt)
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'those' in toks and 'tokens' in toks:
+            d['of_those_tokens'] = True
+        if 'instead' in toks:
+            d['instead'] = True
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            d['if'] = self.interp(at)
         return d
 
     def i_token(self, children):

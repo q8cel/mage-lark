@@ -293,6 +293,42 @@ def t_copy_except_pronouns_bind_new_copy():
     assert all(a["canonical"] == "this creature" for a in got), anas(res)
 
 
+def t_reveal_object_is_the_card():
+    _, res = resolve_card("Dryad Greenseeker", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "it"]
+    assert len(got) == 2, anas(res)
+    assert all(a["canonical"] == "the top card" for a in got), anas(res)
+
+
+def t_search_plural_binds_search_target():
+    _, res = resolve_card("Boundless Realms", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "them"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "up to X basic land cards", anas(res)
+
+
+def t_owner_possessive_keeps_card_collection():
+    _, res = resolve_card("Open the Vaults", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "their"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "all artifact and enchantment cards", anas(res)
+
+
+def t_player_demonstrative_skips_zone_container():
+    _, res = resolve_card("Stain the Mind", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "that player"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "target player", anas(res)
+
+
+def t_rest_after_one_of_binds_source_collection():
+    _, res = resolve_card("See the Truth", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "the rest"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "the top three cards", anas(res)
+    assert got[0]["status"] == "resolved", anas(res)
+
+
 def t_rest_without_collection_abstains():
     # Documented limitation: Monomania's "the rest" has no explicit collection
     # mention (only the singled-out card and the hand zone).  Keep the honest
