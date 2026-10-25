@@ -170,6 +170,17 @@ add("replace-counter",
                   and d.get('extra') == 1
                   and d.get('on', {}).get('card_type', {}).get('value') == 'creature'))
 
+add("aetherspouts-owner-choice",
+    "For each attacking creature, its owner puts it on their choice of the top or bottom of their library",
+    lambda o: has(o, lambda d: d.get('verb') == 'put_library'))
+add("sarkhan-power-list",
+    "Whenever you cast a creature spell with power 4, 5, or 6, this enchantment deals 4 damage to any target",
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage' and d.get('amount') == 4))
+add("scepter-instead-if",
+    "It deals 3 damage instead if you control artifacts named Crown of Empires and Throne of Empires",
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage')
+                  and has(o, lambda d: d.get('if')))
+
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'
     items, types, card_names, sets = load(data)

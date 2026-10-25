@@ -1483,6 +1483,8 @@ class Interpreter:
                     d['if'] = self.interp(ch)
                 elif ch.data == 'trailing_if':
                     d['trailing_if'] = self.interp(ch)
+                elif ch.data in ('trailing_if', 'if_clause'):
+                    d['if'] = self.interp(ch)
                 elif ch.data == 'trailing_unless':
                     val = self.interp(ch)
                     eff = d.get('effect')
@@ -1532,6 +1534,8 @@ class Interpreter:
                     d['effect'] = self.interp(ch)
                 elif ch.data == 'xdef_clause':
                     d['xdef'] = self.interp(ch)
+                elif ch.data in ('trailing_if', 'if_clause'):
+                    d['if'] = self.interp(ch)
                 elif ch.data == 'trailing_unless':
                     val = self.interp(ch)
                     eff = d.get('effect')

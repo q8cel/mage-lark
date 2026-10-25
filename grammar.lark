@@ -472,10 +472,11 @@ gain_poison_action: who V_GET amount "poison" "counters"
 
 deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" "you" V_GAIN amount "life")? ("and" dmg_amount "damage" "to" "that" "creature's" "controller")?
                    | card_target V_DEAL "damage" "equal" "to" any_text "to" damage_who
-                  | ("it" | "they") V_DEAL dmg_amount? "damage" "to" damage_who
-                  | ("it" | "they") V_DEAL dmg_amount "damage"
+                  | (V_IT | V_THEY) V_DEAL dmg_amount? "damage" "to" damage_who
+                  | (V_IT | V_THEY) V_DEAL dmg_amount "damage" "instead" "if" any_text
+                  | (V_IT | V_THEY) V_DEAL dmg_amount "damage"
                   | card_target V_DEAL dmg_amount? "damage" "to" damage_who ("and" dmg_amount? "damage" "to" damage_who)?
-                  | ("it" | "they" | card_target) V_DEAL dmg_amount "damage" "plus" amount "to" damage_who
+                  | (V_IT | V_THEY | card_target) V_DEAL dmg_amount "damage" "plus" amount "to" damage_who
                   | dmg_amount? "damage" "to" damage_who
                   | card_target V_DEAL amount? "damage" "equal" "to" "its" "power" "to" damage_who
                   | card_target V_DEAL "damage" "to" damage_who "equal" "to" xdef
@@ -503,6 +504,7 @@ damage_who: card_target "or" card_target
           | "each" "creature" "and" "each" "player"
           | "each" "opponent" "and" "each" "planeswalker" "they" "control"
           | "each" "opponent" "and" "each" "creature" "your" "opponents" "control"
+          | "each" "opponent" "and" "each" "creature" "and" "planeswalker" "they" "control"
           | "each" "creature" "your" "opponents" "control"
           | "up" "to" "one" "target" "creature" "that" "player" "or" "that" "planeswalker's" "controller" "controls"
           | "each" "player" "and" "each" "creature"
@@ -529,7 +531,7 @@ put_library_action: owner_subject V_PUT ("it" | card_target) "on" put_library_de
                   | owner_subject V_PUT ("it" | card_target) "into" ("their" "hand" | "their" "graveyard")
 put_library_dest: "their" "choice" "of" "the" "top" "or" "bottom" "of" "their" "library"
                 | "the" ("top" | "bottom") "of" "their" "library"
-owner_subject: card_target "'s" ("owner" | "owners'")
+owner_subject: ("its" | "their") ("owner" | "owners'") | card_target "'s" ("owner" | "owners'")
 put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "from" "the" "top")? order_mod?
                | (who)? V_PUT card_target "on" "the" "bottom" ("of" zone)? order_mod?
                | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
@@ -659,7 +661,7 @@ shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE "all" "permanents" "they" "own" "into" "their" "library"
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
              | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library" | (who)? V_SHUFFLE card_target "and" "your" "graveyard" "into" zone
-cast_action: player V_CAST card_target ("without" "paying" "its" "mana" "cost")? ("if" "able")?
+cast_action: player V_CAST card_target ("from" "among" card_target)? ("without" "paying" ("its" | "their") "mana" "cost")? ("if" "able")?
            | V_CAST card_target "from" "your" "graveyard" "by" "paying" amount "life" "and" "discarding" card_target ("in" "addition" "to" "paying" "its" "other" "costs")?
            | V_CAST "the" "copy" ("without" "paying" "its" "mana" "cost")?
            | V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)? ("for" "as" "long" "as" any_text)?
@@ -888,7 +890,9 @@ card_kind: THIS_CARD types? | types
          | "instant" "or" "sorcery" "spell" "s"?
          | "instant" "and" "sorcery" "card" "s"?
          | "creature" "or" "land" "card" "s"?
-with_modifier: "with" (kw_list | "power" amount CMP? | "power" CMP card_target "'s" "power" | "toughness" amount CMP? | "toughness" CMP card_target "'s" "power" | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
+with_modifier: "with" (THIS_CARD | card_target)
+             | "exiled" "with" (THIS_CARD | card_target)
+             | "with" (kw_list | "power" amount ("," amount)+ (","? ("or" | "and") amount)? | "power" amount CMP? | "power" CMP card_target "'s" "power" | "toughness" amount CMP? | "toughness" CMP card_target "'s" "power" | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
              | "that" "are" types
              | "that" "is" GENERIC_TYPE
              | "of" "the" "chosen" ("type" | "color")
@@ -908,6 +912,7 @@ with_modifier: "with" (kw_list | "power" amount CMP? | "power" CMP card_target "
              | "exiled" "this" "way"
              | "tapped" "this" "way"
              | "attached" "to" card_target
+             | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
 CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i
 controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "control"

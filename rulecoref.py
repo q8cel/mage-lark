@@ -898,9 +898,20 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("as-though-self")
 
+        # ---- "they control" after each opponent: the player is the subject,
+        # not the creature/planeswalker collection being controlled.
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "they"
+                and re.match(r"\s+controls?\b", text[rec["end"]:rec["end"] + 20], re.I)):
+            f = [i for i in pool
+                 if ms[i].get("head_type") in ("player", "opponent")]
+            if f:
+                pool = f
+                evidence.append("they-control-player")
+
         # ---- plural subject that is a collection containing a player NP
         # ("Lands your opponents control ... and they gain ...")
-        if rec["kind"] == "pronoun" and rec["surface"].lower() == "they":
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "they"
+                and not re.match(r"\s+controls?\b", text[rec["end"]:rec["end"] + 20], re.I)):
             colls = []
             for i, m in enumerate(ms):
                 if (m["end"] > rec["start"] or m.get("is_anaphor")
@@ -935,6 +946,15 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                             pool = [pidx]
                             evidence.append("condition-chain")
                             break
+
+        # ---- "It deals 3 damage instead ...": the card/source is the
+        # antecedent, not the damage recipient.
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")
+                and _DMG_SUBJECT.match(text[rec["end"]:rec["end"] + 24])):
+            f = [i for i in pool if ms[i].get("is_self")]
+            if f:
+                pool = f
+                evidence.append("damage-subject-self")
 
         # ---- decision
         status, pred = None, None

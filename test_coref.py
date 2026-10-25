@@ -198,6 +198,19 @@ def t_kitesail_hand_and_chosen_card():
     assert ("that card", "a noncreature, nonland card") in got, got
 
 
+def t_owner_and_control_pronouns():
+    text = ("For each attacking creature, its owner puts it on their choice of "
+            "the top or bottom of their library.")
+    res = rulecoref.resolve(text, refs.build(text, parser=False), find_anaphors(text))
+    got = [(a["surface"], a["canonical"]) for a in res["anaphors"]]
+    assert ("their", "its owner") in got, got
+    text2 = ("Each opponent and each creature and planeswalker they control "
+             "is dealt 1 damage.")
+    res2 = rulecoref.resolve(text2, refs.build(text2, parser=False), find_anaphors(text2))
+    got2 = [(a["surface"], a["canonical"]) for a in res2["anaphors"]]
+    assert ("they", "Each opponent") in got2, got2
+
+
 def t_set_rest_prefers_source_collection():
     text = ("Reveal the top four cards of your library. Put all Goblin cards "
             "revealed this way into your hand and the rest on the bottom of "

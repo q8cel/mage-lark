@@ -692,3 +692,43 @@ Cards:
 - Dev coreference: **91.2% entity-aware / 85.2% exact** (was 90.7 / 84.9).
 - Bench: **95.8% regex / 91.5% parser** entity-aware.
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 17 — seed 20261108
+
+Cards:
+
+`Idol of Endurance`, `Ob Nixilis, Unshackled`, `Feat of Resistance`,
+`Heroic Reinforcements`, `Liliana of the Dark Realms`, `Scepter of Empires`,
+`Aetherspouts`, `Sarkhan's Unsealing`, `Will-Forged Golem`,
+`Tezzeret's Strider`, `Miner's Bane`, `Brink of Disaster`, `Triskelion`,
+`Chandra, Awakened Inferno`, `Academy Raider`, `Lifelink`, `Terra Stomper`,
+`Lurking Crocodile`, `Overcome`, `Burst of Speed`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Idol of Endurance | `cast a creature spell from among cards exiled with this artifact` | added `from among` to `cast_action` and `exiled with` to `with_modifier` |
+| Scepter of Empires | `It deals 3 damage instead if ...` | allowed capital `It`/`They` damage subjects and preserved the trailing `if` condition |
+| Aetherspouts | `For each attacking creature, its owner puts it on their choice ...` | allowed `its/their owner` as `owner_subject` |
+| Sarkhan's Unsealing | `creature spell with power 4, 5, or 6`; damage to `each opponent and each creature and planeswalker they control` | added the comma power list and the full damage-recipient phrase |
+
+### Coreference/output fixes found and fixed
+
+- **Scepter of Empires**: `It deals 3 damage instead` now binds to `This artifact`,
+  the damage source, not the target player/planeswalker.
+- **Aetherspouts**: `their` in `its owner puts it on their choice ... their
+  library` binds to `its owner`; owner NPs are now part of the mention inventory.
+- **Sarkhan's Unsealing**: `they control` binds to `each opponent`, not the
+  controlled creature/planeswalker collection.
+- `i_effect_sentence` now retains a trailing `if` condition on effects.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py FDN.json`: 54/54.
+- `test_coref.py`: 19/19 after cache rebuild.
+- Dev coreference: **91.2% entity-aware / 85.2% exact**.
+- Bench: **95.8% regex / 91.5% parser** entity-aware.
+- `test_normalize_map.py`: 6/6; dataset span validation passes.

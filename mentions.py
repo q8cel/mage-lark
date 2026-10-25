@@ -31,6 +31,8 @@ CAND = re.compile(
 PLAYER_CAND = re.compile(
     rf"\b(?:{DET}|your|our|their|defending|attacking|active)\s+"
     rf"(?:players?|opponents?)\b", re.I)
+OWNER_CAND = re.compile(
+    r"\b(?:its|their|his|her|target \w+'s|target [A-Z][\w'\-]*'s|each \w+'s)\s+owners?\b", re.I)
 CONTROLLER_CAND = re.compile(
     rf"\b(?:{DET}|its|their)\s+(?:[A-Za-z][\w'\-]*\s+){{0,2}}controllers?\b", re.I)
 # A spell/ability is often embedded in a larger event NP ("the target of a
@@ -78,6 +80,10 @@ def _regex_mentions(text):
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in PLAYER_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in OWNER_CAND.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
