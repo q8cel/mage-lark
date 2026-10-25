@@ -278,6 +278,21 @@ def t_as_though_refers_to_sentence_subject():
     assert ("that spell", "The next creature spell") in got, got
 
 
+def t_color_choice_demonstrative_prefers_chosen_card():
+    _, res = resolve_card("Lifebane Zombie", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "that card"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "a green or white creature card", anas(res)
+
+
+def t_copy_except_pronouns_bind_new_copy():
+    _, res = resolve_card("Phantasmal Image", "classic.json")
+    got = [a for a in res["anaphors"]
+           if a["surface"].lower() in ("it's", "its", "it")]
+    assert len(got) == 4, anas(res)
+    assert all(a["canonical"] == "this creature" for a in got), anas(res)
+
+
 def t_rest_without_collection_abstains():
     # Documented limitation: Monomania's "the rest" has no explicit collection
     # mention (only the singled-out card and the hand zone).  Keep the honest

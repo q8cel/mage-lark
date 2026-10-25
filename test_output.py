@@ -78,6 +78,52 @@ add("become-pt", "Target land you control becomes a 4/4 Elemental creature with 
 add("stat-condition", "This creature gets +4/+4 as long as an opponent has ten or more cards in their graveyard",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and 'graveyard' in str(d.get('condition', ''))))
+add("skip-combat-phase",
+    "When this creature enters, target opponent skips their next combat phase",
+    lambda o: has(o, lambda d: d.get('verb') == 'skip'
+                  and d.get('phase') == 'combat'
+                  and 'opponent' in str(d.get('who', ''))))
+add("hexproof-targeting",
+    "Until end of turn, your opponents and creatures your opponents control with hexproof can be the targets of spells and abilities you control as though they didn't have hexproof",
+    lambda o: has(o, lambda d: d.get('verb') == 'can_be_target'
+                  and d.get('as_though_without') == 'hexproof'
+                  and len(d.get('targets', [])) == 2))
+add("choose-per-player",
+    "Whenever ~ attacks, for each player, choose target permanent that player controls",
+    lambda o: has(o, lambda d: d.get('verb') == 'choose'
+                  and d.get('per_player') is True
+                  and d.get('object', {}).get('quantifier') == 'target'))
+add("reveal-sacrificed-this-way",
+    "Each player who sacrificed a permanent this way reveals the top card of their library, then puts it onto the battlefield if it's a permanent card",
+    lambda o: has(o, lambda d: d.get('verb') == 'reveal'
+                  and 'each player' in str(d.get('who', '')).lower())
+                  and has(o, lambda d: d.get('verb') == 'put'
+                          and d.get('zone') == 'battlefield'))
+add("gain-control-chosen",
+    "Then each player gains control of each permanent for which they were chosen",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_control'
+                  and d.get('for_which_chosen') is True))
+add("put-library-choice",
+    "Its owner puts it on their choice of the top or bottom of their library",
+    lambda o: has(o, lambda d: d.get('verb') == 'put_library'
+                  and 'Its owner' == d.get('owner')
+                  and 'bottom' in str(d.get('destination', ''))))
+add("reveal-until-that-many",
+    "Exile all creatures you control, then reveal cards from the top of your library until you reveal that many creature cards",
+    lambda o: has(o, lambda d: d.get('verb') == 'reveal'
+                  and d.get('until', {}).get('card_type', {}).get('kind') == 'type'))
+add("shuffle-revealed-rest",
+    "Put all creature cards revealed this way onto the battlefield, then shuffle the rest of the revealed cards into your library",
+    lambda o: has(o, lambda d: d.get('verb') == 'shuffle'))
+add("bloodthirst-number",
+    "Whenever you cast a Vampire creature spell, it gains bloodthirst 3",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and 'bloodthirst 3' in str(d.get('keywords', [])).lower()))
+add("copy-with-exception",
+    "You may have this creature enter as a copy of any creature on the battlefield, except it's an Illusion in addition to its other types and it has \"When this creature becomes the target of a spell or ability, sacrifice it.\"",
+    lambda o: has(o, lambda d: d.get('verb') == 'have'
+                  and d.get('effect', {}).get('verb') == 'copy')
+                  and has(o, lambda d: d.get('verb') == 'gain_quote'))
 add("if-decomposed", "If you control three or more creatures, draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
                   and isinstance(d.get('effect'), dict)

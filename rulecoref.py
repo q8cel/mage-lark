@@ -571,6 +571,20 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         pool = f
                         evidence.append("granted-recipient")
 
+        # ---- copy-with-exception: the copy is the new object, not the copied one.
+        # "have this creature enter as a copy of X, except it's ... and it has ..."
+        # Every pronoun after "except" describes the new copy, including any
+        # quoted ability granted to it.
+        if rec["kind"] == "pronoun":
+            si = rec.get("sentence")
+            s0 = sents[si][0] if si is not None and si < len(sents) else 0
+            prefix = text[s0:rec["start"]].lower()
+            if "enter as a copy" in prefix and "except" in prefix:
+                f = [i for i in pool if ms[i].get("is_self")]
+                if f:
+                    pool = f
+                    evidence.append("copy-except-self")
+
         # ---- argument-type rules (narrow, from the bench miss audit)
         if on["argtype"] and atype is None:
             before = text[max(0, rec["start"] - 18):rec["start"]]

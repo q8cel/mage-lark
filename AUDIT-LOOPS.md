@@ -878,3 +878,102 @@ Cards:
   was 91.2 / 85.3).
 - Bench: **95.8% regex / 91.5% parser** entity-aware (unchanged from baseline).
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 21 — seed 20261112
+
+Cards:
+
+`Hunter's Insight`, `Wit's End`, `Hunter's Edge`, `Seasoned Hallowblade`,
+`Lifebane Zombie`, `Destructive Force`, `Leyline of Anticipation`, `Stuffy Doll`,
+`Ring of Three Wishes`, `Guardian of the Ages`,
+`Vaevictis Asmadi, the Dire`, `Kalonian Hydra`, `Vivien, Nature's Avenger`,
+`Stonehorn Dignitary`, `Bag of Holding`, `Novice Knight`, `Chronostutter`,
+`Detection Tower`, `Pulse of Murasa`, `Arachnus Spinner`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Vaevictis Asmadi, the Dire | `for each player, choose target permanent that player controls` | added the per-player prefix to `choose_action`; the handler reports `per_player` |
+| Vaevictis Asmadi, the Dire | `Each player who sacrificed a permanent this way reveals ...` | allowed the `who sacrificed ... this way` relative clause in `who` |
+| Stonehorn Dignitary | `target opponent skips their next combat phase` | added `skip_action` and the `skips` verb |
+| Detection Tower | `... can be the targets of spells ... as though they didn't have hexproof` | added `can_target_action` and the negative auxiliary form `didn't` |
+
+### Coreference/output fixes found and fixed
+
+- **Lifebane Zombie**: color-qualified card phrases such as
+  `a green or white creature card` are now candidate mentions. `that card`
+  binds to that phrase instead of falling back to `this creature`.
+- **Vaevictis Asmadi, the Dire**: `those permanents` retains the full
+  `target permanent that player controls` antecedent; `it's` binds to
+  `the top card`.
+- Added output regressions for skipping a combat phase, hexproof-targeting
+  exceptions, per-player choices, and the sacrificed-this-way reveal.
+- Added a coreference regression for Lifebane Zombie's color-qualified card.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py classic.json`: 67/67.
+- `test_coref.py`: 27/27 after cache rebuild.
+- Dev coreference: the Lifebane candidate fix is retained with no other
+  observed regressions (the combined loop-22 figures are below).
+- Bench: **95.8% regex / 91.5% parser** entity-aware (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 22 — seed 20261113
+
+Cards:
+
+`Claustrophobia`, `Ajani, Inspiring Leader`, `Vivien of the Arkbow`,
+`Chandra's Fury`, `Illusionary Servant`, `Scrambleverse`, `Aether Gust`,
+`Mass Polymorph`, `Bloodlord of Vaasgoth`, `Nissa's Expedition`,
+`Brash Taunter`, `Basri, Devoted Paladin`, `Jalira, Master Polymorphist`,
+`Phantasmal Image`, `Cavalier of Dawn`, `Read the Tides`, `Grim Tutor`,
+`Alpine Houndmaster`, `Grim Return`, `Nefarox, Overlord of Grixis`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Scrambleverse | `gains control of each permanent for which they were chosen` | added the trailing `for which ... chosen` modifier; the handler emits `for_which_chosen` |
+| Aether Gust | `Its owner puts it on their choice of the top or bottom of their library` | allowed capitalized `Its` as an owner subject; `put_library` keeps owner and destination as text |
+| Mass Polymorph | `reveal ... until you reveal that many creature cards` and `shuffle the rest of the revealed cards into your library` | allowed a `that many` reveal condition and the full revealed-rest shuffle phrase |
+| Bloodlord of Vaasgoth | `it gains bloodthirst 3` | added `bloodthirst` and an optional number to keyword-list items |
+| Phantasmal Image | `enter as a copy ... except it's ... and it has "..."` | allowed `token_except` and the quoted granted ability in `have_action` |
+
+### Coreference/output fixes found and fixed
+
+- **Phantasmal Image**: all four anaphors (`it's`, `its`, `it`, and the
+  quoted `it`) bind to `this creature`, the new copy. The copy-with-exception
+  rule is restricted to `enter as a copy` contexts so token-copy mentions
+  elsewhere are not rewritten.
+- **Mass Polymorph**: the reveal action records its `that many` condition,
+  and the revealed-rest shuffle parses as a `shuffle` action.
+- **Scrambleverse**: the gain-control action records that the permanents
+  were chosen for each player.
+- **Aether Gust**: owner and destination are plain text, and `it` / `their`
+  bind to the spell-or-permanent and its owner respectively.
+- Added output regressions for chosen-control, owner-choice library
+  placement, reveal-until, revealed-rest shuffle, numbered bloodthirst, and
+  copy-with-exception; added the four-pronoun Phantasmal Image coref test.
+
+### Remaining limitations
+
+- **Phantasmal Image**: the `except ...` clause is emitted as a separate
+  `gain_quote` action rather than being folded into the `copy` effect.
+- **Alpine Houndmaster**: both `them` occurrences stay `ambiguous` because the
+  candidate pool contains two identical `a card named ~` mentions.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible,
+  apart from the documented ambiguity.
+- `test_output.py classic.json`: 73/73.
+- `test_coref.py`: 28/28 after cache rebuild.
+- Dev coreference: **91.4% entity-aware / 85.5% exact** (3089/3380, 2889/3380;
+  was 91.3 / 85.4).
+- Bench: **95.8% regex / 91.5% parser** entity-aware (unchanged from baseline).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.

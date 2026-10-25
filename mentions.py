@@ -48,6 +48,12 @@ LIST_CAND = re.compile(
     r"(?:[A-Za-z][\w'\-]*\s+){0,3}"
     r"(?:cards?|creatures?|permanents?|spells?|artifacts?|enchantments?|"
     r"lands?|planeswalkers?|tokens?)\b", re.I)
+COLOR_CARD_CAND = re.compile(
+    r"\b(?:a|an|the|target|another|each|any)\s+"
+    r"(?:white|blue|black|red|green|colorless)"
+    r"(?:\s+(?:or|and/or)\s+(?:white|blue|black|red|green|colorless))+"
+    r"\s+(?:creature|permanent|artifact|enchantment|land|planeswalker|"
+    r"instant|sorcery|card)\s+cards?\b", re.I)
 ZONE_CAND = re.compile(
     r"\b(?:your|their|its|his|her|our|my|a player's|target player's|target opponent's)\s+"
     r"(?:hands?|graveyards?|librar(?:y|ies)|exile|battlefield)\b", re.I)
@@ -97,6 +103,10 @@ def _regex_mentions(text):
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in LIST_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in COLOR_CARD_CAND.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})

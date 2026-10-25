@@ -323,6 +323,7 @@ action: add_mana_action
        | enters_action
        | enchant_action
        | cant_action
+       | can_target_action
        | no_max_hand_action
        | can_gain_life_action
        | attacks_each_combat_action
@@ -347,6 +348,7 @@ action: add_mana_action
        | stat_define_action
        | emblem_action
        | phase_action
+       | skip_action
        | extra_turns_action
        | after_phase_action
        | must_block_action
@@ -381,6 +383,7 @@ exchange_control_action: "Exchange" "control" "of" card_target "and" card_target
                       | "Exchange" "control" "of" card_target
 must_block_action: card_target "must" "be" "blocked" ("this" "turn")? ("if" "able")?
 phase_action: card_target V_PHASE ("in" | "out")
+skip_action: (who)? V_SKIP ("their" | "your") ("next")? ("combat" | "main" | "beginning" | "ending")? "phase" ("this" "turn")?
 after_phase_action: "After" "this" ("main" | "combat" | "beginning" | "ending")? "phase" "," "there" "is" "an" "additional" ("combat" | "main") "phase" ("followed" "by" "an" "additional" ("combat" | "main") "phase")?
 extra_turns_action: (who)? V_TAKE ("a" | "an" | amount) "extra" ("turn" | "turns") ("after" "this" ("one" | "turn"))?
 
@@ -535,7 +538,7 @@ put_library_action: owner_subject V_PUT ("it" | card_target) "on" put_library_de
                   | owner_subject V_PUT ("it" | card_target) "into" ("their" "hand" | "their" "graveyard")
 put_library_dest: "their" "choice" "of" "the" "top" "or" "bottom" "of" "their" "library"
                 | "the" ("top" | "bottom") "of" "their" "library"
-owner_subject: ("its" | "their") ("owner" | "owners'") | card_target "'s" ("owner" | "owners'")
+owner_subject: ("Its" | "its" | "their" | "Their") ("owner" | "owners'") | card_target "'s" ("owner" | "owners'")
 put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "from" "the" "top")? order_mod?
                | (who)? V_PUT card_target "on" "the" "bottom" ("of" zone)? order_mod?
                | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
@@ -585,7 +588,7 @@ sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? with_m
                 | (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" ("the" | "your") "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
 regenerate_action: (who)? V_REGENERATE card_target
               | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
-gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")? ("for" "as" "long" "as" any_text)?
+gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")? ("for" "as" "long" "as" any_text)? ("for" "which" (V_IT | V_THEY) (V_WAS | "were") "chosen")?
 scry_action: ("each" "player" | who)? V_SCRY amount
 surveil_action: V_SURVEIL amount
 mill_action: (who)? V_MILL (("a" | "an" | amount | "that" "many") ("card" | "cards") | "half" ("their" | "his" | "her" | "a" | "the") "library" (","? "rounded" "down")?)
@@ -648,7 +651,7 @@ look_action: V_LOOK "at" "the" "top" amount? "card" "s"? "of" "your" "library" (
          | V_LOOK "at" "target" "player's" "hand"
            | V_LOOK "at" "an" "opponent's" "hand"
 reveal_action: (who)? V_REVEAL card_target (("," | "and/or" | "and" | "or") card_target)+ ("from" "among" "them")? ("and" V_PUT "them" "into" "your" "hand")?
-             | (who)? V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL "a" card_kind)? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
+             | (who)? V_REVEAL card_target ("at" "random")? ("from" "among" "them" | "from" "the" "top" "of" "your" "library" | "from" "the" "top" amount "cards" "of" "your" "library" | "from" ("their" | "your") "hand")? ("until" "you" V_REVEAL ("a" card_kind | "that" "many" card_target))? ("and" V_PUT "it" ("into" "your" "hand" | "onto" "the" "battlefield" | "into" zone))?
              | V_REVEAL "the" "top" amount "cards" "of" "your" "library"
             | (who)? V_REVEAL "the" "top" "card" "of" "their" "library"
             | V_REVEAL "the" "top" "card" "of" "your" "library"
@@ -664,6 +667,7 @@ discard_action: (who)? V_DISCARD card_target ("at" "random")? ("unless" any_text
 shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE ("their" | "your") "libraries"
              | (who)? V_SHUFFLE "the" "rest" "into" ("their" | "your") "library"
+           | (who)? V_SHUFFLE "the" "rest" "of" "the" "revealed" "cards" "into" zone
              | (who)? V_SHUFFLE "all" "permanents" "they" "own" "into" "their" "library"
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
              | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library" | (who)? V_SHUFFLE card_target "and" "your" "graveyard" "into" zone
@@ -675,14 +679,14 @@ play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "w
            | V_PLAY ("an" "additional" "land" | card_target) "until" "the" "end" "of" "your" "next" "turn"
            | V_PLAY card_target "until" any_text
 reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
-choose_action: (player | controller_subject)? V_CHOOSE amount? choose_obj
+choose_action: ("for" "each" "player" ",")? (player | controller_subject)? V_CHOOSE amount? choose_obj
              | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
 copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability" | V_THAT "spell" "or" "ability") ("twice")? ("for" "each" any_text)?
 trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
 lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
 count_action: V_COUNT "the" "number" "of" card_target
 have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" "to" damage_who
-have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" "as" "a" "copy" "of" ("any" card_target | card_target) | draw_action)
+have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" "as" "a" "copy" "of" ("any" card_target | card_target) token_except? ("and" "it" "has" QUOTE)? | draw_action)
            | "have" become_action
 activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
                | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?
@@ -767,6 +771,7 @@ cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target |
             | (card_target)? V_CANT "activate" "abilities" "of" card_target ("or" card_target)*
             | V_YOU V_CANT "lose" "this" "mana" ("as" "steps" "and" "phases" "end")?
             | V_ACTIVATED "abilities" "of" card_target V_CANT "be" "activated" ("unless" any_text)?
+can_target_action: card_target ("and" card_target)? V_CAN "be" "the" ("target" | "targets") "of" ("spells" | "abilities" | "spells" "and" "abilities") ("you" "control")? ("as" "though" ("it" | "they") V_CANT "have" KEYWORD)?
 no_max_hand_action: V_YOU "have" "no" "maximum" "hand" "size" ("for" "the" "rest" "of" "the" "game")?
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
 attacks_each_combat_action: card_target ("attacks" | "blocks") ("each" "combat" | "you" "this" "turn" | "this" "turn") "if" "able"
@@ -832,7 +837,7 @@ OWNER: /target player's|that player's|each player's|target opponent's|that oppon
 player: (V_EACH | V_A | V_AN | V_TARGET | V_ANOTHER | V_THAT | "those" | "the" | "defending" | "attacking" | "active")? ("opponent" | "player" | V_YOU)
 
 //  WHO: an actor that gains/loses life etc.
-who: player | card_target | controller_subject | owner_subject | "each" "of" "them"
+who: player (REL_WHO "sacrificed" card_target "this" "way")? | card_target | controller_subject | owner_subject | "each" "of" "them"
 controller_subject: ("Its" | "its") "controller" | (V_THAT | "this" | "the" | "a" | "an")? ("creature" | "source" | "spell" | "permanent" | "land" | "artifact" | "enchantment" | "planeswalker" | "token" | "attacker" | "blocker" | "aura" | "object" | "ability") "'s" "controller"
 
 //  colors
@@ -937,11 +942,11 @@ in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "libr
 
 //  keyword list
 kw_list: kw_list_item (kw_sep kw_list_item)*
-kw_list_item: KEYWORD
+kw_list_item: KEYWORD (number)?
             | "protection" "from" prot_obj (("and" | "," | "," "and") "from" prot_obj)*
 prot_obj: CARDNAME | colors | GENERIC_TYPE | "the" "color" "of" "your" "choice" | "each" "color" | "each" "player" | "anything"
 kw_sep: "and" | "," | "," "and"
-KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted)\b/i
+KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted|bloodthirst)\b/i
 
 //  modified static keywords (Ward {4}, Kicker {2}, Crew 3, ...)
 MOD_KEYWORD: /ward|kicker|crew|flashback|affinity|protection|hexproof|equip|firebending|web-slinging/i
@@ -992,10 +997,11 @@ V_CAST: /\bcast(s?)\b/i
 V_PLAY: /\bplay(s?)\b/i
 V_ENCHANT: /\benchant\b/i
 V_ENTERS: /\benters?\b/i
-V_CANT: /\bcan't\b|\bdoesn't\b|\bdon't\b/i
+V_CANT: /\bcan't\b|\bdoesn't\b|\bdon't\b|\bdidn't\b/i
 V_CAN: /\bcan\b/i
 V_TAKE: /\btake(s?)\b/i
 V_PHASE: /\bphase(s|d)?\b/i
+V_SKIP: /\bskips?\b/i
 V_MAY: /\bmay\b/i
 V_PAY: /\bpay(s?)\b/i
 V_UNTIL: /\buntil\b/i
@@ -1014,6 +1020,7 @@ V_WIN: /\bwin\b/i
 
 //  case-insensitive function words (sentence-initial forms are capitalised)
 V_WHEN: /\bwhen\b/i
+REL_WHO: /\bwho\b/i
 V_WHATEVER: /\bwhenever\b/i
 V_IF: /\bif\b/i
 INSTEAD: /\binstead\b/i

@@ -321,6 +321,17 @@ class Interpreter:
             if 'protection' in low:
                 out.append(self._text(n.children))
                 return
+            kws = [c.value for c in n.children
+                   if isinstance(c, Token) and c.type == 'KEYWORD']
+            if kws:
+                number = None
+                for c in n.children:
+                    if isinstance(c, Token) and c.type == 'NUMBER':
+                        number = c.value
+                    elif isinstance(c, Tree) and c.data == 'number':
+                        number = self.interp(c)
+                out.append(f"{kws[0]} {number}" if number is not None else kws[0])
+                return
             for c in n.children:
                 walk(c)
         for ch in children:
@@ -331,7 +342,15 @@ class Interpreter:
     i_kw_list_mod = i_kw_list
     def i_kw_item(self, children):
         v = self.i_kw_list(children)
-        return v[0] if v else None
+        if not v:
+            return None
+        number = None
+        for ch in children:
+            if isinstance(ch, Token) and ch.type == 'NUMBER':
+                number = ch.value
+            elif isinstance(ch, Tree) and ch.data == 'number':
+                number = self.interp(ch)
+        return f"{v[0]} {number}" if number is not None else v[0]
 
     def i_kw_with_mod(self, children):
         key = None
@@ -499,7 +518,11 @@ class Interpreter:
         return d
 
     def i_gain_control_action(self, children):
-        return self._card_action('gain_control', children)
+        d = self._card_action('gain_control', children)
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'which' in toks and 'chosen' in toks:
+            d['for_which_chosen'] = True
+        return d
 
     def i_extra_turns_action(self, children):
         d = {'verb': 'extra_turns'}
@@ -543,6 +566,44 @@ class Interpreter:
         d['direction'] = 'in' if 'in' in toks else 'out'
         return d
 
+    def i_skip_action(self, children):
+        d = {'verb': 'skip'}
+        wh = self._find_one(children, 'who')
+        if wh is not None:
+            who_value = self.interp(wh)
+            if who_value:
+                d['who'] = who_value
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        for phase in ('combat', 'main', 'beginning', 'ending'):
+            if phase in toks:
+                d['phase'] = phase
+                break
+        if 'next' in toks:
+            d['next'] = True
+        if 'this' in toks and 'turn' in toks:
+            d['this_turn'] = True
+        return d
+
+    def i_can_target_action(self, children):
+        d = {'verb': 'can_be_target'}
+        cts = self._find(children, 'card_target')
+        if cts:
+            d['targets'] = [self.interp(c) for c in cts]
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'spells' in toks and 'abilities' in toks:
+            d['by'] = ['spells', 'abilities']
+        elif 'spells' in toks:
+            d['by'] = ['spells']
+        elif 'abilities' in toks:
+            d['by'] = ['abilities']
+        if 'you' in toks and 'control' in toks:
+            d['controller'] = 'you'
+        kws = [str(ch) for ch in children
+               if isinstance(ch, Token) and ch.type == 'KEYWORD']
+        if 'as' in toks and 'though' in toks and kws:
+            d['as_though_without'] = kws[-1].lower()
+        return d
+
     def i_enchant_action(self, children):
         d = {'verb': 'enchant'}
         et = self._find_one(children, 'enchant_target')
@@ -566,7 +627,13 @@ class Interpreter:
         return d
 
     def i_reveal_action(self, children):
-        return self._card_action('reveal', children)
+        d = self._card_action('reveal', children)
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'until' in toks:
+            cts = self._find(children, 'card_target')
+            if len(cts) > 1:
+                d['until'] = self.interp(cts[-1])
+        return d
 
     def i_investigate_action(self, children):
         return {'verb': 'investigate'}
@@ -720,7 +787,10 @@ class Interpreter:
                           ('put_library_dest', 'destination')):
             node = self._find_one(children, name)
             if node is not None:
-                d[key] = self.interp(node)
+                if name == 'card_target':
+                    d[key] = self.interp(node)
+                else:
+                    d[key] = self._text(node.children)
         if 'card' not in d:
             d['text'] = self._text(children)
         return d
@@ -1289,6 +1359,9 @@ class Interpreter:
         amt = self._find_one(children, 'amount')
         if amt is not None:
             d['amount'] = self.interp(amt)
+        toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'for' in toks and 'each' in toks and 'player' in toks:
+            d['per_player'] = True
         return d
 
     def i_choose_obj(self, children):
@@ -1392,7 +1465,9 @@ class Interpreter:
         d = {'verb': 'put'}
         wh = self._find_one(children, 'who')
         if wh is not None and wh.data != 'card_target':
-            d['who'] = self.interp(wh)
+            who_value = self.interp(wh)
+            if who_value:
+                d['who'] = who_value
         cts = self._find(children, 'card_target')
         if cts:
             d['card'] = self.interp(cts[0])
