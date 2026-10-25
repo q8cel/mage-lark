@@ -486,6 +486,20 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
 
         # ---- demonstratives: "that/those X" normally points at a previous
         # mention, not at the card itself, and "those cards" prefers a card NP.
+        if (rec["kind"] == "demonstrative"
+                and rec["surface"].lower() in ("those cards", "these cards")):
+            si = rec.get("sentence")
+            if si is not None and si > 0 and si <= len(sents):
+                ps, pe = sents[si - 1]
+                if re.search(r"\bsearch(?:es|ed|ing)?\b", text[ps:pe], re.I):
+                    cards = [i for i, m in enumerate(ms)
+                             if m.get("is_anaphor") is not True
+                             and "card" in m.get("surface", "").lower()
+                             and ps <= m["start"] < pe]
+                    if cards:
+                        pool = [cards[-1]]
+                        evidence.append("demonstrative-search-result")
+
         if rec["kind"] == "demonstrative" and on["type"]:
             f = [i for i in pool if not ms[i].get("is_self")]
             if f:
@@ -503,11 +517,25 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = f
                     evidence.append("card-demonstrative")
                 else:
-                    # Collection/card NP with neither a card nor a compatible
-                    # entity/collection in inventory: abstain, do not substitute
-                    # a player or unrelated creature.
-                    pool = []
-                    evidence.append("card-demonstrative-no-collection")
+                    # "an instant or sorcery spell from among those cards":
+                    # the cards are the contents of the preceding hand/library.
+                    containers = [i for i, m in enumerate(ms)
+                                  if m["head_type"] in
+                                  ("hand", "library", "graveyard", "exile")
+                                  and m["start"] < rec["start"]
+                                  and not m.get("is_anaphor")]
+                    if (containers and re.search(
+                            r"\bfrom among\s*$",
+                            text[max(0, rec["start"] - 20):rec["start"]],
+                            re.I)):
+                        pool = containers
+                        evidence.append("among-container")
+                    else:
+                        # Collection/card NP with neither a card nor a compatible
+                        # entity/collection in inventory: abstain, do not substitute
+                        # a player or unrelated creature.
+                        pool = []
+                        evidence.append("card-demonstrative-no-collection")
 
         # ---- "that creature" after a target is normally the target, not a
         # later indefinite creature in a condition.
@@ -624,7 +652,10 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = f
                     evidence.append("copy-token")
             elif _COPY_OF.search(before):
-                f = [i for i in pool if "token" not in ms[i]["surface"].lower()]
+                f = [i for i in pool
+                     if "token" not in ms[i]["surface"].lower()
+                     and ms[i].get("head_type") not in
+                     ("hand", "graveyard", "library", "exile", "battlefield")]
                 if f:
                     pool = f
                     evidence.append("copy-of-not-the-token")
@@ -636,7 +667,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
 
         # ---- "from it" points at a container/player, not the object NP
         if (rec["kind"] == "pronoun" and not rec["is_possessive"]
-                and _CONTAINER_LEAD.search(text[max(0, rec["start"] - 10):rec["start"]])):
+                and _CONTAINER_LEAD.search(text[max(0, rec["start"] - 10):rec["start"]])
+                and not _COPY_OF.search(text[max(0, rec["start"] - 20):rec["start"]])):
             f = [i for i in pool if ms[i]["head_type"] in
                  ("player", "opponent", "hand", "graveyard", "library", "exile")]
             if f and len(f) != len(pool):
@@ -878,7 +910,9 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if (rec["kind"] == "pronoun" and rec["is_possessive"]
                 and _POSSESSED_CONTROLLER.match(text[rec["end"]:])):
             f = [i for i in pool
-                 if ms[i]["head_type"] not in ("player", "opponent")
+                 if ms[i]["head_type"] not in
+                 ("player", "opponent", "hand", "graveyard", "library",
+                  "exile", "battlefield")
                  and not re.search(r"\bcontrollers?\b", ms[i]["surface"], re.I)]
             if f:
                 pool = f
@@ -940,7 +974,9 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                           and rec["surface"].lower() in ("its", "itself")
                           and not any(ms[i].get("role") for i in pool)):
                         f = [i for i in pool
-                             if ms[i]["head_type"] not in ("player", "opponent")]
+                             if ms[i]["head_type"] not in
+                             ("player", "opponent", "hand", "graveyard",
+                              "library", "exile", "battlefield")]
                         if f:
                             pool = f
                             evidence.append("possessive-object-nonplayer")
@@ -1083,6 +1119,25 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("demonstrative-player-not-zone")
+
+        # ---- "sacrifices ... of their choice": if the current winner is the
+        # sacrificed object, prefer a player from the same sentence.
+        if (rec["kind"] == "pronoun" and rec["is_possessive"]
+                and re.match(r"\s+choice\b", text[rec["end"]:rec["end"] + 12], re.I)
+                and pool):
+            last = max(pool, key=lambda i: ms[i]["end"])
+            if ms[last].get("head_type") not in ("player", "opponent"):
+                f = [i for i in pool
+                     if ms[i]["sentence"] == rec["sentence"]
+                     and ms[i].get("head_type") in ("player", "opponent")]
+                if not f:
+                    f = [i for i, m in enumerate(ms)
+                         if m["sentence"] == rec["sentence"]
+                         and m.get("head_type") in ("player", "opponent")
+                         and m["start"] < rec["start"]]
+                if f:
+                    pool = f
+                    evidence.append("sacrifice-choice-owner")
 
         # ---- decision
         status, pred = None, None

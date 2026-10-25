@@ -314,6 +314,49 @@ def t_owner_possessive_keeps_card_collection():
     assert got[0]["canonical"] == "all artifact and enchantment cards", anas(res)
 
 
+def t_among_cards_binds_container():
+    _, res = resolve_card("Mindclaw Shaman", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "those cards"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "their hand", anas(res)
+
+
+def t_bare_zone_binds_container_pronoun():
+    _, res = resolve_card("Visions of Beyond", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "it"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "a graveyard", anas(res)
+
+
+def t_event_list_does_not_capture_demonstrative():
+    _, res = resolve_card("Inferno Elemental", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "that creature"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "a creature", anas(res)
+
+
+def t_mention_does_not_cross_newline():
+    _, res = resolve_card("Entangling Vines", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "its"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "Enchanted creature", anas(res)
+
+
+def t_those_cards_after_search_bind_card():
+    _, res = resolve_card("Doubling Chant", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "those cards"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == (
+        "a creature card with the same name as that creature"), anas(res)
+
+
+def t_possessive_owner_prefers_object():
+    _, res = resolve_card("Serra Avatar", "classic.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "its"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "~", anas(res)
+
+
 def t_player_demonstrative_skips_zone_container():
     _, res = resolve_card("Stain the Mind", "classic.json")
     got = [a for a in res["anaphors"] if a["surface"].lower() == "that player"]

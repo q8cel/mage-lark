@@ -762,6 +762,8 @@ class Interpreter:
             d['predicate'] = 'attack'
         elif 'block' in toks:
             d['predicate'] = 'block'
+        elif 'phase' in toks:
+            d['predicate'] = 'phase in' if 'in' in toks else 'phase out'
         elif 'activate' in toks and 'cast' in toks:
             d['predicate'] = 'cast spells or activate abilities'
         elif 'activate' in toks:
@@ -1052,6 +1054,11 @@ class Interpreter:
 
     def i_copy_action(self, children):
         d = {'verb': 'copy'}
+        wh = self._find_one(children, 'who')
+        if wh is not None:
+            who_value = self.interp(wh)
+            if who_value:
+                d['who'] = who_value
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['target'] = self.interp(ct)

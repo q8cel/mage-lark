@@ -1083,3 +1083,101 @@ Cards:
 - Bench: **95.8% regex** entity-aware (unchanged); the full parser-mention
   benchmark did not complete in this pass.
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 25 — seed 20261116
+
+Cards:
+
+`Goldmane Griffin`, `Yisan, the Wanderer Bard`, `Teferi, Timeless Voyager`,
+`Mindclaw Shaman`, `Liliana Vess`, `Ring of Xathrid`, `Thunderkin Awakener`,
+`Lavakin Brawler`, `Shimian Specter`, `Act on Impulse`, `Vastwood Hydra`,
+`Gem of Becoming`, `Time Ebb`, `Scourge of Valkas`, `Unholy Indenture`,
+`Traitorous Greed`, `Malefic Scythe`, `Sigiled Sword of Valeron`, `Hive Mind`,
+`Nicol Bolas, Planeswalker`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Yisan, the Wanderer Bard | `mana value equal to the number of verse counters on ~` | added the mana-value-equal phrase to `with_modifier` |
+| Teferi, Timeless Voyager | `Each creature target opponent controls phases out` | allowed `target opponent controls` as a controller phrase |
+| Teferi, Timeless Voyager | `they can't phase in` | added `phase in` / `phase out` to `cant_action` |
+| Thunderkin Awakener | `Return that card to the battlefield tapped and attacking` | allowed the tapped-and-attacking return state |
+| Gem of Becoming | `an Island card, a Swamp card, and a Mountain card` | added comma-separated search targets |
+| Sigiled Sword of Valeron | `gets +2/+0, has vigilance, and is a Knight in addition to its other types` | added the combined stat/keyword/type form |
+| Sigiled Sword of Valeron | `creature token with vigilance that's attacking` | added the bare `that's attacking` token tail |
+| Hive Mind | `each other player copies that spell` | allowed a player subject on `copy_action` |
+| Hive Mind | `Each of those players may choose new targets for their copy` | allowed a player subject before choose-new-targets |
+| Nicol Bolas, Planeswalker | `That player or that planeswalker's controller discards ...` | allowed the compound player subject in `who` |
+
+### Coreference/output fixes found and fixed
+
+- **Mindclaw Shaman**: `those cards` after `from among` binds to the source
+  container `their hand`, not to no-resolution.
+- **Nicol Bolas, Planeswalker**: `their choice` now prefers a player from the
+  compound subject instead of binding to `seven permanents`.
+- Added output regressions for the new parse forms; added coreference
+  regressions for the `from among` container.
+
+### Remaining limitations
+
+- **Nicol Bolas, Planeswalker**: the compound subject is represented by two
+  player mentions. `their` selects `that planeswalker's controller` and stays
+  `ambiguous` rather than inventing a combined subject span.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible,
+  apart from the documented compound-subject ambiguity.
+- `test_output.py`: loop-25 regressions pass; combined run is 99/99 below.
+- `test_coref.py`: loop-25 regressions pass; combined run is 39/39 below.
+- Dev coreference: no regression; combined loop-26 figures are below.
+- Bench: **95.8% regex** entity-aware (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 26 — seed 20261117
+
+Cards:
+
+`Eternal Isolation`, `Arcades, the Strategist`, `Ensoul Artifact`,
+`Doubling Chant`, `Visions of Beyond`, `Fabricate`, `Wolfrider's Saddle`,
+`Transmogrifying Wand`, `Hamletback Goliath`, `Inferno Elemental`,
+`Borderland Marauder`, `Voracious Wurm`, `Serra Avatar`,
+`Sorin, Imperious Bloodlord`, `Molten Birth`, `Invigorating Surge`,
+`Chandra's Incinerator`, `Ring of Thune`, `Entangling Vines`,
+`Overgrowth Elemental`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Ensoul Artifact | `creature with base power and toughness 5/5 in addition to its other types` | allowed the trailing type-addition phrase on the base-P/T become form |
+| Voracious Wurm | `the amount of life you've gained this turn` | added the contracted `you've gained` X definition |
+
+### Coreference/output fixes found and fixed
+
+- **Entangling Vines**: regex mentions no longer cross a newline; `its` binds
+  to `Enchanted creature` instead of a two-line merged span.
+- **Inferno Elemental**: a comma list no longer absorbs a following
+  demonstrative; `that creature` binds to `a creature` rather than
+  `a creature, this creature`.
+- **Visions of Beyond**: bare zone NPs such as `a graveyard` are now candidate
+  mentions, so `it` binds to the graveyard.
+- **Doubling Chant**: `those cards` in a search follow-up binds to the searched
+  card instead of the plural `each creature` subject.
+- **Serra Avatar**: `its owner's library` keeps the card as possessor instead
+  of selecting the graveyard zone.
+- Added coreference regressions for all five cases and output regressions for
+  the two parse forms.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py classic.json`: 99/99.
+- `test_coref.py`: 39/39 after cache rebuild.
+- Dev coreference: **91.4% entity-aware / 85.6% exact** (3090/3380,
+  2893/3380; was 91.4 / 85.6).
+- Bench: **95.8% regex** entity-aware / **84.5% exact** (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.

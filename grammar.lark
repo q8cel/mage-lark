@@ -423,6 +423,8 @@ token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
            | ("with" (kw_list | QUOTE))
            | ("that" "are" "tapped" ("and" "attacking")?)
            | ("that's" "tapped" ("and" "attacking")?)
+           | ("that's" "attacking")
+           | ("that" "are" "attacking")
            | ("and" QUOTE)
            | ("for" "each" card_target)
            | ("where" "X" "is" xdef)
@@ -454,6 +456,7 @@ search_action: V_SEARCH zones "for" search_target ("named" (THIS_CARD | CARDNAME
              | V_SEARCH zones "for" search_target ","? "reveal" ("those" "cards" | "them") ","? "put" "one" "onto" "the" "battlefield" "tapped"? "and" "the" "other" "into" zone ","? "then" "shuffle"
              | "Each" "of" "them" V_SEARCH zones "for" search_target (","? "then" "shuffles" "and" "puts" "that" "card" "on" "top")?
 search_target: card_target (("or" | "and/or" | "and") card_target)*
+             | card_target ("," card_target)+ (","? "and" card_target)?
 
 draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target ("put" "into" zone "this" "way")?
             | ("Any" | "any") "number" "of" "target" "players" "each" V_DRAW draw_amount "card" "s"?
@@ -531,7 +534,7 @@ return_action: V_RETURN "all" card_target "from" zone "to" "the" "battlefield" "
              | V_RETURN card_target "to" "the" "battlefield" "with" counter_amount counter_kind "on" "it"
              | V_RETURN card_target "from" zone "to" "the" "battlefield" "attached" "to" card_target
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" "it")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
-             | V_RETURN card_target "to" "the" "battlefield" ("tapped" | "transformed")?
+             | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "attacking" | "tapped" | "transformed")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "transformed" | "transformed" "and" "tapped" | "tapped" | "transformed")? "under" ("its" "owner's" | "your") "control" ("with" counter_amount counter_kind "on" "it")? ("at" "the" "beginning" "of" (("their" | "your") "next" "upkeep" | "the" "next" "end" "step"))?
              | V_RETURN card_target "and" card_target "to" (("its" | "their") "owner's" "hand" | ("its" | "their") "owners'" "hands")
              | V_RETURN card_target "with" "mana" "value" mv_cmp ("from" "your" "graveyard")? "to" "the" "battlefield"
@@ -611,6 +614,7 @@ attach_action: V_ATTACH card_target "to" (card_target | "the" "token") ("you" "c
 
 stat_action: card_target "and" card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)? ("and" "must" "be" "blocked" "this" "turn" "if" "able")?
            | card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)?
+           | card_target V_GET stat_change "," ("has" | "gains") kw_list "," "and" (V_IS | "is" | "are") (V_A | V_AN)? types "in" "addition" "to" ("its" | "their") "other" "types"
            | ("you")? "have" card_target V_GET stat_change ("until" "end" "of" "turn")?
 stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD "or" POWER_MOD
            | ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
@@ -640,7 +644,7 @@ become_tail: "with" QUOTE "and" "loses" "all" "other" "card" "types" "and" "abil
            | "with" kw_list_mod
            | "with" kw_list "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types") ("until" "end" "of" "turn")?
            | "in" "addition" "to" ("its" | "their") "other" ("colors" "and" "types" | "land" "types" | "types")
-           | "with" "base" "power" "and" "toughness" POWER_T ("named" CARDNAME+)? ("," "loses" "all" "abilities")? (","? "and" ("gains"|"has") kw_list)?
+           | "with" "base" "power" "and" "toughness" POWER_T ("named" CARDNAME+)? ("," "loses" "all" "abilities")? (","? "and" ("gains"|"has") kw_list)? ("in" "addition" "to" "its" "other" "types")?
            | "until" "end" "of" "turn"
            | "that's" "still" ("a" | "an")? GENERIC_TYPE
            | "until" "your" "next" "turn"
@@ -691,7 +695,7 @@ play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "w
 reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
 choose_action: ("for" "each" "player" ",")? (player | controller_subject)? V_CHOOSE amount? choose_obj
              | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
-copy_action: V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability" | V_THAT "spell" "or" "ability") ("twice")? ("for" "each" any_text)?
+copy_action: (who)? V_COPY (card_target "spell"? | "it" | V_THAT "spell" | V_THAT "ability" | V_THAT "spell" "or" "ability") ("twice")? ("for" "each" any_text)?
 trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_target) "triggers" ("an" "additional" | "another" | "additional") "time"
 lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
 count_action: V_COUNT "the" "number" "of" card_target
@@ -700,7 +704,7 @@ have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter
            | "have" become_action
 activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
                | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?
-choose_new_targets_action: (V_YOU V_MAY)? V_CHOOSE "new" "targets" "for" any_text
+choose_new_targets_action: (who | V_EACH "of" "those" "players")? V_MAY? V_CHOOSE "new" "targets" "for" any_text
 choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one"
            | ("target" "creature") "one" "of" "their" "opponents" "controls"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text | "a" any_text ("," any_text)* ("card" | "cards") "from" ("it" | zone)
@@ -781,6 +785,7 @@ cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target |
             | (card_target)? V_CANT "activate" "abilities" "of" card_target ("or" card_target)*
             | V_YOU V_CANT "lose" "this" "mana" ("as" "steps" "and" "phases" "end")?
             | V_ACTIVATED "abilities" "of" card_target V_CANT "be" "activated" ("unless" any_text)?
+            | (card_target)? V_CANT "phase" ("in" | "out")
 can_target_action: card_target ("and" card_target)? V_CAN "be" "the" ("target" | "targets") "of" ("spells" | "abilities" | "spells" "and" "abilities") ("you" "control")? ("as" "though" ("it" | "they") V_CANT "have" KEYWORD)?
 no_max_hand_action: V_YOU "have" "no" "maximum" "hand" "size" ("for" "the" "rest" "of" "the" "game")?
 can_gain_life_action: "Players" V_CANT V_GAIN "life"
@@ -821,6 +826,7 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "your" "life" "total"
     | "the" "life" "lost" "this" "way"
     | "the" "amount" "of" "life" "you" "gained" "this" "turn"
+    | "the" "amount" "of" "life" "you've" "gained" "this" "turn"
     | "the" "total" "amount" "of" "noncombat" "damage" "dealt" "to" "your" "opponents" "this" "turn"
     | "the" "number" "of" "cards" "in" "your" "opponents'" "graveyards"
     | "the" "number" "of" "attacking" "creatures"
@@ -846,9 +852,10 @@ OWNER: /target player's|that player's|each player's|target opponent's|that oppon
 
 //  player reference
 player: (V_EACH | V_A | V_AN | V_TARGET | V_ANOTHER | V_THAT | "those" | "the" | "defending" | "attacking" | "active")? ("opponent" | "player" | V_YOU)
+      | V_EACH V_OTHER "player"
 
 //  WHO: an actor that gains/loses life etc.
-who: player (REL_WHO "sacrificed" card_target "this" "way")? | card_target | controller_subject | owner_subject | "each" "of" "them"
+who: player (REL_WHO "sacrificed" card_target "this" "way")? | card_target | controller_subject | owner_subject | "each" "of" "them" | player "or" controller_subject
 controller_subject: ("Its" | "its") "controller" | (V_THAT | "this" | "the" | "a" | "an")? ("creature" | "source" | "spell" | "permanent" | "land" | "artifact" | "enchantment" | "planeswalker" | "token" | "attacker" | "blocker" | "aura" | "object" | "ability") "'s" "controller"
 
 //  colors
@@ -917,6 +924,7 @@ card_kind: THIS_CARD types? | types
          | "instant" "and" "sorcery" "card" "s"?
          | "creature" "or" "land" "card" "s"?
 with_modifier: "with" (THIS_CARD | card_target)
+             | "mana" "value" "equal" "to" "the" "number" "of" any_text
              | "exiled" "with" (THIS_CARD | card_target)
              | "with" (kw_list | "power" amount ("," amount)+ (","? ("or" | "and") amount)? | "power" amount CMP? | "power" CMP card_target "'s" "power" | "toughness" amount CMP? | "toughness" CMP card_target "'s" "power" | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
              | "that" "are" types
@@ -948,7 +956,7 @@ controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "c
           | "defending" "player" "controls"
           | "controlled" "by" "different" "players" | "you" "already" "control"
           | "you" "cast" | "you" "played"
-          | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "target" "player" "controls"
+          | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "target" "player" "controls" | "target" "opponent" "controls"
           | "its" "owner" | "the" "player" "who" "cast" "it"
 in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "library" | "from" "your" "graveyard"
         | "in" "a" "graveyard" | "in" "exile" | "from" "a" "graveyard" | "from" "their" "graveyard"

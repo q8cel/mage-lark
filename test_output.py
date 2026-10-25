@@ -181,6 +181,45 @@ add("cast-copies-plural-cost",
 add("play-without-paying-plural",
     "You may play them this turn without paying their mana costs",
     lambda o: has(o, lambda d: d.get('verb') == 'play'))
+add("search-mana-value-xdef",
+    "Search your library for a creature card with mana value equal to the number of verse counters on ~, put it onto the battlefield, then shuffle",
+    lambda o: has(o, lambda d: d.get('verb') == 'search'))
+add("phase-out-controlled-creatures",
+    "Each creature target opponent controls phases out",
+    lambda o: has(o, lambda d: d.get('verb') == 'phase'
+                  and d.get('direction') == 'out'))
+add("cant-phase-in",
+    "Until the end of your next turn, they can't phase in",
+    lambda o: has(o, lambda d: d.get('verb') == "can't"
+                  and d.get('predicate') == 'phase in'))
+add("return-tapped-attacking",
+    "Return that card to the battlefield tapped and attacking",
+    lambda o: has(o, lambda d: d.get('verb') == 'return'))
+add("search-card-list",
+    "Search your library for an Island card, a Swamp card, and a Mountain card",
+    lambda o: has(o, lambda d: d.get('verb') == 'search'))
+add("stat-gain-kw-and-type",
+    "Equipped creature gets +2/+0, has vigilance, and is a Knight in addition to its other types",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_change'))
+add("token-thats-attacking",
+    "Whenever equipped creature attacks, create a 2/2 white Knight creature token with vigilance that's attacking",
+    lambda o: has(o, lambda d: d.get('verb') == 'create_token'))
+add("copy-with-player-subject",
+    "Whenever a player casts an instant or sorcery spell, each other player copies that spell",
+    lambda o: has(o, lambda d: d.get('verb') == 'copy'))
+add("choose-new-targets-player",
+    "Each of those players may choose new targets for their copy",
+    lambda o: has(o, lambda d: d.get('verb') == 'choose_new_targets'))
+add("compound-player-discard-sacrifice",
+    "That player or that planeswalker's controller discards seven cards, then sacrifices seven permanents of their choice",
+    lambda o: has(o, lambda d: d.get('verb') == 'discard')
+                  and has(o, lambda d: d.get('verb') == 'sacrifice'))
+add("become-base-pt-in-addition",
+    "Enchanted artifact is a creature with base power and toughness 5/5 in addition to its other types",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'))
+add("xdef-life-youve-gained",
+    "This creature enters with X +1/+1 counters on it, where X is the amount of life you've gained this turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'enters'))
 add("if-decomposed", "If you control three or more creatures, draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
                   and isinstance(d.get('effect'), dict)

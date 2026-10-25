@@ -20,9 +20,9 @@ DET = (r"this|that|these|those|the|a|an|another|each|all|other|target|any|no|"
        r"blocked|unblocked|face-up|face-down")
 # intervening modifiers: alphabetic words only (no commas / clause punctuation),
 # at most two, so spans don't swallow clause boundaries.
-_MID = r"(?:[A-Za-z][\w'\-]*\s+){0,2}"
+_MID = r"(?:[A-Za-z][\w'\-]*[ \t]+){0,2}"
 CAND = re.compile(
-    rf"(?:~'s)|(?:~)|\b(?:{DET})\s+{_MID}(?:{HEADS})\b|\bthe rest\b",
+    rf"(?:~'s)|(?:~)|\b(?:{DET})[ \t]+{_MID}(?:{HEADS})\b|\bthe rest\b",
     re.I,
 )
 # Player NPs are often embedded in a larger permanent NP ("all creatures
@@ -44,7 +44,7 @@ LIST_CAND = re.compile(
     r"deal|deals|damage|gain|lose|tap|untap|counter|reveal|search|shuffle|"
     r"attach|choose|remove|add|copy|cast|play|scry|surveil|fight|become|"
     r"get|gets|has|have|is|are|was|were|can|cannot|can't|with|from|into|onto|"
-    r"to|and|or)\b)"
+    r"to|and|or|this|that|these|those|the|a|an)\b)"
     r"(?:[A-Za-z][\w'\-]*\s+){0,3}"
     r"(?:cards?|creatures?|permanents?|spells?|artifacts?|enchantments?|"
     r"lands?|planeswalkers?|tokens?)\b", re.I)
@@ -68,6 +68,9 @@ TYPE_CARD_CAND = re.compile(
 ZONE_CAND = re.compile(
     r"\b(?:your|their|its|his|her|our|my|a player's|target player's|target opponent's)\s+"
     r"(?:hands?|graveyards?|librar(?:y|ies)|exile|battlefield)\b", re.I)
+BARE_ZONE_CAND = re.compile(
+    r"\b(?:a|an|the|each|target)\s+"
+    r"(?:hands?|graveyards?|librar(?:y|ies)|battlefield|exile)\b", re.I)
 SPELL_CAND = re.compile(
     r"\b(?:a|an|the|that|this|those|these)\s+"
     r"(?:(?:[A-Za-z][\w'\-]*\s+)?(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+)?"
@@ -130,6 +133,10 @@ def _regex_mentions(text):
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
     for m in ZONE_CAND.finditer(text):
+        s = m.group(0).strip()
+        if s:
+            out.append({"surface": s, "start": m.start(), "end": m.end()})
+    for m in BARE_ZONE_CAND.finditer(text):
         s = m.group(0).strip()
         if s:
             out.append({"surface": s, "start": m.start(), "end": m.end()})
