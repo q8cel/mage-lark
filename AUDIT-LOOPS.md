@@ -12,6 +12,12 @@ sat in the coref datasets, and the audits reached all but 13 of the rest. The
 same exclusion rule is applied to `Standard.json` (8,921 rows, 5,158 unique
 names, 2,095 anaphora-bearing), which still has untouched cards.
 
+Loops 27-28 drew only anaphora-bearing cards. From loop 29 a loop samples every
+remaining anaphora-bearing card first (those are the most likely to expose a
+resolver error) and fills the rest of the twenty from the general pool, because
+the audit also looks for parser and interpreter errors (`FAIL`), not only for
+wrong antecedents.
+
 ## Loop 1 — seed 20261023
 
 Cards:
@@ -1281,5 +1287,115 @@ sample yet and are left for the loop that reaches them.
 - `test_coref.py`: 41/41 after cache rebuild.
 - Dev coreference: **91.4% entity-aware / 85.6% exact** (3091/3380,
   2893/3380; entity was 3090, exact unchanged).
+- Bench: **95.8% regex** entity-aware / **84.5% exact** (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 29 — seed 20261120 (Standard.json)
+
+Cards:
+
+`Zaffai and the Tempests`, `Dryad Militant`, `Hallowed Fountain`,
+`Paladin's Arms`, `Godless Shrine`, `Rocky Rebuke`, `Grievous Wound`,
+`Temple Garden`, `Watery Grave`, `Vibrant Cityscape`, `Interjection`,
+`Rainveil Rejuvenator`, `Sanitation Automaton`, `Fields of Strife`,
+`Pym Particles`, `Virus Beetle`, `Bile-Vial Boggart`, `Guidelight Matrix`,
+`Wail of War`, `Opt`.
+
+This is the first loop that fills spare slots with cards without anaphora (see
+the note at the top): the audit checks every sampled card for parser and
+interpreter errors, not only for wrong antecedents.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Zaffai and the Tempests | `Once during each of your turns, you may cast ...` | added the once-per-turn static form, with the effect decomposed |
+| Paladin's Arms | `gets +2/+1, has ward {1}, and is a Knight in addition to its other types` | keyword-list items accept a mana cost (`ward {1}`) |
+| Paladin's Arms | `Lightbringer and Hero's Shield — Equip {4}` | ability-word prefixes may join names with `and`/`,`; keyword statics accept a prefix |
+| Grievous Wound | `Enchant player` | `player` is a valid enchant target |
+| Grievous Wound | `Enchanted player can't gain life` | added the `can't gain life` restriction |
+| Grievous Wound | `they lose half their life, rounded up` | allowed the `rounded up/down` rounding of half a life total |
+| Rainveil Rejuvenator | `Add an amount of {G} equal to this creature's power` | added the symbol-plus-quantity mana form; the handler records symbol and `equal_to` |
+| Guidelight Matrix | `Target Mount you control becomes saddled until end of turn` | added the `becomes saddled` state change |
+
+### Interpreter fixes found and fixed
+
+- **Static sentences** dropped their effect: `Once during each of your turns,
+  you may cast ...` and `Your maximum hand size is ten` emitted only raw text.
+  `i_static_sentence` now decomposes an `effect` child, records
+  `once_each_turn`, and reports `max_hand_size`.
+- **Ability-word statics** were misread as keywords (`Lightbringer`, ... became
+  fake keyword entries). `i_static_keyword_sentence` now skips the prefix and
+  keeps it as `ability_word`.
+- **`Enchant player`** emitted `targets: []`; bare literal targets are kept.
+- **`can't gain life`** had no predicate and attached an empty `card` object.
+- **Disjunctive type lists** reported only the first conjunct
+  (`artifact or creature` -> `artifact`). `i_card_kind`/`i_types` keep every
+  conjunct for the non-protected forms; the protected list form was already a
+  set token.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py classic.json`: 115/115 (loop-29 and loop-30 forms included).
+- `test_coref.py`: 41/41 after cache rebuild.
+- Dev coreference: no regression (combined loop-30 figures are below).
+- Bench: **95.8% regex** entity-aware (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 30 — seed 20261121 (Standard.json)
+
+Cards:
+
+`News Helicopter`, `Yellowjacket, Heartless Marauder`, `Protective Parents`,
+`Seasoned Consultant`, `Bulk Up`, `Starfighter Pilot`, `Storm Fleet Spy`,
+`Glen Elendra's Answer`, `Wander Off`, `Daring Mechanic`,
+`Rot Farm Mortipede`, `Sentinel of the Nameless City`,
+`Dori, Bearer of Friends`, `The Ten Rings`, `Redtooth Genealogist`,
+`Monument to Endurance`, `Angel of Finality`,
+`Mister Fantastic, Reed Richards`, `Bogwater Lumaret`, `Gleaming Bastion`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Protective Parents | `create a Young Hero Role token attached to up to one target creature you control` | added `attached to` as a token tail (also covers Redtooth Genealogist) |
+| Glen Elendra's Answer | `Counter all spells your opponents control and all abilities your opponents control` | added the coordinated all-spells/all-abilities counter form |
+| The Ten Rings | `Your maximum hand size is ten` | added the maximum-hand-size static |
+| The Ten Rings | `draw cards equal to the difference` | added `the difference` as an X definition |
+
+### Interpreter fixes found and fixed
+
+- **Role tokens**: the `attached to` tail was parsed but dropped; tokens now
+  record `attached_to`.
+- **Coordinated counters**: `Counter all spells ... and all abilities ...`
+  emitted only `{verb: counter}`; it now reports `spells`, `abilities`, and the
+  controller.
+- **`draw cards equal to the difference`** emitted a token list
+  (`["the", "difference"]`); X definitions are flattened to a string.
+- **`stat_action`** now keeps a `kw_list` when the same action carries one, so
+  `gets +1/+0 and gains menace` cannot silently lose its keywords.
+- **`quick_test.py`** used `sys` without importing it, so every progress print
+  crashed mid-run. Added the import; the harness now completes (sample of 120
+  sentences from `FDN.json`: 120/120 parse).
+
+### Remaining limitations
+
+- **Type lists**: the list-protection layer turns `an instant or sorcery card`
+  into a set token whose text is preserved, but whose members are
+  `an instant` / `sorcery spell` (the shared prefix is kept separately), so
+  member spans are not normalized.
+- **`and/or` type lists** (`target artifact and/or creature`) still do not
+  parse; no sample has needed that form yet.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py classic.json`: 115/115.
+- `test_coref.py`: 41/41 after cache rebuild.
+- Dev coreference: **91.4% entity-aware / 85.6% exact** (3091/3380,
+  2893/3380; unchanged from loop 28).
 - Bench: **95.8% regex** entity-aware / **84.5% exact** (unchanged).
 - `test_normalize_map.py`: 6/6; dataset span validation passes.

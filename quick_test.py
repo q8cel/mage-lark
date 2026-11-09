@@ -4,6 +4,7 @@
 Use this between full runs to get quick feedback (~2 min instead of ~35 min).
 The full run (test_parse.py) remains the source of truth for coverage.
 """
+import sys
 import time, argparse, random
 from lark import LarkError
 from preprocess import segment

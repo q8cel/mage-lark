@@ -237,6 +237,57 @@ add("gain-kw-lose-all-other",
 add("activated-triggered-effect",
     "{2}, {T}: When you next activate an exhaust ability that isn't a mana ability this turn, copy it",
     lambda o: has(o, lambda d: d.get('verb') == 'copy') or has(o, lambda d: d.get('type') == 'triggered'))
+add("once-each-turn-static",
+    "Once during each of your turns, you may cast an instant or sorcery spell from your hand without paying its mana cost",
+    lambda o: has(o, lambda d: d.get('once_each_turn') is True
+                  and d.get('effect', {}).get('verb') == 'may'))
+add("ability-word-equip",
+    "Lightbringer and Hero's Shield \u2014 Equip {4}",
+    lambda o: has(o, lambda d: d.get('type') == 'static_keyword'
+                  and str(d.get('ability_word', '')).startswith('Lightbringer')
+                  and d.get('keywords', {}).get('keyword') == 'Equip'))
+add("enchant-player",
+    "Enchant player",
+    lambda o: has(o, lambda d: d.get('verb') == 'enchant'
+                  and d.get('targets') == ['player']))
+add("cant-gain-life",
+    "Enchanted player can't gain life",
+    lambda o: has(o, lambda d: d.get('verb') == "can't"
+                  and d.get('predicate') == 'gain life'))
+add("half-life-rounded",
+    "Whenever enchanted player is dealt damage, they lose half their life, rounded up",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
+                  and 'rounded up' in str(d.get('amount', ''))))
+add("add-mana-equal-x",
+    "{T}: Add an amount of {G} equal to this creature's power",
+    lambda o: has(o, lambda d: d.get('verb') == 'add_mana'
+                  and d.get('amount', {}).get('symbol') == '{G}'
+                  and 'equal_to' in d.get('amount', {})))
+add("becomes-saddled",
+    "Target Mount you control becomes saddled until end of turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('state') == 'saddled'))
+add("role-token-attached",
+    "When this creature dies, create a Young Hero Role token attached to up to one target creature you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'create_token'
+                  and 'attached_to' in d.get('token', {})))
+add("counter-all-spells-abilities",
+    "Counter all spells your opponents control and all abilities your opponents control",
+    lambda o: has(o, lambda d: d.get('verb') == 'counter'
+                  and d.get('spells') is True and d.get('abilities') is True))
+add("max-hand-size",
+    "Your maximum hand size is ten",
+    lambda o: has(o, lambda d: d.get('max_hand_size') == 10))
+add("draw-the-difference",
+    "At the beginning of your end step, if you have fewer than ten cards in hand, draw cards equal to the difference",
+    lambda o: has(o, lambda d: d.get('verb') == 'draw'
+                  and d.get('amount') == 'the difference'))
+add("type-disjunction",
+    "Destroy target artifact or creature",
+    lambda o: has(o, lambda d: (d.get('kind') == 'set'
+                                and 'creature' in str(d.get('items')))
+                  or d.get('card_type', {}).get('value')
+                  == 'artifact or creature'))
 add("if-decomposed", "If you control three or more creatures, draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
                   and isinstance(d.get('effect'), dict)
