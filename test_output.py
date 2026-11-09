@@ -220,6 +220,23 @@ add("become-base-pt-in-addition",
 add("xdef-life-youve-gained",
     "This creature enters with X +1/+1 counters on it, where X is the amount of life you've gained this turn",
     lambda o: has(o, lambda d: d.get('verb') == 'enters'))
+add("earthbend",
+    "At the beginning of your end step, earthbend 2",
+    lambda o: has(o, lambda d: d.get('verb') == 'earthbend'
+                  and d.get('amount') == 2))
+add("may-mill-two",
+    "Whenever this Vehicle attacks, you may mill two cards",
+    lambda o: has(o, lambda d: d.get('verb') == 'may'
+                  and d.get('inner', {}).get('verb') == 'mill'
+                  and d.get('inner', {}).get('amount') == 2))
+add("gain-kw-lose-all-other",
+    "It has defender and loses all other abilities",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and d.get('keywords') == ['defender']
+                  and d.get('loses_all_other_abilities') is True))
+add("activated-triggered-effect",
+    "{2}, {T}: When you next activate an exhaust ability that isn't a mana ability this turn, copy it",
+    lambda o: has(o, lambda d: d.get('verb') == 'copy') or has(o, lambda d: d.get('type') == 'triggered'))
 add("if-decomposed", "If you control three or more creatures, draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
                   and isinstance(d.get('effect'), dict)

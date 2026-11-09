@@ -112,7 +112,7 @@ modal_sentence: "Choose one"
 //    cost item: mana | {T} | {Q} | Sacrifice <card> | Remove <counter> |
 //                Tap <card> | Exile <card> | Pay <n> life
 // ----------------------------------------------------------------------------
-activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence) xdef_clause?
+activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence | triggered_sentence) xdef_clause?
 cost_list: cost_item ("," cost_item)*
 cost_item: MANA+
          | MANA+ "and" MANA+
@@ -355,6 +355,7 @@ action: add_mana_action
        | after_phase_action
        | must_block_action
        | investigate_action
+       | earthbend_action
        | flip_action
        | has_abilities_action
        | life_total_action
@@ -369,6 +370,7 @@ action: add_mana_action
        | exchange_control_action
 
 investigate_action: V_INVESTIGATE
+earthbend_action: "earthbend" amount
 flip_action: V_FLIP "a" "coin"
 has_abilities_action: card_target "has" "all" "activated" "abilities" "of" card_target
 life_total_action: "your" "life" "total" "becomes" amount
@@ -481,7 +483,7 @@ lose_life_action: who V_LOSE life_amount ("unless" any_text)?
                 | who V_LOSE "life" "equal" "to" xdef
                 | who V_LOSE "life" "equal" "to" ("its" | "their") ("mana" "value" | "power" | "toughness")
                 | player V_LOSE "life" "equal" "to" xdef
-lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" "abilities" | "all" "keyword" "abilities") ("until" ("end" "of" "turn" | "your" "next" "turn"))?
+lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" ("other")? "abilities" | "all" "keyword" "abilities") ("until" ("end" "of" "turn" | "your" "next" "turn"))?
               | card_target V_LOSE "all" "abilities" ("until" "your" "next" "turn")?
 gain_poison_action: who V_GET amount "poison" "counters"
 
@@ -620,7 +622,7 @@ stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD "or" POWER_MOD
            | ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
            | ("has" | "gains" | "have" | "gain") kw_list
 can_attack_as_though_action: card_target V_CAN "attack" "as" "though" ("it" | "they") ("didn't" | "did" "not") "have" KEYWORD
-gain_kw_action: card_target ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)?
+gain_kw_action: card_target ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)? ("and" ("loses" | "lose") "all" ("other")? "abilities")?
 base_pt_action: card_target ("also")? ("has" | "have" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("and" "are" token_types "in" "addition" "to" "their" "other" "types")? ("until" ("end" "of" "turn" | "your" "next" "turn"))?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
@@ -716,6 +718,7 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | contr
         | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action
         | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
         | investigate_action | begin_game_action
+       | mill_action
        | flip_action
        | has_abilities_action
        | life_total_action

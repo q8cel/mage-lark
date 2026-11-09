@@ -664,6 +664,13 @@ class Interpreter:
     def i_investigate_action(self, children):
         return {'verb': 'investigate'}
 
+    def i_earthbend_action(self, children):
+        d = {'verb': 'earthbend'}
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['amount'] = self.interp(amt)
+        return d
+
     def i_flip_action(self, children):
         return {'verb': 'flip_coin'}
 
@@ -907,6 +914,10 @@ class Interpreter:
         kw = self._find_one(children, 'kw_list')
         if kw is not None:
             d['keywords'] = self.interp(kw)
+        toks = [str(ch).lower() for ch in children
+                if isinstance(ch, Token) and ch.type != 'KEYWORD']
+        if 'loses' in toks and 'abilities' in toks:
+            d['loses_all_other_abilities'] = True
         return d
 
     def i_base_pt_action(self, children):
@@ -1663,7 +1674,8 @@ class Interpreter:
             if isinstance(ch, Tree):
                 if ch.data == 'cost_list':
                     cost = self.interp(ch)
-                elif ch.data in ('effect', 'for_each_sentence', 'until_sentence'):
+                elif ch.data in ('effect', 'for_each_sentence', 'until_sentence',
+                                 'triggered_sentence'):
                     eff = self.interp(ch)
         return {'type': 'activated', 'cost': cost, 'effect': eff}
 

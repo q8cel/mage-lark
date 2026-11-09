@@ -994,8 +994,10 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("possessive-attribute-object")
 
-        # ---- modifier self-reference: "a creature with a counter on it"
-        if (rec["kind"] == "pronoun" and rec["surface"].lower() in ("it", "it's")
+        # ---- modifier self-reference: "a creature with a counter on it",
+        # "creatures you control with +1/+1 counters on them".
+        if (rec["kind"] == "pronoun"
+                and rec["surface"].lower() in ("it", "it's", "them", "they")
                 and re.search(r"\bon\s*$", text[max(0, rec["start"] - 8):rec["start"]], re.I)):
             containers = [i for i, m in enumerate(ms)
                           if not m.get("is_anaphor")

@@ -6,6 +6,12 @@ previous audit. Cards are parsed sentence-by-sentence and then run through the
 deterministic coreference resolver. A loop is clean only when every sentence
 parses and the inspected anaphora choices are semantically defensible.
 
+From loop 27 the sampling corpus is `Standard.json`. Loops 1-26 consumed the
+`classic.json` pool: 506 unique anaphora-bearing cards exist there, 30 already
+sat in the coref datasets, and the audits reached all but 13 of the rest. The
+same exclusion rule is applied to `Standard.json` (8,921 rows, 5,158 unique
+names, 2,095 anaphora-bearing), which still has untouched cards.
+
 ## Loop 1 — seed 20261023
 
 Cards:
@@ -1179,5 +1185,101 @@ Cards:
 - `test_coref.py`: 39/39 after cache rebuild.
 - Dev coreference: **91.4% entity-aware / 85.6% exact** (3090/3380,
   2893/3380; was 91.4 / 85.6).
+- Bench: **95.8% regex** entity-aware / **84.5% exact** (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 27 — seed 20261118 (Standard.json)
+
+Cards:
+
+`Tenderize`, `Grounded for Life`, `Magic Damper`, `Burden of Proof`,
+`Banishing Betrayal`, `Arcanis the Omnipotent`, `Gundabad Opportunist`,
+`Ostrich-Horse`, `Leaping Ambush`, `Retro-Mutation`, `Pathfinding Axejaw`,
+`Emil, Vastlands Roamer`, `Whoosh!`, `Ajani's Response`,
+`Twinflame Travelers`, `Shipwreck Sentry`, `Breeding Pool`, `Octopus Form`,
+`Spider-Mobile`, `Crossroads Village`.
+
+### Parse failures found and fixed
+
+None: every non-modal sentence of the 20 cards parsed already. The forms in
+this sample (cost reduction with `if it targets`, `untap it`, base-P/T become,
+land pay-2-life entries) were covered by earlier loops.
+
+### Coreference/output fixes found and fixed
+
+- **Emil, Vastlands Roamer**: `them` inside a modifier
+  (`Creatures you control with +1/+1 counters on them`) had no antecedent.
+  The existing modifier-container rule only accepted singular `it`; it now
+  accepts `them`/`they` as well and binds to the containing mention.
+- **Twinflame Travelers**: `it` in `If a triggered ability of another Elemental
+you control triggers, it triggers an additional time` had no antecedent.
+  `mentions.SPELL_CAND` spelled the head as `abilities?`, which matches
+  `abilitie`/`abilities` but never the singular `ability`; it is now
+  `abilit(?:y|ies)`, so `a triggered ability` is a candidate.
+- **Ostrich-Horse / Hedge Shredder** (loop 28): `them` bound to the bare noun
+  `cards`. `BARE_COLLECTION` now captures the optional modifier
+  (`three cards`), and `one or more` is an accepted determiner, so Hedge
+  Shredder binds to `one or more land cards` instead of the previously milled
+  `two cards`.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py classic.json`: 103/103 (loop-27 and loop-28 forms included).
+- `test_coref.py`: 41/41 after cache rebuild.
+- Dev coreference: no regression (combined loop-28 figures are below).
+- Bench: **95.8% regex** entity-aware (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 28 — seed 20261119 (Standard.json)
+
+Cards:
+
+`Unscrupulous Agent`, `Pillar Launch`, `Summon: G.F. Cerberus`,
+`Pit Automaton`, `Watery Grasp`, `Toph, the First Metalbender`,
+`Spider-Man No More`, `Gurmag Nightwatch`, `Cenote Scout`,
+`Hard-Hitting Question`, `Sacred Foundry`, `Petrify`, `Mirage Mesa`,
+`Cryoshatter`, `Steam Vents`, `Hedge Shredder`, `Stomping Ground`,
+`Iceridge Serpent`, `Overgrown Tomb`, `Dragonstorm Globe`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Toph, the First Metalbender | `At the beginning of your end step, earthbend 2` | added `earthbend_action` (the Avatar-set keyword action) and its handler |
+| Spider-Man No More | `It has defender and loses all other abilities` | allowed the `and loses all (other) abilities` tail on `gain_kw_action`, reported as `loses_all_other_abilities` |
+| Hedge Shredder | `you may mill two cards` | `mill_action` was missing from `may_action` |
+| Pit Automaton | `{2}, {T}: When you next activate an exhaust ability ..., copy it` | allowed a `triggered_sentence` as the effect of an activated ability; the handler now interprets it |
+
+`earthbend` is the first of the Avatar-set keyword actions to appear. The
+sibling forms `airbend X`, `waterbend {N}` and `firebending N` are not in the
+sample yet and are left for the loop that reaches them.
+
+### Coreference/output fixes found and fixed
+
+- **Pit Automaton**: `it` binds to `an exhaust ability` (the copy target), now
+  that the sentence parses and `ability` is a candidate mention.
+- **Emil, Vastlands Roamer / Twinflame Travelers** (loop 27): see above.
+- Added output regressions for earthbend, may-mill, gain-keyword-and-lose-all,
+  and the activated-triggered form; added coreference regressions for the
+  counter-modifier container and the triggered-ability candidate.
+
+### Remaining limitations
+
+- **Summon: G.F. Cerberus**: the `Double —` / `Triple —` ability words are
+  kept in the parsed line, not split into an ability word plus effect.
+- **Watery Grasp**: `its controller` is still resolved by the generic
+  possessive-object rule; the output is the enchanted creature's controller,
+  which is the intended referent.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- All inspected anaphora choices are resolved and semantically defensible.
+- `test_output.py classic.json`: 103/103.
+- `test_coref.py`: 41/41 after cache rebuild.
+- Dev coreference: **91.4% entity-aware / 85.6% exact** (3091/3380,
+  2893/3380; entity was 3090, exact unchanged).
 - Bench: **95.8% regex** entity-aware / **84.5% exact** (unchanged).
 - `test_normalize_map.py`: 6/6; dataset span validation passes.

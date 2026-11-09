@@ -14,7 +14,7 @@ HEADS = (
     r"enchantments?|spells?|planeswalkers?|players?|opponents?|piles?|sources?|"
     r"objects?|auras?|counters?"
 )
-DET = (r"this|that|these|those|the|a|an|another|each|all|other|target|any|no|"
+DET = (r"one or more|this|that|these|those|the|a|an|another|each|all|other|target|any|no|"
        r"enchanted|equipped|attacking|blocking|tapped|untapped|chosen|"
        r"revealed|exiled|sacrificed|discarded|returned|created|milled|"
        r"blocked|unblocked|face-up|face-down")
@@ -74,15 +74,15 @@ BARE_ZONE_CAND = re.compile(
 SPELL_CAND = re.compile(
     r"\b(?:a|an|the|that|this|those|these)\s+"
     r"(?:(?:[A-Za-z][\w'\-]*\s+)?(?:instant|sorcery)\s+(?:or|and/or)\s+(?:instant|sorcery)\s+)?"
-    r"(?:[A-Za-z][\w'\-]*\s+){0,2}(?:spells?|abilities?)\b", re.I)
+    r"(?:[A-Za-z][\w'\-]*\s+){0,2}(?:spells?|abilit(?:y|ies))\b", re.I)
 # "an instant or sorcery card" / "target red instant or sorcery card": the
 # regular 0-2 modifier window is too short for the disjunction.
 # Bare plural after "with"/"controls" is an event collection ("attacks with
 # creatures", "two or more of those creatures").
 BARE_COLLECTION = re.compile(
     r"\b(?:with|control(?:s)?|mills?|exiles?|reveals?|discards?|draws?)\s+"
-    r"(?:[A-Za-z0-9]+\s+)?"
-    r"(creatures|permanents|cards|lands|artifacts|enchantments|spells|tokens)\b",
+    r"((?:[A-Za-z0-9]+\s+)?"
+    r"(?:creatures|permanents|cards|lands|artifacts|enchantments|spells|tokens))\b",
     re.I)
 STATUS_NAME = re.compile(r"\b(?:Enchanted|Equipped)\s+[A-Z][\w'\-]+\b")
 INSTANT_SORCERY_SPELL = re.compile(

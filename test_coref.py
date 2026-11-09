@@ -357,6 +357,21 @@ def t_possessive_owner_prefers_object():
     assert got[0]["canonical"] == "~", anas(res)
 
 
+def t_counter_modifier_binds_container():
+    _, res = resolve_card("Emil, Vastlands Roamer", "Standard.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "them"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == (
+        "Creatures you control with +1/+1 counters on them"), anas(res)
+
+
+def t_triggered_ability_is_a_candidate():
+    _, res = resolve_card("Twinflame Travelers", "Standard.json")
+    got = [a for a in res["anaphors"] if a["surface"].lower() == "it"]
+    assert len(got) == 1, anas(res)
+    assert got[0]["canonical"] == "a triggered ability", anas(res)
+
+
 def t_player_demonstrative_skips_zone_container():
     _, res = resolve_card("Stain the Mind", "classic.json")
     got = [a for a in res["anaphors"] if a["surface"].lower() == "that player"]
