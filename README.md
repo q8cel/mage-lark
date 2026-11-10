@@ -16,15 +16,15 @@ bundle (21 published sets, 22,196 sentences).
 source myenv/bin/activate          # Python 3.13, Lark 1.3.1
 # or: pip install -r requirements.txt
 
-python debug.py "Draw a card" "Tap an untapped creature you control"
-python run.py --data FDN.json                  # full coverage (cached, fast)
-python run.py --data Standard.json --dump failures_std.txt
-python run.py --data Standard.json --sets OTJ,WOE     # subset of sets
+python tools/debug.py "Draw a card" "Tap an untapped creature you control"
+python tools/run.py --data FDN.json                  # full coverage (cached, fast)
+python tools/run.py --data Standard.json --dump failures_std.txt
+python tools/run.py --data Standard.json --sets OTJ,WOE     # subset of sets
 ```
 
-**Start here:** `PIPELINE.md` documents the full data flow, the canonical parser
+**Start here:** `docs/PIPELINE.md` documents the full data flow, the canonical parser
 configurations (`larkparser.py`), the caches, and where the coreference pass sits.
-`DETERMINISTIC-COREF.md` documents the anaphora resolver design and numbers.
+`docs/DETERMINISTIC-COREF.md` documents the anaphora resolver design and numbers.
 
 `run.py` is the main entry point. It is **cached and parallel** (see
 *Performance*): a first Standard check takes ~25–35 min; any re-run with an
@@ -32,49 +32,96 @@ unchanged grammar is near-instant.
 
 ## Layout
 
+```
+grammar/grammar.lark    the Lark grammar (Earley, ambiguity='resolve')
+paths.py                repo layout + import bootstrap + data-file resolution
+core/                   parse -> interpret pipeline
+coref/                  anaphora detection, resolver, models, evaluation
+tools/                  runners, coverage, quality checks, dataset maintenance
+tests/                  golden / regression suites
+data/                   corpora and labelled datasets
+docs/                   design notes and audit logs
+mtd/                    FDN convenience accessors
+.cache/                 derived caches (git-ignored)
+```
+
+Modules are still imported by their bare names (`import rulecoref`).
+`paths.py` puts the repo root, `core/` and `coref/` on `sys.path`, so scripts
+can live in any subdirectory; data files are resolved by bare name
+(`FDN.json` → `data/FDN.json`).
+
+**Data** (`data/`)
+
 | file | purpose |
 |---|---|
 | `FDN.json` | Oracle text for all 771 Foundations cards |
 | `Standard.json` | (git-ignored) 21-set Standard rotation bundle from mtgjson |
-| `mtd/__init__.py` | FDN convenience accessors, backed by `setdata` |
+| `classic.json` | (git-ignored) M10–M15 + M19–M21 core-set bundle |
+| `coref_standard.json` | dev dataset: teacher-labelled anaphors over `classic.json` |
+| `coref_dataset.json` | training split for the attention baseline |
+| `coref_benchmark.json` | 48-card human-gold coreference benchmark |
+| `all_sentences.txt` | flat sentence dump used by the early survey tools |
+
+**Grammar pipeline** (`core/`)
+
+| file | purpose |
+|---|---|
 | `setdata.py` | Unified loader for FDN and mtgjson (bundle) formats |
 | `preprocess.py` | Strip reminders, split oracle into sentences, strip saga/leveler prefixes |
-| `grammar.lark` | The Lark grammar (Earley, `ambiguity='resolve'`) |
 | `larkparser.py` | Canonical parser factory (`interp` / `ptree` configurations) |
 | `interpret.py` | `Interpreter` — top-down tree walker, tree → typed dicts |
-| `transformer.py` | (legacy) Lark `Transformer` — superseded by `interpret.py` |
+| `lists.py` | `and/or` list protection (round-trips lists through `LISTTOK`) |
+| `ptree.py` | **The** parse: one tree per text, yielding mention spans **and** structure; disk-cached, parallel precompute, regex fallback |
+| `pmentions.py`, `pstruct.py` | Thin shims over `ptree`, kept for existing callers |
+
+**Coreference** (`coref/`)
+
+| file | purpose |
+|---|---|
+| `anaphora.py` | Lexical anaphor enumeration over raw text: `it/its/they/them/their`, `that X`, `the rest` |
+| `mentions.py` | Candidate mention spans: regex ∪ parser spans, bare pronouns filtered |
+| `refs.py` | Mention **inventory**: maximal-span cleaning + `head_type`, `number`, `definiteness`, `is_self`, `is_target`, `sentence`, `clause` |
+| `rulecoref.py` | **Deterministic resolver**: filters → possessive binding → recency → entity clustering → `rewritten_text` |
+| `coref_eval.py` | **Unified entity-aware evaluation** for rule and attention resolvers (same fixed candidate pool) |
+| `dataset_validation.py` | Validate span/gold invariants; `--source` checks `normalize_with_map` grounding |
+| `resolve_pipeline.py` | `--resolve` seam: rewrite → re-parse → interpret; measures how many anaphora markers disappear from the output |
+| `resolve.py` | Attention-over-mentions baseline + `--eval` |
+| `transformer.py`, `vocab.py` | (legacy) Lark `Transformer` and shared vocabulary |
+| `label_cases.py` | Offline teacher harness: builds per-anaphor cases, labels with an LLM |
+| `validate_teacher.py` | Teacher agreement / candidate recall against human gold |
+| `train_head.py`, `sweep_head.py` | Frozen-encoder mention ranker (baseline) + hyperparameter sweep |
+| `ensemble_label.py` | Majority vote across several teacher runs |
+
+**Tools** (`tools/`)
+
+| file | purpose |
+|---|---|
 | `run.py` | **Main runner**: cached + parallel coverage over a whole set/bundle |
-| `test_parse.py`, `test_parallel.py` | Earlier (uncached) runners |
+| `test_parse.py`, `test_parallel.py` | Earlier (uncached) coverage runners |
+| `quick_test.py` | Fast random-sample parse check |
 | `debug.py`, `show.py` | Parse + dump the tree for raw sentences |
 | `demo_output.py` | Show the **actual interpreted dicts** for example sentences/cards |
 | `content_check.py` | **Content-preservation** discovery: input content units vs. output |
 | `check_interp_grammar.py` | Static interpreter↔grammar rule-name sync checker |
-| `test_output.py` | 44 **golden output tests** (regression guard for the interpreter) |
 | `audit_output.py` | Flag suspicious outputs (empty dict, pronoun-as-type, …) |
-| `quick_test.py`, `analyze.py`, `vocab.py` | Sampling / corpus exploration helpers |
-| **Coreference (deterministic)** | |
-| `anaphora.py` | Lexical anaphor enumeration over raw text: `it/its/they/them/their`, `that X`, `the rest` |
-| `mentions.py` | Candidate mention spans: regex ∪ parser spans, bare pronouns filtered |
-| `ptree.py` | **The** parse: one tree per text (`keep_all_tokens=True` + `propagate_positions=True`) yielding mention spans **and** structure (`role`, `verb`, `predicate`, `in_condition`). Disk-cached, parallel precompute, regex fallback per unparseable segment |
-| `pmentions.py`, `pstruct.py` | Thin shims over `ptree`, kept for existing callers |
-| `refs.py` | Mention **inventory**: maximal-span cleaning + `head_type`, `number`, `definiteness`, `is_self`, `is_target`, `sentence`, `clause` |
-| `resolve_pipeline.py` | `--resolve` seam: rewrite -> re-parse -> interpret; measures how many anaphora markers disappear from the output |
-| `repair_dataset.py` | Repair the card-name clobbering in a labelled dataset (`~ch` -> `Search`) with span remapping |
-| `dataset_validation.py` | Validate span/gold invariants; `--source` checks `normalize_with_map` grounding |
-| `repair_dataset_spans.py` | Legacy span repair by nearest surface (only for datasets without source maps) |
-| `remap_dataset.py` | Deterministic rebuild of dataset texts/spans from source using `normalize_with_map` |
-| `coref_eval.py` | **Unified entity-aware evaluation** for rule and attention resolvers (same fixed candidate pool) |
-| `rulecoref.py` | **Deterministic resolver**: filters → possessive binding → recency → entity clustering → `rewritten_text` |
-| `test_coref.py` | 16 golden tests for the resolver (behaviour + documented limitations) |
+| `crosscheck.py`, `invariant_check.py` | Cross-model agreement and dataset invariant audits |
+| `analyze.py`, `vocab.py`, `analyze_strat.py`, `strat_sample.py` | Sampling / corpus exploration helpers |
+| `repair_dataset.py`, `repair_dataset_spans.py`, `remap_dataset.py`, `upgrade_texts.py` | Dataset text/span repair against a source bundle |
+
+**Tests** (`tests/`)
+
+| file | purpose |
+|---|---|
+| `test_output.py` | 122 **golden output tests** (interpreter regression guard) |
+| `test_coref.py` | 41 golden tests for the resolver (behaviour + documented limitations) |
 | `test_normalize_map.py` | Tests for normalized-text ↔ original-offset mapping |
-| `DETERMINISTIC-COREF.md` | Design analysis, measurements, rejected rules |
-| `COREF-AUDIT.md` | 20-card out-of-dev audit, fixed bugs, known inventory limitations |
-| **Coreference (experimental, needs torch)** | |
-| `label_cases.py` | Offline teacher harness: builds per-anaphor cases, labels with an LLM |
-| `validate_teacher.py` | Teacher agreement / candidate recall against human gold |
-| `train_head.py` | Frozen-encoder mention ranker (baseline comparator) |
-| `sweep_head.py` | Hyperparameter sweep for the ranker |
-| `resolve.py` | Attention-over-mentions baseline + `--eval` |
+| `test_lists.py` | Tests for the list-protection layer |
+
+**Docs** (`docs/`): `PIPELINE.md` (data flow, caches, seams),
+`DETERMINISTIC-COREF.md` (resolver design + measurements),
+`COREF-AUDIT.md` and `AUDIT-LOOPS.md` (out-of-dev audits),
+`LISTS.md`, `QWEN_SUGGESTIONS.md`.
+
 
 ## Design
 
@@ -130,16 +177,16 @@ output. This is the discovery engine for *silent bugs* — it finds the
 "parses but the output is wrong/incomplete" cases without enumerating them by hand.
 
 ```bash
-python content_check.py classic.json          # % of parsed sentences that lose content
-python content_check.py classic.json --dump   # write all (unit, sentence) pairs to content_missing.tsv
-python test_output.py                         # golden tests: 44/44 must pass
-python dataset_validation.py coref_standard.json coref_dataset.json
-python dataset_validation.py coref_standard.json --source Standard.json
-python remap_dataset.py coref_standard.json --source Standard.json --dry-run
-python test_normalize_map.py
-python coref_eval.py --dataset coref_standard.json
-python coref_eval.py --bench --mentions regex
-python check_interp_grammar.py                # interpreter handlers vs. grammar rules
+python tools/content_check.py classic.json          # % of parsed sentences that lose content
+python tools/content_check.py classic.json --dump   # write all (unit, sentence) pairs to content_missing.tsv
+python tests/test_output.py                         # golden tests: 44/44 must pass
+python coref/dataset_validation.py coref_standard.json coref_dataset.json
+python coref/dataset_validation.py coref_standard.json --source Standard.json
+python tools/remap_dataset.py coref_standard.json --source Standard.json --dry-run
+python tests/test_normalize_map.py
+python coref/coref_eval.py --dataset coref_standard.json
+python coref/coref_eval.py --bench --mentions regex
+python tools/check_interp_grammar.py                # interpreter handlers vs. grammar rules
 ```
 
 The interpreter was hardened against every class this surfaced; content loss on

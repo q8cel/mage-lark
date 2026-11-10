@@ -1,0 +1,394 @@
+# Pipeline: how the pieces fit
+
+What runs, in what order, on what data, and which caches it touches. Read this
+before changing any module: parser construction is centralized in
+`core/larkparser.py`; use `build_parser("interp")` for interpretation/coverage
+and `build_parser("ptree")` when you need position metadata.
+
+Module locations: `core/` (load → segment → parse → interpret),
+`coref/` (anaphora, inventory, resolver, models, evaluation), `tools/`
+(runners and checks), `tests/` (golden suites), `data/` (corpora and
+datasets), `grammar/grammar.lark`, `docs/`. `paths.py` owns those paths and
+puts `core/`/`coref/` on `sys.path`.
+
+```
+                      setdata.load(path)
+              items=(name, text, code), types, names, sets
+                              │
+                              ▼
+             preprocess.segment(text, names)        names→`~`, strip reminders,
+             [{text, modal, bullet}]                split lines → sentences
+                              │
+        ┌─────────────────────┼──────────────────────┬──────────────────────────┐
+        │                     │                      │                          │
+  (A) COVERAGE         (B) INTERPRETATION      (C) COREFERENCE              (D) OFFLINE LABELS
+      run.py            demo_output.py,          refs.py + rulecoref.py        label_cases.py
+                        interpret.interpret()                                   train_head.py
+        │                     │                      │                        resolve.py
+        ▼                     ▼                      ▼                          │
+  Lark.parse            Lark.parse             anaphora.find_anaphors(text)      │
+  build_parser(         build_parser(        + ptree.nodes(text)               │
+    "interp")             "interp")            ONE parse → spans + structure    │
+                                                (regex fallback per segment)      │
+        │                     │                      │                          │
+        ▼                     ▼                      ▼                          │
+  parsed / failed      Interpreter.interp      refs.clean → refs.annotate        │
+  + failures dump      → semantic dicts       rulecoref.resolve                 │
+        │                     │                 → entities, status, rewrite      │
+        ▼                     ▼                      ▼                          ▼
+   coverage %          effect dicts           resolutions JSON            coref_dataset.json
+                                              + rewritten_text            + ranker weights
+```
+
+## Stages
+
+| # | stage | function | output | cache file |
+|---|---|---|---|---|
+| 1 | load | `setdata.load(path)` | `items (name, text, code)`, `types`, `names`, `sets` | `seg_<data>_<setdata>.pkl` |
+| 2 | normalise + segment | `setdata.normalize_with_map` / `normalize_text` -> `preprocess.segment` | `[{text, modal, bullet}]` + optional `OffsetMap` | `sent_<data>_<preprocess>_<setdata>.pkl` |
+| 3 | parse | `larkparser.build_parser(kind)` | tree | `parse_<grammarhash>.json` (coverage only: 1/0 per sentence) |
+| 4a | interpret | `Interpreter.interp(tree)` | typed dicts (`effect`, `if`, …) | — |
+| 4b | parse once | `ptree.nodes(text)` | records `{start, end, node, role, verb, predicate, in_condition}`, regex fallback per unparseable segment | `ptree_<grammarhash>.json` |
+| 4b' | mention spans | `mentions.candidate_mentions(text, parser=True)` → `ptree.mentions` | `{surface, start, end}` (derived from 4b) | same as 4b |
+| 4c | anaphor spans | `anaphora.find_anaphors(text)` | `{surface, start, end, kind}` | — (pure regex) |
+| 4d | tree structure | `ptree.structure(text)` | `role` (subject/object), `verb`, `predicate`, `in_condition` | same as 4b (cache-read only, never parses) |
+| 5 | inventory | `refs.clean` → `refs.annotate` | `+ head_type, number, definiteness, is_self, is_target, sentence, clause`, and `role`/`verb`/`predicate` when struct is supplied | — |
+| 6 | resolve | `rulecoref.resolve(text, mentions, anaphors)` | entities, per-anaphor status, `rewritten_text` | — |
+| 6b | resolve + re-parse (`--resolve`) | `resolve_pipeline.py`: rewrite -> `segment` -> `Lark` -> `Interpreter` | semantic dicts with the anaphora markers replaced by concrete mentions | — |
+| 7 | label (offline) | `label_cases.py` → Qwen 27B on `:9000` | `coref_dataset.json`, `coref_standard.json` | `.cache/label_cases/` (prompt hash) |
+| 7b | validate / remap labels | `dataset_validation.py` (`--source`), `remap_dataset.py` | span/gold report; source-grounded text/spans | — |
+| 8 | train (offline) | `train_head.py` | frozen MiniLM + tiny MLP | `enc_<model>_L<layer>.pkl` |
+| 9 | evaluate | `coref_eval.py` | unified entity-aware metrics for rule/attention | — |
+
+Stages 1–3 are shared. Stage 4 splits into three parallel consumers that do not
+depend on each other.
+
+## Text normalisation invariants (`setdata.normalize_text`)
+
+One function produces every canonical text, and it has to satisfy two properties:
+
+1. **Line breaks are preserved.** Oracle text puts one ability per line. Collapsing
+   them merges `Trample, haste` with the `When this Vehicle enters, ...` trigger
+   that follows, and the result parses as neither — measured as the single largest
+   cause of parse failure for anaphora-bearing sentences (35 of 179 failures).
+2. **Offsets are mapped, not guessed.** Reminder stripping and name masking change
+   text length, so normalized coordinates are not original coordinates. Use
+   `setdata.normalize_with_map(raw, names) -> (text, OffsetMap)`: `text` is the
+   canonical form and the map translates any normalized span back to the original
+   oracle text. `normalize_text` is the same function without the map.
+
+Anything that re-derives text must go through this function. Historical datasets
+were built with an earlier normalizer, so `remap_dataset.py` maps old text/span
+coordinates -> source -> current text/span deterministically (no surface search).
+
+## Canonical parser configurations
+
+Same grammar, two supported `Lark` settings, both built by `larkparser.py`:
+
+| kind | `keep_all_tokens` | `propagate_positions` | used by |
+|---|---|---|---|
+| `interp` | True | False | coverage, interpreter, content checks, debug/show/demo |
+| `ptree` | True | True | mention spans **and** structure from one parse |
+
+All callers must go through `build_parser(kind)`; opening `grammar.lark` directly
+is how the old `keep_all_tokens=False` paths drifted (a bare pronoun disappeared
+from the tree and became `{"card_type": null}`). `pmentions.py` and
+`pstruct.py` are thin shims over `ptree`.
+
+Consequences that have bitten us already:
+
+- `Exile it` → with `keep_all_tokens=False` the pronoun **disappears**: the tree
+  yields an empty `card_target` and the dict says `{"card_type": null}`. With
+  `True` it survives as `{"ref": "anaphora", "raw": "it"}` — still no *span*.
+- The coverage cache stores only `1/0` per sentence, so it cannot be reused by
+  anything that needs offsets.
+- `pmentions` deliberately parses with `propagate_positions=True`, which is why
+  it is slow (~25–40 s per long card) and why its cache matters.
+
+Any new consumer must state which configuration it needs. Do not "reuse" the
+coverage cache for structure.
+
+## Grammar performance: the `any_text` trap
+
+`any_text` is `ANYWORD+`, i.e. **unbounded**. Putting it inside an optional group of a
+rule that is reachable from most sentences makes Earley explore that group at every
+position, and the cost is paid by *every* sentence — including ones that cannot
+possibly match.
+
+Measured before the fix:
+
+| sentence | parse |
+|---|---|
+| `Flying` | 16.5 s |
+| `Draw a card` | 25.7 s |
+| `~ deals 5 damage to target creature` | 37.0 s |
+
+Cost was nearly **length-independent** (~44 s for a 6-character sentence), which is
+the signature: it is not input size, it is chart exploration.
+
+### How it was found
+
+Ablate one rule at a time and time a trivial sentence:
+
+1. replace `sentence:` with each of its alternatives, one at a time → every branch
+   was instant alone except `effect_sentence`;
+2. same for `action:` → `become_action` alone cost 25.1 s, and removing it took six
+   sample sentences from 232 s to 16.6 s.
+
+`become_action` ended with `("with" any_text)? ("that's" any_text)? ("for" "as" "long"
+"as" any_text)?`, and it starts with a nullable `card_target`. Those tails are now
+closed phrases (`become_tail`), which took parses to:
+
+| | before | after |
+|---|---|---|
+| `Flying` | 16.5 s | **1.66 s** |
+| `Draw a card` | 25.7 s | **2.54 s** |
+| regression gate (143 sentences) | 15m29s | **1m27s** |
+| FDN cache rebuild | ~40 min | **5m44s** |
+
+Coverage was unchanged (143/143 baseline sentences, bench 77%, dev 73.0%).
+
+### Rule for the grammar
+
+When a rule is slow, it is usually `any_text` (or another unbounded repetition) in a
+position that is reachable from the start symbol, not the phrase you were trying to
+add. Prefer closed alternatives; if a family of phrases is genuinely open-ended, put
+it in its own *sentence-level* alternative that fails on its first token rather than
+in the tail of a rule shared by everything.
+
+## Where coreference sits
+
+`rulecoref` is a **post-segmentation discourse pass, parallel to interpretation —
+not downstream of it.** It runs on normalised text plus mention spans, and calls
+the parser only to harvest mention spans (`card_target` / `player` / `token`
+nodes with positions), never to read semantics.
+
+Why not consume `interpret()` output:
+
+1. **No offsets.** The resolver must rewrite text, build a mention graph, and
+   enumerate *every* anaphor occurrence; `interpret()` reports anaphors only when
+   the pronoun lands in a typed slot (`card_kind`), with no position at all.
+2. **Dropped material.** Conditions (`if_sentence`) become `any_text` strings and
+   modifier clauses are flattened (an `attached to that creature` clause arrives
+   as a sibling `card_target`), so several anaphors never appear in the dicts.
+3. **Config fragility.** Anaphor survival is a function of `keep_all_tokens`
+   (see the table above), so depending on it would be depending on a flag.
+
+### Current state: not wired in
+
+Nothing in `run.py`, `interpret.py`, `demo_output.py` or `resolve.py` imports
+`refs`/`rulecoref`; `coref_eval.py` is the shared, entity-aware harness for both
+the rules and the attention baseline. Today it is a standalone CLI:
+
+```bash
+python coref/refs.py --card "Fiery Annihilation"        # inspect the inventory
+python coref/rulecoref.py "Fiery Annihilation"          # resolve one card
+python coref/rulecoref.py "Fiery Annihilation" --json   # full JSON contract
+python coref/coref_eval.py --dataset coref_standard.json       # dev, fixed dataset pool
+python coref/coref_eval.py --bench --mentions parser           # 72 human gold
+python coref/coref_eval.py --bench --mentions regex
+python coref/rulecoref.py --eval X.json --ablate number,type   # ablations
+```
+
+### Verified seam: resolution feeds the compiler (`--resolve`)
+
+`resolve_pipeline.py` measures it; `demo_output.py --resolve` shows it:
+
+```
+python tools/demo_output.py --data FDN.json --resolve "Fiery Annihilation deals 5 damage to target creature. ..."
+python coref/resolve_pipeline.py --data FDN.json --limit 158
+```
+
+Measured on all 158 FDN cards that contain an anaphor (269 occurrences):
+
+| | before | after |
+|---|---|---|
+| anaphora markers in the semantic output | 57 | **7** |
+| unparsed sentences | 28 | **28** (no regression) |
+| cards rewritten | — | 92 / 158 |
+
+Rewrite decisions: 121 edits applied, 49 reverted (the substitution broke that
+sentence's parse), 23 skipped because the anaphor is *embedded* in a larger NP's
+modifier (`from among them`), 52 possessive, 11 number-mismatch, 6 set-valued.
+
+Two rules make this safe:
+
+1. **per-sentence validation** — `rewrite_text(..., parse_ok=...)` reverts a
+   sentence whose edit stops parsing, so a rewrite is only claimed if it compiles;
+2. **slot gating** — an anaphor whose containing mention is much larger than the
+   anaphor itself is skipped (`slot == "embedded"`); substituting an NP inside a
+   modifier produces nonsense even when it parses.
+
+Possessives (`its owner's hand`) and set anaphora (`the rest`) are never rewritten:
+the grammar accepts only `its/their/...` in possessor position, and a set needs a
+partitive ("the rest of the top five cards"), not a plain NP.
+
+### The second integration seam (not built)
+
+1. **Pre-parse rewrite** — `rulecoref` emits pronoun-free text, which is fed back
+   through `segment` → `Lark.parse` → `Interpreter`. Verified on Fiery
+   Annihilation: 3/3 rewritten sentences parse, 0 anaphors remain. This makes
+   resolution *feed* the compiler.
+2. **Post-parse annotation** — attach entity ids to the semantic dicts. Needs
+   `interpret` to preserve anaphor spans (i.e. a single, documented parser
+   configuration plus an offset field).
+
+## JSON contract
+
+`rulecoref.resolve(text, mentions, anaphors)` returns:
+
+```jsonc
+{
+  "text": "...",
+  "mentions": [ {"surface","start","end","src","head_type","number",
+                 "definiteness","is_self","is_target","is_pronoun",
+                 "sentence","clause","is_anaphor"} ],
+  "entities": [ {"id": 1, "canonical": "target creature",
+                 "spans": [ {"surface","start","end","is_anaphor"} ]} ],
+  "anaphors": [ {"surface","start","end","kind","status","entity",
+                 "antecedent": {"surface","start","end"} | null,
+                 "canonical", "antecedent_src", "evidence", "candidates",
+                 "set_valued", "op"} ],
+  "rewritten_text": "..."
+}
+```
+
+- `status` ∈ `resolved` | `ambiguous` | `no-resolution`
+- `set_valued: true` + `op: "minus"` for collection anaphors (`the rest`): the
+  entity named is the collection, and the resolution means "that collection minus
+  the subset just singled out"
+- `entity` is the cluster id (entity ids, not candidate indices — a correct
+  answer that picked a different mention of the same object is still correct)
+- `antecedent_src` maps back to the caller's own candidate numbering (used by
+  the evaluator; `null` on the live path)
+- `evidence` records which rules fired, for debugging
+
+`refs.build(text, parser=True)` produces the `mentions` argument; any caller can
+substitute its own list as long as it has `surface`/`start`/`end`.
+
+## Evaluation protocol
+
+| set | what it is | use |
+|---|---|---|
+| `coref_standard.json` | 3,697 teacher-labelled occurrences (dev); 3,380 have a valid gold label after span repair | iterate freely |
+| `coref_benchmark.json` | 72 human-gold cases, 49 cards (test) | touch once per change |
+| `test_coref.py` | 16 golden/characterization tests over the rules | run before committing |
+
+Run `python coref/dataset_validation.py coref_standard.json` before trusting a dataset
+change. Both datasets now pass a source check: `coref_standard.json --source
+Standard.json` and `coref_dataset.json --source FDN.json` (every text/span is
+reproducible via `normalize_with_map`). The span repair moved 20 stale candidates
+and dropped 45 bogus ones; 15 labels that pointed at unrepairable spans are now
+`-1`.
+
+Scoring is **entity-aware**: build a union-find over the gold labels and accept a
+prediction if the picked mention shares a gold cluster with the gold antecedent.
+`--eval` also reports a **soft** figure: the teacher's chosen mention lies inside the
+entity we bound. The two differ by ~4 points on dev, because our canonical keeps the
+quantifier (`up to one target creature`) while the stored label is the shorter span
+(`target creature`) - same object, different span.
+Index-based scoring understates every method — 14% of gold antecedents have a
+same-surface twin.
+
+Known reference points (entity-aware, no leakage):
+
+| method | dev | human bench |
+|---|---|---|
+| nearest mention | — | 56% |
+| raw encoder attention (`resolve.py --eval`) | — | 67% |
+| deterministic rules (`rulecoref`, unified harness) | **90.1%** | **93.0%** |
+| frozen-encoder mention ranker (`train_head`) | — | 85% |
+| teacher (Qwen 27B) | 89% | 88% |
+
+## Caches
+
+All under `.cache/`, all invalidated by a content hash of what they depend on.
+Deleting the directory is always safe, never wrong — only slow.
+
+| file | key | contents |
+|---|---|---|
+| `seg_<data>_<setdata>.pkl` | data + loader | `(items, types, names, sets)` |
+| `sent_<data>_<preprocess>_<setdata>.pkl` | data + segmenter | segmented sentence list |
+| `parse_<grammar>.json` | grammar | `sentence → 1/0` (coverage) |
+| `ptree_<grammar>.json` | grammar + text | **one** record list per card text: spans + `role`/`verb`/`predicate`/`in_condition` |
+| `pmentions_<grammar>.json` | grammar + text | **legacy, read-only** span cache being migrated away from |
+| `enc_<model>_L<layer>.pkl` | model + layer | per-text hidden states (features) |
+| `label_cases/` | model + prompt | teacher responses |
+| `out_<data>_<grammar>_<interpret>_<setdata>_<preprocess>.json` | data + all text/parse logic | content-check interpreted output |
+
+`pmentions.precompute(texts, workers)` fills the span cache in parallel; it is
+eager (no progress until done) and the CPU cost is the Earley parse, so budget
+~30–40 s per long card divided by core count.
+
+## Rebuild status: done (drift 0)
+
+The unified cache is built and, after the `become_action` fix, rebuilds in **~35 min
+for the full dev corpus** (2,139 texts / 4,034 sentences) and **5m44s for FDN**
+(762 sentences), on 14 workers. Earlier it took **78.5 min on 27 workers**, and
+`python core/ptree.py --verify` reports **0 drifting texts** against the legacy span
+cache. Note the two traps the verifier caught:
+
+1. Comparing only *parsed* spans produces false drift — the legacy cache never
+   recorded whether a span came from the grammar or the regex fallback.
+2. `pmentions` fell back to regex when a parse **succeeded but produced no
+   mention node** (`If you do, that creature gains first strike…`). The merged
+   module initially only fell back on exceptions, which silently dropped those
+   mentions from the inventory. Fixed; `--rebuild-stale` re-parses just the
+   affected texts (295 texts, 15 min) instead of the whole corpus.
+
+Coverage after the rebuild:
+
+| metric | value |
+|---|---|
+| texts with at least one parsed mention | 1,758 / 2,497 (70.4%) |
+| texts parsed nowhere (regex fallback only) | 739 (29.6%) |
+| mention records with `role`/`verb` | 48.0% |
+| anaphors whose sentence yields structure | **58.0%** |
+
+## Original rebuild instructions
+
+`ptree`'s cache is empty right now, so the pipeline runs on the legacy span cache
+(read-through, spans only) and structural rules are inert. Rebuilding is ~1 hour
+of Earley on this host and invalidates nothing else:
+
+```bash
+python core/ptree.py --status                          # coverage of both caches
+python core/ptree.py --build --data FDN.json           # FDN (~770 cards)
+python core/ptree.py --build --sample coref_standard.json   # 2,141 dev cards
+python core/ptree.py --build --sample coref_dataset.json    # 261 more
+python core/ptree.py --verify                          # span drift vs legacy + structure coverage
+```
+
+`--verify` is the migration gate: it compares the new cache's mention spans
+against the legacy span cache for every shared text and exits non-zero on drift,
+then reports what fraction of mentions got a `role`, a governing `verb`, a
+`predicate` flag and an `in_condition` flag. Run it before trusting the rebuild.
+
+`--build` uses all cores minus one; `--workers N` overrides, `--limit N` does a
+strided sample. Safe to interrupt: the cache is written at the end of each
+`precompute` call, and a re-run only parses texts that are still missing.
+
+Until then:
+
+- `ptree.structure(text)` returns `[]` and never parses, so the evaluation path
+  cannot silently spend 30 s per card.
+- `rulecoref --structured-only` (which filters to cards with structure) returns
+  an empty set; drop that flag for normal evaluation.
+- The `drop-predicate-nominals` rule is inert, so expect dev ≈ 71.3% rather than
+  the ~72.8% the pilot suggests is reachable.
+
+After the rebuild, re-measure, then move to the subject-binding rule (possessive
+`their library` → the clause subject), which is the remaining structural win.
+
+## Ground rules
+
+- The deterministic path must not import torch. `resolve.py` and `train_head.py`
+  may; `refs.py`, `rulecoref.py`, `mentions.py`, `pmentions.py`, `anaphora.py`,
+  `preprocess.py`, `setdata.py` must not.
+- Every new stage is JSON-in / JSON-out so it can be ported (C++/Rust/Go).
+- Surface heuristics for syntactic role have been measured and **fail** — see
+  `docs/DETERMINISTIC-COREF.md` §4. Structural decisions need the tree, not a scan.
+- Structural features are *optional*: `rulecoref` looks up `pstruct`'s cache and
+  silently runs without them if a text is not cached. It never triggers a parse
+  on the evaluation path — rebuild the cache explicitly
+  (`python core/pstruct.py --sample coref_standard.json --limit 240`).

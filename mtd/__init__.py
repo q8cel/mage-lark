@@ -7,9 +7,15 @@ do not use this module as an implicit default for Standard/classic data.
 """
 
 import os
+import sys
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FDN = os.path.join(BASE, "FDN.json")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+from paths import data as _data_path  # noqa: E402
+
+FDN = _data_path("FDN.json")
 
 _data = None
 
