@@ -3,11 +3,12 @@
 import re
 from collections import Counter
 from preprocess import segment
-from mtd import all_oracle_text
+from mtd import all_oracle_text, name_set
 
 def items():
+    names = name_set()
     for name, text in all_oracle_text():
-        for it in segment(text):
+        for it in segment(text, names):
             yield it['text']
 
 def main():

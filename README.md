@@ -14,6 +14,7 @@ bundle (21 published sets, 22,196 sentences).
 
 ```bash
 source myenv/bin/activate          # Python 3.13, Lark 1.3.1
+# or: pip install -r requirements.txt
 
 python debug.py "Draw a card" "Tap an untapped creature you control"
 python run.py --data FDN.json                  # full coverage (cached, fast)
@@ -21,8 +22,12 @@ python run.py --data Standard.json --dump failures_std.txt
 python run.py --data Standard.json --sets OTJ,WOE     # subset of sets
 ```
 
+**Start here:** `PIPELINE.md` documents the full data flow, the canonical parser
+configurations (`larkparser.py`), the caches, and where the coreference pass sits.
+`DETERMINISTIC-COREF.md` documents the anaphora resolver design and numbers.
+
 `run.py` is the main entry point. It is **cached and parallel** (see
-*Performance*): a first Standard check takes ~15–20 min; any re-run with an
+*Performance*): a first Standard check takes ~25–35 min; any re-run with an
 unchanged grammar is near-instant.
 
 ## Layout
@@ -31,10 +36,11 @@ unchanged grammar is near-instant.
 |---|---|
 | `FDN.json` | Oracle text for all 771 Foundations cards |
 | `Standard.json` | (git-ignored) 21-set Standard rotation bundle from mtgjson |
-| `mtd/__init__.py` | FDN loader: `all_oracle_text()`, `card_type_set()`, `name_set()` |
+| `mtd/__init__.py` | FDN convenience accessors, backed by `setdata` |
 | `setdata.py` | Unified loader for FDN and mtgjson (bundle) formats |
 | `preprocess.py` | Strip reminders, split oracle into sentences, strip saga/leveler prefixes |
 | `grammar.lark` | The Lark grammar (Earley, `ambiguity='resolve'`) |
+| `larkparser.py` | Canonical parser factory (`interp` / `ptree` configurations) |
 | `interpret.py` | `Interpreter` — top-down tree walker, tree → typed dicts |
 | `transformer.py` | (legacy) Lark `Transformer` — superseded by `interpret.py` |
 | `run.py` | **Main runner**: cached + parallel coverage over a whole set/bundle |
@@ -43,9 +49,32 @@ unchanged grammar is near-instant.
 | `demo_output.py` | Show the **actual interpreted dicts** for example sentences/cards |
 | `content_check.py` | **Content-preservation** discovery: input content units vs. output |
 | `check_interp_grammar.py` | Static interpreter↔grammar rule-name sync checker |
-| `test_output.py` | 15 **golden output tests** (regression guard for the interpreter) |
+| `test_output.py` | 44 **golden output tests** (regression guard for the interpreter) |
 | `audit_output.py` | Flag suspicious outputs (empty dict, pronoun-as-type, …) |
 | `quick_test.py`, `analyze.py`, `vocab.py` | Sampling / corpus exploration helpers |
+| **Coreference (deterministic)** | |
+| `anaphora.py` | Lexical anaphor enumeration over raw text: `it/its/they/them/their`, `that X`, `the rest` |
+| `mentions.py` | Candidate mention spans: regex ∪ parser spans, bare pronouns filtered |
+| `ptree.py` | **The** parse: one tree per text (`keep_all_tokens=True` + `propagate_positions=True`) yielding mention spans **and** structure (`role`, `verb`, `predicate`, `in_condition`). Disk-cached, parallel precompute, regex fallback per unparseable segment |
+| `pmentions.py`, `pstruct.py` | Thin shims over `ptree`, kept for existing callers |
+| `refs.py` | Mention **inventory**: maximal-span cleaning + `head_type`, `number`, `definiteness`, `is_self`, `is_target`, `sentence`, `clause` |
+| `resolve_pipeline.py` | `--resolve` seam: rewrite -> re-parse -> interpret; measures how many anaphora markers disappear from the output |
+| `repair_dataset.py` | Repair the card-name clobbering in a labelled dataset (`~ch` -> `Search`) with span remapping |
+| `dataset_validation.py` | Validate span/gold invariants; `--source` checks `normalize_with_map` grounding |
+| `repair_dataset_spans.py` | Legacy span repair by nearest surface (only for datasets without source maps) |
+| `remap_dataset.py` | Deterministic rebuild of dataset texts/spans from source using `normalize_with_map` |
+| `coref_eval.py` | **Unified entity-aware evaluation** for rule and attention resolvers (same fixed candidate pool) |
+| `rulecoref.py` | **Deterministic resolver**: filters → possessive binding → recency → entity clustering → `rewritten_text` |
+| `test_coref.py` | 16 golden tests for the resolver (behaviour + documented limitations) |
+| `test_normalize_map.py` | Tests for normalized-text ↔ original-offset mapping |
+| `DETERMINISTIC-COREF.md` | Design analysis, measurements, rejected rules |
+| `COREF-AUDIT.md` | 20-card out-of-dev audit, fixed bugs, known inventory limitations |
+| **Coreference (experimental, needs torch)** | |
+| `label_cases.py` | Offline teacher harness: builds per-anaphor cases, labels with an LLM |
+| `validate_teacher.py` | Teacher agreement / candidate recall against human gold |
+| `train_head.py` | Frozen-encoder mention ranker (baseline comparator) |
+| `sweep_head.py` | Hyperparameter sweep for the ranker |
+| `resolve.py` | Attention-over-mentions baseline + `--eval` |
 
 ## Design
 
@@ -103,7 +132,13 @@ output. This is the discovery engine for *silent bugs* — it finds the
 ```bash
 python content_check.py classic.json          # % of parsed sentences that lose content
 python content_check.py classic.json --dump   # write all (unit, sentence) pairs to content_missing.tsv
-python test_output.py                         # golden tests: 15/15 must pass
+python test_output.py                         # golden tests: 44/44 must pass
+python dataset_validation.py coref_standard.json coref_dataset.json
+python dataset_validation.py coref_standard.json --source Standard.json
+python remap_dataset.py coref_standard.json --source Standard.json --dry-run
+python test_normalize_map.py
+python coref_eval.py --dataset coref_standard.json
+python coref_eval.py --bench --mentions regex
 python check_interp_grammar.py                # interpreter handlers vs. grammar rules
 ```
 
@@ -125,7 +160,7 @@ near-instant, via three layers:
    new key → only the corpus re-parses. The cache is shared across datasets
    (FDN texts that also appear in Standard are free).
 3. **Multiprocessing.** Unique uncached texts are parsed in a
-   `multiprocessing.Pool` (24 workers by default), each worker holding its own
+   `multiprocessing.Pool` (CPU count minus two by default), each worker holding its own
    compiled parser. Plus a load cache (70 MB file read once) and a
    segmentation cache (keyed by data + `preprocess.py` hash).
 
@@ -142,41 +177,48 @@ near-instant, via three layers:
 | `card_target` performance fix + batches | 89.9 % |
 | token / deal-damage / counter / verb batches | 93.8 % |
 | cast / spend / draw / search + event batches | 96.9 % |
-| copy / return / exile / Ward / trigger batches | **98.5 % (1,628/1,653, 25 failures)** |
+| copy / return / exile / Ward / trigger batches | 98.5 % (1,628/1,653, 25 failures) |
+| 2026 grammar batch: investigate, exile-all, can't-cast/activate, discard costs, ability words, token/keyword tails | 100.0 % (1,653/1,653, 0 failures) |
+| `attn` + `master` merged | **100.0 % (1,653/1,653, 0 failures)** |
 
-The 25 remaining FDN failures are all **unique** complex one-offs (multi-clause
-effects with internal commas, nested X-defs, "for each / for each other"
-distributions, "loses all abilities and is a X with base power and toughness"
-where the greedy leading `card_target` over-consumes). No common sub-pattern
-remains.
+FDN is fully covered. No common sub-pattern remains.
 
-**Standard generalization** (22,179 sentences, 21 sets):
+**Standard generalization** (22,217 sentences, 21 sets):
 
 | stage | coverage |
 |---|---|
 | as-tuned-on-FDN (no changes) | 62.7 % |
 | + open keyword fallback, "enters the battlefield", main-phase timing, "return … transformed", saga/leveler prefix strip | 70.0 % (15,541/22,196) |
-| + classic-set grammar work (walk keywords, tokens, can't/can, cost mods, loyalty effects, …) + name-normalization data fix | **71.7 % (15,902/22,179)** |
+| + classic-set grammar work (walk keywords, tokens, can't/can, cost mods, loyalty effects, …) + name-normalization data fix | 71.7 % (15,902/22,179) |
+| + investigate / can't-cast-activate / exile-all / discard-cost / event batches | 78.0 % (17,322/22,217) |
+| + high-frequency static phrases, gift/manifest, ability-word prefixes, token tails | 79.8 % (17,725/22,217) |
+| + ability-word triggered/static, empower/collect-evidence, stat tails, token-except | 80.7 % (17,933/22,217) |
+| + hyphenated keywords, cycle/cloak, enter-untapped, gain-control tails | 81.2 % (18,038/22,217) |
+| + devotion/greatest-power X-defs, life-loss events, draw-step triggers, cast-as-long | 81.4 % (18,077/22,217, 2,269 unique failures) |
+| + classic-focused batch: multi-zone searches, event/trigger tails, damage expressions, type lists | **84.9 % (18,854/22,217, 1,810 unique failures)** |
 
-The gap between FDN (98.5 %) and Standard (71.7 %) is the key finding. It is
+The gap between FDN (100.0 %) and Standard (84.9 %) is the key finding. It is
 **not** caused by hardcoded cases — the grammar has no card names, numbers, or
 colors baked in. It is caused by **FDN being a narrow set**: the 21 published
 sets use many more keywords, mechanics, and syntax constructions than FDN
 ever did. The remaining Standard failures are a long tail of distinct
-constructions (new keywords like `prepared`/`Job select`, `It's an X` type
-shifts, `the rest` distributions, modal instructions, `collect evidence` and
+constructions (finality-counter return clauses, Vehicle type changes,
+transform/emblem wording, `It's an X` type shifts, modal instructions, and
 other 2024–26 mechanics). Each is a separate, legitimate MTG pattern that FDN
 simply didn't exercise. Closing the gap means either adding those patterns or
 tuning on a more representative set.
 
-**Classic generalization** (4,279 sentences, 9 core sets: M10–M15 + M19–M21,
+**Classic generalization** (4,280 sentences, 9 core sets: M10–M15 + M19–M21,
 2,586 cards, downloaded via mtgjson): classic sets are a more representative
 test than FDN but predate the 2024–26 mechanics that dominate Standard.
 
 | stage | coverage |
 |---|---|
 | as-tuned-on-FDN (pre data-fix) | 76.3 % |
-| + basic-land/keyword name-normalization fix, walk keywords, token keywords, protection, can't/can patterns, phase/extra-turn, cost modifiers | **79.2 % (3,388/4,279, 609 unique failures)** |
+| + basic-land/keyword name-normalization fix, walk keywords, token keywords, protection, can't/can patterns, phase/extra-turn, cost modifiers | 79.2 % (3,388/4,279, 609 unique failures) |
+| + current grammar (ability words, investigate/can't/static/event batches, token/keyword tails, X-defs) | 90.8 % (3,888/4,280, 334 unique failures) |
+| + classic-focused batch: multi-zone searches, pile actions, event/trigger tails, damage expressions, additional mana, type lists | 94.1 % (4,028/4,280, 237 unique failures) |
+| + `attn` and `master` branches merged (audit loops 1-32 plus the master coverage batches) | **98.2 % (4,201/4,280, 79 unique failures)** |
 
 A **data bug** was the single biggest win: card names that were also basic-
 land or keyword vocabulary (Plains, Island, …, Lifelink, Trample, …) were

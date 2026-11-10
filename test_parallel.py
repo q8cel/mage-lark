@@ -18,10 +18,9 @@ _I = None
 
 def _init(grammar_path, types, names):
     global _P, _I
-    from lark import Lark
     from interpret import Interpreter
-    _P = Lark.open(grammar_path, parser='earley', start='start',
-                   ambiguity='resolve', keep_all_tokens=True)
+    from larkparser import build_parser
+    _P = build_parser("interp", grammar_path)
     _I = Interpreter(types=types, names=names)
 
 def _work(batch):
@@ -55,8 +54,8 @@ def main():
     items, types, names, sets = load(args.data)
     # segment each card's text into sentences
     work = []
-    for name, text in items:
-        for d in segment(text):
+    for name, text, _code in items:
+        for d in segment(text, names):
             s = d['text']
             if s and not d['modal']:
                 work.append((name, s))

@@ -11,9 +11,9 @@ Usage:
     python demo_output.py --cards 5               # first 5 fully-parsing cards
 """
 import sys, os, json
-from lark import Lark, LarkError
+from lark import LarkError
 BASE = os.path.dirname(os.path.abspath(__file__))
-GRAMMAR = os.path.join(BASE, 'grammar.lark')
+from larkparser import build_parser
 from setdata import load
 from preprocess import segment
 from interpret import Interpreter
@@ -37,8 +37,36 @@ def clean(o):
     if hasattr(o, 'value') and hasattr(o, 'type'): return str(o)
     return o
 
-def show(parser, interp, names, raw):
-    print(f"\n===== RAW: {raw}")
+def _resolve(raw, names):
+    """Deterministic anaphora pass -> (resolutions, rewritten text)."""
+    import refs, rulecoref
+    from anaphora import find_anaphors
+    from preprocess import normalize_names, strip_reminders
+    from setdata import normalize_text
+    text = normalize_text(raw, names)
+    res = rulecoref.resolve(text, refs.build(text), find_anaphors(text))
+    return res, text
+
+
+def show(parser, interp, names, raw, resolve=False, label=None):
+    rewritten = None
+    if resolve:
+        try:
+            res, text = _resolve(raw, names)
+            print(f"\n===== RAW:{' ' + label if label else ''} {raw}")
+            print("  resolutions:")
+            for a in res["anaphors"]:
+                ant = a["canonical"] or "?"
+                extra = " [set]" if a.get("set_valued") else ""
+                print(f"    {a['surface']!r:<18} -> {ant!r:<38} [{a['status']}]{extra}")
+            rewritten = res["rewritten_text"]
+            if rewritten != text:
+                print(f"  rewritten: {rewritten}")
+            raw = rewritten
+        except Exception as e:
+            print(f"  [resolve failed: {type(e).__name__}: {e}]")
+    else:
+        print(f"\n===== RAW:{' ' + label if label else ''} {raw}")
     for it in segment(raw, names):
         s = it['text']
         try:
@@ -59,6 +87,8 @@ def main():
         a = args[i]
         if a == '--data':
             data = args[i+1]; i += 1
+        elif a == '--resolve':
+            flags['resolve'] = True
         elif a == '--cards':
             flags['cards'] = True
             if i+1 < len(args) and args[i+1].isdigit():
@@ -70,9 +100,11 @@ def main():
         i += 1
 
     items, types, names, sets = load(data)
-    parser = Lark.open(GRAMMAR, parser='earley', start='start',
-                       ambiguity='resolve', keep_all_tokens=True)
+    parser = build_parser('interp')
     interp = Interpreter(types=types, names=names)
+
+    if flags.get('resolve'):
+        print("(--resolve: anaphora resolved deterministically before interpreting)")
 
     if flags.get('cards'):
         n = int(flags.get('ncards', 5))
@@ -86,12 +118,13 @@ def main():
                 try: parser.parse(d['text']); ok += 1
                 except LarkError: pass
             if ok != len(segs): continue      # only fully-parsing cards
-            show(parser, interp, names, f"[{name}] {text}")
+            show(parser, interp, names, text, resolve=flags.get("resolve", False),
+                 label=f"[{name}]")
             shown += 1
             if shown >= n: break
     else:
         for e in (examples if examples else BUILTIN):
-            show(parser, interp, names, e)
+            show(parser, interp, names, e, resolve=flags.get("resolve", False))
 
 if __name__ == '__main__':
     main()

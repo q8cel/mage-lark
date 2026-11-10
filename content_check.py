@@ -15,11 +15,11 @@ Usage:  python content_check.py classic.json
 import sys, os, re, json
 from collections import Counter
 from multiprocessing import Pool
-from functools import partial
 BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
-from lark import Lark, LarkError
+from lark import LarkError
 GRAMMAR = os.path.join(BASE, 'grammar.lark')
+from larkparser import build_parser
 from setdata import load
 from preprocess import segment, normalize_names
 from interpret import Interpreter
@@ -98,17 +98,33 @@ _ctx = None
 UNPARSED = "\x00unparsed"   # sentinel cache value for sentences that don't parse
 def init(t, n, kws):
     global _parser, _interp, _ctx
-    _parser = Lark.open(GRAMMAR, parser='earley', start='start',
-                        ambiguity='resolve', keep_all_tokens=True)
+    _parser = build_parser('interp')
     _interp = Interpreter(types=t, names=n)
     _ctx = (set(n), t, kws)
 
+def _contains_token(blob, token):
+    """True if `token` appears as a token, not as a substring of a longer unit."""
+    if token == '~':
+        return '~' in blob
+    if token.startswith('{') and token.endswith('}'):
+        return token in blob
+    if re.fullmatch(r'[+-]?(?:\d+|x)/[+-]?(?:\d+|x)', token, re.I):
+        return re.search(r'(?<![\d/])' + re.escape(token.lower()) + r'(?![\d/])',
+                         blob) is not None
+    return re.search(r'(?<![A-Za-z0-9_])' + re.escape(token)
+                     + r'(?![A-Za-z0-9_])', blob) is not None
+
+
 def present(u, blob):
-    if u in blob:
+    if _contains_token(blob, u):
         return True
-    # a number is preserved if its word form appears (e.g. "two" for "2")
-    if u.isdigit() and DIGIT_WORD.get(u, '') in blob:
-        return True
+    # A number is preserved if its word form appears (e.g. "two" for "2").
+    # Never use the empty string as a match: it made every number >= 21 (and
+    # 0) count as present regardless of the interpreted output.
+    if u.isdigit():
+        word = DIGIT_WORD.get(u)
+        if word and _contains_token(blob, word):
+            return True
     return False
 
 def work(sent):
@@ -145,17 +161,23 @@ def main():
         for seg in segment(text, names):
             if seg['text'] and seg['text'] not in seen and not seg['modal']:
                 seen.add(seg['text']); unique.append(seg['text'])
-    # output cache: keyed by grammar + interpret.py hashes; the first run
-    # populates it, later runs are instant until either file changes
+    # Output cache: keyed by everything that can change a normalized sentence
+    # or its interpretation (data, name/stopword logic, segmenter, grammar,
+    # interpreter).  Earlier keys omitted the data/loader hashes, so two sets
+    # could silently share a cache built with different name vocabularies.
     import hashlib
     def fhash(p):
         return hashlib.sha1(open(p, 'rb').read()).hexdigest()[:12]
     os.makedirs(os.path.join(BASE, '.cache'), exist_ok=True)
-    oc_path = os.path.join(BASE, '.cache',
-                           f'out_{fhash(GRAMMAR)}_{fhash(os.path.join(BASE, "interpret.py"))}.json')
+    key_parts = [fhash(data), fhash(GRAMMAR),
+                 fhash(os.path.join(BASE, 'interpret.py')),
+                 fhash(os.path.join(BASE, 'setdata.py')),
+                 fhash(os.path.join(BASE, 'preprocess.py'))]
+    oc_path = os.path.join(BASE, '.cache', 'out_' + '_'.join(key_parts) + '.json')
     oc = json.load(open(oc_path)) if os.path.exists(oc_path) else {}
     n_cached = sum(1 for s in unique if s in oc)
-    print(f'content-checking {len(unique)} unique sentences from {data}... ({n_cached} cached)')
+    print(f'content-checking {len(unique)} unique sentences from {data}... ({n_cached} cached)',
+          flush=True)
 
     todo = [s for s in unique if s not in oc]
     res = []
@@ -168,7 +190,9 @@ def main():
                            if not present(u, oc[s])]
                 res.append((1, s, missing, oc[s]))
     if todo:
-        with Pool(24, initializer=init, initargs=(types, names, kws)) as pool:
+        workers = max(1, (os.cpu_count() or 4) - 2)
+        print(f'  parsing {len(todo)} new sentence(s) with {workers} workers', flush=True)
+        with Pool(workers, initializer=init, initargs=(types, names, kws)) as pool:
             new = pool.map(work, todo, chunksize=8)
         for r in new:
             oc[r[1]] = r[3] if r[0] == 1 else UNPARSED
