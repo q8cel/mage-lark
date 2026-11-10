@@ -535,6 +535,12 @@ class Interpreter:
             to = to[7:]
         if to.lower().startswith('and '):
             to = to[4:]
+        # "Return to the battlefield <target> ... with mana value ...": keep the
+        # destination separate from the mana-value restriction.
+        cut = to.lower().find(' with mana value')
+        if cut > 0:
+            d['mana_value'] = to[cut + len(' with mana value'):].strip()
+            to = to[:cut]
         d['to'] = to
         ca = self._find_one(children, 'counter_amount')
         ck = self._find_one(children, 'counter_kind')
@@ -733,7 +739,11 @@ class Interpreter:
         return {'verb': 'explore'}
 
     def i_manifest_action(self, children):
-        return {'verb': 'manifest_dread'}
+        d = {'verb': 'manifest_dread'}
+        own = self._find_one(children, 'owner_subject')
+        if own is not None:
+            d['who'] = self._text(own.children).strip().replace(" 's", "'s")
+        return d
 
     def i_empower_action(self, children):
         d = self._card_action('empower', children, key='target')
@@ -888,7 +898,16 @@ class Interpreter:
         if kws is not None:
             d['keywords'] = self.interp(kws)
         else:
-            d['all_abilities'] = True
+            toks = [str(c).lower() for c in children if isinstance(c, Token)]
+            if 'types' in toks:
+                # "loses all creature types": the types are dropped, but the
+                # abilities are untouched.
+                kind = 'creature' if 'creature' in toks else (
+                    'land' if 'land' in toks else (
+                        'permanent' if 'permanent' in toks else None))
+                d['all_types'] = kind or True
+            else:
+                d['all_abilities'] = True
         return d
 
     def i_have_action(self, children):
@@ -1511,6 +1530,21 @@ class Interpreter:
                 inner = self.interp(ch)
         return {'verb': 'may', 'inner': inner}
 
+    def i_for_each_sentence(self, children):
+        d = {'verb': 'for_each'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            val = self.interp(ct)
+            if val:
+                d['on'] = val
+        at = self._find_one(children, 'any_text')
+        if at is not None:
+            d['text'] = self.interp(at)
+        eff = self._find_one(children, 'effect')
+        if eff is not None:
+            d['effect'] = self.interp(eff)
+        return d
+
     def i_cost_mod_action(self, children):
         d = {'verb': 'cost_mod'}
         ct = self._find_one(children, 'card_target')
@@ -1763,7 +1797,9 @@ class Interpreter:
         d = {'type': 'effect'}
         for ch in children:
             if isinstance(ch, Tree):
-                if ch.data == 'effect':
+                if ch.data == 'ability_word_prefix':
+                    d['ability_word'] = self._text(ch.children).strip()
+                elif ch.data == 'effect':
                     d['effect'] = self.interp(ch)
                 elif ch.data == 'xdef_clause':
                     d['xdef'] = self.interp(ch)

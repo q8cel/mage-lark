@@ -288,6 +288,38 @@ add("type-disjunction",
                                 and 'creature' in str(d.get('items')))
                   or d.get('card_type', {}).get('value')
                   == 'artifact or creature'))
+add("for-each-color",
+    "For each color among permanents you control, add one mana of that color",
+    lambda o: has(o, lambda d: d.get('verb') == 'for_each'
+                  and d.get('effect', {}).get('verb') == 'add_mana'))
+add("lose-all-creature-types",
+    "Target creature gets +3/-3 and loses all creature types until end of turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_keywords'
+                  and d.get('all_types') == 'creature'))
+add("owner-manifests-dread",
+    "When this Vehicle leaves the battlefield, the exiled card's owner manifests dread",
+    lambda o: has(o, lambda d: d.get('verb') == 'manifest_dread'
+                  and 'owner' in str(d.get('who', ''))))
+add("put-and-or-tokens",
+    "You may put a creature card and/or a land card from your hand onto the battlefield",
+    lambda o: has(o, lambda d: d.get('verb') == 'put'
+                  and d.get('zone') == 'battlefield'
+                  and len(d.get('cards', [])) == 2))
+add("return-to-battlefield-mv",
+    "Return to the battlefield target nonland permanent card in your graveyard with mana value less than or equal to the number of permanent cards in your graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'return'
+                  and 'mana_value' in d
+                  and d.get('to') == 'to the battlefield'))
+add("cost-less-to-activate-this",
+    "This ability costs {1} less to activate for each Island you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and d.get('amount') == '{1}'
+                  and d.get('direction') == 'less'))
+add("ability-word-effect",
+    "Fathomless descent \u2014 Return to the battlefield target nonland permanent card in your graveyard with mana value less than or equal to the number of permanent cards in your graveyard",
+    lambda o: has(o, lambda d: d.get('type') == 'effect'
+                  and str(d.get('ability_word', '')).startswith('Fathomless')
+                  and d.get('effect', {}).get('verb') == 'return'))
 add("if-decomposed", "If you control three or more creatures, draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'if' and 'condition' in d
                   and isinstance(d.get('effect'), dict)

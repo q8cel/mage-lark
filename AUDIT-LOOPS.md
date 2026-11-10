@@ -16,7 +16,9 @@ Loops 27-28 drew only anaphora-bearing cards. From loop 29 a loop samples every
 remaining anaphora-bearing card first (those are the most likely to expose a
 resolver error) and fills the rest of the twenty from the general pool, because
 the audit also looks for parser and interpreter errors (`FAIL`), not only for
-wrong antecedents.
+wrong antecedents. The anaphora-bearing pool of `Standard.json` was exhausted by
+loop 30, so loops 31+ are general parse/interpreter audits of uniformly sampled
+cards.
 
 ## Loop 1 — seed 20261023
 
@@ -1399,3 +1401,89 @@ Cards:
   2893/3380; unchanged from loop 28).
 - Bench: **95.8% regex** entity-aware / **84.5% exact** (unchanged).
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 31 — seed 20261122 (Standard.json)
+
+Cards:
+
+`Swarm, Being of Bees`, `Shadowy Backstreet`, `Gohn, Town of Ruin`,
+`Umbral Collar Zealot`, `Mutant Chain Reaction`, `Wild Pack Squad`,
+`Treeguard Duo`, `Attuned Hunter`, `Bloom Tender`,
+`Undercover Crocodelf`, `Nameless Inversion`, `Aloe Alchemist`,
+`Embrace the Paradox`, `Pym Technologies`, `Searslicer Goblin`,
+`Scales of Shale`, `Gigantic Big Bear`, `Unidentified Hovership`,
+`Michelangelo, Improviser`, `Joo Dee, One of Many`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Bloom Tender | `For each color among permanents you control, add one mana of that color` | `mana_amount` accepts `N mana of that color` |
+| Nameless Inversion | `loses all creature types until end of turn` | added the verb-object type-loss form |
+| Unidentified Hovership | `the exiled card's owner manifests dread` | `V_MANIFEST` accepts third-person `manifests`; `manifest_action` accepts an owner subject |
+| Michelangelo, Improviser | `put a creature card and/or a land card ... onto the battlefield` | added the `and/or` coordinated put form |
+
+### Interpreter fixes found and fixed
+
+- **`for_each_sentence`** had no handler, so `For each color ..., add one mana`
+  emitted a raw token list (including an empty `{}` for the optional target).
+  It now reports `{verb: for_each, text, effect}`.
+- **`loses all creature types`** reported `all_abilities: true`; it now reports
+  `all_types: "creature"`, which is what the card actually removes.
+- **`manifests dread`** dropped the owner subject; it is now the action's `who`.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py classic.json`: 122/122.
+- `test_coref.py`: 41/41 after cache rebuild.
+- Dev coreference: no regression (combined loop-32 figures are below).
+- Bench: **95.8% regex** entity-aware (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+
+## Loop 32 — seed 20261123 (Standard.json)
+
+Cards:
+
+`Temple of Malice`, `Waterwind Scout`, `Scrounge for Eternity`,
+`Earth Kingdom Jailer`, `Epic Downfall`, `Sunshower Druid`, `Cargo Ship`,
+`Squirming Emergence`, `Most Valuable Slayer`, `Nightdrinker Moroii`,
+`Fear of Missing Out`, `Archmage of Runes`, `Waterbending Scroll`,
+`Break Down the Door`, `Clarion Conqueror`, `Precise Redaction`,
+`Wary Watchdog`, `Hot Dog Cart`, `Coruscation Mage`, `Wretched Doll`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Squirming Emergence | `Fathomless descent — Return to the battlefield target ... with mana value less than or equal to ...` | added the destination-first return form with an X-definition restriction |
+| Waterbending Scroll | `This ability costs {1} less to activate ...` | `cost_subject` accepts `this ability` |
+| (loop 31) Michelangelo | see above | |
+| (loop 32 bonus) any ability-word effect line | `Fathomless descent — ...` had no prefix form | `effect_sentence` accepts an ability-word prefix and reports it as `ability_word` |
+
+### Interpreter fixes found and fixed
+
+- **Destination-first returns**: the mana-value restriction was glued into the
+  destination string; it is now a separate `mana_value` field, and `to` stays
+  `to the battlefield`.
+- **`for_each`** and the ability-word prefix are recorded instead of dropped.
+
+### Remaining limitations
+
+- **Ability-word triggered lines** (`Double — When you next cast ...`) are
+  parsed as triggered sentences; the ability word is consumed by the prefix and
+  not reported, unlike the effect-sentence path.
+- **Set-token type lists** keep their raw text but not normalized member spans
+  (see loop 30).
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence.
+- `test_output.py classic.json`: 122/122.
+- `test_coref.py`: 41/41 after cache rebuild.
+- Dev coreference: **91.4% entity-aware / 85.6% exact** (3091/3380,
+  2893/3380; unchanged from loop 30).
+- Bench: **95.8% regex** entity-aware / **84.5% exact** (unchanged).
+- `test_normalize_map.py`: 6/6; dataset span validation passes.
+- `quick_test.py -n 120`: 120/120 sentences parse (grammar-wide sanity check
+  after the ability-word prefix change).

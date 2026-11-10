@@ -256,7 +256,7 @@ kw_with_mod: MOD_KEYWORD (MANA+ | "for" card_target | "from" (colors | "instants
 // ----------------------------------------------------------------------------
 //  generic effect sentence
 // ----------------------------------------------------------------------------
-effect_sentence: ("Then" | "And" | "Otherwise" ",")? effect (xdef_clause)? (trailing_if | trailing_unless)?
+effect_sentence: ability_word_prefix? ("Then" | "And" | "Otherwise" ",")? effect (xdef_clause)? (trailing_if | trailing_unless)?
               | ("Then" | "And") if_sentence
 
 // ----------------------------------------------------------------------------
@@ -382,7 +382,7 @@ damage_reduce_action: "damage" any_text "reduces" "it" "to" amount "instead"
 assign_combat_action: card_target "assigns" "combat" "damage" "equal" "to" "its" "toughness" "rather" "than" "its" "power"
 gift_action: "Gift" ("a" | "an")? card_target
 explore_action: (V_IT)? "explore" "s"?
-manifest_action: V_MANIFEST "dread"
+manifest_action: (owner_subject)? V_MANIFEST "dread"
 empower_action: "empower" card_target number?
 collect_evidence_action: "collect" "evidence" amount
 cloak_action: V_CLOAK card_target ("from" zone)?
@@ -406,6 +406,7 @@ add_mana_action: (who)? V_ADD mana_amount
                 | (who)? V_ADD "an" "additional" "one" "mana" "of" "any" "color"
                 | (who)? V_ADD "an" "additional" MANA+
 mana_amount: "one" "mana" "of" "any" "color" | amount MANA
+           | amount "mana" "of" "that" "color"
            | amount "mana" "of" "any" "one" "color"
            | amount "mana" "in" "any" "combination" "of" "colors"
            | "one" "mana" "of" "the" "chosen" "color"
@@ -488,6 +489,7 @@ lose_life_action: who V_LOSE life_amount ("unless" any_text)?
                 | who V_LOSE "life" "equal" "to" ("its" | "their") ("mana" "value" | "power" | "toughness")
                 | player V_LOSE "life" "equal" "to" xdef
 lose_kw_action: lead? card_kind V_LOSE (kw_list | "all" ("other")? "abilities" | "all" "keyword" "abilities") ("until" ("end" "of" "turn" | "your" "next" "turn"))?
+              | card_target V_LOSE "all" ("creature" | "land" | "permanent") "types" ("until" ("end" "of" "turn" | "your" "next" "turn"))?
               | card_target V_LOSE "all" "abilities" ("until" "your" "next" "turn")?
 gain_poison_action: who V_GET amount "poison" "counters"
 
@@ -535,7 +537,8 @@ divided_rest: (ANYWORD | ",")+
 counter_spell_action: V_COUNTER card_target ("spell" | "ability")? ("with" any_text)? ("unless" any_text)?
                     | V_COUNTER "all" "spells" controller "and" "all" "abilities" controller
 
-return_action: V_RETURN "all" card_target "from" zone "to" "the" "battlefield" "under" "their" "owners'" "control"
+return_action: V_RETURN "to" "the" "battlefield" card_target ("from" zone)? ("with" "mana" "value" CMP xdef)?
+             | V_RETURN "all" card_target "from" zone "to" "the" "battlefield" "under" "their" "owners'" "control"
              | V_RETURN "all" types "and" types "card" "s"? "from" zone "to" "the" "battlefield" "under" "their" "owners'" "control"
              | V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands") ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" "with" counter_amount counter_kind "on" "it"
@@ -556,7 +559,8 @@ put_library_action: owner_subject V_PUT ("it" | card_target) "on" put_library_de
 put_library_dest: "their" "choice" "of" "the" "top" "or" "bottom" "of" "their" "library"
                 | "the" ("top" | "bottom") "of" "their" "library"
 owner_subject: ("Its" | "its" | "their" | "Their") ("owner" | "owners'") | card_target "'s" ("owner" | "owners'")
-put_zone_action: (who)? V_PUT card_target "into" zone (("second" | "third") "from" "the" "top")? order_mod?
+put_zone_action: (who)? V_PUT card_target "and/or" card_target "onto" "the" "battlefield"
+               | (who)? V_PUT card_target "into" zone (("second" | "third") "from" "the" "top")? order_mod?
                | (who)? V_PUT card_target "on" "the" "bottom" ("of" zone)? order_mod?
                | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
                | "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
@@ -742,7 +746,8 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | contr
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual* ("," "where" "X" "is" xdef)?
                | "The" WORD "cost" "is" "equal" "to" any_text
                | card_target V_COST "an" "additional" MANA+ "to" "cast"
-cost_subject: card_target "and" card_target ("you" "cast")?
+cost_subject: ("This" | "this") "ability"
+            | card_target "and" card_target ("you" "cast")?
             | card_target ("you" | "your opponents") "cast" ("that" "target" card_target)?
             | card_target ("you" "cast")?
             | ("activated" | "other" | "mana")? "abilities" "of" card_target
@@ -1040,7 +1045,7 @@ V_PAY: /\bpay(s?)\b/i
 V_UNTIL: /\buntil\b/i
 V_INVESTIGATE: /\binvestigate(s|d)?\b/i
 V_FLIP: /\bflip(s|ped)?\b/i
-V_MANIFEST: /\bmanifest\b/i
+V_MANIFEST: /\bmanifests?\b/i
 V_CYCLE: /\bcycle\b/i
 V_CLOAK: /\bcloak\b/i
 V_DOUBLE: /\bdouble\b/i
