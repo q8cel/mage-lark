@@ -238,11 +238,97 @@ def test_exempt(tmp):
     assert exempt_sid in json.load(open(b2))["sids"]
 
 
+def test_carry(tmp):
+    import csv as _csv
+    import hashlib
+    texts = ["Draw a card", "Draw two cards", "You gain 3 life"]
+    snap = os.path.join(tmp, "snap_carry.json")
+    build_snapshot(texts, snap)
+
+    root1 = os.path.join(tmp, "carry_r1")
+    ledger1 = os.path.join(root1, "ledger.csv")
+    assert run(REVIEW, "seed", "--snapshot", snap, "--out", ledger1).returncode == 0
+    claims = os.path.join(tmp, "carry_batch.json")
+    res = run(REVIEW, "batch", "--owner", "a1", "--n", "10",
+              "--out", claims, "--root", root1)
+    assert res.returncode == 0, res.stderr
+    sids = json.load(open(claims))["sids"]
+    assert len(sids) >= 3
+    for sid in sids:
+        assert run(REVIEW, "verdict", "--owner", "a1", "--sid", sid,
+                   "--verdict", "ok", "--root", root1).returncode == 0
+
+    carry_csv = os.path.join(tmp, "carry.csv")
+    res = run(REVIEW, "carry", "--root", root1, "--out", carry_csv)
+    assert res.returncode == 0, res.stderr
+    carried = list(_csv.DictReader(open(carry_csv)))
+    assert {r["sid"] for r in carried} == set(sids)
+    assert all(r["out_sha1"] for r in carried)
+
+    # mutate one output hash and add a new sentence
+    doc = json.load(open(snap))
+    changed_text = texts[0]
+    changed_sid = hashlib.sha1(changed_text.encode()).hexdigest()[:12]
+    unchanged_text = texts[1]
+    unchanged_sid = hashlib.sha1(unchanged_text.encode()).hexdigest()[:12]
+    doc["sentences"][changed_text]["out_sha1"] = "f" * 40
+    doc["sentences"]["Flying"] = {"out_sha1": "a" * 40, "shape_sha1": "b" * 40,
+                                  "cluster": "start(sentence($@))"}
+    doc["outputs"]["Flying"] = [{"type": "static_keyword"}]
+    snap2 = os.path.join(tmp, "snap_carry2.json")
+    write(doc, snap2)
+
+    root2 = os.path.join(tmp, "carry_r2")
+    ledger2 = os.path.join(root2, "ledger.csv")
+    res = run(REVIEW, "seed", "--snapshot", snap2, "--out", ledger2,
+              "--carry", carry_csv)
+    assert res.returncode == 0, res.stderr
+    summary = json.loads(res.stdout)["carry"]
+    assert summary["reopened"] == 1 and summary["kept"] >= 2 and summary["new"] == 1
+    rows = {r["sid"]: r for r in _csv.DictReader(open(ledger2))}
+    assert rows[changed_sid]["verdict"] == "todo"
+    assert rows[changed_sid]["note"].startswith("reopened: output changed (was ok)")
+    assert rows[unchanged_sid]["verdict"] == "ok"
+    new_sid = hashlib.sha1(b"Flying").hexdigest()[:12]
+    assert rows[new_sid]["verdict"] == "todo" and rows[new_sid]["note"] == ""
+
+    status = run(REVIEW, "status", "--root", root2)
+    assert status.returncode == 0
+    assert "reopened" in status.stdout
+    assert any(line.split()[-1] == "1" for line in status.stdout.splitlines()
+               if line.startswith("reopened "))
+
+    # conflicting duplicate verdicts make carry fail
+    root3 = os.path.join(tmp, "carry_r3")
+    ledger3 = os.path.join(root3, "ledger.csv")
+    run(REVIEW, "seed", "--snapshot", snap, "--out", ledger3)
+    sid0 = sorted(sids)[0]
+    os.makedirs(os.path.join(root3, "verdicts"), exist_ok=True)
+    for owner, verdict in (("x", "ok"), ("y", "bug")):
+        with open(os.path.join(root3, "verdicts", owner + ".csv"), "w") as fh:
+            fh.write("sid,verdict,note\n%s,%s,-\n" % (sid0, verdict))
+    res = run(REVIEW, "carry", "--root", root3, "--out",
+              os.path.join(tmp, "carry_conflict.csv"))
+    assert res.returncode != 0
+
+    # a partially written trailing row (no newline) must not break carry
+    root4 = os.path.join(tmp, "carry_r4")
+    run(REVIEW, "seed", "--snapshot", snap, "--out",
+        os.path.join(root4, "ledger.csv"))
+    os.makedirs(os.path.join(root4, "verdicts"), exist_ok=True)
+    with open(os.path.join(root4, "verdicts", "partial.csv"), "w") as fh:
+        fh.write("sid,verdict,note\n%s,ok,-\n%s,ok" % (sid0, sorted(sids)[1]))
+    res = run(REVIEW, "carry", "--root", root4, "--out",
+              os.path.join(tmp, "carry_partial.csv"))
+    assert res.returncode == 0, res.stderr
+    assert len(list(_csv.DictReader(open(os.path.join(tmp, "carry_partial.csv"))))) == 1
+
+
 def main():
     with tempfile.TemporaryDirectory() as tmp:
         for fn in (test_snapshot_deterministic, test_diff_classes,
                    test_review_flow, test_unparsed_priority,
-                   test_minority_priority, test_exempt):
+                   test_minority_priority, test_exempt, test_carry):
             with tempfile.TemporaryDirectory() as sub:
                 fn(sub)
             print("PASS", fn.__name__)

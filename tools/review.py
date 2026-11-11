@@ -23,6 +23,7 @@ Commands::
     review.py status
     review.py verdict --owner a1 --sid X --verdict bug|ok|legit|unparsed|inspected --note "..."
     review.py check   --owner a1
+    review.py carry   --out /tmp/carry.csv
 
 Every command takes ``--root`` so tests and parallel work can use separate
 directories.  Verdicts are only accepted for sids claimed by that owner.
@@ -132,7 +133,12 @@ def read_claims(p):
 
 
 def read_verdicts(p):
-    """{owner: {sid: (verdict, note)}}; rejects duplicate sids."""
+    """{owner: {sid: (verdict, note)}}; tolerates a partially written last row.
+
+    Writers hold LOCK_EX on the verdict file; a shared lock here makes the read
+    wait for an in-flight append.  A trailing line without a newline (a process
+    that does not lock) is dropped rather than parsed.
+    """
     out = {}
     if not os.path.isdir(p["verdicts"]):
         return out
@@ -140,16 +146,50 @@ def read_verdicts(p):
         if name.startswith(".") or not name.endswith(".csv"):
             continue
         owner = name[:-4]
+        path = os.path.join(p["verdicts"], name)
+        with open(path, newline="") as fh:
+            fcntl.flock(fh, fcntl.LOCK_SH)
+            try:
+                text = fh.read()
+            finally:
+                fcntl.flock(fh, fcntl.LOCK_UN)
+        if text and not text.endswith("\n"):
+            text = text.rsplit("\n", 1)[0]
         rows = {}
-        with open(os.path.join(p["verdicts"], name), newline="") as fh:
-            for row in csv.DictReader(fh):
-                sid = row.get("sid")
-                if not sid:
-                    continue
-                if sid in rows:
-                    sys.exit("duplicate verdict for sid %s in %s" % (sid, name))
-                rows[sid] = (row.get("verdict", ""), row.get("note", ""))
+        try:
+            parsed = list(csv.DictReader(io.StringIO(text)))
+        except csv.Error:
+            lines = text.splitlines(True)
+            parsed = list(csv.DictReader(io.StringIO("".join(lines[:-1])))) if lines else []
+        for row in parsed:
+            sid = row.get("sid")
+            if not sid:
+                continue
+            if sid in rows:
+                sys.exit("duplicate verdict for sid %s in %s" % (sid, name))
+            rows[sid] = (row.get("verdict", ""), row.get("note", ""))
         out[owner] = rows
+    return out
+
+
+def read_carry(path):
+    """{sid: (verdict, note, out_sha1)} from a ``carry`` CSV."""
+    out = {}
+    with open(path, newline="") as fh:
+        for row in csv.DictReader(fh):
+            sid = row.get("sid")
+            if not sid:
+                continue
+            verdict = row.get("verdict", "")
+            if verdict not in VERDICTS:
+                sys.exit("invalid carried verdict %r for sid %s" % (verdict, sid))
+            prev = out.get(sid)
+            if prev and prev[0] != verdict:
+                sys.exit("conflicting carried verdicts for sid %s: %r vs %r"
+                         % (sid, prev[0], verdict))
+            if prev is None or (not prev[1] and row.get("note")):
+                out[sid] = (verdict, row.get("note") or "",
+                            row.get("out_sha1") or "")
     return out
 
 
@@ -186,6 +226,24 @@ def seed(args):
     sentences = snap.get("sentences", {})
     unparsed = snap.get("unparsed", []) if args.include_unparsed else []
     exempt = read_exempt(args.exempt)
+    carried = read_carry(args.carry) if args.carry else {}
+    used = set()
+    outcome = Counter()
+
+    def decide(sid, out_sha1, default_verdict):
+        """(verdict, note, category) for one ledger row."""
+        old = carried.get(sid)
+        if old is None:
+            category = "inspected" if default_verdict == "inspected" else "new"
+            outcome[category] += 1
+            return default_verdict, "", category
+        used.add(sid)
+        verdict, note, old_out = old
+        if old_out == out_sha1:
+            outcome["kept"] += 1
+            return verdict, note, "kept"
+        outcome["reopened"] += 1
+        return "todo", "reopened: output changed (was %s)" % verdict, "reopened"
 
     clusters = defaultdict(list)
     for text, rec in sentences.items():
@@ -204,30 +262,35 @@ def seed(args):
         sid = sid_of(rep)
         _check_sid(sid_map, sid, rep)
         cid = cid_of(cluster)
+        verdict, note, _ = decide(
+            sid, sentences[rep]["out_sha1"],
+            "inspected" if sid in exempt else "todo")
         rows.append({"sid": sid, "cid": cid, "role": "majority",
                      "sentence": rep, "out_sha1": sentences[rep]["out_sha1"],
                      "shape_sha1": majority_shape,
-                     "verdict": "inspected" if sid in exempt else "todo",
-                     "note": ""})
+                     "verdict": verdict, "note": note})
         for text in members:
             if sentences[text]["shape_sha1"] == majority_shape:
                 continue
             sid = sid_of(text)
             _check_sid(sid_map, sid, text)
+            verdict, note, _ = decide(
+                sid, sentences[text]["out_sha1"],
+                "inspected" if sid in exempt else "todo")
             rows.append({"sid": sid, "cid": cid, "role": "minority",
                          "sentence": text, "out_sha1": sentences[text]["out_sha1"],
                          "shape_sha1": sentences[text]["shape_sha1"],
-                         "verdict": "inspected" if sid in exempt else "todo",
-                         "note": ""})
+                         "verdict": verdict, "note": note})
     for text in sorted(unparsed):
         sid = sid_of(text)
         if sid in sid_map:
             continue
         _check_sid(sid_map, sid, text)
+        verdict, note, _ = decide(sid, "",
+                                  "inspected" if sid in exempt else "todo")
         rows.append({"sid": sid, "cid": "", "role": "unparsed",
                      "sentence": text, "out_sha1": "", "shape_sha1": "",
-                     "verdict": "inspected" if sid in exempt else "todo",
-                     "note": ""})
+                     "verdict": verdict, "note": note})
 
     rows.sort(key=lambda r: (r["role"] != "unparsed", r["cid"], r["role"], r["sentence"]))
     out = args.out or os.path.join(args.root, "ledger.csv")
@@ -253,9 +316,18 @@ def seed(args):
                    "generated": time.strftime("%Y-%m-%dT%H:%M:%S")}, fh)
     counts = Counter(r["role"] for r in rows)
     inspected = sum(1 for row in rows if row["verdict"] == "inspected")
+    dropped = sorted(set(carried) - used)
+    if dropped:
+        print("warning: %d carried sids are not in the new snapshot"
+              % len(dropped), file=sys.stderr)
     print(json.dumps({"ledger": out, "rows": len(rows),
                       "clusters": len(clusters), "roles": dict(counts),
                       "inspected": inspected, "exempt_sids": len(exempt),
+                      "carry": {"kept": outcome.get("kept", 0),
+                                "reopened": outcome.get("reopened", 0),
+                                "new": outcome.get("new", 0),
+                                "inspected": outcome.get("inspected", 0),
+                                "dropped": len(dropped)},
                       "unparsed_in_snapshot": len(unparsed)}, indent=1))
     return 0
 
@@ -424,6 +496,9 @@ def status(args):
     print("%-10s %8s" % ("state", "total"))
     for state in ("todo", "claimed", "ok", "bug", "legit", "unparsed", "inspected"):
         print("%-10s %8d" % (state, states.get(state, 0)))
+    reopened = sum(1 for row in ledger
+                   if (row.get("note") or "").startswith("reopened:"))
+    print("%-10s %8d" % ("reopened", reopened))
     if per_owner:
         owners = sorted(per_owner)
         print("\n%-10s %8s  %s" % ("owner", "claimed", "states"))
@@ -490,6 +565,65 @@ def verdict(args):
 
 
 # ---------------------------------------------------------------------- check
+def carry(args):
+    """Join the current ledger with every verdict file.
+
+    Output rows are ``sid,verdict,note,out_sha1`` where ``out_sha1`` is the
+    output the verdict judged (from ledger.csv).  Refuses on conflicting
+    verdicts for the same sid.
+    """
+    p = paths_for(args.root)
+    ledger = read_ledger(p)
+    rows = {row["sid"]: row for row in ledger}
+    verdicts = read_verdicts(p)
+
+    merged = {}
+    conflicts = []
+    for owner in sorted(verdicts):
+        for sid, (verdict, note) in sorted(verdicts[owner].items()):
+            if verdict not in VERDICTS:
+                sys.exit("invalid verdict %r for sid %s in %s"
+                         % (verdict, sid, owner))
+            current = merged.get(sid)
+            if current is not None and current[0] != verdict:
+                conflicts.append((sid, current[0], verdict, owner))
+                continue
+            if current is None or (not current[1] and note):
+                merged[sid] = (verdict, note)
+    if conflicts:
+        print("ERROR: conflicting verdicts for %d sid(s):" % len(conflicts),
+              file=sys.stderr)
+        for sid, first, second, owner in conflicts:
+            print("  %s: %s vs %s (%s)" % (sid, first, second, owner),
+                  file=sys.stderr)
+        return 1
+
+    out_rows, orphans = [], []
+    for sid, (verdict, note) in sorted(merged.items()):
+        row = rows.get(sid)
+        if row is None:
+            orphans.append(sid)
+            continue
+        out_rows.append({"sid": sid, "verdict": verdict, "note": note,
+                         "out_sha1": row.get("out_sha1", "")})
+
+    os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
+    tmp = args.out + ".tmp"
+    with open(tmp, "w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=["sid", "verdict", "note",
+                                                "out_sha1"])
+        writer.writeheader()
+        writer.writerows(out_rows)
+    os.replace(tmp, args.out)
+    if orphans:
+        print("warning: %d verdicts have no ledger row and were not carried: %s"
+              % (len(orphans), ", ".join(orphans[:10])), file=sys.stderr)
+    print(json.dumps({"out": args.out, "rows": len(out_rows),
+                      "owners": sorted(verdicts), "orphans": len(orphans)},
+                     indent=1))
+    return 0
+
+
 def check(args):
     p = paths_for(args.root)
     ledger = read_ledger(p)
@@ -531,6 +665,8 @@ def main(argv=None):
     s.add_argument("--no-unparsed", dest="include_unparsed", action="store_false")
     s.add_argument("--exempt", default=None,
                    help="sid<TAB>corpora file already read by the audit loops")
+    s.add_argument("--carry", default=None,
+                   help="carry CSV from the previous ledger (see `carry`)")
 
     b = sub.add_parser("batch", help="claim todo sids and write a batch")
     b.add_argument("--owner", required=True)
@@ -555,13 +691,18 @@ def main(argv=None):
     v.add_argument("--note", default="")
     v.add_argument("--root", default="review")
 
+    cr = sub.add_parser("carry", help="join ledger + verdicts for the next seed")
+    cr.add_argument("--root", default="review")
+    cr.add_argument("--out", required=True,
+                    help="carry CSV to write (never under review/)")
+
     c = sub.add_parser("check", help="every claimed sid has exactly one verdict")
     c.add_argument("--owner", required=True)
     c.add_argument("--root", default="review")
 
     args = ap.parse_args(argv)
     return {"seed": seed, "batch": batch, "status": status,
-            "verdict": verdict, "check": check}[args.cmd](args)
+            "verdict": verdict, "check": check, "carry": carry}[args.cmd](args)
 
 
 if __name__ == "__main__":
