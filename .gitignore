@@ -16,3 +16,10 @@ myenv/
 content_missing.tsv
 crosscheck_missing.tsv
 invariant_flags.tsv
+
+# review ledger state (generated/scratch; verdicts are tracked)
+review/*/ledger.csv
+review/*/claims/
+review/*/batches/
+review/*/meta.json
+review/*/occurrences.json
