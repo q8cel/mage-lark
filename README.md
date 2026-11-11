@@ -211,6 +211,18 @@ near-instant, via three layers:
    compiled parser. Plus a load cache (70 MB file read once) and a
    segmentation cache (keyed by data + `preprocess.py` hash).
 
+Under the caches sits the parser cost itself. Lark expands every `(...)?` into a
+copy of its parent rule, so `grammar.lark` used to compile to **9,644 rules**, and
+Earley predicted the whole rule set at every chart position: ~1.8 s for *one
+token*, ~8 s for a 15-word sentence. `core/grammar_hoist.py` moves each optional
+into its own helper rule (linear instead of exponential) before Lark sees the
+grammar: **2,803 rules**, build 4.9 s → 0.5 s, `Flying` 1.81 s → 0.09 s, a
+15-word sentence 8.2 s → 0.46 s, and **5.72 s → 0.34 s per real corpus sentence
+(16.8x)**. Coverage and parse trees are unchanged; `docs/HOIST-SHIFTS.md` lists
+the 29 sentences where ambiguity resolution picks a different (mostly richer)
+analysis; see `docs/PIPELINE.md` → *optionals are exponential*.
+`MLARK_RAW_GRAMMAR=1` restores the untransformed grammar.
+
 ## Status
 
 **FDN coverage** (1,653 sentences):

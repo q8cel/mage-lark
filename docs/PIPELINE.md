@@ -156,6 +156,57 @@ add. Prefer closed alternatives; if a family of phrases is genuinely open-ended,
 it in its own *sentence-level* alternative that fails on its first token rather than
 in the tail of a rule shared by everything.
 
+## Grammar performance: optionals are exponential (the hoisting pass)
+
+The second, much larger cost was not `any_text` but the number of *rules* Lark
+produces. ``(a b)?`` inside a rule is not a rule of its own: `EBNF_to_BNF.maybe`
+emits both alternatives, and `SimplifyRule_Visitor.expansion` unpacks them into
+the parent. A parent with *n* optionals compiles to 2^n copies of itself:
+
+| rule | written alternatives | Lark rules |
+|---|---|---|
+| `search_action` | 10 | 2,706 |
+| `cant_action` | 9 | 897 |
+| `cast_action` | 6 | 602 |
+| whole grammar | ~700 | **9,644** |
+
+Lark's Earley parser precomputes, per nonterminal, *every reachable rule*
+(`GrammarAnalyzer.expand_rule`), and the predictor adds all of them at each chart
+position. Almost everything is reachable from `start`, so every position's item
+set is the entire grammar — hence a fixed ~1.8 s per parse no matter the input
+(`Flying` = 1.78 s, a *failing* 3-token parse = 0.91 s, 15 words = 8.0 s).
+
+`core/grammar_hoist.py` rewrites the grammar before it is handed to Lark: every
+optional (`( ... )?` group or single-atom `X?`) is moved into its own helper rule
+`_opt_N` with two alternatives (body, empty). The parent keeps one alternative,
+so growth is linear. Helpers start with `_`, so Lark splices their children into
+the parent and the parse tree keeps its shape.
+
+| metric | before | after |
+|---|---|---|
+| grammar rules | 9,644 | 2,803 |
+| parser build (per process) | 4.9 s | 0.5 s |
+| `Flying` | 1.81 s | 0.09 s |
+| `Draw a card` | 2.86 s | 0.20 s |
+| 15-word sentence | 8.17 s | 0.46 s |
+
+The hoisted grammar is derived and cached in `.cache/grammar_hoisted_<v>_<hash>.lark`;
+`grammar.lark` stays the source of truth, and every cache that keys on the grammar
+hash still sees the *source* hash. Set `MLARK_RAW_GRAMMAR=1` to parse with the
+untransformed grammar (only to reproduce pre-hoist behaviour).
+
+Hoisting cannot change the *language* (both alternatives of every optional are
+kept), but it does renumber rules, and the grammar is genuinely ambiguous in a
+few places, so `ambiguity='resolve'` may pick a different winning alternative.
+Measured over all 2,148 unique `classic.json` sentences: identical coverage
+(2,074), content loss 5.4 % -> 5.2 %, and 29 sentences (1.4 %) whose interpreted
+output changed — every one reviewed, listed in `docs/HOIST-SHIFTS.md`.
+The affected shapes were reviewed and normalised in the interpreter — a bare
+pronoun (`{"this_that": "it"}` vs a `card_kind` anaphora ref), an event with no
+object (`{}` vs `""`), a token's `for each` tail (was mislabelled `attached_to`),
+wrapped `search_target` card targets, and an ability word left in the trigger
+keywords — so interpreted output is unchanged corpus-wide.
+
 ## Where coreference sits
 
 `rulecoref` is a **post-segmentation discourse pass, parallel to interpretation —

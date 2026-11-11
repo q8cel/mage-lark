@@ -273,7 +273,13 @@ class Interpreter:
         return self._text(children)
 
     def i_this_that(self, children):
-        return self._text(children)
+        # A bare pronoun reaches card_target either through this_that or through
+        # card_kind, depending on which alternative the parser resolves.  Report
+        # both the same way: an anaphora reference, never a card type.
+        text = self._text(children)
+        if text.lower() in self.ANAPHORA:
+            return {'ref': 'anaphora', 'raw': text}
+        return text
 
     def i_possessive(self, children):
         return self._text(children)
@@ -400,7 +406,15 @@ class Interpreter:
         if 'controller' in toks:
             return 'its controller'
         first = children[0]
-        return self.interp(first) if isinstance(first, Tree) else first
+        val = self.interp(first) if isinstance(first, Tree) else first
+        # A `who` slot can be filled by an unrelated leading word that the parser
+        # had no other home for ("Then copy that spell" -> who = types 'Then').
+        # A target made of a single unresolved type word is never a who.
+        if (isinstance(val, dict) and set(val) == {'card_type'}
+                and isinstance(val['card_type'], dict)
+                and val['card_type'].get('note') == 'unresolved'):
+            return None
+        return val
 
     # ------------------------------------------------------------------ effect / actions
     def i_effect(self, children):
@@ -1388,6 +1402,7 @@ class Interpreter:
 
     def _token_tail(self, ch, d):
         """Extract 'with <kw>' / 'named X' / 'tapped' / zone from a token_tail."""
+        seen_for_each = False
         for sub in ch.children:
             if isinstance(sub, Tree):
                 if sub.data == 'kw_list':
@@ -1395,11 +1410,16 @@ class Interpreter:
                 elif sub.data == 'in_zone':
                     d['zone'] = self.interp(sub)
                 elif sub.data == 'card_target':
-                    # "a Role token attached to <target>"
-                    d['attached_to'] = self.interp(sub)
+                    # "a Role token attached to <target>" / "... for each <target>"
+                    if seen_for_each:
+                        d['for_each'] = self.interp(sub)
+                    else:
+                        d['attached_to'] = self.interp(sub)
             elif isinstance(sub, Token):
                 if sub.value.lower() == 'tapped':
                     d['tapped'] = True
+                elif sub.value.lower() == 'each':
+                    seen_for_each = True
                 if sub.type == 'CARDNAME':
                     d.setdefault('named', []).append(sub.value)
 
@@ -1464,10 +1484,17 @@ class Interpreter:
 
     def i_search_action(self, children):
         d = {'verb': 'search'}
+        cards = []
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'card_target':
-                    d['card'] = self.interp(ch)
+                    cards.append(self.interp(ch))
+                elif ch.data == 'search_target':
+                    # The target may be wrapped: one or more card_targets joined by
+                    # and/or/comma.  Collect in document order; the last one is the
+                    # card actually named ("a card named ~ or ~").
+                    cards.extend(self.interp(c) for c in ch.children
+                                 if isinstance(c, Tree) and c.data == 'card_target')
                 elif ch.data == 'amount':
                     d['amount'] = self.interp(ch)
                 elif ch.data in ('zone', 'in_zone'):
@@ -1478,6 +1505,12 @@ class Interpreter:
                         if isinstance(zc, Tree) and zc.data in ('zone', 'in_zone'):
                             d['zone'] = self.interp(zc)
                             break
+        if cards:
+            # An empty card_target is a parser artefact, not the searched card
+            # (it can appear as a list separator's optional slot).
+            real = [c for c in cards if c]
+            if real:
+                d['card'] = real[-1]
         if 'zone' not in d:
             z = self._zone_from_tokens(children)
             if z is not None:
@@ -1702,7 +1735,10 @@ class Interpreter:
         for ch in children:
             if isinstance(ch, Tree):
                 return self.interp(ch)
-        return self._text(children)
+        # An event with no object ("Whenever this creature attacks").  Lark's optional
+        # expansion can either omit the slot or leave an empty placeholder node behind;
+        # both must mean the same thing, so return the empty object rather than ''.
+        return self._text(children) if children else {}
 
     def i_condition(self, children):
         return self.interp(children[0]) if children else None
@@ -1724,9 +1760,12 @@ class Interpreter:
 
     def i_trigger_clause(self, children):
         d = {}
+        leading = []          # ability word: "Landfall — Whenever ..."
+        seen_when = False
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'trig_when':
+                    seen_when = True
                     d['when'] = self.interp(ch)
                 elif ch.data == 'event':
                     d['event'] = self.interp(ch)
@@ -1741,7 +1780,14 @@ class Interpreter:
                     else:
                         d['text'] = val
             elif isinstance(ch, Token):
-                d.setdefault('keywords', []).append(ch.value)
+                if ch.value == '\u2014' or ch.type == 'EMDASH':
+                    continue
+                if seen_when:
+                    d.setdefault('keywords', []).append(ch.value)
+                else:
+                    leading.append(ch.value)
+        if leading:
+            d['ability_word'] = ' '.join(leading)
         return d
 
     def i_triggered_sentence(self, children):

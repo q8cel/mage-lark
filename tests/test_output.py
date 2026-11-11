@@ -464,6 +464,34 @@ add("spend-mana-cast-or-activate",
     "Spend this mana only to cast artifact spells or activate abilities of artifacts",
     lambda o: has(o, lambda d: d.get('verb') == 'spend_mana_only_to_cast'))
 
+# --- shapes that Lark's optional expansion used to hide (grammar hoisting) ---
+# Each of these was produced two different ways depending on which alternative
+# the parser resolved; the interpreter now reports one canonical shape.
+add("pronoun-is-anaphora",
+    "It gains haste until end of turn",
+    lambda o: has(o, lambda d: d.get('ref') == 'anaphora' and d.get('raw')))
+add("event-without-object",
+    "Whenever this creature attacks, it gets +1/+1 until end of turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'attacks' and d.get('object') == {}))
+add("token-for-each",
+    "Create a 2/2 green Wolf creature token for each Forest you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'create_token'
+                  and isinstance(d.get('token'), dict)
+                  and d['token'].get('for_each', {}).get('card_type', {})
+                       .get('value') == 'Forest'))
+add("trigger-ability-word",
+    "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Saproling creature token",
+    lambda o: has(o, lambda d: d.get('ability_word') == 'Landfall'
+                  and d.get('when') == 'Whenever'))
+add("search-named-target",
+    "{2}, {T}: Search your library for a card named ~ or ~, put it onto the battlefield tapped, then shuffle",
+    lambda o: has(o, lambda d: d.get('verb') == 'search' and d.get('card')))
+add("counter-with-modifier",
+    "Counter target spell with mana value X",
+    lambda o: has(o, lambda d: d.get('verb') == 'counter'
+                  and isinstance(d.get('spell'), dict)
+                  and 'mana value X' in str(d['spell'].get('modifier'))))
+
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'
     items, types, card_names, sets = load(data)
