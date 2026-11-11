@@ -13,7 +13,7 @@ Layout under ``--root`` (default ``review/``)::
     meta.json               corpus, snapshot path, counts
     occurrences.json        sentence -> occurrence count (from the snapshot)
     claims/<owner>.txt      one sid per line
-    verdicts/<owner>.csv    sid,verdict,note (append-only)
+    verdicts/<owner>.csv    sid,verdict,note (append-only log; last row wins)
     batches/<owner>.json    last batch handed to an owner
 
 Commands::
@@ -165,10 +165,23 @@ def read_verdicts(p):
             sid = row.get("sid")
             if not sid:
                 continue
-            if sid in rows:
-                sys.exit("duplicate verdict for sid %s in %s" % (sid, name))
+            # append-only log: the last row for a sid is the effective verdict
             rows[sid] = (row.get("verdict", ""), row.get("note", ""))
         out[owner] = rows
+
+    # A sid may only be verdicted by one owner.  Repeats inside one owner's log
+    # are the reopen path; two *different* verdicts from different owners are a
+    # real conflict.
+    seen = {}
+    for owner, rows in out.items():
+        for sid, (verdict, _note) in rows.items():
+            prev = seen.get(sid)
+            if prev is None:
+                seen[sid] = (verdict, owner)
+            elif prev[0] != verdict:
+                sys.exit("conflicting verdicts for sid %s across owners: "
+                         "%s (%s) vs %s (%s)"
+                         % (sid, prev[0], prev[1], verdict, owner))
     return out
 
 
@@ -550,14 +563,6 @@ def verdict(args):
     by_sid, by_owner = read_claims(p)
     if args.owner not in by_sid.get(args.sid, []):
         sys.exit("sid %s is not claimed by %s" % (args.sid, args.owner))
-    verdicts = read_verdicts(p)
-    existing = verdicts.get(args.owner, {}).get(args.sid)
-    if existing:
-        if existing[0] == args.verdict:
-            print("already recorded: %s %s" % (args.sid, args.verdict))
-            return 0
-        sys.exit("conflicting verdict: sid %s already %r for %s"
-                 % (args.sid, existing[0], args.owner))
     path = os.path.join(p["verdicts"], args.owner + ".csv")
     _append_verdict(path, args.sid, args.verdict, args.note or "")
     print("recorded %s %s" % (args.sid, args.verdict))
@@ -577,26 +582,16 @@ def carry(args):
     rows = {row["sid"]: row for row in ledger}
     verdicts = read_verdicts(p)
 
+    # read_verdicts already rejects different verdicts from different owners.
     merged = {}
-    conflicts = []
     for owner in sorted(verdicts):
         for sid, (verdict, note) in sorted(verdicts[owner].items()):
             if verdict not in VERDICTS:
                 sys.exit("invalid verdict %r for sid %s in %s"
                          % (verdict, sid, owner))
             current = merged.get(sid)
-            if current is not None and current[0] != verdict:
-                conflicts.append((sid, current[0], verdict, owner))
-                continue
             if current is None or (not current[1] and note):
                 merged[sid] = (verdict, note)
-    if conflicts:
-        print("ERROR: conflicting verdicts for %d sid(s):" % len(conflicts),
-              file=sys.stderr)
-        for sid, first, second, owner in conflicts:
-            print("  %s: %s vs %s (%s)" % (sid, first, second, owner),
-                  file=sys.stderr)
-        return 1
 
     out_rows, orphans = [], []
     for sid, (verdict, note) in sorted(merged.items()):

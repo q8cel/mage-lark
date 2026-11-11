@@ -133,12 +133,11 @@ def test_review_flow(tmp):
     res = run(REVIEW, "verdict", "--owner", "a1", "--sid", sid,
               "--verdict", "ok", "--root", root)
     assert res.returncode == 0, res.stderr
-    # idempotent
+    # appending again is allowed; the last row wins (reopen path)
     assert run(REVIEW, "verdict", "--owner", "a1", "--sid", sid,
                "--verdict", "ok", "--root", root).returncode == 0
-    # conflicting verdict rejected
     assert run(REVIEW, "verdict", "--owner", "a1", "--sid", sid,
-               "--verdict", "bug", "--root", root).returncode != 0
+               "--verdict", "bug", "--root", root).returncode == 0
     # unclaimed sid rejected
     other_sid = sorted(s2 - s1)[0]
     assert run(REVIEW, "verdict", "--owner", "a1", "--sid", other_sid,
@@ -152,6 +151,9 @@ def test_review_flow(tmp):
     for sid in sorted(s1):
         run(REVIEW, "verdict", "--owner", "a1", "--sid", sid,
             "--verdict", "legit", "--root", root)
+    # but a sid the owner never claimed is still rejected
+    assert run(REVIEW, "verdict", "--owner", "a1", "--sid", other_sid,
+               "--verdict", "ok", "--root", root).returncode != 0
     assert run(REVIEW, "check", "--owner", "a1", "--root", root).returncode == 0
 
     # tampered overlap must be detected loudly
@@ -236,6 +238,33 @@ def test_exempt(tmp):
               "--root", root, "--exempt", exempt_path, "--include-exempt")
     assert res.returncode == 0, res.stderr
     assert exempt_sid in json.load(open(b2))["sids"]
+
+
+def test_last_verdict_wins(tmp):
+    import csv as _csv
+    texts = ["Draw a card", "You gain 3 life"]
+    snap = os.path.join(tmp, "snap_last.json")
+    build_snapshot(texts, snap)
+    root = os.path.join(tmp, "last_r")
+    ledger = os.path.join(root, "ledger.csv")
+    assert run(REVIEW, "seed", "--snapshot", snap, "--out", ledger).returncode == 0
+    b = os.path.join(tmp, "last_batch.json")
+    assert run(REVIEW, "batch", "--owner", "a1", "--n", "1",
+               "--out", b, "--root", root).returncode == 0
+    sid = json.load(open(b))["sids"][0]
+    assert run(REVIEW, "verdict", "--owner", "a1", "--sid", sid,
+               "--verdict", "ok", "--root", root).returncode == 0
+    assert run(REVIEW, "verdict", "--owner", "a1", "--sid", sid,
+               "--verdict", "bug", "--root", root).returncode == 0
+    log = list(_csv.DictReader(open(os.path.join(root, "verdicts", "a1.csv"))))
+    assert [r["verdict"] for r in log if r["sid"] == sid] == ["ok", "bug"]
+    carry_csv = os.path.join(tmp, "last_carry.csv")
+    assert run(REVIEW, "carry", "--root", root, "--out", carry_csv).returncode == 0
+    carried = {r["sid"]: r["verdict"] for r in _csv.DictReader(open(carry_csv))}
+    assert carried[sid] == "bug"
+    assert run(REVIEW, "check", "--owner", "a1", "--root", root).returncode == 0
+    status = run(REVIEW, "status", "--root", root)
+    assert status.returncode == 0
 
 
 def test_carry(tmp):
@@ -328,7 +357,8 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for fn in (test_snapshot_deterministic, test_diff_classes,
                    test_review_flow, test_unparsed_priority,
-                   test_minority_priority, test_exempt, test_carry):
+                   test_minority_priority, test_exempt, test_last_verdict_wins,
+                   test_carry):
             with tempfile.TemporaryDirectory() as sub:
                 fn(sub)
             print("PASS", fn.__name__)
