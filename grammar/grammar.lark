@@ -11,7 +11,9 @@ start: sentence+
 // ----------------------------------------------------------------------------
 //  sentence dispatch (deterministic by prefix)
 // ----------------------------------------------------------------------------
-sentence: loyalty_sentence
+sentence: prefixed_static
+        | spree_sentence
+        | loyalty_sentence
         | for_each_sentence
         | enchanted_sentence
         | keyword_static_sentence
@@ -44,6 +46,8 @@ instead_suffix: INSTEAD ("of" any_text)?
 // ----------------------------------------------------------------------------
 //  static restrictions / one-liners that aren't keyword lists
 // ----------------------------------------------------------------------------
+// Case/"To solve" and similar lines: an ability word in front of a static statement.
+prefixed_static: ability_word_prefix static_sentence
 static_sentence: "Activate" "only" "as" "a" "sorcery"
                | "Once" "during" "each" "of" "your" "turns" "," effect
                | "Your" "maximum" "hand" "size" "is" amount
@@ -57,6 +61,7 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | "They're" POWER_T tok_colors? ("artifact")? ("creature" "s"?)
                | "damage" any_text "reduces" "it" "to" amount "instead"
                | card_target "assigns" "combat" "damage" "equal" "to" "its" "toughness" "rather" "than" "its" "power"
+               | V_YOU "have" "no" "cards" "in" "hand"
                | "Start" "your" "engines" "!"
                | "Do" "this" "only" "once" "each" "turn"
                | V_YOU "may" "choose" "the" "same" "mode" "more" "than" "once"
@@ -115,6 +120,8 @@ modal_sentence: "Choose one"
 //    cost item: mana | {T} | {Q} | Sacrifice <card> | Remove <counter> |
 //                Tap <card> | Exile <card> | Pay <n> life
 // ----------------------------------------------------------------------------
+// Spree modes are written "+ <cost> - <effect>"; the cost is the mode's price.
+spree_sentence: "+" cost_list EMDASH if_clause? (effect | for_each_sentence | triggered_sentence) xdef_clause?
 activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence | triggered_sentence) xdef_clause?
 cost_list: cost_item ("," cost_item)*
 cost_item: MANA+
@@ -272,7 +279,7 @@ effect_sentence: ability_word_prefix? ("Then" | "And" | "Otherwise" ",")? effect
 // ----------------------------------------------------------------------------
 //  effect = one or more actions joined by and / then / ,
 // ----------------------------------------------------------------------------
-effect: (effect_timing)? action (JOIN action)*
+effect: (effect_timing)? ("instead")? action (JOIN action)*
 effect_timing: "Until" "end" "of" "turn" ","
              | V_UNTIL "end" "of" "turn" ","
              | V_UNTIL ("your" | "their") "next" ("end" "step" | "turn") ","
@@ -433,7 +440,7 @@ create_token_action: (who)? V_CREATE token ("if" any_text)? ("for" "each" card_t
 token: "a" "token" "that's" "a" "copy" "of" card_target token_except?
       | token_num ("tapped")? POWER_T? tok_colors? token_types? ("artifact")? ("creature" | "card")? "token" "s"? token_tail*
       | token_proper "," "a" "legendary" POWER_T? tok_colors? token_types? "creature" "token"
-      | "a" "number" "of" POWER_T? tok_colors? token_types? "creature" "tokens" "equal" "to" xdef ("named" ("~" | CARDNAME))?
+      | "a" "number" "of" POWER_T? tok_colors? token_types? "creature" "tokens" token_tail* "equal" "to" xdef ("named" ("~" | CARDNAME))?
 tok_colors: (COLOR | "colorless" | "multicolored") (("," | "and" | "or") (COLOR | "colorless" | "multicolored"))*
 token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
            | ("attached" "to" card_target)
@@ -636,15 +643,16 @@ fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "do
             | "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
 attach_action: V_ATTACH card_target "to" (card_target | "the" "token") ("you" "control")?
 
-stat_action: card_target "and" ("other")? card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)? ("and" "must" "be" "blocked" "this" "turn" "if" "able")?
-           | card_target (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)?
+stat_action: card_target "and" ("other")? card_target ("each")? (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)? ("and" "must" "be" "blocked" "this" "turn" "if" "able")?
+           | card_target ("each")? (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)?
            | card_target V_GET stat_change "," ("has" | "gains") kw_list "," "and" (V_IS | "is" | "are") (V_A | V_AN)? types "in" "addition" "to" ("its" | "their") "other" "types"
            | ("you")? "have" card_target V_GET stat_change ("until" "end" "of" "turn")?
 stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD "or" POWER_MOD
            | ("an" | "a")? ("additional" | "another")? POWER_MOD ("and" ("has" | "gains" | "have" | "gain" | "loses" | "lose") kw_list)?
            | ("has" | "gains" | "have" | "gain") kw_list
 can_attack_as_though_action: card_target V_CAN "attack" "as" "though" ("it" | "they") ("didn't" | "did" "not") "have" KEYWORD
-gain_kw_action: card_target ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)? ("and" ("loses" | "lose") "all" ("other")? "abilities")?
+gain_kw_action: card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)? ("and" ("loses" | "lose") "all" ("other")? "abilities")?
+             | card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") "your" "choice" "of" kw_list ("until" "end" "of" "turn")?
 base_pt_action: card_target ("also")? ("has" | "have" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("and" "are" token_types "in" "addition" "to" "their" "other" "types")? ("until" ("end" "of" "turn" | "your" "next" "turn"))?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
@@ -915,12 +923,17 @@ possessive: "your" | "Your" | "its" | "their" | "an opponent's" | "that player's
 otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*
 NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolored)|non-[A-Z][a-zA-Z]+/i
-quantifier: V_ALL | V_EACH | "every" | V_TARGET | "no" | "one" "or" "more" | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
+quantifier: V_ALL | V_EACH | "every" | V_TARGET | "no" | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
           | "half" "the"
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET | amount "or" "more"
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
+          // "one or two target creatures", "Two or more creatures": last so that the
+          // pre-existing alternatives keep their resolution order.
+          | NUM_WORD "or" "more" | NUM_WORD "or" "more" V_TARGET | NUM_WORD "or" NUM_WORD | NUM_WORD "or" NUM_WORD V_TARGET
 status_list: STATUS+
+// "one or two target creatures ..." / "Two or more ...": number words that may start a line
+NUM_WORD: /\b(?:one|two|three)\b/i
 STATUS: /attacking or blocking|attacking|blocking|tapped|untapped|equipped|enchanted|exiled|chosen|revealed|sacrificed|discarded|returned|created|milled|blocked|unblocked|face-up|face-down/i
 card_kind: THIS_CARD types? | types
          | "activated" "or" "triggered" "ability" "s"?
@@ -960,7 +973,8 @@ card_kind: THIS_CARD types? | types
 with_modifier: "with" (THIS_CARD | card_target)
              | "mana" "value" "equal" "to" "the" "number" "of" any_text
              | "exiled" "with" (THIS_CARD | card_target)
-             | "with" (kw_list | "power" amount ("," amount)+ (","? ("or" | "and") amount)? | "power" amount CMP? | "power" CMP card_target "'s" "power" | "toughness" amount CMP? | "toughness" CMP card_target "'s" "power" | "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
+             | "with" (kw_list | "power" amount ("," amount)+ (","? ("or" | "and") amount)? | "power" amount CMP? | "power" CMP card_target "'s" "power" | "toughness" amount CMP? | "toughness" CMP card_target "'s" "power" | "mana" "value" amount CMP? | "total" "mana" "value" amount CMP? | "mana" "value" CMP "the" "number" "of" card_target | ("a")? POWER_MOD "counter" "s"? "on" ("it" | "them") | counter_name "counter" "s"? "on" ("it" | "them") | "deathtouch" | "different" "names" | "the" "same" "name" "as" "that" "permanent")
+             | "each" "with" "mana" "value" amount CMP?
              | "that" "are" types
              | "that" "is" GENERIC_TYPE
              | "of" "the" "chosen" ("type" | "color")
@@ -1003,7 +1017,7 @@ kw_list_item: KEYWORD (number | MANA+)?
             | "protection" "from" prot_obj (("and" | "," | "," "and") "from" prot_obj)*
 prot_obj: CARDNAME | colors | GENERIC_TYPE | "the" "color" "of" "your" "choice" | "each" "color" | "each" "player" | "anything"
 kw_sep: "and" | "," | "," "and" | "or" | "," "or"
-KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted|bloodthirst)\b/i
+KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted|bloodthirst|firebending)\b/i
 
 //  modified static keywords (Ward {4}, Kicker {2}, Crew 3, ...)
 MOD_KEYWORD: /ward|kicker|crew|flashback|affinity|protection|hexproof|equip|firebending|web-slinging/i

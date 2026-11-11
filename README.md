@@ -254,7 +254,8 @@ FDN is fully covered. No common sub-pattern remains.
 | + ability-word triggered/static, empower/collect-evidence, stat tails, token-except | 80.7 % (17,933/22,217) |
 | + hyphenated keywords, cycle/cloak, enter-untapped, gain-control tails | 81.2 % (18,038/22,217) |
 | + devotion/greatest-power X-defs, life-loss events, draw-step triggers, cast-as-long | 81.4 % (18,077/22,217, 2,269 unique failures) |
-| + classic-focused batch: multi-zone searches, event/trigger tails, damage expressions, type lists | **84.9 % (18,854/22,217, 1,810 unique failures)** |
+| + classic-focused batch: multi-zone searches, event/trigger tails, damage expressions, type lists | 84.9 % (18,854/22,217, 1,810 unique failures) |
+| + audit loops 27-34: stat/keyword tails, one-or-two quantifiers, `each with`/`total mana value`, spree modes, case prefixes, chapter ranges | **88.1 % (19,573/22,217, 1,391 unique failures)** |
 
 The gap between FDN (100.0 %) and Standard (84.9 %) is the key finding. It is
 **not** caused by hardcoded cases — the grammar has no card names, numbers, or
@@ -277,7 +278,8 @@ test than FDN but predate the 2024–26 mechanics that dominate Standard.
 | + basic-land/keyword name-normalization fix, walk keywords, token keywords, protection, can't/can patterns, phase/extra-turn, cost modifiers | 79.2 % (3,388/4,279, 609 unique failures) |
 | + current grammar (ability words, investigate/can't/static/event batches, token/keyword tails, X-defs) | 90.8 % (3,888/4,280, 334 unique failures) |
 | + classic-focused batch: multi-zone searches, pile actions, event/trigger tails, damage expressions, additional mana, type lists | 94.1 % (4,028/4,280, 237 unique failures) |
-| + `attn` and `master` branches merged (audit loops 1-32 plus the master coverage batches) | **98.2 % (4,201/4,280, 79 unique failures)** |
+| + `attn` and `master` branches merged (audit loops 1-32 plus the master coverage batches) | 98.2 % (4,201/4,280, 79 unique failures) |
+| + audit loops 33-34 (one-or-two quantifiers, `instead` effects, spree/case prefixes) | **98.2 % (4,203/4,280, 77 unique failures)** |
 
 A **data bug** was the single biggest win: card names that were also basic-
 land or keyword vocabulary (Plains, Island, …, Lifelink, Trample, …) were

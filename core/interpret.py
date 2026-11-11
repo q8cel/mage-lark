@@ -244,6 +244,14 @@ class Interpreter:
             return int(words[0])
         if trees:
             return self.interp(trees[0])
+        if len(words) > 1:
+            # Multi-word quantifier phrases ("one or two", "any number of") are one
+            # unit; a trailing "target" belongs to the target, not the quantifier.
+            low = [w.lower() for w in words]
+            if 'or' in low or 'of' in low:
+                if low[-1] == 'target':
+                    low = low[:-1]
+                return ' '.join(low)
         return words[0].lower() if words else None
 
     def i_status_list(self, children):
@@ -270,7 +278,12 @@ class Interpreter:
         return self._text(children)
 
     def i_with_modifier(self, children):
-        return self._text(children)
+        text = self._text(children)
+        # "cards each with mana value 2 or less": "each" is distributive over the
+        # targets, not part of the restriction itself.
+        if text.lower().startswith('each with '):
+            text = text[len('each '):]
+        return text
 
     def i_this_that(self, children):
         # A bare pronoun reaches card_target either through this_that or through
@@ -1722,6 +1735,12 @@ class Interpreter:
                     d.setdefault('object', self.interp(ch))
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
+        if not d:
+            # Reflexive trigger ("When you do, ..."): the clause is a pronoun plus
+            # a verb, not a subject/verb/object event.  Keep it as text.
+            text = self._text(children)
+            if text:
+                d['text'] = text
         return d
 
     def i_event_subject(self, children):
@@ -1758,6 +1777,10 @@ class Interpreter:
     def i_static_text(self, children):
         return self._text(children)
 
+    def _ability_word(self, node):
+        """Text of an `ability_word_prefix` without its trailing em dash."""
+        return self._text(node.children).replace('\u2014', '').strip()
+
     def i_trigger_clause(self, children):
         d = {}
         leading = []          # ability word: "Landfall — Whenever ..."
@@ -1792,9 +1815,12 @@ class Interpreter:
 
     def i_triggered_sentence(self, children):
         d = {'type': 'triggered'}
+        ability_word = None
         for ch in children:
             if isinstance(ch, Tree):
-                if ch.data == 'trigger_clause':
+                if ch.data == 'ability_word_prefix':
+                    ability_word = self._ability_word(ch)
+                elif ch.data == 'trigger_clause':
                     d['trigger'] = self.interp(ch)
                 elif ch.data == 'if_clause':
                     d['if'] = self.interp(ch)
@@ -1813,6 +1839,12 @@ class Interpreter:
                         d['unless'] = val
                 elif ch.data == 'effect':
                     d['effect'] = self.interp(ch)
+                elif ch.data == 'xdef_clause':
+                    d['xdef'] = self.interp(ch)
+        if ability_word and isinstance(d.get('trigger'), dict):
+            d['trigger'].setdefault('ability_word', ability_word)
+        elif ability_word:
+            d['ability_word'] = ability_word
         return d
 
     # ------------------------------------------------------------------ sentence types
@@ -1834,6 +1866,36 @@ class Interpreter:
                     eff = self.interp(ch)
         return {'type': 'activated', 'cost': cost, 'effect': eff}
 
+    def i_spree_sentence(self, children):
+        """A spree mode: "+ {2}{B} — Destroy target creature".
+
+        The "+" marker is the mode indicator; the cost is what the mode costs.
+        """
+        cost = None
+        eff = None
+        for ch in children:
+            if isinstance(ch, Tree):
+                if ch.data == 'cost_list':
+                    cost = self.interp(ch)
+                elif ch.data in ('effect', 'for_each_sentence', 'triggered_sentence'):
+                    eff = self.interp(ch)
+        return {'type': 'spree_mode', 'cost': cost, 'effect': eff}
+
+    def i_prefixed_static(self, children):
+        """A static statement behind an ability word: "To solve — You have no cards in hand"."""
+        d = {'type': 'static'}
+        for ch in children:
+            if isinstance(ch, Tree):
+                if ch.data == 'ability_word_prefix':
+                    d['ability_word'] = self._text(ch.children).replace('\u2014', '').strip()
+                else:
+                    val = self.interp(ch)
+                    if isinstance(val, dict):
+                        d.update(val)
+                    else:
+                        d['text'] = val
+        return d
+
     def i_loyalty_sentence(self, children):
         cost = None
         eff = None
@@ -1849,7 +1911,7 @@ class Interpreter:
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'ability_word_prefix':
-                    d['ability_word'] = self._text(ch.children).strip()
+                    d['ability_word'] = self._ability_word(ch)
                 elif ch.data == 'effect':
                     d['effect'] = self.interp(ch)
                 elif ch.data == 'xdef_clause':
@@ -1922,7 +1984,7 @@ class Interpreter:
         kw = None
         prefix = self._find_one(children, 'ability_word_prefix')
         if prefix is not None:
-            d['ability_word'] = self._text(prefix.children).strip()
+            d['ability_word'] = self._ability_word(prefix)
             idx = children.index(prefix) + 1
             rest = list(children[idx:])
         else:

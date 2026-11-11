@@ -17,8 +17,8 @@ remaining anaphora-bearing card first (those are the most likely to expose a
 resolver error) and fills the rest of the twenty from the general pool, because
 the audit also looks for parser and interpreter errors (`FAIL`), not only for
 wrong antecedents. The anaphora-bearing pool of `Standard.json` was exhausted by
-loop 30, so loops 31+ are general parse/interpreter audits of uniformly sampled
-cards.
+loop 30 (a fresh sample at loop 33 found 0 left), so loops 31+ are general
+parse/interpreter audits of uniformly sampled cards.
 
 ## Loop 1 — seed 20261023
 
@@ -1487,3 +1487,121 @@ Cards:
 - `test_normalize_map.py`: 6/6; dataset span validation passes.
 - `quick_test.py -n 120`: 120/120 sentences parse (grammar-wide sanity check
   after the ability-word prefix change).
+
+## Loop 33 — seed 20261124 (Standard.json)
+
+Cards:
+
+`Appeal to Eirdu`, `Skilled Battlecarver`, `Arahbo, the First Fang`,
+`Tumbleweed Rising`, `Hexhaven Battalion`, `Fire Nation Palace`,
+`Bestial Bloodline`, `Fabrication Foundry`, `Meteor Sword`, `Lunar Insight`,
+`Loxodon Eavesdropper`, `Sun-Blessed Peak`, `Rumbling Rockslide`,
+`Seize the Secrets`, `Cid, Timeless Artificer`, `Enter the Enigma`,
+`Boommobile`, `Iron-Fist Pulverizer`, `Erudite Wizard`, `Full Steam Ahead`.
+
+The Standard anaphora pool is now empty (0 anaphora-bearing cards outside the
+dev/benchmark datasets and prior audits), so this loop — like all later ones —
+is a uniform parse/interpreter audit.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Appeal to Eirdu | `One or two target creatures each get +2/+1 until end of turn` | `NUM_WORD "or" NUM_WORD [V_TARGET]` quantifiers; `each` in `stat_action` / `gain_kw_action` |
+| Fire Nation Palace | `Target creature you control gains firebending 4 until end of turn` | `firebending` joined `KEYWORD`, so `kw_list_item` accepts its number |
+| Fabrication Foundry | `..., Exile one or more other artifacts you control with total mana value X: ...` | `with_modifier` accepts `total mana value X` |
+
+`One or two target creatures ...` also exposed a case-sensitivity hole: number
+words start a line capitalised (`One or two target creatures you control each
+get +1/+0 ...`), and the quantifier only had lowercase literals, so the parser
+split `One` off as a keyword sentence and dropped it. The quantifier now uses a
+case-insensitive `NUM_WORD` terminal for the phrase forms. The alternatives were
+placed last in `quantifier` so pre-existing resolutions keep their order.
+
+### Interpreter fixes found and fixed
+
+- **Multi-word quantifiers** were reported as their first word only (`one or
+  two` → `one`, `any number of` → `any`); the phrase is now kept whole.
+- The audit flag (not the interpreter) counted the intentional
+  `event.object: {}` of an objectless event as an empty dict; the flag now
+  skips it, so `FLAGS` means something again.
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence; no flags.
+- `test_output.py classic.json`: 128/128.
+- `test_coref.py`: 41/41; dev coreference 91.4% / 85.6%, bench 95.8% / 84.5%.
+- `quick_test.py -n 60`: 60/60.
+
+## Loop 34 — seed 20261125 (Standard.json)
+
+Cards:
+
+`Rydia's Return`, `Manifold Mouse`, `Matoya, Archon Elder`,
+`Specter of Mortality`, `Cauldron of Essence`, `Moonrise Cleric`,
+`Snarling Gorehound`, `Unfortunate Accident`, `Azula Always Lies`,
+`Ayli, Eternal Pilgrim`, `Cooped Up`, `Dewdrop Cure`, `Summon: Primal Garuda`,
+`Broodspinner`, `Case of the Crimson Pulse`, `Arc Reactor`,
+`Whiskerquill Scribe`, `Anchovy & Banana Pizza`, `Defenestrated Phantom`,
+`Forest`.
+
+### Parse failures found and fixed
+
+| card | sentence / cause | fix |
+|---|---|---|
+| Manifold Mouse | `target Mouse you control gains your choice of double strike or trample until end of turn` | `gain_kw_action` accepts `your choice of kw_list` |
+| Dewdrop Cure | `Return up to two target creature cards each with mana value 2 or less ...` | `with_modifier` accepts the distributive `each with mana value N CMP` |
+| Dewdrop Cure | `If the gift was promised, instead return up to three target creature cards ...` | `effect` accepts a leading `instead` (was parsed as a raw clause) |
+| Summon: Primal Garuda | `II, III — Slipstream — Another target creature ...` | the saga prefix strip accepts chapter *ranges* (`I, II`, `I, II, III, IV`: 72 lines in Standard) |
+| Broodspinner | `Create a number of 1/1 black and green Insect creature tokens with flying equal to ...` | the `a number of ... tokens` form takes `token_tail*` before `equal to` |
+| Case of the Crimson Pulse | `To solve — You have no cards in hand` | new `prefixed_static` (ability word + static sentence) and the `You have no cards in hand` statement |
+| Unfortunate Accident | `+ {2}{B} — Destroy target creature` | new `spree_sentence`: the mode cost is kept instead of dropped |
+
+Spree modes appear 71 times in Standard and cases 13 times; both had been
+invisible because the lines never parsed (or parsed as raw text).
+
+### Interpreter fixes found and fixed
+
+- **`spree_sentence`** had no handler, so a mode emitted a raw token list
+  (`["+", ["{2} {B}"], "—", {...}]`); it now reports
+  `{type: spree_mode, cost, effect}`.
+- **`prefixed_static`** likewise emitted a raw list; it now reports
+  `{type: static, ability_word, text}`.
+- **Reflexive triggers** (`When you do, ...`) produced `event: {}` — the clause
+  is a pronoun plus a verb, not a subject/verb/object event, so it now keeps its
+  text (`event.text`).
+- **`where X is ...`** on a triggered sentence was parsed but dropped; it is now
+  reported as `xdef`.
+- **Ability words on triggered sentences** were consumed by
+  `ability_word_prefix` and silently lost (`Solved — ...`,
+  `Landfall — Whenever ...`); they are now `trigger.ability_word`. This closes
+  the limitation recorded in loops 31-32.
+- The distributive `each` of `each with mana value ...` is dropped from the
+  stored modifier.
+
+### Remaining limitations
+
+- Saga/leveler/case chapter markers are still stripped rather than reported
+  (`II, III — ...` loses the chapter numbers).
+- A grantable keyword's number is kept as keyword text (`firebending 4`), not
+  split into keyword + amount.
+- `a number of ... tokens with flying` keeps the keyword as `kw: [[...]]`
+  (nested list) — pre-existing shape, left alone in this loop.
+- `Double — When you next cast an instant or sorcery spell this turn, ...` keeps
+  the ability word but reports the event object without its verb
+  (`event: {object: 'an instant or sorcery spell'}`).
+
+### Verification
+
+- 20/20 sampled cards parse every non-modal sentence; no flags.
+- `test_output.py classic.json`: 128/128.
+- `test_coref.py`: 41/41 after cache rebuild (one span expectation relaxed: a
+  `Choose two target creatures` mention now starts at the quantifier, so the
+  test asserts the head NP instead of a fixed left edge).
+- Dev coreference: **91.4% entity-aware / 85.6% exact** (3091/3380, 2893/3380).
+- Bench: **95.8% regex** entity-aware / **84.5% exact**.
+- `classic.json`: coverage 4203/4280 = 98.2% (was 4201), content loss
+  105/2076 = 5.1% (was 108/2074 = 5.2%).
+- `test_normalize_map.py`: 6/6; `test_lists.py`; `test_grammar_hoist.py`: 5/5;
+  dataset span validation passes; `check_interp_grammar.py` has no dangling
+  lookups.

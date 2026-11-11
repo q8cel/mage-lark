@@ -99,7 +99,10 @@ def t_plural_pronoun_agrees():
     plural = [a for a in res["anaphors"] if a["surface"].lower() == "their"]
     assert plural, anas(res)
     assert plural[0]["status"] == "resolved", plural[0]
-    assert plural[0]["canonical"].startswith("target creatures"), plural[0]["canonical"]
+    # The mention is the whole NP; whether the parser's card_target span starts at
+    # "two" or at "target" depends on how "Choose two target creatures" resolves,
+    # so require the head NP rather than a fixed left edge.
+    assert "target creatures" in plural[0]["canonical"], plural[0]["canonical"]
 
 
 def t_ambiguous_is_reported_not_guessed():
