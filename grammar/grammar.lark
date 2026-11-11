@@ -397,7 +397,10 @@ life_total_action: "your" "life" "total" "becomes" amount
                  | player "'s" "life" "total" "becomes" amount
                 | "your" "life" "total" "becomes" "equal" "to" amount
 damage_reduce_action: "damage" any_text "reduces" "it" "to" amount "instead"
-assign_combat_action: card_target "assigns" "combat" "damage" "equal" "to" "its" "toughness" "rather" "than" "its" "power"
+// "assigns combat damage equal to its toughness rather than its power": the
+// two stats are semantics, not filler, so capture them (was a literal tail).
+assign_combat_action: card_target "assigns" "combat" "damage" "equal" "to" "its" stat_basis "rather" "than" "its" stat_basis
+stat_basis: "toughness" | "power"
 gift_action: "Gift" ("a" | "an")? card_target
 explore_action: (V_IT)? "explore" "s"?
 manifest_action: (owner_subject)? V_MANIFEST "dread"
@@ -489,7 +492,11 @@ draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target ("pu
             | ("Any" | "any") "number" "of" "target" "players" "each" V_DRAW draw_amount "card" "s"?
             | (who)? V_DRAW draw_amount "card" "s"? ("for" "each" "different" "mana" "value" "among" card_target)? ("for" "each" "color" "among" card_target)?
            | (who)? V_DRAW draw_amount "card" "s"?
-           | (who)? V_DRAW "cards" "equal" "to" ("its" "power" | "half" "the" "number" "of" "cards" "in" zone | xdef)
+           | (who)? V_DRAW "cards" "equal" "to" (draw_ref | xdef)
+// "equal to its power" / "equal to half the number of cards in <zone>":
+// capture the referent instead of matching those words as filler.
+draw_ref: "its" "power"
+        | "half" "the" "number" "of" "cards" "in" zone
 draw_amount: amount | "a" | "an" | "an" "additional" | "that" "many" | "that" "much"
 
 gain_life_action: who V_GAIN life_amount ("for" "each" card_target ("that" "died" "this" "turn")?)?
@@ -823,6 +830,9 @@ cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target |
             | V_ACTIVATED "abilities" "of" card_target V_CANT "be" "activated" ("unless" any_text)?
             | card_target V_CANT "gain" "life"
             | (card_target)? V_CANT "phase" ("in" | "out")
+            // lower-case "the damage can't be prevented" appears mid-sentence;
+            // prevent_action's literal only matches the capitalised initial form.
+            | "the" "damage" V_CANT "be" "prevented"
 can_target_action: card_target ("and" card_target)? V_CAN "be" "the" ("target" | "targets") "of" ("spells" | "abilities" | "spells" "and" "abilities") ("you" "control")? ("as" "though" ("it" | "they") V_CANT "have" KEYWORD)?
 no_max_hand_action: V_YOU "have" "no" "maximum" "hand" "size" ("for" "the" "rest" "of" "the" "game")?
 can_gain_life_action: "Players" V_CANT V_GAIN "life"

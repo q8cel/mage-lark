@@ -63,6 +63,10 @@ class Interpreter:
         return t.value
 
     ANAPHORA = {'it', 'them', 'its', "it's", 'they', 'their'}
+    # card_kind's literal ability alternatives produce these keyword tokens; the
+    # target is an ability ("activated abilities"), never the first word as a type.
+    ABILITY_TOKENS = {'ACTIVATED', 'TRIGGERED', 'ABILITY', 'ABILITIES',
+                      'SPELL', 'SPELLS', 'OR', 'AND'}
     WORD_NUM = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6,
                 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11,
                 'twelve': 12, 'thirteen': 13, 'fourteen': 14, 'fifteen': 15,
@@ -212,6 +216,15 @@ class Interpreter:
             return {'kind': 'type', 'value': 'instant or sorcery'}
         if toks[0].value.lower() in self.ANAPHORA:
             return {'ref': 'anaphora', 'raw': toks[0].value}
+        if all(t.type in self.ABILITY_TOKENS for t in toks):
+            words = [t.value.lower() for t in toks]
+            has_ability = any(w in ('ability', 'abilities') for w in words)
+            has_spell = any(w in ('spell', 'spells') for w in words)
+            if has_ability and has_spell:
+                kind = 'spell or ability'
+            else:
+                kind = 'ability' if has_ability else 'spell'
+            return {'kind': kind, 'value': ' '.join(words)}
         # Disjunctive type lists ("instant or sorcery spell", "artifact or
         # creature") must keep every conjunct: reporting only the first word
         # silently narrows the target type.
@@ -532,7 +545,21 @@ class Interpreter:
             val = self.interp(xd)
             d['amount'] = (' '.join(str(v) for v in val)
                            if isinstance(val, list) else val)
+        ref = self._find_one(children, 'draw_ref')
+        if ref is not None:
+            d['amount'] = self.i_draw_ref(ref.children)
         return d
+
+    def i_draw_ref(self, children):
+        # "equal to its power" / "equal to half the number of cards in <zone>".
+        zn = self._find_one(children, 'zone')
+        if zn is None:
+            return {'stat': 'power', 'possessor': 'its'}
+        out = {'count': 'half', 'of': 'cards'}
+        z = self.interp(zn)
+        if z:
+            out['zone'] = z
+        return out
 
     def i_discard_action(self, children):
         return self._card_action('discard', children)
@@ -731,10 +758,20 @@ class Interpreter:
     def i_reveal_action(self, children):
         d = self._card_action('reveal', children)
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        cts = self._find(children, 'card_target')
+        if len(cts) > 1:
+            # "reveal a blue or artifact card": each disjunct is a target; keep
+            # all of them instead of silently keeping only the first.
+            d['cards'] = [self.interp(c) for c in cts]
+            if 'or' in toks or 'and/or' in toks:
+                d['any_of'] = True
         if 'until' in toks:
-            cts = self._find(children, 'card_target')
             if len(cts) > 1:
                 d['until'] = self.interp(cts[-1])
+        if {'from', 'among', 'them'} <= set(toks):
+            # The source is the set revealed/exiled earlier, not a zone.  Keep
+            # the same {prep, zone} shape as i_in_zone so consumers see one form.
+            d['zone'] = {'prep': 'from', 'zone': 'them'}
         return d
 
     def i_investigate_action(self, children):
@@ -762,7 +799,17 @@ class Interpreter:
         return {'verb': 'damage_reduce'}
 
     def i_assign_combat_action(self, children):
-        return self._card_action('assign_combat', children)
+        d = self._card_action('assign_combat', children)
+        stats = [self.interp(b) for b in self._find(children, 'stat_basis')]
+        stats = [st for st in stats if st]
+        if stats:
+            d['basis'] = stats[0]
+            if len(stats) > 1:
+                d['instead_of'] = stats[1]
+        return d
+
+    def i_stat_basis(self, children):
+        return str(children[0]).lower() if children else None
 
     def i_gift_action(self, children):
         return self._card_action('gift', children)
@@ -857,8 +904,10 @@ class Interpreter:
             d['predicate'] = 'gain life'
         elif 'activate' in toks and 'cast' in toks:
             d['predicate'] = 'cast spells or activate abilities'
-        elif 'activate' in toks:
+        elif 'activate' in toks or 'activated' in toks:
             d['predicate'] = 'activate abilities'
+        elif 'prevented' in toks:
+            d['predicate'] = 'be prevented'
         elif 'lose' in toks and 'mana' in toks:
             d['predicate'] = 'lose mana'
         if 'except' in toks and len(cts) > 1:
@@ -1132,13 +1181,27 @@ class Interpreter:
         la = self._find_one(children, 'life_amount')
         if la is not None:
             d['amount'] = self.interp(la)
+        else:
+            # "gain life equal to <expr>": the grammar keeps the expression as a
+            # sibling any_text/xdef, not as a life_amount.
+            expr = self._find_one(children, 'xdef') or self._find_one(children, 'any_text')
+            if expr is not None:
+                amount = self.interp(expr)
+                if isinstance(amount, str) and amount.lower() in ('its power', 'its toughness'):
+                    # "gain life equal to its power": a stat reference, not free text.
+                    amount = {'possessor': 'its', 'stat': amount.lower().split()[1]}
+                d['amount'] = amount
         return d
 
     def i_lose_life_action(self, children):
         d = {'verb': 'lose_life'}
         who = self._find_one(children, 'who') or self._find_one(children, 'player')
         if who is not None:
-            d['who'] = self.interp(who)
+            # `who` can match an empty card_target for an elided subject
+            # ("... and loses half their life"); omit it instead of {}.
+            who_value = self.interp(who)
+            if who_value:
+                d['who'] = who_value
         la = self._find_one(children, 'life_amount')
         if la is not None:
             d['amount'] = self.interp(la)
@@ -1717,6 +1780,11 @@ class Interpreter:
                 z = self._zone_from_tokens(children)
                 if z is not None:
                     d['zone'] = z
+        # Entry state: only a direct token ("onto the battlefield tapped"), not a
+        # "tapped" inside the card_target's status list.
+        if any(isinstance(ch, Token) and str(ch).lower() == 'tapped'
+               for ch in children):
+            d['tapped'] = True
         return d
 
     # ------------------------------------------------------------------ triggered
@@ -1899,12 +1967,20 @@ class Interpreter:
     def i_loyalty_sentence(self, children):
         cost = None
         eff = None
+        xdef = None
         for ch in children:
             if isinstance(ch, Token) and ch.type == 'LOY_COST':
                 cost = ch.value
             elif isinstance(ch, Tree) and ch.data in ('effect', 'triggered_sentence'):
                 eff = self.interp(ch)
-        return {'type': 'loyalty', 'cost': cost, 'effect': eff}
+            elif isinstance(ch, Tree) and ch.data == 'xdef_clause':
+                # "where X is the number of Swamps you control" defines the
+                # change's X; dropping it leaves the effect under-specified.
+                xdef = self.interp(ch)
+        d = {'type': 'loyalty', 'cost': cost, 'effect': eff}
+        if xdef is not None:
+            d['xdef'] = xdef
+        return d
 
     def i_effect_sentence(self, children):
         d = {'type': 'effect'}
