@@ -659,6 +659,10 @@ class Interpreter:
         if timing:
             d['timing'] = timing
         d.update(self._placement(children))
+        toks = self._token_words(children)
+        if 'without' in toks and 'paying' in toks:
+            # "cast/play it without paying its mana cost": a free cast/play.
+            d['without_paying'] = True
         return d
 
     def i_cast_action(self, children):

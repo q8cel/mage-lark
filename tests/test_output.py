@@ -88,6 +88,10 @@ add("sacrifice-delayed-timing",
 add("play-permission-duration", "You may play those cards this turn",
     lambda o: has(o, lambda d: d.get('verb') == 'play'
                   and d.get('duration') == 'this turn'))
+add("cast-without-paying",
+    "You may cast that card without paying its mana cost",
+    lambda o: has(o, lambda d: d.get('verb') == 'cast'
+                  and d.get('without_paying') is True))
 add("cant-block-duration", "Target creature can't block this turn",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
                   and d.get('duration') == 'this turn'))
