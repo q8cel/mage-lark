@@ -1017,9 +1017,11 @@ card_kind: THIS_CARD types? | types
          | types "," "or" types "card"?
          | types "," types "," "or" types "card"?
          | types ("," types)+ ("," "or" types)? "card"?
+         | types ("," types)+ ("," "and/or" types)? "card"?
          | types "," types "," "and" types "card" "s"?
          | types "," types "," "and" types
          | types "and" types "card"?
+         | types "and/or" types "card"?
          | CARDNAME ("creature" "card" | "creature" "cards" | "creature" | "creatures" | "spell" | "spells" | "card" | "cards" | "permanent" | "permanents" | "planeswalker" "card" | "planeswalker" "cards")
          | "card" | "cards" | "creature" | "creatures" | "spell" | "spells"
          | "creature" "card" | "creature" "cards" | "land" | "land" "card" | "permanent" | "permanent" "card" | "permanent" "cards"
