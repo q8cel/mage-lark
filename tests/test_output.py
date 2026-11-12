@@ -43,6 +43,19 @@ def add(name, sent, pred):
 add("keywords-list", "Flying, first strike, and deathtouch",
     lambda o: has(o, lambda d: isinstance(d.get('keywords'), list)
                   and {'Flying', 'first strike', 'deathtouch'} <= set(d['keywords'])))
+add("add-mana-bare", "Add {R}",
+    lambda o: has(o, lambda d: d.get('verb') == 'add_mana'
+                  and d.get('amount') == '{R}'))
+add("waterbend-not-keyword",
+    "Waterbend {4}: Target creature can't be blocked this turn",
+    lambda o: has(o, lambda d: d.get('type') == 'activated'
+                  and d.get('ability_word') == 'Waterbend')
+                  and not has(o, lambda d: d.get('type') == 'static_keyword'))
+add("activated-prefix-not-keyword",
+    "Activated abilities of artifacts you control cost {1} less to activate",
+    lambda o: has(o, lambda d: d.get('type') == 'effect'
+                  and d.get('ability_word') == 'Activated')
+                  and not has(o, lambda d: d.get('type') == 'static_keyword'))
 add("ward-full-cost", "Ward—Pay 2 life",
     lambda o: has(o, lambda d: d.get('keyword') == 'Ward'
                   and 'Pay 2 life' in str(d.get('modifier'))))

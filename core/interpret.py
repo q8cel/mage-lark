@@ -273,13 +273,52 @@ class Interpreter:
         return vals
 
     # ------------------------------------------------------------------ top
+    # Ability words / dispatch prefixes that the generic keyword fallback can
+    # steal from the sentence that owns them ("Waterbend {4}: …", "Activated
+    # abilities … cost …"). They are markers, not keywords.
+    ABILITY_WORDS = {
+        'waterbend', 'activated', 'threshold', 'delirium', 'celebration',
+        'valiant', 'flurry', 'alliance', 'landfall', 'descend', 'renew',
+        'bargain', 'evidence', 'domain', 'metalcraft', 'revolt', 'raid',
+        'ferocious', 'formidable', 'morbid', 'hellbent', 'spell mastery',
+    }
+
+    def _spurious_static_word(self, item):
+        if not isinstance(item, dict) or item.get('type') != 'static_keyword':
+            return None
+        kw = item.get('keywords')
+        words = kw if isinstance(kw, list) else [kw]
+        vals = []
+        for w in words:
+            if isinstance(w, dict) and w.get('kind') == 'type':
+                vals.append(str(w.get('value', '')).lower())
+            elif isinstance(w, str):
+                vals.append(w.lower())
+        if len(vals) == 1 and vals[0] in self.ABILITY_WORDS:
+            return vals[0]
+        return None
+
     def i_start(self, children):
         out = []
         for ch in children:
             v = self.interp(ch)
             if v is not None:
                 out.append(v)
-        return out
+        # A stray ability-word "sentence" immediately before the real sentence
+        # is a dispatch artefact; attach it as that sentence's marker.
+        cleaned = []
+        for idx, item in enumerate(out):
+            word = self._spurious_static_word(item)
+            if word is not None and idx + 1 < len(out):
+                nxt = out[idx + 1]
+                if isinstance(nxt, dict):
+                    label = item['keywords']
+                    if isinstance(label, dict):
+                        label = label.get('value')
+                    nxt.setdefault('ability_word', label)
+                continue
+            cleaned.append(item)
+        return cleaned
 
     def i_sentence(self, children):
         for ch in children:
@@ -2883,6 +2922,15 @@ class Interpreter:
                 items.append(self.interp(ch))
         if not items and rest:
             kw = self.interp(rest[0])
+            if (isinstance(kw, list) and kw
+                    and isinstance(kw[0], dict)
+                    and str(kw[0].get('value', '')).lower() == 'add'):
+                # Bare "Add {R}" reaches the generic keyword list; it is a
+                # mana action, not a keyword.
+                mana = ''.join(str(x) for x in kw[1:]
+                               if isinstance(x, str) and x.startswith('{'))
+                if mana:
+                    return {'verb': 'add_mana', 'amount': mana}
             if kw is not None:
                 d['keywords'] = kw
                 value = kw.get('value') if isinstance(kw, dict) else kw
