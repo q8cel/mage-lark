@@ -3159,6 +3159,10 @@ class Interpreter:
             d.pop('text', None)
         return d
 
+    def i_ward_cost(self, children):
+        # Children: "Ward", EMDASH, then the payload tokens/subtrees.
+        return {'keyword': 'Ward', 'modifier': self._text(children[2:]).strip()}
+
     def i_keyword_cost(self, children):
         d = {'verb': 'keyword_cost'}
         words = []

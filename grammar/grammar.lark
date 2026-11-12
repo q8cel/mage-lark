@@ -264,10 +264,16 @@ static_keyword_sentence: ability_word_prefix? kw_with_mod
                        | kw_list_mod
                        | kw_list "," kw_with_mod
                        | kw_with_mod "," kw_list
+                       | ward_cost
                        | generic_kw_list
                        | keyword_cost
                        | kw_with_mod xdef_clause
 keyword_cost: (CARDNAME | WORD)+ number? EMDASH MANA+ ("," V_PAY amount "life" | "," V_DISCARD card_target)?
+ward_cost: "Ward" EMDASH (V_WATERBEND MANA+
+         | ("Collect" | "collect") "evidence" amount
+         | V_DISCARD card_target ("or" V_PAY MANA+)?
+         | V_PAY amount "life"
+         | V_PAY "life" "equal" "to" xdef)
 generic_kw_list: generic_kw (kw_sep generic_kw)*
 generic_kw: CARDNAME (MANA+ | number | EMDASH effect)?
 kw_list_mod: kw_item ("," kw_item)* ("," "and" kw_item)?
