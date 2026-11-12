@@ -182,6 +182,12 @@ add("then-if-not-empty",
     lambda o: has(o, lambda d: d.get('type') == 'effect'
                   and 'three or more' in str(d.get('condition', ''))
                   and d.get('effect')))
+add("transform-action",
+    "Then if it has three or more +1/+1 counters on it, transform it",
+    lambda o: has(o, lambda d: d.get('verb') == 'transform'))
+add("untap-and-transform",
+    "Then if your life total is less than or equal to half your starting life total, untap this creature and transform this creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'transform'))
 add("draw-amount-article", "Draw a card",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 1))
 add("draw-who", "You draw two cards",

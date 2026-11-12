@@ -1493,6 +1493,9 @@ class Interpreter:
             return self.interp(children[0])
         return self._text(children)
 
+    def i_transform_action(self, children):
+        return self._card_action('transform', children)
+
     def i_end_turn_action(self, children):
         return {'verb': 'end_turn'}
 

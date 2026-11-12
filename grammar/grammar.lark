@@ -358,6 +358,7 @@ action: add_mana_action
        | spend_mana_action
        | pay_action
        | end_turn_action
+       | transform_action
        | distribute_action
        | copy_action
        | trigger_extra_action
@@ -804,6 +805,8 @@ spend_mana_action: (V_YOU "can")? V_SPEND ("this" "mana" | "mana" "of" "any" "ty
 pay_action: V_PAY MANA+ ("rather" "than" "pay" ("this" "spell's" | "its") "mana" "cost")?
            | V_PAY amount "life"
 end_turn_action: "End" "the" "turn"
+transform_action: V_TRANSFORM card_target
+V_TRANSFORM: /\btransforms?\b/i
 for_each_sentence: "For" "each" card_target "," effect
                 | "For" "each" card_target any_text "," effect
 enchanted_sentence: "Enchanted" card_kind effect
