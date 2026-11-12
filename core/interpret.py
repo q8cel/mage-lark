@@ -2526,6 +2526,9 @@ class Interpreter:
         at = self._find_one(children, 'any_text')
         if at is not None:
             d['text'] = self.interp(at)
+        ck = self._find_one(children, 'counter_kind')
+        if ck is not None:
+            d['per'] = self._text(ck.children).strip()
         eff = self._find_one(children, 'effect')
         if eff is not None:
             d['effect'] = self.interp(eff)
@@ -3036,6 +3039,8 @@ class Interpreter:
                         d['unless'] = val
                 elif ch.data == 'effect':
                     d['effect'] = self.interp(ch)
+                elif ch.data == 'for_each_sentence':
+                    d['effect'] = self.interp(ch)
                 elif ch.data == 'xdef_clause':
                     d['xdef'] = self.interp(ch)
         if ability_word and isinstance(d.get('trigger'), dict):
@@ -3156,6 +3161,8 @@ class Interpreter:
                 if ch.data == 'ability_word_prefix':
                     d['ability_word'] = self._ability_word(ch)
                 elif ch.data == 'effect':
+                    d['effect'] = self.interp(ch)
+                elif ch.data == 'for_each_sentence':
                     d['effect'] = self.interp(ch)
                 elif ch.data == 'xdef_clause':
                     d['xdef'] = self.interp(ch)
