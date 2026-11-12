@@ -995,7 +995,11 @@ class Interpreter:
         return out
 
     def i_discard_action(self, children):
-        return self._card_action('discard', children)
+        d = self._card_action('discard', children)
+        words = self._token_words(children)
+        if 'at' in words and 'random' in words:
+            d['random'] = True
+        return d
 
     def i_exile_action(self, children):
         d = self._card_action('exile', children)
