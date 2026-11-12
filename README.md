@@ -120,7 +120,7 @@ can live in any subdirectory; data files are resolved by bare name
 **Docs** (`docs/`): `PIPELINE.md` (data flow, caches, seams),
 `DETERMINISTIC-COREF.md` (resolver design + measurements),
 `COREF-AUDIT.md` and `AUDIT-LOOPS.md` (out-of-dev audits),
-`LISTS.md`, `QWEN_SUGGESTIONS.md`.
+`LISTS.md`, `QWEN_SUGGESTIONS.md`, `REVIEW.md` (corpus review pipeline + measured state).
 
 
 ## Design
