@@ -694,6 +694,10 @@ class Interpreter:
         toks = [ch.value for ch in children if isinstance(ch, Token)]
         if 'controller' in toks:
             return 'its controller'
+        if (len(toks) >= 4 and toks[0].lower() == 'any'
+                and toks[1].lower() == 'number' and toks[2].lower() == 'of'
+                and any(str(t).lower() == 'players' for t in toks)):
+            return 'any number of target players'
         first = children[0]
         val = self.interp(first) if isinstance(first, Tree) else first
         # A `who` slot can be filled by an unrelated leading word that the parser
@@ -2316,7 +2320,14 @@ class Interpreter:
             d['amount'] = self.interp(xd)
         else:
             words = self._token_words(children)
-            if 'that' in words and 'many' in words:
+            if 'half' in words and 'library' in words:
+                owner = next((w for w in ('their', 'his', 'her', 'a', 'the')
+                              if w in words), 'their')
+                half = 'half %s library' % owner
+                if 'rounded' in words:
+                    half += ', rounded ' + ('down' if 'down' in words else 'up')
+                d['amount'] = half
+            elif 'that' in words and 'many' in words:
                 d['amount'] = 'that many'
             elif any(w in ('a', 'an') for w in words) and 'card' in words:
                 # "mill a card" is one card.

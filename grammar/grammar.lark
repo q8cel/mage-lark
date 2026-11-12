@@ -983,6 +983,7 @@ player: (V_EACH | V_A | V_AN | V_TARGET | V_ANOTHER | V_THAT | "those" | "the" |
 
 //  WHO: an actor that gains/loses life etc.
 who: player (REL_WHO "sacrificed" card_target "this" "way")? | card_target | controller_subject | owner_subject | "each" "of" "them" | player "or" controller_subject
+   | ("Any" | "any") "number" "of" "target" "players" "each"?
 controller_subject: ("Its" | "its") "controller" | (V_THAT | "this" | "the" | "a" | "an")? ("creature" | "source" | "spell" | "permanent" | "land" | "artifact" | "enchantment" | "planeswalker" | "token" | "attacker" | "blocker" | "aura" | "object" | "ability") "'s" "controller"
 
 //  colors
