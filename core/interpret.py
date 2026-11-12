@@ -1823,9 +1823,17 @@ class Interpreter:
         amt = self._find_one(children, 'amount')
         if amt is not None:
             d['amount'] = self.interp(amt)
-        pl = self._find_one(children, 'player')
-        if pl is not None:
-            d['who'] = self.interp(pl)
+        else:
+            words = self._token_words(children)
+            if 'that' in words and 'many' in words:
+                d['amount'] = 'that many'
+        wh = self._find_one(children, 'who')
+        if wh is not None:
+            d['who'] = self.interp(wh)
+        else:
+            pl = self._find_one(children, 'player')
+            if pl is not None:
+                d['who'] = self.interp(pl)
         return d
 
     def i_search_action(self, children):
@@ -1896,6 +1904,11 @@ class Interpreter:
             elif 'top' in words:
                 # "Look at the top card of your library" is one card.
                 d['amount'] = 1
+        if 'hand' in words and 'at' in words:
+            # "look at an opponent's hand": the possessor follows `at`.
+            pre = words[words.index('at') + 1:words.index('hand')]
+            if pre:
+                d['possessor'] = ' '.join(pre)
         return d
 
     def i_shuffle_action(self, children):

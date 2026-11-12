@@ -104,6 +104,12 @@ add("coordinated-who",
     "Target player draws three cards and loses 3 life",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
                   and d.get('who') == 'Target player'))
+add("mill-actor", "Target player mills four cards",
+    lambda o: has(o, lambda d: d.get('verb') == 'mill'
+                  and d.get('who') == 'Target player'))
+add("look-possessor", "As this creature enters, look at an opponent's hand",
+    lambda o: has(o, lambda d: d.get('verb') == 'look'
+                  and d.get('possessor') == "an opponent's"))
 add("cant-block-duration", "Target creature can't block this turn",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
                   and d.get('duration') == 'this turn'))
