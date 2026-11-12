@@ -56,6 +56,18 @@ add("activated-prefix-not-keyword",
     lambda o: has(o, lambda d: d.get('type') == 'effect'
                   and d.get('ability_word') == 'Activated')
                   and not has(o, lambda d: d.get('type') == 'static_keyword'))
+add("activated-if-condition",
+    "{5}: If this land isn't a creature, it becomes a 2/4 Wizard creature",
+    lambda o: has(o, lambda d: d.get('type') == 'activated'
+                  and "isn't a creature" in str(d.get('if', ''))))
+add("cost-mod-shared-cast",
+    "Instant and sorcery spells you cast with mana value 4 or greater cost {X} less to cast",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and all(c.get('cast_by') == 'you' for c in d.get('cards', []))))
+add("extra-turns-no-empty-actor",
+    "Time Compression — When this creature transforms into this creature, take an extra turn after this one",
+    lambda o: has(o, lambda d: d.get('verb') == 'extra_turns'
+                  and 'actor' not in d))
 add("ward-full-cost", "Ward—Pay 2 life",
     lambda o: has(o, lambda d: d.get('keyword') == 'Ward'
                   and 'Pay 2 life' in str(d.get('modifier'))))

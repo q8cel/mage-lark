@@ -973,7 +973,9 @@ class Interpreter:
         d = {'verb': 'extra_turns'}
         who = self._find_one(children, 'who')
         if who is not None:
-            d['actor'] = self.interp(who)
+            actor = self.interp(who)
+            if actor:
+                d['actor'] = actor
         am = self._first_number(children)
         if am:
             d['amount'] = am
@@ -2295,10 +2297,22 @@ class Interpreter:
                     if cast_by:
                         v = dict(v); v['cast_by'] = cast_by
                     targets.append(v)
+                if cast_by is None:
+                    ctrl = next((t.get('controller') for t in targets
+                                 if t.get('controller')), None)
+                    if ctrl and 'cast' in str(ctrl).lower():
+                        cast_by = str(ctrl).lower().replace('cast', '').strip() or 'you'
+                        for t in targets:
+                            t['cast_by'] = cast_by
                 d['target'] = targets[0]
                 if len(targets) > 1:
                     # "Instant and sorcery spells you cast with mana value 4
                     # or greater": a filter stated once applies to both.
+                    shared = [t for t in targets if t.get('controller')]
+                    if shared:
+                        ctrl = shared[0]['controller']
+                        for t in targets:
+                            t.setdefault('controller', ctrl)
                     shared = [t for t in targets if t.get('modifier')]
                     if shared:
                         mod = shared[0]['modifier']
@@ -2736,6 +2750,7 @@ class Interpreter:
         cost = None
         eff = None
         xdef = None
+        cond = None
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'cost_list':
@@ -2745,7 +2760,11 @@ class Interpreter:
                     eff = self.interp(ch)
                 elif ch.data == 'xdef_clause':
                     xdef = self.interp(ch)
+                elif ch.data in ('if_clause', 'trailing_if'):
+                    cond = self.interp(ch)
         d = {'type': 'activated', 'cost': cost, 'effect': eff}
+        if cond is not None:
+            d['if'] = cond
         if xdef is not None:
             d['xdef'] = xdef
         return d
