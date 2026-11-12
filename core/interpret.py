@@ -2053,11 +2053,23 @@ class Interpreter:
                     d['object'] = self.interp(ch)
                 elif ch.data == 'card_target':
                     d.setdefault('object', self.interp(ch))
-                elif ch.data == 'any_text' and 'while' in self._token_words(children):
-                    # "attacks while saddled": a state condition on the event.
-                    d['condition'] = 'while ' + self._text([ch]).strip()
+                elif ch.data == 'any_text':
+                    words = self._token_words(children)
+                    if 'while' in words:
+                        # "attacks while saddled": a state condition on the event.
+                        d['condition'] = 'while ' + self._text([ch]).strip()
+                    elif 'target' in words:
+                        # "becomes the target of <any_text>".
+                        d['of'] = self.interp(ch)
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
+        words = self._token_words(children)
+        if 'becomes' in words and 'target' in words:
+            # This alternative keeps "becomes the target" as literal tokens,
+            # and its card_target is the subject, not the object.
+            if 'object' in d and 'subject' not in d:
+                d['subject'] = d.pop('object')
+            d['verb'] = 'becomes the target'
         # Passive damage events ("is dealt combat damage") carry the kind as
         # direct tokens; plain "is dealt damage" must not invent one.
         words = self._token_words(children)

@@ -605,6 +605,10 @@ add("event-while-saddled",
     "Whenever this creature attacks while saddled, put a +1/+1 counter on it",
     lambda o: has(o, lambda d: d.get('verb') == 'attacks'
                   and d.get('condition') == 'while saddled'))
+add("event-becomes-the-target",
+    "Whenever this creature becomes the target of a spell or ability you control for the first time each turn, put a +1/+1 counter on it",
+    lambda o: has(o, lambda d: d.get('verb') == 'becomes the target'
+                  and 'spell or ability' in str(d.get('of', ''))))
 add("token-for-each",
     "Create a 2/2 green Wolf creature token for each Forest you control",
     lambda o: has(o, lambda d: d.get('verb') == 'create_token'
