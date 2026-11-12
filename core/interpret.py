@@ -111,6 +111,71 @@ class Interpreter:
                 out.extend(self._find_all(c.children, name))
         return out
 
+    # Duration/timing clauses are matched by the grammar as literal tokens
+    # (e.g. gain_kw_action's `("until" "end" "of" "turn")?`). The handlers
+    # must read them back out: a keyword grant without its time limit says
+    # something different, and a delayed sacrifice without its timing loses
+    # *when* it happens. Canonical, lower-case values.
+    DURATION_TAILS = (
+        (('until', 'end', 'of', 'turn'), 'until end of turn'),
+        (('until', 'the', 'end', 'of', 'your', 'next', 'turn'),
+         'until the end of your next turn'),
+        (('until', 'the', 'end', 'of', 'their', 'next', 'turn'),
+         'until the end of their next turn'),
+        (('until', 'your', 'next', 'turn'), 'until your next turn'),
+        (('until', 'their', 'next', 'turn'), 'until their next turn'),
+    )
+    TIMING_TAILS = (
+        (('at', 'the', 'beginning', 'of', 'the', 'next', 'end', 'step'),
+         'at the beginning of the next end step'),
+        (('at', 'the', 'beginning', 'of', 'your', 'next', 'end', 'step'),
+         'at the beginning of your next end step'),
+        (('at', 'the', 'beginning', 'of', 'their', 'next', 'end', 'step'),
+         'at the beginning of their next end step'),
+        (('at', 'end', 'of', 'combat'), 'at end of combat'),
+    )
+
+    @staticmethod
+    def _match_tail(words, tails):
+        for i in range(len(words)):
+            for tail, phrase in tails:
+                if tuple(words[i:i + len(tail)]) == tail:
+                    return phrase
+        return None
+
+    def _duration(self, children):
+        found = self._match_tail(self._token_words(children), self.DURATION_TAILS)
+        if found:
+            return found
+        # "play card_target until any_text" / "for as long as any_text": the
+        # tail is a subtree, not literal tokens.
+        for i, ch in enumerate(children):
+            if not isinstance(ch, Token):
+                continue
+            lead = str(ch).lower()
+            rest = [str(c).lower() for c in children[i + 1:i + 4]
+                    if isinstance(c, Token)]
+            if lead == 'until':
+                prefix = 'until'
+            elif lead == 'for' and rest[:3] == ['as', 'long', 'as']:
+                prefix = 'for as long as'
+            else:
+                continue
+            for nxt in children[i + 1:]:
+                if isinstance(nxt, Tree) and nxt.data == 'any_text':
+                    txt = self.interp(nxt)
+                    if isinstance(txt, dict):
+                        txt = txt.get('text', '')
+                    return (prefix + ' ' + str(txt)).strip()
+        return None
+
+    def _timing(self, children):
+        return self._match_tail(self._token_words(children), self.TIMING_TAILS)
+
+    @staticmethod
+    def _token_words(children):
+        return [str(ch).lower() for ch in children if isinstance(ch, Token)]
+
     def _first_number(self, children):
         for ch in children:
             if isinstance(ch, Token):
@@ -517,16 +582,28 @@ class Interpreter:
         wm = self._find_one(children, 'with_modifier')
         if wm is not None:
             d['modifier'] = self.interp(wm)
+        dur = self._duration(children)
+        if dur:
+            d['duration'] = dur
+        timing = self._timing(children)
+        if timing:
+            d['timing'] = timing
         return d
 
     def i_cast_action(self, children):
-        return self._card_action('cast', children)
+        d = self._card_action('cast', children)
+        toks = self._token_words(children)
+        if 'this' in toks and 'turn' in toks:
+            d.setdefault('duration', 'this turn')
+        return d
 
     def i_play_action(self, children):
         d = self._card_action('play', children)
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
         if 'additional' in toks and 'land' in toks:
             d['additional_land'] = True
+        if 'this' in toks and 'turn' in toks:
+            d.setdefault('duration', 'this turn')
         return d
 
     def i_draw_action(self, children):
@@ -909,12 +986,25 @@ class Interpreter:
             d['predicate'] = 'gain life'
         elif 'activate' in toks and 'cast' in toks:
             d['predicate'] = 'cast spells or activate abilities'
+        elif 'cast' in toks:
+            d['predicate'] = 'cast spells'
         elif 'activate' in toks or 'activated' in toks:
             d['predicate'] = 'activate abilities'
         elif 'prevented' in toks:
             d['predicate'] = 'be prevented'
         elif 'lose' in toks and 'mana' in toks:
             d['predicate'] = 'lose mana'
+        # "can't block this turn" / "can't cast spells during your turn":
+        # the grammar carries the restriction window, the handler must keep it.
+        didx = next((i for i, ch in enumerate(children)
+                     if isinstance(ch, Token) and str(ch).lower() == 'during'),
+                    None)
+        after = [str(ch).lower() for ch in children[didx:]
+                 if isinstance(ch, Token)] if didx is not None else []
+        if 'turn' in after:
+            d['duration'] = 'during ' + ' '.join(after[1:])
+        elif 'this' in toks and 'turn' in toks:
+            d['duration'] = 'this turn'
         if 'except' in toks and len(cts) > 1:
             d['except_by'] = self.interp(cts[-1])
         elif 'by' in toks and len(cts) > 1:
@@ -994,6 +1084,9 @@ class Interpreter:
                 d['all_types'] = kind or True
             else:
                 d['all_abilities'] = True
+        dur = self._duration(children)
+        if dur:
+            d['duration'] = dur
         return d
 
     def i_have_action(self, children):
@@ -1065,6 +1158,9 @@ class Interpreter:
                 if isinstance(ch, Token) and ch.type != 'KEYWORD']
         if 'loses' in toks and 'abilities' in toks:
             d['loses_all_other_abilities'] = True
+        dur = self._duration(children)
+        if dur:
+            d['duration'] = dur
         return d
 
     def i_base_pt_action(self, children):
@@ -1075,6 +1171,9 @@ class Interpreter:
         pt = [c for c in children if isinstance(c, Token) and c.type == 'POWER_T']
         if pt:
             d['base_pt'] = pt[0].value
+        dur = self._duration(children)
+        if dur:
+            d['duration'] = dur
         return d
 
     def i_become_action(self, children):
@@ -1155,6 +1254,9 @@ class Interpreter:
                 d.update(r)          # compound stat: change + gained/lost keywords
             else:
                 d['change'] = r
+        dur = self._duration(children)
+        if dur:
+            d['duration'] = dur
         return d
 
     def i_stat_change(self, children):
@@ -1613,7 +1715,15 @@ class Interpreter:
         return {'verb': 'shuffle'}
 
     def i_no_max_hand_action(self, children):
-        return {'verb': 'no_max_hand_size'}
+        d = {'verb': 'no_max_hand_size'}
+        dur = self._duration(children)
+        if dur:
+            d['duration'] = dur
+        else:
+            words = self._token_words(children)
+            if 'rest' in words and 'game' in words:
+                d['duration'] = 'for the rest of the game'
+        return d
 
     def i_can_gain_life_action(self, children):
         return {'verb': "players_can't_gain_life"}
@@ -2120,6 +2230,10 @@ class Interpreter:
                     d['effect'] = self.interp(ch)
                 elif ch.data == 'during_time':
                     d['time'] = self.interp(ch)
+        if stype == 'until':
+            dur = self._duration(children)
+            if dur:
+                d['duration'] = dur
         return d
 
     def i_as_long_sentence(self, children):

@@ -45,6 +45,34 @@ add("keywords-list", "Flying, first strike, and deathtouch",
                   and {'Flying', 'first strike', 'deathtouch'} <= set(d['keywords'])))
 add("anaphora-not-type", "It gains haste until end of turn",
     lambda o: has(o, lambda d: d.get('ref') == 'anaphora'))
+add("gain-kw-duration", "It gains haste until end of turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and d.get('duration') == 'until end of turn'))
+add("stat-duration", "Target creature gets +2/+0 until end of turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
+                  and d.get('duration') == 'until end of turn'))
+add("sacrifice-delayed-timing",
+    "Sacrifice it at the beginning of your next end step",
+    lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'
+                  and d.get('timing') == 'at the beginning of your next end step'))
+add("play-permission-duration", "You may play those cards this turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'play'
+                  and d.get('duration') == 'this turn'))
+add("cant-block-duration", "Target creature can't block this turn",
+    lambda o: has(o, lambda d: d.get('verb') == "can't"
+                  and d.get('duration') == 'this turn'))
+add("cast-permission-as-long",
+    "You may cast this card for as long as it remains exiled",
+    lambda o: has(o, lambda d: d.get('verb') == 'cast'
+                  and d.get('duration') == 'for as long as it remains exiled'))
+add("no-max-hand-duration",
+    "You have no maximum hand size for the rest of the game",
+    lambda o: has(o, lambda d: d.get('verb') == 'no_max_hand_size'
+                  and d.get('duration') == 'for the rest of the game'))
+add("until-sentence-duration",
+    "Until the end of your next turn, you may play those cards",
+    lambda o: has(o, lambda d: d.get('type') == 'until'
+                  and d.get('duration') == 'until the end of your next turn'))
 add("draw-amount-int", "Draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 2))
 add("draw-amount-article", "Draw a card",
