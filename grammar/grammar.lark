@@ -691,6 +691,7 @@ pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
 become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
              | card_target "becomes" "saddled" ("until" "end" "of" "turn")?
+             | card_target "becomes" "prepared"
              | card_target "becomes" "equal" "to" any_text
              | card_target "becomes" "your" "choice" "of" any_text ("," any_text)*
              | card_target "becomes" "a" "copy" "of" card_target ("until" "end" "of" "turn")?

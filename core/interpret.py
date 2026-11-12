@@ -1624,6 +1624,8 @@ class Interpreter:
         if gens:
             d.setdefault('types', []).extend(gens)
         toks_low = [str(c).lower() for c in children if isinstance(c, Token)]
+        if 'prepared' in toks_low:
+            d['state'] = 'prepared'
         if 'saddled' in toks_low:
             d['state'] = 'saddled'
             if 'until' in toks_low:

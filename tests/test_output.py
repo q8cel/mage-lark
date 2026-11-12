@@ -389,6 +389,9 @@ add("fight-second-target",
     "Target creature you control fights target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'fight'
                   and d.get('fights', {}).get('controller') == 'an opponent controls'))
+add("become-prepared", "Target creature becomes prepared",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('state') == 'prepared'))
 add("become-copy-source",
     "This creature becomes a copy of another target creature you control",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
