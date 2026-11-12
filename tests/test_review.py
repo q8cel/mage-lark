@@ -399,6 +399,60 @@ def test_carry(tmp):
     assert len(list(_csv.DictReader(open(os.path.join(tmp, "carry_partial.csv"))))) == 1
 
 
+def test_tree_cache_roundtrip(tmp):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("snapshot_tree", SNAPSHOT)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["snapshot_tree"] = mod
+    spec.loader.exec_module(mod)
+
+    fixture = os.path.join(tmp, "tree.txt")
+    with open(fixture, "w") as fh:
+        fh.write("Draw a card\nYou gain 3 life\nTarget creature gets +1/+1 until end of turn\n")
+    out1 = os.path.join(tmp, "tree1.json")
+    out2 = os.path.join(tmp, "tree2.json")
+    assert mod.main(["build", "--sentences", fixture, "--out", out1,
+                     "--jobs", "1"]) == 0
+    cache_path = mod.tree_cache_path(mod.source_hashes()["grammar_sha1"])
+    assert os.path.exists(cache_path), "cold build must write the tree cache"
+    assert mod.tree_cache_path("a" * 16) != mod.tree_cache_path("b" * 16)
+
+    original = mod._parse
+
+    def boom(*_args, **_kwargs):
+        raise AssertionError("parser invoked on a tree-cache hit")
+
+    mod._parse = boom
+    try:
+        assert mod.main(["build", "--sentences", fixture, "--out", out2,
+                         "--jobs", "1"]) == 0
+    finally:
+        mod._parse = original
+    assert open(out1, "rb").read() == open(out2, "rb").read()
+
+    # a different grammar key must not reuse the cached trees
+    fake = dict(mod.source_hashes())
+    fake["grammar_sha1"] = "c" * 16
+    calls = [fake, fake]
+
+    def fake_sources():
+        return calls.pop(0) if calls else fake
+
+    original_sources = mod.source_hashes
+    mod.source_hashes = fake_sources
+    mod._parse = boom
+    out3 = os.path.join(tmp, "tree3.json")
+    try:
+        assert mod.main(["build", "--sentences", fixture, "--out", out3,
+                         "--jobs", "1"]) == 0
+    finally:
+        mod.source_hashes = original_sources
+        mod._parse = original
+    doc = json.load(open(out3))
+    assert doc["meta"]["count"] == 0, "different grammar must re-parse, not reuse trees"
+    assert doc["meta"]["grammar_sha1"] == "c" * 16
+
+
 def test_stale_snapshot(tmp):
     import importlib.util
     spec = importlib.util.spec_from_file_location("snapshot_tool", SNAPSHOT)
@@ -429,15 +483,18 @@ def test_stale_snapshot(tmp):
 
 
 def main():
-    with tempfile.TemporaryDirectory() as tmp:
-        for fn in (test_snapshot_deterministic, test_diff_classes,
-                   test_review_flow, test_unparsed_priority,
-                   test_minority_priority, test_exempt, test_last_verdict_wins,
-                   test_carry, test_carry_effective_verdicts,
-                   test_stale_snapshot):
-            with tempfile.TemporaryDirectory() as sub:
-                fn(sub)
-            print("PASS", fn.__name__)
+    with tempfile.TemporaryDirectory() as cache_tmp:
+        os.environ["MLARK_CACHE"] = os.path.join(cache_tmp, "cache")
+        with tempfile.TemporaryDirectory() as tmp:
+            for fn in (test_snapshot_deterministic, test_diff_classes,
+                       test_review_flow, test_unparsed_priority,
+                       test_minority_priority, test_exempt,
+                       test_last_verdict_wins, test_carry,
+                       test_carry_effective_verdicts, test_tree_cache_roundtrip,
+                       test_stale_snapshot):
+                with tempfile.TemporaryDirectory() as sub:
+                    fn(sub)
+                print("PASS", fn.__name__)
     print("all tests passed")
 
 

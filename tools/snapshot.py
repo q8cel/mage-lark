@@ -34,6 +34,7 @@ _paths.bootstrap()
 
 import argparse
 import hashlib
+import gzip
 import json
 import multiprocessing as mp
 import os
@@ -55,6 +56,7 @@ ANON = re.compile(r"\$__ANON_\d+")
 SHAPE_SKIP = frozenset({"note", "head", "shared_prefix", "shared_suffix"})
 _P = None
 _I = None
+_TREES = None
 _TIMEOUT = 0
 
 
@@ -64,6 +66,13 @@ class _Timeout(Exception):
 
 def _alarm(sig, frm):
     raise _Timeout()
+
+
+def _pool_context():
+    try:
+        return mp.get_context("fork")
+    except ValueError:
+        return mp.get_context()
 
 
 def _init_worker(types, names, timeout):
@@ -93,19 +102,40 @@ def _parse(text):
         signal.signal(signal.SIGALRM, old)
 
 
-def _work(texts):
+def _init_worker_cached(types, names):
+    """Tree mode: no parser, only the interpreter."""
+    global _I
+    from interpret import Interpreter
+    _I = Interpreter(types=set(types), names=set(names))
+
+
+def _work_parse(texts):
+    """Parse only: return trees so they can go into the tree cache."""
     out = []
     for text in texts:
         try:
             tree = _parse(text)
-            output = _I.interp(tree)
-        except _Timeout:
-            out.append((text, 0, None))
-            continue
         except Exception:
             out.append((text, 0, None))
             continue
-        out.append((text, 1, (ANON.sub("$@", tree_sig(tree)), output)))
+        out.append((text, 1, tree))
+    return out
+
+
+def _work_cached(texts):
+    """Interpret trees inherited from the parent via fork."""
+    out = []
+    for text in texts:
+        tree = _TREES.get(text)
+        if tree is None:
+            out.append((text, 0, None, None))
+            continue
+        try:
+            output = _I.interp(tree)
+        except Exception:
+            out.append((text, 0, None, None))
+            continue
+        out.append((text, 1, output, ANON.sub("$@", tree_sig(tree))))
     return out
 
 
@@ -228,6 +258,25 @@ def load_parse_cache():
     return {}, path
 
 
+def tree_cache_path(grammar16):
+    return os.path.join(CACHE, "trees", "trees_%s.pkl.gz" % grammar16)
+
+
+def load_trees(path):
+    if not os.path.exists(path):
+        return {}
+    with gzip.open(path, "rb") as fh:
+        return pickle.load(fh)
+
+
+def save_trees(path, trees):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = "%s.%d.tmp" % (path, os.getpid())
+    with gzip.open(tmp, "wb", compresslevel=6) as fh:
+        pickle.dump(trees, fh, protocol=pickle.HIGHEST_PROTOCOL)
+    os.replace(tmp, path)
+
+
 def save_parse_cache(cache, path):
     os.makedirs(CACHE, exist_ok=True)
     tmp = path + ".tmp"
@@ -258,22 +307,49 @@ def build(args):
     if cache is None:
         known_fail = []
 
-    chunks = [todo[i:i + 8] for i in range(0, len(todo), 8)]
+    jobs = args.jobs or max(1, (os.cpu_count() or 4) - 2)
     parsed = {}
     failures = list(known_fail)
-    worker_rss = 0.0
-    if chunks:
-        jobs = args.jobs or max(1, (os.cpu_count() or 4) - 2)
-        with mp.Pool(jobs, initializer=_init_worker,
-                     initargs=(types, names, args.timeout)) as pool:
-            for i, result in enumerate(pool.imap_unordered(_work, chunks), 1):
-                for text, ok, payload in result:
+
+    # Tree cache is keyed by the grammar hash only: an interpreter-only change
+    # re-uses every tree.  Trees are pickled (not coverage bits), so a cache hit
+    # skips parsing entirely.
+    trees = load_trees(tree_cache_path(sources_start["grammar_sha1"]))
+    missing = [t for t in todo if t not in trees]
+    if missing:
+        chunks = [missing[i:i + 8] for i in range(0, len(missing), 8)]
+        with _pool_context().Pool(jobs, initializer=_init_worker,
+                                  initargs=(types, names, args.timeout)) as pool:
+            for i, result in enumerate(pool.imap_unordered(_work_parse, chunks), 1):
+                for text, ok, tree in result:
                     if not ok:
                         failures.append(text)
                         if cache is not None:
                             cache[text] = 0
                         continue
-                    sig, output = payload
+                    trees[text] = tree
+                    if cache is not None:
+                        cache[text] = 1
+                if i % 100 == 0:
+                    print("  ...%d/%d parse batches" % (i, len(chunks)),
+                          file=sys.stderr, flush=True)
+        save_trees(tree_cache_path(sources_start["grammar_sha1"]), trees)
+    if cache is not None and missing:
+        save_parse_cache(cache, cache_path)
+
+    interpretable = [t for t in todo if t in trees]
+    chunks = [interpretable[i:i + 8] for i in range(0, len(interpretable), 8)]
+    if chunks:
+        global _TREES
+        _TREES = trees
+        # fork lets children inherit _TREES copy-on-write; no re-pickling
+        with _pool_context().Pool(jobs, initializer=_init_worker_cached,
+                                  initargs=(types, names)) as pool:
+            for i, result in enumerate(pool.imap_unordered(_work_cached, chunks), 1):
+                for text, ok, output, sig in result:
+                    if not ok:
+                        failures.append(text)
+                        continue
                     out_sha1, shape_sha1 = out_hashes(output)
                     parsed[text] = {
                         "out_sha1": out_sha1,
@@ -281,13 +357,10 @@ def build(args):
                         "cluster": sig,
                         "output": output,
                     }
-                    if cache is not None:
-                        cache[text] = 1
                 if i % 100 == 0:
-                    print("  ...%d/%d batches" % (i, len(chunks)),
+                    print("  ...%d/%d interpret batches" % (i, len(chunks)),
                           file=sys.stderr, flush=True)
-    if cache is not None and todo:
-        save_parse_cache(cache, cache_path)
+        _TREES = None
 
     sentences = {}
     outputs = {}
