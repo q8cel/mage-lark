@@ -825,6 +825,7 @@ count_action: V_COUNT "the" "number" "of" card_target
 have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" "to" damage_who
 have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" ("tapped")? "as" "a" "copy" "of" ("any" card_target | card_target) token_except? ("and" "it" "has" QUOTE)? | draw_action)
            | "have" "the" "base" "power" "and" "toughness" "of" card_target "become" "equal" "to" xdef ("until" ("end" "of" "turn" | "your" "next" "turn"))?
+           | "have" card_target "'s" "base" ("power" "and" "toughness" | "power" | "toughness") "become" "equal" "to" xdef ("until" ("end" "of" "turn" | "your" "next" "turn"))?
            | "have" become_action
 activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
                | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?

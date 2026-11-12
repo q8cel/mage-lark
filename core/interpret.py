@@ -1585,6 +1585,10 @@ class Interpreter:
             eff = {'verb': 'set_base_pt'}
             if cts:
                 eff['of'] = self.interp(cts[0])
+            if 'toughness' not in toks:
+                eff['stat'] = 'power'
+            elif 'power' not in toks:
+                eff['stat'] = 'toughness'
             if xd is not None:
                 eff['equal_to'] = self.interp(xd)
             d['effect'] = eff
