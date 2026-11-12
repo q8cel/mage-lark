@@ -975,9 +975,9 @@ class Interpreter:
             d['amount'] = 1 if value in ('a', 'an') else value
         xd = self._find_one(children, 'xdef')
         if xd is not None:
-            val = self.interp(xd)
-            d['amount'] = (' '.join(str(v) for v in val)
-                           if isinstance(val, list) else val)
+            # Keep the amount as the clause text; str()-joining the
+            # interpreted list stringifies nested card_target dicts.
+            d['amount'] = ' '.join(self._text(xd.children).split())
         ref = self._find_one(children, 'draw_ref')
         if ref is not None:
             d['amount'] = self.i_draw_ref(ref.children)
@@ -2363,10 +2363,13 @@ class Interpreter:
         for name in ('mana_amount', 'xdef', 'amount'):
             node = self._find_one(children, name)
             if node is not None:
-                val = self.interp(node)
-                if isinstance(val, list):
-                    val = ' '.join(str(v) for v in val)
-                d['amount'] = val
+                if name == 'xdef':
+                    d['amount'] = ' '.join(self._text(node.children).split())
+                else:
+                    val = self.interp(node)
+                    if isinstance(val, list):
+                        val = ' '.join(str(v) for v in val)
+                    d['amount'] = val
                 break
         else:
             if children:
