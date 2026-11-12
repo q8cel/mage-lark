@@ -33,10 +33,12 @@ sentence: prefixed_static
         | xdef_sentence
         | round_up_sentence
         | cost_dash_sentence
+        | spend_mana_fallback
 
 // ----------------------------------------------------------------------------
 //  conditional static ability:  "If <condition>, <effect>."
 // ----------------------------------------------------------------------------
+spend_mana_fallback: "Spend" "this" "mana" "only" "to" any_text
 deck_rule: "A" "deck" "can" "have" ("any" "number" "of" | amount) "cards" "named" (THIS_CARD | CARDNAME)
 round_up_sentence: "Round" "up" "each" "time"
 

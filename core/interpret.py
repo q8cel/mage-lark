@@ -3520,6 +3520,9 @@ class Interpreter:
             for v in node:
                 self._apply_duration(v, dur)
 
+    def i_spend_mana_fallback(self, children):
+        return {'type': 'static', 'text': self._text(children)}
+
     def i_as_long_sentence(self, children):
         return self._cond_effect_sentence('as_long', children)
 
