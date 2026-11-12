@@ -57,3 +57,8 @@ Family ranking by occurrence weight: `swarm/reports/residual_impact.md`.
 Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `batch` and review; the corpus JSON only needs the `setdata.load` shape.
 ## Known limits
 Only cluster representatives are reviewed; non-representative siblings share a cluster key but are not individually read. Coreference is not covered. Reviewers are LLM agents with the rubric in verdict notes. Two owners logging different verdicts for the same sid abort with `conflicting verdicts for sid ... across owners`; fix the wrong log, or re-verdict within the same owner (last row wins).
+
+## Unparsed tail
+Texts that do not parse at all are grammar work, not review work, and never enter the review ledger.
+`swarm/work/failure_batches/` holds closed, assignable batches (`batch_NN.json`, `index.json`) packed from `swarm/work/failures_ranked.tsv` by `swarm/scripts/make_failure_batches.py`; each batch carries occurrence weight, its construction keys and a rule-family hint.
+Landing a fix is gated by coverage on FDN.json + classic.json not regressing and `tests/test_output.py` passing — not by review verdicts.
