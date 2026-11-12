@@ -473,7 +473,7 @@ create_token_action: (who)? V_CREATE token ("if" any_text)? ("for" "each" card_t
                    | (who)? V_CREATE amount "of" "those" "tokens" INSTEAD? ("if" any_text)?
 token: "a" "token" "that's" "a" "copy" "of" card_target token_except?
       | token_num ("tapped")? POWER_T? tok_colors? token_types? ("artifact")? ("creature" | "card")? "token" "s"? token_tail*
-      | token_proper "," "a" "legendary" POWER_T? tok_colors? token_types? "creature" "token"
+      | token_proper "," "a" "legendary" POWER_T? tok_colors? token_types? ("artifact")? ("creature" | "card")? "token" "s"? token_tail*
       | "a" "number" "of" POWER_T? tok_colors? token_types? "creature" "tokens" token_tail* "equal" "to" xdef ("named" ("~" | CARDNAME))?
 tok_colors: (COLOR | "colorless" | "multicolored") (("," | "and" | "or") (COLOR | "colorless" | "multicolored"))*
 token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
@@ -485,11 +485,11 @@ token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
            | ("that's" "tapped" ("and" "attacking")?)
            | ("that's" "attacking")
            | ("that" "are" "attacking")
-           | ("and" QUOTE)
+           | (","? "and" QUOTE)
            | ("for" "each" card_target)
            | ("where" "X" "is" xdef)
            | in_zone
-token_proper: CARDNAME token_proper_tail*
+token_proper: (CARDNAME | THIS_CARD)+ token_proper_tail*
 token_proper_tail: "of" "the" CARDNAME | "of" CARDNAME | "and" CARDNAME
 token_num: "a" | "an" | "that" "many" | amount
 token_types: CARDNAME+ | TOK_TYPE_WORD+
