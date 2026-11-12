@@ -1526,6 +1526,12 @@ class Interpreter:
         la = self._find_one(children, 'life_amount')
         if la is not None:
             d['amount'] = self.interp(la)
+        else:
+            # "loses life equal to the number of …": the expression is an
+            # xdef/any_text sibling.
+            expr = self._find_one(children, 'xdef') or self._find_one(children, 'any_text')
+            if expr is not None:
+                d['amount'] = self.interp(expr)
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['for_each'] = self.interp(ct)
@@ -1661,6 +1667,12 @@ class Interpreter:
             amt = self._find_one(children, 'amount')
             if amt is not None:
                 d['amount'] = self.interp(amt)
+            elif 'equal' in self._token_words(children):
+                # "deals damage equal to its power": keep the referent.
+                expr = (self._find_one(children, 'any_text')
+                        or self._find_one(children, 'xdef'))
+                if expr is not None:
+                    d['amount'] = self.interp(expr)
         # source = a card_target that is a DIRECT child (the dealer)
         for ch in children:
             if isinstance(ch, Tree) and ch.data == 'card_target':

@@ -241,6 +241,14 @@ add("draw-who", "You draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('who')))
 add("deal-damage", "this enchantment deals 2 damage to that player",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage' and d.get('amount') == 2 and d.get('to')))
+add("damage-equal-to-power",
+    "It deals damage equal to its power to target creature an opponent controls",
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
+                  and d.get('amount') == 'its power'))
+add("life-loss-equal-to-count",
+    "Target opponent loses life equal to the number of creatures they control",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
+                  and 'number' in str(d.get('amount', ''))))
 add("enters-counters", "This creature enters with three wish counters on it",
     lambda o: has(o, lambda d: d.get('verb') == 'enters' and d.get('with', {}).get('count') == 3))
 add("put-zone", "put it into your hand",
