@@ -47,6 +47,16 @@ Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claim
 | classic | 789 | 48 | 6.1% | 1.9% |
 | FDN | 521 | 30 | 5.8% | 3.8% |
 
+Final grammar state (2026-11-12, measured at `a9c42ec`, fix2 merge 9):
+
+| corpus | unique parsed | unique % | occurrences | occ % |
+|---|---:|---:|---:|---:|
+| Standard | 7,201 / 7,966 | 90.4% | 20,781 / 22,217 | 93.5% |
+| classic | 4,216 / 4,280 | 98.5% | 4,216 / 4,280 | 98.5% |
+| FDN | 1,653 / 1,653 | 100% | 1,653 / 1,653 | 100% |
+
+The remaining 765 unique Standard failures cluster in compound/structural classes: cost_list/effect boundary, compound statics, deep exile/permission compounds, and xdef tails.
+
 ## Residual (cycle 12)
 Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 355 bugs are effect-slot detail:
 - Standard: 277 bugs (6.2% rows, 2.5% share) — effect slots 80, raw wrappers 71, target/quantifier 44, for-each 15, coordinated 19.
@@ -60,6 +70,8 @@ Two fixers work in separate worktrees/branches (`master`, `fix2` in `../mage-k2`
 Branches merge via `swarm/scripts/merge_gate.py <branch>`: disposable detached worktree, rebase, then tests/review/grammar/coverage/seed delta/relative parser cost/rule assertions (`--assert-rule`); snapshot diff only with `--snapshot-diff`. Exit 0 PASS, 1 FAIL, 2 CONFLICT.
 Gates take an advisory lock at `.cache/merge.lock` (branch, base, pid, timestamp); a second gate exits 3 while a lock younger than 30 minutes exists.
 Fixers must not edit or commit while the lock exists; a stale lock older than 30 minutes may be removed manually.
+`--assert-rule` only proves a rule-text shape exists; it breaks when the rule is legitimately rewritten, so every merge should also carry corpus-based parse assertions.
+Correct a stale rule string instead of treating it as a branch failure (merge 9 false FAIL: `types "and/or" types "card"?` versus master's pluralized `types "and/or" types "card" "s"?`).
 Merges `7ebe7bb` and `15c09db` rebased cleanly; the new commits shared zero rule names; `xdef` is the only cumulatively shared rule, edited on different lines.
 Combined gain: Standard unique 6,680 -> 6,891 (+211), occurrences 19,811 -> 20,169 (+358), 90.8%.
 Two gate bugs were fixed: an absolute parse-time threshold misfired under load (now branch/base median ratio, limit 1.25) and cold snapshot builds doubled runtime (now opt-in).
