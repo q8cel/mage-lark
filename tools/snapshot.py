@@ -239,6 +239,8 @@ def save_parse_cache(cache, path):
 # --------------------------------------------------------------------- build
 def build(args):
     t0 = time.time()
+    sources_start = source_hashes()
+    commit = created_from_commit()
     if args.sentences:
         texts, occurrences, types, names = sentence_texts(args.sentences)
         corpus = os.path.splitext(os.path.basename(args.sentences))[0]
@@ -306,14 +308,21 @@ def build(args):
         digest.update(b"\n")
 
     meta = {"corpus": corpus,
-            "created_from_commit": created_from_commit(),
+            "created_from_commit": commit,
             "count": len(sentences),
             "digest": digest.hexdigest(),
             "occurrences": {t: occurrences.get(t, 0) for t in sorted(parsed)}}
-    meta.update(source_hashes())
+    meta.update(sources_start)
     blob = {"meta": meta, "sentences": sentences, "outputs": outputs}
     if args.unparsed:
         blob["unparsed"] = sorted(set(failures))
+
+    sources_end = source_hashes()
+    stale = sources_start != sources_end
+    if stale:
+        meta["stale"] = True
+        meta["sources_at_start"] = sources_start
+        meta["sources_at_end"] = sources_end
 
     out = args.out or os.path.join(CACHE, "snapshots",
                                    "%s_%s_%s.json" % (corpus, meta["grammar_sha1"],
@@ -332,8 +341,14 @@ def build(args):
         "unparsed": len(set(failures)),
         "bytes": os.path.getsize(out),
         "digest": meta["digest"],
+        "stale": stale,
         "wall_s": round(time.time() - t0, 1),
     }, indent=1))
+    if stale:
+        changed = sorted(k for k in sources_start if sources_start[k] != sources_end[k])
+        print("ERROR: sources changed during build; re-run "
+              "(snapshot marked stale): %s" % ", ".join(changed), file=sys.stderr)
+        return 1
     return 0
 
 

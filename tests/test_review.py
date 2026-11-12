@@ -58,6 +58,7 @@ def test_snapshot_deterministic(tmp):
     doc = json.load(open(a))
     assert doc["meta"]["count"] == len(doc["sentences"])
     assert set(doc["sentences"]) == set(SENTENCES)
+    assert "stale" not in doc["meta"]
     for rec in doc["sentences"].values():
         assert len(rec["cluster"]) > 0
         assert len(rec["out_sha1"]) == 40 and len(rec["shape_sha1"]) == 40
@@ -186,9 +187,10 @@ def test_unparsed_priority(tmp):
 
 
 def test_minority_priority(tmp):
+    # the copy/copies pair shares a cluster key but keeps two output shapes
     texts = ["Draw a card",
-             "It gains menace until end of turn",
-             "He gains menace until end of turn"]
+             "You may choose new targets for the copy",
+             "You may choose new targets for the copies"]
     snap = os.path.join(tmp, "snap_minority.json")
     build_snapshot(texts, snap)
     doc = json.load(open(snap))
@@ -353,12 +355,41 @@ def test_carry(tmp):
     assert len(list(_csv.DictReader(open(os.path.join(tmp, "carry_partial.csv"))))) == 1
 
 
+def test_stale_snapshot(tmp):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("snapshot_tool", SNAPSHOT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    # an empty sentence list exercises the provenance check without a parse
+    fixture = os.path.join(tmp, "stale.txt")
+    open(fixture, "w").close()
+    out = os.path.join(tmp, "stale.json")
+    before = {"grammar_sha1": "a" * 16, "interp_sha1": "b" * 16,
+              "preprocess_sha1": "c" * 16, "setdata_sha1": "d" * 16}
+    after = dict(before)
+    after["interp_sha1"] = "e" * 16
+    calls = [before, after]
+    original = mod.source_hashes
+    mod.source_hashes = lambda: calls.pop(0)
+    try:
+        rc = mod.main(["build", "--sentences", fixture, "--out", out])
+    finally:
+        mod.source_hashes = original
+    assert rc != 0, "a source change during build must fail loudly"
+    doc = json.load(open(out))
+    assert doc["meta"]["stale"] is True
+    assert doc["meta"]["sources_at_start"] == before
+    assert doc["meta"]["sources_at_end"] == after
+    assert doc["meta"]["interp_sha1"] == before["interp_sha1"]
+
+
 def main():
     with tempfile.TemporaryDirectory() as tmp:
         for fn in (test_snapshot_deterministic, test_diff_classes,
                    test_review_flow, test_unparsed_priority,
                    test_minority_priority, test_exempt, test_last_verdict_wins,
-                   test_carry):
+                   test_carry, test_stale_snapshot):
             with tempfile.TemporaryDirectory() as sub:
                 fn(sub)
             print("PASS", fn.__name__)
