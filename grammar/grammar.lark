@@ -629,6 +629,7 @@ put_zone_action: (who)? V_PUT card_target "and/or" card_target "onto" "the" "bat
                | V_PUT "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
                | "the" "rest" "on" "the" "bottom" ("of" "your" "library")? order_mod?
                | V_PUT "the" "rest" "into" zone
+               | V_PUT "the" "rest" "of" card_target "into" zone
                | V_PUT card_target "into" zone "and" "the" "rest" "into" zone
                | V_PUT card_target "onto" "the" "battlefield" "and" "the" "rest" "into" zone
                | V_PUT card_target "and" card_target "on" "top" "of" zone
@@ -646,11 +647,14 @@ put_zone_action: (who)? V_PUT card_target "and/or" card_target "onto" "the" "bat
 order_mod: "in" ("a" "random" | "any") "order"
 
 exile_action: (who)? V_EXILE card_target ("from" zones)? ("until" any_text)?
+            | (who)? V_EXILE card_target ("from" zones)? "at" "the" "beginning" "of" ("the" | "your" | "their") "next" "end" "step"
             | (who)? V_EXILE card_target ("from" zones)? "and" card_target ("from" zones)?
             | (who)? V_EXILE card_target "from" "the" "top" "of" zone ("until" any_text)?
             | V_EXILE "all" "graveyards"
-            | V_EXILE "the" "top" amount "cards" "of" "your" "library"
+            | V_EXILE "the" "top" amount "cards" "of" "your" "library" ("face" "down")?
+            | (who)? V_EXILE "the" "top" amount "cards" "of" ("their" | "your") "library" ("face" "down")?
             | V_EXILE "the" "top" "card" "of" "your" "library"
+            | (who)? V_EXILE "the" "top" "card" "of" ("their" | "your") "library" ("face" "down")?
             | V_EXILE "the" "top" "card" "of" "each" "player's" "library"
             | V_EXILE card_target "from" zones ("with" "a" counter_name "counter" "on" self_ref)?
             | V_EXILE "all" "other" card_target "tokens" "you" "control"
@@ -775,6 +779,7 @@ play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "w
            | V_PLAY ("them" | card_target) "this" "turn" "without" "paying" ("its" | "their") "mana" "cost" "s"?
            | V_PLAY ("an" "additional" "land" | card_target) "until" "the" "end" "of" "your" "next" "turn"
            | V_PLAY card_target "until" any_text
+           | V_PLAY card_target "for" "as" "long" "as" any_text
 reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
 choose_action: ("for" "each" "player" ",")? (player | controller_subject)? V_CHOOSE amount? choose_obj
              | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
