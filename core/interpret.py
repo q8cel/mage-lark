@@ -2617,6 +2617,8 @@ class Interpreter:
     def i_effect_sentence(self, children):
         d = {'type': 'effect'}
         for ch in children:
+            if isinstance(ch, Token) and str(ch).lower() == 'otherwise':
+                d['otherwise'] = True
             if isinstance(ch, Tree):
                 if ch.data == 'ability_word_prefix':
                     d['ability_word'] = self._ability_word(ch)

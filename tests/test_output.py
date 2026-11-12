@@ -237,6 +237,9 @@ add("or-pay-cost",
 add("instead-replacement-marker",
     "If this spell was kicked, instead choose any number of target creatures you own",
     lambda o: has(o, lambda d: d.get('verb') == 'choose' and d.get('instead') is True))
+add("otherwise-else-branch", "Otherwise, you lose 2 life",
+    lambda o: has(o, lambda d: d.get('type') == 'effect'
+                  and d.get('otherwise') is True))
 add("then-if-not-empty",
     "Then if it has three or more +1/+1 counters on it, transform it",
     lambda o: has(o, lambda d: d.get('type') == 'effect'
