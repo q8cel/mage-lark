@@ -149,6 +149,9 @@ add("mill-actor", "Target player mills four cards",
 add("mill-no-actor-no-empty-who", "Mill four cards",
     lambda o: has(o, lambda d: d.get('verb') == 'mill'
                   and 'who' not in d))
+add("mill-singular-amount", "Mill a card",
+    lambda o: has(o, lambda d: d.get('verb') == 'mill'
+                  and d.get('amount') == 1))
 add("gain-life-no-empty-who",
     "Whenever you put one or more +1/+1 counters on a creature, you may gain that much life",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_life'

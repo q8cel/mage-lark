@@ -2013,6 +2013,9 @@ class Interpreter:
             words = self._token_words(children)
             if 'that' in words and 'many' in words:
                 d['amount'] = 'that many'
+            elif any(w in ('a', 'an') for w in words) and 'card' in words:
+                # "mill a card" is one card.
+                d['amount'] = 1
         wh = self._find_one(children, 'who')
         if wh is not None:
             who = self.interp(wh)
