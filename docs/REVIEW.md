@@ -39,11 +39,11 @@ review.py status --root R
 6. `check` until every claimed sid has one verdict; `status` shows disjoint claims and no `todo`.
 7. Recompute rates and the occurrence-weighted residual ranking.
 ## Measured state
-Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claimed`, `inspected`). Occurrence share = sum of occurrences of bug rows / total corpus sentence occurrences. Latest cycle (cycle 12, HEAD `6e39a1d`):
+Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claimed`, `inspected`). Occurrence share = sum of occurrences of bug rows / total corpus sentence occurrences. Latest cycle (cycle 14, Standard at HEAD `ba4ce56`; 159 reopened rows are still `todo`, so the Standard row is provisional):
 
 | corpus | reviewed rows | bug rows | row rate | occurrence share |
 |---|---:|---:|---:|---:|
-| Standard | 4,451 | 277 | 6.2% | 2.5% |
+| Standard | 5,108 | 263 | 5.2% | 2.5% |
 | classic | 789 | 48 | 6.1% | 1.9% |
 | FDN | 521 | 30 | 5.8% | 3.8% |
 
