@@ -1569,6 +1569,17 @@ class Interpreter:
             d['effect'] = {'verb': 'lose_life', 'amount': self.interp(life)}
         elif 'mill' in toks:
             d['effect'] = {'verb': 'mill'}
+        elif 'base' in toks and 'equal' in toks:
+            # "have the base power and toughness of each other creature …
+            # become equal to ~'s power"
+            cts = self._find(children, 'card_target')
+            xd = self._find_one(children, 'xdef')
+            eff = {'verb': 'set_base_pt'}
+            if cts:
+                eff['of'] = self.interp(cts[0])
+            if xd is not None:
+                eff['equal_to'] = self.interp(xd)
+            d['effect'] = eff
         elif self._find_one(children, 'become_action') is not None:
             d['effect'] = self.interp(self._find_one(children, 'become_action'))
         elif 'copy' in toks:
