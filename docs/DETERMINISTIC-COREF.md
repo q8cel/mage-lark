@@ -6,17 +6,98 @@ unless marked current. Everything is measured against the teacher-labelled
 anaphor occurrences in `coref_standard.json`, using the existing `mentions.py` /
 `anaphora.py` inventory. No model, no LLM.
 
-**Current measurement note (2026-11-12):** the canonical harness is
-`coref_eval.py`. It scores entity-aware clusters over a fixed candidate pool
-shared by every resolver. Measured now: **91.4 % entity-aware / 85.6 % exact on
-3,380 valid labels** in `coref_standard.json`; **92.7 % / 86.8 %** on the
-label-repaired `coref_standard_v2.json` with `--exclude-cataphora` (3,352
-labels; 28 excluded), or 91.9 % / 86.0 % on v2 without exclusions. Benchmark:
-**95.8 % / 84.5 %** with the regex candidate pool and **93.0 % / 83.1 %** with
-the parser pool. The bench is not independent of dev (see §4h). The evaluator
-maps a gold sub-span such as `target creature` to the maximal containing runtime
-mention (`up to one target creature`); 4 gold spans are unscoreable. Historical
-strict/soft numbers below are from the old harness.
+**Current state (2026-11-12):** the canonical harness is `coref_eval.py`; it
+scores entity-aware clusters over a fixed candidate pool shared by every
+resolver. The measured numbers, the commit history, and the known label
+inconsistencies are in the section below. Everything after it is the historical
+design analysis unless marked current.
+
+## Current state (2026-11-12, measured)
+
+**Corpus.** `data/coref_standard_v2.json` is the honest evaluation set. It
+repairs 18 label indices (15 became correct), marks 28 unreconstructible or
+ambiguous cases to be skipped with `--exclude-cataphora`, and leaves the
+original `coref_standard.json` untouched for continuity. All numbers below use
+the current grammar-hash ptree cache (see the cache note at the end).
+
+| run | entity | exact | resolved | no-resolution | ambiguous |
+|---|---:|---:|---:|---:|---:|
+| v2 `--exclude-cataphora` baseline | 3,102/3,352 = 92.5 % | 2,906 = 86.7 % | 3,497 | 109 | 63 |
+| **v2 `--exclude-cataphora` final (primary)** | **3,141/3,352 = 93.7 %** | **2,947 = 87.9 %** | **3,500** | **109** | **60** |
+| v1 baseline (continuity) | 3,087/3,380 = 91.3 % | 2,891 = 85.5 % | 3,524 | 109 | 64 |
+| v1 final (continuity) | 3,125/3,380 = 92.5 % | 2,931 = 86.7 % | 3,527 | 109 | 61 |
+
+The v2 run excludes 28 marked cases; 4 gold spans remain unscoreable. Total
+movement is **+39 entity, +41 exact** on v2 and +38/+40 on v1; status moves
+**+3 resolved, −3 ambiguous, no-resolution unchanged**, so no abstention was
+traded for guesses.
+
+**Resolver commits (each measured with the full cache; v2 entity/exact deltas).**
+
+| commit | class | change | delta |
+|---|---|---|---:|
+| `9c58134` | wrong pick | `among them` / `the rest` bind the source collection, not an enumerated subset | +10 / +11 |
+| `1fe91c5` | wrong class | verb/predicate priors: damage-to-`them`→player, counter-on-object, target-trigger self, `gained control`→player, `as though they had flash`→spell/card | +11 / +12 |
+| `fa9cbf9` | possessive | copy-exception `its other types` binds the new token; `enter tapped as a copy` binds self | +5 / +5 |
+| `e55f43b` | wrong pick | match the word `token`, not the substring in `nontoken` (copy-source self-binding) | +2 / +2 |
+| `bfb5c63` | possessive | `its owner` follows the object moved by `return`/`put` | +4 / +4 |
+| `d0246b0` | wrong class | `its mana cost` binds the object of the last `cast` verb | +4 / +4 |
+| `c40371f` | possessive | `their mana costs` / `their total power` bind the named plural spells/creatures | +3 / +3 |
+
+**Known gold inconsistencies — do not chase these without repairing the labels.**
+
+- **Reveal-from-among coordinated lists.** `put it into your hand` after
+  `reveal … from among them` is labelled the top-X collection only when the
+  revealed NP is a coordinated type list (`a Goblin, Swamp, or Mountain card`);
+  the identical single-type shape (`a creature card with power 3 or less`) is
+  labelled the revealed card. Same semantics, two conventions.
+- **`if it's not their turn`.** Adrenaline Jockey and Eddymurk Crab are golded
+  the spell/self; March of the World Ooze and Scytheclaw Raptor are golded the
+  player. A uniform resolver rule is not a net win.
+- **Equipment `in addition to its other types`.** White Mage's Staff, Sage's
+  Nouliths and Black Mage's Rod gold `creature` (Equipped creature), while Red
+  Mage's Rapier and Thief's Knife gold the quote-internal `this creature`.
+  A uniform subject rule breaks a currently correct case.
+- **`This X becomes … Put a counter on it`.** Gold alternates between the self
+  (`this Vehicle`: Rocketeer, Marshals' Pathcruiser, Invasion Submersible) and
+  the predicate (`an artifact creature`: Rangers' Refueler, Spire Mechcycle).
+- **Duplicate-token / source-vs-copy.** Vaultborn Tyrant has two same-surface
+  `a token` spans (gold is the earlier condition token); Mockingbird's gold is
+  the copied source while the golden test asserts the copy/self for the
+  identical Phantasmal Image shape; Cloning of Shredder and The Apprentice's
+  Folly contain same-surface token spans; copy-token exceptions are labelled
+  token for Molten Duplication/Saheeli/Ember Island but source for Nexus of
+  Becoming/Applied Geometry.
+- **Bench is a dev subset, not held-out.** 48/49 bench cards occur in dev and
+  68 of 71 labelled cases are literally shared; only 3 are unique. Smoke only:
+  regex 67/71 entity (94.4 %), 60/71 exact; parser 66/71 (93.0 %), 60/71 exact.
+  The single regex entity difference is Genesis Wave: dev/teacher gold is
+  `the top X cards`, bench human gold is `any number of permanent cards`.
+
+**ptree-cache requirement for the golden suite.** `tests/test_coref.py` skips
+every card-based test (27 of 41, leaving 14 parser-free tests) when the current
+grammar hash has no `ptree_<grammarhash>.json` and no legacy
+`pmentions_<grammarhash>.json`. With the cache present the suite is **41/41
+passed, 0 skipped** (~23 s). Build it with:
+
+```bash
+python core/ptree.py --build --data FDN.json --workers 10          # 251 s, 501 texts
+python core/ptree.py --build --sample coref_standard.json --workers 10
+                                                                   # 1,155 s, 1,984 new texts
+```
+
+The 20 non-FDN golden-test cards (`classic.json`/`Standard.json`) were
+precomputed directly (20 texts / 38 new sentences, 43 s); alternatively build
+`--data classic.json` and `--data Standard.json`. Current cache sizes:
+`ptree_8f294968de.json` 1,164,012 B, `psent_8f294968de.json` 1,180,501 B.
+
+**Does the evaluator depend on that cache?** The candidate pool comes from the
+dataset's stored candidates and does not use ptree. `rulecoref.resolve` reads
+`ptree.peek` for structural fields, but only `role` is consumed, by the
+possessive-role family. A missing cache therefore makes those rules inert; all
+other rules are text/mention based. Before/after pairs were always measured in
+the same cache state, so the deltas are comparable; the absolute full-cache
+baseline above is the one to use.
 
 ---
 
