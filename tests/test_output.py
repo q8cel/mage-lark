@@ -56,6 +56,24 @@ add("become-tail-keywords",
     "{4}: This land becomes a 3/3 creature with vigilance and all creature types",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and d.get('keywords') == ['vigilance']))
+add("cost-mod-subject",
+    "Dragon spells you cast cost {1} less to cast",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and 'Dragon' in str(d.get('target', ''))))
+add("hexproof-from-color", "Reach, hexproof from blue",
+    lambda o: has(o, lambda d: 'hexproof from blue' in str(d.get('keywords', ''))))
+add("cost-direction-more",
+    "This spell costs {2} more to cast if it targets a Dragon",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and d.get('direction') == 'more'))
+add("cost-name-equal",
+    "The embalm cost is equal to its mana cost",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and d.get('cost_name') == 'embalm'))
+add("become-duration",
+    "Until end of turn, this creature becomes a Plant with base power and toughness 0/8",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('duration') == 'until end of turn'))
 add("anaphora-not-type", "It gains haste until end of turn",
     lambda o: has(o, lambda d: d.get('ref') == 'anaphora'))
 add("gain-kw-duration", "It gains haste until end of turn",

@@ -117,7 +117,7 @@ class Interpreter:
     # something different, and a delayed sacrifice without its timing loses
     # *when* it happens. Canonical, lower-case values.
     DURATION_VERBS = {'stat_change', 'gain_kw', 'gain_quote', 'lose_keywords',
-                      'set_base_pt', "can't", 'play', 'cast', 'exile',
+                      'set_base_pt', 'become', "can't", 'play', 'cast', 'exile',
                       'gain_control', 'no_max_hand_size', 'prevent_damage'}
     DURATION_TAILS = (
         (('until', 'end', 'of', 'turn'), 'until end of turn'),
@@ -540,7 +540,7 @@ class Interpreter:
                 if n.type == 'KEYWORD':
                     out.append(n.value)
                 return
-            if n.data == 'kw_list_item':
+            if n.data in ('kw_list_item', 'kw_item'):
                 v = self.i_kw_list_item(n.children)
                 if v:
                     out.append(v)
@@ -2181,6 +2181,19 @@ class Interpreter:
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['card'] = self.interp(ct)
+        cs = self._find_one(children, 'cost_subject')
+        toks = self._token_words(children)
+        if cs is not None:
+            # "Dragon spells you cast cost …" / "Activated abilities of
+            # artifacts you control cost …": the affected set is the subject.
+            inner = self._find_one(cs.children, 'card_target')
+            if inner is not None:
+                target = self.interp(inner)
+                if 'cast' in self._token_words(cs.children):
+                    target = dict(target); target['cast_by'] = 'you'
+                d['target'] = target
+            else:
+                d['target'] = self._text(cs.children).strip()
         # capture the mana/amount that is paid or reduced
         ca = self._find_one(children, 'cost_amount')
         if ca is not None:
@@ -2192,8 +2205,19 @@ class Interpreter:
                 d['amount'] = ''.join(mana)
         if any(isinstance(ch, Token) and ch.value == 'less' for ch in children):
             d['direction'] = 'less'
+        elif any(isinstance(ch, Token) and ch.value == 'more' for ch in children):
+            d['direction'] = 'more'
         elif any(isinstance(ch, Token) and ch.value == 'additional' for ch in children):
             d['direction'] = 'additional'
+        if 'equal' in toks and 'cost' in toks:
+            # "The embalm cost is equal to its mana cost": name the cost and
+            # keep the defining expression.
+            idx = toks.index('cost')
+            if idx > 0 and toks[idx - 1] not in ('the', 'a', 'an'):
+                d['cost_name'] = toks[idx - 1]
+            expr = self._find_one(children, 'any_text') or self._find_one(children, 'xdef')
+            if expr is not None:
+                d['amount'] = self.interp(expr)
         fe = self._for_each(children)
         if fe is not None:
             d['for_each'] = fe
