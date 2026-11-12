@@ -237,7 +237,13 @@ def rule_predictions(case, rules=None):
         idx = (_overlap_index(case["candidates"], (ant["start"], ant["end"]))
                if ant else None)
         out.append({"index": idx, "status": rec.get("status"),
-                    "canonical": rec.get("canonical")})
+                    "canonical": rec.get("canonical"),
+                    "surface": ant["surface"] if ant else None,
+                    "span": (ant["start"], ant["end"]) if ant else None,
+                    "evidence": rec.get("evidence") or [],
+                    "rules_fired": rec.get("evidence") or [],
+                    "pool_size": rec.get("candidates"),
+                    "set_valued": rec.get("set_valued", False)})
     return out
 
 
@@ -258,15 +264,27 @@ def attention_predictions(case, resolver):
 
 
 # ------------------------------------------------------------------= scoring
-def evaluate_cases(cases, predict, resolver, verbose=0):
+def evaluate_cases(cases, predict, resolver, verbose=0, dump_path=None):
     stats = Counter()
     per_kind = defaultdict(Counter)
     misses = []
     statuses = Counter()
+    dump_rows = []
 
     for case in cases:
         preds = predict(case)
         uf = _gold_uf(case)
+        head = {(m["start"], m["end"]): m for m in case["mentions"]}
+
+        def _cand(idx):
+            if idx is None:
+                return None
+            c = case["candidates"][idx]
+            m = head.get((c["start"], c["end"]), {})
+            return {"surface": c["surface"], "start": c["start"], "end": c["end"],
+                    "index": idx, "head_type": m.get("head_type"),
+                    "number": m.get("number"), "is_self": m.get("is_self")}
+
         for i, target in case["targets"].items():
             if i >= len(preds):
                 preds.append({"index": None, "status": "missing"})
@@ -289,6 +307,23 @@ def evaluate_cases(cases, predict, resolver, verbose=0):
                 # in the denominator (it is a real label), but there is no
                 # entity cluster to score against.
                 stats["gold_missing"] += 1
+                if dump_path:
+                    ana = case["anaphors"][i]
+                    dump_rows.append({
+                        "card": case["card"], "text": case["text"],
+                        "source": case.get("source"), "anaphor_i": i,
+                        "anaphor": {"surface": ana.get("surface"),
+                                    "start": ana.get("start"), "end": ana.get("end"),
+                                    "kind": ana.get("kind")},
+                        "gold": {"surface": target.get("gold_surface"),
+                                 "index": None, "mention": None},
+                        "pred": {"surface": pred.get("surface"),
+                                 "index": pred.get("index"),
+                                 "mention": _cand(pred.get("index")),
+                                 "status": st,
+                                 "evidence": pred.get("evidence") or []},
+                        "exact": False, "entity": False, "gold_missing": True,
+                    })
                 if len(misses) < verbose:
                     misses.append((case["card"], target.get("gold_surface"),
                                    target.get("gold_surface"), None,
@@ -303,6 +338,23 @@ def evaluate_cases(cases, predict, resolver, verbose=0):
             stats["entity"] += entity
             per_kind[kind]["exact"] += exact
             per_kind[kind]["entity"] += entity
+            if dump_path:
+                ana = case["anaphors"][i]
+                dump_rows.append({
+                    "card": case["card"], "text": case["text"],
+                    "source": case.get("source"), "anaphor_i": i,
+                    "anaphor": {"surface": ana.get("surface"),
+                                "start": ana.get("start"), "end": ana.get("end"),
+                                "kind": ana.get("kind")},
+                    "gold": {"surface": target.get("gold_surface"),
+                             "index": gi, "mention": _cand(gi)},
+                    "pred": {"surface": pred.get("surface"),
+                             "index": pred_i,
+                             "mention": _cand(pred_i),
+                             "status": st,
+                             "evidence": pred.get("evidence") or []},
+                    "exact": exact, "entity": entity, "gold_missing": False,
+                })
             if not entity and len(misses) < verbose:
                 misses.append((
                     case["card"], target.get("gold_surface"),
@@ -332,6 +384,12 @@ def evaluate_cases(cases, predict, resolver, verbose=0):
               f"exact {d['exact']}/{d['total']}")
     for card, ana, gold, pred, status in misses:
         print(f"    MISS {card}: {ana!r} gold={gold!r} pred={pred!r} [{status}]")
+    if dump_path:
+        with open(dump_path, "w") as fh:
+            for row in dump_rows:
+                fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+        print(f"  wrote {dump_path} ({len(dump_rows)} labelled cases)")
+    stats["dump"] = dump_path
     return dict(stats)
 
 
@@ -367,6 +425,8 @@ def main():
     ap.add_argument("--head", default="max")
     ap.add_argument("--max-length", type=int, default=512)
     ap.add_argument("--json-out", default=None)
+    ap.add_argument("--dump", default=None,
+                    help="write per-case JSONL (sentence, anaphor, gold/pred, evidence)")
     args = ap.parse_args()
 
     if args.dataset:
@@ -379,7 +439,8 @@ def main():
                                         mentions=args.mentions)
 
     predict = _make_predictor(args)
-    stats = evaluate_cases(cases, predict, args.resolver, args.show_misses)
+    stats = evaluate_cases(cases, predict, args.resolver, args.show_misses,
+                           dump_path=args.dump)
     stats.update(extra)
     if args.json_out:
         with open(args.json_out, "w") as fh:
