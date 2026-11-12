@@ -165,6 +165,7 @@ during_sentence: ability_word_prefix? "During" during_time "," effect
 until_sentence: "Until" "end" "of" "turn" "," effect
               | "Until" "the" "end" "of" "your" "next" "turn" "," effect
 as_cost_sentence: "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," effect
+                | "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," any_text
 during_time: "your" "turn" | "each" "of" "your" "turns" | "combat"
             | OWNER? "next" "turn"
 trigger_clause: trig_when event?
