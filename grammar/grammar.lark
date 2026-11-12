@@ -782,7 +782,9 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | "any"
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual* ("," "where" "X" "is" xdef)?
                | "The" WORD "cost" "is" "equal" "to" any_text
                | card_target V_COST "an" "additional" MANA+ "to" "cast"
-cost_subject: ("This" | "this") "ability"
+cost_subject: ("The" | "the") ("first" | "second") card_target "you" "cast" "each" "turn"
+            | ("The" | "the") ("first" | "second") card_target "each" "turn"
+            | ("This" | "this") "ability"
             | card_target "and" card_target ("you" "cast")?
             | card_target ("you" | "your opponents") "cast" ("that" "target" card_target)?
             | card_target ("you" "cast")?

@@ -2395,6 +2395,9 @@ class Interpreter:
                         and idx > 1 and subj_words[idx - 2] == 'your'):
                     actor = 'your ' + actor
                 cast_by = actor or 'you'
+            freq = next((w for w in subj_words if w in ('first', 'second')), None)
+            if freq:
+                d['frequency'] = freq + ' each turn'
             if inners:
                 targets = []
                 for inner in inners:
