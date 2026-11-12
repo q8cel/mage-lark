@@ -475,6 +475,7 @@ token: "a" "token" "that's" "a" "copy" "of" card_target token_except?
       | "a" "number" "of" POWER_T? tok_colors? token_types? "creature" "tokens" token_tail* "equal" "to" xdef ("named" ("~" | CARDNAME))?
 tok_colors: (COLOR | "colorless" | "multicolored") (("," | "and" | "or") (COLOR | "colorless" | "multicolored"))*
 token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
+           | ("and" "equip" MANA+)
            | ("attached" "to" card_target)
            | ("with" kw_with_mod)
            | ("with" (kw_list | QUOTE))

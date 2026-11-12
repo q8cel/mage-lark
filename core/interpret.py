@@ -2166,6 +2166,10 @@ class Interpreter:
                         d['quote'] = sub.value
                 if sub.type == 'CARDNAME':
                     d.setdefault('named', []).append(sub.value)
+                if sub.type == 'MANA':
+                    # "… with \"Equipped creature gets +1/+0\" and equip {2}":
+                    # the only direct MANA in a token_tail is the equip cost.
+                    d['equip_cost'] = sub.value
 
     def i_token_num(self, children):
         words = [str(c).lower() for c in children if isinstance(c, Token)]
