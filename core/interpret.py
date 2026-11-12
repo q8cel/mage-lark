@@ -570,6 +570,8 @@ class Interpreter:
     def i_effect(self, children):
         out = []
         timing = None
+        instead = any(isinstance(ch, Token) and str(ch).lower() == 'instead'
+                      for ch in children)
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'effect_timing':
@@ -599,6 +601,10 @@ class Interpreter:
                         and action.get('verb') in self.DURATION_VERBS
                         and 'duration' not in action):
                     action['duration'] = durations[0]
+        if instead:
+            for action in out:
+                if isinstance(action, dict):
+                    action['instead'] = True
         if len(out) == 1:
             return out[0]
         return out
