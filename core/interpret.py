@@ -1030,6 +1030,11 @@ class Interpreter:
         if cut > 0:
             d['mana_value'] = to[cut + len(' with mana value'):].strip()
             to = to[:cut]
+        timing = self._timing(children)
+        if timing:
+            d['timing'] = timing
+            if to.lower().endswith(timing.lower()):
+                to = to[:-len(timing)].strip()
         d['to'] = to
         ca = self._find_one(children, 'counter_amount')
         ck = self._find_one(children, 'counter_kind')

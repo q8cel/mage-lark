@@ -611,6 +611,7 @@ return_action: V_RETURN "to" "the" "battlefield" card_target ("from" zone)? ("wi
              | V_RETURN card_target "from" zone "to" "the" "battlefield" "with" counter_amount "additional"? counter_kind "on" self_ref
              | V_RETURN card_target "from" zone "to" "the" "battlefield" "attached" "to" card_target
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" self_ref)? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+             | V_RETURN card_target "to" "the" "battlefield" "under" "their" "owners'" "control" ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "attacking" | "tapped" | "transformed")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "transformed" | "transformed" "and" "tapped" | "tapped" | "transformed")? "under" (("its" | "her" | "his") "owner's" | "your") "control" ("with" counter_amount counter_kind "on" self_ref)? ("at" "the" "beginning" "of" (("their" | "your") "next" "upkeep" | "the" "next" "end" "step"))?
              | V_RETURN card_target "and" card_target "to" (("its" | "their") "owner's" "hand" | ("its" | "their") "owners'" "hands")
