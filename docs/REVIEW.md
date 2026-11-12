@@ -58,6 +58,8 @@ Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `
 ## Parallel fixers and the merge gate
 Two fixers work in separate worktrees/branches (`master`, `fix2` in `../mage-k2`); batches are assigned disjoint construction families.
 Branches merge via `swarm/scripts/merge_gate.py <branch>`: disposable detached worktree, rebase, then tests/review/grammar/coverage/seed delta/relative parser cost/rule assertions (`--assert-rule`); snapshot diff only with `--snapshot-diff`. Exit 0 PASS, 1 FAIL, 2 CONFLICT.
+Gates take an advisory lock at `.cache/merge.lock` (branch, base, pid, timestamp); a second gate exits 3 while a lock younger than 30 minutes exists.
+Fixers must not edit or commit while the lock exists; a stale lock older than 30 minutes may be removed manually.
 Merges `7ebe7bb` and `15c09db` rebased cleanly; the new commits shared zero rule names; `xdef` is the only cumulatively shared rule, edited on different lines.
 Combined gain: Standard unique 6,680 -> 6,891 (+211), occurrences 19,811 -> 20,169 (+358), 90.8%.
 Two gate bugs were fixed: an absolute parse-time threshold misfired under load (now branch/base median ratio, limit 1.25) and cold snapshot builds doubled runtime (now opt-in).
