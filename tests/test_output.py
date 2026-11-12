@@ -290,6 +290,29 @@ add("instead-replacement-marker",
 add("otherwise-else-branch", "Otherwise, you lose 2 life",
     lambda o: has(o, lambda d: d.get('type') == 'effect'
                   and d.get('otherwise') is True))
+add("replace-token-doubling",
+    "If one or more tokens would be created under your control, twice that many of those tokens are created instead",
+    lambda o: has(o, lambda d: d.get('verb') == 'replace_tokens'
+                  and d.get('multiplier') == 2 and d.get('instead') is True))
+add("replace-damage-doubling",
+    "If a creature you control that entered this turn would deal damage, it deals twice that much damage instead",
+    lambda o: has(o, lambda d: d.get('verb') == 'replace_damage'
+                  and d.get('multiplier') == 2))
+add("skip-that-draw",
+    "If you would draw a card while your library has no cards in it, skip that draw instead",
+    lambda o: has(o, lambda d: d.get('verb') == 'skip'
+                  and d.get('object') == 'draw'))
+add("become-prepared",
+    "Then if an opponent controls more creatures than you, this creature becomes prepared",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('state') == 'prepared'))
+add("amass-consequence",
+    "If this spell was cast from a graveyard, amass Goblins 3 instead",
+    lambda o: has(o, lambda d: d.get('verb') == 'amass'
+                  and d.get('type') == 'Goblins' and d.get('amount') == 3))
+add("recruit-consequence",
+    "If that spell's mana value was 2 or less, recruit",
+    lambda o: has(o, lambda d: d.get('verb') == 'recruit'))
 add("then-if-not-empty",
     "Then if it has three or more +1/+1 counters on it, transform it",
     lambda o: has(o, lambda d: d.get('type') == 'effect'

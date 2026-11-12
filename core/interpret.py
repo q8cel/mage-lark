@@ -2908,10 +2908,66 @@ class Interpreter:
             d['effect'] = eff
         elif len(texts) >= 2:
             d['condition'] = texts[0]
-            d['effect'] = {'verb': 'raw', 'text': texts[1]}
+            d['effect'] = (self._structured_consequence(texts[1])
+                           or {'verb': 'raw', 'text': texts[1]})
         else:
             d['text'] = self._text(children)
         return d
+
+    def _structured_consequence(self, text):
+        """Give a few frequent raw if-consequences a structured verb.
+
+        The grammar falls back to any_text for replacement effects; the text
+        still states which event is replaced and by what multiplier, so keep
+        that instead of a bare {'verb': 'raw'}.
+        """
+        if not isinstance(text, str):
+            return None
+        low = text.lower().strip()
+        mult = 2 if 'twice' in low else 3 if 'three times' in low else None
+        if mult and ('that many' in low or 'that much' in low
+                     or 'as much' in low):
+            if 'token' in low:
+                kind = 'tokens'
+            elif 'counter' in low:
+                kind = 'counters'
+            elif 'damage' in low:
+                kind = 'damage'
+            elif 'mana' in low:
+                kind = 'mana'
+            else:
+                kind = 'permanent'
+            return {'verb': 'replace_' + kind, 'multiplier': mult,
+                    'instead': True, 'text': text}
+        if low.startswith('skip that draw'):
+            return {'verb': 'skip', 'object': 'draw', 'instead': True}
+        if 'becomes prepared' in low:
+            return {'verb': 'become', 'state': 'prepared'}
+        if low.startswith('amass '):
+            words = text.strip().rstrip('.').split()
+            if words and words[-1].lower() == 'instead':
+                words = words[:-1]
+            amount = words[-1] if words and words[-1].isdigit() else None
+            typ = ' '.join(words[1:-1] if amount else words[1:])
+            d = {'verb': 'amass'}
+            if typ:
+                d['type'] = typ
+            if amount:
+                d['amount'] = int(amount)
+            return d
+        if low.rstrip('.') == 'recruit':
+            return {'verb': 'recruit'}
+        if low.startswith('remove those counters'):
+            return {'verb': 'remove_counter', 'counter': 'those counters',
+                    'text': text}
+        if low.startswith('unattach it'):
+            return {'verb': 'unattach', 'object': {'ref': 'anaphora',
+                                                   'raw': 'it'}, 'text': text}
+        if low.startswith('attach it to '):
+            return {'verb': 'attach',
+                    'target': {'ref': 'anaphora', 'raw': 'it'},
+                    'to': text[len('attach it to '):].strip(), 'text': text}
+        return None
 
     def _cond_effect_sentence(self, stype, children):
         d = {'type': stype}
