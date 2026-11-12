@@ -985,6 +985,8 @@ class Interpreter:
             d['possessor'] = ('each ' if 'each' in words else '') + 'player'
         elif "opponent's" in words:
             d['possessor'] = ('each ' if 'each' in words else '') + 'opponent'
+        if 'face' in words and 'down' in words:
+            d['face_down'] = True
         return d
 
     def i_destroy_action(self, children):

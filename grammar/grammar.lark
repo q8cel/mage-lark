@@ -652,7 +652,7 @@ put_zone_action: (who)? V_PUT card_target "and/or" card_target "onto" "the" "bat
 
 order_mod: "in" ("a" "random" | "any") "order"
 
-exile_action: (who)? V_EXILE card_target ("from" zones)? ("until" any_text)?
+exile_action: (who)? V_EXILE card_target ("from" zones)? ("until" any_text)? ("face" "down")?
             | (who)? V_EXILE card_target ("from" zones)? "at" "the" "beginning" "of" ("the" | "your" | "their") "next" "end" "step"
             | (who)? V_EXILE card_target ("from" zones)? "and" card_target ("from" zones)?
             | (who)? V_EXILE card_target "from" "the" "top" "of" zone ("until" any_text)?
