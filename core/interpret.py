@@ -749,6 +749,43 @@ class Interpreter:
                 action['source'] = last_source
         # …and one duration: "gets +1/+0 and gains first strike until end of
         # turn" puts the clause on the last action only, but it qualifies both.
+        head_verbs = {'stat_change', 'gain_kw', 'lose_keywords', 'become',
+                      'set_base_pt', "can't"}
+        # One shared head: condition, coordinated target list, controller.
+        conditions = [a['condition'] for a in out
+                      if isinstance(a, dict) and a.get('condition')]
+        cards = [a['cards'] for a in out
+                 if isinstance(a, dict) and a.get('cards')]
+        ctrl = None
+        for a in out:
+            if not isinstance(a, dict):
+                continue
+            for v in (a.get('target'), a.get('card')):
+                if isinstance(v, dict) and v.get('controller'):
+                    ctrl = v['controller']
+                    break
+            if ctrl:
+                break
+            for c in a.get('cards') or []:
+                if isinstance(c, dict) and c.get('controller'):
+                    ctrl = c['controller']
+                    break
+            if ctrl:
+                break
+        for a in out:
+            if not isinstance(a, dict) or a.get('verb') not in head_verbs:
+                continue
+            if conditions and 'condition' not in a:
+                a['condition'] = conditions[0]
+            if cards and 'cards' not in a:
+                a['cards'] = cards[0]
+            for key in ('target', 'card'):
+                v = a.get(key)
+                if isinstance(v, dict) and ctrl:
+                    v.setdefault('controller', ctrl)
+            for c in a.get('cards') or []:
+                if isinstance(c, dict) and ctrl:
+                    c.setdefault('controller', ctrl)
         durations = [timing] if timing else [a['duration'] for a in out
                                              if isinstance(a, dict) and a.get('duration')]
         if durations:
@@ -1598,9 +1635,15 @@ class Interpreter:
         cts = self._find(children, 'card_target')
         if cts:
             d['target'] = self.interp(cts[0])   # the subject
-            if len(cts) > 1:
+            for_idx = next((i for i, ch in enumerate(children)
+                            if isinstance(ch, Token) and str(ch).lower() == 'for'), None)
+            subject_vals = [self.interp(c) for c in cts
+                            if for_idx is None
+                            or children.index(c) < for_idx]
+            subject_vals = [v for v in subject_vals if v]
+            if len(subject_vals) > 1:
                 # "Skeletons you control and other Zombies you control get …"
-                d['cards'] = [self.interp(c) for c in cts]
+                d['cards'] = subject_vals
         # "gets +1/+0 and gains menace": keep the keyword half when the same
         # action (rather than a separate gain_kw action) carries it.
         kw = self._find_one(children, 'kw_list')
@@ -3034,6 +3077,22 @@ class Interpreter:
             rest = list(children[idx:])
         else:
             rest = list(children)
+        for ch in rest:
+            if isinstance(ch, Tree) and ch.data == 'generic_kw_list':
+                for gk in ch.children:
+                    if not isinstance(gk, Tree) or gk.data != 'generic_kw':
+                        continue
+                    eff = next((c for c in gk.children
+                                if isinstance(c, Tree) and c.data == 'effect'), None)
+                    if eff is None:
+                        continue
+                    word = next((str(c.value) for c in gk.children
+                                 if isinstance(c, Token) and c.value != '\u2014'), None)
+                    d = {'type': 'static'}
+                    if word:
+                        d['ability_word'] = word
+                    d['effect'] = self.interp(eff)
+                    return d
         items = []
         from_list = False
         for ch in rest:

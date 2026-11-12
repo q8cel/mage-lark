@@ -83,6 +83,26 @@ add("event-during-subject-verb",
     lambda o: has(o, lambda d: d.get('verb') == 'loses'
                   and d.get('subject') == 'an opponent'
                   and d.get('condition') == 'during your turn'))
+add("enchanted-for-each-no-empty-card",
+    "Enchanted creature gets +1/+1 for each Forest you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
+                  and all(c for c in d.get('cards', []))))
+add("coordinated-condition",
+    "Delirium — This creature gets +1/+1 and has trample as long as there are four or more card types among cards in your graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and d.get('condition'))
+                  and has(o, lambda d: isinstance(d.get('effect'), list)
+                          and all(a.get('condition') for a in d['effect']
+                                  if isinstance(a, dict))))
+add("coordinated-cards-controller",
+    "Skeletons you control and other Zombies you control get +1/+1 and have deathtouch",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and len(d.get('cards', [])) == 2))
+add("delirium-static-effect",
+    "Delirium — This creature gets +1/+1 and has trample as long as there are four or more card types among cards in your graveyard",
+    lambda o: has(o, lambda d: d.get('type') == 'static'
+                  and d.get('ability_word') == 'Delirium'
+                  and isinstance(d.get('effect'), list)))
 add("shuffle-zones",
     "{T}, Exile this artifact: Shuffle your graveyard into your library",
     lambda o: has(o, lambda d: d.get('verb') == 'shuffle'
