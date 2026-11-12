@@ -80,6 +80,13 @@ def load(path):
             continue
         names.add(name)
         names.add(name.split(',')[0].strip())
+        # Double-faced cards are listed as "Front // Back"; oracle text refers
+        # to the front (and occasionally the back) face by its own name.
+        for face in name.split('//'):
+            face = face.strip()
+            if face:
+                names.add(face)
+                names.add(face.split(',')[0].strip())
         types.update(t)
         items.append((name, text, code))
 
