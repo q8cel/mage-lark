@@ -3657,7 +3657,11 @@ class Interpreter:
                     cond = str(self.interp(ch))
         if cond is not None and isinstance(eff, dict):
             inner = eff.get('inner')
-            if isinstance(inner, dict):
+            if eff.get('verb') == 'gain_kw':
+                # "gains hexproof for as long as …": the keyword grant is
+                # time-bounded; this is its duration, not a separate if.
+                eff.setdefault('duration', 'for as long as ' + cond)
+            elif isinstance(inner, dict):
                 # "you may cast …": the permission carries the duration.
                 inner.setdefault('duration', 'for as long as ' + cond)
             else:
