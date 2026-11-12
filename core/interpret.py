@@ -3076,6 +3076,15 @@ class Interpreter:
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
         words = self._token_words(children)
+        if 'next' in words and 'cast' in words:
+            # "When you next cast a creature spell this turn": the cast is
+            # the event verb; keep the one-shot window.
+            d.setdefault('verb', 'cast')
+            d['next'] = True
+            if 'this' in words and 'turn' in words:
+                d['window'] = 'this turn'
+            if 'you' in words:
+                d.setdefault('subject', 'you')
         if 'put' in words:
             ca = self._find_one(children, 'counter_amount')
             ck = self._find_one(children, 'counter_kind')
