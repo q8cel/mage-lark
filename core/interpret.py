@@ -2676,6 +2676,15 @@ class Interpreter:
                     target = self.interp(ch)
                 elif ch.data == 'effect':
                     eff = self.interp(ch)
+        if isinstance(target, dict):
+            # The sentence-level "Enchanted" is a status on the target; the
+            # action's own (empty) card_target does not carry it.
+            status = target.get('status')
+            status = list(status) if isinstance(status, list) else []
+            if 'Enchanted' not in status:
+                status.insert(0, 'Enchanted')
+            target['status'] = status
+
         def attach(v):
             if isinstance(v, dict):
                 if 'target' in v and not v['target'] and target is not None:

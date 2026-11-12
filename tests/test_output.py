@@ -654,6 +654,12 @@ add("enchanted-target", "Enchanted creature gets +1/+0 and has trample",
                   and d.get('target', {}).get('value') == 'creature'
                   and all(a.get('target') for a in d.get('effect', [])
                           if isinstance(a, dict))))
+add("enchanted-status",
+    "Enchanted creature gets +1/+1 and has menace and trample",
+    lambda o: has(o, lambda d: d.get('type') == 'static'
+                  and 'Enchanted' in d.get('target', {}).get('status', [])
+                  and all('Enchanted' in a.get('target', {}).get('status', [])
+                          for a in d.get('effect', []) if isinstance(a, dict))))
 add("coordinated-target", "When this creature enters, target creature gets +2/+0 and gains first strike until end of turn",
     lambda o: has(o, lambda d: isinstance(d.get('effect'), list)
                   and all(a.get('target') for a in d['effect']
