@@ -43,6 +43,26 @@ def add(name, sent, pred):
 add("keywords-list", "Flying, first strike, and deathtouch",
     lambda o: has(o, lambda d: isinstance(d.get('keywords'), list)
                   and {'Flying', 'first strike', 'deathtouch'} <= set(d['keywords'])))
+add("attach-target-controller",
+    "When this Equipment enters, attach it to target creature you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'attach'
+                  and d.get('to', {}).get('controller') == 'you control'))
+add("exile-each-opponent-graveyard",
+    "{T}, Sacrifice this artifact: Exile each opponent's graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'exile'
+                  and d.get('possessor') == 'each opponent'))
+add("exile-top-each-player",
+    "Whenever this creature attacks, exile the top card of each player's library",
+    lambda o: has(o, lambda d: d.get('verb') == 'exile'
+                  and d.get('top') is True and d.get('possessor') == 'each player'))
+add("each-of-up-to",
+    "When this creature enters, put a +1/+1 counter on each of up to two other target creatures you control",
+    lambda o: has(o, lambda d: d.get('on', {}).get('quantifier') == {'up_to': 2}
+                  and d.get('on', {}).get('otherness') == 'other'))
+add("coordinated-stat-targets",
+    "Skeletons you control and other Zombies you control get +1/+1 and have deathtouch",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
+                  and len(d.get('cards', [])) == 2))
 add("add-mana-bare", "Add {R}",
     lambda o: has(o, lambda d: d.get('verb') == 'add_mana'
                   and d.get('amount') == '{R}'))
@@ -53,8 +73,8 @@ add("waterbend-not-keyword",
                   and not has(o, lambda d: d.get('type') == 'static_keyword'))
 add("activated-prefix-not-keyword",
     "Activated abilities of artifacts you control cost {1} less to activate",
-    lambda o: has(o, lambda d: d.get('type') == 'effect'
-                  and d.get('ability_word') == 'Activated')
+    lambda o: has(o, lambda d: d.get('type') == 'effect')
+                  and has(o, lambda d: d.get('verb') == 'cost_mod')
                   and not has(o, lambda d: d.get('type') == 'static_keyword'))
 add("activated-if-condition",
     "{5}: If this land isn't a creature, it becomes a 2/4 Wizard creature",

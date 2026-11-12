@@ -310,12 +310,13 @@ class Interpreter:
         for idx, item in enumerate(out):
             word = self._spurious_static_word(item)
             if word is not None and idx + 1 < len(out):
-                nxt = out[idx + 1]
-                if isinstance(nxt, dict):
-                    label = item['keywords']
-                    if isinstance(label, dict):
-                        label = label.get('value')
-                    nxt.setdefault('ability_word', label)
+                if word != 'activated':
+                    nxt = out[idx + 1]
+                    if isinstance(nxt, dict):
+                        label = item['keywords']
+                        if isinstance(label, dict):
+                            label = label.get('value')
+                        nxt.setdefault('ability_word', label)
                 continue
             cleaned.append(item)
         return cleaned
@@ -355,6 +356,17 @@ class Interpreter:
                 if 'other' in self._token_words(q.children):
                     d['otherness'] = 'other'
                     break
+        if d.get('quantifier') == 'each':
+            # "each of up to two target creatures": the distributive `each`
+            # wraps a nested card_target that carries the real quantifier.
+            for inner_tree in self._find_all(children, 'card_target'):
+                inner = self.interp(inner_tree)
+                if isinstance(inner, dict) and inner.get('quantifier'):
+                    inner = dict(inner)
+                    d.pop('quantifier', None)
+                    d.update(inner)
+                    d['each'] = True
+                    return d
         return d
 
     def i_card_kind(self, children):
@@ -895,7 +907,16 @@ class Interpreter:
         return self._card_action('discard', children)
 
     def i_exile_action(self, children):
-        return self._card_action('exile', children)
+        d = self._card_action('exile', children)
+        words = self._token_words(children)
+        pl = self._find_one(children, 'player')
+        if pl is not None and "'s" in words:
+            d['possessor'] = self.interp(pl)
+        elif "player's" in words:
+            d['possessor'] = ('each ' if 'each' in words else '') + 'player'
+        elif "opponent's" in words:
+            d['possessor'] = ('each ' if 'each' in words else '') + 'opponent'
+        return d
 
     def i_destroy_action(self, children):
         return self._card_action('destroy', children)
@@ -1224,6 +1245,10 @@ class Interpreter:
         if len(cts) >= 2:
             d['object'] = self.interp(cts[0])
             d['to'] = self.interp(cts[1])
+            words = self._token_words(children)
+            if 'you' in words and 'control' in words and isinstance(d['to'], dict):
+                d['to'] = dict(d['to'])
+                d['to'].setdefault('controller', 'you control')
         elif cts:
             d['object'] = self.interp(cts[0])
             if token:
@@ -1557,6 +1582,9 @@ class Interpreter:
         cts = self._find(children, 'card_target')
         if cts:
             d['target'] = self.interp(cts[0])   # the subject
+            if len(cts) > 1:
+                # "Skeletons you control and other Zombies you control get …"
+                d['cards'] = [self.interp(c) for c in cts]
         # "gets +1/+0 and gains menace": keep the keyword half when the same
         # action (rather than a separate gain_kw action) carries it.
         kw = self._find_one(children, 'kw_list')
