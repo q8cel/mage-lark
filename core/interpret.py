@@ -2278,6 +2278,12 @@ class Interpreter:
 
     def i_stat_define_action(self, children):
         d = {'verb': 'stat_define', 'stat': 'power_and_toughness', 'relation': 'each_equal_to'}
+        for ch in children:
+            if isinstance(ch, Token):
+                v = str(ch.value)
+                if v.endswith("'s"):
+                    d['subject'] = v[:-2]
+                    break
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['target'] = self.interp(ct)

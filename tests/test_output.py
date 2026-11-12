@@ -682,6 +682,10 @@ add("unless-clause",
     "Whenever an opponent casts a spell, that player loses 5 life unless they discard a card",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
                   and 'discard a card' in str(d.get('unless', ''))))
+add("stat-define-subject",
+    "~'s power and toughness are each equal to the number of creatures you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_define'
+                  and d.get('subject') == '~'))
 add("coordinated-card-target",
     "Equipped creature can't be blocked and has shroud",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
