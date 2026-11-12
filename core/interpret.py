@@ -1622,6 +1622,9 @@ class Interpreter:
                    if isinstance(c, Token) and c.type == 'KEYWORD']
             if kws:
                 d['without_keywords'] = kws
+        toks = [str(c).lower() for c in children if isinstance(c, Token)]
+        if 'this' in toks and 'turn' in toks:
+            d['duration'] = 'this turn'
         return d
 
     def i_gain_kw_action(self, children):
