@@ -686,6 +686,15 @@ add("stat-define-subject",
     "~'s power and toughness are each equal to the number of creatures you control",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_define'
                   and d.get('subject') == '~'))
+add("destroy-attached-relation",
+    "Destroy up to one Equipment attached to that creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'destroy'
+                  and d.get('attached_to', {}).get('this_that') == 'that'))
+add("exile-two-shared-zone",
+    "When ~ enters, exile up to one target nonland permanent and up to one target nonland permanent card from a graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'exile'
+                  and len(d.get('cards', [])) == 2
+                  and all(c.get('zone') == 'graveyard' for c in d['cards'])))
 add("coordinated-card-target",
     "Equipped creature can't be blocked and has shroud",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'

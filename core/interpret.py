@@ -743,9 +743,15 @@ class Interpreter:
         if (len(cts) > 1
                 and verb in ('exile', 'destroy', 'sacrifice', 'tap',
                              'untap', 'discard')):
-            # Coordinated object list: "exile up to one target artifact and
-            # up to one target enchantment" keeps both targets.
-            d['cards'] = [self.interp(c) for c in cts]
+            words = self._token_words(children)
+            if 'attached' in words and 'to' in words:
+                # "destroy up to one Equipment attached to that creature":
+                # the second target is the attachment host, not a second victim.
+                d['attached_to'] = self.interp(cts[1])
+            elif 'and' in words or 'or' in words or ',' in words:
+                # Coordinated object list: "exile up to one target artifact
+                # and up to one target enchantment" keeps both targets.
+                d['cards'] = [self.interp(c) for c in cts]
         if verb in ('cast', 'play') and len(cts) > 1:
             words = self._token_words(children)
             if 'among' in words:
@@ -771,6 +777,12 @@ class Interpreter:
                 z = self._zone_from_tokens(children)
                 if z is not None:
                     d['zone'] = z
+        if d.get('cards') and d.get('zone'):
+            # "exile A and B from a graveyard": the shared source zone
+            # belongs to every conjunct.
+            for card in d['cards']:
+                if isinstance(card, dict):
+                    card.setdefault('zone', d['zone'])
         wm = self._find_one(children, 'with_modifier')
         if wm is not None:
             d['modifier'] = self.interp(wm)
@@ -2047,6 +2059,9 @@ class Interpreter:
             real = [c for c in cards if c]
             if real:
                 d['card'] = real[-1]
+                if len(real) > 1:
+                    # "for a card named ~ and/or a card named ~": keep both.
+                    d['cards'] = real
         if 'zone' not in d:
             z = self._zone_from_tokens(children)
             if z is not None:
