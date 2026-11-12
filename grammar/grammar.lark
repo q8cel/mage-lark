@@ -31,6 +31,7 @@ sentence: prefixed_static
         | deck_rule
         | xdef_sentence
         | round_up_sentence
+        | cost_dash_sentence
 
 // ----------------------------------------------------------------------------
 //  conditional static ability:  "If <condition>, <effect>."
@@ -48,6 +49,9 @@ instead_suffix: INSTEAD ("of" any_text)?
 // ----------------------------------------------------------------------------
 // Case/"To solve" and similar lines: an ability word in front of a static statement.
 prefixed_static: ability_word_prefix static_sentence
+               | ability_word_prefix during_sentence
+               | ability_word_prefix as_long_sentence
+               | ability_word_prefix modal_sentence
 static_sentence: "Activate" "only" "as" "a" "sorcery"
                | "Once" "during" "each" "of" "your" "turns" "," effect
                | "Your" "maximum" "hand" "size" "is" amount
@@ -124,7 +128,8 @@ modal_sentence: "Choose one"
 // ----------------------------------------------------------------------------
 // Spree modes are written "+ <cost> - <effect>"; the cost is the mode's price.
 spree_sentence: "+" cost_list EMDASH if_clause? (effect | for_each_sentence | triggered_sentence) xdef_clause?
-activated_sentence: ((CARDNAME | WORD)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence | triggered_sentence) xdef_clause?
+cost_dash_sentence.2: ability_word_prefix? cost_list EMDASH (effect | triggered_sentence) xdef_clause?
+activated_sentence: ((CARDNAME | WORD | THIS_CARD | NUMBER)+ EMDASH)? cost_list ":" if_clause? (effect | for_each_sentence | triggered_sentence) xdef_clause?
 cost_list: cost_item ("," cost_item)*
 cost_item: MANA+
          | MANA+ "and" MANA+
@@ -150,7 +155,7 @@ cost_item: MANA+
 //  triggered ability
 //    <trigger clause> [if <condition>], <effect>
 // ----------------------------------------------------------------------------
-ability_word_prefix: (CARDNAME | WORD)+ (("and" | ",") (CARDNAME | WORD)+)* EMDASH
+ability_word_prefix: (CARDNAME | WORD | THIS_CARD | NUMBER)+ (("and" | ",") (CARDNAME | WORD | THIS_CARD | NUMBER)+)* EMDASH
 triggered_sentence: ability_word_prefix? trigger_clause "," if_clause? effect xdef_clause? (trailing_if | trailing_unless)?
 as_long_sentence: "As" "long" "as" any_text "," effect
 during_sentence: ability_word_prefix? "During" during_time "," effect
@@ -604,10 +609,12 @@ mv_cmp: amount "or" ("less" | "more")
 
 // "X's owner puts it on their choice of the top or bottom of their library"
 put_library_action: owner_subject V_PUT ("it" | card_target) "on" put_library_dest
+                  | owner_subject V_PUT ("it" | card_target) "into" put_library_dest
                   | owner_subject V_PUT ("it" | card_target) "into" ("their" "hand" | "their" "graveyard")
 put_library_dest: "their" "choice" "of" "the" "top" "or" "bottom" "of" "their" "library"
+                | "their" "library" "second" "from" "the" "top" "or" "on" "the" "bottom"
                 | "the" ("top" | "bottom") "of" "their" "library"
-owner_subject: ("Its" | "its" | "their" | "Their") ("owner" | "owners'") | card_target "'s" ("owner" | "owners'")
+owner_subject: ("Its" | "its" | "their" | "Their") ("owner" | "owners'") | card_target "'s" ("owner" | "owners'") | "The" "owner" "of" card_target
 put_zone_action: (who)? V_PUT card_target "and/or" card_target "onto" "the" "battlefield"
                | (who)? V_PUT card_target "into" zone (("second" | "third") "from" "the" "top")? order_mod?
                | (who)? V_PUT card_target "on" "the" "bottom" ("of" zone)? order_mod?
@@ -744,6 +751,7 @@ discard_action: (who)? V_DISCARD card_target ("at" "random")? ("unless" any_text
               | "You" V_MAY V_DISCARD card_target ("unless" any_text)?
               | (who)? V_DISCARD "half" "the" "cards" "in" zone
 shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
+             | owner_subject V_SHUFFLE ("it" | card_target) "into" zone
              | (who)? V_SHUFFLE ("their" | "your") "libraries"
              | (who)? V_SHUFFLE "the" "rest" "into" ("their" | "your") "library"
            | (who)? V_SHUFFLE "the" "rest" "of" "the" "revealed" "cards" "into" zone
@@ -893,6 +901,9 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "its" "power"
     | "its" "toughness"
     | "the" "greatest" "power" "among" card_target
+    | "the" "greatest" "mana" "value" "among" card_target
+    | "the" "total" "toughness" "of" card_target
+    | "that" "spell's" "mana" "value"
     | "the" "mana" "value" "of" "that" "spell"
     | ("that" | "a" | "its") "creature's" "mana" "value"
     | card_target "'s" ("power" | "toughness")
