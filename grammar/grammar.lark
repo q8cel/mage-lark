@@ -259,6 +259,8 @@ static_keyword_sentence: ability_word_prefix? kw_with_mod
                        | kw_list "," kw_with_mod
                        | kw_with_mod "," kw_list
                        | generic_kw_list
+                       | keyword_cost
+keyword_cost: (CARDNAME | WORD)+ number? EMDASH MANA+ ("," V_PAY amount "life" | "," V_DISCARD card_target)?
 generic_kw_list: generic_kw (kw_sep generic_kw)*
 generic_kw: CARDNAME (MANA+ | number | EMDASH effect)?
 kw_list_mod: kw_item ("," kw_item)* ("," "and" kw_item)?

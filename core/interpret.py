@@ -3077,6 +3077,24 @@ class Interpreter:
             d.pop('text', None)
         return d
 
+    def i_keyword_cost(self, children):
+        d = {'verb': 'keyword_cost'}
+        words = []
+        cost = []
+        after = False
+        for ch in children:
+            if isinstance(ch, Token):
+                v = str(ch.value)
+                if v in ('\u2014', '\u2013', '-'):
+                    after = True
+                    continue
+                (cost if after else words).append(v)
+            elif isinstance(ch, Tree):
+                v = self.interp(ch)
+                (cost if after else words).append(str(v))
+        name = ' '.join(w for w in words if not w.isdigit()).strip()
+        return {'keyword': name, 'modifier': ' '.join(cost).strip()}
+
     def i_static_keyword_sentence(self, children):
         d = {'type': 'static_keyword'}
         kw = None
