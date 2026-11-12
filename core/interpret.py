@@ -2954,6 +2954,17 @@ class Interpreter:
                 kind = 'permanent'
             return {'verb': 'replace_' + kind, 'multiplier': mult,
                     'instead': True, 'text': text}
+        if 'repeat this process' in low:
+            d = {'verb': 'repeat'}
+            if 'once' in low:
+                d['count'] = 1
+            if low.startswith('draw a card and repeat'):
+                d['also'] = {'verb': 'draw', 'amount': 1}
+            d['text'] = text
+            return d
+        if 'assigns combat damage as though' in low:
+            return {'verb': 'assign_combat_damage',
+                    'as_though': 'positive power', 'text': text}
         if low.startswith('skip that draw'):
             return {'verb': 'skip', 'object': 'draw', 'instead': True}
         if 'becomes prepared' in low:
@@ -2973,11 +2984,33 @@ class Interpreter:
         if low.rstrip('.') == 'recruit':
             return {'verb': 'recruit'}
         if low.startswith('remove those counters'):
-            return {'verb': 'remove_counter', 'counter': 'those counters',
-                    'text': text}
+            d = {'verb': 'remove_counter', 'counter': 'those counters',
+                 'text': text}
+            # "…, remove those counters and it deals 20 damage to you"
+            pos = low.find(' and it deals ')
+            if pos >= 0:
+                tail = text[pos + len(' and it deals '):]
+                words = tail.split()
+                amount = None
+                for w in words:
+                    if w.isdigit():
+                        amount = int(w)
+                        break
+                d['and'] = {'verb': 'deal_damage'}
+                if amount is not None:
+                    d['and']['amount'] = amount
+                if ' to you' in tail:
+                    d['and']['to'] = 'you'
+            elif ' and transform it' in low:
+                d['and'] = {'verb': 'transform',
+                            'card': {'ref': 'anaphora', 'raw': 'it'}}
+            return d
         if low.startswith('unattach it'):
-            return {'verb': 'unattach', 'object': {'ref': 'anaphora',
-                                                   'raw': 'it'}, 'text': text}
+            d = {'verb': 'unattach', 'object': {'ref': 'anaphora',
+                                                'raw': 'it'}, 'text': text}
+            if 'at the beginning of the next end step' in low:
+                d['timing'] = 'at the beginning of the next end step'
+            return d
         if low.startswith('attach it to '):
             return {'verb': 'attach',
                     'target': {'ref': 'anaphora', 'raw': 'it'},

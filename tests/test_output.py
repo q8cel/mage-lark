@@ -323,6 +323,26 @@ add("amass-consequence",
 add("recruit-consequence",
     "If that spell's mana value was 2 or less, recruit",
     lambda o: has(o, lambda d: d.get('verb') == 'recruit'))
+add("repeat-process",
+    "If two cards that share a card type were milled this way, draw a card and repeat this process",
+    lambda o: has(o, lambda d: d.get('verb') == 'repeat'
+                  and d.get('also', {}).get('verb') == 'draw'))
+add("assign-damage-as-though-positive",
+    "If this creature's power is negative, he assigns combat damage as though his power were positive",
+    lambda o: has(o, lambda d: d.get('verb') == 'assign_combat_damage'
+                  and d.get('as_though') == 'positive power'))
+add("remove-counter-and-damage",
+    "Then if there are seven or more time counters on it, remove those counters and it deals 20 damage to you",
+    lambda o: has(o, lambda d: d.get('verb') == 'remove_counter'
+                  and d.get('and', {}).get('amount') == 20))
+add("remove-counter-and-transform",
+    "Then if there are three or more bore counters on it, remove those counters and transform it",
+    lambda o: has(o, lambda d: d.get('verb') == 'remove_counter'
+                  and d.get('and', {}).get('verb') == 'transform'))
+add("unattach-timing",
+    "If you do, unattach it at the beginning of the next end step",
+    lambda o: has(o, lambda d: d.get('verb') == 'unattach'
+                  and d.get('timing') == 'at the beginning of the next end step'))
 add("then-if-not-empty",
     "Then if it has three or more +1/+1 counters on it, transform it",
     lambda o: has(o, lambda d: d.get('type') == 'effect'
