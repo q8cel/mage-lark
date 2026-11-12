@@ -168,7 +168,7 @@ trigger_clause: trig_when event?
               | COND_KEYWORD EMDASH event?
               | COND_KEYWORD EMDASH static_text
 trig_when: V_WHEN | V_WHATEVER | V_AT "the" "beginning" "of" AT_WHEN | V_AT "the" "beginning" "of" "the" "upkeep" "of" card_target "'s" "controller" | V_AS
-AT_WHEN: /the end step|each end step of the game|your upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step|each opponent's draw step|your main phase|your first main phase|each player's main phase|each player's first main phase|each player's upkeep|your combat step|your first upkeep/
+AT_WHEN: /the end step|each end step of the game|your upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step|each opponent's draw step|your main phase|your first main phase|your second main phase|each player's main phase|each player's first main phase|each player's upkeep|your combat step|your first upkeep/
 event: event_subject EVENT_VERB event_object?
       | event_subject V_GAIN kw_list ("until" "end" "of" "turn")?
       | ("one" "or" "more")? ("players" | player) V_DISCARD ("one" "or" "more")? card_target
