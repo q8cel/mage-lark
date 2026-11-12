@@ -509,6 +509,7 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
             | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
              | (",")? "except" "it" "has" QUOTE
+            | (",")? "except" ("his" | "her" | "its") "name" "is" (THIS_CARD | CARDNAME)
              | (",")? "except" ("the" "tokens" "aren't" | "the" "copy" "isn't" | "it" "isn't" | "it's" "not") "legendary" ("and" "is" (V_A | V_AN)? token_types "in" "addition" "to" "its" "other" "types")?
              | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types? ("in" "addition" "to" "its" "other" "types")?
              | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types? ("artifact")? ("creature" | "card")? "in" "addition" "to" "its" "other" "colors" "and" "types" ("and" "it" "has" kw_list)?
@@ -541,7 +542,7 @@ search_target: card_target (("or" | "and/or" | "and") card_target)*
              | card_target ("," card_target)+ (","? "and" card_target)?
              | V_SEARCH zones "for" card_target "," V_REVEAL card_target ("," "put" "one" "onto" "the" "battlefield" "tapped" "and" "the" "other" "into" "your" "hand")? ("," "then" "shuffle")?
 
-draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target ("put" "into" zone "this" "way")?
+draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target ("that" "died" "this" "turn")? ("put" "into" zone "this" "way")?
             | (who)? V_DRAW draw_amount "card" "s"? "for" "each" "card" "type" "among" card_target
             | (who)? V_DRAW draw_amount "card" "s"? "for" "each" counter_kind "on" card_target
             | ("Any" | "any") "number" "of" "target" "players" "each" V_DRAW draw_amount "card" "s"?
@@ -555,6 +556,7 @@ draw_ref: "its" "power"
 draw_amount: amount | "a" | "an" | "an" "additional" | "that" "many" | "that" "much"
 
 gain_life_action: who V_GAIN life_amount ("for" "each" card_target ("that" "died" "this" "turn")?)?
+             | who V_GAIN life_amount "for" "each" "of" card_target
              | who V_GAIN "life" "equal" "to" any_text
                 | who V_GAIN "life" "equal" "to" xdef
 life_amount: amount "life" | "twice" "that" "much" "life" | "double" "that" "much" "life" | "half" ("their" | "a" | "your" | "his" | "her" | "an" "'opponent'" "s") "life" ("," "rounded" ("up" | "down"))?
@@ -732,12 +734,14 @@ gain_kw_action: card_target ("each")? ("also")? ("has" | "have" | "gains" | "gai
 base_pt_action: card_target ("also")? ("has" | "have" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("and" "are" token_types "in" "addition" "to" "their" "other" "types")? ("until" ("end" "of" "turn" | "your" "next" "turn"))?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
-become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
+become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? "legendary"? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
              | card_target "becomes" "saddled" ("until" "end" "of" "turn")?
+             | card_target ("becomes" | "become") "no" "longer" "suspected"
              | card_target "becomes" "prepared"
              | card_target "becomes" "equal" "to" any_text
              | card_target "becomes" "your" "choice" "of" any_text ("," any_text)*
              | card_target "becomes" "a" "copy" "of" card_target token_except? ("until" "end" "of" "turn")?
+             | card_target "become" "a" "copy" "of" card_target token_except? ("until" "end" "of" "turn")?
              | card_target "becomes" "a" "copy" "of" card_target ("until" "end" "of" "turn")? token_except?
              | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE become_tail?
 // NOTE: this rule used to end with three optional groups containing `any_text`
@@ -762,6 +766,7 @@ become_tail: "with" QUOTE "and" "loses" "all" "other" "card" "types" "and" "abil
            | "for" "as" "long" "as" "you" "control" "it"
            | "for" "as" "long" "as" any_text
            | "that's" "no" "longer" "an" "Equipment"
+           | "named" (THIS_CARD | CARDNAME) (","? CARDNAME)*
 prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | "him" | "her" | "them" | card_target) (("and" | "or") ("you" | "him" | "her" | "them" | card_target))*)? ("this" "turn")?
               | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
               | V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" "this" "turn" "to" ("you" | "him" | "her" | "them" | card_target)
@@ -1119,6 +1124,7 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
              | "that" "crewed" "it" "this" "turn"
+             | "milled" "this" "way"
              | "with" "mana" "value" CMP "the" "amount" "of" "mana" "spent" "to" "cast" card_target
              | "with" "the" "greatest" "mana" "value" "among" card_target
              | "discarded" "this" "way"
