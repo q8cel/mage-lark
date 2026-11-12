@@ -504,6 +504,8 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
              | (",")? "except" "it" "has" QUOTE
              | (",")? "except" ("the" "tokens" "aren't" | "the" "copy" "isn't" | "it" "isn't" | "it's" "not") "legendary" ("and" "is" (V_A | V_AN)? token_types "in" "addition" "to" "its" "other" "types")?
              | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types? ("in" "addition" "to" "its" "other" "types")?
+             | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types? ("artifact")? ("creature" | "card")? "in" "addition" "to" "its" "other" "colors" "and" "types" ("and" "it" "has" kw_list)?
+             | (",")? "except" "it's" (V_A | V_AN)? token_types "in" "addition" "to" "its" "other" "types" ("and" "it" "has" kw_list)?
 
 put_counter_action: V_PUT counter_amount counter_kind "and" counter_amount counter_kind "on" card_target
                   | V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("for" "each" card_target)?
@@ -729,6 +731,7 @@ become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? p
              | card_target "becomes" "equal" "to" any_text
              | card_target "becomes" "your" "choice" "of" any_text ("," any_text)*
              | card_target "becomes" "a" "copy" "of" card_target token_except? ("until" "end" "of" "turn")?
+             | card_target "becomes" "a" "copy" "of" card_target ("until" "end" "of" "turn")? token_except?
              | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE become_tail?
 // NOTE: this rule used to end with three optional groups containing `any_text`
 // ("with any_text", "that's any_text", "for as long as any_text"). `any_text` is
@@ -804,7 +807,7 @@ trigger_extra_action: ("that" "ability" | "that" "triggered" "ability" | card_ta
 lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
 count_action: V_COUNT "the" "number" "of" card_target
 have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" "to" damage_who
-have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" "as" "a" "copy" "of" ("any" card_target | card_target) token_except? ("and" "it" "has" QUOTE)? | draw_action)
+have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" ("tapped")? "as" "a" "copy" "of" ("any" card_target | card_target) token_except? ("and" "it" "has" QUOTE)? | draw_action)
            | "have" become_action
 activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
                | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?
@@ -1017,8 +1020,8 @@ NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolore
 quantifier: V_ALL | V_EACH | "every" | V_TARGET | "no" | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
           | "half" "the"
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET | amount "or" "more"
-          | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
-          | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A | V_AN
+          | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A "second" V_TARGET | V_A | V_AN
+          | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A "second" V_TARGET | V_A | V_AN
           // "one or two target creatures", "Two or more creatures": last so that the
           // pre-existing alternatives keep their resolution order.
           | NUM_WORD "or" "more" | NUM_WORD "or" "more" V_TARGET | NUM_WORD "or" NUM_WORD | NUM_WORD "or" NUM_WORD V_TARGET
