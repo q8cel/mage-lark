@@ -456,6 +456,7 @@ add_mana_action: (who)? V_ADD ("an" "additional")? mana_amount
                 | (who)? V_ADD "an" "additional" MANA+
                 | (who)? V_ADD MANA+ "for" "each" counter_kind "on" card_target
 mana_amount: "one" "mana" "of" "any" "color" | amount MANA
+           | "that" "much" MANA+
            | amount "mana" "of" "that" "color"
            | amount "mana" "of" "any" "one" "color"
            | amount "mana" "in" "any" "combination" "of" "colors"
