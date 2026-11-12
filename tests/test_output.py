@@ -87,6 +87,19 @@ add("enters-counters", "This creature enters with three wish counters on it",
     lambda o: has(o, lambda d: d.get('verb') == 'enters' and d.get('with', {}).get('count') == 3))
 add("put-zone", "put it into your hand",
     lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'hand'))
+add("exile-top-card", "Exile the top card of your library",
+    lambda o: has(o, lambda d: d.get('verb') == 'exile' and d.get('top') is True))
+add("look-top-card-amount", "Look at the top card of your library",
+    lambda o: has(o, lambda d: d.get('verb') == 'look' and d.get('top') is True
+                  and d.get('amount') == 1))
+add("put-bottom", "Put target card from a graveyard on the bottom of your library",
+    lambda o: has(o, lambda d: d.get('verb') == 'put'
+                  and d.get('placement') == 'bottom'))
+add("put-rest-random-order", "Put the rest on the bottom in a random order",
+    lambda o: has(o, lambda d: d.get('verb') == 'put'
+                  and d.get('card') == 'the rest'
+                  and d.get('placement') == 'bottom'
+                  and d.get('order') == 'random'))
 add("token-color-type", "Create a white Avatar creature token",
     lambda o: has(o, lambda d: d.get('verb') == 'create_token'
                   and d.get('token', {}).get('colors') == 'white'

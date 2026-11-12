@@ -172,6 +172,40 @@ class Interpreter:
     def _timing(self, children):
         return self._match_tail(self._token_words(children), self.TIMING_TAILS)
 
+    def _placement(self, children):
+        """Top/bottom of a library, rest-of-set objects, and ordering.
+
+        The grammar matches these as literal sibling tokens ("the top card of
+        your library", "on the bottom … in a random order"); without this the
+        action keeps only `zone: library` and loses where in the library.
+        """
+        words = self._token_words(children)
+        for ch in children:
+            if isinstance(ch, Tree) and ch.data == 'order_mod':
+                words += [str(c).lower() for c in ch.children
+                          if isinstance(c, Token)]
+        d = {}
+        if 'top' in words:
+            i = words.index('top')
+            if 'on' in words and words.index('on') < i:
+                d['placement'] = 'top'
+            else:
+                d['top'] = True
+            if 'second' in words:
+                d['from_top'] = 2
+            elif 'third' in words:
+                d['from_top'] = 3
+        if 'bottom' in words:
+            d['placement'] = 'bottom'
+        if 'order' in words:
+            if 'random' in words:
+                d['order'] = 'random'
+            elif 'any' in words:
+                d['order'] = 'any'
+        if 'rest' in words:
+            d['rest'] = True
+        return d
+
     @staticmethod
     def _token_words(children):
         return [str(ch).lower() for ch in children if isinstance(ch, Token)]
@@ -335,6 +369,8 @@ class Interpreter:
         if len(words) > 1:
             # Multi-word quantifier phrases ("one or two", "any number of") are one
             # unit; a trailing "target" belongs to the target, not the quantifier.
+            if low == ['that', 'many']:
+                return 'that many'
             if 'or' in low or 'of' in low:
                 if low[-1] == 'target':
                     low = low[:-1]
@@ -592,6 +628,7 @@ class Interpreter:
         timing = self._timing(children)
         if timing:
             d['timing'] = timing
+        d.update(self._placement(children))
         return d
 
     def i_cast_action(self, children):
@@ -845,6 +882,17 @@ class Interpreter:
         d = self._card_action('reveal', children)
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
         cts = self._find(children, 'card_target')
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['amount'] = self.interp(amt)
+        elif 'that' in toks and 'many' in toks:
+            d['amount'] = 'that many'
+        elif (isinstance(d.get('card'), dict)
+              and d['card'].get('quantifier') == 'that many'):
+            d['amount'] = 'that many'
+        elif d.get('top') and 'amount' not in d:
+            # "Reveal the top card of your library" is one card.
+            d['amount'] = 1
         if len(cts) > 1:
             # "reveal a blue or artifact card": each disjunct is a target; keep
             # all of them instead of silently keeping only the first.
@@ -1702,6 +1750,7 @@ class Interpreter:
             z = self._zone_from_tokens(children)
             if z is not None:
                 d['zone'] = z
+        d.update(self._placement(children))
         return d
 
     def i_look_action(self, children):
@@ -1713,6 +1762,14 @@ class Interpreter:
         z = self._zone_from_tokens(children)
         if z is not None:
             d['zone'] = z
+        d.update(self._placement(children))
+        words = self._token_words(children)
+        if 'amount' not in d:
+            if 'that' in words and 'many' in words:
+                d['amount'] = 'that many'
+            elif 'top' in words:
+                # "Look at the top card of your library" is one card.
+                d['amount'] = 1
         return d
 
     def i_shuffle_action(self, children):
@@ -1899,6 +1956,11 @@ class Interpreter:
                 z = self._zone_from_tokens(children)
                 if z is not None:
                     d['zone'] = z
+        # "put the rest on the bottom … in a random order" / "on top":
+        # the destination phrase is literal tokens with no card_target/zone tree.
+        if 'rest' in toks and 'card' not in d:
+            d['card'] = 'the rest'
+        d.update(self._placement(children))
         # Entry state: only a direct token ("onto the battlefield tapped"), not a
         # "tapped" inside the card_target's status list.
         if any(isinstance(ch, Token) and str(ch).lower() == 'tapped'
