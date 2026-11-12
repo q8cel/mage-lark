@@ -156,6 +156,10 @@ add("that-pile-other-destination",
     lambda o: has(o, lambda d: d.get('verb') == 'put'
                   and d.get('card') == 'that pile'
                   and d.get('rest_zone') == 'graveyard'))
+add("or-pay-cost",
+    "As an additional cost to cast this spell, sacrifice a creature or pay {3}{B}",
+    lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'
+                  and d.get('or_pay') == '{3} {B}'))
 add("instead-replacement-marker",
     "If this spell was kicked, instead choose any number of target creatures you own",
     lambda o: has(o, lambda d: d.get('verb') == 'choose' and d.get('instead') is True))

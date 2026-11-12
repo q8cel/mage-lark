@@ -770,7 +770,17 @@ class Interpreter:
         return self._card_action('untap', children)
 
     def i_sacrifice_action(self, children):
-        return self._card_action('sacrifice', children)
+        d = self._card_action('sacrifice', children)
+        toks = self._token_words(children)
+        if 'pay' in toks:
+            # "sacrifice a creature or pay {2}": keep the alternative cost.
+            pay = [str(ch.value) for ch in children
+                   if isinstance(ch, Token)
+                   and (ch.type in ('MANA', 'NUMBER')
+                        or str(ch.value).lower() in ('life', 'mana'))]
+            if pay:
+                d['or_pay'] = ' '.join(pay)
+        return d
 
     def i_return_action(self, children):
         d = {'verb': 'return'}
