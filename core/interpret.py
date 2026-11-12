@@ -1267,6 +1267,14 @@ class Interpreter:
                 pt = [c for c in pcm.children if isinstance(c, Token) and c.type in ('POWER_T', 'POWER_MOD')]
         if pt:
             d['pt'] = pt[0].value
+        tail = self._find_one(children, 'become_tail')
+        if tail is not None:
+            tail_words = self._token_words(tail.children)
+            if 'base' in tail_words and 'toughness' in tail_words:
+                bpt = [c for c in tail.children
+                       if isinstance(c, Token) and c.type == 'POWER_T']
+                if bpt:
+                    d['base_pt'] = bpt[0].value
         pcm = self._find_one(children, 'pt_color_mod')
         if pcm is not None:
             def _colors(node):

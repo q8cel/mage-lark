@@ -55,6 +55,10 @@ add("coordinated-duration",
     "Target creature gets +1/+0 and gains first strike until end of turn",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and d.get('duration') == 'until end of turn'))
+add("become-base-pt",
+    "Until end of turn, this creature becomes a Plant with base power and toughness 0/8",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('base_pt') == '0/8'))
 add("sacrifice-delayed-timing",
     "Sacrifice it at the beginning of your next end step",
     lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'
