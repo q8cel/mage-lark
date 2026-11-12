@@ -30,3 +30,9 @@ Counts are verdict rows matching the note shape when last measured.
 |---|---|---|
 | alternative cast cost: "in addition to paying its other costs" as a structured field | e4e9c2d2d824 | The clause parses and is currently kept inside the `by` string; representing it as a separate cost component needs a cost-by decomposition shared by cast/activated cost lists, not a readback. |
 | shuffle object "the rest" not referenced | cf482a72c5b3 | `shuffle_action` emits `from: []`; expressing "the rest of the chosen cards" needs an anaphoric set reference in the action model, which is a structural change. |
+
+## Cycle-14 cost-boundary scan
+
+| class | sids | why deferred / measured result |
+|---|---|---|
+| silent activated cost-boundary mismatch | none (probe "{4}, {T}: Two target creatures … can't be blocked") | Snapshot scan of interpreted outputs (Standard_cycle14 7,184; classic 2,076; FDN 761): `has_prefix_no_cost` = 5 / 0 / 1, all keyword-cost statics (Equip/Flashback/Ward/Warp) whose cost is still in `keywords.modifier`; `activated_no_prefix` = 0 / 0 / 0 after normalizing ability words ("Power-up —", "Exhaust —", "Waterbend {N}"); `activated_empty_cost` = 0. The probe sentence is a parse failure, not a silent success, so no cost_list/effect rewrite was made. Scenario counts are flap-prone if the prefix regex ignores ability words (raw first pass: 38/0/0 activated_no_prefix and 119 including parsefails). |
