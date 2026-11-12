@@ -69,6 +69,9 @@ add("cant-except", "This creature can't be blocked except by black creatures",
                   and d.get('except_by')))
 add("search-zone", "Search your library for a card named Test Card",
     lambda o: has(o, lambda d: d.get('verb') == 'search' and d.get('zone') == 'library'))
+add("basic-land-type", "Search your library for a basic land card",
+    lambda o: has(o, lambda d: d.get('verb') == 'search'
+                  and d.get('card', {}).get('card_type', {}).get('value') == 'basic land'))
 add("put-counter", "put a -1/-1 counter on it",
     lambda o: has(o, lambda d: d.get('verb') == 'put_counter'
                   and '-1/-1' in str(d.get('counter', ''))))

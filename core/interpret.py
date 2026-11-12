@@ -217,8 +217,12 @@ class Interpreter:
             return {'kind': 'type', 'value': 'instant or sorcery'}
         if toks[0].value.lower() in self.ANAPHORA:
             return {'ref': 'anaphora', 'raw': toks[0].value}
+        words = [t.value.lower() for t in toks]
+        # "basic land card": `basic` is a modifier, not the type. Reporting
+        # toks[0] alone dropped the head noun ('basic' instead of 'basic land').
+        if len(words) > 1 and words[0] in ('basic', 'nonbasic') and 'land' in words:
+            return {'kind': 'type', 'value': words[0] + ' land'}
         if all(t.type in self.ABILITY_TOKENS for t in toks):
-            words = [t.value.lower() for t in toks]
             has_ability = any(w in ('ability', 'abilities') for w in words)
             has_spell = any(w in ('spell', 'spells') for w in words)
             if has_ability and has_spell:
