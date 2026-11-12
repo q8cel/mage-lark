@@ -1813,6 +1813,14 @@ class Interpreter:
             if z is not None:
                 d['zone'] = z
         d.update(self._placement(children))
+        toks = self._token_words(children)
+        if 'reveal' in toks:
+            # "search …, reveal it, put it into your hand" keeps the reveal
+            # step as direct tokens; without the flag the chain silently
+            # becomes search -> put.
+            d['reveal'] = True
+        if 'shuffle' in toks:
+            d['then_shuffle'] = True
         # "search for a card named X": the name is a direct token after `named`.
         for i, ch in enumerate(children):
             if isinstance(ch, Token) and str(ch).lower() == 'named':
