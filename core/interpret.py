@@ -118,7 +118,7 @@ class Interpreter:
     # *when* it happens. Canonical, lower-case values.
     DURATION_VERBS = {'stat_change', 'gain_kw', 'gain_quote', 'lose_keywords',
                       'set_base_pt', "can't", 'play', 'cast', 'exile',
-                      'gain_control', 'no_max_hand_size'}
+                      'gain_control', 'no_max_hand_size', 'prevent_damage'}
     DURATION_TAILS = (
         (('until', 'end', 'of', 'turn'), 'until end of turn'),
         (('until', 'the', 'end', 'of', 'your', 'next', 'turn'),
@@ -2147,7 +2147,15 @@ class Interpreter:
         return d
 
     def i_prevent_action(self, children):
-        return self._card_action('prevent_damage', children)
+        d = self._card_action('prevent_damage', children)
+        toks = self._token_words(children)
+        if 'damage' in toks:
+            d.setdefault('object', 'damage')
+        if 'all' in toks:
+            d['all'] = True
+        if 'to' in toks and 'you' in toks:
+            d['to'] = 'you'
+        return d
 
     SUPERTYPES = {'creature', 'artifact', 'enchantment', 'land', 'plane',
                   'phenomenon', 'module', 'card', 'saga', 'vanguard', 'cop'}

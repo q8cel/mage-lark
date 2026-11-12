@@ -129,6 +129,12 @@ add("look-possessor", "As this creature enters, look at an opponent's hand",
 add("cant-block-duration", "Target creature can't block this turn",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
                   and d.get('duration') == 'this turn'))
+add("prevent-damage-object-duration",
+    "Until your next turn, prevent all damage that would be dealt to you",
+    lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'
+                  and d.get('object') == 'damage'
+                  and d.get('to') == 'you'
+                  and d.get('duration') == 'until your next turn'))
 add("cast-permission-as-long",
     "You may cast this card for as long as it remains exiled",
     lambda o: has(o, lambda d: d.get('verb') == 'cast'
