@@ -172,6 +172,18 @@ add("other-target",
 add("one-or-more-quantifier",
     "Whenever one or more creatures you control attack, you gain life equal to the number of attacking creatures",
     lambda o: has(o, lambda d: d.get('quantifier') == {'one_or_more': 1}))
+add("for-each-gain-life",
+    "When this creature enters, you gain 2 life for each Gate you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_life'
+                  and d.get('for_each', {}).get('card_type', {}).get('value') == 'Gate'))
+add("for-each-cost-mod",
+    "This spell costs {1} less to cast for each instant and sorcery card in your graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and 'instant' in str(d.get('for_each', ''))))
+add("for-each-put-counter",
+    "Whenever you cast a spell, put a +1/+1 counter on this creature for each of that spell's colors",
+    lambda o: has(o, lambda d: d.get('verb') == 'put_counter'
+                  and d.get('for_each')))
 add("fight-second-target",
     "Target creature you control fights target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'fight'

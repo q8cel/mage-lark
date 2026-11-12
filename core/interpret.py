@@ -209,6 +209,32 @@ class Interpreter:
             d['rest'] = True
         return d
 
+    def _for_each(self, children):
+        """The "for each <set>" multiplier, as a direct or cost_qual subtree."""
+        words = self._token_words(children)
+        if 'for' not in words or 'each' not in words:
+            # cost_mod keeps the phrase in a cost_qual subtree.
+            for ch in children:
+                if isinstance(ch, Tree) and ch.data == 'cost_qual':
+                    qw = self._token_words(ch.children)
+                    if 'for' in qw and 'each' in qw:
+                        for sub in ch.children:
+                            if isinstance(sub, Tree) and sub.data in ('card_target', 'any_text'):
+                                return self.interp(sub)
+            return None
+        start = next(i for i, ch in enumerate(children)
+                     if isinstance(ch, Token) and str(ch).lower() == 'for')
+        for nxt in children[start + 1:]:
+            if not isinstance(nxt, Tree):
+                continue
+            if nxt.data in ('card_target', 'any_text'):
+                return self.interp(nxt)
+            if nxt.data == 'cost_qual':
+                for sub in nxt.children:
+                    if isinstance(sub, Tree) and sub.data in ('card_target', 'any_text'):
+                        return self.interp(sub)
+        return None
+
     @staticmethod
     def _token_words(children):
         return [str(ch).lower() for ch in children if isinstance(ch, Token)]
@@ -1483,6 +1509,9 @@ class Interpreter:
                     # "gain life equal to its power": a stat reference, not free text.
                     amount = {'possessor': 'its', 'stat': amount.lower().split()[1]}
                 d['amount'] = amount
+        fe = self._for_each(children)
+        if fe is not None:
+            d['for_each'] = fe
         return d
 
     def i_lose_life_action(self, children):
@@ -1648,6 +1677,9 @@ class Interpreter:
         xd = self._find_one(children, 'xdef')
         if xd is not None:
             d['amount'] = {'xdef': self.interp(xd)}
+        fe = self._for_each(children)
+        if fe is not None:
+            d['for_each'] = fe
         return d
 
     def i_damage_amount(self, children):
@@ -1697,6 +1729,11 @@ class Interpreter:
         cts = self._find(children, 'card_target')
         cas = self._find(children, 'counter_amount')
         cks = self._find(children, 'counter_kind')
+        words = self._token_words(children)
+        if 'for' in words and 'each' in words and 'and' not in words:
+            # "… for each of that spell's colors": that card_target is the
+            # multiplier set, not a second counter target.
+            cts = cts[:1]
         extras = []
         for i in range(1, max(len(cts), len(cas), len(cks))):
             e = {}
@@ -1709,6 +1746,9 @@ class Interpreter:
             extras.append(e)
         if extras:
             d['and'] = extras
+        fe = self._for_each(children)
+        if fe is not None:
+            d['for_each'] = fe
         return d
 
     def i_remove_counter_action(self, children):
@@ -2058,6 +2098,15 @@ class Interpreter:
             # "Its controller may …" / "Each player may …": keep the actor so
             # the permission is not attributed to the spell's controller.
             d['who'] = actor
+        who_verbs = {'gain_life', 'lose_life', 'draw', 'mill', 'discard',
+                     'scry', 'surveil'}
+        if (actor and str(actor).lower() == 'you'
+                and isinstance(inner, dict)
+                and inner.get('verb') in who_verbs
+                and 'who' not in inner):
+            # "you may gain N life": the explicit actor belongs to the inner
+            # action too (the empty placeholder is not stored).
+            inner['who'] = 'You'
         return d
 
     def i_for_each_sentence(self, children):
@@ -2093,6 +2142,9 @@ class Interpreter:
             d['direction'] = 'less'
         elif any(isinstance(ch, Token) and ch.value == 'additional' for ch in children):
             d['direction'] = 'additional'
+        fe = self._for_each(children)
+        if fe is not None:
+            d['for_each'] = fe
         return d
 
     def i_gain_quote_action(self, children):
