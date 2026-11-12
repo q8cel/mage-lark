@@ -515,6 +515,18 @@ add("pronoun-subject-anaphora", "He gains menace until end of turn",
 add("event-without-object",
     "Whenever this creature attacks, it gets +1/+1 until end of turn",
     lambda o: has(o, lambda d: d.get('verb') == 'attacks' and d.get('object') == {}))
+add("event-combat-damage",
+    "Whenever this creature deals combat damage to a player, draw a card",
+    lambda o: has(o, lambda d: d.get('verb') == 'deals'
+                  and d.get('object', {}).get('damage') == 'combat'
+                  and d.get('object', {}).get('to') == 'a player'))
+add("event-sacrifice-verb",
+    "Whenever you sacrifice an artifact, put a +1/+1 counter on this creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'sacrifice' and d.get('subject') == 'you'))
+add("event-while-saddled",
+    "Whenever this creature attacks while saddled, put a +1/+1 counter on it",
+    lambda o: has(o, lambda d: d.get('verb') == 'attacks'
+                  and d.get('condition') == 'while saddled'))
 add("token-for-each",
     "Create a 2/2 green Wolf creature token for each Forest you control",
     lambda o: has(o, lambda d: d.get('verb') == 'create_token'

@@ -219,7 +219,7 @@ event: event_subject EVENT_VERB event_object?
       | V_YOU V_CYCLE card_target
       | V_THAT "mana" "is" "spent" "to" "cast" event_object
 event_subject: card_target "or" card_target | card_target | player | V_THEY
-EVENT_VERB: /enters or dies|enters or attacks|attacks for the first time each turn|is countered|is dealt|is put|enters|dies|attacks|attack|deals|deal|becomes|casts|cast|discards|draws|draw|gains|gain|loses|lose|taps|untaps|blocks|block|fights|leaves|resolves/
+EVENT_VERB: /enters or dies|enters or attacks|attacks for the first time each turn|is countered|is dealt|is put|enters|dies|attacks|attack|deals|deal|becomes|casts|cast|discards|discard|draws|draw|gains|gain|loses|lose|taps|untaps|blocks|block|fights|leaves|resolves|sacrifices|sacrifice|cycles|cycle/
 event_object: ("combat" "damage" "to" (player | card_target) | player)?
             | "noncombat" "damage"
             | "damage"

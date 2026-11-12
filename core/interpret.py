@@ -1916,6 +1916,9 @@ class Interpreter:
                     d['object'] = self.interp(ch)
                 elif ch.data == 'card_target':
                     d.setdefault('object', self.interp(ch))
+                elif ch.data == 'any_text' and 'while' in self._token_words(children):
+                    # "attacks while saddled": a state condition on the event.
+                    d['condition'] = 'while ' + self._text([ch]).strip()
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
         if not d:
@@ -1934,6 +1937,16 @@ class Interpreter:
         return {'or': cards}
 
     def i_event_object(self, children):
+        words = self._token_words(children)
+        if 'damage' in words:
+            # "deals combat damage to a player": the damage kind is part of the
+            # event, not just the recipient.
+            d = {'damage': 'combat' if 'combat' in words else 'noncombat'}
+            for ch in children:
+                if isinstance(ch, Tree):
+                    d['to'] = self.interp(ch)
+                    break
+            return d
         for ch in children:
             if isinstance(ch, Tree):
                 return self.interp(ch)
