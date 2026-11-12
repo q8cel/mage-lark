@@ -506,6 +506,7 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
             | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
              | (",")? "except" "it" "has" QUOTE
+            | (",")? "except" ("his" | "her" | "its") "name" "is" (THIS_CARD | CARDNAME)
              | (",")? "except" ("the" "tokens" "aren't" | "the" "copy" "isn't" | "it" "isn't" | "it's" "not") "legendary" ("and" "is" (V_A | V_AN)? token_types "in" "addition" "to" "its" "other" "types")?
              | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types? ("in" "addition" "to" "its" "other" "types")?
              | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types? ("artifact")? ("creature" | "card")? "in" "addition" "to" "its" "other" "colors" "and" "types" ("and" "it" "has" kw_list)?
