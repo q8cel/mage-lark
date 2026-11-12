@@ -110,6 +110,11 @@ add("mill-actor", "Target player mills four cards",
 add("mill-no-actor-no-empty-who", "Mill four cards",
     lambda o: has(o, lambda d: d.get('verb') == 'mill'
                   and 'who' not in d))
+add("gain-life-no-empty-who",
+    "Whenever you put one or more +1/+1 counters on a creature, you may gain that much life",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_life'
+                  and 'who' not in d)
+                  and not has(o, lambda d: d.get('who') == {}))
 add("look-possessor", "As this creature enters, look at an opponent's hand",
     lambda o: has(o, lambda d: d.get('verb') == 'look'
                   and d.get('possessor') == "an opponent's"))

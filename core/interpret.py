@@ -1451,7 +1451,9 @@ class Interpreter:
         d = {'verb': 'gain_life'}
         who = self._find_one(children, 'who') or self._find_one(children, 'player')
         if who is not None:
-            d['who'] = self.interp(who)
+            wv = self.interp(who)
+            if wv:
+                d['who'] = wv
         la = self._find_one(children, 'life_amount')
         if la is not None:
             d['amount'] = self.interp(la)
@@ -1543,7 +1545,9 @@ class Interpreter:
         d = {'verb': verb}
         for ch in children:
             if isinstance(ch, Tree) and ch.data in ('who', 'player', 'card_target'):
-                d['who'] = self.interp(ch)
+                wv = self.interp(ch)
+                if wv:
+                    d['who'] = wv
                 break
         return d
 
@@ -1585,7 +1589,9 @@ class Interpreter:
         d = {'verb': 'gain_poison'}
         who = self._find_one(children, 'who')
         if who is not None:
-            d['who'] = self.interp(who)
+            wv = self.interp(who)
+            if wv:
+                d['who'] = wv
         am = self._find_one(children, 'amount')
         if am is not None:
             d['amount'] = self.interp(am)
