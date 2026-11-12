@@ -77,6 +77,8 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | "Transform" card_target
                | "Spend" "only" colors "mana" "on" "X"
                | V_YOU "have" "protection" "from" "the" "chosen" "card" "name"
+               | V_YOU "may" "spend" "mana" "as" "though" "it" "were" "mana" "of" "any" "color" "to" ("cast" card_target | "activate" "abilities" "of" card_target)
+               | card_target "can" "be" "cast" "as" "though" ("it" | "they") "had" KEYWORD
                | V_YOU "may" "spend" "mana" "as" "though" "it" "were" "mana" "of" "any" "color"
                | V_YOU "may" "play" amount? "additional" "land" "s"? "on" "each" "of" "your" "turns"
                | V_YOU "may" "look" "at" "the" "top" "card" "of" "your" "library" "any" "time" (","? "and" V_YOU "may" "play" "lands" "from" "the" "top" "of" "your" "library")?

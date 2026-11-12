@@ -3291,6 +3291,28 @@ class Interpreter:
         if 'maximum' in toks and 'hand' in toks and amt is not None:
             d['max_hand_size'] = self.interp(amt)
             d.pop('text', None)
+        if 'spend' in toks and 'mana' in toks and 'though' in toks:
+            eff = {'verb': 'spend_mana', 'object': 'mana',
+                   'as_though': 'mana of any color'}
+            ct = self._find_one(children, 'card_target')
+            if ct is not None:
+                eff['to'] = self.interp(ct)
+            d['effect'] = eff
+            d.pop('text', None)
+        elif ('cast' in toks and 'though' in toks and 'be' in toks
+              and any(isinstance(c, Token) and c.type == 'KEYWORD'
+                      for c in children)):
+            kw = next(str(c) for c in children
+                      if isinstance(c, Token) and c.type == 'KEYWORD')
+            d['effect'] = {'verb': 'cast', 'object': 'spell',
+                           'as_though': kw}
+            d.pop('text', None)
+        elif ('look' in toks and 'top' in toks and 'any' in toks
+              and 'play' not in toks):
+            d['effect'] = {'verb': 'look',
+                           'object': 'top card of your library',
+                           'any_time': True}
+            d.pop('text', None)
         return d
 
     def i_ward_cost(self, children):
