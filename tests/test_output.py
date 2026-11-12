@@ -135,6 +135,10 @@ add("prevent-damage-object-duration",
                   and d.get('object') == 'damage'
                   and d.get('to') == 'you'
                   and d.get('duration') == 'until your next turn'))
+add("may-gain-life-actor",
+    "You may gain 4 life",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_life'
+                  and d.get('who') == 'You'))
 add("cast-permission-as-long",
     "You may cast this card for as long as it remains exiled",
     lambda o: has(o, lambda d: d.get('verb') == 'cast'
