@@ -784,6 +784,7 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | "any"
         | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
         | investigate_action | begin_game_action
         | keyword_action
+        | transform_action
        | mill_action
        | flip_action
        | has_abilities_action
