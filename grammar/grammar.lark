@@ -945,6 +945,7 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | card_target "'s" ("power" | "toughness")
     | "that" "card's" "mana" "cost"
     | "the" "amount" "of" "excess" "damage" "dealt" "to" "that" "creature" "this" "way"
+    | "the" "amount" "of" "mana" "spent" "to" "cast" card_target
     | "the" "amount" "of" "damage" "dealt" "this" "way"
     | "the" "greatest" "power" "among" "other" "creatures" "you" "control"
     | "the" "greatest" "power" "among" "creatures" "you" "control"
@@ -1096,6 +1097,7 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
              | "that" "crewed" "it" "this" "turn"
+             | "with" "mana" "value" CMP "the" "amount" "of" "mana" "spent" "to" "cast" card_target
              | "with" "the" "greatest" "mana" "value" "among" card_target
              | "discarded" "this" "way"
              | "you've" ("cast" | "discarded" | "gained") "this" "turn"
