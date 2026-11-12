@@ -1156,6 +1156,12 @@ class Interpreter:
             w = {'counter': self._text(ck.children)}
             if ca is not None:
                 w['count'] = self.interp(ca)
+            toks = [str(c).lower() for c in children
+                    if isinstance(c, Token)]
+            if 'fewer' in toks:
+                amt = self._find_one(children, 'amount')
+                if amt is not None:
+                    w['fewer'] = self.interp(amt)
             d['with'] = w
         return d
 
