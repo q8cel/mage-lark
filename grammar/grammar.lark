@@ -981,6 +981,8 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "the" "greatest" "power" "among" "other" "creatures" "you" "control"
     | "the" "greatest" "power" "among" "creatures" "you" "control"
     | "the" "greatest" "number" "of" "cards" "a" "player" "discarded" "this" "way"
+    | "the" "greatest" "number" "of" card_target
+    | "the" "total" "number" "of" card_target
     | "your" "devotion" "to" colors
     | "this" "creature's" "power"
     | "~'s" "power"
@@ -1046,13 +1048,17 @@ without_mod: "without" KEYWORD ("or" KEYWORD)*
 zone_mod: with_modifier? controller? with_modifier? in_zone? with_modifier?
             | quantifier "of" card_target
             | relative_mod
+            | relative_mod in_zone
             | controller relative_mod
+            | controller relative_mod in_zone
 relative_mod: ("that" | "who") rel_pred
 rel_pred: "attacked" "this" "turn"
         | "entered" "the" "battlefield" "this" "turn"
         | "was" "dealt" "damage" "this" "turn"
         | "saddled" "it" "this" "turn"
         | "don't" "share" "a" "creature" "type" "with" "the" "chosen" "creature" "they" "control"
+        | "have" "a" "creature" "type" "in" "common"
+        | "share" "a" "creature" "type"
 this_that: V_THIS | V_THAT | V_IT | "those" | "these" | "the"
 possessive: "your" | "Your" | "its" | "their" | "an opponent's" | "that player's" | "that opponent's"
 otherness: V_OTHER | V_ANOTHER
@@ -1151,6 +1157,7 @@ controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "c
           | "you" "don't" "control" | "you" "own" | "you" "don't" "own" | "an" "opponent" "owns" | "its" "controller"
           | "defending" "player" "controls"
           | "controlled" "by" "different" "players" | "you" "already" "control"
+          | "those" "players" "control"
           | "you" "cast" | "you" "played"
           | "defending" "player" "controls" | "attacking" "player" "controls"
           | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "that" "opponent" "controls" | "target" "player" "controls" | "target" "opponent" "controls" | "they" "gained" "control" "of" "this" "way"
