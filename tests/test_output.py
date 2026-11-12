@@ -240,6 +240,9 @@ add("token-except-clause",
 add("token-that-many",
     "Whenever one or more Dinosaurs you control attack, create that many Treasure tokens",
     lambda o: has(o, lambda d: d.get('token', {}).get('count') == 'that many'))
+add("token-two-quotes",
+    'Whenever ~ enters or attacks, create a tapped colorless artifact token named Test Relic with "When this token enters, it deals 2 damage to any target" and "{T}: Add one mana of any color."',
+    lambda o: has(o, lambda d: len(d.get('token', {}).get('quotes', [])) == 2))
 add("stat-for-each", "This creature gets +1/+1 for each other creature on the battlefield",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and 'battlefield' in str(d.get('for_each', ''))))

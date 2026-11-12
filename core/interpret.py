@@ -1812,7 +1812,11 @@ class Interpreter:
                 elif sub.value.lower() == 'each':
                     seen_for_each = True
                 if sub.type == 'QUOTE':
-                    d['quote'] = sub.value
+                    # "with \"A\" and \"B\"": keep every granted quote.
+                    if 'quote' in d:
+                        d.setdefault('quotes', [d['quote']]).append(sub.value)
+                    else:
+                        d['quote'] = sub.value
                 if sub.type == 'CARDNAME':
                     d.setdefault('named', []).append(sub.value)
 
