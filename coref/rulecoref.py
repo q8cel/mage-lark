@@ -163,6 +163,9 @@ def quoted_region(text, pos):
 _ONE_OF = re.compile(r"\bone\s+of\s+(them|those|these)\b", re.I)
 COLLECTION_TYPES = {"card", "creature", "permanent", "artifact", "land",
                     "enchantment", "token", "spell", "pile"}
+# A distributive/enumerated NP is a MEMBER of a collection, not the collection
+# itself ("each card", "all enchantment cards", "any number of spells").
+_SUBSET_MEMBER = re.compile(r"^(?:each|every|any|all|one of|some)\b", re.I)
 
 POSSESSED_RE = re.compile(
     r"^\s*(?:'s\s+)?(owner|controller|power|toughness|mana value|mana cost|"
@@ -489,6 +492,26 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = f
                     evidence.append("drop-non-entities")
 
+        # ---- "from among them": the pronoun names the collection being drawn
+        # from, not the subset NP immediately before it.  "Exile a card of that
+        # type from among them" / "Put all enchantment cards from among them"
+        # both refer to the revealed/library pile; the enumerated NP ("each
+        # card", "all ... cards", "any number of ...") is a member, never the
+        # collection.  The source collection is the plural card NP, and only
+        # the non-distributive ones can be the whole.
+        if (on["set_element"] and rec["kind"] == "pronoun"
+                and rec["surface"].lower() == "them"
+                and re.search(r"\bamong\s*$",
+                              text[max(0, rec["start"] - 12):rec["start"]],
+                              re.I)):
+            f = [i for i in pool
+                 if ms[i]["number"] == "pl"
+                 and ms[i]["head_type"] == "card"
+                 and not _SUBSET_MEMBER.match(ms[i]["surface"].strip())]
+            if f:
+                pool = f
+                evidence.append("among-collection")
+
         # ---- demonstratives: "that/those X" normally points at a previous
         # mention, not at the card itself, and "those cards" prefers a card NP.
         if (rec["kind"] == "demonstrative"
@@ -592,25 +615,39 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 break
 
         if on["set_rest"] and rec["kind"] == "phrase":
-            f = [i for i in pool if ms[i]["number"] == "pl" and ms[i]["head_type"]]
-            if f:
-                # "Put all Goblin cards revealed this way into your hand and
-                # the rest ...": the last collection is the singled-out subset;
-                # prefer the source collection (the revealed top cards).
-                last = ms[f[-1]]
-                subset = (re.match(r"(?i)^all\b", last["surface"].strip())
-                          and ("revealed this way" in last["surface"].lower()
-                               or text[last["end"]:last["end"] + 24].lower()
-                               .lstrip().startswith("revealed this way")))
-                if len(f) > 1 and subset:
-                    f = [f[-2]]
-                pool = f
-                evidence.append("set-rest")
+            # The collection being split is normally the card pile ("the top
+            # N cards", "that many cards").  A distributive/enumerated NP
+            # ("each card", "all ... cards", "any number of ...") is the
+            # singled-out subset, never the whole that "the rest" excludes
+            # from.  Prefer the last non-subset plural card collection.
+            cards = [i for i in pool
+                     if ms[i]["number"] == "pl"
+                     and ms[i]["head_type"] == "card"
+                     and not ms[i].get("is_anaphor")
+                     and not _SUBSET_MEMBER.match(ms[i]["surface"].strip())]
+            if cards:
+                pool = [max(cards, key=lambda i: ms[i]["end"])]
+                evidence.append("set-rest-source")
             else:
-                # "the rest" of a hand/library has no entity antecedent here;
-                # abstain rather than fall through to the singled-out card.
-                pool = []
-                evidence.append("set-rest-no-collection")
+                f = [i for i in pool if ms[i]["number"] == "pl" and ms[i]["head_type"]]
+                if f:
+                    # "Put all Goblin cards revealed this way into your hand and
+                    # the rest ...": the last collection is the singled-out subset;
+                    # prefer the source collection (the revealed top cards).
+                    last = ms[f[-1]]
+                    subset = (re.match(r"(?i)^all\b", last["surface"].strip())
+                              and ("revealed this way" in last["surface"].lower()
+                                   or text[last["end"]:last["end"] + 24].lower()
+                                   .lstrip().startswith("revealed this way")))
+                    if len(f) > 1 and subset:
+                        f = [f[-2]]
+                    pool = f
+                    evidence.append("set-rest")
+                else:
+                    # "the rest" of a hand/library has no entity antecedent here;
+                    # abstain rather than fall through to the singled-out card.
+                    pool = []
+                    evidence.append("set-rest-no-collection")
 
         # ---- quoted granted ability
         if on["granted"]:
