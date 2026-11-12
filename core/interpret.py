@@ -2071,6 +2071,11 @@ class Interpreter:
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['target'] = self.interp(ct)
+        kws = self._find_one(children, 'kw_list')
+        if kws is not None:
+            # "gains trample and \"…\"": the keyword and the quoted grant
+            # share one action.
+            d['keywords'] = self.interp(kws)
         for ch in children:
             if isinstance(ch, Tree) and ch.data == 'card_target':
                 d['target'] = self.interp(ch)

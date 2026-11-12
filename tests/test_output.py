@@ -132,6 +132,11 @@ add("effect-timing-delayed",
     "At the beginning of the next end step, return those creatures to their owner's hand",
     lambda o: has(o, lambda d: d.get('verb') == 'return'
                   and d.get('timing') == 'at the beginning of the next end step'))
+add("gain-quote-duration-keywords",
+    '{T}: Until end of turn, target creature you control gains trample and "Whenever this creature deals combat damage to a player, draw a card."',
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_quote'
+                  and d.get('duration') == 'until end of turn'
+                  and d.get('keywords') == ['trample']))
 add("draw-amount-int", "Draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 2))
 add("up-to-quantifier", "Discard up to two cards",
