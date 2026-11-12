@@ -1569,6 +1569,19 @@ class Interpreter:
             if pm:
                 w['counter'] = pm[0].value + ' counter'
             d['with'] = w
+        cas = self._find(children, 'counter_amount')
+        cks = self._find(children, 'counter_kind')
+        if len(cas) > 1 or len(cks) > 1:
+            extras = []
+            for i in range(1, max(len(cas), len(cks))):
+                e = {}
+                if i < len(cas):
+                    e['count'] = self.interp(cas[i])
+                if i < len(cks):
+                    e['counter'] = self._text(cks[i].children)
+                extras.append(e)
+            if extras and isinstance(d.get('with'), dict):
+                d['with']['and'] = extras
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
         if 'tapped' in toks:
             d['tapped'] = True

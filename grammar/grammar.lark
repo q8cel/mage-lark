@@ -499,7 +499,8 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
             | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
 
-put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("for" "each" card_target)?
+put_counter_action: V_PUT counter_amount counter_kind "and" counter_amount counter_kind "on" card_target
+                  | V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("for" "each" card_target)?
                   | V_PUT counter_amount counter_kind ("," counter_amount? counter_kind)+ (","? "and" counter_amount? counter_kind)? "on" card_target
                   | V_PUT counter_amount counter_name ("," counter_name)* (","? "or")? POWER_MOD? "counter" "s"? "on" card_target
                   | V_PUT ("its" | "their" | "those" | "this" "creature's") "counters" "on" card_target
@@ -879,7 +880,7 @@ gain_quote_action: (card_target)? (V_GAIN | "has" | "have") QUOTE
 emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))?
 
 self_ref: "it" | "him" | "her" | "them"
-enters_action: card_target V_ENTERS ("the" "battlefield")? (("tapped" | "untapped") "with" counter_amount counter_kind "on" self_ref | "tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" self_ref | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" self_ref | "with" amount "additional"? POWER_MOD "counter" "s"? "on" self_ref)? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
+enters_action: card_target V_ENTERS ("the" "battlefield")? ("with" counter_amount counter_kind "and" counter_amount counter_kind "on" self_ref | ("tapped" | "untapped") "with" counter_amount counter_kind "on" self_ref | "tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" self_ref | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" self_ref | "with" amount "additional"? POWER_MOD "counter" "s"? "on" self_ref)? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
             | card_target V_ENTERS ("the" "battlefield")? "with" "a" "number" "of" (POWER_MOD | counter_name) "counters" "on" self_ref "equal" "to" any_text
 enchant_action: V_ENCHANT enchant_target
 enchant_target: LISTTOK | STATUS* (GENERIC_TYPE | CARDNAME | "player") (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
