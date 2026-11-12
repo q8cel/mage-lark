@@ -733,6 +733,8 @@ stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD "or" POWER_MOD
            | ("has" | "gains" | "have" | "gain") kw_list
 can_attack_as_though_action: card_target V_CAN "attack" ("this" "turn")? "as" "though" ("it" | "they") ("didn't" | "did" "not") "have" KEYWORD
 gain_kw_action: card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)? ("and" ("loses" | "lose") "all" ("other")? "abilities")?
+             | card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "your" "next" "turn") ("as" "long" "as" any_text)?
+             | card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") kw_list "and" "becomes" "colorless" ("until" ("end" "of" "turn" | "your" "next" "turn"))?
              | card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") "your" "choice" "of" kw_list ("until" "end" "of" "turn")?
 base_pt_action: card_target ("also")? ("has" | "have" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("and" "are" token_types "in" "addition" "to" "their" "other" "types")? ("until" ("end" "of" "turn" | "your" "next" "turn"))?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
@@ -825,6 +827,7 @@ count_action: V_COUNT "the" "number" "of" card_target
 have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" "to" damage_who
 have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" ("tapped")? "as" "a" "copy" "of" ("any" card_target | card_target) token_except? ("and" "it" "has" QUOTE)? | draw_action)
            | "have" "the" "base" "power" "and" "toughness" "of" card_target "become" "equal" "to" xdef ("until" ("end" "of" "turn" | "your" "next" "turn"))?
+           | "have" card_target "'s" "base" ("power" "and" "toughness" | "power" | "toughness") "become" "equal" "to" xdef ("until" ("end" "of" "turn" | "your" "next" "turn"))?
            | "have" become_action
 activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
                | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?
@@ -860,17 +863,21 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "players" | "an" "oppon
         | discard_action "or" sacrifice_action)
 
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual* ("," "where" "X" "is" xdef)?
+               | cost_subject V_COST cost_amount ("less" | "more") cost_qual*
                | "The" WORD "cost" "is" "equal" "to" any_text
                | card_target V_COST "an" "additional" MANA+ "to" "cast"
                | ("This" | "the") WORD? "cost" "is" "reduced" "by" cost_amount ("for" "each" card_target)?
 cost_subject: ("The" | "the") ("first" | "second") card_target "you" "cast" "each" "turn"
+            | ("The" | "the") ("first" | "second") card_target "you" "cast" "during" "each" "of" "your" "turns"
+            | card_target "you" "cast" "from" "anywhere" "other" "than" "your" "hand"
+            | "Unlock" "cost" "s"? "you" "pay"
             | ("The" | "the") ("first" | "second") card_target "each" "turn"
             | ("This" | "this") "ability"
             | card_target "and" card_target ("you" "cast")?
             | card_target ("you" | "your opponents") "cast" ("that" "target" card_target)?
             | card_target ("you" "cast")?
             | ("activated" | "other" | "mana")? "abilities" "of" card_target
-cost_qual: ("for" "each" any_text) | ("that" "target" any_text) | ("unless" any_text) | ("during" OWNER? "turn")
+cost_qual: ("for" "each" any_text) | ("that" "target" any_text) | ("unless" any_text) | ("during" OWNER? "turn") | ("as" "long" "as" any_text)
 cost_amount: amount | MANA+
                | card_target "costs" "double" "what" "they" "normally" "would"
                | card_target "cost" "the" "same" "amount" "as" "its" "base" "mana" "cost"
