@@ -1087,6 +1087,7 @@ card_kind: THIS_CARD types? | types
          | "creature" "spells" | "permanent" "spells" | "artifact" "spells" | "enchantment" "spells" | "land" "spells"
          | "creature" "spell" | "permanent" "spell" | "artifact" "spell" | "enchantment" "spell" | "land" "spell"
          | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
+         | "graveyard" "s"?
          | "it" | "them" | "they" | "him" | "her" | "he" | "she"
          | "copy" "of" card_target
          | INSTANT_SORCERY "spell" "s"?
@@ -1125,6 +1126,7 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "attached" "to" card_target
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
+             | "with" amount "or" "more" "cards" "in" "it"
              | "that" "crewed" "it" "this" "turn"
              | "milled" "this" "way"
              | "with" "mana" "value" CMP "the" "amount" "of" "mana" "spent" "to" "cast" card_target
@@ -1138,7 +1140,7 @@ controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "c
           | "controlled" "by" "different" "players" | "you" "already" "control"
           | "you" "cast" | "you" "played"
           | "defending" "player" "controls" | "attacking" "player" "controls"
-          | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "that" "opponent" "controls" | "target" "player" "controls" | "target" "opponent" "controls"
+          | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "that" "opponent" "controls" | "target" "player" "controls" | "target" "opponent" "controls" | "they" "gained" "control" "of" "this" "way"
           | "its" "owner" | "the" "player" "who" "cast" "it"
 in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "library" | "from" "your" "graveyard"
         | "in" "a" "graveyard" | "in" "exile" | "from" "a" "graveyard" | "from" "their" "graveyard"
