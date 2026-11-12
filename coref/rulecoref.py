@@ -1132,6 +1132,27 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = [max(f, key=lambda i: ms[i]["end"])]
                 evidence.append("possessive-owner-object")
 
+        # ---- "their mana costs" / "their total power": the possessive refers
+        # to the plural spells/creatures just named, not to the card pile they
+        # are cast from or the library being exiled.
+        if (on["possessive"] and rec["is_possessive"]
+                and rec["surface"].lower() == "their"):
+            after = text[rec["end"]:rec["end"] + 24]
+            if re.match(r"\s+mana\s+costs?\b", after, re.I):
+                pat = r"\bspells\b"
+            elif re.match(r"\s+total\s+(?:power|toughness)\b", after, re.I):
+                pat = r"\bcreatures\b"
+            else:
+                pat = None
+            if pat:
+                f = [i for i in range(len(ms))
+                     if not ms[i].get("is_anaphor")
+                     and ms[i]["end"] <= rec["start"]
+                     and re.search(pat, ms[i]["surface"], re.I)]
+                if f:
+                    pool = [max(f, key=lambda i: ms[i]["end"])]
+                    evidence.append("their-attribute-plural")
+
         # ---- copy-token exception: "create a token that's a copy of X, except
         # it's ... in addition to its other types".  "its other types" is the
         # new token, not the copied source.  Only fire for a concrete copied
