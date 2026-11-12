@@ -1730,6 +1730,9 @@ class Interpreter:
         wm = self._find_one(children, 'with_modifier') or self._find_one(children, 'any_text')
         if wm is not None and any(isinstance(c, Token) and c.value == 'with' for c in children):
             d['modifier'] = self.interp(wm)
+        exc = self._find_one(children, 'token_except')
+        if exc is not None:
+            d['except'] = self._text(exc.children).strip()
         return d
 
     def i_stat_action(self, children):
@@ -1891,6 +1894,9 @@ class Interpreter:
             d['for_each'] = self.interp(at)
         elif any(str(c) == 'it' for c in children if not isinstance(c, Tree)):
             d['target'] = {'kind': 'this_card'}
+        words = self._token_words(children)
+        if 'except' in words and 'legendary' in words:
+            d['except'] = 'not legendary'
         return d
 
     def i_trigger_extra_action(self, children):
