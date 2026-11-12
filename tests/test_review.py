@@ -269,6 +269,50 @@ def test_last_verdict_wins(tmp):
     assert status.returncode == 0
 
 
+def test_carry_effective_verdicts(tmp):
+    import csv as _csv
+    import hashlib
+    texts = ["Draw a card", "You gain 3 life", "Draw two cards"]
+    snap = os.path.join(tmp, "snap_eff.json")
+    build_snapshot(texts, snap)
+    sid_draw = hashlib.sha1(b"Draw a card").hexdigest()[:12]
+    sid_gain = hashlib.sha1(b"You gain 3 life").hexdigest()[:12]
+
+    root1 = os.path.join(tmp, "eff_r1")
+    ledger1 = os.path.join(root1, "ledger.csv")
+    assert run(REVIEW, "seed", "--snapshot", snap, "--out", ledger1).returncode == 0
+    b = os.path.join(tmp, "eff_batch.json")
+    assert run(REVIEW, "batch", "--owner", "a1", "--n", "10",
+               "--out", b, "--root", root1).returncode == 0
+    assert run(REVIEW, "verdict", "--owner", "a1", "--sid", sid_draw,
+               "--verdict", "ok", "--root", root1).returncode == 0
+    carry1 = os.path.join(tmp, "eff_carry1.csv")
+    assert run(REVIEW, "carry", "--root", root1, "--out", carry1).returncode == 0
+
+    # root2 has a seeded ledger verdict for sid_draw and no owner verdict file
+    exempt = os.path.join(tmp, "eff_exempt.txt")
+    with open(exempt, "w") as fh:
+        fh.write("%s\tStandard\n" % sid_gain)
+    root2 = os.path.join(tmp, "eff_r2")
+    assert run(REVIEW, "seed", "--snapshot", snap, "--out",
+               os.path.join(root2, "ledger.csv"), "--carry", carry1,
+               "--exempt", exempt).returncode == 0
+    carry2 = os.path.join(tmp, "eff_carry2.csv")
+    assert run(REVIEW, "carry", "--root", root2, "--out", carry2).returncode == 0
+    rows = {r["sid"]: r for r in _csv.DictReader(open(carry2))}
+    assert rows[sid_draw]["verdict"] == "ok", "ledger verdict must be carried"
+    assert sid_gain not in rows, "inspected rows are re-derived from --exempt"
+
+    # an owner row overrides the ledger value
+    os.makedirs(os.path.join(root2, "verdicts"), exist_ok=True)
+    with open(os.path.join(root2, "verdicts", "a1.csv"), "w") as fh:
+        fh.write("sid,verdict,note\n%s,bug,owner says bug\n" % sid_draw)
+    assert run(REVIEW, "carry", "--root", root2, "--out", carry2).returncode == 0
+    rows = {r["sid"]: r for r in _csv.DictReader(open(carry2))}
+    assert rows[sid_draw]["verdict"] == "bug"
+    assert rows[sid_draw]["note"] == "owner says bug"
+
+
 def test_carry(tmp):
     import csv as _csv
     import hashlib
@@ -389,7 +433,8 @@ def main():
         for fn in (test_snapshot_deterministic, test_diff_classes,
                    test_review_flow, test_unparsed_priority,
                    test_minority_priority, test_exempt, test_last_verdict_wins,
-                   test_carry, test_stale_snapshot):
+                   test_carry, test_carry_effective_verdicts,
+                   test_stale_snapshot):
             with tempfile.TemporaryDirectory() as sub:
                 fn(sub)
             print("PASS", fn.__name__)

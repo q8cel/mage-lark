@@ -582,23 +582,27 @@ def carry(args):
     rows = {row["sid"]: row for row in ledger}
     verdicts = read_verdicts(p)
 
-    # read_verdicts already rejects different verdicts from different owners.
-    merged = {}
-    for owner in sorted(verdicts):
-        for sid, (verdict, note) in sorted(verdicts[owner].items()):
-            if verdict not in VERDICTS:
-                sys.exit("invalid verdict %r for sid %s in %s"
-                         % (verdict, sid, owner))
-            current = merged.get(sid)
-            if current is None or (not current[1] and note):
-                merged[sid] = (verdict, note)
+    # Effective verdict per row: owner log (last row wins) overrides the
+    # ledger's own verdict column.  `combined_verdicts` is the same merge used
+    # by `status`.  Notes come from the owner row when present, else the ledger.
+    effective = combined_verdicts(ledger, verdicts)
+    owner_notes = {}
+    for owner in verdicts:
+        for sid, (_verdict, note) in verdicts[owner].items():
+            owner_notes[sid] = note
 
     out_rows, orphans = [], []
-    for sid, (verdict, note) in sorted(merged.items()):
+    for sid, verdict in sorted(effective.items()):
+        if verdict in ("todo", "inspected"):
+            # todo: unreviewed; inspected: re-derived from --exempt at seed time
+            continue
+        if verdict not in VERDICTS:
+            sys.exit("invalid effective verdict %r for sid %s" % (verdict, sid))
         row = rows.get(sid)
         if row is None:
             orphans.append(sid)
             continue
+        note = owner_notes[sid] if sid in owner_notes else (row.get("note") or "")
         out_rows.append({"sid": sid, "verdict": verdict, "note": note,
                          "out_sha1": row.get("out_sha1", "")})
 
