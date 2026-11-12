@@ -1078,6 +1078,38 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("possessive-attribute-object")
 
+        # ---- "return/put the object ... to its owner's hand/graveyard":
+        # 'its' belongs to the object NP of the clause (target/card/"each ...
+        # card"), not to a later self/zone mention.
+        if (on["possessive"] and rec["is_possessive"]
+                and rec["surface"].lower() == "its"
+                and re.match(r"\s+owner'?s?\s+(?:hand|library|graveyard|deck)\b",
+                             text[rec["end"]:rec["end"] + 32], re.I)):
+            si = rec.get("sentence")
+            s0 = sents[si][0] if si is not None and si < len(sents) else 0
+            verbs = list(re.finditer(r"\b(?:return|returns|returned|put|puts|"
+                                     r"exile|exiles)\b", text[s0:rec["start"]],
+                                     re.I))
+            vpos = s0 + verbs[-1].start() if verbs else s0
+            same = [i for i in range(len(ms))
+                    if not ms[i].get("is_anaphor")
+                    and ms[i]["end"] <= rec["start"]
+                    and ms[i]["sentence"] == rec["sentence"]
+                    and ms[i]["start"] > vpos]
+            targets = [i for i in same
+                       if ms[i].get("is_target")
+                       and ms[i]["head_type"] not in
+                       ("player", "opponent", "hand", "graveyard",
+                        "library", "exile")]
+            cards = [i for i in same
+                     if ms[i]["head_type"] == "card"
+                     and not ms[i].get("is_self")
+                     and not ms[i].get("is_anaphor")]
+            f = targets or cards
+            if f:
+                pool = [max(f, key=lambda i: ms[i]["end"])]
+                evidence.append("possessive-owner-object")
+
         # ---- copy-token exception: "create a token that's a copy of X, except
         # it's ... in addition to its other types".  "its other types" is the
         # new token, not the copied source.  Only fire for a concrete copied
