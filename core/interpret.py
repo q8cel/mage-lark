@@ -1526,7 +1526,11 @@ class Interpreter:
         return self._card_action('regenerate', children)
 
     def i_suspect_action(self, children):
-        return self._card_action('suspect', children)
+        d = self._card_action('suspect', children)
+        if any(isinstance(c, Token) and str(c).lower() == 'otherwise'
+               for c in children):
+            d['otherwise'] = True
+        return d
 
     def i_reveal_top_action(self, children):
         return {'verb': 'reveal_top'}
@@ -3253,6 +3257,9 @@ class Interpreter:
                     d['ability_word'] = self._ability_word(ch)
                 elif ch.data == 'effect':
                     d['effect'] = self.interp(ch)
+                    eff = d['effect']
+                    if isinstance(eff, dict) and eff.pop('otherwise', None):
+                        d['otherwise'] = True
                 elif ch.data == 'for_each_sentence':
                     d['effect'] = self.interp(ch)
                 elif ch.data == 'xdef_clause':
