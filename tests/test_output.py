@@ -121,7 +121,7 @@ add("mill-no-actor-no-empty-who", "Mill four cards",
 add("gain-life-no-empty-who",
     "Whenever you put one or more +1/+1 counters on a creature, you may gain that much life",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_life'
-                  and 'who' not in d)
+                  and d.get('who') != {})
                   and not has(o, lambda d: d.get('who') == {}))
 add("look-possessor", "As this creature enters, look at an opponent's hand",
     lambda o: has(o, lambda d: d.get('verb') == 'look'
@@ -135,6 +135,15 @@ add("prevent-damage-object-duration",
                   and d.get('object') == 'damage'
                   and d.get('to') == 'you'
                   and d.get('duration') == 'until your next turn'))
+add("prevent-combat-kind-this-turn",
+    "Prevent all combat damage that would be dealt this turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'
+                  and d.get('damage') == 'combat'
+                  and d.get('duration') == 'this turn'))
+add("damage-cant-be-prevented",
+    "The damage can't be prevented",
+    lambda o: has(o, lambda d: d.get('verb') == "can't"
+                  and d.get('predicate') == 'be prevented'))
 add("may-gain-life-actor",
     "You may gain 4 life",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_life'

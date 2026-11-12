@@ -2206,14 +2206,25 @@ class Interpreter:
         return d
 
     def i_prevent_action(self, children):
-        d = self._card_action('prevent_damage', children)
         toks = self._token_words(children)
+        if 'prevented' in toks and any(
+                w in ("can't", 'cannot', 'cant') for w in toks):
+            # "The damage can't be prevented" is a negation, not prevention.
+            return {'verb': "can't", 'predicate': 'be prevented',
+                    'object': 'damage'}
+        d = self._card_action('prevent_damage', children)
         if 'damage' in toks:
             d.setdefault('object', 'damage')
         if 'all' in toks:
             d['all'] = True
         if 'to' in toks and 'you' in toks:
             d['to'] = 'you'
+        if 'combat' in toks:
+            d['damage'] = 'combat'
+        elif 'noncombat' in toks:
+            d['damage'] = 'noncombat'
+        if 'this' in toks and 'turn' in toks:
+            d['duration'] = 'this turn'
         return d
 
     SUPERTYPES = {'creature', 'artifact', 'enchantment', 'land', 'plane',
