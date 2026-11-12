@@ -673,6 +673,12 @@ class Interpreter:
             # Coordinated object list: "exile up to one target artifact and
             # up to one target enchantment" keeps both targets.
             d['cards'] = [self.interp(c) for c in cts]
+        if verb in ('cast', 'play') and len(cts) > 1:
+            words = self._token_words(children)
+            if 'among' in words:
+                # "cast … from among them / the exiled cards": the source set
+                # is the second card_target.
+                d['from_among'] = self.interp(cts[1])
         amt = self._find_one(children, 'amount')
         if amt is not None:
             d['amount'] = self.interp(amt)

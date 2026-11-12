@@ -100,6 +100,10 @@ add("cast-without-paying",
     "You may cast that card without paying its mana cost",
     lambda o: has(o, lambda d: d.get('verb') == 'cast'
                   and d.get('without_paying') is True))
+add("cast-from-among",
+    "You may cast any number of spells from among them without paying their mana costs",
+    lambda o: has(o, lambda d: d.get('verb') == 'cast'
+                  and d.get('from_among', {}).get('card_type', {}).get('raw') == 'them'))
 add("may-actor",
     "Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle",
     lambda o: has(o, lambda d: d.get('verb') == 'may'
