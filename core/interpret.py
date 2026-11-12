@@ -3299,6 +3299,8 @@ class Interpreter:
                     for sub in ch.children:
                         if isinstance(sub, Tree) and sub.data == 'any_text':
                             d['instead_of'] = self._text([sub]).strip()
+                elif ch.data in ('xdef_clause', 'xdef'):
+                    d['xdef'] = self.interp(ch)
         if eff is not None:
             if texts:
                 d['condition'] = texts[0]

@@ -39,7 +39,7 @@ sentence: prefixed_static
 deck_rule: "A" "deck" "can" "have" ("any" "number" "of" | amount) "cards" "named" (THIS_CARD | CARDNAME)
 round_up_sentence: "Round" "up" "each" "time"
 
-if_sentence: ability_word_prefix? V_IF any_text "," effect instead_suffix?
+if_sentence: ability_word_prefix? V_IF any_text "," effect xdef_clause? instead_suffix?
             | V_IF any_text "," any_text
             | V_IF any_text
 instead_suffix: INSTEAD ("of" any_text)?
@@ -868,7 +868,7 @@ gain_quote_action: (card_target)? (V_GAIN | "has" | "have") QUOTE
 emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))?
 
 self_ref: "it" | "him" | "her" | "them"
-enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" self_ref | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" self_ref)? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
+enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" self_ref | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" self_ref | "with" amount "additional"? POWER_MOD "counter" "s"? "on" self_ref)? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
             | card_target V_ENTERS ("the" "battlefield")? "with" "a" "number" "of" (POWER_MOD | counter_name) "counters" "on" self_ref "equal" "to" any_text
 enchant_action: V_ENCHANT enchant_target
 enchant_target: LISTTOK | STATUS* (GENERIC_TYPE | CARDNAME | "player") (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
