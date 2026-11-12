@@ -401,7 +401,16 @@ class Interpreter:
                     if v:
                         vals.append(str(v))
                 if len(vals) > 1:
-                    return {'kind': 'type', 'value': ' or '.join(vals)}
+                    words = [str(t).lower() for t in toks]
+                    if 'or' in words or 'and/or' in words:
+                        sep = ' or '
+                    elif 'and' in words:
+                        sep = ' and '
+                    else:
+                        # "noncreature, nonland": comma lists are an
+                        # intersection of restrictions, not a union.
+                        sep = ', '
+                    return {'kind': 'type', 'value': sep.join(vals)}
             return self.interp(trees[0])
         if not toks:
             return None
