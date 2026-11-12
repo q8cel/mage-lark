@@ -1077,6 +1077,7 @@ card_kind: THIS_CARD types? | types
          | "activated" "or" "triggered" "abilities"
          | "spell" "or" "ability" | "spells" "or" "abilities"
          | GENERIC_TYPE+ "card"?
+         | GENERIC_TYPE CARDNAME "card" "s"?
          | "basic" THIS_CARD
          | "basic" "land" | "basic" "land" "card" | "basic" "land" "cards"
          | "source" | "sources"
@@ -1085,12 +1086,12 @@ card_kind: THIS_CARD types? | types
          | types "or" NONTYPE GENERIC_TYPE "card"?
          | types "," "or" types "card"?
          | types "," types "," "or" types "card"?
-         | types ("," types)+ ("," "or" types)? "card"?
-         | types ("," types)+ ("," "and/or" types)? "card"?
+         | types ("," types)+ ("," "or" types)? "card" "s"?
+         | types ("," types)+ ("," "and/or" types)? "card" "s"?
          | types "," types "," "and" types "card" "s"?
          | types "," types "," "and" types
          | types "and" types "card"?
-         | types "and/or" types "card"?
+         | types "and/or" types "card" "s"?
          | CARDNAME ("creature" "card" | "creature" "cards" | "creature" | "creatures" | "spell" | "spells" | "card" | "cards" | "permanent" | "permanents" | "planeswalker" "card" | "planeswalker" "cards")
          | "card" | "cards" | "creature" | "creatures" | "spell" | "spells"
          | "creature" "card" | "creature" "cards" | "land" | "land" "card" | "permanent" | "permanent" "card" | "permanent" "cards"
