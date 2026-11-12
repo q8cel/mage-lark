@@ -256,6 +256,10 @@ add("become-copy-source",
     "This creature becomes a copy of another target creature you control",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and d.get('copy_of', {}).get('otherness') == 'another'))
+add("quantified-become-target",
+    "Until end of turn, target creature loses all abilities and becomes a blue Frog with base power and toughness 1/1",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('target', {}).get('quantifier') == 'target'))
 add("two-exile-targets",
     "Exile up to one target artifact and up to one target enchantment",
     lambda o: has(o, lambda d: d.get('verb') == 'exile'
