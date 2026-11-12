@@ -6,16 +6,17 @@ unless marked current. Everything is measured against the teacher-labelled
 anaphor occurrences in `coref_standard.json`, using the existing `mentions.py` /
 `anaphora.py` inventory. No model, no LLM.
 
-**Current measurement note:** the canonical harness is `coref_eval.py`. It scores
-entity-aware clusters over a fixed candidate pool shared by every resolver.
-`remap_dataset.py` rebuilt old texts/spans from source with `normalize_with_map`
-(55 records changed). `coref_standard.json` now validates both standalone and
-against `Standard.json`. Current rule result: **90.1% entity-aware / 84.1% exact
-on 3,380 valid labels**; human bench: **93.0% entity-aware (parser pool) / 94.1%
-(regex pool)**. The evaluator maps a gold sub-span such as `target creature` to the
-maximal containing runtime mention (`up to one target creature`); only 4 gold
-spans are now truly unscoreable. Historical strict/soft numbers below are from
-the old harness.
+**Current measurement note (2026-11-12):** the canonical harness is
+`coref_eval.py`. It scores entity-aware clusters over a fixed candidate pool
+shared by every resolver. Measured now: **91.4 % entity-aware / 85.6 % exact on
+3,380 valid labels** in `coref_standard.json`; **92.7 % / 86.8 %** on the
+label-repaired `coref_standard_v2.json` with `--exclude-cataphora` (3,352
+labels; 28 excluded), or 91.9 % / 86.0 % on v2 without exclusions. Benchmark:
+**95.8 % / 84.5 %** with the regex candidate pool and **93.0 % / 83.1 %** with
+the parser pool. The bench is not independent of dev (see §4h). The evaluator
+maps a gold sub-span such as `target creature` to the maximal containing runtime
+mention (`up to one target creature`); 4 gold spans are unscoreable. Historical
+strict/soft numbers below are from the old harness.
 
 ---
 
@@ -493,11 +494,35 @@ Three label sources exist, and they are not interchangeable:
 | set | size | labels | what it measures |
 |---|---|---|---|
 | `coref_benchmark.json` | 72 (71 resolvable) | human | correctness |
-| `coref_standard.json` (dev) | 3,395 occurrences / 2,139 cards | teacher (Qwen 27B) | agreement with the teacher |
+| `coref_standard.json` (dev) | 3,380 labelled occurrences / 2,141 cards | teacher (Qwen 27B) | agreement with the teacher |
 | FDN dataset | 261 cards | teacher | same |
 
-70 of the 72 bench cases also exist in dev, so three things can be scored on the
-*same* cases:
+**Correction (2026-11-12): the bench is a dev subset, not a held-out
+benchmark.** Matching `(card, text, anaphor span)` across the `coref_eval --dump`
+records found 49 unique bench cards / 72 rows, of which 48 cards, 71 rows by
+card and 69 rows by normalized text also occur in dev; **68 of the 71 labelled
+bench cases are exactly the same occurrence as a labelled dev case**, leaving
+only 3 unique bench cases. On those 68 shared cases the human and teacher gold
+surfaces agree on 49 (19 differ), which is the known annotator gap. Dev is built
+from `Standard.json`, whose bundle includes the `FDN` set used by the bench, so
+dev and bench are not separate corpora: the bench cannot measure
+generalization, and a dev-tuned fix will move it almost automatically.
+
+**Label-index repair (`coref_standard_v2.json`, 2026-11-12).** Of the 289 dev
+misses, 46 were label/index artifacts rather than resolver failures (31
+cataphoric/gold-after-anaphor + 15 duplicate-same-surface). `coref_standard_v2.json`
+repairs 18 where an earlier mention of the same entity exists (15 now agree with
+the resolver; 3 remain genuine misses), keeps the one true forward reference but
+marks it excluded, and marks 27 as excluded (`exclude: "label"`) because no
+single earlier mention is reconstructible (missing inventory, set-valued, or
+ambiguous duplicate). The original `coref_standard.json` is untouched.
+Corrected dev numbers with `--exclude-cataphora`: **92.7 % entity-aware / 86.8 %
+exact on 3,352 labels**; split: resolved 3,497, no-resolution 109, ambiguous 63,
+excluded 28, teacher `no antecedent` 317. Without exclusions (repairs only) v2 is
+**91.9 % / 86.0 % on 3,380 labels**. The corrected headline is +1.3 pp over the
+old 91.4 %, and the fixers should be measured against v2.
+
+The historical 70-case overlap is superseded by the exact-occurrence count above; on those shared cases three things can be scored:
 
 | on those 70 cases | score |
 |---|---|

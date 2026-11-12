@@ -108,7 +108,7 @@ def _gold_uf(case):
 
 
 # --------------------------------------------------------------------- loading
-def load_dataset_cases(path, require_struct=False):
+def load_dataset_cases(path, require_struct=False, exclude_cataphora=False):
     """Dataset cases.  Candidate indices in the file are the gold coordinate
     system; the common pool is the cleaned runtime inventory."""
     import refs
@@ -149,6 +149,11 @@ def load_dataset_cases(path, require_struct=False):
 
         targets = {}
         for i, ana in enumerate(anaphors):
+            if exclude_cataphora and ana.get("exclude"):
+                targets[i] = {"excluded": True, "exclude": ana.get("exclude"),
+                              "kind": ana.get("kind"),
+                              "gold_surface": None, "gold_index": None}
+                continue
             g = ana.get("antecedent")
             if g is None or g < 0:
                 targets[i] = {"no_gold": True, "gold_index": None,
@@ -290,8 +295,12 @@ def evaluate_cases(cases, predict, resolver, verbose=0, dump_path=None):
                 preds.append({"index": None, "status": "missing"})
             pred = preds[i]
             st = pred.get("status")
-            statuses[st] += 1
 
+            if target.get("excluded"):
+                stats["excluded"] += 1
+                continue
+
+            statuses[st] += 1
             if target.get("no_gold"):
                 stats["no_gold"] += 1
                 if pred.get("index") is None:
@@ -372,6 +381,8 @@ def evaluate_cases(cases, predict, resolver, verbose=0, dump_path=None):
     print(f"  exact span:   {stats['exact']}/{n} = "
           f"{100*stats['exact']/max(1,n):.1f}%")
     print(f"  gold span missing from pool: {stats['gold_missing']}")
+    if stats.get("excluded"):
+        print(f"  excluded by file marker: {stats['excluded']}")
     print(f"  gold says 'no antecedent': {stats['no_gold']}  "
           f"(abstained on {stats['no_gold_abstained']})")
     if statuses:
@@ -419,6 +430,8 @@ def main():
     ap.add_argument("--data", default=None, help="source data for benchmark texts")
     ap.add_argument("--ablate", default="", help="comma-separated rule names to disable")
     ap.add_argument("--structured-only", action="store_true")
+    ap.add_argument("--exclude-cataphora", action="store_true",
+                    help="skip anaphors marked exclude in the dataset (v2)")
     ap.add_argument("--show-misses", type=int, default=8)
     ap.add_argument("--model", default="sentence-transformers/all-MiniLM-L6-v2")
     ap.add_argument("--layer", type=int, default=2)
@@ -431,7 +444,8 @@ def main():
 
     if args.dataset:
         cases = load_dataset_cases(args.dataset,
-                                   require_struct=args.structured_only)
+                                   require_struct=args.structured_only,
+                                   exclude_cataphora=args.exclude_cataphora)
         extra = {}
     else:
         path = args.bench or None
