@@ -2334,6 +2334,11 @@ class Interpreter:
             d['to'] = zones[-1] if len(zones) > 1 else 'library'
         elif 'libraries' in toks:
             d['to'] = 'library'
+        own = self._find_one(children, 'owner_subject')
+        if own is not None:
+            owner = self._text(own.children)
+            if owner:
+                d['owner'] = owner
         return d
 
     def i_no_max_hand_action(self, children):
