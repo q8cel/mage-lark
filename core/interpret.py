@@ -116,9 +116,9 @@ class Interpreter:
     # must read them back out: a keyword grant without its time limit says
     # something different, and a delayed sacrifice without its timing loses
     # *when* it happens. Canonical, lower-case values.
-    DURATION_VERBS = {'stat_change', 'gain_kw', 'lose_keywords', 'set_base_pt',
-                      "can't", 'play', 'cast', 'exile', 'gain_control',
-                      'no_max_hand_size'}
+    DURATION_VERBS = {'stat_change', 'gain_kw', 'gain_quote', 'lose_keywords',
+                      'set_base_pt', "can't", 'play', 'cast', 'exile',
+                      'gain_control', 'no_max_hand_size'}
     DURATION_TAILS = (
         (('until', 'end', 'of', 'turn'), 'until end of turn'),
         (('until', 'the', 'end', 'of', 'your', 'next', 'turn'),
@@ -577,14 +577,17 @@ class Interpreter:
     def i_effect(self, children):
         out = []
         timing = None
+        timing_phrase = None
         instead = any(isinstance(ch, Token) and str(ch).lower() == 'instead'
                       for ch in children)
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'effect_timing':
-                    # "{3}: Until end of turn, …" keeps the clause in its own
-                    # subtree; it qualifies every duration-taking action.
+                    # "{3}: Until end of turn, …" / "At the beginning of the
+                    # next end step, …" keeps the clause in its own subtree;
+                    # it qualifies every action.
                     timing = self._duration(ch.children)
+                    timing_phrase = self._timing(ch.children)
                     continue
                 out.append(self.interp(ch))
         # Coordinated actions often share one target: "target creature gets
@@ -624,6 +627,10 @@ class Interpreter:
                         and action.get('verb') in self.DURATION_VERBS
                         and 'duration' not in action):
                     action['duration'] = durations[0]
+        if timing_phrase:
+            for action in out:
+                if isinstance(action, dict):
+                    action.setdefault('timing', timing_phrase)
         if instead:
             for action in out:
                 if isinstance(action, dict):

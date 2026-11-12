@@ -128,6 +128,10 @@ add("until-sentence-duration",
     "Until the end of your next turn, you may play those cards",
     lambda o: has(o, lambda d: d.get('type') == 'until'
                   and d.get('duration') == 'until the end of your next turn'))
+add("effect-timing-delayed",
+    "At the beginning of the next end step, return those creatures to their owner's hand",
+    lambda o: has(o, lambda d: d.get('verb') == 'return'
+                  and d.get('timing') == 'at the beginning of the next end step'))
 add("draw-amount-int", "Draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 2))
 add("up-to-quantifier", "Discard up to two cards",
