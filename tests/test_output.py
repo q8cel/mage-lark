@@ -389,6 +389,12 @@ add("fight-second-target",
     "Target creature you control fights target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'fight'
                   and d.get('fights', {}).get('controller') == 'an opponent controls'))
+add("life-total-equal", "your life total becomes equal to X",
+    lambda o: has(o, lambda d: d.get('verb') == 'life_total'
+                  and d.get('amount') == 'X'))
+add("xdef-your-speed",
+    "Noncreature spells you cast cost {X} less to cast, where X is your speed",
+    lambda o: has(o, lambda d: 'speed' in str(d.get('xdef', ''))))
 add("become-prepared", "Target creature becomes prepared",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and d.get('state') == 'prepared'))
@@ -434,6 +440,12 @@ add("skip-that-draw",
     "If you would draw a card while your library has no cards in it, skip that draw instead",
     lambda o: has(o, lambda d: d.get('verb') == 'skip'
                   and d.get('object') == 'draw'))
+add("life-total-equal", "your life total becomes equal to X",
+    lambda o: has(o, lambda d: d.get('verb') == 'life_total'
+                  and d.get('amount') == 'X'))
+add("xdef-your-speed",
+    "Noncreature spells you cast cost {X} less to cast, where X is your speed",
+    lambda o: has(o, lambda d: 'speed' in str(d.get('xdef', ''))))
 add("become-prepared",
     "Then if an opponent controls more creatures than you, this creature becomes prepared",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
