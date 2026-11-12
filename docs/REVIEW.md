@@ -55,6 +55,14 @@ Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. Th
 Family ranking by occurrence weight: `swarm/reports/residual_impact.md`.
 ## Adding a corpus
 Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `batch` and review; the corpus JSON only needs the `setdata.load` shape.
+## Parallel fixers and the merge gate
+Two fixers work in separate worktrees/branches (`master`, `fix2` in `../mage-k2`); batches are assigned disjoint construction families.
+Branches merge via `swarm/scripts/merge_gate.py <branch>`: disposable detached worktree, rebase, then tests/review/grammar/coverage/seed delta/relative parser cost/rule assertions (`--assert-rule`); snapshot diff only with `--snapshot-diff`. Exit 0 PASS, 1 FAIL, 2 CONFLICT.
+Merges `7ebe7bb` and `15c09db` rebased cleanly; the new commits shared zero rule names; `xdef` is the only cumulatively shared rule, edited on different lines.
+Combined gain: Standard unique 6,680 -> 6,891 (+211), occurrences 19,811 -> 20,169 (+358), 90.8%.
+Two gate bugs were fixed: an absolute parse-time threshold misfired under load (now branch/base median ratio, limit 1.25) and cold snapshot builds doubled runtime (now opt-in).
+The parallel setup surfaced one real defect: master grafted xdef alternatives into `static_sentence`/`life_total_action`; a peer caught it, coverage did not.
+
 ## Known limits
 Only cluster representatives are reviewed; non-representative siblings share a cluster key but are not individually read. Coreference is not covered. Reviewers are LLM agents with the rubric in verdict notes. Two owners logging different verdicts for the same sid abort with `conflicting verdicts for sid ... across owners`; fix the wrong log, or re-verdict within the same owner (last row wins).
 
