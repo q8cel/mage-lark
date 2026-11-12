@@ -39,19 +39,19 @@ review.py status --root R
 6. `check` until every claimed sid has one verdict; `status` shows disjoint claims and no `todo`.
 7. Recompute rates and the occurrence-weighted residual ranking.
 ## Measured state
-Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claimed`, `inspected`). Occurrence share = sum of occurrences of bug rows / total corpus sentence occurrences. Latest cycle (cycle 11, HEAD `5b5cd03`):
+Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claimed`, `inspected`). Occurrence share = sum of occurrences of bug rows / total corpus sentence occurrences. Latest cycle (cycle 12, HEAD `6e39a1d`):
 
 | corpus | reviewed rows | bug rows | row rate | occurrence share |
 |---|---:|---:|---:|---:|
-| Standard | 4,640 | 287 | 6.2% | 2.6% |
-| classic | 825 | 48 | 5.8% | 1.9% |
-| FDN | 525 | 32 | 6.1% | 4.2% |
+| Standard | 4,451 | 277 | 6.2% | 2.5% |
+| classic | 789 | 48 | 6.1% | 1.9% |
+| FDN | 521 | 30 | 5.8% | 3.8% |
 
-## Residual (cycle 11)
-Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 367 bugs are effect-slot detail:
-- Standard: 287 bugs (6.2% rows, 2.6% share) — effect slots 84, raw wrappers 71, target/quantifier 46, for-each 16, coordinated 19.
-- classic: 48 bugs (5.8%, 1.9%) — effect slots 25, actor/who 3, target/quantifier 4, coordinated 4.
-- FDN: 32 bugs (6.1%, 4.2%) — effect slots 9, target/quantifier 5, coordinated 4, keyword/cost 2, threshold/static 3, for-each 2.
+## Residual (cycle 12)
+Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 355 bugs are effect-slot detail:
+- Standard: 277 bugs (6.2% rows, 2.5% share) — effect slots 80, raw wrappers 71, target/quantifier 44, for-each 15, coordinated 19.
+- classic: 48 bugs (6.1%, 1.9%) — effect slots 25, actor/who 3, target/quantifier 4, coordinated 4.
+- FDN: 30 bugs (5.8%, 3.8%) — effect slots 9, target/quantifier 5, threshold/static 3, coordinated 3, for-each 2, actor/who 2.
 Family ranking by occurrence weight: `swarm/reports/residual_impact.md`.
 ## Adding a corpus
 Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `batch` and review; the corpus JSON only needs the `setdata.load` shape.
