@@ -1578,6 +1578,12 @@ class Interpreter:
             expr = self._find_one(children, 'xdef') or self._find_one(children, 'any_text')
             if expr is not None:
                 d['amount'] = self.interp(expr)
+        toks = self._token_words(children)
+        if 'unless' in toks:
+            at = self._find_one(children, 'any_text')
+            if at is not None:
+                # "… loses 5 life unless they discard a card"
+                d['unless'] = self.interp(at)
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['for_each'] = self.interp(ct)

@@ -678,6 +678,10 @@ add("enchanted-status",
                   and 'Enchanted' in d.get('target', {}).get('status', [])
                   and all('Enchanted' in a.get('target', {}).get('status', [])
                           for a in d.get('effect', []) if isinstance(a, dict))))
+add("unless-clause",
+    "Whenever an opponent casts a spell, that player loses 5 life unless they discard a card",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
+                  and 'discard a card' in str(d.get('unless', ''))))
 add("coordinated-card-target",
     "Equipped creature can't be blocked and has shroud",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
