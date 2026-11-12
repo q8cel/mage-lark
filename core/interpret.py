@@ -411,6 +411,8 @@ class Interpreter:
         if toks[0].value.lower() in self.ANAPHORA:
             return {'ref': 'anaphora', 'raw': toks[0].value}
         words = [t.value.lower() for t in toks]
+        if words and words[0] in ("players'", "opponents'") and 'graveyards' in words:
+            return {'kind': 'type', 'value': words[0] + ' graveyards'}
         # "basic land card": `basic` is a modifier, not the type. Reporting
         # toks[0] alone dropped the head noun ('basic' instead of 'basic land').
         if len(words) > 1 and words[0] in ('basic', 'nonbasic') and 'land' in words:
