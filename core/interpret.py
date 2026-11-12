@@ -920,6 +920,10 @@ class Interpreter:
         toks = self._token_words(children)
         if 'this' in toks and 'turn' in toks:
             d.setdefault('duration', 'this turn')
+        for i, ch in enumerate(children):
+            if isinstance(ch, Token) and str(ch).lower() == 'by':
+                d['by'] = self._text(children[i + 1:]).strip()
+                break
         return d
 
     def i_play_action(self, children):

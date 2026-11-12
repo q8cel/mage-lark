@@ -794,7 +794,7 @@ shuffle_action: (who)? V_SHUFFLE ("your" "graveyard" "into" "your" "library")?
              | (who)? V_SHUFFLE card_target ("and" card_target)? "into" zone
              | (who)? V_SHUFFLE ("your" | "their") "hand" "and" "graveyard" "into" ("your" | "their") "library" | (who)? V_SHUFFLE card_target "and" "your" "graveyard" "into" zone
 cast_action: player V_CAST card_target ("from" "among" card_target)? ("without" "paying" ("its" | "their") "mana" "cost")? ("if" "able")?
-           | V_CAST card_target "from" "your" "graveyard" "by" "paying" amount "life" "and" "discarding" card_target ("in" "addition" "to" "paying" "its" "other" "costs")?
+           | V_CAST card_target ("from" ("your" "graveyard" | "among" card_target))? "by" any_text
            | V_CAST "the" "copies" ("without" "paying" ("its" | "their") "mana" "cost" "s"?)? ("this" "turn")?
            | V_CAST "the" "copy" ("without" "paying" "its" "mana" "cost")?
            | V_CAST card_target ("from" ("your" "graveyard" | "the" "top" "of" "your" "library" | "among" card_target))? ("without" "paying" ("their" "mana" "costs" | "its" "mana" "cost"))? ("by" "removing" amount "counters" "from" "among" card_target)? ("in" "addition" "to" "paying" "its" "other" "costs")? ("this" "turn")? ("as" "though" ("they" | "it") "had" KEYWORD)? ("for" "as" "long" "as" any_text)?
