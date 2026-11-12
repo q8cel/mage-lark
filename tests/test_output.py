@@ -107,6 +107,9 @@ add("coordinated-who",
 add("mill-actor", "Target player mills four cards",
     lambda o: has(o, lambda d: d.get('verb') == 'mill'
                   and d.get('who') == 'Target player'))
+add("mill-no-actor-no-empty-who", "Mill four cards",
+    lambda o: has(o, lambda d: d.get('verb') == 'mill'
+                  and 'who' not in d))
 add("look-possessor", "As this creature enters, look at an opponent's hand",
     lambda o: has(o, lambda d: d.get('verb') == 'look'
                   and d.get('possessor') == "an opponent's"))

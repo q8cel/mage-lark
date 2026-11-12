@@ -1829,11 +1829,15 @@ class Interpreter:
                 d['amount'] = 'that many'
         wh = self._find_one(children, 'who')
         if wh is not None:
-            d['who'] = self.interp(wh)
+            who = self.interp(wh)
+            if who:
+                d['who'] = who
         else:
             pl = self._find_one(children, 'player')
             if pl is not None:
-                d['who'] = self.interp(pl)
+                who = self.interp(pl)
+                if who:
+                    d['who'] = who
         return d
 
     def i_search_action(self, children):
