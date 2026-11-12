@@ -43,6 +43,19 @@ def add(name, sent, pred):
 add("keywords-list", "Flying, first strike, and deathtouch",
     lambda o: has(o, lambda d: isinstance(d.get('keywords'), list)
                   and {'Flying', 'first strike', 'deathtouch'} <= set(d['keywords'])))
+add("ward-full-cost", "Ward—Pay 2 life",
+    lambda o: has(o, lambda d: d.get('keyword') == 'Ward'
+                  and 'Pay 2 life' in str(d.get('modifier'))))
+add("flashback-full-cost", "Flashback {2}{B}{B}",
+    lambda o: has(o, lambda d: d.get('modifier') == '{2}{B}{B}'))
+add("multiple-keywords-with-mod",
+    "Lifelink, hexproof from instants",
+    lambda o: has(o, lambda d: isinstance(d.get('keywords'), list)
+                  and len(d['keywords']) == 2))
+add("become-tail-keywords",
+    "{4}: This land becomes a 3/3 creature with vigilance and all creature types",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('keywords') == ['vigilance']))
 add("anaphora-not-type", "It gains haste until end of turn",
     lambda o: has(o, lambda d: d.get('ref') == 'anaphora'))
 add("gain-kw-duration", "It gains haste until end of turn",

@@ -540,6 +540,11 @@ class Interpreter:
                 if n.type == 'KEYWORD':
                     out.append(n.value)
                 return
+            if n.data == 'kw_list_item':
+                v = self.i_kw_list_item(n.children)
+                if v:
+                    out.append(v)
+                return
             low = [c.value.lower() for c in n.children if isinstance(c, Token)]
             if 'protection' in low:
                 out.append(self._text(n.children))
@@ -561,6 +566,31 @@ class Interpreter:
             walk(ch)
         return out
 
+    def i_kw_list_item(self, children):
+        head = []
+        mana = []
+        nums = []
+        for ch in children:
+            if isinstance(ch, Tree):
+                v = self.interp(ch)
+                if v is not None:
+                    head.append(str(v))
+                continue
+            if ch.type == 'MANA':
+                mana.append(ch.value)
+            elif ch.type in ('NUMBER', 'POWER_T'):
+                nums.append(ch.value)
+            elif ch.value.lower() in (',', 'and', 'or', '—', '–'):
+                continue
+            else:
+                head.append(ch.value)
+        text = ' '.join(head)
+        if nums:
+            text = (text + ' ' + ' '.join(nums)).strip()
+        if mana:
+            text = (text + ' ' + ''.join(mana)).strip()
+        return text
+
     # kw_list_mod / kw_item are parallel keyword-list rules -> same extraction.
     i_kw_list_mod = i_kw_list
     def i_kw_item(self, children):
@@ -576,15 +606,19 @@ class Interpreter:
         return f"{v[0]} {number}" if number is not None else v[0]
 
     def i_kw_with_mod(self, children):
-        key = None
-        mod = None
-        for ch in children:
+        key = self.interp(children[0]) if children else None
+        mods = []
+        for ch in children[1:]:
+            if isinstance(ch, Token) and ch.value in ('\u2014', '\u2013', ',', '-', ':'):
+                continue
             v = self.interp(ch)
-            if key is None:
-                key = v
-            else:
-                mod = v
-        return {'keyword': key, 'modifier': mod}
+            if v is not None:
+                mods.append(v)
+        if len(mods) == 1:
+            modifier = mods[0]
+        else:
+            modifier = ' '.join(str(m) for m in mods).strip().replace('} {', '}{')
+        return {'keyword': key, 'modifier': modifier}
 
     def i_player(self, children):
         return self._text(children)
@@ -1406,6 +1440,12 @@ class Interpreter:
             if 'addition' in tail_words:
                 # "… creature in addition to its other types"
                 d['in_addition'] = True
+            if 'all' in tail_words and 'types' in tail_words:
+                d['all_creature_types'] = True
+            kws = self._find_one(tail.children, 'kw_list')
+            if kws is not None:
+                # "becomes … with vigilance": keywords live in the tail.
+                d.setdefault('keywords', []).extend(self.interp(kws))
             if 'base' in tail_words and 'toughness' in tail_words:
                 bpt = [c for c in tail.children
                        if isinstance(c, Token) and c.type == 'POWER_T']
@@ -2671,19 +2711,34 @@ class Interpreter:
             rest = list(children[idx:])
         else:
             rest = list(children)
+        items = []
+        from_list = False
         for ch in rest:
-            if isinstance(ch, Tree) and ch.data == 'kw_with_mod':
-                kw = self.interp(ch)
-                break
-        if kw is None and rest:
+            if isinstance(ch, Tree) and ch.data in ('kw_list', 'kw_list_mod'):
+                items.extend(self.interp(ch))
+                from_list = True
+            elif isinstance(ch, Tree) and ch.data == 'kw_with_mod':
+                items.append(self.interp(ch))
+        if not items and rest:
             kw = self.interp(rest[0])
-        if kw is not None:
-            d['keywords'] = kw
-            value = kw.get('value') if isinstance(kw, dict) else kw
-            # The open keyword fallback can claim a one-word keyword action.
-            # Preserve its semantic class instead of emitting a fake keyword.
-            if isinstance(value, str) and value.lower() == 'investigate':
-                return {'verb': 'investigate'}
+            if kw is not None:
+                d['keywords'] = kw
+                value = kw.get('value') if isinstance(kw, dict) else kw
+                if isinstance(value, str) and value.lower() == 'investigate':
+                    return {'verb': 'investigate'}
+            return d
+        # "Lifelink, hexproof from instants" / "Trample, ward {4}": keep every
+        # keyword in order, with its cost argument.
+        if len(items) > 1 or from_list:
+            d['keywords'] = items
+        else:
+            d['keywords'] = items[0]
+        value = (items[0].get('value') if isinstance(items[0], dict)
+                 else items[0]) if len(items) == 1 else None
+        # The open keyword fallback can claim a one-word keyword action.
+        # Preserve its semantic class instead of emitting a fake keyword.
+        if isinstance(value, str) and value.lower() == 'investigate':
+            return {'verb': 'investigate'}
         return d
 
     def i_if_sentence(self, children):
