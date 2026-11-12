@@ -1325,6 +1325,11 @@ class Interpreter:
                 d['until'] = 'end of turn'
         if any(isinstance(c, Token) and c.value == 'addition' for c in children):
             d['in_addition'] = True
+        cts = self._find(children, 'card_target')
+        if len(cts) > 1 and 'copy' in [str(c).lower() for c in children
+                                       if isinstance(c, Token)]:
+            # "becomes a copy of <target>": the second card_target is the source.
+            d['copy_of'] = self.interp(cts[1])
         pt = [c for c in children if isinstance(c, Token) and c.type in ('POWER_T', 'POWER_MOD')]
         if not pt:
             pcm = self._find_one(children, 'pt_color_mod')
