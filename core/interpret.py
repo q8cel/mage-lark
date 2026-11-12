@@ -1561,6 +1561,8 @@ class Interpreter:
             d['effect'] = {'verb': 'lose_life', 'amount': self.interp(life)}
         elif 'mill' in toks:
             d['effect'] = {'verb': 'mill'}
+        elif self._find_one(children, 'become_action') is not None:
+            d['effect'] = self.interp(self._find_one(children, 'become_action'))
         elif 'copy' in toks:
             d['effect'] = {'verb': 'copy'}
         else:
@@ -1678,6 +1680,10 @@ class Interpreter:
         if gens:
             d.setdefault('types', []).extend(gens)
         toks_low = [str(c).lower() for c in children if isinstance(c, Token)]
+        if 'legendary' in toks_low:
+            d.setdefault('types', []).insert(0, 'legendary')
+        if 'no' in toks_low and 'longer' in toks_low and 'suspected' in toks_low:
+            d['state'] = 'not_suspected'
         if 'prepared' in toks_low:
             d['state'] = 'prepared'
         if 'saddled' in toks_low:
@@ -1713,7 +1719,7 @@ class Interpreter:
                 names = [str(c.value) for c in tail.children[idx + 1:]
                          if isinstance(c, Token)]
                 if names:
-                    d['named'] = ' '.join(names)
+                    d['named'] = ' '.join(names).replace(' ,', ',')
             for sub in tail.children:
                 if isinstance(sub, Token) and sub.type == 'QUOTE':
                     d['quote'] = sub.value

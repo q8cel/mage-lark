@@ -730,12 +730,14 @@ gain_kw_action: card_target ("each")? ("also")? ("has" | "have" | "gains" | "gai
 base_pt_action: card_target ("also")? ("has" | "have" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("and" "are" token_types "in" "addition" "to" "their" "other" "types")? ("until" ("end" "of" "turn" | "your" "next" "turn"))?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
 
-become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
+become_action: card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? pt_color_mod? "legendary"? (CARDNAME+ (GENERIC_TYPE)? | types) become_tail?
              | card_target "becomes" "saddled" ("until" "end" "of" "turn")?
+             | card_target ("becomes" | "become") "no" "longer" "suspected"
              | card_target "becomes" "prepared"
              | card_target "becomes" "equal" "to" any_text
              | card_target "becomes" "your" "choice" "of" any_text ("," any_text)*
              | card_target "becomes" "a" "copy" "of" card_target token_except? ("until" "end" "of" "turn")?
+             | card_target "become" "a" "copy" "of" card_target token_except? ("until" "end" "of" "turn")?
              | card_target "becomes" "a" "copy" "of" card_target ("until" "end" "of" "turn")? token_except?
              | card_target (V_IS | "are" | "become" | "becomes") (V_A | V_AN)? GENERIC_TYPE GENERIC_TYPE become_tail?
 // NOTE: this rule used to end with three optional groups containing `any_text`
@@ -760,6 +762,7 @@ become_tail: "with" QUOTE "and" "loses" "all" "other" "card" "types" "and" "abil
            | "for" "as" "long" "as" "you" "control" "it"
            | "for" "as" "long" "as" any_text
            | "that's" "no" "longer" "an" "Equipment"
+           | "named" (THIS_CARD | CARDNAME) (","? CARDNAME)*
 prevent_action: V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" ("to" ("you" | "him" | "her" | "them" | card_target) (("and" | "or") ("you" | "him" | "her" | "them" | card_target))*)? ("this" "turn")?
               | V_PREVENT "all" ("combat" | "noncombat") "damage" "that" "would" "be" "dealt" "to" "and" "dealt" "by" card_target
               | V_PREVENT "all" ("combat" | "noncombat")? "damage" ("that" "would" "be")? "dealt" "this" "turn" "to" ("you" | "him" | "her" | "them" | card_target)
