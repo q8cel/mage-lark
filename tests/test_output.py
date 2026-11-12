@@ -69,6 +69,14 @@ add("cost-mod-subject",
     "Dragon spells you cast cost {1} less to cast",
     lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
                   and 'Dragon' in str(d.get('target', ''))))
+add("cost-mod-opponents",
+    "Noncreature spells your opponents cast cost {1} more to cast",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and d.get('target', {}).get('cast_by') == 'your opponents'))
+add("cost-mod-conjunction",
+    "Kithkin spells and Soldier spells you cast cost {1} less to cast",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and len(d.get('cards', [])) == 2))
 add("stat-define-singular-power",
     "~'s power is equal to the number of artifacts you control",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_define'

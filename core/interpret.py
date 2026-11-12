@@ -1304,7 +1304,14 @@ class Interpreter:
         if ct is not None:
             d['target'] = self.interp(ct)
         elif kind is not None:
-            d['target'] = self.interp(kind)
+            target = self.interp(kind)
+            qs = self._find_all(children, 'quantifier')
+            if isinstance(target, dict) and qs:
+                # "target creature loses all abilities": the quantifier sits
+                # in lead, apart from the card_kind.
+                target = dict(target)
+                target['quantifier'] = self.interp(qs[0])
+            d['target'] = target
         kws = self._find_one(children, 'kw_list')
         if kws is not None:
             d['keywords'] = self.interp(kws)
@@ -2224,12 +2231,26 @@ class Interpreter:
         if cs is not None:
             # "Dragon spells you cast cost …" / "Activated abilities of
             # artifacts you control cost …": the affected set is the subject.
-            inner = self._find_one(cs.children, 'card_target')
-            if inner is not None:
-                target = self.interp(inner)
-                if 'cast' in self._token_words(cs.children):
-                    target = dict(target); target['cast_by'] = 'you'
-                d['target'] = target
+            inners = self._find_all(cs.children, 'card_target')
+            subj_words = self._token_words(cs.children)
+            cast_by = None
+            if 'cast' in subj_words:
+                idx = subj_words.index('cast')
+                actor = subj_words[idx - 1] if idx else 'you'
+                if (actor in ('opponents', 'opponent')
+                        and idx > 1 and subj_words[idx - 2] == 'your'):
+                    actor = 'your ' + actor
+                cast_by = actor or 'you'
+            if inners:
+                targets = []
+                for inner in inners:
+                    v = self.interp(inner)
+                    if cast_by:
+                        v = dict(v); v['cast_by'] = cast_by
+                    targets.append(v)
+                d['target'] = targets[0]
+                if len(targets) > 1:
+                    d['cards'] = targets
             else:
                 d['target'] = self._text(cs.children).strip()
         # capture the mana/amount that is paid or reduced
