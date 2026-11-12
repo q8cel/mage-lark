@@ -436,6 +436,8 @@ mana_amount: "one" "mana" "of" "any" "color" | amount MANA
            | "two" "mana" "of" "any" "one" "color"
            | "G" "for" "each" card_target
            | MANA+ ("or" MANA+)*
+           | MANA+ ("," ("or")? MANA+)+ (","? "or" MANA+)?
+           | amount MANA ("or" amount MANA)+
            | MANA+ "for" "each" card_target
 
 create_token_action: (who)? V_CREATE token ("if" any_text)? ("for" "each" card_target ("that" "died" "this" "turn")?)?
