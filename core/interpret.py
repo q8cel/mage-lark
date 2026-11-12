@@ -1657,6 +1657,14 @@ class Interpreter:
                     d['with'].setdefault('for_each', val)
                 else:
                     d.setdefault('for_each', val)
+        for i, ch in enumerate(children):
+            if (isinstance(ch, Token)
+                    and str(ch).lower() in ('if', 'unless')):
+                key = str(ch).lower()
+                for nxt in children[i + 1:]:
+                    if isinstance(nxt, Tree) and nxt.data == 'any_text':
+                        d.setdefault(key, self.interp(nxt))
+                        break
         return d
 
     def i_can_attack_as_though_action(self, children):
