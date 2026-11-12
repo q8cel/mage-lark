@@ -692,6 +692,7 @@ exile_action: (who)? V_EXILE card_target ("from" zones)? ("until" any_text)? ("f
             | V_EXILE "all" "but" "the" "bottom" "card" "of" zone
 
 destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "random")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+              | V_DESTROY card_target "except" card_target
               | V_DESTROY card_target "and" "all" "other" "permanents" "with" "the" "same" "name" "as" "that" "permanent"
 
 tap_action: V_TAP card_target
@@ -823,6 +824,7 @@ lose_game_action: (who | player | "you") (V_LOSE | V_WIN) "the" "game"
 count_action: V_COUNT "the" "number" "of" card_target
 have_deal_action: ("you" V_MAY)? "have" card_target V_DEAL dmg_amount? "damage" "to" damage_who
 have_action: "have" card_target (V_LOSE life_amount | V_MILL "a" "card" | "enter" ("tapped")? "as" "a" "copy" "of" ("any" card_target | card_target) token_except? ("and" "it" "has" QUOTE)? | draw_action)
+           | "have" "the" "base" "power" "and" "toughness" "of" card_target "become" "equal" "to" xdef ("until" ("end" "of" "turn" | "your" "next" "turn"))?
            | "have" become_action
 activate_action: V_ACTIVATE ("loyalty" | "activated" | "triggered")? "abilities" "of" card_target ("on" "any" "player's" "turn")? ("any" "time" "you" "could" "cast" "an" "instant")?
                | V_ACTIVATE "one" "of" "its" "loyalty" "abilities" ("once" "this" "turn")? ("as" "though" any_text)?
@@ -860,6 +862,7 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "players" | "an" "oppon
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual* ("," "where" "X" "is" xdef)?
                | "The" WORD "cost" "is" "equal" "to" any_text
                | card_target V_COST "an" "additional" MANA+ "to" "cast"
+               | ("This" | "the") WORD? "cost" "is" "reduced" "by" cost_amount ("for" "each" card_target)?
 cost_subject: ("The" | "the") ("first" | "second") card_target "you" "cast" "each" "turn"
             | ("The" | "the") ("first" | "second") card_target "each" "turn"
             | ("This" | "this") "ability"
@@ -867,7 +870,7 @@ cost_subject: ("The" | "the") ("first" | "second") card_target "you" "cast" "eac
             | card_target ("you" | "your opponents") "cast" ("that" "target" card_target)?
             | card_target ("you" "cast")?
             | ("activated" | "other" | "mana")? "abilities" "of" card_target
-cost_qual: ("for" "each" any_text) | ("that" "target" any_text) | ("unless" any_text)
+cost_qual: ("for" "each" any_text) | ("that" "target" any_text) | ("unless" any_text) | ("during" OWNER? "turn")
 cost_amount: amount | MANA+
                | card_target "costs" "double" "what" "they" "normally" "would"
                | card_target "cost" "the" "same" "amount" "as" "its" "base" "mana" "cost"
@@ -1092,6 +1095,7 @@ card_kind: THIS_CARD types? | types
          | "creature" "spells" | "permanent" "spells" | "artifact" "spells" | "enchantment" "spells" | "land" "spells"
          | "creature" "spell" | "permanent" "spell" | "artifact" "spell" | "enchantment" "spell" | "land" "spell"
          | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
+         | "graveyard" "s"?
          | "it" | "them" | "they" | "him" | "her" | "he" | "she"
          | "copy" "of" card_target
          | INSTANT_SORCERY "spell" "s"?
@@ -1130,6 +1134,8 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "attached" "to" card_target
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
+             | "chosen" "this" "way"
+             | "with" amount "or" "more" "cards" "in" "it"
              | "that" "crewed" "it" "this" "turn"
              | "milled" "this" "way"
              | "with" "mana" "value" CMP "the" "amount" "of" "mana" "spent" "to" "cast" card_target
@@ -1143,7 +1149,7 @@ controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "c
           | "controlled" "by" "different" "players" | "you" "already" "control"
           | "you" "cast" | "you" "played"
           | "defending" "player" "controls" | "attacking" "player" "controls"
-          | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "that" "opponent" "controls" | "target" "player" "controls" | "target" "opponent" "controls"
+          | "they" "control" | "he" "controls" | "she" "controls" | "it" "controls" | "that" "player" "controls" | "that" "opponent" "controls" | "target" "player" "controls" | "target" "opponent" "controls" | "they" "gained" "control" "of" "this" "way"
           | "its" "owner" | "the" "player" "who" "cast" "it"
 in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "library" | "from" "your" "graveyard"
         | "in" "a" "graveyard" | "in" "exile" | "from" "a" "graveyard" | "from" "their" "graveyard"

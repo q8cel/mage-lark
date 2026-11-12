@@ -1003,7 +1003,12 @@ class Interpreter:
         return d
 
     def i_destroy_action(self, children):
-        return self._card_action('destroy', children)
+        d = self._card_action('destroy', children)
+        if 'except' in self._token_words(children):
+            cts = self._find(children, 'card_target')
+            if len(cts) > 1:
+                d['except'] = self.interp(cts[1])
+        return d
 
     def i_tap_action(self, children):
         return self._card_action('tap', children)
@@ -1572,6 +1577,17 @@ class Interpreter:
             d['effect'] = {'verb': 'lose_life', 'amount': self.interp(life)}
         elif 'mill' in toks:
             d['effect'] = {'verb': 'mill'}
+        elif 'base' in toks and 'equal' in toks:
+            # "have the base power and toughness of each other creature …
+            # become equal to ~'s power"
+            cts = self._find(children, 'card_target')
+            xd = self._find_one(children, 'xdef')
+            eff = {'verb': 'set_base_pt'}
+            if cts:
+                eff['of'] = self.interp(cts[0])
+            if xd is not None:
+                eff['equal_to'] = self.interp(xd)
+            d['effect'] = eff
         elif self._find_one(children, 'become_action') is not None:
             d['effect'] = self.interp(self._find_one(children, 'become_action'))
         elif 'copy' in toks:
