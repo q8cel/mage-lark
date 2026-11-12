@@ -59,6 +59,24 @@ add("become-base-pt",
     "Until end of turn, this creature becomes a Plant with base power and toughness 0/8",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and d.get('base_pt') == '0/8'))
+add("without-flying-target",
+    "Creatures without flying can't block this turn",
+    lambda o: has(o, lambda d: d.get('without_keywords') == ['flying']))
+add("choice-of-keywords",
+    "Target creature gets +1/+1 and gains your choice of deathtouch or lifelink until end of turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and d.get('your_choice') is True))
+add("put-under-your-control",
+    "Put up to two creature cards from graveyards onto the battlefield under your control",
+    lambda o: has(o, lambda d: d.get('verb') == 'put'
+                  and d.get('controller') == 'you control'))
+add("activated-xdef",
+    "{4}{R}{G}: ~ gets +X/+X until end of turn, where X is the number of lands you control",
+    lambda o: has(o, lambda d: d.get('type') == 'activated' and d.get('xdef')))
+add("search-named-qualifier",
+    "When this creature enters, you may search your library for up to three cards named ~, reveal them, put them into your hand, then shuffle",
+    lambda o: has(o, lambda d: d.get('verb') == 'search'
+                  and d.get('named') == '~'))
 add("sacrifice-delayed-timing",
     "Sacrifice it at the beginning of your next end step",
     lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'

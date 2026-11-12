@@ -275,6 +275,7 @@ class Interpreter:
             ('quantifier', 'quantifier'), ('otherness', 'otherness'),
             ('nontoken', 'nontoken'), ('status_list', 'status'),
             ('colors', 'colors'), ('card_kind', 'card_type'),
+            ('without_mod', 'without_keywords'),
             ('with_modifier', 'modifier'), ('controller', 'controller'),
             ('in_zone', 'zone'),
         ]
@@ -419,6 +420,10 @@ class Interpreter:
         if text.lower() in self.ANAPHORA:
             return {'ref': 'anaphora', 'raw': text}
         return text
+
+    def i_without_mod(self, children):
+        return [c.value for c in children
+                if isinstance(c, Token) and c.type == 'KEYWORD']
 
     def i_possessive(self, children):
         return self._text(children)
@@ -1223,6 +1228,10 @@ class Interpreter:
                 if isinstance(ch, Token) and ch.type != 'KEYWORD']
         if 'loses' in toks and 'abilities' in toks:
             d['loses_all_other_abilities'] = True
+        if 'choice' in toks:
+            # "gains your choice of deathtouch or lifelink": one keyword is
+            # chosen, not all of them.
+            d['your_choice'] = True
         dur = self._duration(children)
         if dur:
             d['duration'] = dur
@@ -1772,6 +1781,13 @@ class Interpreter:
             if z is not None:
                 d['zone'] = z
         d.update(self._placement(children))
+        # "search for a card named X": the name is a direct token after `named`.
+        for i, ch in enumerate(children):
+            if isinstance(ch, Token) and str(ch).lower() == 'named':
+                for nxt in children[i + 1:]:
+                    if isinstance(nxt, Token) and nxt.type in ('THIS_CARD', 'CARDNAME'):
+                        d['named'] = nxt.value
+                        break
         return d
 
     def i_look_action(self, children):
@@ -1981,6 +1997,8 @@ class Interpreter:
         # the destination phrase is literal tokens with no card_target/zone tree.
         if 'rest' in toks and 'card' not in d:
             d['card'] = 'the rest'
+        if {'under', 'your', 'control'} <= set(toks):
+            d['controller'] = 'you control'
         d.update(self._placement(children))
         # Entry state: only a direct token ("onto the battlefield tapped"), not a
         # "tapped" inside the card_target's status list.
@@ -2153,6 +2171,7 @@ class Interpreter:
     def i_activated_sentence(self, children):
         cost = None
         eff = None
+        xdef = None
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'cost_list':
@@ -2160,7 +2179,12 @@ class Interpreter:
                 elif ch.data in ('effect', 'for_each_sentence', 'until_sentence',
                                  'triggered_sentence'):
                     eff = self.interp(ch)
-        return {'type': 'activated', 'cost': cost, 'effect': eff}
+                elif ch.data == 'xdef_clause':
+                    xdef = self.interp(ch)
+        d = {'type': 'activated', 'cost': cost, 'effect': eff}
+        if xdef is not None:
+            d['xdef'] = xdef
+        return d
 
     def i_spree_sentence(self, children):
         """A spree mode: "+ {2}{B} — Destroy target creature".
@@ -2169,13 +2193,19 @@ class Interpreter:
         """
         cost = None
         eff = None
+        xdef = None
         for ch in children:
             if isinstance(ch, Tree):
                 if ch.data == 'cost_list':
                     cost = self.interp(ch)
                 elif ch.data in ('effect', 'for_each_sentence', 'triggered_sentence'):
                     eff = self.interp(ch)
-        return {'type': 'spree_mode', 'cost': cost, 'effect': eff}
+                elif ch.data == 'xdef_clause':
+                    xdef = self.interp(ch)
+        d = {'type': 'spree_mode', 'cost': cost, 'effect': eff}
+        if xdef is not None:
+            d['xdef'] = xdef
+        return d
 
     def i_prefixed_static(self, children):
         """A static statement behind an ability word: "To solve — You have no cards in hand"."""
