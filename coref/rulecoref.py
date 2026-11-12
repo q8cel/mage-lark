@@ -718,13 +718,14 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         pool = f
                         evidence.append("counter-target-is-permanent")
             elif _COPY_EXCEPT.search(before):
-                f = [i for i in pool if "token" in ms[i]["surface"].lower()]
+                f = [i for i in pool
+                     if re.search(r"\btokens?\b", ms[i]["surface"], re.I)]
                 if f:
                     pool = f
                     evidence.append("copy-token")
             elif _COPY_OF.search(before):
                 f = [i for i in pool
-                     if "token" not in ms[i]["surface"].lower()
+                     if not re.search(r"\btokens?\b", ms[i]["surface"], re.I)
                      and ms[i].get("head_type") not in
                      ("hand", "graveyard", "library", "exile", "battlefield")]
                 if f:
@@ -935,7 +936,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         si = rec.get("sentence")
         s0 = sents[si][0] if si is not None and si < len(sents) else 0
         before = text[s0:rec["start"]].lower()
-        token_ctx = ("token" in before and ("create" in before or "copy" in before))
+        token_ctx = (re.search(r"\btokens?\b", before)
+                     and ("create" in before or "copy" in before))
         # Pronouns in the sentence after a token-creation sentence usually still
         # refer to that token ("Create a token ... It gains haste").
         if (not token_ctx and si is not None and si > 0
@@ -945,14 +947,15 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     break
                 p0, p1 = sents[si - back]
                 prev = text[p0:p1].lower()
-                if "token" in prev and ("create" in prev or "copy" in prev):
+                if re.search(r"\btokens?\b", prev) and ("create" in prev or "copy" in prev):
                     token_ctx = True
                     break
                 if any(ms[i].get("sentence") == si - back for i in pool):
                     break
         if token_ctx and rec["kind"] == "pronoun" and not rec["is_possessive"]:
             f = [i for i in pool
-                 if "token" in ms[i]["surface"].lower() or ms[i]["head_type"] == "token"]
+                 if re.search(r"\btokens?\b", ms[i]["surface"], re.I)
+                     or ms[i]["head_type"] == "token"]
             if f:
                 pool = f
                 evidence.append("created-token")
@@ -1094,14 +1097,14 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 for i, m in enumerate(ms):
                     if m["start"] < cpos or m["end"] > rec["start"]:
                         continue
-                    if "token" in m["surface"].lower() and (
+                    if re.search(r"\btokens?\b", m["surface"], re.I) and (
                             token is None or m["start"] < ms[token]["start"]):
                         token = i
                 qpos = s0 + copies[-1].end()
                 for i, m in enumerate(ms):
                     if m["start"] < qpos or m["end"] > rec["start"]:
                         continue
-                    if m.get("is_anaphor") or "token" in m["surface"].lower():
+                    if m.get("is_anaphor") or re.search(r"\btokens?\b", m["surface"], re.I):
                         continue
                     if src is None or m["start"] < ms[src]["start"]:
                         src = i
