@@ -1040,6 +1040,11 @@ core: status_list? colors? possessive? card_kind? without_mod?
 without_mod: "without" KEYWORD ("or" KEYWORD)*
 zone_mod: with_modifier? controller? with_modifier? in_zone? with_modifier?
             | quantifier "of" card_target
+            | relative_mod
+            | controller relative_mod
+relative_mod: ("that" | "who") rel_pred
+rel_pred: "attacked" "this" "turn"
+        | "entered" "the" "battlefield" "this" "turn"
 this_that: V_THIS | V_THAT | V_IT | "those" | "these" | "the"
 possessive: "your" | "Your" | "its" | "their" | "an opponent's" | "that player's" | "that opponent's"
 otherness: V_OTHER | V_ANOTHER

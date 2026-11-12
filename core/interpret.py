@@ -346,7 +346,7 @@ class Interpreter:
             ('colors', 'colors'), ('card_kind', 'card_type'),
             ('without_mod', 'without_keywords'),
             ('with_modifier', 'modifier'), ('controller', 'controller'),
-            ('in_zone', 'zone'),
+            ('in_zone', 'zone'), ('relative_mod', 'relative'),
         ]
         for name, key in mapping:
             found = self._find_all(children, name)
@@ -371,6 +371,9 @@ class Interpreter:
                     d['each'] = True
                     return d
         return d
+
+    def i_relative_mod(self, children):
+        return self._text(children)
 
     def i_card_kind(self, children):
         toks = [c for c in children if isinstance(c, Token)]
