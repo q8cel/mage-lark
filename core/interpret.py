@@ -3151,6 +3151,9 @@ class Interpreter:
             return d
         # "Lifelink, hexproof from instants" / "Trample, ward {4}": keep every
         # keyword in order, with its cost argument.
+        xd = self._find_one(rest, 'xdef_clause') if rest else None
+        if xd is not None:
+            d['xdef'] = self.interp(xd)
         if len(items) > 1 or from_list:
             d['keywords'] = items
         else:

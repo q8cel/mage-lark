@@ -57,7 +57,9 @@ static_sentence: "Activate" "only" "as" "a" "sorcery"
                | card_target "guesses" "whether" any_text
                | "The" "next" amount "damage" any_text "instead"
                | "The" "next" card_target "you" "cast" "this" "turn" "can" "be" "cast" "as" "though" "it" "had" KEYWORD
-               | "your" "life" "total" "becomes" amount
+               | "your" "life" "total"
+    | "your" "speed"
+    | ("this" | "that") "creature's" ("power" | "toughness") "becomes" amount
                | "They're" POWER_T tok_colors? ("artifact")? ("creature" "s"?)
                | "damage" any_text "reduces" "it" "to" amount "instead"
                | card_target "assigns" "combat" "damage" "equal" "to" "its" "toughness" "rather" "than" "its" "power"
@@ -260,13 +262,14 @@ static_keyword_sentence: ability_word_prefix? kw_with_mod
                        | kw_with_mod "," kw_list
                        | generic_kw_list
                        | keyword_cost
+                       | kw_with_mod xdef_clause
 keyword_cost: (CARDNAME | WORD)+ number? EMDASH MANA+ ("," V_PAY amount "life" | "," V_DISCARD card_target)?
 generic_kw_list: generic_kw (kw_sep generic_kw)*
 generic_kw: CARDNAME (MANA+ | number | EMDASH effect)?
 kw_list_mod: kw_item ("," kw_item)* ("," "and" kw_item)?
 kw_item: KEYWORD (MANA+ | "from" colors)?
        | "protection" "from" CARDNAME (("and" | "," | "," "and") "from" CARDNAME)*
-kw_with_mod: MOD_KEYWORD (MANA+ | "for" card_target | "from" (colors | "instants" | "sorceries" | GENERIC_TYPE) | number)?
+kw_with_mod: MOD_KEYWORD (MANA+ | "X" | "for" card_target | "from" (colors | "instants" | "sorceries" | GENERIC_TYPE) | number)?
             | MOD_KEYWORD EMDASH V_PAY amount "life"
             | MOD_KEYWORD EMDASH MANA+ ("," V_PAY amount "life")?
             | "Protection" "from" (colors | "everything")
@@ -398,7 +401,9 @@ flip_action: V_FLIP "a" "coin"
 has_abilities_action: card_target "has" "all" "activated" "abilities" "of" card_target
 life_total_action: "your" "life" "total" "becomes" amount
                  | player "'s" "life" "total" "becomes" amount
-                | "your" "life" "total" "becomes" "equal" "to" amount
+                | "your" "life" "total"
+    | "your" "speed"
+    | ("this" | "that") "creature's" ("power" | "toughness") "becomes" "equal" "to" amount
 damage_reduce_action: "damage" any_text "reduces" "it" "to" amount "instead"
 // "assigns combat damage equal to its toughness rather than its power": the
 // two stats are semantics, not filler, so capture them (was a literal tail).
@@ -885,6 +890,8 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "~'s" "power"
     | "the" "sacrificed" "creature's" "toughness"
     | "your" "life" "total"
+    | "your" "speed"
+    | ("this" | "that") "creature's" ("power" | "toughness")
     | "the" "life" "lost" "this" "way"
     | "the" "amount" "of" "life" "you" "gained" "this" "turn"
     | "the" "amount" "of" "life" "you've" "gained" "this" "turn"
