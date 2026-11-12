@@ -835,6 +835,45 @@ class Interpreter:
             for action in out:
                 if isinstance(action, dict):
                     action['instead'] = True
+        # "… enter as a copy of X, except it's a Bird … and it has flying": a
+        # trailing grant on the copied permanent belongs to the copy's
+        # exception clause, not to a second effect on an unnamed target.
+        def _copy_effect(node):
+            if not isinstance(node, dict):
+                return None
+            if node.get('verb') == 'copy':
+                return node
+            for key in ('inner', 'effect'):
+                inner = node.get(key)
+                if isinstance(inner, dict):
+                    got = _copy_effect(inner)
+                    if got is not None:
+                        return got
+                elif isinstance(inner, list):
+                    for it in inner:
+                        got = _copy_effect(it)
+                        if got is not None:
+                            return got
+            return None
+        if len(out) > 1:
+            cp = _copy_effect(out[0])
+            if isinstance(cp, dict) and cp.get('except'):
+                kws = []
+                i = 1
+                while i < len(out):
+                    a = out[i]
+                    tgt = a.get('target') if isinstance(a, dict) else None
+                    if (isinstance(a, dict) and a.get('verb') == 'gain_kw'
+                            and isinstance(tgt, dict)
+                            and isinstance(tgt.get('card_type'), dict)
+                            and tgt['card_type'].get('ref') == 'anaphora'):
+                        kws.extend(a.get('keywords') or [])
+                        i += 1
+                    else:
+                        break
+                if kws:
+                    cp['except_keywords'] = kws
+                    out = [out[0]] + out[i:]
         if (len(out) == 2 and isinstance(out[0], dict)
                 and out[0].get('verb') == 'remove_counter'
                 and isinstance(out[1], dict)):
@@ -1624,7 +1663,16 @@ class Interpreter:
         elif self._find_one(children, 'become_action') is not None:
             d['effect'] = self.interp(self._find_one(children, 'become_action'))
         elif 'copy' in toks:
-            d['effect'] = {'verb': 'copy'}
+            # "have X enter as a copy of Y, except …": keep the copy source and
+            # the exception, not just a bare copy marker.
+            cts = self._find(children, 'card_target')
+            eff = {'verb': 'copy'}
+            if len(cts) > 1:
+                eff['of'] = self.interp(cts[1])
+            exc = self._find_one(children, 'token_except')
+            if exc is not None:
+                eff['except'] = self._text(exc.children).strip().lstrip(',').strip()
+            d['effect'] = eff
         else:
             da = self._find_one(children, 'draw_action')
             if da is not None:
