@@ -2365,6 +2365,20 @@ class Interpreter:
                     d['xdef'] = self.interp(ch)
                 elif ch.data in ('trailing_if', 'if_clause'):
                     d['if'] = self.interp(ch)
+                elif ch.data == 'if_sentence':
+                    # "Then if <condition>, <action>": hoist the if-sentence
+                    # instead of returning a bare {'type':'effect'}.
+                    sub = self.interp(ch)
+                    if isinstance(sub, dict):
+                        for key in ('condition', 'if'):
+                            if sub.get(key) is not None:
+                                d['condition'] = sub[key]
+                        if sub.get('effect') is not None:
+                            d['effect'] = sub['effect']
+                        if sub.get('instead'):
+                            d['instead'] = True
+                        if 'effect' not in d and sub.get('text'):
+                            d['text'] = sub['text']
                 elif ch.data == 'trailing_unless':
                     val = self.interp(ch)
                     eff = d.get('effect')
