@@ -859,6 +859,7 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "players" | "an" "oppon
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual* ("," "where" "X" "is" xdef)?
                | "The" WORD "cost" "is" "equal" "to" any_text
                | card_target V_COST "an" "additional" MANA+ "to" "cast"
+               | ("This" | "the") WORD? "cost" "is" "reduced" "by" cost_amount ("for" "each" card_target)?
 cost_subject: ("The" | "the") ("first" | "second") card_target "you" "cast" "each" "turn"
             | ("The" | "the") ("first" | "second") card_target "each" "turn"
             | ("This" | "this") "ability"
@@ -866,7 +867,7 @@ cost_subject: ("The" | "the") ("first" | "second") card_target "you" "cast" "eac
             | card_target ("you" | "your opponents") "cast" ("that" "target" card_target)?
             | card_target ("you" "cast")?
             | ("activated" | "other" | "mana")? "abilities" "of" card_target
-cost_qual: ("for" "each" any_text) | ("that" "target" any_text) | ("unless" any_text)
+cost_qual: ("for" "each" any_text) | ("that" "target" any_text) | ("unless" any_text) | ("during" OWNER? "turn")
 cost_amount: amount | MANA+
                | card_target "costs" "double" "what" "they" "normally" "would"
                | card_target "cost" "the" "same" "amount" "as" "its" "base" "mana" "cost"
