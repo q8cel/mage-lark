@@ -441,6 +441,13 @@ class Interpreter:
                 joins.pop()
             if len(joins) > 1:
                 return {'kind': 'type', 'value': ' '.join(joins)}
+        # "nonlegendary permanent card": the trailing head noun `card` is
+        # generic, but the adjective chain before it is the type restriction.
+        # Reporting only the first token silently dropped `permanent`.
+        if len(words) > 1 and words[-1] in ('card', 'cards'):
+            head = ' '.join(words[:-1])
+            if head:
+                return {'kind': 'type', 'value': head}
         return {'kind': 'type', 'value': toks[0].value.lower()}
 
     def i_types(self, children):
