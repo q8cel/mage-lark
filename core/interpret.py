@@ -352,6 +352,14 @@ class Interpreter:
             found = self._find_all(children, name)
             if found:
                 d[key] = self.interp(found[0])
+        mod = d.get('modifier')
+        if (isinstance(mod, str) and 'number of' in mod
+                and d.get('controller')):
+            # "with mana value <= the number of creatures you control":
+            # `you control` delimits the inner count set, not the outer card.
+            # Earley may bind it to the outer zone_mod; re-attach it.
+            d['modifier'] = mod + ' ' + str(d['controller'])
+            d.pop('controller', None)
         if 'otherness' not in d:
             # "up to one other target creature": `other` sits inside the
             # quantifier subtree, so it must be lifted to the target.
