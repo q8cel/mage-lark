@@ -1064,6 +1064,8 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "attached" "to" card_target
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
+             | "that" "crewed" "it" "this" "turn"
+             | "with" "the" "greatest" "mana" "value" "among" card_target
              | "discarded" "this" "way"
              | "you've" ("cast" | "discarded" | "gained") "this" "turn"
 CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i
