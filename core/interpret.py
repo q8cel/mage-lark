@@ -811,6 +811,15 @@ class Interpreter:
             for action in out:
                 if isinstance(action, dict):
                     action['instead'] = True
+        if (len(out) == 2 and isinstance(out[0], dict)
+                and out[0].get('verb') == 'remove_counter'
+                and isinstance(out[1], dict)):
+            # "remove those counters and it deals 20 damage": a removal followed
+            # by its consequence keeps the pinned one-action shape
+            # (remove_counter with an `and` tail), as the raw-consequence path
+            # produced before the structured action existed.
+            out[0]['and'] = out[1]
+            out = [out[0]]
         if len(out) == 1:
             return out[0]
         return out
@@ -2056,6 +2065,20 @@ class Interpreter:
         fe = self._for_each(children)
         if fe is not None:
             d['for_each'] = fe
+        names = [self._text(ch.children).strip() for ch in children
+                 if isinstance(ch, Tree) and ch.data == 'counter_name']
+        pmods = [ch.value for ch in children
+                 if isinstance(ch, Token) and ch.type == 'POWER_MOD']
+        if names or pmods:
+            # "a flying, lifelink, or +1/+1 counter": a list of counter kinds.
+            d['counters'] = [n for n in names if n.lower() != 'or'] + pmods
+        if (not cas and ck is None and 'counters' in words
+                and ('its' in words or 'their' in words or 'those' in words
+                     or "creature's" in words)):
+            # "put its counters on target creature": a moved counter set.
+            d['counters'] = ('those' if 'those' in words else
+                             'its' if 'its' in words else
+                             'their' if 'their' in words else "this creature's")
         return d
 
     def i_remove_counter_action(self, children):
