@@ -733,6 +733,8 @@ stat_change: ("an" | "a")? ("additional" | "another")? POWER_MOD "or" POWER_MOD
            | ("has" | "gains" | "have" | "gain") kw_list
 can_attack_as_though_action: card_target V_CAN "attack" ("this" "turn")? "as" "though" ("it" | "they") ("didn't" | "did" "not") "have" KEYWORD
 gain_kw_action: card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "end" "of" "turn")? ("as" "long" "as" any_text)? ("for" "as" "long" "as" any_text)? ("and" ("loses" | "lose") "all" ("other")? "abilities")?
+             | card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") kw_list ("until" "your" "next" "turn") ("as" "long" "as" any_text)?
+             | card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") kw_list "and" "becomes" "colorless" ("until" ("end" "of" "turn" | "your" "next" "turn"))?
              | card_target ("each")? ("also")? ("has" | "have" | "gains" | "gain") "your" "choice" "of" kw_list ("until" "end" "of" "turn")?
 base_pt_action: card_target ("also")? ("has" | "have" | "gains" | "gets") "base" "power" "and" "toughness" POWER_T ("and" "are" token_types "in" "addition" "to" "their" "other" "types")? ("until" ("end" "of" "turn" | "your" "next" "turn"))?
 pt_color_mod: colors (POWER_T)? | POWER_T colors?
