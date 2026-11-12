@@ -923,12 +923,14 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "the" "greatest" "power" "among" card_target
     | "the" "greatest" "mana" "value" "among" card_target
     | "the" "total" "toughness" "of" card_target
+    | "the" "total" "mana" "value" "of" card_target
     | "that" "spell's" "mana" "value"
     | "the" "mana" "value" "of" "that" "spell"
     | ("that" | "a" | "its") "creature's" "mana" "value"
     | card_target "'s" ("power" | "toughness")
     | "that" "card's" "mana" "cost"
     | "the" "amount" "of" "excess" "damage" "dealt" "to" "that" "creature" "this" "way"
+    | "the" "amount" "of" "damage" "dealt" "this" "way"
     | "the" "greatest" "power" "among" "other" "creatures" "you" "control"
     | "the" "greatest" "power" "among" "creatures" "you" "control"
     | "the" "greatest" "number" "of" "cards" "a" "player" "discarded" "this" "way"
