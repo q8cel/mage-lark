@@ -1201,7 +1201,48 @@ class Interpreter:
         return d
 
     def i_investigate_action(self, children):
-        return {'verb': 'investigate'}
+        d = {'verb': 'investigate'}
+        who = self._find_one(children, 'who')
+        if who is not None:
+            who_value = self.interp(who)
+            if who_value:
+                d['who'] = who_value
+        toks = [str(c).lower() for c in children if isinstance(c, Token)]
+        if 'twice' in toks:
+            d['times'] = 2
+        else:
+            amt = self._find_one(children, 'amount')
+            if amt is not None:
+                d['times'] = self.interp(amt)
+        if 'lost' in toks:
+            d['for_each'] = 'opponent who lost life this turn'
+        return d
+
+    KW_ACTION_VERBS = ('blight', 'waterbend', 'discover', 'amass', 'connive',
+                       'recruit', 'forage', 'airbend', 'devour')
+
+    def i_keyword_action(self, children):
+        """Keyword actions with an optional parameter: blight N, waterbend {N},
+        discover N, amass <type> N, connives, recruit, forage, airbend <target>,
+        devour land N."""
+        toks = [str(c).lower() for c in children if isinstance(c, Token)]
+        verb = next((v for v in self.KW_ACTION_VERBS if v in toks), 'keyword_action')
+        d = {'verb': verb}
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['amount'] = self.interp(amt)
+        mana = ''.join(str(c) for c in children
+                       if isinstance(c, Token) and c.type == 'MANA')
+        if mana:
+            d['mana'] = mana
+        ck = self._find_one(children, 'card_kind')
+        if ck is not None:
+            d['type'] = self._text(ck.children).strip()
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            key = 'who' if verb == 'connive' else 'target'
+            d[key] = self.interp(ct)
+        return d
 
     def i_earthbend_action(self, children):
         d = {'verb': 'earthbend'}
@@ -1241,7 +1282,17 @@ class Interpreter:
         return self._card_action('gift', children)
 
     def i_explore_action(self, children):
-        return {'verb': 'explore'}
+        d = {'verb': 'explore'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['who'] = self.interp(ct)
+        toks = [str(c).lower() for c in children if isinstance(c, Token)]
+        if 'again' in toks:
+            d['again'] = True
+        elif 'times' in toks:
+            amt = self._find_one(children, 'amount')
+            d['times'] = self.interp(amt) if amt is not None else 'X'
+        return d
 
     def i_manifest_action(self, children):
         d = {'verb': 'manifest_dread'}
@@ -1305,6 +1356,8 @@ class Interpreter:
             d['object'] = self.interp(cts[0])
             if token:
                 d['to'] = {'card_type': {'kind': 'type', 'value': 'token'}}
+            elif 'amassed' in self._token_words(children):
+                d['to'] = {'card_type': {'kind': 'type', 'value': 'Army'}}
         return d
 
     def i_fight_action(self, children):

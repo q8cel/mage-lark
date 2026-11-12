@@ -141,6 +141,7 @@ cost_item: MANA+
          | V_DISCARD card_target
          | V_DISCARD "your" "hand"
          | V_PAY amount "life"
+         | V_BLIGHT amount
          | V_PAY amount "mana"
          | V_PUT counter_amount counter_kind "on" card_target
          | V_RETURN card_target "to" "its" "owner's" "hand"
@@ -394,9 +395,19 @@ action: add_mana_action
        | collect_evidence_action
        | cloak_action
        | exchange_control_action
+       | keyword_action
 
-investigate_action: V_INVESTIGATE
-earthbend_action: "earthbend" amount
+investigate_action: (who)? V_INVESTIGATE ("twice" | amount "times")? ("for" "each" player "who" "lost" "life" "this" "turn")?
+keyword_action: V_BLIGHT amount
+              | V_WATERBEND MANA+
+              | V_DISCOVER amount
+              | V_AMASS card_kind? amount
+              | card_target V_CONNIVE
+              | V_RECRUIT
+              | V_FORAGE
+              | V_AIRBEND card_target
+              | V_DEVOUR "land" amount
+earthbend_action: (who)? V_EARTHBEND amount
 flip_action: V_FLIP "a" "coin"
 has_abilities_action: card_target "has" "all" "activated" "abilities" "of" card_target
 life_total_action: "your" "life" "total" "becomes" amount
@@ -411,6 +422,7 @@ assign_combat_action: card_target "assigns" "combat" "damage" "equal" "to" "its"
 stat_basis: "toughness" | "power"
 gift_action: "Gift" ("a" | "an")? card_target
 explore_action: (V_IT)? "explore" "s"?
+              | card_target V_EXPLORE ("X" "times" | amount "times" | "again")?
 manifest_action: (owner_subject)? V_MANIFEST "dread"
 empower_action: "empower" card_target number?
 collect_evidence_action: "collect" "evidence" amount
@@ -662,6 +674,7 @@ fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "do
             | ("it" | card_target)? V_FIGHT ("up to" "one")? V_TARGET card_target ("you" "don't" "control")?
             | "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
 attach_action: V_ATTACH card_target "to" (card_target | "the" "token") ("you" "control")?
+             | V_ATTACH card_target "to" "the" "amassed" "Army"
 
 stat_action: card_target "and" ("other")? card_target ("each")? (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)? ("and" "must" "be" "blocked" "this" "turn" "if" "able")?
            | card_target ("each")? (V_GET | V_GAIN) stat_change ("for" "each" (card_target | any_text))? ("until" "end" "of" "turn")? ("for" "each" (card_target | any_text))? ("as" "long" "as" any_text)?
@@ -769,6 +782,7 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | "any"
         | put_counter_action | remove_counter_action | gain_control_action | deal_damage_action
         | stat_action | become_action | count_action | have_deal_action | have_action | distribute_action | activate_action
         | investigate_action | begin_game_action
+        | keyword_action
        | mill_action
        | flip_action
        | has_abilities_action
@@ -990,7 +1004,7 @@ card_kind: THIS_CARD types? | types
          | "creature" "spells" | "permanent" "spells" | "artifact" "spells" | "enchantment" "spells" | "land" "spells"
          | "creature" "spell" | "permanent" "spell" | "artifact" "spell" | "enchantment" "spell" | "land" "spell"
          | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
-         | "it" | "them" | "they" | "him" | "her"
+         | "it" | "them" | "they" | "him" | "her" | "he" | "she"
          | "copy" "of" card_target
          | INSTANT_SORCERY "spell" "s"?
          | "instant" "spell" "s"? | "sorcery" "spell" "s"?
@@ -1107,6 +1121,17 @@ V_MAY: /\bmay\b/i
 V_PAY: /\bpay(s?)\b/i
 V_UNTIL: /\buntil\b/i
 V_INVESTIGATE: /\binvestigate(s|d)?\b/i
+V_BLIGHT: /\bblights?\b/i
+V_WATERBEND: /\bwaterbends?\b/i
+V_DISCOVER: /\bdiscovers?\b/i
+V_AMASS: /\bamass(?:es)?\b/i
+V_CONNIVE: /\bconnives?\b/i
+V_RECRUIT: /\brecruits?\b/i
+V_FORAGE: /\bforages?\b/i
+V_AIRBEND: /\bairbends?\b/i
+V_EARTHBEND: /\bearthbends?\b/i
+V_EXPLORE: /\bexplores?\b/i
+V_DEVOUR: /\bdevours?\b/i
 V_FLIP: /\bflip(s|ped)?\b/i
 V_MANIFEST: /\bmanifests?\b/i
 V_CYCLE: /\bcycle\b/i
