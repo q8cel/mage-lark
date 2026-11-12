@@ -1013,6 +1013,7 @@ card_kind: THIS_CARD types? | types
          | "source" | "sources"
          | types "source"
          | types "or" types "card"?
+         | types "or" NONTYPE GENERIC_TYPE "card"?
          | types "," "or" types "card"?
          | types "," types "," "or" types "card"?
          | types ("," types)+ ("," "or" types)? "card"?
