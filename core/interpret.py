@@ -573,7 +573,9 @@ class Interpreter:
         for ch in children:
             if isinstance(ch, Tree):
                 v = self.interp(ch)
-                if v is not None:
+                if isinstance(v, list):
+                    head.extend(str(x) for x in v)
+                elif v is not None:
                     head.append(str(v))
                 continue
             if ch.type == 'MANA':
@@ -670,8 +672,12 @@ class Interpreter:
                 continue
             if action.get('target'):
                 last_target = action['target']
-            elif 'target' in action and not action['target'] and last_target:
+            elif action.get('card') and isinstance(action['card'], dict):
+                last_target = action['card']
+            if 'target' in action and not action['target'] and last_target:
                 action['target'] = dict(last_target)
+            elif 'card' in action and not action['card'] and last_target:
+                action['card'] = dict(last_target)
             # "You draw a card and gain 1 life" / "Target player draws … and
             # loses …": the actor is shared, but only the first action kept it.
             who = action.get('who')

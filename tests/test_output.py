@@ -678,6 +678,12 @@ add("enchanted-status",
                   and 'Enchanted' in d.get('target', {}).get('status', [])
                   and all('Enchanted' in a.get('target', {}).get('status', [])
                           for a in d.get('effect', []) if isinstance(a, dict))))
+add("coordinated-card-target",
+    "Equipped creature can't be blocked and has shroud",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and 'Equipped' in d.get('target', {}).get('status', []))
+                  or has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and 'Equipped' in d.get('card', {}).get('status', [])))
 add("coordinated-target", "When this creature enters, target creature gets +2/+0 and gains first strike until end of turn",
     lambda o: has(o, lambda d: isinstance(d.get('effect'), list)
                   and all(a.get('target') for a in d['effect']
