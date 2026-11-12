@@ -62,7 +62,8 @@ class Interpreter:
             return {'kind': 'type', 'value': 'instant or sorcery'}
         return t.value
 
-    ANAPHORA = {'it', 'them', 'its', "it's", 'they', 'their'}
+    ANAPHORA = {'it', 'its', "it's", 'they', 'them', 'their',
+                'he', 'him', 'his', 'she', 'her'}
     # card_kind's literal ability alternatives produce these keyword tokens; the
     # target is an ability ("activated abilities"), never the first word as a type.
     ABILITY_TOKENS = {'ACTIVATED', 'TRIGGERED', 'ABILITY', 'ABILITIES',

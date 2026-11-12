@@ -470,6 +470,9 @@ add("spend-mana-cast-or-activate",
 add("pronoun-is-anaphora",
     "It gains haste until end of turn",
     lambda o: has(o, lambda d: d.get('ref') == 'anaphora' and d.get('raw')))
+add("pronoun-subject-anaphora", "He gains menace until end of turn",
+    lambda o: has(o, lambda d: d.get('ref') == 'anaphora'
+                  and d.get('raw') == 'He'))
 add("event-without-object",
     "Whenever this creature attacks, it gets +1/+1 until end of turn",
     lambda o: has(o, lambda d: d.get('verb') == 'attacks' and d.get('object') == {}))
