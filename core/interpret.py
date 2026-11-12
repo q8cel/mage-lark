@@ -465,6 +465,10 @@ class Interpreter:
             head = ' '.join(words[:-1])
             if head:
                 return {'kind': 'type', 'value': head}
+        if len(words) > 1:
+            # Adjective + head noun ("legendary creature", "nonartifact
+            # creature"): reporting only the first token drops the noun.
+            return {'kind': 'type', 'value': ' '.join(words)}
         return {'kind': 'type', 'value': toks[0].value.lower()}
 
     def i_types(self, children):
