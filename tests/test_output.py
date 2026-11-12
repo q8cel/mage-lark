@@ -63,6 +63,28 @@ add("coordinated-stat-targets",
     "Skeletons you control and other Zombies you control get +1/+1 and have deathtouch",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and len(d.get('cards', [])) == 2))
+add("shuffle-zones",
+    "{T}, Exile this artifact: Shuffle your graveyard into your library",
+    lambda o: has(o, lambda d: d.get('verb') == 'shuffle'
+                  and d.get('from') == 'graveyard' and d.get('to') == 'library'))
+add("prevent-to-and-by",
+    "Prevent all combat damage that would be dealt to and dealt by this creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'
+                  and d.get('to') and d.get('by')))
+add("second-damage-source",
+    "Whenever this creature attacks, it deals 4 damage to any target and 3 damage to each of up to two other targets",
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
+                  and d.get('amount') == 3 and d.get('source')))
+add("pay-life-amount", "Whenever a Vampire you control dies, you may pay 2 life",
+    lambda o: has(o, lambda d: d.get('verb') == 'pay'
+                  and d.get('amount') == '2 life'))
+add("for-each-colors",
+    "Whenever you cast a spell, put a +1/+1 counter on this creature for each of that spell's colors",
+    lambda o: has(o, lambda d: d.get('for_each', {}).get('colors') is True))
+add("spend-mana-any-type",
+    "You can spend mana of any type to cast creature spells",
+    lambda o: has(o, lambda d: d.get('verb') == 'spend_mana_only_to_cast'
+                  and d.get('mana') == 'any type'))
 add("add-mana-bare", "Add {R}",
     lambda o: has(o, lambda d: d.get('verb') == 'add_mana'
                   and d.get('amount') == '{R}'))

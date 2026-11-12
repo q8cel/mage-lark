@@ -228,7 +228,10 @@ class Interpreter:
             if not isinstance(nxt, Tree):
                 continue
             if nxt.data in ('card_target', 'any_text'):
-                return self.interp(nxt)
+                val = self.interp(nxt)
+                if isinstance(val, dict) and 'colors' in words:
+                    val = dict(val); val['colors'] = True
+                return val
             if nxt.data == 'cost_qual':
                 for sub in nxt.children:
                     if isinstance(sub, Tree) and sub.data in ('card_target', 'any_text'):
@@ -740,6 +743,9 @@ class Interpreter:
             if src:
                 last_source = src
             elif 'source' in action and not src and last_source is not None:
+                action['source'] = last_source
+            elif (action.get('verb') == 'deal_damage'
+                  and 'source' not in action and last_source is not None):
                 action['source'] = last_source
         # …and one duration: "gets +1/+0 and gains first strike until end of
         # turn" puts the clause on the last action only, but it qualifies both.
@@ -2204,7 +2210,16 @@ class Interpreter:
         return d
 
     def i_shuffle_action(self, children):
-        return {'verb': 'shuffle'}
+        d = {'verb': 'shuffle'}
+        toks = self._token_words(children)
+        zones = [t for t in toks
+                 if t in ('graveyard', 'library', 'hand', 'battlefield', 'exile')]
+        if zones:
+            d['from'] = zones[0]
+            d['to'] = zones[-1] if len(zones) > 1 else 'library'
+        elif 'libraries' in toks:
+            d['to'] = 'library'
+        return d
 
     def i_no_max_hand_action(self, children):
         d = {'verb': 'no_max_hand_size'}
@@ -2409,6 +2424,11 @@ class Interpreter:
         ct = self._find_one(children, 'card_target')
         if ct is not None:
             d['target'] = self.interp(ct)
+        words = self._token_words(children)
+        if 'any' in words and 'type' in words:
+            d['mana'] = 'any type'
+        elif 'any' in words and 'color' in words:
+            d['mana'] = 'any color'
         return d
 
     def i_pay_action(self, children):
@@ -2503,6 +2523,12 @@ class Interpreter:
             d['all'] = True
         if 'to' in toks and 'you' in toks:
             d['to'] = 'you'
+        ct = self._find_one(children, 'card_target')
+        if ct is not None and 'by' in toks and 'dealt' in toks:
+            # "damage that would be dealt to and dealt by this creature"
+            d['to'] = self.interp(ct)
+            d['by'] = self.interp(ct)
+            d.pop('card', None)
         if 'combat' in toks:
             d['damage'] = 'combat'
         elif 'noncombat' in toks:
