@@ -381,6 +381,13 @@ class Interpreter:
             return {'up_to': self._first_number(children)}
         if len(words) == 1 and words[0].isdigit():
             return int(words[0])
+        if 'or' in low and 'more' in low:
+            # "one or more creatures" is a batched quantity, not the number 1.
+            n = self._first_number(children)
+            if n == 1:
+                return {'one_or_more': 1}
+            if n is not None:
+                return '%s or more' % n
         if trees:
             return self.interp(trees[0])
         if len(words) > 1:

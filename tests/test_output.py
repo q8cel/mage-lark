@@ -169,6 +169,9 @@ add("other-target",
     "When this creature enters, destroy up to one other target creature",
     lambda o: has(o, lambda d: d.get('card', {}).get('otherness') == 'other'
                   and d.get('card', {}).get('quantifier') == {'up_to': 1}))
+add("one-or-more-quantifier",
+    "Whenever one or more creatures you control attack, you gain life equal to the number of attacking creatures",
+    lambda o: has(o, lambda d: d.get('quantifier') == {'one_or_more': 1}))
 add("fight-second-target",
     "Target creature you control fights target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'fight'
