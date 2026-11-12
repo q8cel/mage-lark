@@ -1648,7 +1648,7 @@ class Interpreter:
             if ca is not None:
                 w['count'] = self.interp(ca)
             if ck is not None:
-                w['counter'] = self._text(ck.children) if isinstance(ck, Tree) else str(ck)
+                w['counter'] = self._counter_text(ck) if isinstance(ck, Tree) else str(ck)
             if pm:
                 w['counter'] = pm[0].value + ' counter'
             d['with'] = w
@@ -1661,7 +1661,7 @@ class Interpreter:
                 if i < len(cas):
                     e['count'] = self.interp(cas[i])
                 if i < len(cks):
-                    e['counter'] = self._text(cks[i].children)
+                    e['counter'] = self._counter_text(cks[i])
                 extras.append(e)
             if extras and isinstance(d.get('with'), dict):
                 d['with']['and'] = extras
@@ -2212,12 +2212,24 @@ class Interpreter:
         if ct is not None:
             d['from'] = self.interp(ct)
         ca = self._find_one(children, 'counter_amount')
-        if ca is not None:
-            d['count'] = self.interp(ca)
         ck = self._find_one(children, 'counter_kind')
-        if ck is not None:
-            d['counter'] = self._text(ck.children)
+        ctext = self._counter_text(ck) if ck is not None else None
+        count = self.interp(ca) if ca is not None else None
+        if count == 'those' and ctext:
+            # "remove those counters": keep the anaphoric object intact.
+            d['counter'] = 'those ' + ctext
+        else:
+            if count is not None:
+                d['count'] = count
+            if ctext:
+                d['counter'] = ctext
         return d
+
+    def _counter_text(self, node):
+        txt = ' '.join(self._text(node.children).split())
+        if txt.endswith(' s'):
+            txt = txt[:-2] + 's'
+        return txt
 
     def i_counter_amount(self, children):
         t = self._text(children).strip().lower()
