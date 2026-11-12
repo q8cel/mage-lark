@@ -461,6 +461,10 @@ class Interpreter:
         # "nonlegendary permanent card": the trailing head noun `card` is
         # generic, but the adjective chain before it is the type restriction.
         # Reporting only the first token silently dropped `permanent`.
+        if (len(words) > 2 and words[-2] == 'card' and words[-1] == 's'):
+            head = ' '.join(words[:-2])
+            if head:
+                return {'kind': 'type', 'value': head}
         if len(words) > 1 and words[-1] in ('card', 'cards'):
             head = ' '.join(words[:-1])
             if head:
@@ -1557,6 +1561,8 @@ class Interpreter:
             d['predicate'] = 'cast spells or activate abilities'
         elif 'play' in toks:
             d['predicate'] = 'play cards'
+            if 'hand' in toks:
+                d['from'] = 'their hand' if 'their' in toks else 'your hand'
         elif 'cast' in toks:
             d['predicate'] = 'cast spells'
         elif 'activate' in toks or 'activated' in toks:
@@ -1738,6 +1744,9 @@ class Interpreter:
                 w['counter'] = self._counter_text(ck) if isinstance(ck, Tree) else str(ck)
             if pm:
                 w['counter'] = pm[0].value + ' counter'
+            if 'additional' in [str(c).lower() for c in children
+                                if isinstance(c, Token)]:
+                w['additional'] = True
             d['with'] = w
         cas = self._find(children, 'counter_amount')
         cks = self._find(children, 'counter_kind')
