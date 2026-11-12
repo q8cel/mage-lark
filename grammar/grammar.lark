@@ -803,6 +803,7 @@ play_action: V_PLAY ("an" "additional" "land" | card_target) ("exiled" "this" "w
            | V_PLAY ("an" "additional" "land" | card_target) "until" "the" "end" "of" "your" "next" "turn"
            | V_PLAY card_target "until" any_text
            | V_PLAY card_target "for" "as" "long" "as" any_text
+           | V_PLAY card_target "they" "exiled" "this" "way"
 reveal_top_action: "Play" "with" "the" "top" "card" "of" "your" "library" "revealed"
 choose_action: ("for" "each" "player" ",")? (player | controller_subject)? V_CHOOSE amount? choose_obj
              | (V_YOU V_MAY)? V_CHOOSE choose_obj "from" card_target
@@ -820,7 +821,7 @@ choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one
            | ("target" "creature") "one" "of" "their" "opponents" "controls"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text | "a" any_text ("," any_text)* ("card" | "cards") "from" ("it" | zone)
 
-may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | "any" "opponent" | "target" "opponent" | controller_subject | owner_subject)? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
+may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "players" | "an" "opponent" | "any" "opponent" | "target" "opponent" | controller_subject | owner_subject)? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
         | gain_life_action | lose_life_action | exile_action | attach_action | cast_action
         | play_action | scry_action | surveil_action | create_token_action | shuffle_action | reveal_action
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action
@@ -905,6 +906,7 @@ enchant_target: LISTTOK | STATUS* (GENERIC_TYPE | CARDNAME | "player") (("," | "
 cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind) "for" "as" "long" "as" any_text
             | (card_target)? V_CANT ("have" counter_kind "put" "on" card_target | "get" counter_kind | "be" "countered" ("by" card_target)? | "be" "regenerated" | "be" "activated" | "cast" ("spells" | "sorceries" | "instants" | "a" "spell") | "block" | "attack" | "attack" "or" "block" "alone"? ("unless" any_text)? | "be" "blocked" ("this" "turn")? ("by" "more" "than" amount card_target | "by" card_target | "except" "by" card_target | "as" "long" "as" any_text)? | "attack" "unless" any_text | "block" "unless" any_text | "lose" "this" "mana" | "untap" "during" ("your" | "its" | "their" | "his" | "her") ("controller's")? "next"? "untap" "step" | "untap" "during" (V_THAT | "any" | "each") "player's" "next"? "untap" "step") ("this" "turn")? ("if" "able")? ("," "and" "its" "activated" "abilities" "can't" "be" "activated")?
             | (card_target)? V_CANT "cast" "spells" "or" "activate" "abilities" "of" card_target ("or" card_target)*
+            | (card_target)? V_CANT "play" card_target "from" ("their" | "your") "hand"
             | (card_target)? V_CANT "cast" "spells" ("during" OWNER? "turn")?
             | (card_target)? V_CANT "activate" "abilities" "of" card_target ("or" card_target)*
             | V_YOU V_CANT "lose" "this" "mana" ("as" "steps" "and" "phases" "end")?

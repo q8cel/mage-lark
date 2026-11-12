@@ -933,6 +933,8 @@ class Interpreter:
             d['additional_land'] = True
         if 'this' in toks and 'turn' in toks:
             d.setdefault('duration', 'this turn')
+        if 'they' in toks and 'exiled' in toks and 'way' in toks:
+            d['exiled_this_way'] = True
         return d
 
     def i_draw_action(self, children):
@@ -1437,6 +1439,8 @@ class Interpreter:
             d['predicate'] = 'gain life'
         elif 'activate' in toks and 'cast' in toks:
             d['predicate'] = 'cast spells or activate abilities'
+        elif 'play' in toks:
+            d['predicate'] = 'play cards'
         elif 'cast' in toks:
             d['predicate'] = 'cast spells'
         elif 'activate' in toks or 'activated' in toks:
