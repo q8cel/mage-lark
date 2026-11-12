@@ -142,7 +142,7 @@ cost_item: MANA+
          | V_SACRIFICE ("one" "or" "more")? card_target
          | V_REMOVE counter_amount counter_kind "from" card_target
          | V_REMOVE counter_amount "counter" "from" card_target
-         | V_REMOVE "a" counter_name "counter" "from" card_target
+         | V_REMOVE V_A counter_name "counter" "from" card_target
          | V_REMOVE amount counter_name "counters" "from" card_target
          | V_REMOVE counter_amount counter_kind "from" card_target "and" V_SACRIFICE card_target
          | V_TAP card_target
@@ -527,7 +527,7 @@ remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
              | V_REMOVE counter_amount counter_kind
              | (who)? V_LOSE "all" counter_kind
 counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
-counter_amount: amount | "one" "or" "more" | "that" "many" | "those" | "a" | "an" | "twice" "X"
+counter_amount: amount | "one" "or" "more" | "that" "many" | "those" | "all" | "any" "number" "of" | V_A | V_AN | "twice" "X"
 counter_name: WORD+
 
 search_action: V_SEARCH zones "for" search_target ("named" (THIS_CARD | CARDNAME) (("and" | "or" | "and/or") card_target)*)? ("with" "the" "same" "name" ("as" (THIS_CARD | CARDNAME))?)? ("and")? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? (","? "then" "shuffle" (","? "and" "put" "that" "card" "on" "top")?)?
