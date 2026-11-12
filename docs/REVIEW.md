@@ -1,38 +1,24 @@
 # Corpus review pipeline
-Coverage is not correctness: a sentence can parse and still produce the wrong
-structure. The only oracle used to be the 34 hand-audited loops in
-`AUDIT-LOOPS.md` (20 cards per sample), which could not say how much of a corpus
-was wrong and forced re-reading after every change. This pipeline reviews a
-snapshot instead of a random sample.
+Coverage is not correctness: a sentence can parse and still produce the wrong structure. The only oracle used to be the 34 hand-audited loops in `AUDIT-LOOPS.md` (20 cards per sample), which could not say how much of a corpus was wrong and forced re-reading after every change. This pipeline reviews a snapshot instead of a random sample.
 ## Tools
-`tools/snapshot.py build --data Standard.json [--out PATH] [--jobs N] [--unparsed]`
-and `diff A B [--json]` write and compare deterministic snapshots (`meta`,
-`sentences` with `out_sha1`/`shape_sha1`/`cluster`, full `outputs`). `diff`
-classifies `cluster` / `shape` / `output` / `added` / `removed` and exits
-non-zero on change. `build` segments with `tools/run.py`'s caches, parses with
-`build_parser("interp")`, and interprets.
-Parse trees are cached in `.cache/trees/trees_<grammar16>.pkl.gz` (gzipped
-pickle, atomic replace). The key is the **grammar sha1 only**, so an
-interpreter-only change rebuilds Standard in ~1 s instead of ~640 s and a grammar
-edit re-parses. Sources are hashed at start and end; a mid-build change writes
-`meta.stale` plus `sources_at_start`/`sources_at_end` and exits 1.
-
+`tools/snapshot.py` writes and compares deterministic snapshots:
+```
+snapshot.py build --data Standard.json [--out PATH] [--jobs N] [--limit K] [--timeout S] [--unparsed]
+snapshot.py diff A B [--json] [--limit N]
+```
+`build` segments with `tools/run.py`'s caches, parses with `build_parser("interp")`, interprets, and writes `meta`, `sentences` (`out_sha1`, `shape_sha1`, `cluster`) and full `outputs`. `diff` classifies `cluster` / `shape` / `output` / `added` / `removed` and exits non-zero on change.
+Parse trees are cached in `.cache/trees/trees_<grammar16>.pkl.gz` (gzipped pickle, atomic replace). The key is the **grammar sha1 only**, so an interpreter-only change rebuilds Standard in ~1 s instead of ~640 s and a grammar edit re-parses. Sources are hashed at start and end; a mid-build change writes `meta.stale` plus `sources_at_start`/`sources_at_end` and exits 1.
 `tools/review.py` owns the judgment:
 ```
-review.py seed --snapshot S --root R --carry C [--exempt review/loop_inspected.txt]
-review.py batch --owner NAME [--n N] [--extend] [--include-exempt]
-review.py verdict --owner NAME --sid S --verdict ok|bug|legit|unparsed|inspected --note ...
-review.py check --owner NAME
-review.py carry --root R --out /tmp/carry.csv
+review.py seed --snapshot S --root R [--out CSV] [--carry C] [--exempt FILE] [--no-unparsed]
+review.py batch --owner NAME [--n N] [--extend] [--out FILE] [--root R] [--exempt FILE] [--include-exempt] [--max-bytes N]
+review.py verdict --owner NAME --sid S --verdict ok|bug|legit|unparsed|inspected --note TEXT [--root R]
+review.py check --owner NAME [--root R]
+review.py carry --root R --out CSV
 review.py status --root R
 ```
-`seed` emits one `majority` row per cluster and one `minority` row per deviating
-sentence. `batch` claims todo rows under a lock (unparsed, minorities, then
-occurrence count) and caps the file at 250 KB. `verdict` appends to a per-owner
-log; the last row wins, so reopened rows can be re-verdicted. `carry` writes the
-effective verdict per sid with the `out_sha1` it judged; `seed --carry` keeps it
-when that hash still matches, else reopens it (`note = "reopened: output changed
-(was ...)"`).
+`seed` emits one `majority` row per cluster and one `minority` row per deviating sentence. `batch` claims todo rows under a lock (unparsed, minorities, then occurrence count) and caps the file at `--max-bytes` (default 250000; this workflow used 100000 for one-pass batches). `verdict` appends to a per-owner log; the last row wins, so reopened rows can be re-verdicted.
+`carry` writes the effective verdict per sid with the `out_sha1` it judged; `seed --carry` keeps it when that hash still matches, else reopens it (`note = "reopened: output changed (was ...)"`).
 ## State layout
 `review/<corpus>N/` is one cycle and is historical; never edit an old root.
 
@@ -42,39 +28,32 @@ when that hash still matches, else reopens it (`note = "reopened: output changed
 | `claims/<owner>.txt`, `batches/<owner>.json` | scratch, git-ignored |
 | `verdicts/<owner>.csv` | append-only owner log; the accumulated judgment |
 | `occurrences.json`, `meta.json` | occurrence weights, snapshot pointer |
-`review/loop_inspected.txt` maps `sid<TAB>corpora` for texts already read by
-`AUDIT-LOOPS.md`; they seed as `inspected` unless `--include-exempt` is passed.
+
+`review/loop_inspected.txt` maps `sid<TAB>corpora` for texts already read by `AUDIT-LOOPS.md`; they seed as `inspected` unless `--include-exempt` is passed. `review/README.md` records the same protocol.
 ## Cycle protocol
 1. Fix the interpreter (or grammar) and commit.
 2. Build a fresh snapshot per corpus (tree cache: seconds).
 3. `carry` the previous root to a CSV.
 4. `seed` the next root with `--carry` and `--exempt review/loop_inspected.txt`.
 5. `batch` each reviewer, read the rows, `verdict` them.
-6. `check` until every claimed sid has one verdict; `status` shows disjoint
-   claims and no `todo`.
+6. `check` until every claimed sid has one verdict; `status` shows disjoint claims and no `todo`.
 7. Recompute rates and the occurrence-weighted residual ranking.
 ## Measured state
-Latest cycle (HEAD `63fad29`; 72 DFC-key tree misses, otherwise cache hits):
+Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claimed`, `inspected`). Occurrence share = sum of occurrences of bug rows / total corpus sentence occurrences. Latest cycle (cycle 9, HEAD `63fad29`):
 
 | corpus | reviewed rows | bug rows | row rate | occurrence share |
 |---|---:|---:|---:|---:|
-| Standard | 4,682 | 370 | 7.9% | 3.47% |
-| classic | 849 | 60 | 7.1% | 2.31% |
-| FDN | 544 | 55 | 10.1% | 6.96% |
+| Standard | 4,761 | 379 | 8.0% | 3.4% |
+| classic | 849 | 60 | 7.1% | 2.3% |
+| FDN | 547 | 55 | 10.1% | 7.0% |
 
-The residual is a long tail ranked by occurrence weight, not row count, in
-`swarm/reports/residual_impact.md` (amount-equal-to-X, keyword cost/payload,
-raw-collapse replacement wrappers, `Otherwise`/conditions, target/quantifier,
-for-each). That ranking drives the next fix batch.
+## Residual (cycle 9)
+Keyword payloads are cleared. The remaining 494 bugs are effect-slot detail:
+- Standard: 379 bugs (8.0% rows, 3.4% share) — other/effect slots, raw replacement wrappers, target quantifier, conditions, for-each.
+- classic: 60 bugs (7.1%, 2.3%) — other/effect slots, actor/who, target/quantifier.
+- FDN: 55 bugs (10.1%, 7.0%) — object/zone/source 12, quantifier/conjunct 10, controller/actor 8, conditions/unless 8, amount/cost/mana 8, static/raw 8, Threshold/as-long 3.
+Family ranking by occurrence weight: `swarm/reports/residual_impact.md`.
 ## Adding a corpus
-
-Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then
-`batch` and review; the corpus JSON only needs the `setdata.load` shape.
-
+Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `batch` and review; the corpus JSON only needs the `setdata.load` shape.
 ## Known limits
-
-Only cluster representatives are reviewed; non-representative siblings share a
-cluster key but are not individually read. Coreference is not covered. Reviewers
-are LLM agents working from the sentence, output and cluster siblings, with the
-rubric recorded in verdict notes; disagreement is resolved by a second owner's
-appended verdict.
+Only cluster representatives are reviewed; non-representative siblings share a cluster key but are not individually read. Coreference is not covered. Reviewers are LLM agents with the rubric in verdict notes. Two owners logging different verdicts for the same sid abort with `conflicting verdicts for sid ... across owners`; fix the wrong log, or re-verdict within the same owner (last row wins).
