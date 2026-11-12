@@ -2992,6 +2992,25 @@ class Interpreter:
             d['xdef'] = xdef
         return d
 
+    def i_cost_dash_sentence(self, children):
+        """A mana-cost line written "<cost> — <effect>" ("{P} — Draw a card",
+        "Blizzard — {0} — Return …"): the mana before the dash is the price."""
+        cost = None
+        eff = None
+        xdef = None
+        for ch in children:
+            if isinstance(ch, Tree):
+                if ch.data == 'cost_list':
+                    cost = self.interp(ch)
+                elif ch.data in ('effect', 'triggered_sentence'):
+                    eff = self.interp(ch)
+                elif ch.data == 'xdef_clause':
+                    xdef = self.interp(ch)
+        d = {'type': 'cost_dash', 'cost': cost, 'effect': eff}
+        if xdef is not None:
+            d['xdef'] = xdef
+        return d
+
     def i_prefixed_static(self, children):
         """A static statement behind an ability word: "To solve — You have no cards in hand"."""
         d = {'type': 'static'}
