@@ -971,7 +971,7 @@ COLOR: /white|blue|black|red|green|colorless|multicolored/i
 
 //  card types (generic + proper-noun subtypes resolved in the transformer)
 types: GENERIC_TYPE | CARDNAME | LISTTOK
-GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorcery|sorceries|basic|nonbasic|nontoken|legendary|nonlegendary|walls?/i
+GENERIC_TYPE: /creatures?|cards?|spells?|permanents?|lands?|artifacts?|enchantments?|equipment|planeswalkers?|tokens?|instants?|sorcery|sorceries|basic|nonbasic|nonartifact|nonartifacts|noncreature|noncreatures|nonenchantment|nonenchantments|nonland|nonlands|nontoken|legendary|nonlegendary|walls?/i
 INSTANT_SORCERY: /\b[iI]nstant and sorcery\b/
 
 //  the star: an atomic card reference
