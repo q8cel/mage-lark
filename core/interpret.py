@@ -325,6 +325,12 @@ class Interpreter:
         # toks[0] alone dropped the head noun ('basic' instead of 'basic land').
         if len(words) > 1 and words[0] in ('basic', 'nonbasic') and 'land' in words:
             return {'kind': 'type', 'value': words[0] + ' land'}
+        if len(words) > 1 and ('token' in words or 'tokens' in words):
+            # "target artifact token" / "creature tokens": keep the token
+            # restriction instead of reporting only the first type word.
+            head = next((w for w in words if w not in ('token', 'tokens')), None)
+            if head:
+                return {'kind': 'type', 'value': head + ' token'}
         if all(t.type in self.ABILITY_TOKENS for t in toks):
             has_ability = any(w in ('ability', 'abilities') for w in words)
             has_spell = any(w in ('spell', 'spells') for w in words)
@@ -1652,13 +1658,26 @@ class Interpreter:
                     d['zone'] = self.interp(ch)
                 elif ch.data == 'token_tail':
                     self._token_tail(ch, d)
+                elif ch.data == 'token_proper':
+                    # "create Darkstar, a legendary … creature token": the name
+                    # is a token_proper subtree, not a bare CARDNAME.
+                    d.setdefault('named', []).append(self._text(ch.children).strip())
+                elif ch.data == 'token_except':
+                    # "except it has haste and …" / "except it's a 5/5 …"
+                    d['except'] = self._text(ch.children).strip()
             elif isinstance(ch, Token):
                 if ch.type == 'POWER_T':
                     d['power_toughness'] = ch.value
                 elif ch.type == 'COLOR':
                     d.setdefault('colors', ch.value)
+                elif ch.type == 'QUOTE':
+                    d['quote'] = ch.value
                 elif ch.type == 'CARDNAME':
                     types.append(ch.value)
+                elif ch.value.lower() in ('tapped', 'attacking'):
+                    d[ch.value.lower()] = True
+                elif ch.value.lower() == 'legendary':
+                    types.append('legendary')
                 elif ch.value.lower() in self.SUPERTYPES:
                     types.append(ch.value.lower())
         if types:
@@ -1670,7 +1689,7 @@ class Interpreter:
         seen_for_each = False
         for sub in ch.children:
             if isinstance(sub, Tree):
-                if sub.data == 'kw_list':
+                if sub.data in ('kw_list', 'kw_with_mod'):
                     d.setdefault('kw', []).append(self.interp(sub))
                 elif sub.data == 'in_zone':
                     d['zone'] = self.interp(sub)
@@ -1683,12 +1702,19 @@ class Interpreter:
             elif isinstance(sub, Token):
                 if sub.value.lower() == 'tapped':
                     d['tapped'] = True
+                elif sub.value.lower() == 'attacking':
+                    d['attacking'] = True
                 elif sub.value.lower() == 'each':
                     seen_for_each = True
+                if sub.type == 'QUOTE':
+                    d['quote'] = sub.value
                 if sub.type == 'CARDNAME':
                     d.setdefault('named', []).append(sub.value)
 
     def i_token_num(self, children):
+        words = [str(c).lower() for c in children if isinstance(c, Token)]
+        if words == ['that', 'many']:
+            return 'that many'
         return self.interp(children[0]) if children else None
 
     def i_token_types(self, children):

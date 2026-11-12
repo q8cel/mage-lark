@@ -130,6 +130,26 @@ add("token-color-type", "Create a white Avatar creature token",
     lambda o: has(o, lambda d: d.get('verb') == 'create_token'
                   and d.get('token', {}).get('colors') == 'white'
                   and 'creature' in d.get('token', {}).get('types', [])))
+add("token-tapped",
+    "Whenever you commit a crime, create a tapped Treasure token",
+    lambda o: has(o, lambda d: d.get('token', {}).get('tapped') is True))
+add("token-granted-ability",
+    'Create a 0/1 black Wizard creature token with "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent."',
+    lambda o: has(o, lambda d: 'noncreature spell' in str(d.get('token', {}).get('quote', ''))))
+add("token-crew",
+    "When this creature enters, create a 3/2 colorless Vehicle artifact token with crew 1",
+    lambda o: has(o, lambda d: {'keyword': 'crew', 'modifier': 1} in d.get('token', {}).get('kw', [])))
+add("token-tapped-and-attacking",
+    "{2}{W}, {T}: Whenever you attack this turn, create two 1/1 red Warrior creature tokens that are tapped and attacking",
+    lambda o: has(o, lambda d: d.get('token', {}).get('tapped') is True
+                  and d.get('token', {}).get('attacking') is True))
+add("token-except-clause",
+    "Create a token that's a copy of target creature you control, except it has haste",
+    lambda o: has(o, lambda d: 'except' in str(d.get('token', {})).lower()
+                  and 'haste' in str(d.get('token', {}))))
+add("token-that-many",
+    "Whenever one or more Dinosaurs you control attack, create that many Treasure tokens",
+    lambda o: has(o, lambda d: d.get('token', {}).get('count') == 'that many'))
 add("stat-for-each", "This creature gets +1/+1 for each other creature on the battlefield",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and 'battlefield' in str(d.get('for_each', ''))))
