@@ -39,7 +39,7 @@ sentence: prefixed_static
 deck_rule: "A" "deck" "can" "have" ("any" "number" "of" | amount) "cards" "named" (THIS_CARD | CARDNAME)
 round_up_sentence: "Round" "up" "each" "time"
 
-if_sentence: ability_word_prefix? V_IF any_text "," effect instead_suffix?
+if_sentence: ability_word_prefix? V_IF any_text "," effect xdef_clause? instead_suffix?
             | V_IF any_text "," any_text
             | V_IF any_text
 instead_suffix: INSTEAD ("of" any_text)?
@@ -474,7 +474,7 @@ create_token_action: (who)? V_CREATE token ("if" any_text)? ("for" "each" card_t
                    | (who)? V_CREATE amount "of" "those" "tokens" INSTEAD? ("if" any_text)?
 token: "a" "token" "that's" "a" "copy" "of" card_target token_except?
       | token_num ("tapped")? POWER_T? tok_colors? token_types? ("artifact")? ("creature" | "card")? "token" "s"? token_tail*
-      | token_proper "," "a" "legendary" POWER_T? tok_colors? token_types? "creature" "token"
+      | token_proper "," "a" "legendary" POWER_T? tok_colors? token_types? ("artifact")? ("creature" | "card")? "token" "s"? token_tail*
       | "a" "number" "of" POWER_T? tok_colors? token_types? "creature" "tokens" token_tail* "equal" "to" xdef ("named" ("~" | CARDNAME))?
 tok_colors: (COLOR | "colorless" | "multicolored") (("," | "and" | "or") (COLOR | "colorless" | "multicolored"))*
 token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
@@ -486,11 +486,11 @@ token_tail: ("named" ("~'s" CARDNAME | CARDNAME+))
            | ("that's" "tapped" ("and" "attacking")?)
            | ("that's" "attacking")
            | ("that" "are" "attacking")
-           | ("and" QUOTE)
+           | (","? "and" QUOTE)
            | ("for" "each" card_target)
            | ("where" "X" "is" xdef)
            | in_zone
-token_proper: CARDNAME token_proper_tail*
+token_proper: (CARDNAME | THIS_CARD)+ token_proper_tail*
 token_proper_tail: "of" "the" CARDNAME | "of" CARDNAME | "and" CARDNAME
 token_num: "a" | "an" | "that" "many" | amount
 token_types: CARDNAME+ | TOK_TYPE_WORD+
@@ -500,11 +500,15 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
 
 put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("for" "each" card_target)?
+                  | V_PUT counter_amount counter_kind ("," counter_amount? counter_kind)+ (","? "and" counter_amount? counter_kind)? "on" card_target
+                  | V_PUT counter_amount counter_name ("," counter_name)* (","? "or")? POWER_MOD? "counter" "s"? "on" card_target
+                  | V_PUT ("its" | "their" | "those" | "this" "creature's") "counters" "on" card_target
 replace_counter_action: "that" "many" "plus" amount counter_kind "are" "put" "on" card_target "instead"? ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
 remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
+             | V_REMOVE counter_amount counter_kind
              | (who)? V_LOSE "all" counter_kind
 counter_kind: (POWER_MOD | counter_name)? "counter" "s"?
-counter_amount: amount | "one" "or" "more" | "that" "many" | "a" | "an"
+counter_amount: amount | "one" "or" "more" | "that" "many" | "those" | "a" | "an" | "twice" "X"
 counter_name: WORD+
 
 search_action: V_SEARCH zones "for" search_target ("named" (THIS_CARD | CARDNAME) (("and" | "or" | "and/or") card_target)*)? ("with" "the" "same" "name" ("as" (THIS_CARD | CARDNAME))?)? ("and")? ("reveal" "it")? ("and"? "put" ("it" | "them") "into" zone)? (","? "then" "shuffle" (","? "and" "put" "that" "card" "on" "top")?)?
@@ -604,6 +608,7 @@ return_action: V_RETURN "to" "the" "battlefield" card_target ("from" zone)? ("wi
              | V_RETURN "all" types "and" types "card" "s"? "from" zone "to" "the" "battlefield" "under" "their" "owners'" "control"
              | V_RETURN card_target "to" (("its" | "their") "owner's" "hand" | "the" "battlefield" | "your" "hand" | ("its" | "their") "owners'" "hands") ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" "with" counter_amount counter_kind "on" self_ref
+             | V_RETURN card_target "from" zone "to" "the" "battlefield" "with" counter_amount "additional"? counter_kind "on" self_ref
              | V_RETURN card_target "from" zone "to" "the" "battlefield" "attached" "to" card_target
              | V_RETURN card_target "to" "the" "battlefield" ("with" (amount "fewer" | "no") counter_kind "on" self_ref)? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
              | V_RETURN card_target "to" "the" "battlefield" ("tapped" "and" "attacking" | "tapped" | "transformed")?
@@ -634,7 +639,7 @@ put_zone_action: (who)? V_PUT card_target "and/or" card_target "onto" "the" "bat
                | V_PUT card_target "onto" "the" "battlefield" "and" "the" "rest" "into" zone
                | V_PUT card_target "and" card_target "on" "top" "of" zone
                | V_PUT card_target "into" zone "and" "the" "other" "into" zone
-               | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control" | "face" "down")? ("attached" "to" card_target)?
+               | (who)? V_PUT card_target "onto" "the" "battlefield" ("tapped" | "under" "your" "control" | "face" "down")? ("with" counter_amount "additional"? counter_kind "on" self_ref)? ("attached" "to" card_target)?
                | V_PUT card_target "on" "top" "of" zone order_mod?
                | V_PUT card_target "on" "top"
                | V_PUT "that" "pile" "into" "your" "hand" "and" "the" "other" "into" "your" "graveyard"
@@ -874,7 +879,7 @@ gain_quote_action: (card_target)? (V_GAIN | "has" | "have") QUOTE
 emblem_action: (V_YOU | player)? V_GET "an" "emblem" ("with" (QUOTE | any_text))?
 
 self_ref: "it" | "him" | "her" | "them"
-enters_action: card_target V_ENTERS ("the" "battlefield")? ("tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" self_ref | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" self_ref)? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
+enters_action: card_target V_ENTERS ("the" "battlefield")? (("tapped" | "untapped") "with" counter_amount counter_kind "on" self_ref | "tapped" | "untapped" | "prepared" | "with" counter_amount counter_kind "on" self_ref | "with" ("an" | "a")? ("additional" | "another")? POWER_MOD "counter" "s"? "on" self_ref | "with" amount "additional"? POWER_MOD "counter" "s"? "on" self_ref)? ("for" "each" any_text)? ("if" any_text)? ("unless" any_text)?
             | card_target V_ENTERS ("the" "battlefield")? "with" "a" "number" "of" (POWER_MOD | counter_name) "counters" "on" self_ref "equal" "to" any_text
 enchant_action: V_ENCHANT enchant_target
 enchant_target: LISTTOK | STATUS* (GENERIC_TYPE | CARDNAME | "player") (("," | "or" | "," "or") (GENERIC_TYPE | CARDNAME))*
@@ -1019,6 +1024,7 @@ card_kind: THIS_CARD types? | types
          | "source" | "sources"
          | types "source"
          | types "or" types "card"?
+         | types "or" NONTYPE GENERIC_TYPE "card"?
          | types "," "or" types "card"?
          | types "," types "," "or" types "card"?
          | types ("," types)+ ("," "or" types)? "card"?
@@ -1072,6 +1078,8 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "attached" "to" card_target
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
+             | "that" "crewed" "it" "this" "turn"
+             | "with" "the" "greatest" "mana" "value" "among" card_target
              | "discarded" "this" "way"
              | "you've" ("cast" | "discarded" | "gained") "this" "turn"
 CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i
