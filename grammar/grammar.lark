@@ -54,6 +54,7 @@ prefixed_static: ability_word_prefix static_sentence
                | ability_word_prefix as_long_sentence
                | ability_word_prefix modal_sentence
 static_sentence: "Activate" "only" "as" "a" "sorcery"
+               | card_target "saddles" "Mounts" "and" "crews" "Vehicles" (("as" "though" "its" "power" "were" amount "greater") | ("using" "its" "toughness" "rather" "than" "its" "power"))?
                | "Once" "during" "each" "of" "your" "turns" "," effect
                | "Your" "maximum" "hand" "size" "is" amount
                | card_target "lose" "all" "land" "types" "and" "abilities" ","? "and" "they" "gain" QUOTE
