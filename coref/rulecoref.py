@@ -684,10 +684,37 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if on["argtype"] and atype is None:
             before = text[max(0, rec["start"] - 18):rec["start"]]
             if _COUNTER_ON.search(before):
-                f = [i for i in pool if ms[i]["head_type"] in PERMANENTS]
-                if f:
-                    pool = f
-                    evidence.append("counter-target-is-permanent")
+                # "return/cast the card ... with a finality counter on it":
+                # the counter recipient is the card/permanent just moved, not
+                # any permanent that happens to be more recent.
+                wide = text[max(0, rec["start"] - 80):rec["start"]]
+                to_battlefield = bool(
+                    re.search(r"\b(?:onto|to)\s+the\s+battlefield\b[^.;]{0,50}$",
+                              wide, re.I)
+                    or (re.search(r"\bcast\b[^.;]{0,50}\bfrom\s+your\s+graveyard\b",
+                                  wide, re.I)
+                        and re.search(r"\benters?\s+with\b", wide, re.I)))
+                f = []
+                if to_battlefield:
+                    # Prefer the target object of the return/put clause, then
+                    # the card/self NP; never an unrelated recent permanent.
+                    f = [i for i in pool
+                         if ms[i].get("is_target")
+                         and ms[i]["sentence"] == rec["sentence"]
+                         and ms[i]["head_type"] not in
+                         ("player", "opponent", "hand", "graveyard",
+                          "library", "exile")]
+                    if not f:
+                        f = [i for i in pool if ms[i]["head_type"] == "card"
+                             or ms[i].get("is_self")]
+                    if f:
+                        pool = f
+                        evidence.append("counter-object-card")
+                if not f:
+                    f = [i for i in pool if ms[i]["head_type"] in PERMANENTS]
+                    if f:
+                        pool = f
+                        evidence.append("counter-target-is-permanent")
             elif _COPY_EXCEPT.search(before):
                 f = [i for i in pool if "token" in ms[i]["surface"].lower()]
                 if f:
@@ -791,6 +818,16 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("damage-object-not-self")
+
+        # ---- "deals N damage to them": the recipient is the player/opponent
+        # introduced by the trigger ("Whenever an opponent draws a card, this
+        # creature deals 1 damage to them"), never the damage source.
+        if (rec["kind"] == "pronoun" and rec["surface"].lower() == "them"
+                and _DAMAGE_TO_LEAD.search(text[max(0, rec["start"] - 18):rec["start"]])):
+            f = [i for i in pool if ms[i]["head_type"] in ("player", "opponent")]
+            if f:
+                pool = f
+                evidence.append("damage-to-player")
 
         # ---- "It's still a land" after a target land becomes a creature
         if (rec["kind"] == "pronoun"
@@ -1072,10 +1109,37 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                         pool = f
                         evidence.append("as-though-self")
 
+        # ---- "you may cast spells as though they had flash": 'they' is the
+        # spell/card, not a player.
+        if (rec["kind"] == "pronoun"
+                and rec["surface"].lower() in ("they", "them")
+                and re.search(r"\bas\s+though\s*$",
+                              text[max(0, rec["start"] - 12):rec["start"]], re.I)
+                and re.match(r"\s+(?:had|has)\s+flash\b",
+                             text[rec["end"]:rec["end"] + 20], re.I)):
+            f = [i for i in pool if ms[i]["head_type"] in ("spell", "card")]
+            if f:
+                pool = f
+                evidence.append("flash-object")
+
+        # ---- "becomes the target of a spell or ability ..., it gets ...":
+        # the trigger's subject, not the "target of a spell" nominal.
+        if (rec["kind"] == "pronoun"
+                and rec["surface"].lower() in ("it", "it's")
+                and re.search(r"\bbecomes?\s+the\s+target\s+of\b",
+                              text[max(0, rec["start"] - 200):rec["start"]], re.I)
+                and re.match(r"\s+(?:gets?|gains?|has)\b",
+                             text[rec["end"]:rec["end"] + 16], re.I)):
+            f = [i for i in pool if ms[i].get("is_self")]
+            if f:
+                pool = f
+                evidence.append("target-trigger-self")
+
         # ---- "they control" after each opponent: the player is the subject,
         # not the creature/planeswalker collection being controlled.
         if (rec["kind"] == "pronoun" and rec["surface"].lower() == "they"
-                and re.match(r"\s+controls?\b", text[rec["end"]:rec["end"] + 20], re.I)):
+                and re.match(r"\s+(?:controls?|gained\s+control)\b",
+                             text[rec["end"]:rec["end"] + 24], re.I)):
             f = [i for i in pool
                  if ms[i].get("head_type") in ("player", "opponent")]
             if f:
