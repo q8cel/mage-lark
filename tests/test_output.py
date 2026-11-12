@@ -64,7 +64,17 @@ add("become-named",
 add("become-lose-types-no-all-creature",
     "Enchanted permanent is a colorless land with \"{T}: Add {C}\" and loses all other card types and abilities",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
-                  and 'all_creature_types' not in d))
+                  and 'all_creature_types' not in d
+                  and d.get('quote') == '"{T}: Add {C}"'
+                  and d.get('loses_all_other_card_types_and_abilities') is True))
+add("lose-keywords-otherness",
+    "Lizard Formula — When this creature enters, up to one other target creature loses all abilities and becomes a green Lizard creature with base power and toughness 4/4",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_keywords'
+                  and d.get('target', {}).get('otherness') == 'other'))
+add("cost-mod-filter-shared",
+    "Instant and sorcery spells you cast with mana value 4 or greater cost {X} less to cast",
+    lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
+                  and all(c.get('modifier') for c in d.get('cards', []))))
 add("cost-mod-subject",
     "Dragon spells you cast cost {1} less to cast",
     lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'

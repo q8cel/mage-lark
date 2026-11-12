@@ -1311,6 +1311,8 @@ class Interpreter:
                 # in lead, apart from the card_kind.
                 target = dict(target)
                 target['quantifier'] = self.interp(qs[0])
+                if 'other' in self._token_words(qs[0].children):
+                    target['otherness'] = 'other'
             d['target'] = target
         kws = self._find_one(children, 'kw_list')
         if kws is not None:
@@ -1475,6 +1477,12 @@ class Interpreter:
                          if isinstance(c, Token)]
                 if names:
                     d['named'] = ' '.join(names)
+            for sub in tail.children:
+                if isinstance(sub, Token) and sub.type == 'QUOTE':
+                    d['quote'] = sub.value
+            if ('loses' in tail_words and 'types' in tail_words
+                    and 'abilities' in tail_words):
+                d['loses_all_other_card_types_and_abilities'] = True
             kws = self._find_one(tail.children, 'kw_list')
             if kws is not None:
                 # "becomes … with vigilance": keywords live in the tail.
@@ -2250,6 +2258,13 @@ class Interpreter:
                     targets.append(v)
                 d['target'] = targets[0]
                 if len(targets) > 1:
+                    # "Instant and sorcery spells you cast with mana value 4
+                    # or greater": a filter stated once applies to both.
+                    shared = [t for t in targets if t.get('modifier')]
+                    if shared:
+                        mod = shared[0]['modifier']
+                        for t in targets:
+                            t.setdefault('modifier', mod)
                     d['cards'] = targets
             else:
                 d['target'] = self._text(cs.children).strip()
