@@ -23,3 +23,10 @@ Counts are verdict rows matching the note shape when last measured.
 | Keyword cost with em dash (`Impending 4—{2}{W}{W}`, `Blitz—{…}`) | ~10 Standard | Needs a closed keyword-argument rule; not yet attempted. |
 | Double-dash ability line (`Name — {cost} — effect`, `{P}{P} — effect`) | ~15 Standard | Sentence-level dispatch alternative needed. |
 | "until your next turn" on stat/keyword changes | ~8 Standard | Needs additive alternatives in several actions; would duplicate long rules. |
+
+## Cycle-12 deferrals (grammar queue)
+
+| class | sids | why deferred |
+|---|---|---|
+| alternative cast cost: "in addition to paying its other costs" as a structured field | e4e9c2d2d824 | The clause parses and is currently kept inside the `by` string; representing it as a separate cost component needs a cost-by decomposition shared by cast/activated cost lists, not a readback. |
+| shuffle object "the rest" not referenced | cf482a72c5b3 | `shuffle_action` emits `from: []`; expressing "the rest of the chosen cards" needs an anaphoric set reference in the action model, which is a structural change. |
