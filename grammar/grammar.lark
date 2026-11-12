@@ -635,7 +635,10 @@ sacrifice_action: (who)? V_SACRIFICE card_target ("of" "their" "choice")? with_m
                 | (who)? V_SACRIFICE card_target ("of" "their" "choice")? "or" V_PAY amount "life"
                 | (who)? V_SACRIFICE card_target ("of" "their" "choice")? ("at" "the" "beginning" "of" ("the" | "your") "next" "end" "step")? ("at" "end" "of" "combat")? ("unless" any_text)?
 regenerate_action: (who)? V_REGENERATE card_target
-              | ("any" "opponent" | who) V_MAY V_SACRIFICE card_target ("of" "their" "choice")?
+              // "you may sacrifice …" is may_action + sacrifice_action; it used to
+              // live here, which made the interpreter report verb 'regenerate'
+              // for every optional sacrifice.
+
 gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of" "turn")? ("for" "as" "long" "as" any_text)? ("for" "which" (V_IT | V_THEY) (V_WAS | "were") "chosen")?
 control_player_action: V_YOU "control" (player | card_target) "during" (V_THAT "player's" | "their" | "his" | "her") "next" "turn"
 scry_action: ("each" "player" | who)? V_SCRY amount
@@ -749,7 +752,7 @@ choose_obj: "a" "color" "or" "none" | "a" "creature" "type" | "a" "color" | "one
            | ("target" "creature") "one" "of" "their" "opponents" "controls"
            | "any" "card" "name" | "a" "card" "name" | "an" "opponent's" "hand" | card_target | any_text | "a" any_text ("," any_text)* ("card" | "cards") "from" ("it" | zone)
 
-may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | controller_subject | owner_subject)? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
+may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | "any" "opponent" | "target" "opponent" | controller_subject | owner_subject)? V_MAY (draw_action | discard_action | sacrifice_action | tap_action | untap_action
         | gain_life_action | lose_life_action | exile_action | attach_action | cast_action
         | play_action | scry_action | surveil_action | create_token_action | shuffle_action | reveal_action
         | search_action | look_action | counter_spell_action | return_action | put_zone_action | destroy_action | pay_action

@@ -443,6 +443,14 @@ add("sacrifice-choice-modifier",
     "Target opponent sacrifices a creature of their choice with flying",
     lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'
                   and 'flying' in str(d.get('modifier', ''))))
+add("optional-sacrifice-is-not-regenerate", "You may sacrifice a creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'may'
+                  and d.get('inner', {}).get('verb') == 'sacrifice')
+                  and not has(o, lambda d: d.get('verb') == 'regenerate'))
+add("any-opponent-may-sacrifice",
+    "At the beginning of each combat, any opponent may sacrifice a creature of their choice",
+    lambda o: has(o, lambda d: d.get('verb') == 'may'
+                  and d.get('inner', {}).get('verb') == 'sacrifice'))
 add("upkeep-of-controller",
     "At the beginning of the upkeep of enchanted creature's controller, that player loses 2 life",
     lambda o: has(o, lambda d: d.get('type') == 'triggered'
