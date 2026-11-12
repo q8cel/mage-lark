@@ -844,6 +844,66 @@ class Interpreter:
             for action in out:
                 if isinstance(action, dict):
                     action['instead'] = True
+        # "create a token that's a copy of it, except it isn't legendary and is
+        # a Mutant in addition to its other types": the residual targetless
+        # become/gain actions describe the token's exception, not a new effect.
+        if out and isinstance(out[0], dict) and out[0].get('verb') == 'create_token':
+            tok = out[0].get('token')
+            if isinstance(tok, dict) and tok.get('except'):
+                extra = []
+                i = 1
+                while i < len(out):
+                    a = out[i]
+                    if (isinstance(a, dict) and a.get('verb') in ('become', 'gain_kw')
+                            and not a.get('target')):
+                        a = dict(a)
+                        a.pop('target', None)
+                        extra.append(a)
+                        i += 1
+                    else:
+                        break
+                if extra:
+                    tok['except_effects'] = extra
+                    out = [out[0]] + out[i:]
+        # "… enter as a copy of X, except it's a Bird … and it has flying": a
+        # trailing grant on the copied permanent belongs to the copy's
+        # exception clause, not to a second effect on an unnamed target.
+        def _copy_effect(node):
+            if not isinstance(node, dict):
+                return None
+            if node.get('verb') == 'copy':
+                return node
+            for key in ('inner', 'effect'):
+                inner = node.get(key)
+                if isinstance(inner, dict):
+                    got = _copy_effect(inner)
+                    if got is not None:
+                        return got
+                elif isinstance(inner, list):
+                    for it in inner:
+                        got = _copy_effect(it)
+                        if got is not None:
+                            return got
+            return None
+        if len(out) > 1:
+            cp = _copy_effect(out[0])
+            if isinstance(cp, dict) and cp.get('except'):
+                kws = []
+                i = 1
+                while i < len(out):
+                    a = out[i]
+                    tgt = a.get('target') if isinstance(a, dict) else None
+                    if (isinstance(a, dict) and a.get('verb') == 'gain_kw'
+                            and isinstance(tgt, dict)
+                            and isinstance(tgt.get('card_type'), dict)
+                            and tgt['card_type'].get('ref') == 'anaphora'):
+                        kws.extend(a.get('keywords') or [])
+                        i += 1
+                    else:
+                        break
+                if kws:
+                    cp['except_keywords'] = kws
+                    out = [out[0]] + out[i:]
         if (len(out) == 2 and isinstance(out[0], dict)
                 and out[0].get('verb') == 'remove_counter'
                 and isinstance(out[1], dict)):
@@ -1297,8 +1357,16 @@ class Interpreter:
         """Keyword actions with an optional parameter: blight N, waterbend {N},
         discover N, amass <type> N, connives, recruit, forage, airbend <target>,
         devour land N."""
-        toks = [str(c).lower() for c in children if isinstance(c, Token)]
-        verb = next((v for v in self.KW_ACTION_VERBS if v in toks), 'keyword_action')
+        ttypes = {c.type for c in children if isinstance(c, Token)}
+        # Each verb has its own terminal (V_CONNIVE, V_BLIGHT, …); use the type,
+        # not the token text, so inflected forms ("connives") still name the verb.
+        verb = next((v for v in self.KW_ACTION_VERBS
+                     if 'V_' + v.upper() in ttypes), None)
+        if verb is None:
+            toks = [str(c).lower() for c in children if isinstance(c, Token)]
+            verb = next((v for v in self.KW_ACTION_VERBS
+                         if v in toks or v + 's' in toks or v + 'es' in toks),
+                        'keyword_action')
         d = {'verb': verb}
         amt = self._find_one(children, 'amount')
         if amt is not None:
@@ -1629,7 +1697,16 @@ class Interpreter:
         elif self._find_one(children, 'become_action') is not None:
             d['effect'] = self.interp(self._find_one(children, 'become_action'))
         elif 'copy' in toks:
-            d['effect'] = {'verb': 'copy'}
+            # "have X enter as a copy of Y, except …": keep the copy source and
+            # the exception, not just a bare copy marker.
+            cts = self._find(children, 'card_target')
+            eff = {'verb': 'copy'}
+            if len(cts) > 1:
+                eff['of'] = self.interp(cts[1])
+            exc = self._find_one(children, 'token_except')
+            if exc is not None:
+                eff['except'] = self._text(exc.children).strip().lstrip(',').strip()
+            d['effect'] = eff
         else:
             da = self._find_one(children, 'draw_action')
             if da is not None:
