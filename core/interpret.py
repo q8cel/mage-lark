@@ -1075,7 +1075,12 @@ class Interpreter:
         return d
 
     def i_fight_action(self, children):
-        return self._card_action('fight', children, key='target')
+        d = self._card_action('fight', children, key='target')
+        cts = self._find(children, 'card_target')
+        if len(cts) > 1:
+            # "X fights Y": the second card_target is the other combatant.
+            d['fights'] = self.interp(cts[1])
+        return d
 
     def i_cant_action(self, children):
         d = {'verb': "can't"}
