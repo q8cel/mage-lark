@@ -1458,8 +1458,16 @@ class Interpreter:
             if 'addition' in tail_words:
                 # "… creature in addition to its other types"
                 d['in_addition'] = True
-            if 'all' in tail_words and 'types' in tail_words:
+            if ('all' in tail_words and 'creature' in tail_words
+                    and 'types' in tail_words):
                 d['all_creature_types'] = True
+            if 'named' in tail_words:
+                # "… named Legitimate Businessperson": keep the resulting name.
+                idx = tail_words.index('named')
+                names = [str(c.value) for c in tail.children[idx + 1:]
+                         if isinstance(c, Token)]
+                if names:
+                    d['named'] = ' '.join(names)
             kws = self._find_one(tail.children, 'kw_list')
             if kws is not None:
                 # "becomes … with vigilance": keywords live in the tail.

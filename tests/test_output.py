@@ -55,7 +55,16 @@ add("multiple-keywords-with-mod",
 add("become-tail-keywords",
     "{4}: This land becomes a 3/3 creature with vigilance and all creature types",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
-                  and d.get('keywords') == ['vigilance']))
+                  and d.get('keywords') == ['vigilance']
+                  and d.get('all_creature_types') is True))
+add("become-named",
+    "Enchanted creature loses all abilities and is a green and white Citizen creature with base power and toughness 1/1 named Legitimate Businessperson",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('named') == 'Legitimate Businessperson'))
+add("become-lose-types-no-all-creature",
+    "Enchanted permanent is a colorless land with \"{T}: Add {C}\" and loses all other card types and abilities",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and 'all_creature_types' not in d))
 add("cost-mod-subject",
     "Dragon spells you cast cost {1} less to cast",
     lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
