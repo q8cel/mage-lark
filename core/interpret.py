@@ -835,6 +835,27 @@ class Interpreter:
             for action in out:
                 if isinstance(action, dict):
                     action['instead'] = True
+        # "create a token that's a copy of it, except it isn't legendary and is
+        # a Mutant in addition to its other types": the residual targetless
+        # become/gain actions describe the token's exception, not a new effect.
+        if out and isinstance(out[0], dict) and out[0].get('verb') == 'create_token':
+            tok = out[0].get('token')
+            if isinstance(tok, dict) and tok.get('except'):
+                extra = []
+                i = 1
+                while i < len(out):
+                    a = out[i]
+                    if (isinstance(a, dict) and a.get('verb') in ('become', 'gain_kw')
+                            and not a.get('target')):
+                        a = dict(a)
+                        a.pop('target', None)
+                        extra.append(a)
+                        i += 1
+                    else:
+                        break
+                if extra:
+                    tok['except_effects'] = extra
+                    out = [out[0]] + out[i:]
         # "… enter as a copy of X, except it's a Bird … and it has flying": a
         # trailing grant on the copied permanent belongs to the copy's
         # exception clause, not to a second effect on an unnamed target.
