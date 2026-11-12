@@ -946,6 +946,17 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "the" "greatest" "mana" "value" "among" card_target
     | "the" "total" "toughness" "of" card_target
     | "the" "total" "mana" "value" "of" card_target
+    | "the" "sacrificed" "creature's" "mana" "value"
+    | "the" "difference" "between" "its" "power" "and" "toughness"
+    | "the" "difference" "between" "the" "chosen" "creatures'" "powers"
+    | "one" "plus" "the" "mana" "value" "of" card_target
+    | "one" "plus" "the" "number" "of" "opponents" "who" "control" card_target
+    | "that" "excess" "damage"
+    | "its" "mana" "value"
+    | "the" "greatest" "toughness" "among" "creatures" "you" "control"
+    | "the" "amount" "of" "damage" "dealt"
+    | "the" "amount" "of" "damage" "dealt" "to" "it" "this" "turn"
+    | "the" "amount" "of" "life" "you" "lost" "this" "turn"
     | "twice" "the" "number" "of" card_target
     | "that" "spell's" "mana" "value"
     | "the" "mana" "value" "of" "that" "spell"
