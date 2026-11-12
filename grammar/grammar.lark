@@ -936,6 +936,7 @@ xdef: "the" "number" "of" card_target | "the" "total" "power" "of" card_target |
     | "the" "greatest" "mana" "value" "among" card_target
     | "the" "total" "toughness" "of" card_target
     | "the" "total" "mana" "value" "of" card_target
+    | "twice" "the" "number" "of" card_target
     | "that" "spell's" "mana" "value"
     | "the" "mana" "value" "of" "that" "spell"
     | ("that" | "a" | "its") "creature's" "mana" "value"
