@@ -979,7 +979,7 @@ card_kind: THIS_CARD types? | types
          | "creature" "spells" | "permanent" "spells" | "artifact" "spells" | "enchantment" "spells" | "land" "spells"
          | "creature" "spell" | "permanent" "spell" | "artifact" "spell" | "enchantment" "spell" | "land" "spell"
          | "permanents" | "token" | "tokens" | "player" | "players" | "opponent" | "opponents"
-         | "it" | "them" | "they" | "him" | "her"
+         | "it" | "them" | "they" | "him" | "her" | "he" | "she"
          | "copy" "of" card_target
          | INSTANT_SORCERY "spell" "s"?
          | "instant" "spell" "s"? | "sorcery" "spell" "s"?
