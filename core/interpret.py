@@ -657,8 +657,15 @@ class Interpreter:
             if who_value:
                 d['who'] = who_value
         ct = self._find_one(children, 'card_target')
+        cts = self._find(children, 'card_target')
         if ct is not None:
             d[key] = self.interp(ct)
+        if (len(cts) > 1
+                and verb in ('exile', 'destroy', 'sacrifice', 'tap',
+                             'untap', 'discard')):
+            # Coordinated object list: "exile up to one target artifact and
+            # up to one target enchantment" keeps both targets.
+            d['cards'] = [self.interp(c) for c in cts]
         amt = self._find_one(children, 'amount')
         if amt is not None:
             d['amount'] = self.interp(amt)
@@ -1643,6 +1650,23 @@ class Interpreter:
         ck = self._find_one(children, 'counter_kind')
         if ck is not None:
             d['counter'] = self._text(ck.children)
+        # "put a +1/+1 counter on it and a plan counter on this creature":
+        # the second counter is a sibling, not part of the first one.
+        cts = self._find(children, 'card_target')
+        cas = self._find(children, 'counter_amount')
+        cks = self._find(children, 'counter_kind')
+        extras = []
+        for i in range(1, max(len(cts), len(cas), len(cks))):
+            e = {}
+            if i < len(cas):
+                e['count'] = self.interp(cas[i])
+            if i < len(cks):
+                e['counter'] = self._text(cks[i].children)
+            if i < len(cts):
+                e['on'] = self.interp(cts[i])
+            extras.append(e)
+        if extras:
+            d['and'] = extras
         return d
 
     def i_remove_counter_action(self, children):
@@ -1858,11 +1882,15 @@ class Interpreter:
                 elif ch.data in ('zone', 'in_zone'):
                     d['zone'] = self.interp(ch)
                 elif ch.data == 'zones':
-                    # zones wraps one or more zone nodes; take the first as the source
-                    for zc in ch.children:
-                        if isinstance(zc, Tree) and zc.data in ('zone', 'in_zone'):
-                            d['zone'] = self.interp(zc)
-                            break
+                    # zones wraps one or more zone nodes; keep every disjunct
+                    # ("search your hand and/or library").
+                    zlist = [self.interp(zc) for zc in ch.children
+                             if isinstance(zc, Tree) and zc.data in ('zone', 'in_zone')]
+                    zlist = [z for z in zlist if z]
+                    if zlist:
+                        d['zone'] = zlist[0]
+                        if len(zlist) > 1:
+                            d['zones'] = zlist
         if cards:
             # An empty card_target is a parser artefact, not the searched card
             # (it can appear as a list separator's optional slot).
@@ -2094,6 +2122,10 @@ class Interpreter:
                 d['cards'] = [self.interp(c) for c in cts]
         zns = self._find(children, 'zone')
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'pile' in toks and 'card' not in d:
+            # "put that pile into your hand and the other into your graveyard":
+            # the objects are literal tokens, not a card_target.
+            d['card'] = 'that pile'
         if zns:
             d['zone'] = self.interp(zns[0])
             # "put a card onto the battlefield and the rest into your
@@ -2116,7 +2148,8 @@ class Interpreter:
             found = [aliases[t] for t in toks if t in aliases]
             if found:
                 d['zone'] = found[0]
-                if len(found) > 1 and ('rest' in toks or len(cts) > 1):
+                if len(found) > 1 and ('rest' in toks or len(cts) > 1
+                                       or 'other' in toks):
                     d['rest_zone'] = found[-1]
             else:
                 z = self._zone_from_tokens(children)

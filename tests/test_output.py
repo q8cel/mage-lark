@@ -144,6 +144,18 @@ add("become-copy-source",
     "This creature becomes a copy of another target creature you control",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and d.get('copy_of', {}).get('otherness') == 'another'))
+add("two-exile-targets",
+    "Exile up to one target artifact and up to one target enchantment",
+    lambda o: has(o, lambda d: d.get('verb') == 'exile'
+                  and len(d.get('cards', [])) == 2))
+add("second-put-counter",
+    "When this creature enters, put a +1/+1 counter on it and a +1/+1 counter on this creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'put_counter' and d.get('and')))
+add("that-pile-other-destination",
+    "Put that pile into your hand and the other into your graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'put'
+                  and d.get('card') == 'that pile'
+                  and d.get('rest_zone') == 'graveyard'))
 add("instead-replacement-marker",
     "If this spell was kicked, instead choose any number of target creatures you own",
     lambda o: has(o, lambda d: d.get('verb') == 'choose' and d.get('instead') is True))
