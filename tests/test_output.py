@@ -78,6 +78,11 @@ add("page-counter-condition",
 add("during-turn-event",
     "Whenever a creature you control deals combat damage during your turn, put that many +1/+1 counters on it",
     lambda o: has(o, lambda d: d.get('condition') == 'during your turn'))
+add("event-during-subject-verb",
+    "Whenever an opponent loses life during your turn, you draw that many cards",
+    lambda o: has(o, lambda d: d.get('verb') == 'loses'
+                  and d.get('subject') == 'an opponent'
+                  and d.get('condition') == 'during your turn'))
 add("shuffle-zones",
     "{T}, Exile this artifact: Shuffle your graveyard into your library",
     lambda o: has(o, lambda d: d.get('verb') == 'shuffle'

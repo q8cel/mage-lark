@@ -2636,6 +2636,8 @@ class Interpreter:
                     d['object'] = self.interp(ch)
                 elif ch.data == 'card_target':
                     d.setdefault('object', self.interp(ch))
+                elif ch.data == 'player' and 'subject' not in d:
+                    d['subject'] = self.interp(ch)
                 elif ch.data == 'any_text':
                     words = self._token_words(children)
                     if 'while' in words:
@@ -2663,6 +2665,10 @@ class Interpreter:
                     d['counter'] = counter
                 if 'you' in words and 'subject' not in d:
                     d['subject'] = 'you'
+        if 'loses' in words and 'verb' not in d:
+            d['verb'] = 'loses'
+            if 'life' in words:
+                d['object'] = 'life'
         if 'there' in words and 'are' in words and 'condition' not in d:
             d['condition'] = self._text(children)
         if 'during' in words and 'turn' in words:
