@@ -116,6 +116,9 @@ class Interpreter:
     # must read them back out: a keyword grant without its time limit says
     # something different, and a delayed sacrifice without its timing loses
     # *when* it happens. Canonical, lower-case values.
+    DURATION_VERBS = {'stat_change', 'gain_kw', 'lose_keywords', 'set_base_pt',
+                      "can't", 'play', 'cast', 'exile', 'gain_control',
+                      'no_max_hand_size'}
     DURATION_TAILS = (
         (('until', 'end', 'of', 'turn'), 'until end of turn'),
         (('until', 'the', 'end', 'of', 'your', 'next', 'turn'),
@@ -569,6 +572,16 @@ class Interpreter:
                 last_target = action['target']
             elif 'target' in action and not action['target'] and last_target:
                 action['target'] = dict(last_target)
+        # …and one duration: "gets +1/+0 and gains first strike until end of
+        # turn" puts the clause on the last action only, but it qualifies both.
+        durations = [a['duration'] for a in out
+                     if isinstance(a, dict) and a.get('duration')]
+        if durations:
+            for action in out:
+                if (isinstance(action, dict)
+                        and action.get('verb') in self.DURATION_VERBS
+                        and 'duration' not in action):
+                    action['duration'] = durations[0]
         if len(out) == 1:
             return out[0]
         return out

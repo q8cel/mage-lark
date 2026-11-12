@@ -51,6 +51,10 @@ add("gain-kw-duration", "It gains haste until end of turn",
 add("stat-duration", "Target creature gets +2/+0 until end of turn",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and d.get('duration') == 'until end of turn'))
+add("coordinated-duration",
+    "Target creature gets +1/+0 and gains first strike until end of turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
+                  and d.get('duration') == 'until end of turn'))
 add("sacrifice-delayed-timing",
     "Sacrifice it at the beginning of your next end step",
     lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'
