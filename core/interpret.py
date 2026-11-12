@@ -2309,8 +2309,11 @@ class Interpreter:
     def i_mill_action(self, children):
         d = {'verb': 'mill'}
         amt = self._find_one(children, 'amount')
+        xd = self._find_one(children, 'xdef')
         if amt is not None:
             d['amount'] = self.interp(amt)
+        elif xd is not None:
+            d['amount'] = self.interp(xd)
         else:
             words = self._token_words(children)
             if 'that' in words and 'many' in words:

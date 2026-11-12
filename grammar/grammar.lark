@@ -696,7 +696,8 @@ gain_control_action: (who)? V_GAIN "control" "of" card_target ("until" "end" "of
 control_player_action: V_YOU "control" (player | card_target) "during" (V_THAT "player's" | "their" | "his" | "her") "next" "turn"
 scry_action: ("each" "player" | who)? V_SCRY amount
 surveil_action: V_SURVEIL amount
-mill_action: (who)? V_MILL (("a" | "an" | amount | "that" "many") ("card" | "cards") | "half" ("their" | "his" | "her" | "a" | "the") "library" (","? "rounded" "down")?)
+mill_action: (who)? V_MILL "cards" "equal" "to" xdef
+           | (who)? V_MILL (("a" | "an" | amount | "that" "many") ("card" | "cards") | "half" ("their" | "his" | "her" | "a" | "the") "library" (","? "rounded" "down")?)
            | player V_MILL amount "cards"
 suspect_action: ("Otherwise" ",")? V_SUSPECT card_target
 fight_action: ("you" V_MAY)? "have" "it" V_FIGHT V_TARGET card_target ("you" "don't" "control")?
@@ -1103,7 +1104,7 @@ controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "c
           | "its" "owner" | "the" "player" "who" "cast" "it"
 in_zone: ("in" | "from" | "on") zone | "from" "among" "them" | "of" "your" "library" | "from" "your" "graveyard"
         | "in" "a" "graveyard" | "in" "exile" | "from" "a" "graveyard" | "from" "their" "graveyard"
-        | "from" "a" "single" "graveyard" | "from" "all" "graveyards" | "in" "your" "graveyard" | "on" "the" "battlefield"
+        | "from" "a" "single" "graveyard" | "from" "all" "graveyards" | "in" "their" "graveyard" | "in" "your" "graveyard" | "on" "the" "battlefield"
 
 //  keyword list
 kw_list: kw_list_item (kw_sep kw_list_item)*
