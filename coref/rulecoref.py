@@ -981,14 +981,36 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 pool = f
                 evidence.append("its-quantified-object")
 
-        # ---- "its other costs"/"its mana cost": the spell/card itself
+        # ---- "its other costs"/"its mana cost": the cost belongs to the
+        # object being cast, so bind to that object NP, not to the caster or a
+        # later generic card ("cast the exiled card ... paying its mana cost").
         if (rec["kind"] == "pronoun" and rec["surface"].lower() == "its"
                 and _ITS_COST.match(text[rec["end"]:])):
-            f = [i for i in pool if ms[i]["head_type"] in ("spell", "card")]
-            if f:
-                own = [i for i in f if ms[i].get("is_self")]
-                pool = own or f
-                evidence.append("its-cost-card")
+            si = rec.get("sentence")
+            s0 = sents[si][0] if si is not None and si < len(sents) else 0
+            casts = list(re.finditer(r"\bcast\b", text[s0:rec["start"]], re.I))
+            obj = None
+            if casts:
+                cpos = s0 + casts[-1].end()
+                cands = [i for i in range(len(ms))
+                         if (not ms[i].get("is_anaphor")
+                             or re.match(r"^(?:that|this|those|these)\b",
+                                         ms[i]["surface"], re.I))
+                         and ms[i]["start"] >= cpos
+                         and ms[i]["end"] <= rec["start"]
+                         and ms[i]["head_type"] in
+                         ("card", "spell", "permanent", "creature")]
+                if cands:
+                    obj = min(cands, key=lambda i: ms[i]["start"])
+            if obj is not None:
+                pool = [obj]
+                evidence.append("its-cost-cast-object")
+            else:
+                f = [i for i in pool if ms[i]["head_type"] in ("spell", "card")]
+                if f:
+                    own = [i for i in f if ms[i].get("is_self")]
+                    pool = own or f
+                    evidence.append("its-cost-card")
 
         # ---- "its controller/owner": the possessor is the object
         if (rec["kind"] == "pronoun" and rec["is_possessive"]
