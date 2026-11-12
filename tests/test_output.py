@@ -69,6 +69,14 @@ add("cost-mod-subject",
     "Dragon spells you cast cost {1} less to cast",
     lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
                   and 'Dragon' in str(d.get('target', ''))))
+add("stat-define-singular-power",
+    "~'s power is equal to the number of artifacts you control",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_define'
+                  and d.get('stat') == 'power' and d.get('subject') == '~'))
+add("stat-define-toughness-split",
+    "~'s power is equal to the number of card types among cards in all graveyards and its toughness is equal to that number plus 1",
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_define'
+                  and d.get('toughness_value') == 'that number plus 1'))
 add("hexproof-from-color", "Reach, hexproof from blue",
     lambda o: has(o, lambda d: 'hexproof from blue' in str(d.get('keywords', ''))))
 add("cost-direction-more",

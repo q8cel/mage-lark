@@ -2303,19 +2303,66 @@ class Interpreter:
         return d
 
     def i_stat_define_action(self, children):
-        d = {'verb': 'stat_define', 'stat': 'power_and_toughness', 'relation': 'each_equal_to'}
+        toks = self._token_words(children)
+        d = {'verb': 'stat_define'}
+        if 'toughness' in toks:
+            d['stat'] = 'power_and_toughness'
+        elif 'power' in toks:
+            d['stat'] = 'power'
+        else:
+            d['stat'] = 'power_and_toughness'
+        d['relation'] = 'each_equal_to' if 'each' in toks else 'equal_to'
         for ch in children:
             if isinstance(ch, Token):
                 v = str(ch.value)
-                if v.endswith("'s"):
+                if v.endswith("'s") and v[:-2]:
                     d['subject'] = v[:-2]
                     break
         ct = self._find_one(children, 'card_target')
         if ct is not None:
-            d['target'] = self.interp(ct)
+            target = self.interp(ct)
+            if 'subject' not in d and isinstance(target, dict):
+                kind = target.get('card_type')
+                d['subject'] = (kind.get('value') if isinstance(kind, dict)
+                                else target.get('value'))
+            d['target'] = target
         xd = self._find_one(children, 'xdef')
         if xd is not None:
-            d['value'] = self.interp(xd)
+            value = self.interp(xd)
+            # "… and its toughness is equal to that number plus 1" arrives in
+            # the same xdef; split the two definitions instead of leaving the
+            # toughness formula inside the power value.
+            seq = value if isinstance(value, list) else [value]
+            # The whole tail can arrive as one any_text string.
+            for k, el in enumerate(seq):
+                if isinstance(el, str):
+                    marker = ' and its toughness is equal to '
+                    pos = el.lower().find(marker)
+                    if pos >= 0:
+                        seq = seq[:k] + [el[:pos].strip()]
+                        d['stat'] = 'power_and_toughness'
+                        d['relation'] = 'equal_to'
+                        d['value'] = seq
+                        d['toughness_value'] = el[pos + len(marker):].strip()
+                        return d
+            low = [str(x).lower() for x in seq]
+            split_at = None
+            for i in range(len(low) - 2):
+                if low[i] == 'and' and low[i + 1] in ('its', 'their') \
+                        and low[i + 2] == 'toughness':
+                    split_at = i
+                    break
+            if split_at is not None:
+                tough = seq[split_at:]
+                tlow = [str(x).lower() for x in tough]
+                if 'to' in tlow:
+                    tough = tough[tlow.index('to') + 1:]
+                d['stat'] = 'power_and_toughness'
+                d['relation'] = 'equal_to'
+                d['value'] = seq[:split_at]
+                d['toughness_value'] = tough
+            else:
+                d['value'] = value
         return d
 
     def i_emblem_action(self, children):
