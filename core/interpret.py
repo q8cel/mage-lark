@@ -942,6 +942,14 @@ class Interpreter:
         ref = self._find_one(children, 'draw_ref')
         if ref is not None:
             d['amount'] = self.i_draw_ref(ref.children)
+        words = self._token_words(children)
+        fe = self._for_each(children)
+        if fe is not None:
+            d['for_each'] = fe
+            if 'each' in words and 'for' in words and 'type' in words:
+                d['per'] = 'card type'
+            elif 'each' in words and 'for' in words and 'counter' in words:
+                d['per'] = 'counter'
         return d
 
     def i_draw_ref(self, children):
@@ -1257,6 +1265,14 @@ class Interpreter:
     def i_life_total_action(self, children):
         amt = self._find_one(children, 'amount')
         d = {'verb': 'life_total', 'amount': self.interp(amt) if amt is not None else None}
+        words = self._token_words(children)
+        if 'starting' in words:
+            # "your life total becomes half your starting life total, rounded up"
+            d['amount'] = 'half your starting life total'
+            if 'up' in words:
+                d['rounded'] = 'up'
+            elif 'down' in words:
+                d['rounded'] = 'down'
         pl = self._find_one(children, 'player')
         if pl is not None:
             d['who'] = self.interp(pl)
@@ -2196,6 +2212,19 @@ class Interpreter:
         if sym and xd is not None and self._find_one(children, 'mana_amount') is None:
             d['amount'] = {'symbol': ''.join(sym), 'equal_to': self.interp(xd)}
             return d
+        words = self._token_words(children)
+        if (sym and 'each' in words and 'for' in words
+                and self._find_one(children, 'mana_amount') is None):
+            # "add {G} for each charge counter on this enchantment": the symbol
+            # and the multiplier set are separate facts.
+            d['symbol'] = ''.join(sym)
+            ck = self._find_one(children, 'counter_kind')
+            if ck is not None:
+                d['per'] = self._text(ck.children).strip()
+            ct = self._find_one(children, 'card_target')
+            if ct is not None:
+                d['on'] = self.interp(ct)
+            return d
         for name in ('mana_amount', 'xdef', 'amount'):
             node = self._find_one(children, name)
             if node is not None:
@@ -2386,7 +2415,7 @@ class Interpreter:
         return self._text(children)
 
     def i_may_action(self, children):
-        inner = None
+        inners = []
         actor_words = []
         actor_tree = None
         seen_may = False
@@ -2400,13 +2429,16 @@ class Interpreter:
             if not isinstance(ch, Tree):
                 continue
             if seen_may:
-                inner = self.interp(ch)
+                inners.append(self.interp(ch))
             elif ch.data in ('controller_subject', 'owner_subject'):
                 actor_tree = self._text([ch]).strip()
             elif ch.data in ('player', 'card_target'):
                 actor_tree = self.interp(ch)
             else:
                 actor_words.append(self._text([ch]))
+        # "you may sacrifice an artifact or discard a card": both alternatives
+        # are consequences of the permission, not one action.
+        inner = inners[0] if len(inners) == 1 else (inners or None)
         d = {'verb': 'may', 'inner': inner}
         actor = actor_tree if actor_tree is not None else ' '.join(actor_words).strip()
         if actor and str(actor).lower() != 'you':

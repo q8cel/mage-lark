@@ -174,7 +174,7 @@ trigger_clause: trig_when event?
               | COND_KEYWORD EMDASH event?
               | COND_KEYWORD EMDASH static_text
 trig_when: V_WHEN | V_WHATEVER | V_AT "the" "beginning" "of" AT_WHEN | V_AT "the" "beginning" "of" "the" "upkeep" "of" card_target "'s" "controller" | V_AS
-AT_WHEN: /the end step|each end step of the game|your upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step|each opponent's draw step|your main phase|your first main phase|your second main phase|each player's main phase|each player's first main phase|each player's upkeep|each opponent's upkeep|each upkeep|your combat step|your first upkeep/
+AT_WHEN: /the end step|each end step of the game|your upkeep|your next upkeep|your end step|each end step|each of your turns|combat on your turn|each combat|combat|your untap step|each player's draw step|each opponent's draw step|your main phase|your first main phase|your second main phase|each player's main phase|each player's first main phase|each player's upkeep|each opponent's upkeep|each upkeep|your combat step|your first upkeep/
 event: event_subject EVENT_VERB event_object?
       | event_subject V_GAIN kw_list ("until" "end" "of" "turn")?
       | ("one" "or" "more")? ("players" | player) V_DISCARD ("one" "or" "more")? card_target
@@ -421,7 +421,8 @@ flip_action: V_FLIP "a" "coin"
 has_abilities_action: card_target "has" "all" "activated" "abilities" "of" card_target
 life_total_action: "your" "life" "total" "becomes" amount
                  | player "'s" "life" "total" "becomes" amount
-                | "your" "life" "total" "becomes" "equal" "to" amount
+                 | "your" "life" "total" "becomes" "equal" "to" amount
+                 | "your" "life" "total" "becomes" "half" "your" "starting" "life" "total" ("," "rounded" ("up" | "down"))?
 damage_reduce_action: "damage" any_text "reduces" "it" "to" amount "instead"
 // "assigns combat damage equal to its toughness rather than its power": the
 // two stats are semantics, not filler, so capture them (was a literal tail).
@@ -453,6 +454,7 @@ add_mana_action: (who)? V_ADD ("an" "additional")? mana_amount
                 | (who)? V_ADD amount "mana" "of" "the" "chosen" "color" "for" "each" any_text
                 | (who)? V_ADD "an" "additional" "one" "mana" "of" "any" "color"
                 | (who)? V_ADD "an" "additional" MANA+
+                | (who)? V_ADD MANA+ "for" "each" counter_kind "on" card_target
 mana_amount: "one" "mana" "of" "any" "color" | amount MANA
            | amount "mana" "of" "that" "color"
            | amount "mana" "of" "any" "one" "color"
@@ -496,7 +498,7 @@ token_except: (",")? "except" "it" "has" kw_list ("and" QUOTE)?
             | (",")? "except" "it's" ("a" | "an")? POWER_T tok_colors? token_types
              | (",")? "except" "it's" (V_A | V_AN)? CARDNAME "in" "addition" "to" "its" "other" "types"
 
-put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+put_counter_action: V_PUT counter_amount counter_kind "on" card_target ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")? ("for" "each" card_target)?
 replace_counter_action: "that" "many" "plus" amount counter_kind "are" "put" "on" card_target "instead"? ("and" counter_amount counter_kind "on" card_target)? ("for" "each" "of" card_target "'s" "colors")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
 remove_counter_action: V_REMOVE counter_amount counter_kind "from" card_target
              | (who)? V_LOSE "all" counter_kind
@@ -519,6 +521,8 @@ search_target: card_target (("or" | "and/or" | "and") card_target)*
              | V_SEARCH zones "for" card_target "," V_REVEAL card_target ("," "put" "one" "onto" "the" "battlefield" "tapped" "and" "the" "other" "into" "your" "hand")? ("," "then" "shuffle")?
 
 draw_action: (who)? V_DRAW draw_amount "card" "s"? "for" "each" card_target ("put" "into" zone "this" "way")?
+            | (who)? V_DRAW draw_amount "card" "s"? "for" "each" "card" "type" "among" card_target
+            | (who)? V_DRAW draw_amount "card" "s"? "for" "each" counter_kind "on" card_target
             | ("Any" | "any") "number" "of" "target" "players" "each" V_DRAW draw_amount "card" "s"?
             | (who)? V_DRAW draw_amount "card" "s"? ("for" "each" "different" "mana" "value" "among" card_target)? ("for" "each" "color" "among" card_target)?
            | (who)? V_DRAW draw_amount "card" "s"?
@@ -809,7 +813,9 @@ may_action: (V_YOU | V_THAT "player" | V_EACH "player" | "an" "opponent" | "any"
        | collect_evidence_action
        | cloak_action
        | exchange_control_action
-        | (V_TAP "or" V_UNTAP | V_UNTAP "or" V_TAP) card_target)
+        | (V_TAP "or" V_UNTAP | V_UNTAP "or" V_TAP) card_target
+        | sacrifice_action "or" discard_action
+        | discard_action "or" sacrifice_action)
 
 cost_mod_action: cost_subject V_COST cost_amount ("less" | "more") "to" ("cast" | "activate") cost_qual* ("," "where" "X" "is" xdef)?
                | "The" WORD "cost" "is" "equal" "to" any_text
@@ -1058,6 +1064,8 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "attached" "to" card_target
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
+             | "discarded" "this" "way"
+             | "you've" ("cast" | "discarded" | "gained") "this" "turn"
 CMP: /less than or equal to|less than|or greater|or less|greater than|or equal to|at least|or less|or greater/i
 controller: "you" "control" | "an" "opponent" "controls" | "your" "opponents" "control"
           | "you" "don't" "control" | "you" "own" | "you" "don't" "own" | "an" "opponent" "owns" | "its" "controller"
