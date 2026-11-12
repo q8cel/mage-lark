@@ -1403,6 +1403,11 @@ class Interpreter:
         dur = self._duration(children)
         if dur:
             d['duration'] = dur
+        words = self._token_words(children)
+        if 'as' in words and 'long' in words:
+            at = self._find_one(children, 'any_text')
+            if at is not None:
+                d['condition'] = self.interp(at)
         return d
 
     def i_have_action(self, children):
@@ -1481,6 +1486,11 @@ class Interpreter:
         dur = self._duration(children)
         if dur:
             d['duration'] = dur
+        words = self._token_words(children)
+        if 'as' in words and 'long' in words:
+            at = self._find_one(children, 'any_text')
+            if at is not None:
+                d['condition'] = self.interp(at)
         return d
 
     def i_base_pt_action(self, children):
@@ -2437,6 +2447,17 @@ class Interpreter:
                 if isinstance(ch, Token) and ch.type == 'MANA']
         if mana:
             d['amount'] = ''.join(mana)
+        else:
+            amt = self._find_one(children, 'amount')
+            nums = [str(ch.value) for ch in children
+                    if isinstance(ch, Token) and ch.type == 'NUMBER']
+            unit = [str(ch.value).lower() for ch in children
+                    if isinstance(ch, Token) and str(ch.value).lower() in ('life', 'mana')]
+            if amt is not None:
+                val = self.interp(amt)
+                d['amount'] = (f"{val} {unit[0]}" if unit else val)
+            elif nums:
+                d['amount'] = ' '.join(nums + unit)
         return d
 
     def i_stat_define_action(self, children):
@@ -2642,6 +2663,11 @@ class Interpreter:
                     d['counter'] = counter
                 if 'you' in words and 'subject' not in d:
                     d['subject'] = 'you'
+        if 'there' in words and 'are' in words and 'condition' not in d:
+            d['condition'] = self._text(children)
+        if 'during' in words and 'turn' in words:
+            d['condition'] = 'during ' + ' '.join(
+                words[words.index('during') + 1:])
         if 'discard' in words:
             d.setdefault('verb', 'discard')
             if 'subject' not in d:
@@ -2692,6 +2718,9 @@ class Interpreter:
                 if isinstance(ch, Tree):
                     d['to'] = self.interp(ch)
                     break
+            if 'during' in words and 'turn' in words:
+                d['condition'] = 'during ' + ' '.join(
+                    words[words.index('during') + 1:])
             if not d:
                 # Plain "is dealt damage": keep the damage object, no kind.
                 txt = self._text(children)
@@ -2773,7 +2802,11 @@ class Interpreter:
                 elif ch.data == 'trailing_if':
                     d['trailing_if'] = self.interp(ch)
                 elif ch.data in ('trailing_if', 'if_clause'):
-                    d['if'] = self.interp(ch)
+                    val = self.interp(ch)
+                    if isinstance(val, str) and val.strip().lower() == 'able':
+                        d['if_able'] = True
+                    else:
+                        d['if'] = val
                 elif ch.data == 'trailing_unless':
                     val = self.interp(ch)
                     eff = d.get('effect')
@@ -2890,7 +2923,11 @@ class Interpreter:
                 elif ch.data == 'xdef_clause':
                     d['xdef'] = self.interp(ch)
                 elif ch.data in ('trailing_if', 'if_clause'):
-                    d['if'] = self.interp(ch)
+                    val = self.interp(ch)
+                    if isinstance(val, str) and val.strip().lower() == 'able':
+                        d['if_able'] = True
+                    else:
+                        d['if'] = val
                 elif ch.data == 'if_sentence':
                     # "Then if <condition>, <action>": hoist the if-sentence
                     # instead of returning a bare {'type':'effect'}.
@@ -2914,6 +2951,12 @@ class Interpreter:
                         eff[-1]['unless'] = val
                     else:
                         d['unless'] = val
+        if d.get('if_able'):
+            eff = d.get('effect')
+            acts = eff if isinstance(eff, list) else [eff]
+            for a in acts:
+                if isinstance(a, dict):
+                    a['if_able'] = True
         return d
 
     def i_trailing_unless(self, children):

@@ -63,6 +63,21 @@ add("coordinated-stat-targets",
     "Skeletons you control and other Zombies you control get +1/+1 and have deathtouch",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and len(d.get('cards', [])) == 2))
+add("as-long-as-condition",
+    "This creature has flying as long as it's attacking",
+    lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
+                  and d.get('condition') == "it's attacking"))
+add("if-able-on-action",
+    "Each creature you control gets +3/+3 until end of turn and must be blocked this turn if able",
+    lambda o: has(o, lambda d: d.get('verb') == 'must_block'
+                  and d.get('if_able') is True)
+                  and not has(o, lambda d: d.get('type') == 'effect' and d.get('if')))
+add("page-counter-condition",
+    "When there are four or more page counters on this artifact, exile it",
+    lambda o: has(o, lambda d: d.get('condition') == 'there are four or more page counters on this artifact'))
+add("during-turn-event",
+    "Whenever a creature you control deals combat damage during your turn, put that many +1/+1 counters on it",
+    lambda o: has(o, lambda d: d.get('condition') == 'during your turn'))
 add("shuffle-zones",
     "{T}, Exile this artifact: Shuffle your graveyard into your library",
     lambda o: has(o, lambda d: d.get('verb') == 'shuffle'
