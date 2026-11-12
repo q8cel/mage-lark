@@ -47,15 +47,16 @@ Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claim
 | classic | 789 | 48 | 6.1% | 1.9% |
 | FDN | 521 | 30 | 5.8% | 3.8% |
 
-Final grammar state (2026-11-12, measured at `a9c42ec`, fix2 merge 9):
+Final grammar state (2026-11-12, verified with a no-cache full reparse at `0841d3b`, grammar hash `8f294968de4ee66e`):
 
 | corpus | unique parsed | unique % | occurrences | occ % |
 |---|---:|---:|---:|---:|
-| Standard | 7,201 / 7,966 | 90.4% | 20,781 / 22,217 | 93.5% |
-| classic | 4,216 / 4,280 | 98.5% | 4,216 / 4,280 | 98.5% |
-| FDN | 1,653 / 1,653 | 100% | 1,653 / 1,653 | 100% |
+| Standard | 7,184 / 7,966 | 90.2% | 20,752 / 22,217 | 93.4% |
+| classic | 2,089 / 2,148 | 97.3% | 4,216 / 4,280 | 98.5% |
+| FDN | 761 / 761 | 100% | 1,653 / 1,653 | 100% |
 
-The remaining 765 unique Standard failures cluster in compound/structural classes: cost_list/effect boundary, compound statics, deep exile/permission compounds, and xdef tails.
+The remaining 782 unique Standard failures cluster in compound/structural classes: cost_list/effect boundary, compound statics, deep exile/permission compounds, and xdef tails.
+A `--seed` run trusts passes from another grammar and **must never be quoted as absolute coverage**: the earlier 7,201/20,781 was 17 false seed passes plus 12 genuinely new passes; a no-cache reparse gives 7,184. The snapshot-based count agrees (7,184 parsed texts, 20,752 occurrence weight).
 
 ## Residual (cycle 12)
 Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 355 bugs are effect-slot detail:
