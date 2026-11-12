@@ -1288,8 +1288,16 @@ class Interpreter:
         """Keyword actions with an optional parameter: blight N, waterbend {N},
         discover N, amass <type> N, connives, recruit, forage, airbend <target>,
         devour land N."""
-        toks = [str(c).lower() for c in children if isinstance(c, Token)]
-        verb = next((v for v in self.KW_ACTION_VERBS if v in toks), 'keyword_action')
+        ttypes = {c.type for c in children if isinstance(c, Token)}
+        # Each verb has its own terminal (V_CONNIVE, V_BLIGHT, …); use the type,
+        # not the token text, so inflected forms ("connives") still name the verb.
+        verb = next((v for v in self.KW_ACTION_VERBS
+                     if 'V_' + v.upper() in ttypes), None)
+        if verb is None:
+            toks = [str(c).lower() for c in children if isinstance(c, Token)]
+            verb = next((v for v in self.KW_ACTION_VERBS
+                         if v in toks or v + 's' in toks or v + 'es' in toks),
+                        'keyword_action')
         d = {'verb': verb}
         amt = self._find_one(children, 'amount')
         if amt is not None:
