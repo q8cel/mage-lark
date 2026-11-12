@@ -75,6 +75,8 @@ add("until-sentence-duration",
                   and d.get('duration') == 'until the end of your next turn'))
 add("draw-amount-int", "Draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 2))
+add("up-to-quantifier", "Discard up to two cards",
+    lambda o: has(o, lambda d: d.get('card', {}).get('quantifier') == {'up_to': 2}))
 add("draw-amount-article", "Draw a card",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 1))
 add("draw-who", "You draw two cards",

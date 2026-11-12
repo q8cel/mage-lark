@@ -321,7 +321,12 @@ class Interpreter:
         toks = [c for c in children if isinstance(c, Token)]
         trees = [c for c in children if isinstance(c, Tree)]
         words = [t.value for t in toks]
-        if 'up' in words and 'to' in words:
+        low = [w.lower() for w in words]
+        # Lark merges adjacent literals ("up to") into one anonymous token;
+        # the same phrase also arrives as separate V_UP/V_TO tokens.
+        if 'up to' in low or ('up' in low and 'to' in low):
+            if 'that' in low and 'many' in low:
+                return {'up_to': 'that many'}
             return {'up_to': self._first_number(children)}
         if len(words) == 1 and words[0].isdigit():
             return int(words[0])
@@ -330,7 +335,6 @@ class Interpreter:
         if len(words) > 1:
             # Multi-word quantifier phrases ("one or two", "any number of") are one
             # unit; a trailing "target" belongs to the target, not the quantifier.
-            low = [w.lower() for w in words]
             if 'or' in low or 'of' in low:
                 if low[-1] == 'target':
                     low = low[:-1]
