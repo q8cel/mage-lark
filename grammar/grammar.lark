@@ -1055,7 +1055,7 @@ possessive: "your" | "Your" | "its" | "their" | "an opponent's" | "that player's
 otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*
 NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolored)|non-[A-Z][a-zA-Z]+/i
-quantifier: V_ALL | V_EACH | "every" | V_TARGET | "no" | "any number of" | "up to" amount | "that" "many" | "up to" "that" "many"
+quantifier: V_ALL | V_EACH | "every" | V_TARGET | "no" | "any number of" | "any number of" V_TARGET | "up to" amount | "that" "many" | "up to" "that" "many"
           | "half" "the"
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET | amount "or" "more"
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A "second" V_TARGET | V_A | V_AN
