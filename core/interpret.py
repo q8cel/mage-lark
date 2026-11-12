@@ -2111,6 +2111,28 @@ class Interpreter:
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
         words = self._token_words(children)
+        if 'put' in words:
+            ca = self._find_one(children, 'counter_amount')
+            ck = self._find_one(children, 'counter_kind')
+            if ca is not None or ck is not None:
+                # "you put one or more +1/+1 counters on …" / "counters are
+                # put on …": the counter event has no EVENT_VERB token.
+                d.setdefault('verb', 'put')
+                counter = {}
+                if ca is not None:
+                    counter['count'] = self._text(ca.children)
+                if ck is not None:
+                    counter['kind'] = self._text(ck.children)
+                if counter:
+                    d['counter'] = counter
+                if 'you' in words and 'subject' not in d:
+                    d['subject'] = 'you'
+        if 'discard' in words:
+            d.setdefault('verb', 'discard')
+            if 'subject' not in d:
+                pre = ' '.join(words[:words.index('discard')]).strip()
+                if pre:
+                    d['subject'] = pre
         if 'becomes' in words and 'target' in words:
             # This alternative keeps "becomes the target" as literal tokens,
             # and its card_target is the subject, not the object.

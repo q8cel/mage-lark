@@ -627,6 +627,10 @@ add("event-becomes-the-target",
     "Whenever this creature becomes the target of a spell or ability you control for the first time each turn, put a +1/+1 counter on it",
     lambda o: has(o, lambda d: d.get('verb') == 'becomes the target'
                   and 'spell or ability' in str(d.get('of', ''))))
+add("event-counter-put",
+    "Whenever you put one or more +1/+1 counters on this creature, draw a card",
+    lambda o: has(o, lambda d: d.get('verb') == 'put'
+                  and 'one or more' in str(d.get('counter', {}))))
 add("token-for-each",
     "Create a 2/2 green Wolf creature token for each Forest you control",
     lambda o: has(o, lambda d: d.get('verb') == 'create_token'
