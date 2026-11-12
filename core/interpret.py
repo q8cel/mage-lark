@@ -584,6 +584,10 @@ class Interpreter:
         # +2/+0 and gains first strike".  The second action's card_target is
         # empty in the tree; carry the first action's target into it.
         last_target = None
+        last_who = None
+        last_source = None
+        who_verbs = {'gain_life', 'lose_life', 'draw', 'mill', 'discard',
+                     'scry', 'surveil'}
         for action in out:
             if not isinstance(action, dict):
                 continue
@@ -591,6 +595,18 @@ class Interpreter:
                 last_target = action['target']
             elif 'target' in action and not action['target'] and last_target:
                 action['target'] = dict(last_target)
+            # "You draw a card and gain 1 life" / "Target player draws … and
+            # loses …": the actor is shared, but only the first action kept it.
+            who = action.get('who')
+            if who:
+                last_who = who
+            elif action.get('verb') in who_verbs and last_who is not None:
+                action['who'] = last_who
+            src = action.get('source')
+            if src:
+                last_source = src
+            elif 'source' in action and not src and last_source is not None:
+                action['source'] = last_source
         # …and one duration: "gets +1/+0 and gains first strike until end of
         # turn" puts the clause on the last action only, but it qualifies both.
         durations = [timing] if timing else [a['duration'] for a in out

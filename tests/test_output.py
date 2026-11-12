@@ -100,6 +100,10 @@ add("may-actor",
     "Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle",
     lambda o: has(o, lambda d: d.get('verb') == 'may'
                   and d.get('who') == 'Its controller'))
+add("coordinated-who",
+    "Target player draws three cards and loses 3 life",
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
+                  and d.get('who') == 'Target player'))
 add("cant-block-duration", "Target creature can't block this turn",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
                   and d.get('duration') == 'this turn'))
