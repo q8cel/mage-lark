@@ -123,6 +123,10 @@ add("draw-amount-int", "Draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 2))
 add("up-to-quantifier", "Discard up to two cards",
     lambda o: has(o, lambda d: d.get('card', {}).get('quantifier') == {'up_to': 2}))
+add("other-target",
+    "When this creature enters, destroy up to one other target creature",
+    lambda o: has(o, lambda d: d.get('card', {}).get('otherness') == 'other'
+                  and d.get('card', {}).get('quantifier') == {'up_to': 1}))
 add("instead-replacement-marker",
     "If this spell was kicked, instead choose any number of target creatures you own",
     lambda o: has(o, lambda d: d.get('verb') == 'choose' and d.get('instead') is True))

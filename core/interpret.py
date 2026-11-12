@@ -283,6 +283,13 @@ class Interpreter:
             found = self._find_all(children, name)
             if found:
                 d[key] = self.interp(found[0])
+        if 'otherness' not in d:
+            # "up to one other target creature": `other` sits inside the
+            # quantifier subtree, so it must be lifted to the target.
+            for q in self._find_all(children, 'quantifier'):
+                if 'other' in self._token_words(q.children):
+                    d['otherness'] = 'other'
+                    break
         return d
 
     def i_card_kind(self, children):
