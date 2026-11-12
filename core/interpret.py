@@ -1000,7 +1000,12 @@ class Interpreter:
         return d
 
     def i_destroy_action(self, children):
-        return self._card_action('destroy', children)
+        d = self._card_action('destroy', children)
+        if 'except' in self._token_words(children):
+            cts = self._find(children, 'card_target')
+            if len(cts) > 1:
+                d['except'] = self.interp(cts[1])
+        return d
 
     def i_tap_action(self, children):
         return self._card_action('tap', children)

@@ -690,6 +690,7 @@ exile_action: (who)? V_EXILE card_target ("from" zones)? ("until" any_text)? ("f
             | V_EXILE "all" "but" "the" "bottom" "card" "of" zone
 
 destroy_action: V_DESTROY card_target ("attached" "to" card_target)? ("at" "random")? ("at" "the" "beginning" "of" "the" "next" "end" "step")?
+              | V_DESTROY card_target "except" card_target
               | V_DESTROY card_target "and" "all" "other" "permanents" "with" "the" "same" "name" "as" "that" "permanent"
 
 tap_action: V_TAP card_target
@@ -1126,6 +1127,7 @@ with_modifier: "with" (THIS_CARD | card_target)
              | "attached" "to" card_target
              | "with" (THIS_CARD | card_target)
              | "destroyed" "this" "way"
+             | "chosen" "this" "way"
              | "with" amount "or" "more" "cards" "in" "it"
              | "that" "crewed" "it" "this" "turn"
              | "milled" "this" "way"
