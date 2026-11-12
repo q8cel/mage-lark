@@ -1987,6 +1987,15 @@ class Interpreter:
                     d['condition'] = 'while ' + self._text([ch]).strip()
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
+        # Passive damage events ("is dealt combat damage") carry the kind as
+        # direct tokens; plain "is dealt damage" must not invent one.
+        words = self._token_words(children)
+        if 'is' in words and 'dealt' in words:
+            # Passive damage event: "is dealt [combat|noncombat] damage".
+            d.setdefault('verb', 'is dealt')
+        for i, w in enumerate(words):
+            if w in ('combat', 'noncombat') and words[i + 1:i + 2] == ['damage']:
+                d['damage'] = w
         if not d:
             # Reflexive trigger ("When you do, ..."): the clause is a pronoun plus
             # a verb, not a subject/verb/object event.  Keep it as text.
@@ -2005,9 +2014,13 @@ class Interpreter:
     def i_event_object(self, children):
         words = self._token_words(children)
         if 'damage' in words:
-            # "deals combat damage to a player": the damage kind is part of the
-            # event, not just the recipient.
-            d = {'damage': 'combat' if 'combat' in words else 'noncombat'}
+            # "deals combat damage to a player": only a sentence that states
+            # the kind gets one; plain "deals damage" has no kind.
+            d = {}
+            if 'combat' in words:
+                d['damage'] = 'combat'
+            elif 'noncombat' in words:
+                d['damage'] = 'noncombat'
             for ch in children:
                 if isinstance(ch, Tree):
                     d['to'] = self.interp(ch)

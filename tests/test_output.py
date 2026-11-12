@@ -535,6 +535,19 @@ add("event-combat-damage",
     lambda o: has(o, lambda d: d.get('verb') == 'deals'
                   and d.get('object', {}).get('damage') == 'combat'
                   and d.get('object', {}).get('to') == 'a player'))
+add("event-plain-damage-no-kind",
+    "Whenever this creature deals damage to an opponent, you may draw a card",
+    lambda o: has(o, lambda d: d.get('verb') == 'deals'
+                  and d.get('object', {}).get('to') == 'an opponent'
+                  and 'damage' not in d.get('object', {})))
+add("event-passive-combat-damage",
+    "Whenever this creature is dealt combat damage, you gain that much life",
+    lambda o: has(o, lambda d: d.get('verb') == 'is dealt'
+                  and d.get('damage') == 'combat'))
+add("event-passive-damage-no-kind",
+    "Whenever equipped creature is dealt damage, destroy it",
+    lambda o: has(o, lambda d: d.get('verb') == 'is dealt'
+                  and 'damage' not in d))
 add("event-sacrifice-verb",
     "Whenever you sacrifice an artifact, put a +1/+1 counter on this creature",
     lambda o: has(o, lambda d: d.get('verb') == 'sacrifice' and d.get('subject') == 'you'))
