@@ -39,19 +39,19 @@ review.py status --root R
 6. `check` until every claimed sid has one verdict; `status` shows disjoint claims and no `todo`.
 7. Recompute rates and the occurrence-weighted residual ranking.
 ## Measured state
-Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claimed`, `inspected`). Occurrence share = sum of occurrences of bug rows / total corpus sentence occurrences. Latest cycle (cycle 10, HEAD `c173475`):
+Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claimed`, `inspected`). Occurrence share = sum of occurrences of bug rows / total corpus sentence occurrences. Latest cycle (cycle 11, HEAD `5b5cd03`):
 
 | corpus | reviewed rows | bug rows | row rate | occurrence share |
 |---|---:|---:|---:|---:|
-| Standard | 4,726 | 358 | 7.6% | 3.3% |
-| classic | 845 | 59 | 7.0% | 2.3% |
-| FDN | 545 | 53 | 9.7% | 6.5% |
+| Standard | 4,640 | 287 | 6.2% | 2.6% |
+| classic | 825 | 48 | 5.8% | 1.9% |
+| FDN | 525 | 32 | 6.1% | 4.2% |
 
-## Residual (cycle 10)
-Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 470 bugs are effect-slot detail:
-- Standard: 358 bugs (7.6% rows, 3.3% share) — effect slots, target/quantifier 71, raw wrappers 71, conditions, for-each.
-- classic: 59 bugs (7.0%, 2.3%) — effect slots, actor/who, target/quantifier.
-- FDN: 53 bugs (9.7%, 6.5%) — effect slots 16, target/quantifier 11, coordinated 5, conditions 5, threshold/static 3, for-each 2, keyword/cost 2.
+## Residual (cycle 11)
+Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 367 bugs are effect-slot detail:
+- Standard: 287 bugs (6.2% rows, 2.6% share) — effect slots 84, raw wrappers 71, target/quantifier 46, for-each 16, coordinated 19.
+- classic: 48 bugs (5.8%, 1.9%) — effect slots 25, actor/who 3, target/quantifier 4, coordinated 4.
+- FDN: 32 bugs (6.1%, 4.2%) — effect slots 9, target/quantifier 5, coordinated 4, keyword/cost 2, threshold/static 3, for-each 2.
 Family ranking by occurrence weight: `swarm/reports/residual_impact.md`.
 ## Adding a corpus
 Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `batch` and review; the corpus JSON only needs the `setdata.load` shape.
