@@ -1649,6 +1649,14 @@ class Interpreter:
             d['tapped'] = True
         if 'prepared' in toks:
             d['prepared'] = True
+        if 'for' in toks and 'each' in toks:
+            at = self._find_one(children, 'any_text')
+            if at is not None:
+                val = self.interp(at)
+                if isinstance(d.get('with'), dict):
+                    d['with'].setdefault('for_each', val)
+                else:
+                    d.setdefault('for_each', val)
         return d
 
     def i_can_attack_as_though_action(self, children):
