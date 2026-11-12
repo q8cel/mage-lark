@@ -1259,6 +1259,11 @@ class Interpreter:
                        if isinstance(c, Token) and c.type == 'MANA')
         if mana:
             d['mana'] = mana
+        wh = self._find_one(children, 'who')
+        if wh is not None:
+            wv = self.interp(wh)
+            if wv:
+                d['who'] = wv
         ck = self._find_one(children, 'card_kind')
         if ck is not None:
             d['type'] = self._text(ck.children).strip()

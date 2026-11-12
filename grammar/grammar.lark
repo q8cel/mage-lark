@@ -410,7 +410,7 @@ investigate_action: (who)? V_INVESTIGATE ("twice" | amount "times")? ("for" "eac
 keyword_action: V_BLIGHT amount
               | V_WATERBEND MANA+
               | V_DISCOVER amount
-              | V_AMASS card_kind? amount
+              | (who)? V_AMASS card_kind? amount
               | card_target V_CONNIVE
               | V_RECRUIT
               | V_FORAGE
