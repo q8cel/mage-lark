@@ -63,6 +63,10 @@ add("become-base-pt",
     "Until end of turn, this creature becomes a Plant with base power and toughness 0/8",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and d.get('base_pt') == '0/8'))
+add("become-generic-types",
+    "If it's a Vehicle, it becomes an artifact creature",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and {'artifact', 'creature'} <= set(d.get('types', []))))
 add("without-flying-target",
     "Creatures without flying can't block this turn",
     lambda o: has(o, lambda d: d.get('without_keywords') == ['flying']))

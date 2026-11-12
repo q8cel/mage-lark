@@ -1284,6 +1284,12 @@ class Interpreter:
             tp = self._find_one(children, 'types')
             if tp is not None:
                 d['type'] = self.interp(tp)
+        # "becomes an artifact creature": generic type words are direct tokens,
+        # not the CARDNAME/`types` forms above.
+        gens = [c.value for c in children
+                if isinstance(c, Token) and c.type == 'GENERIC_TYPE']
+        if gens:
+            d.setdefault('types', []).extend(gens)
         toks_low = [str(c).lower() for c in children if isinstance(c, Token)]
         if 'saddled' in toks_low:
             d['state'] = 'saddled'
