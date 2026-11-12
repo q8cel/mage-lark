@@ -137,6 +137,11 @@ add("gain-quote-duration-keywords",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_quote'
                   and d.get('duration') == 'until end of turn'
                   and d.get('keywords') == ['trample']))
+add("passive-damage-object",
+    "Whenever this creature is dealt damage, destroy it",
+    lambda o: has(o, lambda d: d.get('verb') == 'is dealt'
+                  and d.get('object') == 'damage'
+                  and 'damage' not in d))
 add("draw-amount-int", "Draw two cards",
     lambda o: has(o, lambda d: d.get('verb') == 'draw' and d.get('amount') == 2))
 add("up-to-quantifier", "Discard up to two cards",

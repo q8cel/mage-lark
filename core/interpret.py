@@ -2282,6 +2282,10 @@ class Interpreter:
                 if isinstance(ch, Tree):
                     d['to'] = self.interp(ch)
                     break
+            if not d:
+                # Plain "is dealt damage": keep the damage object, no kind.
+                txt = self._text(children)
+                return txt if txt else {}
             return d
         for ch in children:
             if isinstance(ch, Tree):
