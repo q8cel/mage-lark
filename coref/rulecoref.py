@@ -674,7 +674,9 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             si = rec.get("sentence")
             s0 = sents[si][0] if si is not None and si < len(sents) else 0
             prefix = text[s0:rec["start"]].lower()
-            if "enter as a copy" in prefix and "except" in prefix:
+            if (re.search(r"\benter(?:s|ed)?\b[^.;]{0,30}\bas\s+a\s+copy\b",
+                          prefix, re.I)
+                    and "except" in prefix):
                 f = [i for i in pool if ms[i].get("is_self")]
                 if f:
                     pool = f
@@ -1072,6 +1074,44 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("possessive-attribute-object")
+
+        # ---- copy-token exception: "create a token that's a copy of X, except
+        # it's ... in addition to its other types".  "its other types" is the
+        # new token, not the copied source.  Only fire for a concrete copied
+        # permanent: card/permanent source NPs are labelled as the source.
+        if (on["possessive"] and rec["is_possessive"]
+                and rec["surface"].lower() == "its"
+                and re.match(r"\s+other\s+(?:card\s+)?types\b",
+                             text[rec["end"]:rec["end"] + 20], re.I)):
+            si = rec.get("sentence")
+            s0 = sents[si][0] if si is not None and si < len(sents) else 0
+            seg = text[s0:rec["start"]]
+            creates = list(re.finditer(r"\bcreate\b", seg, re.I))
+            copies = list(re.finditer(r"\bcopy\s+of\b", seg, re.I))
+            token = src = None
+            if creates and copies:
+                cpos = s0 + creates[-1].start()
+                for i, m in enumerate(ms):
+                    if m["start"] < cpos or m["end"] > rec["start"]:
+                        continue
+                    if "token" in m["surface"].lower() and (
+                            token is None or m["start"] < ms[token]["start"]):
+                        token = i
+                qpos = s0 + copies[-1].end()
+                for i, m in enumerate(ms):
+                    if m["start"] < qpos or m["end"] > rec["start"]:
+                        continue
+                    if m.get("is_anaphor") or "token" in m["surface"].lower():
+                        continue
+                    if src is None or m["start"] < ms[src]["start"]:
+                        src = i
+            if token is not None and src is not None and token in pool:
+                st = ms[src].get("head_type")
+                if (st in PERMANENTS and st != "permanent"
+                        and not re.search(r"\b(?:card|permanent)s?\b",
+                                          ms[src]["surface"], re.I)):
+                    pool = [token]
+                    evidence.append("copy-token-possessive")
 
         # ---- modifier self-reference: "a creature with a counter on it",
         # "creatures you control with +1/+1 counters on them".
