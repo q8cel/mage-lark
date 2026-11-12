@@ -569,8 +569,14 @@ class Interpreter:
     # ------------------------------------------------------------------ effect / actions
     def i_effect(self, children):
         out = []
+        timing = None
         for ch in children:
             if isinstance(ch, Tree):
+                if ch.data == 'effect_timing':
+                    # "{3}: Until end of turn, …" keeps the clause in its own
+                    # subtree; it qualifies every duration-taking action.
+                    timing = self._duration(ch.children)
+                    continue
                 out.append(self.interp(ch))
         # Coordinated actions often share one target: "target creature gets
         # +2/+0 and gains first strike".  The second action's card_target is
@@ -585,8 +591,8 @@ class Interpreter:
                 action['target'] = dict(last_target)
         # …and one duration: "gets +1/+0 and gains first strike until end of
         # turn" puts the clause on the last action only, but it qualifies both.
-        durations = [a['duration'] for a in out
-                     if isinstance(a, dict) and a.get('duration')]
+        durations = [timing] if timing else [a['duration'] for a in out
+                                             if isinstance(a, dict) and a.get('duration')]
         if durations:
             for action in out:
                 if (isinstance(action, dict)
@@ -2403,7 +2409,21 @@ class Interpreter:
             dur = self._duration(children)
             if dur:
                 d['duration'] = dur
+                # "Until end of turn, this creature loses defender and gains
+                # flying": the clause qualifies the inner actions too.
+                self._apply_duration(d.get('effect'), dur)
         return d
+
+    def _apply_duration(self, node, dur):
+        if isinstance(node, dict):
+            if (node.get('verb') in self.DURATION_VERBS
+                    and 'duration' not in node):
+                node['duration'] = dur
+            for v in node.values():
+                self._apply_duration(v, dur)
+        elif isinstance(node, list):
+            for v in node:
+                self._apply_duration(v, dur)
 
     def i_as_long_sentence(self, children):
         return self._cond_effect_sentence('as_long', children)
