@@ -67,6 +67,10 @@ add("become-generic-types",
     "If it's a Vehicle, it becomes an artifact creature",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and {'artifact', 'creature'} <= set(d.get('types', []))))
+add("become-in-addition",
+    "It becomes a 0/0 Bird creature with flying in addition to its other types",
+    lambda o: has(o, lambda d: d.get('verb') == 'become'
+                  and d.get('in_addition') is True))
 add("without-flying-target",
     "Creatures without flying can't block this turn",
     lambda o: has(o, lambda d: d.get('without_keywords') == ['flying']))

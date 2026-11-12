@@ -1364,6 +1364,9 @@ class Interpreter:
         tail = self._find_one(children, 'become_tail')
         if tail is not None:
             tail_words = self._token_words(tail.children)
+            if 'addition' in tail_words:
+                # "… creature in addition to its other types"
+                d['in_addition'] = True
             if 'base' in tail_words and 'toughness' in tail_words:
                 bpt = [c for c in tail.children
                        if isinstance(c, Token) and c.type == 'POWER_T']
