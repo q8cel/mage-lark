@@ -98,6 +98,18 @@ add("coordinated-cards-controller",
     "Skeletons you control and other Zombies you control get +1/+1 and have deathtouch",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
                   and len(d.get('cards', [])) == 2))
+add("shuffle-two-sources",
+    "Each player may shuffle their hand and graveyard into their library",
+    lambda o: has(o, lambda d: d.get('verb') == 'shuffle'
+                  and d.get('from') == ['hand', 'graveyard']))
+add("prevent-by-only",
+    "Prevent all combat damage that would be dealt by nongreen creatures this turn",
+    lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'
+                  and d.get('by') and 'to' not in d))
+add("zone-possessor",
+    "Whenever this creature deals combat damage to a player, you may cast target nonland permanent card from that player's graveyard",
+    lambda o: has(o, lambda d: d.get('verb') == 'cast'
+                  and d.get('card', {}).get('zone', {}).get('possessor') == "that player's"))
 add("delirium-static-effect",
     "Delirium — This creature gets +1/+1 and has trample as long as there are four or more card types among cards in your graveyard",
     lambda o: has(o, lambda d: d.get('type') == 'static'

@@ -544,7 +544,16 @@ class Interpreter:
                 else:
                     zone = ch.value
             elif isinstance(ch, Tree) and ch.data == 'zone':
+                owner = None
+                for sub in ch.children:
+                    if isinstance(sub, Token):
+                        v = str(sub.value)
+                        if sub.type == 'OWNER' or v.endswith("'s"):
+                            owner = v
                 zone = self.interp(ch)
+                if owner:
+                    owner_zone = {'zone': zone, 'possessor': owner}
+                    return {'prep': prep, 'zone': zone, 'possessor': owner}
         return {'prep': prep, 'zone': zone}
 
     def i_zone(self, children):
@@ -2268,7 +2277,7 @@ class Interpreter:
         zones = [t for t in toks
                  if t in ('graveyard', 'library', 'hand', 'battlefield', 'exile')]
         if zones:
-            d['from'] = zones[0]
+            d['from'] = zones[0] if len(zones) == 2 else zones[:-1]
             d['to'] = zones[-1] if len(zones) > 1 else 'library'
         elif 'libraries' in toks:
             d['to'] = 'library'
@@ -2589,8 +2598,9 @@ class Interpreter:
             d['to'] = 'you'
         ct = self._find_one(children, 'card_target')
         if ct is not None and 'by' in toks and 'dealt' in toks:
-            # "damage that would be dealt to and dealt by this creature"
-            d['to'] = self.interp(ct)
+            # "dealt to and dealt by X" restricts both; "dealt by X" only the source.
+            if 'to' in toks and 'and' in toks:
+                d['to'] = self.interp(ct)
             d['by'] = self.interp(ct)
             d.pop('card', None)
         if 'combat' in toks:
