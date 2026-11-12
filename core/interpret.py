@@ -2374,6 +2374,9 @@ class Interpreter:
         z = self._zone_from_tokens(children)
         if z is not None:
             d['zone'] = z
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['of'] = self.interp(ct)
         d.update(self._placement(children))
         words = self._token_words(children)
         if 'amount' not in d:
