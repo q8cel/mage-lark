@@ -1902,10 +1902,33 @@ class Interpreter:
 
     def i_may_action(self, children):
         inner = None
+        actor_words = []
+        actor_tree = None
+        seen_may = False
         for ch in children:
-            if isinstance(ch, Tree) and ch.data not in ('V_YOU', 'V_MAY'):
+            if isinstance(ch, Token):
+                if str(ch).lower() == 'may':
+                    seen_may = True
+                elif not seen_may:
+                    actor_words.append(ch.value)
+                continue
+            if not isinstance(ch, Tree):
+                continue
+            if seen_may:
                 inner = self.interp(ch)
-        return {'verb': 'may', 'inner': inner}
+            elif ch.data in ('controller_subject', 'owner_subject'):
+                actor_tree = self._text([ch]).strip()
+            elif ch.data in ('player', 'card_target'):
+                actor_tree = self.interp(ch)
+            else:
+                actor_words.append(self._text([ch]))
+        d = {'verb': 'may', 'inner': inner}
+        actor = actor_tree if actor_tree is not None else ' '.join(actor_words).strip()
+        if actor and str(actor).lower() != 'you':
+            # "Its controller may …" / "Each player may …": keep the actor so
+            # the permission is not attributed to the spell's controller.
+            d['who'] = actor
+        return d
 
     def i_for_each_sentence(self, children):
         d = {'verb': 'for_each'}

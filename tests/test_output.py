@@ -92,6 +92,10 @@ add("cast-without-paying",
     "You may cast that card without paying its mana cost",
     lambda o: has(o, lambda d: d.get('verb') == 'cast'
                   and d.get('without_paying') is True))
+add("may-actor",
+    "Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle",
+    lambda o: has(o, lambda d: d.get('verb') == 'may'
+                  and d.get('who') == 'Its controller'))
 add("cant-block-duration", "Target creature can't block this turn",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
                   and d.get('duration') == 'this turn'))
