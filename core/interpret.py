@@ -3505,6 +3505,26 @@ class Interpreter:
     def i_as_long_sentence(self, children):
         return self._cond_effect_sentence('as_long', children)
 
+    def i_as_long_tail_sentence(self, children):
+        d = {'type': 'effect'}
+        eff = None
+        cond = None
+        for ch in children:
+            if isinstance(ch, Tree):
+                if ch.data == 'effect':
+                    eff = self.interp(ch)
+                elif ch.data == 'any_text':
+                    cond = str(self.interp(ch))
+        if cond is not None and isinstance(eff, dict):
+            inner = eff.get('inner')
+            if isinstance(inner, dict):
+                # "you may cast …": the permission carries the duration.
+                inner.setdefault('duration', 'for as long as ' + cond)
+            else:
+                eff.setdefault('condition', cond)
+        d['effect'] = eff
+        return d
+
     def i_during_sentence(self, children):
         return self._cond_effect_sentence('during', children)
 

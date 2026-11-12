@@ -20,6 +20,7 @@ sentence: prefixed_static
         | modal_sentence
         | activated_sentence
         | as_long_sentence
+        | as_long_tail_sentence
         | as_cost_sentence
         | during_sentence
         | until_sentence
@@ -156,6 +157,8 @@ cost_item: MANA+
 ability_word_prefix: (CARDNAME | WORD | THIS_CARD | NUMBER)+ (("and" | ",") (CARDNAME | WORD | THIS_CARD | NUMBER)+)* EMDASH
 triggered_sentence: ability_word_prefix? trigger_clause "," if_clause? effect xdef_clause? (trailing_if | trailing_unless)?
 as_long_sentence: "As" "long" "as" any_text "," effect
+as_long_tail_sentence: effect "for" "as" "long" "as" any_text
+             | "For" "as" "long" "as" any_text "," effect
 during_sentence: ability_word_prefix? "During" during_time "," effect
 until_sentence: "Until" "end" "of" "turn" "," effect
               | "Until" "the" "end" "of" "your" "next" "turn" "," effect
