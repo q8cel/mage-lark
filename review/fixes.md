@@ -36,3 +36,10 @@ Counts are verdict rows matching the note shape when last measured.
 | class | sids | why deferred / measured result |
 |---|---|---|
 | silent activated cost-boundary mismatch | none (probe "{4}, {T}: Two target creatures … can't be blocked") | Snapshot scan of interpreted outputs (Standard_cycle14 7,184; classic 2,076; FDN 761): `has_prefix_no_cost` = 5 / 0 / 1, all keyword-cost statics (Equip/Flashback/Ward/Warp) whose cost is still in `keywords.modifier`; `activated_no_prefix` = 0 / 0 / 0 after normalizing ability words ("Power-up —", "Exhaust —", "Waterbend {N}"); `activated_empty_cost` = 0. The probe sentence is a parse failure, not a silent success, so no cost_list/effect rewrite was made. Scenario counts are flap-prone if the prefix regex ignores ability words (raw first pass: 38/0/0 activated_no_prefix and 119 including parsefails). |
+
+## Clause phase: deferred structural shapes (measured)
+
+| class | measured size | why deferred |
+|---|---|---|
+| replacement-event clauses | 49 Standard clause sites; top sub-shape "would die this turn" only 5, then "would be created under your control" 4, "would be put into a graveyard" 3 | the class is genuinely varied (would die/created/put/deal/enter/leave, each 1-5 sites), so a closed grammar alternative would cover only a small slice at a chart-cost; leave triage |
+| while / as-long-as nesting | 38 Standard clause sites, all beginning "while" | nesting (while + control/count/state) needs recursive condition construction; the simple inner states are already structured by the readback handlers, but the wrapper is a grammar/structural change |
