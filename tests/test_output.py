@@ -1056,6 +1056,20 @@ add("counter-with-modifier",
                   and isinstance(d.get('spell'), dict)
                   and 'mana value X' in str(d['spell'].get('modifier'))))
 
+add("unparsed-static-fallback",
+    "Activate only if you control a Sliver",
+    lambda o: has(o, lambda d: d.get('type') == 'unparsed'
+                  and d.get('reason') == 'static_text'
+                  and 'Sliver' in str(d.get('fragment', ''))))
+add("unparsed-raw-fallback",
+    "Start your engines!",
+    lambda o: has(o, lambda d: d.get('type') == 'unparsed'
+                  and d.get('reason') == 'static_text'
+                  and 'Start your engines' in str(d.get('fragment', ''))))
+add("no-text-key-in-fallback",
+    "Activate only if you control a Sliver",
+    lambda o: not has(o, lambda d: isinstance(d, dict) and 'text' in d))
+
 def main():
     data = sys.argv[1] if len(sys.argv) > 1 else 'classic.json'
     items, types, card_names, sets = load(data)
