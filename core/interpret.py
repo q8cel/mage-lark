@@ -1916,6 +1916,16 @@ class Interpreter:
     KW_ACTION_VERBS = ('blight', 'waterbend', 'discover', 'amass', 'connive',
                        'recruit', 'forage', 'airbend', 'devour')
 
+    def i_endure_action(self, children):
+        d = {'verb': 'endure'}
+        ct = self._find_one(children, 'card_target')
+        if ct is not None:
+            d['who'] = self.interp(ct)
+        amt = self._find_one(children, 'amount')
+        if amt is not None:
+            d['amount'] = self.interp(amt)
+        return d
+
     def i_craft_sentence(self, children):
         d = {'type': 'craft'}
         for ch in children:
