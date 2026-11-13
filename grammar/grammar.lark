@@ -33,6 +33,7 @@ sentence: prefixed_static
         | xdef_sentence
         | round_up_sentence
         | cost_dash_sentence
+        | craft_sentence
         | spend_mana_fallback
 
 // ----------------------------------------------------------------------------
@@ -903,6 +904,11 @@ pay_action: V_PAY MANA+ ("rather" "than" "pay" ("this" "spell's" | "its") "mana"
 end_turn_action: "End" "the" "turn"
 transform_action: V_TRANSFORM card_target
 V_TRANSFORM: /\btransforms?\b/i
+craft_sentence: "Craft" "with" craft_arg MANA+
+craft_arg: "one" "or" "more" card_target?
+         | amount "or" "more" card_target
+         | card_target ("," card_target)* (","? "and" card_target)?
+
 for_each_sentence: ("For" | "for") "each" card_target "," effect xdef_clause?
                 | ("For" | "for") "each" card_target any_text "," effect
                 | ("For" | "for") "each" counter_kind "on" card_target "," effect

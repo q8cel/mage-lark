@@ -63,3 +63,15 @@ shape across heads, not head by head.
 | timing | ABBA 15-word parse 1.113 s -> 1.127 s (1.013x, noise) |
 | corpus delta | Standard seeded parse 20,754 -> 20,782; failures 1,463 -> 1,435 occ / 781 -> 760 uniq. FDN honest unchanged 1,494/1,653 (90.4%) |
 | left | `Level N` lines with a non-cost prefix (e.g. "Level up" costs) not present upstream |
+
+### batch: Craft-with keyword line
+
+| field | value |
+|---|---|
+| gap | `Craft with <arg> {cost}` — a keyword ability line whose argument is a card kind / list / quantifier and whose trailing mana is the craft cost; the sentence dispatcher had no rule for it (CHAR at the `{`) |
+| change | `craft_sentence: "Craft" "with" craft_arg MANA+`; `craft_arg` = `one or more [target]` / `amount or more target` / `target ("," target)* (","? "and" target)?`; `i_craft_sentence` returns `type: craft`, `with`, `cost` |
+| texts fixed | 18 unique / 22 occurrences (`Craft with artifact/creature/Cave/Island/Dinosaurs`, list and "two creatures" forms) |
+| rule count | 3,340 -> 3,351 (+11) |
+| timing | ABBA 15-word parse 0.433 s -> 0.436 s (1.007x) |
+| corpus delta | Standard seeded parse 20,782 -> 20,804; failures 1,435 -> 1,413 occ / 760 -> 742 uniq. FDN honest unchanged 1,494/1,653 (90.4%) |
+| left | `Craft with four or more nonlands with activated abilities {8}{U}` (card_target lacks the relative "with activated abilities" modifier) |
