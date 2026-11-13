@@ -867,7 +867,8 @@ add("gift", "Gift a card",
 add("manifest-dread", "Manifest dread",
     lambda o: has(o, lambda d: d.get('verb') == 'manifest_dread'))
 add("start-engines", "Start your engines!",
-    lambda o: has(o, lambda d: 'Start your engines' in str(d.get('fragment', ''))))
+    lambda o: has(o, lambda d: d.get('type') == 'static'
+                  and d.get('kind') == 'start_engines'))
 add("ability-word-activated", "Max speed — {3}, Exile this card from your graveyard: Draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'activated'))
 add("ability-word-if", "Flare Star — If a Wizard you control would deal damage to a permanent or player, it deals double that damage instead",
@@ -1071,10 +1072,10 @@ add("unparsed-static-fallback",
                   and d.get('reason') == 'static_text'
                   and 'Sliver' in str(d.get('fragment', ''))))
 add("unparsed-raw-fallback",
-    "Start your engines!",
-    lambda o: has(o, lambda d: d.get('type') == 'unparsed'
-                  and d.get('reason') == 'static_text'
-                  and 'Start your engines' in str(d.get('fragment', ''))))
+    "If X is 6 or more, return a creature card put into a graveyard this way to the battlefield",
+    lambda o: has(o, lambda d: d.get('verb') == 'raw'
+                  and d.get('unparsed') is True
+                  and d.get('reason') == 'raw_action'))
 add("no-text-key-in-fallback",
     "Activate only if you control a Sliver",
     lambda o: not has(o, lambda d: isinstance(d, dict) and 'text' in d))

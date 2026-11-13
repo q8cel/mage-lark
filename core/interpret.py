@@ -323,6 +323,24 @@ class Interpreter:
                         nxt.setdefault('ability_word', label)
                 continue
             cleaned.append(item)
+        # "Enchant creature you control" is split into enchant_action +
+        # a static "you control" sentence by the grammar; join the qualifier.
+        merged = []
+        for item in cleaned:
+            if (merged and isinstance(item, dict)
+                    and item.get('type') == 'static'
+                    and 'text' in item
+                    and item['text'].strip().lower() == 'you control'):
+                prev = merged[-1]
+                eff = prev.get('effect') if isinstance(prev, dict) else None
+                inner = eff.get('effect') if isinstance(eff, dict) else eff
+                if inner is None:
+                    inner = eff
+                if isinstance(inner, dict) and inner.get('verb') == 'enchant':
+                    inner['controller'] = 'you control'
+                    continue
+            merged.append(item)
+        cleaned = merged
         return [self._finalize(x, top=True) for x in cleaned]
 
     @staticmethod
@@ -463,6 +481,42 @@ class Interpreter:
                         'event': {'subject': 'you', 'verb': 'cast',
                                   'object': tgt},
                         'this_turn': True}
+        return None
+
+    def _trigger_event(self, text):
+        """Closed trigger-event fragments from a stashed trigger text."""
+        low = ' '.join(str(text).lower().split()).rstrip('.')
+        if low.startswith('one or more ') and low.endswith(' die'):
+            between = low[len('one or more '):-len(' die')].strip()
+            other = False
+            if between.startswith('other '):
+                other = True
+                between = between[len('other '):]
+            controller = None
+            for suf, ctl in ((' you control', 'you control'),
+                             (' an opponent controls', 'an opponent controls')):
+                if between.endswith(suf):
+                    between = between[:-len(suf)]
+                    controller = ctl
+                    break
+            if between:
+                subj = {'card_type': {'kind': 'type', 'value': between},
+                        'quantifier': 'one or more'}
+                if other:
+                    subj['otherness'] = 'other'
+                if controller:
+                    subj['controller'] = controller
+                return {'subject': subj, 'verb': 'dies'}
+        if low in ('~ enter', '~ enters', 'this creature enters'):
+            return {'subject': {'card_type': {'kind': 'this_card',
+                                              'value': '~'}},
+                    'verb': 'enters'}
+        if low == 'a creature you control attacks alone':
+            return {'subject': {'card_type': {'kind': 'type',
+                                              'value': 'creature'},
+                                'quantifier': 'a',
+                                'controller': 'you control'},
+                    'verb': 'attacks', 'alone': True}
         return None
 
     def _finalize(self, node, top=False):
@@ -649,6 +703,11 @@ class Interpreter:
                 orig = node[key]
                 node[key] = {'unparsed': True, 'reason': reason,
                              'fragment': orig, 'source': src}
+        if 'text' in node and 'when' in node:
+            ev = self._trigger_event(node.get('text'))
+            if ev is not None:
+                node.setdefault('event', ev)
+                node.pop('text', None)
         if 'text' in node:
             frag = node.pop('text')
             reason, source = self._unparsed_tag(node)
@@ -3799,6 +3858,7 @@ class Interpreter:
 
     def i_modal_sentence(self, children):
         txt = ' '.join(self._text(children).split()).rstrip('.').lower()
+        txt = txt.replace(' !', '!').replace(' .', '.')
         if txt == 'choose one':
             return {'type': 'modal', 'choose': 1}
         if txt == "choose one that hasn't been chosen":
@@ -3837,6 +3897,35 @@ class Interpreter:
 
     def i_static_sentence(self, children):
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        txt = ' '.join(self._text(children).split()).rstrip('.').lower()
+        txt = txt.replace(' !', '!').replace(' .', '.')
+        fixed = {
+            'this ability triggers only once each turn':
+                {'kind': 'trigger_limit', 'limit': 'once_each_turn'},
+            'start your engines!': {'kind': 'start_engines'},
+            "this spell can't be countered":
+                {'kind': 'uncounterable', 'subject': 'this spell'},
+            "it's still a land":
+                {'kind': 'type_retention', 'card_type': 'land'},
+            "it's an enchantment":
+                {'kind': 'type_retention', 'card_type': 'enchantment'},
+            'do this only once each turn':
+                {'kind': 'action_limit', 'limit': 'once_each_turn'},
+            "damage can't be prevented":
+                {'kind': 'damage_prevention_disabled'},
+            "you can't lose the game and your opponents can't win the game":
+                {'kind': 'loss_lock', 'you': 'cannot_lose',
+                 'opponents': 'cannot_win'},
+            'you may choose the same mode more than once':
+                {'kind': 'mode_repeat'},
+        }
+        if txt in fixed:
+            return {'type': 'static', **fixed[txt]}
+        if txt == 'enchant creature you control':
+            return {'type': 'static', 'kind': 'enchant',
+                    'card_target': {'card_type': {'kind': 'type',
+                                                  'value': 'creature'},
+                                    'controller': 'you control'}}
         if 'activate' in toks and 'only' in toks:
             if 'sorcery' in toks:
                 return {'type': 'static', 'activate_only': 'as a sorcery'}
