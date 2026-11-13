@@ -47,16 +47,17 @@ Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claim
 | classic | 789 | 48 | 6.1% | 1.9% |
 | FDN | 521 | 30 | 5.8% | 3.8% |
 
-Final grammar state (2026-11-12, verified with a no-cache full reparse at `0841d3b`, grammar hash `8f294968de4ee66e`):
+Final grammar state (2026-11-13, measured at `91fdaca`):
 
-| corpus | unique parsed | unique % | occurrences | occ % |
-|---|---:|---:|---:|---:|
-| Standard | 7,184 / 7,966 | 90.2% | 20,752 / 22,217 | 93.4% |
-| classic | 2,089 / 2,148 | 97.3% | 4,216 / 4,280 | 98.5% |
-| FDN | 761 / 761 | 100% | 1,653 / 1,653 | 100% |
+| corpus | honest occurrences | honest % | of accepted | parse occurrences | parse unique | parse_fail | interpret_unparsed |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Standard | 17,504 / 22,217 | 78.8% | 84.3% | 20,754 (93.4%) | 7,185 / 7,966 | 1,463 occ / 781 uniq | 3,250 occ / 1,599 uniq |
+| classic | 3,896 / 4,280 | 91.0% | 92.4% | 4,216 (98.5%) | 2,089 / 2,148 | 64 / 59 | 320 / 225 |
+| FDN | 1,478 / 1,653 | 89.4% | 89.4% | 1,653 (100%) | 761 / 761 | 0 | 175 / 88 |
 
-The remaining 782 unique Standard failures cluster in compound/structural classes: cost_list/effect boundary, compound statics, deep exile/permission compounds, and xdef tails.
-A `--seed` run trusts passes from another grammar and **must never be quoted as absolute coverage**: the earlier 7,201/20,781 was 17 false seed passes plus 12 genuinely new passes; a no-cache reparse gives 7,184. The snapshot-based count agrees (7,184 parsed texts, 20,752 occurrence weight).
+Honest unique: Standard 5,586/7,966 = 70.1%, classic 1,864/2,148 = 86.8%, FDN 673/761 = 88.4%.
+Strict/honest counts a sentence only if its interpreted output has no unparsed/raw text; parse-only counts any successful parse. The `text` purge removed text/raw payloads from outputs, so honest coverage, not parse coverage, is the headline number.
+A `--seed` run trusts passes from another grammar and **must never be quoted as absolute coverage**: the earlier 7,201/20,781 was 17 false seed passes plus 12 genuinely new passes; a no-cache reparse gives 7,184 (then 7,185 after the blob-text merge).
 
 ## Residual (cycle 12)
 Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 355 bugs are effect-slot detail:
