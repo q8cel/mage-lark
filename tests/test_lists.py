@@ -96,7 +96,9 @@ def main():
     assert out[0]['type'] == 'if'
     cond = out[0]['condition']
     assert cond['lists'][0]['logic'] == 'union'
-    assert 'Bird, Frog, Otter, or Rat' in cond['text']
+    # C1 label migration: the list surface is `label` + items, not `text`.
+    assert 'Bird, Frog, Otter, or Rat' in cond['label']
+    assert cond['items'] == ['a Bird', 'Frog', 'Otter', 'Rat']
 
     out = parse("If it's a noncreature, nonland card, you gain 2 life")
     assert out[0]['condition']['lists'][0]['logic'] == 'intersection'
@@ -133,9 +135,9 @@ def main():
     assert out[0]['effect']['verb'] == 'set_base_pt'
     assert out[0]['effect']['base_pt'] == '2/2'
 
-    # 'the copy' is an object, not an opaque string.
+    # 'the copy' is an object; the redundant summary text was deleted (C2).
     out = parse('You may choose new targets for the copy')
-    assert out[0]['effect']['for'] == {'kind': 'copy', 'text': 'the copy'}
+    assert out[0]['effect']['for'] == {'kind': 'copy'}
 
     # Sentence text is surface text: segment() must not persist a protected
     # list token, and the parser must protect on demand.
