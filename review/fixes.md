@@ -116,3 +116,6 @@ parse_fail 1,337 occ / 702 unique (from 1,395 / 733). Left: harmonize/persist/
 rebound keyword words are now accepted but their _action_ forms (e.g. a
 harmonize verb) are not; collect-evidence lines blocked on unrelated effects;
 the long tail below.
+
+| trigger_text event-kind groups | cast 103, unlock 45, commit-crime 27, activate 20, expend 14, face-up/transform 35 | 763f4c9 (cast), 1945a40 (commit/expend/unlock/activate), c96fe36 (face-up/transform): {kind:event, event:{subject,verb,object,window/ordinal/amount}} | trigger_text residual ~270 occ, mostly compound enter-or-turn-face-up and free-form one-offs |
+| Standard honest after condition+trigger readbacks | parse 20,822/22,217 (93.7%), honest 18,662/22,217 (84.0%), unique 6,072; interpret_unparsed 2,160 occ / 1,161 unique | approximate marker split from ledger closures: condition ~1,317, trigger ~270, static 168, no_handler 125, raw_action 109, xdef 83, object 64, modifier 24 | remaining condition heads: would-replacement 155, triggered-ability 42, there-are 37, you-put 23, opponent-comparison 19 |
