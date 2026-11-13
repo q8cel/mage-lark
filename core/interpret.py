@@ -2356,7 +2356,11 @@ class Interpreter:
                 else:
                     d[key] = self._text(node.children)
         if 'card' not in d:
-            d['text'] = self._text(children)
+            txt = self._text(children)
+            if 'puts it' in txt.lower() or 'put it' in txt.lower():
+                d['card'] = {'card_type': {'ref': 'anaphora', 'raw': 'it'}}
+            else:
+                d['text'] = txt
         return d
 
     def i_lose_kw_action(self, children):
@@ -2794,7 +2798,22 @@ class Interpreter:
         d = {'verb': 'distribute'}
         at = self._find_one(children, 'any_text')
         if at is not None:
-            d['text'] = self.interp(at)
+            txt = self.interp(at)
+            if isinstance(txt, str):
+                m = re.match(r'^(.*?)\s+counters? among (.+)$', txt,
+                             re.I)
+                if m:
+                    left = m.group(1).strip().split()
+                    if left:
+                        d['count'] = left[0]
+                        kind = ' '.join(left[1:]).strip()
+                        if kind:
+                            d['counter'] = kind
+                    tgt = self._simple_target(m.group(2))
+                    if tgt:
+                        d['among'] = tgt
+                        return d
+            d['text'] = txt
         return d
 
     def i_copy_action(self, children):
