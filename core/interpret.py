@@ -441,6 +441,20 @@ class Interpreter:
                 if tgt:
                     ev['object'] = {'with': {'card_target': tgt}}
             return {'kind': 'event', 'event': ev, 'this_turn': True}
+        if body in ("an opponent lost life", 'an opponent has lost life',
+                    'an opponent lost life this turn'):
+            return {'kind': 'event',
+                    'event': {'subject': 'an opponent', 'verb': 'lose',
+                              'object': 'life'},
+                    'this_turn': True}
+        if body in ('an opponent was dealt noncombat damage',
+                    'an opponent was dealt damage'):
+            ev = {'subject': 'an opponent', 'verb': 'is dealt',
+                  'object': {'damage': ('noncombat'
+                                        if 'noncombat' in body else None)}}
+            if ev['object']['damage'] is None:
+                ev['object'] = 'damage'
+            return {'kind': 'event', 'event': ev, 'this_turn': True}
         if body in ("you've lost life", 'you lost life', 'you have lost life'):
             return {'kind': 'event',
                     'event': {'subject': 'you', 'verb': 'lose',
@@ -682,7 +696,8 @@ class Interpreter:
                     node[key] = {'kind': 'state', 'subject': 'turn',
                                  'state': {'status': 'not_your_turn'}}
                     continue
-                if low.startswith('there are ') and ' or more ' in low:
+                if (low.startswith('there are ') and ' or more ' in low
+                        and ' among ' not in low):
                     body = val.strip()[len('there are '):]
                     num, rest = body.split(' or more ', 1)
                     mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4,
@@ -741,6 +756,94 @@ class Interpreter:
                 if low == 'you have an enduring story':
                     node[key] = {'kind': 'state', 'subject': 'you',
                                  'state': {'status': 'enduring story'}}
+                    continue
+                if (low.startswith('a triggered ability of ')
+                        and low.endswith(' triggers')):
+                    mid = val.strip()[len('a triggered ability of '):-len(' triggers')]
+                    tgt = self._simple_target(mid)
+                    if tgt:
+                        node[key] = {'kind': 'triggered_ability', 'of': tgt}
+                        continue
+                if low.startswith('there are ') and ' among ' in low:
+                    body = val.strip()[len('there are '):]
+                    if ' or more ' in body:
+                        num, rest = re.split(r' or more ', body, maxsplit=1, flags=re.I)
+                        mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                              'five': 5, 'six': 6, 'seven': 7, 'eight': 8}
+                        n = int(num) if num.strip().isdigit() else mp.get(num.strip().lower())
+                        if n is not None:
+                            unit, among = re.split(r' among ', rest, maxsplit=1, flags=re.I)
+                            of = None
+                            al = among.lower().strip()
+                            if al.startswith('cards in '):
+                                zone = al[len('cards in '):]
+                                z = None
+                                for zn in ('graveyard', 'library', 'hand',
+                                           'exile', 'battlefield'):
+                                    if zn in zone:
+                                        z = {'prep': 'in', 'zone': zn,
+                                             'possessor': ('you' if 'your' in zone
+                                                           else 'their')}
+                                        break
+                                if z:
+                                    of = {'card_target': {
+                                              'card_type': {'kind': 'type',
+                                                            'value': 'cards'}},
+                                          'zone': z}
+                            elif al.startswith('cards exiled with '):
+                                of = {'card_target': {
+                                          'card_type': {'kind': 'type',
+                                                        'value': 'cards'}},
+                                      'zone': {'prep': 'exiled with',
+                                               'zone': among[len('cards exiled with '):].strip()}}
+                            elif al.startswith('creatures you control'):
+                                of = {'card_target': self._simple_target(among)}
+                            if of:
+                                node[key] = {'kind': 'count',
+                                             'quantity': {'at_least': n},
+                                             'unit': unit.strip(),
+                                             'of': of}
+                                continue
+                mput = re.match(r"^you (don't )?put (.+)$", low)
+                if mput:
+                    negative = bool(mput.group(1))
+                    rest = val.strip()
+                    rest = rest[len("you don't put "):] if negative else rest[len('you put '):]
+                    this_way = ' this way' in rest.lower()
+                    cut = len(rest)
+                    for sep in (' this way', ' into ', ' onto ', ' on ',
+                                ' this turn'):
+                        idx = rest.lower().find(sep)
+                        if 0 <= idx < cut:
+                            cut = idx
+                    objtxt = rest[:cut].strip()
+                    tgt = self._simple_target(objtxt)
+                    if tgt:
+                        ev = {'subject': 'you', 'verb': 'put', 'object': tgt}
+                        if negative:
+                            ev['polarity'] = 'negative'
+                        if this_way:
+                            ev['this_way'] = True
+                        if 'this turn' in rest.lower():
+                            ev['this_turn'] = True
+                        node[key] = {'kind': 'event', 'event': ev}
+                        continue
+                mcmp = re.match(r'^an opponent (controls|has) more (.+) than you$', low)
+                if mcmp:
+                    node[key] = {'kind': 'comparison',
+                                 'subject': 'an opponent',
+                                 'verb': mcmp.group(1),
+                                 'object': mcmp.group(2),
+                                 'comparison': 'more_than_you'}
+                    continue
+                mtp = re.match(r'^(creatures you control) have total power (\d+) or (greater|less)$', low)
+                if mtp:
+                    q = ({'at_least': int(mtp.group(2))}
+                         if mtp.group(3) == 'greater'
+                         else {'at_most': int(mtp.group(2))})
+                    node[key] = {'kind': 'comparison',
+                                 'subject': self._simple_target(mtp.group(1)),
+                                 'stat': 'total_power', 'quantity': q}
                     continue
                 ev = self._event_this_turn(val)
                 if ev:
