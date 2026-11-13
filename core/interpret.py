@@ -349,6 +349,118 @@ class Interpreter:
             return 'object_text', 'i_put_library_action'
         return 'no_handler', 'i_' + str(v or t or 'sentence')
 
+    @staticmethod
+    def _simple_target(text):
+        """A permissive card_target for short condition nouns."""
+        t = text.strip()
+        if not t:
+            return None
+        q = None
+        mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+              'six': 6, 'seven': 7, 'eight': 8}
+        lowt = t.lower()
+        for w, n in mp.items():
+            if lowt.startswith(w + ' or more '):
+                q = {'at_least': n}
+                t = t[len(w + ' or more '):]
+                break
+        if q is None:
+            for qw in ('a', 'an', 'each', 'target', 'up to'):
+                if t.lower().startswith(qw + ' '):
+                    q = qw
+                    t = t[len(qw) + 1:]
+                    break
+        mod = None
+        for sep in (' with ', ' that ', ' whose ', ' without '):
+            if sep in t.lower():
+                cut = t.lower().index(sep)
+                t, mod = t[:cut], t[cut + 1:]
+                break
+        if not t:
+            return None
+        d = {'card_type': {'kind': 'type', 'value': t.strip()}}
+        if q:
+            d['quantifier'] = q
+        if mod:
+            d['modifier'] = mod.strip()
+        return d
+
+    def _event_this_turn(self, val):
+        norm = ' '.join(val.lower().split()).rstrip('.')
+        if not norm.endswith('this turn'):
+            return None
+        body = norm[:-len('this turn')].strip()
+        orig = val.strip()[:-len('this turn')].strip()
+        words = body.split()
+        def numq(ws):
+            mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+                  'six': 6, 'seven': 7, 'eight': 8}
+            for i, w in enumerate(ws):
+                if w in mp:
+                    if i + 1 < len(ws) and ws[i + 1] == 'or':
+                        return {'at_least': mp[w]}
+                    return mp[w]
+                if w.isdigit():
+                    return int(w)
+            return None
+        if body.startswith("you've drawn ") or body.startswith('you drew '):
+            rest = body.split('drawn ', 1)[-1].split('drew ', 1)[-1]
+            q = numq(rest.split()) or ('a' if 'a card' in rest else 'cards')
+            return {'kind': 'event',
+                    'event': {'subject': 'you', 'verb': 'draw',
+                              'object': {'card': {
+                                  'card_type': {'kind': 'type', 'value': 'cards'},
+                                  'quantifier': q}}},
+                    'this_turn': True}
+        if body.startswith('you attacked'):
+            ev = {'subject': 'you', 'verb': 'attacks'}
+            if ' with ' in body:
+                tgt = self._simple_target(orig.split(' with ', 1)[-1])
+                if tgt:
+                    ev['object'] = {'with': {'card_target': tgt}}
+            return {'kind': 'event', 'event': ev, 'this_turn': True}
+        if body in ("you've lost life", 'you lost life', 'you have lost life'):
+            return {'kind': 'event',
+                    'event': {'subject': 'you', 'verb': 'lose',
+                              'object': 'life'},
+                    'this_turn': True}
+        if body in ('a creature died', 'one or more creatures died',
+                    'a creature has died'):
+            return {'kind': 'event',
+                    'event': {'subject': {'card_type': {
+                                  'kind': 'type', 'value': 'creature'},
+                              'quantifier': 'a'},
+                              'verb': 'dies'},
+                    'this_turn': True}
+        if body in ('this creature attacked', 'this permanent attacked'):
+            return {'kind': 'event',
+                    'event': {'subject': {'card_type': {
+                                  'kind': 'this_card', 'value': '~'}},
+                              'verb': 'attacks'},
+                    'this_turn': True}
+        if body in ('this creature died', 'this permanent died'):
+            return {'kind': 'event',
+                    'event': {'subject': {'card_type': {
+                                  'kind': 'this_card', 'value': '~'}},
+                              'verb': 'dies'},
+                    'this_turn': True}
+        if body == 'a permanent left the battlefield':
+            return {'kind': 'event',
+                    'event': {'subject': {'card_type': {
+                                  'kind': 'type', 'value': 'permanent'},
+                              'quantifier': 'a'},
+                              'verb': 'leaves'},
+                    'this_turn': True}
+        if body.startswith('you cast ') or body.startswith("you've cast "):
+            rest = orig.split('cast ', 1)[-1]
+            tgt = self._simple_target(rest)
+            if tgt:
+                return {'kind': 'event',
+                        'event': {'subject': 'you', 'verb': 'cast',
+                                  'object': tgt},
+                        'this_turn': True}
+        return None
+
     def _finalize(self, node, top=False):
         """Replace every remaining `text` fallback with an honest marker.
 
@@ -378,6 +490,10 @@ class Interpreter:
                 # "you control a Dragon" / "you control a creature with
                 # power 4 or greater": a controller condition with a simple
                 # card_target. Leave compounds (and/or/spells) to unparsed.
+                ev = self._event_this_turn(val)
+                if ev:
+                    node[key] = ev
+                    continue
                 # Object state: "it's a Mount", "it is a Vehicle",
                 # "it's a Zombie card", "it's tapped".
                 for pref in ("it's ", 'it is ', 'this creature is ',
