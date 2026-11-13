@@ -134,13 +134,28 @@ def load_my_outputs():
     return out
 
 
+HARD = {'fallback_text', 'illegal_quote', 'label_without_structure'}
+
+
 def check(out, sent, flags):
-    def walk(o):
+    def walk(o, parent=None):
         if isinstance(o, dict):
             verb = o.get('verb') if isinstance(o.get('verb'), str) else None
+            if 'text' in o:
+                flags.append(('fallback_text', sent, str(o['text'])[:80]))
+            if 'label' in o and not (
+                    'items' in o and any(k in o for k in ('connector', 'logic', 'kind'))):
+                flags.append(('label_without_structure', sent, str(o['label'])[:80]))
+            if 'quote' in o:
+                scoped = (verb in ('gain_quote', 'emblem')
+                          or 'token' in o or 'types' in o
+                          or 'power_toughness' in o
+                          or (verb == 'become' and ('target' in o or 'type' in o)))
+                if not scoped:
+                    flags.append(('illegal_quote', sent, str(o['quote'])[:80]))
             for k, v in o.items():
                 if k == 'verb' and v == 'raw':
-                    flags.append(('raw_action', sent, (o.get('text') or '').strip()))
+                    flags.append(('raw_action', sent, (o.get('fragment') or '').strip()))
                 elif k in ('pt', 'change', 'power', 'toughness') and isinstance(v, str):
                     if '/' in v and not _pt_ok(v):
                         flags.append(('pt_format', sent, f"{k}={v!r}"))
@@ -171,7 +186,7 @@ def check(out, sent, flags):
                         # target is the sentence-level subject, nothing was lost.
                         if not (k == 'card' and verb in OBJECTLESS_VERBS):
                             flags.append(('empty_target', sent, f"{k}={{}}"))
-                walk(v)
+                walk(v, o)
         elif isinstance(o, list):
             for x in o:
                 walk(x)
@@ -235,6 +250,11 @@ def main():
             else:
                 fh.write(f"{t}\t{d}\t{s}\n")
     print(f"\n[dumped {len(flags)} flags to invariant_flags.tsv]")
+    hard = [f for f in flags if f[0] in HARD]
+    if hard:
+        print(f"\nHARD FAIL: {len(hard)} invariant violations "
+              f"({sorted({f[0] for f in hard})})")
+        sys.exit(1)
 
 
 if __name__ == '__main__':

@@ -3849,10 +3849,17 @@ class Interpreter:
             parts = []
             for c in children:
                 if isinstance(c, Token) and c.type == 'LISTTOK':
-                    parts.append(decode_list_token(c.value).get('text', c.value))
+                    dec = decode_list_token(c.value)
+                    parts.append(dec.get('label') or dec.get('text') or c.value)
                 else:
                     parts.append(str(c))
-            return {'label': ' '.join(parts).strip(), 'lists': lists}
+            out = {'label': ' '.join(parts).strip(), 'lists': lists}
+            if lists:
+                first = lists[0]
+                for k in ('items', 'connector', 'logic', 'kind'):
+                    if k in first:
+                        out[k] = first[k]
+            return out
         return self._text(children)
 
     def i_raw_action(self, children):
