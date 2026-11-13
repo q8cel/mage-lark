@@ -4243,6 +4243,69 @@ class Interpreter:
             return {'verb': 'investigate'}
         return d
 
+    def i_replacement_sentence(self, children):
+        d = {'type': 'replacement'}
+        for ch in children:
+            if isinstance(ch, Tree):
+                if ch.data == 'replacement_cond':
+                    d['if'] = self.interp(ch)
+                elif ch.data == 'effect':
+                    d['instead'] = self.interp(ch)
+                elif ch.data in ('xdef_clause', 'xdef'):
+                    d['xdef'] = self.interp(ch)
+        return d
+
+    def i_replacement_cond(self, children):
+        """The replaced event of "If <subject> would <event>, <action> instead"."""
+        d = {}
+        subj = self._find_one(children, 'event_subject')
+        if subj is not None:
+            d['subject'] = self.interp(subj)
+        toks = [str(c).lower() for c in children if isinstance(c, Token)]
+        zn = self._find_one(children, 'zone')
+        if zn is not None:
+            d['verb'] = 'put_into'
+            d['zone'] = self.interp(zn)
+        elif 'die' in toks:
+            d['verb'] = 'die'
+            if 'turn' in toks:
+                d['this_turn'] = True
+        elif 'damage' in toks:
+            d['verb'] = 'deal_damage'
+            if 'noncombat' in toks:
+                d['kind'] = 'noncombat'
+            elif 'combat' in toks:
+                d['kind'] = 'combat'
+            dw = self._find_one(children, 'damage_who')
+            if dw is not None:
+                d['to'] = self.interp(dw)
+        elif 'put' in toks and 'on' in toks:
+            d['verb'] = 'put_counter'
+            ck = self._find_one(children, 'counter_kind')
+            if ck is not None:
+                d['counter'] = self._text(ck.children).strip()
+            ct = self._find_one(children, 'card_target')
+            if ct is not None:
+                d['on'] = self.interp(ct)
+        elif 'gain' in toks and 'life' in toks:
+            d['verb'] = 'gain_life'
+        elif 'lose' in toks and 'life' in toks:
+            d['verb'] = 'lose_life'
+            if 'during' in toks:
+                d['during'] = 'your turn' if 'your' in toks else 'their turn'
+        elif 'draw' in toks:
+            d['verb'] = 'draw'
+        elif 'created' in toks:
+            d['verb'] = 'create_token'
+            ct = self._find_one(children, 'card_target')
+            if ct is not None:
+                d['what'] = self.interp(ct)
+            if 'your' in toks:
+                d['controller'] = 'you control'
+        else:
+            d['text'] = self._text(children)
+        return d
+
     def i_if_sentence(self, children):
         d = {'type': 'if'}
         texts, eff = [], None

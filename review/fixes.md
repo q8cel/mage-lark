@@ -116,3 +116,28 @@ parse_fail 1,337 occ / 702 unique (from 1,395 / 733). Left: harmonize/persist/
 rebound keyword words are now accepted but their _action_ forms (e.g. a
 harmonize verb) are not; collect-evidence lines blocked on unrelated effects;
 the long tail below.
+
+### family: would-replacement clauses
+
+Measured on the ledger's `interpret_unparsed` rows: 51 texts / 158 occurrences
+contain a "would" replacement (the named family size is 49 / 155; the wider
+regex catches two more). Distribution by the event after "would": would be put
+38, would die 32, would deal 32, would be created 17, would draw 7, would
+create 6, would gain 5, would lose 5, would put 5, would be dealt 4, then
+one-offs (connive/pay/mill/explore).
+
+Built `replacement_sentence.2` with a closed `replacement_cond`
+(would die; would be put into a zone (+from anywhere); would put counters on;
+would deal damage; would be dealt damage; damage would be dealt; would gain/
+lose life; would draw a card; would be created) and a new output type
+`{type: replacement, if: <event>, instead: <action>}` reusing the event and
+action builders. The rule has priority 2 so it wins over the generic
+`any_text` if-sentence parse.
+
+| field | value |
+|---|---|
+| structured | 22 texts / 89 of 158 occurrences (56%); prior shape was raw condition text |
+| rule count | 3,410 -> 3,452 (+42) |
+| timing | ABBA 15-word parse 0.530 -> 0.542 s (1.023x) |
+| left | the remaining 67 occurrences need passive replacement actions ("twice that many of those tokens are created", "it deals twice that much damage") and conditions outside the closed set ("would lose unspent mana", "would connive/explore", "while …" tails). The passive multiplication side is a second structure, not a condition variant. |
+| tests | if-instead / if-relative-life updated to assert the replacement shape (the deliberate contract change) |
