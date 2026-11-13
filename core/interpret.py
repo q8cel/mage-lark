@@ -507,6 +507,37 @@ class Interpreter:
                 if controller:
                     subj['controller'] = controller
                 return {'subject': subj, 'verb': 'dies'}
+        mcast = re.match(r'^(.*?)\bcas(?:t|ts)\b(.*)$', low)
+        if mcast:
+            head, tail = mcast.group(1), mcast.group(2)
+            subject = None
+            if head.strip() in ('you', 'a player', 'an opponent',
+                                'each opponent', 'each player'):
+                subject = head.strip()
+            elif head.strip().startswith('you '):
+                subject = 'you'
+            if subject:
+                rest = tail.strip()
+                if rest.startswith(('your ', 'their ', 'a ')):
+                    rest = rest.split(' ', 1)[1]
+                ordinal = None
+                for w in ('first', 'second', 'third', 'fourth'):
+                    if rest.startswith(w + ' '):
+                        ordinal = w
+                        rest = rest[len(w) + 1:]
+                        break
+                ev = {'subject': subject, 'verb': 'cast'}
+                obj = self._simple_target(rest.split(' this turn')[0]
+                                          .split(' each turn')[0].strip())
+                if obj:
+                    ev['object'] = obj
+                if ordinal:
+                    ev['ordinal'] = ordinal
+                if 'each turn' in low:
+                    ev['window'] = 'each turn'
+                elif 'this turn' in low:
+                    ev['window'] = 'this turn'
+                return ev
         if low in ('~ enter', '~ enters', 'this creature enters'):
             return {'subject': {'card_type': {'kind': 'this_card',
                                               'value': '~'}},
