@@ -3411,9 +3411,14 @@ class Interpreter:
                 else:
                     val = self.interp(ch)
                     if isinstance(val, dict):
-                        d.update(val)
-                    else:
-                        d['text'] = val
+                        if 'text' in val:
+                            # "To solve — You control seven or more lands":
+                            # the statement is the ability's condition.
+                            d['condition'] = val['text']
+                        else:
+                            d.update(val)
+                    elif val:
+                        d['condition'] = val
         return d
 
     def i_loyalty_sentence(self, children):
@@ -3500,6 +3505,11 @@ class Interpreter:
         return {'xdef': self.interp(children[-1]) if children else None}
 
     def i_modal_sentence(self, children):
+        txt = ' '.join(self._text(children).split()).rstrip('.').lower()
+        if txt == 'choose one':
+            return {'type': 'modal', 'choose': 1}
+        if txt == "choose one that hasn't been chosen":
+            return {'type': 'modal', 'choose': 1, 'unchosen': True}
         return {'type': 'modal', 'text': self._text(children)}
 
     def i_enchanted_sentence(self, children):
@@ -3533,8 +3543,17 @@ class Interpreter:
         return {'type': 'static', 'target': target, 'effect': eff}
 
     def i_static_sentence(self, children):
-        d = {'type': 'static', 'text': self._text(children)}
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        if 'activate' in toks and 'only' in toks:
+            if 'sorcery' in toks:
+                return {'type': 'static', 'activate_only': 'as a sorcery'}
+            if 'during' in toks and 'your' in toks and 'turn' in toks:
+                return {'type': 'static', 'activate_only': 'during your turn'}
+            if 'once' in toks and ('each' in toks or 'per' in toks):
+                return {'type': 'static', 'activate_only': 'once each turn'}
+            if 'once' in toks:
+                return {'type': 'static', 'activate_only': 'once'}
+        d = {'type': 'static', 'text': self._text(children)}
         eff = self._find_one(children, 'effect')
         if eff is not None:
             d['effect'] = self.interp(eff)
@@ -3567,6 +3586,10 @@ class Interpreter:
                            'object': 'top card of your library',
                            'any_time': True}
             d.pop('text', None)
+        pref = self._find_one(children, 'ability_word_prefix')
+        if pref is not None and 'text' in d:
+            d['ability_word'] = self._ability_word(pref)
+            d['condition'] = d.pop('text')
         return d
 
     def i_ward_cost(self, children):
