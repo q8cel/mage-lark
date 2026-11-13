@@ -12,7 +12,6 @@ import paths as _paths
 _paths.bootstrap()
 import re
 
-from lists import protect as protect_lists
 
 def strip_reminders(text):
     """Remove all parenthetical (reminder) groups, handling nested parens."""
@@ -146,5 +145,7 @@ def segment(text, names=None):
             if not s_body:
                 continue
             modal = bool(re.match(r'^(Choose one|Choose [a-z]+)$', s_body))
-            items.append({'text': protect_lists(s_body), 'modal': modal, 'bullet': bullet})
+            # `text` is the decoded sentence; the parser protects list spans
+            # itself (lists.parse_ready), so no @@L token is ever persisted.
+            items.append({'text': s_body, 'modal': modal, 'bullet': bullet})
     return items

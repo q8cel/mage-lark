@@ -182,6 +182,12 @@ def main():
         work = work[:args.n]
         total_occ = len(work)
     uniq = sorted(set(work))
+    # Sentence text is surface text: a protected-list token here means an
+    # upstream stage persisted the parser form (see lists.parse_ready).
+    bad = next((t for t in uniq if '@@' in t), None)
+    if bad is not None:
+        raise SystemExit(
+            f"sentence text contains a protected-list token: {bad[:120]!r}")
     print(f"occurrences={total_occ}  unique_texts={len(uniq)}")
 
     # ---- parse cache ----
@@ -190,6 +196,13 @@ def main():
     cache = {}
     if not args.no_cache and os.path.exists(parse_cache_path):
         cache = json.load(open(parse_cache_path))
+        # Sentence texts are decoded now; old entries were keyed by the
+        # protected-list form and can only be stale.
+        stale = [k for k in cache if '@@' in k]
+        for k in stale:
+            cache.pop(k)
+        if stale:
+            print(f"[parse-cache] dropped {len(stale)} protected-list keys")
         print(f"[parse-cache] {len(cache)} entries from grammar hash {gh}")
 
     # --seed: additive-grammar optimization. When this edit only ADDED parse
