@@ -51,3 +51,47 @@ Counts are verdict rows matching the note shape when last measured.
 | static_text / i_static_sentence | 95 / 497 | fixed enum: trigger/action once-each-turn, start engines, uncounterable, type retention, damage-prevention disabled, loss lock, mode repeat, enchant creature you control, plus split enchant+`you control` join: 329 occurrences closed | 168 occurrences (arbitrary "Activate only if …", free-form statics) |
 | xdef_text / i_xdef* | 73 / 134 | six highest-frequency raw expressions normalized (your speed, your life total, its power, that spell's mana value, life gained this turn, +1/+1 counters on ~): 51 occurrences closed | 83 occurrences, varied (number-of/among/color-pair forms) |
 | trigger_text / i_trigger_clause | 379 / 634 | one-or-more [other] X you control die (83), a creature you control attacks alone (44), ~ enters (13): 140 occurrences closed | ~494 occurrences: cast/activate/unlock/commit-crime/expend and compound enter-or-turn-face-up events |
+
+## Parse-gap batches (parse-fail ledger, Standard)
+
+Queue: `review/gap_ledger.tsv`, class `parse_fail` (781 unique / 1,463 occurrences
+against 20,754/22,217 parse), grouped by `head`; top-10 heads cover 12.71% and the
+rest is a long tail. Sampling shows the heads are tail problems (the trigger prefix
+parses; the effect/clause after the comma fails), so causes were picked by tail
+shape across heads, not head by head.
+
+### batch: Level-N frame marker
+
+| field | value |
+|---|---|
+| gap | `{W}: Level 2` — the activated/level-up effect is the marker `Level N`; no action matched it, so the line died after the colon |
+| change | `level_action: "Level" number` in the action list; `i_level_action` -> `{verb: level, level: N}` |
+| texts fixed | 21 unique / 28 occurrences (all `Level 2`/`Level 3` lines) |
+| rule count | 3,338 -> 3,340 (+2) |
+| timing | ABBA 15-word parse 1.113 s -> 1.127 s (1.013x, noise) |
+| corpus delta | Standard seeded parse 20,754 -> 20,782; failures 1,463 -> 1,435 occ / 781 -> 760 uniq. FDN honest unchanged 1,494/1,653 (90.4%) |
+| left | `Level N` lines with a non-cost prefix (e.g. "Level up" costs) not present upstream |
+
+### batch: Craft-with keyword line
+
+| field | value |
+|---|---|
+| gap | `Craft with <arg> {cost}` — a keyword ability line whose argument is a card kind / list / quantifier and whose trailing mana is the craft cost; the sentence dispatcher had no rule for it (CHAR at the `{`) |
+| change | `craft_sentence: "Craft" "with" craft_arg MANA+`; `craft_arg` = `one or more [target]` / `amount or more target` / `target ("," target)* (","? "and" target)?`; `i_craft_sentence` returns `type: craft`, `with`, `cost` |
+| texts fixed | 18 unique / 22 occurrences (`Craft with artifact/creature/Cave/Island/Dinosaurs`, list and "two creatures" forms) |
+| rule count | 3,340 -> 3,351 (+11) |
+| timing | ABBA 15-word parse 0.433 s -> 0.436 s (1.007x) |
+| corpus delta | Standard seeded parse 20,782 -> 20,804; failures 1,435 -> 1,413 occ / 760 -> 742 uniq. FDN honest unchanged 1,494/1,653 (90.4%) |
+| left | `Craft with four or more nonlands with activated abilities {8}{U}` (card_target lacks the relative "with activated abilities" modifier) |
+
+### batch: double/triple power and toughness
+
+| field | value |
+|---|---|
+| gap | `Double the power and toughness of X`, `Double target creature's power and toughness`, `Double the power of X`, `Double its power and toughness and it gains trample`, `Double all damage … would deal`, `Triple target creature's power and toughness` — double_action only knew "double the number of X" and "double X's power" |
+| change | double_action gains the power-and-toughness forms, the all-damage form, "the power of X", the anaphoric "its power and toughness and it gains kw", and V_TRIPLE forms; i_double_action reports verb triple when the V_TRIPLE token is present |
+| texts fixed | 8 unique / 16 occurrences measured for the drafted set; seeded Standard delta is +18 occurrences / +9 unique (one extra text resolved through the new alternatives) |
+| rule count | 3,351 -> 3,371 (+20) |
+| timing | ABBA 15-word parse 0.684 s -> 0.666 s (noise, no regression) |
+| honest | parse-only gain: the pipeline tags verb `double` as `raw_action` by design (`_unparsed_tag`), so these sentences add parse coverage but not honest coverage. FDN honest stays 1,494/1,653 (the single FDN "Double …" line becomes parse-only, not honest) |
+| left | relative-clause targets ("Double all damage that sources you control of the chosen type would deal" card-target tails) are now covered, but "double strike" texts are unrelated; making double honest needs an interpret-schema decision (out of this grammar phase) |

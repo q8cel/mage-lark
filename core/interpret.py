@@ -1859,6 +1859,26 @@ class Interpreter:
     KW_ACTION_VERBS = ('blight', 'waterbend', 'discover', 'amass', 'connive',
                        'recruit', 'forage', 'airbend', 'devour')
 
+    def i_craft_sentence(self, children):
+        d = {'type': 'craft'}
+        for ch in children:
+            if isinstance(ch, Tree) and ch.data == 'craft_arg':
+                d['with'] = self.interp(ch)
+        mana = ''.join(str(c) for c in children
+                       if isinstance(c, Token) and c.type == 'MANA')
+        if mana:
+            d['cost'] = mana
+        return d
+
+    def i_level_action(self, children):
+        """Level-up frame marker: "{1}{U}: Level 2"."""
+        for ch in children:
+            if isinstance(ch, Tree):
+                n = self._first_number(ch.children)
+                if n is not None:
+                    return {'verb': 'level', 'level': n}
+        return {'verb': 'level', 'level': self._first_number(children)}
+
     def i_keyword_action(self, children):
         """Keyword actions with an optional parameter: blight N, waterbend {N},
         discover N, amass <type> N, connives, recruit, forage, airbend <target>,
@@ -3339,7 +3359,9 @@ class Interpreter:
         return d
 
     def i_double_action(self, children):
-        d = {'verb': 'double'}
+        triple = any(isinstance(c, Token) and c.type == 'V_TRIPLE'
+                     for c in children)
+        d = {'verb': 'triple' if triple else 'double'}
         d['text'] = self._text(children)
         return d
 

@@ -33,6 +33,7 @@ sentence: prefixed_static
         | xdef_sentence
         | round_up_sentence
         | cost_dash_sentence
+        | craft_sentence
         | spend_mana_fallback
 
 // ----------------------------------------------------------------------------
@@ -416,8 +417,10 @@ action: add_mana_action
        | cloak_action
        | exchange_control_action
        | keyword_action
+       | level_action
 
 investigate_action: (who)? V_INVESTIGATE ("twice" | amount "times")? ("for" "each" player "who" "lost" "life" "this" "turn")?
+level_action: "Level" number
 keyword_action: V_BLIGHT amount
               | V_WATERBEND MANA+
               | V_DISCOVER amount
@@ -884,6 +887,12 @@ cost_amount: amount | MANA+
 
 double_action: V_DOUBLE "the" "number" "of" any_text
              | V_DOUBLE card_target "'s" "power" ("until" "end" "of" "turn")?
+             | V_DOUBLE "the" "power" "and" "toughness" "of" card_target ("until" "end" "of" "turn")?
+             | V_DOUBLE card_target "'s" "power" "and" "toughness" ("until" "end" "of" "turn")?
+             | V_DOUBLE "all" "damage" ("that")? card_target "would" "deal"
+             | V_DOUBLE "the" "power" "of" card_target ("until" "end" "of" "turn")?
+             | V_DOUBLE ("its" | "their") "power" "and" "toughness" ("until" "end" "of" "turn")? "and" "it" "gains" kw_list
+             | V_TRIPLE ("the" "power" "and" "toughness" "of" card_target | card_target "'s" "power" "and" "toughness") ("until" "end" "of" "turn")?
 distribute_action: V_DISTRIBUTE any_text
                  | V_DISTRIBUTE counter_amount counter_kind "among" amount ("," amount)* ("," "or" amount)? "target" "creatures"
 separate_action: V_SEPARATE "them" "into" "a" "face-down" "pile" "and" "a" "face-up" "pile"
@@ -901,6 +910,11 @@ pay_action: V_PAY MANA+ ("rather" "than" "pay" ("this" "spell's" | "its") "mana"
 end_turn_action: "End" "the" "turn"
 transform_action: V_TRANSFORM card_target
 V_TRANSFORM: /\btransforms?\b/i
+craft_sentence: "Craft" "with" craft_arg MANA+
+craft_arg: "one" "or" "more" card_target?
+         | amount "or" "more" card_target
+         | card_target ("," card_target)* (","? "and" card_target)?
+
 for_each_sentence: ("For" | "for") "each" card_target "," effect xdef_clause?
                 | ("For" | "for") "each" card_target any_text "," effect
                 | ("For" | "for") "each" counter_kind "on" card_target "," effect
@@ -1256,6 +1270,7 @@ V_MANIFEST: /\bmanifests?\b/i
 V_CYCLE: /\bcycle\b/i
 V_CLOAK: /\bcloak\b/i
 V_DOUBLE: /\bdouble\b/i
+V_TRIPLE: /\btriple(s)?\b/i
 V_DISTRIBUTE: /\bdistributes?\b/i
 V_CHANGE: /\bchange\b/i
 V_SPEND: /\b(spend|spent)\b/i
