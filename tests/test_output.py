@@ -77,8 +77,9 @@ add("if-able-on-action",
 add("page-counter-condition",
     "When there are four or more page counters on this artifact, exile it",
     lambda o: has(o, lambda d: isinstance(d.get('condition'), dict)
-                  and d['condition'].get('reason') == 'condition_text'
-                  and d['condition'].get('fragment') == 'there are four or more page counters on this artifact'))
+                  and d['condition'].get('kind') == 'count'
+                  and d['condition'].get('quantity') == {'at_least': 4}
+                  and 'page counters' in str(d['condition'].get('of', {}))))
 add("during-turn-event",
     "Whenever a creature you control deals combat damage during your turn, put that many +1/+1 counters on it",
     lambda o: has(o, lambda d: d.get('condition') == 'during your turn'))

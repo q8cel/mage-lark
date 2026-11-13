@@ -378,6 +378,10 @@ class Interpreter:
                 break
         if not t:
             return None
+        if t.strip().lower() in ('this creature', 'this permanent',
+                                 'this enchantment', 'this artifact',
+                                 'this land', 'this card'):
+            return {'card_type': {'kind': 'this_card', 'value': '~'}}
         d = {'card_type': {'kind': 'type', 'value': t.strip()}}
         if q:
             d['quantifier'] = q
@@ -508,6 +512,43 @@ class Interpreter:
                                  'state': 'first_time_this_turn',
                                  'this_turn': True}
                     continue
+                if low.startswith('there are ') and ' or more ' in low:
+                    body = val.strip()[len('there are '):]
+                    num, rest = body.split(' or more ', 1)
+                    mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                          'five': 5, 'six': 6, 'seven': 7, 'eight': 8,
+                          'nine': 9, 'ten': 10}
+                    n = int(num) if num.isdigit() else mp.get(num.lower())
+                    if n is not None:
+                        rlow = rest.lower().strip().rstrip('.')
+                        of = None
+                        if ' among ' in rlow:
+                            continue
+                        if ' in ' in rlow:
+                            unit, zone = rest.split(' in ', 1)
+                            zl = zone.lower()
+                            for zname in ('graveyard', 'library', 'hand',
+                                          'exile', 'battlefield'):
+                                if zname in zl:
+                                    of = {'card_target': {
+                                              'card_type': {'kind': 'type',
+                                                            'value': unit.strip()}},
+                                          'zone': {'prep': 'in',
+                                                   'zone': zname,
+                                                   'possessor': ('you' if 'your' in zl else 'their')}}
+                                    break
+                        elif ' counter' in rlow:
+                            on = None
+                            if ' on ' in rlow:
+                                unit, on = rest.rsplit(' on ', 1)
+                                on = self._simple_target(on)
+                            if on:
+                                of = {'counter': unit.strip(), 'on': on}
+                        if of:
+                            node[key] = {'kind': 'count',
+                                         'quantity': {'at_least': n},
+                                         'of': of}
+                            continue
                 if low.startswith('you may '):
                     rest = val.strip()[len('you may '):]
                     parts = rest.split(' ', 1)
