@@ -374,6 +374,35 @@ class Interpreter:
                     node[key] = {'kind': 'event_ref', 'actor': parts[0],
                                  'polarity': ('positive' if parts[1] == 'do'
                                               else 'negative')}
+                    continue
+                # "you control a Dragon" / "you control a creature with
+                # power 4 or greater": a controller condition with a simple
+                # card_target. Leave compounds (and/or/spells) to unparsed.
+                if low.startswith('you control '):
+                    rest = val.strip()[len('you control '):]
+                    mod = None
+                    for sep in (' with ', ' that ', ' whose ', ' without '):
+                        if sep in rest.lower():
+                            cut = rest.lower().index(sep)
+                            rest, mod = rest[:cut], rest[cut + 1:]
+                            break
+                    base_low = rest.lower()
+                    if ' and ' not in base_low and ' or ' not in base_low:
+                        mq = None
+                        for qw in ('a', 'an', 'each', 'target', 'up to'):
+                            if rest.lower().startswith(qw + ' '):
+                                mq = qw
+                                rest = rest[len(qw) + 1:]
+                                break
+                        if rest:
+                            ct = {'card_type': {'kind': 'type',
+                                                'value': rest.strip()},
+                                  'controller': 'you control'}
+                            if mq:
+                                ct['quantifier'] = mq
+                            if mod:
+                                ct['modifier'] = mod.strip()
+                            node[key] = {'kind': 'control', 'card_target': ct}
         src = 'i_' + str(node.get('verb') or node.get('type') or 'sentence')
         for key, reason in (('condition', 'condition_text'),
                             ('if', 'condition_text'),
