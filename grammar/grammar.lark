@@ -26,6 +26,7 @@ sentence: prefixed_static
         | until_sentence
         | triggered_sentence
         | if_sentence
+        | replacement_sentence
         | static_sentence
         | static_keyword_sentence
         | effect_sentence
@@ -42,6 +43,21 @@ sentence: prefixed_static
 spend_mana_fallback: "Spend" "this" "mana" "only" "to" any_text
 deck_rule: "A" "deck" "can" "have" ("any" "number" "of" | amount) "cards" "named" (THIS_CARD | CARDNAME)
 round_up_sentence: "Round" "up" "each" "time"
+
+replacement_sentence.2: ability_word_prefix? V_IF replacement_cond "," effect xdef_clause? instead_suffix?
+replacement_cond: event_subject "would" "die" ("this" "turn")?
+                | event_subject "would" "be" "put" "into" zone ("from" (zone | "anywhere"))?
+                | event_subject "would" "be" "put" "on" card_target
+                | "one" "or" "more" counter_kind "would" "be" "put" "on" card_target
+                | counter_amount counter_kind "would" "be" "put" "on" card_target
+                | event_subject "would" "deal" ("noncombat" | "combat")? "damage" ("to" damage_who)?
+                | event_subject "would" "be" "dealt" "damage"
+                | "damage" "would" "be" "dealt" ("to" card_target)?
+                | player "would" "gain" "life"
+                | player "would" "lose" "life" ("during" OWNER? "turn")?
+                | V_YOU "would" "draw" "a" "card"
+                | "one" "or" "more" card_target "would" "be" "created" ("under" "your" "control")?
+                | card_target "would" "be" "created" ("under" "your" "control")?
 
 if_sentence: ability_word_prefix? V_IF any_text "," effect xdef_clause? instead_suffix?
             | V_IF any_text "," any_text
@@ -601,6 +617,7 @@ deal_damage_action: card_target V_DEAL dmg_amount? "damage" "to" damage_who ("an
                   | card_target V_DEAL "damage" "equal" "to" any_text "divided" "as" any_text "chooses" "among" any_text
                   | card_target V_DEAL dmg_amount "damage" "divided" divided_rest
 damage_who: card_target "or" card_target
+          | card_target "or" player
           | "target" "player" "and" "each" "creature" "that" "player" "controls"
           | card_target "or" card_target ("it's" | "they're") "attacking"
           | "target" "player" "or" "planeswalker"
@@ -1093,6 +1110,7 @@ otherness: V_OTHER | V_ANOTHER
 nontoken: NONTYPE ("," NONTYPE)*
 NONTYPE: /non(?:token|creature|land|basic|black|white|green|red|blue|multicolored)|non-[A-Z][a-zA-Z]+/i
 quantifier: V_ALL | V_EACH | "every" | V_TARGET | "no" | "any number of" | "any number of" V_TARGET | "up to" amount | "that" "many" | "up to" "that" "many"
+          | "one" "or" "more"
           | "half" "the"
           | V_UP V_TO amount "other" V_TARGET | amount "other" V_TARGET | amount "or" "more"
           | V_UP V_TO amount V_TARGET | V_UP V_TO amount | amount V_TARGET | amount | V_A "second" V_TARGET | V_A | V_AN

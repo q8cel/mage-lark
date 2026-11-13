@@ -828,11 +828,14 @@ add("if-decomposed", "If you control three or more creatures, draw a card",
                   and isinstance(d.get('effect'), dict)
                   and d['effect'].get('verb') == 'draw'))
 add("if-instead", "If a card would be put into an opponent's graveyard from anywhere, exile it instead",
-    lambda o: has(o, lambda d: d.get('type') == 'if' and d.get('instead') is True
-                  and d.get('effect', {}).get('verb') == 'exile'))
+    lambda o: has(o, lambda d: d.get('type') == 'replacement'
+                  and d.get('if', {}).get('verb') == 'put_into'
+                  and d.get('instead', {}).get('verb') == 'exile'))
 add("if-relative-life", "If you would gain life, you gain twice that much life instead",
-    lambda o: has(o, lambda d: d.get('effect', {}).get('verb') == 'gain_life'
-                  and 'twice' in str(d.get('effect', {}).get('amount', ''))))
+    lambda o: has(o, lambda d: d.get('type') == 'replacement'
+                  and d.get('if', {}).get('verb') == 'gain_life'
+                  and d.get('instead', {}).get('verb') == 'gain_life'
+                  and 'twice' in str(d.get('instead', {}).get('amount', ''))))
 add("put-with-subject", "that player puts it into their hand",
     lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'hand'
                   and d.get('who') == 'that player'))
@@ -872,7 +875,9 @@ add("start-engines", "Start your engines!",
 add("ability-word-activated", "Max speed — {3}, Exile this card from your graveyard: Draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'activated'))
 add("ability-word-if", "Flare Star — If a Wizard you control would deal damage to a permanent or player, it deals double that damage instead",
-    lambda o: has(o, lambda d: d.get('type') == 'if'))
+    lambda o: has(o, lambda d: d.get('type') == 'replacement'
+                  and d.get('if', {}).get('verb') == 'deal_damage'
+                  and d.get('instead', {}).get('verb') == 'deal_damage'))
 add("empower", "When ~ enters, empower Jace 5",
     lambda o: has(o, lambda d: d.get('verb') == 'empower'))
 add("collect-evidence", "As an additional cost to cast this spell, you may collect evidence 6",

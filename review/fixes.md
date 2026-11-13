@@ -119,3 +119,28 @@ the long tail below.
 
 | trigger_text event-kind groups | cast 103, unlock 45, commit-crime 27, activate 20, expend 14, face-up/transform 35 | 763f4c9 (cast), 1945a40 (commit/expend/unlock/activate), c96fe36 (face-up/transform): {kind:event, event:{subject,verb,object,window/ordinal/amount}} | trigger_text residual ~270 occ, mostly compound enter-or-turn-face-up and free-form one-offs |
 | Standard honest after condition+trigger readbacks | parse 20,822/22,217 (93.7%), honest 18,662/22,217 (84.0%), unique 6,072; interpret_unparsed 2,160 occ / 1,161 unique | approximate marker split from ledger closures: condition ~1,317, trigger ~270, static 168, no_handler 125, raw_action 109, xdef 83, object 64, modifier 24 | remaining condition heads: would-replacement 155, triggered-ability 42, there-are 37, you-put 23, opponent-comparison 19 |
+
+### family: would-replacement clauses
+
+Measured on the ledger's `interpret_unparsed` rows: 51 texts / 158 occurrences
+contain a "would" replacement (the named family size is 49 / 155; the wider
+regex catches two more). Distribution by the event after "would": would be put
+38, would die 32, would deal 32, would be created 17, would draw 7, would
+create 6, would gain 5, would lose 5, would put 5, would be dealt 4, then
+one-offs (connive/pay/mill/explore).
+
+Built `replacement_sentence.2` with a closed `replacement_cond`
+(would die; would be put into a zone (+from anywhere); would put counters on;
+would deal damage; would be dealt damage; damage would be dealt; would gain/
+lose life; would draw a card; would be created) and a new output type
+`{type: replacement, if: <event>, instead: <action>}` reusing the event and
+action builders. The rule has priority 2 so it wins over the generic
+`any_text` if-sentence parse.
+
+| field | value |
+|---|---|
+| structured | 22 texts / 89 of 158 occurrences (56%); prior shape was raw condition text |
+| rule count | 3,410 -> 3,452 (+42) |
+| timing | ABBA 15-word parse 0.530 -> 0.542 s (1.023x) |
+| left | the remaining 67 occurrences need passive replacement actions ("twice that many of those tokens are created", "it deals twice that much damage") and conditions outside the closed set ("would lose unspent mana", "would connive/explore", "while …" tails). The passive multiplication side is a second structure, not a condition variant. |
+| tests | if-instead / if-relative-life updated to assert the replacement shape (the deliberate contract change) |
