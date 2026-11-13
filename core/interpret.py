@@ -16,7 +16,7 @@ Usage:
     out = it.interp(parser.parse(sentence)) # -> list of sentence dicts
 """
 
-import os as _os, sys as _sys
+import os as _os, sys as _sys, re
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import paths as _paths
 _paths.bootstrap()
@@ -569,6 +569,54 @@ class Interpreter:
                 if low == 'the gift was promised':
                     node[key] = {'kind': 'gift', 'state': 'promised'}
                     continue
+                if low == "the gift wasn't promised":
+                    node[key] = {'kind': 'gift', 'state': 'not_promised'}
+                    continue
+                if low.startswith('five or more mana was spent'):
+                    node[key] = {'kind': 'spell_state',
+                                 'state': 'mana_spent_at_least',
+                                 'amount': 5}
+                    continue
+                if low.startswith('x is '):
+                    rest = low[5:].strip()
+                    q = None
+                    mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                          'five': 5, 'six': 6, 'seven': 7, 'eight': 8,
+                          'nine': 9, 'ten': 10}
+                    for w, n in mp.items():
+                        if rest.startswith(w + ' or more'):
+                            q = {'at_least': n}
+                            break
+                        if rest.startswith(w + ' or less'):
+                            q = {'at_most': n}
+                            break
+                    if q is None:
+                        mm = re.match(r'^(\d+) or (more|less)', rest)
+                        if mm:
+                            q = ({'at_least': int(mm.group(1))}
+                                 if mm.group(2) == 'more' else
+                                 {'at_most': int(mm.group(1))})
+                    if q:
+                        node[key] = {'kind': 'xdef_compare', 'x': True,
+                                     'quantity': q}
+                        continue
+                mpl = re.match(
+                    r'^(a|an|each|target) player has (\w+|[0-9]+) or (less|more) life$',
+                    low)
+                if mpl:
+                    mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                          'five': 5, 'six': 6, 'seven': 7, 'eight': 8,
+                          'nine': 9, 'ten': 10}
+                    n = (int(mpl.group(2)) if mpl.group(2).isdigit()
+                         else mp.get(mpl.group(2)))
+                    if n is not None:
+                        node[key] = {
+                            'kind': 'count', 'unit': 'life',
+                            'subject': {'player': mpl.group(1)},
+                            'quantity': ({'at_most': n}
+                                         if mpl.group(3) == 'less'
+                                         else {'at_least': n})}
+                        continue
                 if low in ("it's your turn", 'it is your turn'):
                     node[key] = {'kind': 'state', 'subject': 'turn',
                                  'state': {'status': 'your_turn'}}
@@ -643,8 +691,9 @@ class Interpreter:
                     continue
                 # Object state: "it's a Mount", "it is a Vehicle",
                 # "it's a Zombie card", "it's tapped".
-                for pref in ("it's ", 'it is ', 'this creature is ',
-                             'this permanent is '):
+                for pref in ("it's ", 'it is ', 'it was ', 'it wasn\'t ',
+                             'this creature is ', 'this creature was ',
+                             'this permanent is ', 'this permanent was '):
                     if low.startswith(pref):
                         rest = val.strip()[len(pref):]
                         rlow = rest.lower().rstrip('.')
@@ -684,6 +733,22 @@ class Interpreter:
                             rest, mod = rest[:cut], rest[cut + 1:]
                             break
                     base_low = rest.lower()
+                    qty = None
+                    mpq = {'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                           'five': 5, 'six': 6, 'seven': 7, 'eight': 8,
+                           'nine': 9, 'ten': 10}
+                    mqty = re.match(
+                        r'^(one|two|three|four|five|six|seven|eight|nine|ten|[0-9]+) or (more|less|fewer) ',
+                        base_low)
+                    if mqty:
+                        n = (int(mqty.group(1)) if mqty.group(1).isdigit()
+                             else mpq.get(mqty.group(1)))
+                        if n is not None:
+                            qty = ({'at_least': n}
+                                   if mqty.group(2) == 'more'
+                                   else {'at_most': n})
+                            rest = rest[mqty.end():]
+                            base_low = rest.lower()
                     if ' and ' not in base_low and ' or ' not in base_low:
                         mq = None
                         for qw in ('a', 'an', 'each', 'target', 'up to'):
@@ -699,7 +764,10 @@ class Interpreter:
                                 ct['quantifier'] = mq
                             if mod:
                                 ct['modifier'] = mod.strip()
-                            node[key] = {'kind': 'control', 'card_target': ct}
+                            cond = {'kind': 'control', 'card_target': ct}
+                            if qty:
+                                cond['quantity'] = qty
+                            node[key] = cond
         src = 'i_' + str(node.get('verb') or node.get('type') or 'sentence')
         for key, reason in (('condition', 'condition_text'),
                             ('if', 'condition_text'),
