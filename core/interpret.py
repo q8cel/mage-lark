@@ -373,6 +373,22 @@ class Interpreter:
         t = text.strip()
         if not t:
             return None
+        controller = None
+        zone = None
+        low0 = t.lower()
+        for suf, ctl in ((' you control', 'you control'),
+                         (' an opponent controls', 'an opponent controls'),
+                         (" an opponent's control", "an opponent's control")):
+            if low0.endswith(suf):
+                t = t[:-len(suf)]
+                controller = ctl
+                low0 = t.lower()
+                break
+        mzone = re.match(r'^(.*) in (your|their|a|an) (graveyard|library|hand|exile)$', low0)
+        if mzone:
+            t = t[:mzone.end(1)].strip()
+            zone = {'prep': 'in', 'zone': mzone.group(3),
+                    'possessor': 'you' if mzone.group(2) == 'your' else 'their'}
         q = None
         mp = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
               'six': 6, 'seven': 7, 'eight': 8}
@@ -403,6 +419,10 @@ class Interpreter:
         d = {'card_type': {'kind': 'type', 'value': t.strip()}}
         if q:
             d['quantifier'] = q
+        if controller:
+            d['controller'] = controller
+        if zone:
+            d['zone'] = zone
         if mod:
             d['modifier'] = mod.strip()
         return d
@@ -4175,8 +4195,57 @@ class Interpreter:
 
     def _normalize_xdef(self, val):
         if not isinstance(val, list) or any(isinstance(x, dict) for x in val):
+            if (isinstance(val, list) and len(val) >= 4
+                    and [str(x).lower() for x in val[:3]]
+                    == ['the', 'number', 'of']
+                    and isinstance(val[-1], dict)):
+                tgt = val[-1]
+                unit = None
+                if isinstance(tgt.get('card_type'), dict):
+                    unit = tgt['card_type'].get('value')
+                if unit:
+                    return {'kind': 'count', 'unit': unit, 'of': tgt}
             return val
-        txt = ' '.join(str(x) for x in val).lower().strip()
+        orig = ' '.join(str(x) for x in val).strip()
+        txt = orig.lower()
+        if txt.startswith('the number of '):
+            rest = orig[len('the number of '):]
+            rl = rest.lower()
+            if ' on ' in rl:
+                unit, on = rest.split(' on ', 1)
+                tgt = self._simple_target(on)
+                if tgt:
+                    return {'kind': 'count', 'unit': unit.strip(),
+                            'on': tgt}
+            if ' among ' in rl:
+                unit, among = rest.split(' among ', 1)
+                tgt = self._simple_target(among)
+                if tgt:
+                    return {'kind': 'count', 'unit': unit.strip(),
+                            'of': tgt}
+            if rl.startswith('colors of mana spent'):
+                return {'kind': 'count', 'unit': 'colors',
+                        'of': 'mana spent to cast this spell'}
+            if ' you control' in rl or ' an opponent controls' in rl:
+                tgt = self._simple_target(rest)
+                if tgt:
+                    unit = rest.lower().split(' you control')[0].split(' an opponent controls')[0].strip()
+                    return {'kind': 'count', 'unit': unit, 'of': tgt}
+        mg = re.match(r'^the greatest (power|toughness|mana value) among (.+)$',
+                      txt)
+        if mg:
+            tgt = self._simple_target(orig[len('the greatest '):][len(mg.group(1)) + len(' among '):])
+            if tgt:
+                return {'kind': 'greatest', 'stat': mg.group(1), 'of': tgt}
+        if txt == "the sacrificed creature's mana value":
+            return {'kind': 'stat', 'stat': 'mana_value',
+                    'possessor': 'sacrificed creature'}
+        if txt == 'the difference between its power and toughness':
+            return {'kind': 'difference', 'stat': 'power_toughness',
+                    'possessor': 'its'}
+        if txt == 'their total power':
+            return {'kind': 'stat', 'stat': 'total_power',
+                    'possessor': 'their'}
         table = {
             'your speed':
                 {'kind': 'stat', 'stat': 'speed', 'possessor': 'your'},
