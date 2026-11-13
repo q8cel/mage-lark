@@ -416,8 +416,10 @@ action: add_mana_action
        | cloak_action
        | exchange_control_action
        | keyword_action
+       | level_action
 
 investigate_action: (who)? V_INVESTIGATE ("twice" | amount "times")? ("for" "each" player "who" "lost" "life" "this" "turn")?
+level_action: "Level" number
 keyword_action: V_BLIGHT amount
               | V_WATERBEND MANA+
               | V_DISCOVER amount

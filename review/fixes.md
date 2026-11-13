@@ -43,3 +43,23 @@ Counts are verdict rows matching the note shape when last measured.
 |---|---|---|
 | replacement-event clauses | 49 Standard clause sites; top sub-shape "would die this turn" only 5, then "would be created under your control" 4, "would be put into a graveyard" 3 | the class is genuinely varied (would die/created/put/deal/enter/leave, each 1-5 sites), so a closed grammar alternative would cover only a small slice at a chart-cost; leave triage |
 | while / as-long-as nesting | 38 Standard clause sites, all beginning "while" | nesting (while + control/count/state) needs recursive condition construction; the simple inner states are already structured by the readback handlers, but the wrapper is a grammar/structural change |
+
+## Parse-gap batches (parse-fail ledger, Standard)
+
+Queue: `review/gap_ledger.tsv`, class `parse_fail` (781 unique / 1,463 occurrences
+against 20,754/22,217 parse), grouped by `head`; top-10 heads cover 12.71% and the
+rest is a long tail. Sampling shows the heads are tail problems (the trigger prefix
+parses; the effect/clause after the comma fails), so causes were picked by tail
+shape across heads, not head by head.
+
+### batch: Level-N frame marker
+
+| field | value |
+|---|---|
+| gap | `{W}: Level 2` — the activated/level-up effect is the marker `Level N`; no action matched it, so the line died after the colon |
+| change | `level_action: "Level" number` in the action list; `i_level_action` -> `{verb: level, level: N}` |
+| texts fixed | 21 unique / 28 occurrences (all `Level 2`/`Level 3` lines) |
+| rule count | 3,338 -> 3,340 (+2) |
+| timing | ABBA 15-word parse 1.113 s -> 1.127 s (1.013x, noise) |
+| corpus delta | Standard seeded parse 20,754 -> 20,782; failures 1,463 -> 1,435 occ / 781 -> 760 uniq. FDN honest unchanged 1,494/1,653 (90.4%) |
+| left | `Level N` lines with a non-cost prefix (e.g. "Level up" costs) not present upstream |

@@ -1721,6 +1721,15 @@ class Interpreter:
     KW_ACTION_VERBS = ('blight', 'waterbend', 'discover', 'amass', 'connive',
                        'recruit', 'forage', 'airbend', 'devour')
 
+    def i_level_action(self, children):
+        """Level-up frame marker: "{1}{U}: Level 2"."""
+        for ch in children:
+            if isinstance(ch, Tree):
+                n = self._first_number(ch.children)
+                if n is not None:
+                    return {'verb': 'level', 'level': n}
+        return {'verb': 'level', 'level': self._first_number(children)}
+
     def i_keyword_action(self, children):
         """Keyword actions with an optional parameter: blight N, waterbend {N},
         discover N, amass <type> N, connives, recruit, forage, airbend <target>,
