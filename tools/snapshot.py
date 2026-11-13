@@ -237,6 +237,10 @@ def corpus_texts(data):
                     work.append(item["text"])
         with open(sent_cache, "wb") as fh:
             pickle.dump(work, fh)
+    bad = next((t for t in work if '@@' in t), None)
+    if bad is not None:
+        raise SystemExit(
+            "sentence text contains a protected-list token: %r" % bad[:120])
     return sorted(set(work)), Counter(work), sorted(types), sorted(names)
 
 
@@ -254,7 +258,12 @@ def load_parse_cache():
     path = parse_cache_path()
     if os.path.exists(path):
         with open(path) as fh:
-            return json.load(fh), path
+            cache = json.load(fh)
+        # drop entries keyed by the old protected-list sentence form
+        stale = [k for k in cache if '@@' in k]
+        for k in stale:
+            cache.pop(k)
+        return cache, path
     return {}, path
 
 

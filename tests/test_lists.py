@@ -137,6 +137,20 @@ def main():
     out = parse('You may choose new targets for the copy')
     assert out[0]['effect']['for'] == {'kind': 'copy', 'text': 'the copy'}
 
+    # Sentence text is surface text: segment() must not persist a protected
+    # list token, and the parser must protect on demand.
+    from lists import parse_ready, has_tokens
+    items = segment('Destroy target artifact or enchantment. '
+                    'Birds and Frogs you control get +1/+1.')
+    assert items
+    for it in items:
+        assert '@@' not in it['text'], it['text']
+    list_text = next(it['text'] for it in items
+                     if 'Birds and Frogs' in it['text'])
+    assert list_text == 'Birds and Frogs you control get +1/+1'
+    assert not has_tokens(list_text)
+    assert has_tokens(parse_ready(list_text))
+
     print('list tests passed')
 
 

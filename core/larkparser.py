@@ -88,5 +88,16 @@ def build_parser(kind="interp", grammar=None):
         keep_all_tokens=True,
         propagate_positions=(kind == "ptree"),
     )
+    if kind == "interp":
+        # Sentence texts are persisted decoded; protect captured list spans
+        # here so every interp caller parses the same safe form. ptree keeps
+        # raw positions (mention spans), so it is not wrapped.
+        from lists import parse_ready
+        _inner = parser.parse
+
+        def _parse_protected(sentence, *args, **kwargs):
+            return _inner(parse_ready(sentence), *args, **kwargs)
+
+        parser.parse = _parse_protected
     _CACHE[key] = parser
     return parser

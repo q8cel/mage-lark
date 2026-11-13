@@ -395,3 +395,20 @@ def protect(text):
 def decode(tok):
     """Decode a LISTTOK produced by :func:`protect`."""
     return json.loads(bytes.fromhex(tok[3:-2]).decode())
+
+TOKEN_RE = re.compile(r'@@L[0-9a-f]+@@')
+
+def has_tokens(text):
+    """True when `text` already contains a protected-list token."""
+    return bool(TOKEN_RE.search(text))
+
+def parse_ready(text):
+    """Prepare sentence text for the parser: protect list spans, once.
+
+    Sentence texts are stored decoded (the list placeholders are an internal
+    parsing device, not surface text); every parser entry point calls this so
+    a comma inside a captured list is still safe for Earley.
+    """
+    if not isinstance(text, str) or has_tokens(text):
+        return text
+    return protect(text)
