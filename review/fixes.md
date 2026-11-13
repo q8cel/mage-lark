@@ -97,3 +97,22 @@ shape across heads, not head by head.
 | left | relative-clause targets ("Double all damage that sources you control of the chosen type would deal" card-target tails) are now covered, but "double strike" texts are unrelated; making double honest needs an interpret-schema decision (out of this grammar phase) |
 
 | condition shared cluster | i_if 513 / i_triggered 393 / i_effect 182 occ | gift-promised/not (27), you-control N or more/fewer (99), it was/is a <type> (51), x is N or more/less (11), player life threshold (10), five-or-more-mana-spent (13): ~211 occ closed across all condition sources; trailing-if reuses the same builder | remaining ledger heads: would-replacement 155, triggered-ability 42, there-are 37, you-put 23, opponent-comparison 19, plus other residual |
+
+### shared tails: may-copy, empower X, keyword effect tails, compound become
+
+Queue re-measured on master 7d706d9 (781 ledger texts re-parsed: 733 still failing;
+the ledger is keyed to the older grammar). Tails were taken in occurrence order,
+skipping anything under ~8 occurrences.
+
+| tail | texts / occ | change | rules | ABBA | seeded Standard parse delta |
+|---|---|---:|---|---|---|
+| may-copy | 3 / 8 | copy_action added to may_action | +1 | 0.478 -> 0.482 s | 20,822 -> 20,831 |
+| empower X | 4 / 8 measured (+12/+7 seeded) | case-insensitive V_EMPOWER + X as the amount | +1 | 1.043 -> 0.926 s | 20,831 -> 20,843 |
+| keyword effect tails | 17 of 20 / 29 | endure_action + V_ENDURE; collect evidence as cost_item/effect with V_COLLECT; harmonize/persist/rebound in KEYWORD; as_cost xdef_clause | +12 | 0.528 -> 0.541 s (1.025x) | 20,843 -> 20,874 |
+| compound become + gains | 2 still failing / 6 (third text unblocked by the cost fix) | become_tail his/her addition + and-gains, with-base-P/T + and-gains; "the color of your choice and gains …"; kw_list_item "KEYWORD from that color" | +25 | 0.499 -> 0.502 s | 20,874 -> 20,880 |
+
+Cumulative after the four tails: Standard 20,880/22,217 = 94.0 % parse,
+parse_fail 1,337 occ / 702 unique (from 1,395 / 733). Left: harmonize/persist/
+rebound keyword words are now accepted but their _action_ forms (e.g. a
+harmonize verb) are not; collect-evidence lines blocked on unrelated effects;
+the long tail below.
