@@ -47,15 +47,15 @@ Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claim
 | classic | 789 | 48 | 6.1% | 1.9% |
 | FDN | 521 | 30 | 5.8% | 3.8% |
 
-Final grammar state (2026-11-13, measured at `91fdaca`):
+Final grammar state (2026-11-13, measured at `d6a7fb8`):
 
 | corpus | honest occurrences | honest % | of accepted | parse occurrences | parse unique | parse_fail | interpret_unparsed |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Standard | 17,504 / 22,217 | 78.8% | 84.3% | 20,754 (93.4%) | 7,185 / 7,966 | 1,463 occ / 781 uniq | 3,250 occ / 1,599 uniq |
-| classic | 3,896 / 4,280 | 91.0% | 92.4% | 4,216 (98.5%) | 2,089 / 2,148 | 64 / 59 | 320 / 225 |
-| FDN | 1,478 / 1,653 | 89.4% | 89.4% | 1,653 (100%) | 761 / 761 | 0 | 175 / 88 |
+| Standard | 17,713 / 22,217 | 79.7% | 85.3% | 20,754 (93.4%) | 7,185 / 7,966 | 1,463 occ / 781 uniq | 3,041 occ / 1,461 uniq |
+| classic | 3,901 / 4,280 | 91.1% | 92.5% | 4,216 (98.5%) | 2,089 / 2,148 | 64 / 59 | 315 / 222 |
+| FDN | 1,494 / 1,653 | 90.4% | 90.4% | 1,653 (100%) | 761 / 761 | 0 | 159 / 80 |
 
-Honest unique: Standard 5,586/7,966 = 70.1%, classic 1,864/2,148 = 86.8%, FDN 673/761 = 88.4%.
+Honest unique: Standard 5,724/7,966 = 71.9%, classic 1,867/2,148 = 86.9%, FDN 681/761 = 89.5%.
 Strict/honest counts a sentence only if its interpreted output has no unparsed/raw text; parse-only counts any successful parse. The `text` purge removed text/raw payloads from outputs, so honest coverage, not parse coverage, is the headline number.
 A `--seed` run trusts passes from another grammar and **must never be quoted as absolute coverage**: the earlier 7,201/20,781 was 17 false seed passes plus 12 genuinely new passes; a no-cache reparse gives 7,184 (then 7,185 after the blob-text merge).
 
@@ -65,6 +65,7 @@ Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. Th
 - classic: 48 bugs (6.1%, 1.9%) — effect slots 25, actor/who 3, target/quantifier 4, coordinated 4.
 - FDN: 30 bugs (5.8%, 3.8%) — effect slots 9, target/quantifier 5, threshold/static 3, coordinated 3, for-each 2, actor/who 2.
 Family ranking by occurrence weight: `swarm/reports/residual_impact.md`.
+The remaining `interpret_unparsed` is dominated by four named shapes: replacement-event 107, while/as-long-as 55, modifier cost 50, and residual other-clause 472; the first three are grammar work, the last is triage.
 ## Adding a corpus
 Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `batch` and review; the corpus JSON only needs the `setdata.load` shape.
 ## Parallel fixers and the merge gate
