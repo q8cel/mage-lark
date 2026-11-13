@@ -92,6 +92,31 @@ def _work(texts):
             out.append((s, 0, False))
     return out
 
+def _has_unparsed(node, top=False):
+    if isinstance(node, list):
+        return any(_has_unparsed(x) for x in node)
+    if not isinstance(node, dict):
+        return False
+    if node.get('unparsed') or node.get('type') == 'unparsed' or 'text' in node:
+        return True
+    return any(_has_unparsed(v) for k, v in node.items() if k != 'meta')
+
+
+def _check_outputs(texts):
+    """texts: list[str] already known to parse -> [(text, bad)]. """
+    global _P, _I
+    out = []
+    for s in texts:
+        try:
+            tree = _P.parse(s)
+            res = _I.interp(tree)
+            bad = _has_unparsed(res)
+        except Exception:
+            bad = True
+        out.append((s, bad))
+    return out
+
+
 def _chunked(seq, n):
     for i in range(0, len(seq), n):
         yield seq[i:i+n]
@@ -117,6 +142,8 @@ def main():
     ap.add_argument('--no-cache', action='store_true')
     ap.add_argument('--checkpoint', type=int, default=50,
                     help='save the parse cache every N batches (0 = only at end)')
+    ap.add_argument('--lenient', action='store_true',
+                    help='count parsed sentences as covered even if the output is unparsed')
     ap.add_argument('--timeout', type=float, default=0,
                     help='per-sentence parse cap in seconds (0 = no cap)')
     ap.add_argument('--seed', default=None,
@@ -266,18 +293,38 @@ def main():
         print("all unique texts cached -> nothing to parse")
 
     # ---- roll up to occurrences ----
-    ok_occ = 0
-    fails = []
-    seen_fail = set()
-    for s in work:
-        if cache.get(s):
-            ok_occ += 1
-        else:
-            fails.append(s)
+    parse_ok = sum(1 for s in work if cache.get(s))
     total = len(work)
-    print(f"\n==== COVERAGE: {ok_occ}/{total} = {100*ok_occ/total:.1f}%  "
+    unparsed = {}
+    if not args.lenient:
+        passing = [s for s in uniq if cache.get(s)]
+        batches = list(_chunked(passing, max(1, args.chunk * 4)))
+        with mp.Pool(args.workers, initializer=_init,
+                     initargs=(GRAMMAR, types, names, args.timeout)) as pool:
+            for res in pool.imap_unordered(_check_outputs, batches):
+                for s, bad in res:
+                    unparsed[s] = bad
+    honest_ok = 0
+    parse_fails = []
+    interp_fails = []
+    for s in work:
+        if not cache.get(s):
+            parse_fails.append(s)
+        elif unparsed.get(s):
+            interp_fails.append(s)
+        else:
+            honest_ok += 1
+    print(f"\n==== PARSE COVERAGE: {parse_ok}/{total} = {100*parse_ok/total:.1f}%  "
           f"(unique {sum(cache.get(s,0) for s in uniq)}/{len(uniq)}) ====")
-    print(f"Failures (occurrences): {len(fails)}  (unique: {len(set(fails))})")
+    if args.lenient:
+        print("==== HONEST COVERAGE: lenient (unparsed outputs counted as covered) ====")
+    else:
+        print(f"==== HONEST COVERAGE: {honest_ok}/{total} = {100*honest_ok/total:.1f}% "
+              f"(unique {sum(1 for s in uniq if cache.get(s) and not unparsed.get(s))}/{len(uniq)}) ====")
+    print(f"Failures (occurrences): parse_fail {len(parse_fails)} "
+          f"(unique {len(set(parse_fails))}), interpret_unparsed {len(interp_fails)} "
+          f"(unique {len(set(interp_fails))})")
+    fails = parse_fails + interp_fails
 
     if args.dump:
         with open(args.dump, 'w') as f:
