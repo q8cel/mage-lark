@@ -490,6 +490,24 @@ class Interpreter:
                 # "you control a Dragon" / "you control a creature with
                 # power 4 or greater": a controller condition with a simple
                 # card_target. Leave compounds (and/or/spells) to unparsed.
+                states = {
+                    'this spell was kicked': 'kicked',
+                    'this spell was bargained': 'bargained',
+                    'this spell was cast using teamwork': 'cast_using_teamwork',
+                    'this spell was cast from a graveyard': 'cast_from_graveyard',
+                    "this spell's additional cost was paid": 'additional_cost_paid',
+                    'this spell was plotted': 'plotted',
+                    'this permanent was prepared': 'prepared',
+                }
+                if low in states:
+                    node[key] = {'kind': 'spell_state',
+                                 'state': states[low]}
+                    continue
+                if low == 'this is the first time this ability has resolved this turn':
+                    node[key] = {'kind': 'spell_state',
+                                 'state': 'first_time_this_turn',
+                                 'this_turn': True}
+                    continue
                 ev = self._event_this_turn(val)
                 if ev:
                     node[key] = ev
