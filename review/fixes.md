@@ -144,3 +144,5 @@ action builders. The rule has priority 2 so it wins over the generic
 | timing | ABBA 15-word parse 0.530 -> 0.542 s (1.023x) |
 | left | the remaining 67 occurrences need passive replacement actions ("twice that many of those tokens are created", "it deals twice that much damage") and conditions outside the closed set ("would lose unspent mana", "would connive/explore", "while …" tails). The passive multiplication side is a second structure, not a condition variant. |
 | tests | if-instead / if-relative-life updated to assert the replacement shape (the deliberate contract change) |
+
+| trigger residual / no_handler / raw_action | trigger residual ~270; no_handler 125; raw_action 109 | 2750395 condition residual cluster (triggered-ability, there-are-among, you-put, opponent comparison); 9d978de no_handler event refs (When you/they do, cast-during-window); 6924944 double/triple structured | final Standard honest 18,983/22,217 = 85.4% occurrences (unique 6,253/7,966; interpret_unparsed 1,897 occ / 1,011 unique). Approx reason split: condition ~1,197, trigger ~270, static 168, xdef 83, object 64, modifier 24, raw_action ~91, no_handler ~0 |
