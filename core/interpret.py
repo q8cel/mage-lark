@@ -954,6 +954,20 @@ class Interpreter:
             node['reason'] = reason
             node['fragment'] = frag
             node['source'] = source
+        if node.get('unparsed') and node.get('reason') == 'no_handler':
+            frag = ' '.join(str(node.get('fragment', '')).lower().split()).rstrip('.')
+            if frag in ('you do', 'they do'):
+                node.clear()
+                node.update({'kind': 'event_ref',
+                             'actor': 'you' if frag.startswith('you') else 'they',
+                             'polarity': 'positive'})
+            elif frag.startswith('you cast a spell during '):
+                node.clear()
+                node.update({'kind': 'event',
+                             'event': {'subject': 'you', 'verb': 'cast',
+                                       'object': {'card_type': {
+                                           'kind': 'type', 'value': 'spell'}}},
+                             'window': frag[len('you cast a spell during '):]})
         if top:
             if node.get('type') == 'effect':
                 eff = node.get('effect')
