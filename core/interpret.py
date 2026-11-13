@@ -24,6 +24,7 @@ from lark import Token, Tree
 
 from lists import decode as decode_list_token
 from mtd import card_type_set, name_set
+from clause_metric import classify_clause, CLAUSE, EXPRESSION
 
 
 def _tree_text(node):
@@ -362,6 +363,20 @@ class Interpreter:
         for k in list(node):
             if k != 'text':
                 node[k] = self._finalize(node[k])
+        src = 'i_' + str(node.get('verb') or node.get('type') or 'sentence')
+        for key, reason in (('condition', 'condition_text'),
+                            ('if', 'condition_text'),
+                            ('unless', 'condition_text'),
+                            ('trailing_if', 'condition_text'),
+                            ('modifier', 'modifier_text'),
+                            ('xdef', 'xdef_text')):
+            if key not in node:
+                continue
+            verdict = classify_clause(key, node[key])
+            if verdict in (CLAUSE, EXPRESSION):
+                orig = node[key]
+                node[key] = {'unparsed': True, 'reason': reason,
+                             'fragment': orig, 'source': src}
         if 'text' in node:
             frag = node.pop('text')
             reason, source = self._unparsed_tag(node)

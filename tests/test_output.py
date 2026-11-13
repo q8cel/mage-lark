@@ -66,7 +66,9 @@ add("coordinated-stat-targets",
 add("as-long-as-condition",
     "This creature has flying as long as it's attacking",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
-                  and d.get('condition') == "it's attacking"))
+                  and isinstance(d.get('condition'), dict)
+                  and d['condition'].get('reason') == 'condition_text'
+                  and d['condition'].get('fragment') == "it's attacking"))
 add("if-able-on-action",
     "Each creature you control gets +3/+3 until end of turn and must be blocked this turn if able",
     lambda o: has(o, lambda d: d.get('verb') == 'must_block'
@@ -74,7 +76,9 @@ add("if-able-on-action",
                   and not has(o, lambda d: d.get('type') == 'effect' and d.get('if')))
 add("page-counter-condition",
     "When there are four or more page counters on this artifact, exile it",
-    lambda o: has(o, lambda d: d.get('condition') == 'there are four or more page counters on this artifact'))
+    lambda o: has(o, lambda d: isinstance(d.get('condition'), dict)
+                  and d['condition'].get('reason') == 'condition_text'
+                  and d['condition'].get('fragment') == 'there are four or more page counters on this artifact'))
 add("during-turn-event",
     "Whenever a creature you control deals combat damage during your turn, put that many +1/+1 counters on it",
     lambda o: has(o, lambda d: d.get('condition') == 'during your turn'))
@@ -1028,7 +1032,9 @@ add("event-sacrifice-verb",
 add("event-while-saddled",
     "Whenever this creature attacks while saddled, put a +1/+1 counter on it",
     lambda o: has(o, lambda d: d.get('verb') == 'attacks'
-                  and d.get('condition') == 'while saddled'))
+                  and isinstance(d.get('condition'), dict)
+                  and d['condition'].get('reason') == 'condition_text'
+                  and d['condition'].get('fragment') == 'while saddled'))
 add("event-becomes-the-target",
     "Whenever this creature becomes the target of a spell or ability you control for the first time each turn, put a +1/+1 counter on it",
     lambda o: has(o, lambda d: d.get('verb') == 'becomes the target'

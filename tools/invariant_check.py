@@ -30,6 +30,8 @@ import sys, os, re, json, argparse, glob
 from collections import Counter, defaultdict
 BASE = _paths.ROOT
 sys.path.insert(0, BASE)
+sys.path.insert(0, os.path.join(BASE, 'core'))
+from clause_metric import classify_clause, CLAUSE, EXPRESSION
 
 ZONE      = {'battlefield', 'hand', 'library', 'graveyard', 'exile', 'stack', 'yard',
              'hands', 'libraries', 'graveyards', 'stacks', 'battlefields'}
@@ -134,7 +136,8 @@ def load_my_outputs():
     return out
 
 
-HARD = {'fallback_text', 'illegal_quote', 'label_without_structure'}
+HARD = {'fallback_text', 'illegal_quote', 'label_without_structure',
+        'bare_condition', 'bare_modifier', 'bare_xdef'}
 
 
 def check(out, sent, flags):
@@ -154,6 +157,15 @@ def check(out, sent, flags):
                 if not scoped:
                     flags.append(('illegal_quote', sent, str(o['quote'])[:80]))
             for k, v in o.items():
+                if k in ('condition', 'if', 'unless', 'trailing_if',
+                         'modifier', 'with_modifier', 'xdef'):
+                    verdict = classify_clause(k, v)
+                    if verdict in (CLAUSE, EXPRESSION):
+                        flag = ('bare_condition' if k in
+                                ('condition', 'if', 'unless', 'trailing_if')
+                                else 'bare_modifier' if k in
+                                ('modifier', 'with_modifier') else 'bare_xdef')
+                        flags.append((flag, sent, f"{k}={str(v)[:80]}"))
                 if k == 'verb' and v == 'raw':
                     flags.append(('raw_action', sent, (o.get('fragment') or '').strip()))
                 elif k in ('pt', 'change', 'power', 'toughness') and isinstance(v, str):
