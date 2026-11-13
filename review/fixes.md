@@ -141,3 +141,23 @@ action builders. The rule has priority 2 so it wins over the generic
 | timing | ABBA 15-word parse 0.530 -> 0.542 s (1.023x) |
 | left | the remaining 67 occurrences need passive replacement actions ("twice that many of those tokens are created", "it deals twice that much damage") and conditions outside the closed set ("would lose unspent mana", "would connive/explore", "while …" tails). The passive multiplication side is a second structure, not a condition variant. |
 | tests | if-instead / if-relative-life updated to assert the replacement shape (the deliberate contract change) |
+
+### residual: passive replacement actions (closed, not built)
+
+The would-replacement family structures 89 of 158 occurrences. The remaining 69
+occurrences, enumerated by the replacement clause after the comma:
+
+| shape | occurrences | example |
+|---|---:|---|
+| multiplication ("twice/three times that many … created/put") | 28 | "…, twice that many of those tokens are created instead" |
+| other instead-clause (state flips, life/mana) | 18 | "… would lose unspent mana, that mana becomes red instead" |
+| exile (condition-tail variants) | 11 | "If a card you didn't control would be put into an opponent's graveyard from anywhere, exile it instead" |
+| double damage | 8 | "… it deals twice that much damage instead" |
+| draw replacement | 3 | "If you would draw a card except the first one …, draw two cards instead" |
+| other | 1 | "Prevent all damage that would be dealt by up to one target creature …" |
+
+The largest closed form is the multiplication shape at 28 occurrences, below
+the 30-occurrence build threshold, and the rest are distinct passivisations.
+Adding a passive replacement action would cost a broad action shape for <30
+occurrences, so the family is closed here; the 69 occurrences stay in the
+ledger for a future phase.
