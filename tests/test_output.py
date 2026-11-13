@@ -67,8 +67,8 @@ add("as-long-as-condition",
     "This creature has flying as long as it's attacking",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
                   and isinstance(d.get('condition'), dict)
-                  and d['condition'].get('reason') == 'condition_text'
-                  and d['condition'].get('fragment') == "it's attacking"))
+                  and d['condition'].get('kind') == 'state'
+                  and d['condition'].get('state', {}).get('status') == 'attacking'))
 add("if-able-on-action",
     "Each creature you control gets +3/+3 until end of turn and must be blocked this turn if able",
     lambda o: has(o, lambda d: d.get('verb') == 'must_block'

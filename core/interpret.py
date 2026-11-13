@@ -378,6 +378,40 @@ class Interpreter:
                 # "you control a Dragon" / "you control a creature with
                 # power 4 or greater": a controller condition with a simple
                 # card_target. Leave compounds (and/or/spells) to unparsed.
+                # Object state: "it's a Mount", "it is a Vehicle",
+                # "it's a Zombie card", "it's tapped".
+                for pref in ("it's ", 'it is ', 'this creature is ',
+                             'this permanent is '):
+                    if low.startswith(pref):
+                        rest = val.strip()[len(pref):]
+                        rlow = rest.lower().rstrip('.')
+                        status = None
+                        for st in ('tapped', 'untapped', 'attacking',
+                                   'blocking', 'saddled', 'prepared'):
+                            if rlow == st:
+                                status = st
+                                break
+                        if status:
+                            node[key] = {'kind': 'state',
+                                         'subject': {'card_type': {
+                                             'kind': 'this_card', 'value': '~'}},
+                                         'state': {'status': status}}
+                            break
+                        if rlow.endswith(' card'):
+                            rest = rest[:-len(' card')]
+                        mq = None
+                        for qw in ('a', 'an'):
+                            if rlow.startswith(qw + ' '):
+                                mq = qw
+                                rest = rest[len(qw) + 1:]
+                                break
+                        if rest and ' ' not in rest.strip().lower():
+                            node[key] = {'kind': 'state',
+                                         'subject': {'card_type': {
+                                             'kind': 'this_card', 'value': '~'}},
+                                         'state': {'card_type': {
+                                             'kind': 'type', 'value': rest.strip()}}}
+                            break
                 if low.startswith('you control '):
                     rest = val.strip()[len('you control '):]
                     mod = None
