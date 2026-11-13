@@ -3849,12 +3849,37 @@ class Interpreter:
         at = self._find_one(children, 'any_text')
         return self.interp(at) if at is not None else self._text(children)
 
+    def _normalize_xdef(self, val):
+        if not isinstance(val, list) or any(isinstance(x, dict) for x in val):
+            return val
+        txt = ' '.join(str(x) for x in val).lower().strip()
+        table = {
+            'your speed':
+                {'kind': 'stat', 'stat': 'speed', 'possessor': 'your'},
+            'your life total':
+                {'kind': 'stat', 'stat': 'life_total', 'possessor': 'your'},
+            'its power':
+                {'kind': 'stat', 'stat': 'power', 'possessor': 'its'},
+            "that spell's mana value":
+                {'kind': 'stat', 'stat': 'mana_value',
+                 'possessor': "that spell's"},
+            'the amount of life you gained this turn':
+                {'kind': 'event', 'event': 'life_gained', 'this_turn': True},
+            'the number of +1/+1 counters on ~':
+                {'kind': 'count', 'unit': '+1/+1 counters',
+                 'on': {'card_type': {'kind': 'this_card', 'value': '~'}}},
+        }
+        return table.get(txt, val)
+
     def i_xdef_sentence(self, children):
         xd = self._find_one(children, 'xdef')
-        return {'verb': 'xdef', 'value': self.interp(xd) if xd is not None else None}
+        return {'verb': 'xdef',
+                'value': (self._normalize_xdef(self.interp(xd))
+                          if xd is not None else None)}
 
     def i_xdef_clause(self, children):
-        return {'xdef': self.interp(children[-1]) if children else None}
+        val = self.interp(children[-1]) if children else None
+        return {'xdef': self._normalize_xdef(val)}
 
     def i_modal_sentence(self, children):
         txt = ' '.join(self._text(children).split()).rstrip('.').lower()
