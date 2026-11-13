@@ -43,3 +43,11 @@ Counts are verdict rows matching the note shape when last measured.
 |---|---|---|
 | replacement-event clauses | 49 Standard clause sites; top sub-shape "would die this turn" only 5, then "would be created under your control" 4, "would be put into a graveyard" 3 | the class is genuinely varied (would die/created/put/deal/enter/leave, each 1-5 sites), so a closed grammar alternative would cover only a small slice at a chart-cost; leave triage |
 | while / as-long-as nesting | 38 Standard clause sites, all beginning "while" | nesting (while + control/count/state) needs recursive condition construction; the simple inner states are already structured by the readback handlers, but the wrapper is a grammar/structural change |
+
+## Interpret-gap phase (readback families)
+
+| family | size (texts / occurrences) | built | left |
+|---|---|---|---|
+| static_text / i_static_sentence | 95 / 497 | fixed enum: trigger/action once-each-turn, start engines, uncounterable, type retention, damage-prevention disabled, loss lock, mode repeat, enchant creature you control, plus split enchant+`you control` join: 329 occurrences closed | 168 occurrences (arbitrary "Activate only if …", free-form statics) |
+| xdef_text / i_xdef* | 73 / 134 | six highest-frequency raw expressions normalized (your speed, your life total, its power, that spell's mana value, life gained this turn, +1/+1 counters on ~): 51 occurrences closed | 83 occurrences, varied (number-of/among/color-pair forms) |
+| trigger_text / i_trigger_clause | 379 / 634 | one-or-more [other] X you control die (83), a creature you control attacks alone (44), ~ enters (13): 140 occurrences closed | ~494 occurrences: cast/activate/unlock/commit-crime/expend and compound enter-or-turn-face-up events |
