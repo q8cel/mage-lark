@@ -322,7 +322,68 @@ class Interpreter:
                         nxt.setdefault('ability_word', label)
                 continue
             cleaned.append(item)
-        return cleaned
+        return [self._finalize(x, top=True) for x in cleaned]
+
+    @staticmethod
+    def _unparsed_tag(d):
+        v = d.get('verb')
+        t = d.get('type')
+        if v == 'raw':
+            return 'raw_action', 'i_raw_action'
+        if v == 'axis':
+            return 'raw_action', 'i_raw_action'
+        if v == 'double':
+            return 'raw_action', 'i_double_action'
+        if v == 'for_each':
+            return 'object_text', 'i_for_each_sentence'
+        if v in ('distribute',):
+            return 'object_text', 'i_distribute_action'
+        if t == 'static':
+            return 'static_text', 'i_static_sentence'
+        if t == 'modal':
+            return 'static_text', 'i_modal_sentence'
+        if 'when' in d or 'event' in d:
+            return 'trigger_text', 'i_trigger_clause'
+        if 'owner' in d or 'destination' in d:
+            return 'object_text', 'i_put_library_action'
+        return 'no_handler', 'i_' + str(v or t or 'sentence')
+
+    def _finalize(self, node, top=False):
+        """Replace every remaining `text` fallback with an honest marker.
+
+        C1/C2 payloads were migrated/deleted already; anything left is an
+        unparsed whole sentence (top-level static/modal/raw effect) or an
+        unparsed subtree.
+        """
+        if isinstance(node, list):
+            return [self._finalize(x) for x in node]
+        if not isinstance(node, dict):
+            return node
+        for k in list(node):
+            if k != 'text':
+                node[k] = self._finalize(node[k])
+        if 'text' in node:
+            frag = node.pop('text')
+            reason, source = self._unparsed_tag(node)
+            node['unparsed'] = True
+            node['reason'] = reason
+            node['fragment'] = frag
+            node['source'] = source
+        if top:
+            if node.get('type') == 'effect':
+                eff = node.get('effect')
+                if (isinstance(eff, dict) and eff.get('unparsed')
+                        and eff.get('reason') == 'raw_action'
+                        and set(node) <= {'type', 'effect', 'ability_word'}):
+                    return {'type': 'unparsed', 'reason': eff['reason'],
+                            'fragment': eff['fragment'],
+                            'source': eff['source']}
+            if (node.get('type') in ('static', 'modal')
+                    and node.get('unparsed') and node.get('fragment')):
+                return {'type': 'unparsed', 'reason': node['reason'],
+                        'fragment': node['fragment'],
+                        'source': node['source']}
+        return node
 
     def i_sentence(self, children):
         for ch in children:
@@ -3811,5 +3872,6 @@ def interpret(sentence, types=None, names=None, interp=None):
             tree = parser.parse(it['text'])
             out.extend(interp.interp(tree))
         except Exception:
-            out.append({'type': 'unparsed', 'text': it['text']})
+            out.append({'type': 'unparsed', 'reason': 'parse_error',
+                        'fragment': it['text'], 'source': 'interpret'})
     return out

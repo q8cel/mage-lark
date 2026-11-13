@@ -860,7 +860,7 @@ add("gift", "Gift a card",
 add("manifest-dread", "Manifest dread",
     lambda o: has(o, lambda d: d.get('verb') == 'manifest_dread'))
 add("start-engines", "Start your engines!",
-    lambda o: has(o, lambda d: 'Start your engines' in str(d.get('text', ''))))
+    lambda o: has(o, lambda d: 'Start your engines' in str(d.get('fragment', ''))))
 add("ability-word-activated", "Max speed — {3}, Exile this card from your graveyard: Draw a card",
     lambda o: has(o, lambda d: d.get('type') == 'activated'))
 add("ability-word-if", "Flare Star — If a Wizard you control would deal damage to a permanent or player, it deals double that damage instead",
