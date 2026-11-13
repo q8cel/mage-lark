@@ -261,7 +261,7 @@ def _two_item(text):
             if start > 0 and text[start-1].isalpha(): continue
             if end < len(text) and text[end].isalpha(): continue
             # m.end('last') points after body incl cut; subtract ignored tail
-            obj={'kind':kind,'logic':logic,'connector':conn,'items':[first,last],'text':text[start:end].strip()}
+            obj={'kind':kind,'logic':logic,'connector':conn,'items':[first,last],'label':text[start:end].strip()}
             if suffix: obj['shared_suffix']=suffix
             if prefix: obj['shared_prefix']=prefix
             if head: obj['head']=head
@@ -340,7 +340,7 @@ def capture(text):
                 continue
             surface=text[start:end]
             obj={'kind':kind,'logic':logic,'connector':conn or 'implicit',
-                 'items':[x.strip() for x in items], 'text':surface.strip()}
+                 'items':[x.strip() for x in items], 'label':surface.strip()}
             if suffix: obj['shared_suffix']=suffix
             # extract shared prefix for first item
             _, pref = _strip_det(raw_first[trim:].strip())

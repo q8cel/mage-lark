@@ -2156,7 +2156,7 @@ class Interpreter:
         if at is not None:
             val = self.interp(at)
             if isinstance(val, str) and val.strip().lower() == 'the copy':
-                d['for'] = {'kind': 'copy', 'text': val.strip()}
+                d['for'] = {'kind': 'copy'}
             else:
                 d['for'] = val
         return d
@@ -3650,18 +3650,17 @@ class Interpreter:
             else:
                 kind = 'permanent'
             return {'verb': 'replace_' + kind, 'multiplier': mult,
-                    'instead': True, 'text': text}
+                    'instead': True}
         if 'repeat this process' in low:
             d = {'verb': 'repeat'}
             if 'once' in low:
                 d['count'] = 1
             if low.startswith('draw a card and repeat'):
                 d['also'] = {'verb': 'draw', 'amount': 1}
-            d['text'] = text
             return d
         if 'assigns combat damage as though' in low:
             return {'verb': 'assign_combat_damage',
-                    'as_though': 'positive power', 'text': text}
+                    'as_though': 'positive power'}
         if low.startswith('skip that draw'):
             return {'verb': 'skip', 'object': 'draw', 'instead': True}
         if 'becomes prepared' in low:
@@ -3681,8 +3680,7 @@ class Interpreter:
         if low.rstrip('.') == 'recruit':
             return {'verb': 'recruit'}
         if low.startswith('remove those counters'):
-            d = {'verb': 'remove_counter', 'counter': 'those counters',
-                 'text': text}
+            d = {'verb': 'remove_counter', 'counter': 'those counters'}
             # "…, remove those counters and it deals 20 damage to you"
             pos = low.find(' and it deals ')
             if pos >= 0:
@@ -3704,14 +3702,14 @@ class Interpreter:
             return d
         if low.startswith('unattach it'):
             d = {'verb': 'unattach', 'object': {'ref': 'anaphora',
-                                                'raw': 'it'}, 'text': text}
+                                                'raw': 'it'}}
             if 'at the beginning of the next end step' in low:
                 d['timing'] = 'at the beginning of the next end step'
             return d
         if low.startswith('attach it to '):
             return {'verb': 'attach',
                     'target': {'ref': 'anaphora', 'raw': 'it'},
-                    'to': text[len('attach it to '):].strip(), 'text': text}
+                    'to': text[len('attach it to '):].strip()}
         return None
 
     def _cond_effect_sentence(self, stype, children):
@@ -3793,7 +3791,7 @@ class Interpreter:
                     parts.append(decode_list_token(c.value).get('text', c.value))
                 else:
                     parts.append(str(c))
-            return {'text': ' '.join(parts).strip(), 'lists': lists}
+            return {'label': ' '.join(parts).strip(), 'lists': lists}
         return self._text(children)
 
     def i_raw_action(self, children):
