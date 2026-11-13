@@ -538,6 +538,23 @@ class Interpreter:
                 elif 'this turn' in low:
                     ev['window'] = 'this turn'
                 return ev
+        if low.startswith('you commit a crime'):
+            ev = {'subject': 'you', 'verb': 'commit_crime'}
+            if 'during your turn' in low:
+                ev['window'] = 'your turn'
+            return ev
+        m_exp = re.match(r'^you expend ([0-9]+|\w+)$', low)
+        if m_exp:
+            return {'subject': 'you', 'verb': 'expend',
+                    'amount': m_exp.group(1)}
+        if low in ('you unlock this door', 'you unlock the door'):
+            return {'subject': 'you', 'verb': 'unlock', 'object': 'door'}
+        if low in ('you fully unlock a room', 'you unlock a room'):
+            return {'subject': 'you', 'verb': 'unlock', 'object': 'room'}
+        m_act = re.match(r'^(you|an opponent|a player|each opponent|each player) activates? (.+)$', low)
+        if m_act:
+            return {'subject': m_act.group(1), 'verb': 'activate',
+                    'object': self._simple_target(m_act.group(2))}
         if low in ('~ enter', '~ enters', 'this creature enters'):
             return {'subject': {'card_type': {'kind': 'this_card',
                                               'value': '~'}},
