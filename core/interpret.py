@@ -566,6 +566,17 @@ class Interpreter:
                                  'state': 'first_time_this_turn',
                                  'this_turn': True}
                     continue
+                if low == 'the gift was promised':
+                    node[key] = {'kind': 'gift', 'state': 'promised'}
+                    continue
+                if low in ("it's your turn", 'it is your turn'):
+                    node[key] = {'kind': 'state', 'subject': 'turn',
+                                 'state': {'status': 'your_turn'}}
+                    continue
+                if low in ("it's not your turn", 'it is not your turn'):
+                    node[key] = {'kind': 'state', 'subject': 'turn',
+                                 'state': {'status': 'not_your_turn'}}
+                    continue
                 if low.startswith('there are ') and ' or more ' in low:
                     body = val.strip()[len('there are '):]
                     num, rest = body.split(' or more ', 1)
