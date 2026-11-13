@@ -363,6 +363,17 @@ class Interpreter:
         for k in list(node):
             if k != 'text':
                 node[k] = self._finalize(node[k])
+        # Anaphoric event references: "If they do" / "If you don't".
+        for key in ('condition', 'if', 'unless', 'trailing_if'):
+            val = node.get(key)
+            if isinstance(val, str):
+                low = ' '.join(val.lower().split()).rstrip('.')
+                parts = low.split()
+                if (len(parts) == 2 and parts[0] in ('you', 'they')
+                        and parts[1] in ('do', "don't")):
+                    node[key] = {'kind': 'event_ref', 'actor': parts[0],
+                                 'polarity': ('positive' if parts[1] == 'do'
+                                              else 'negative')}
         src = 'i_' + str(node.get('verb') or node.get('type') or 'sentence')
         for key, reason in (('condition', 'condition_text'),
                             ('if', 'condition_text'),
