@@ -508,6 +508,29 @@ class Interpreter:
                                  'state': 'first_time_this_turn',
                                  'this_turn': True}
                     continue
+                if low.startswith('you may '):
+                    rest = val.strip()[len('you may '):]
+                    parts = rest.split(' ', 1)
+                    verb = parts[0].lower() if parts else ''
+                    if verb in ('behold', 'choose', 'discard', 'sacrifice',
+                                'exile', 'pay') and len(parts) > 1:
+                        action = {'verb': verb}
+                        if verb != 'pay':
+                            tgt = self._simple_target(parts[1])
+                            if tgt:
+                                action['card_target'] = tgt
+                            else:
+                                action = None
+                        else:
+                            action['amount'] = parts[1].strip()
+                        if action:
+                            node[key] = {'kind': 'may', 'actor': 'you',
+                                         'action': action}
+                            continue
+                if low == 'you have an enduring story':
+                    node[key] = {'kind': 'state', 'subject': 'you',
+                                 'state': {'status': 'enduring story'}}
+                    continue
                 ev = self._event_this_turn(val)
                 if ev:
                     node[key] = ev
