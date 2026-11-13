@@ -538,6 +538,15 @@ class Interpreter:
                 elif 'this turn' in low:
                     ev['window'] = 'this turn'
                 return ev
+        if low.endswith('is turned face up') or low == 'this creature turns face up':
+            return {'subject': {'card_type': {'kind': 'this_card',
+                                              'value': '~'}},
+                    'verb': 'turn_face_up'}
+        if low.startswith('this creature transforms into '):
+            return {'subject': {'card_type': {'kind': 'this_card',
+                                              'value': '~'}},
+                    'verb': 'transforms',
+                    'into': low[len('this creature transforms into '):]}
         if low.startswith('you commit a crime'):
             ev = {'subject': 'you', 'verb': 'commit_crime'}
             if 'during your turn' in low:
