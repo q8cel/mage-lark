@@ -1068,7 +1068,13 @@ class Interpreter:
             modifier = mods[0]
         else:
             modifier = ' '.join(str(m) for m in mods).strip().replace('} {', '}{')
-        return {'keyword': key, 'modifier': modifier}
+        d = {'keyword': key, 'modifier': modifier}
+        if isinstance(modifier, str):
+            kc = self._keyword_cost(modifier)
+            if kc:
+                d.pop('modifier', None)
+                d['cost'] = kc
+        return d
 
     def i_player(self, children):
         return self._text(children)
@@ -3879,9 +3885,46 @@ class Interpreter:
             d['condition'] = d.pop('text')
         return d
 
+    def _keyword_cost(self, text):
+        t = ' '.join(text.split()).strip()
+        if not t or ' or ' in t or ' and ' in t:
+            return None
+        mana = None
+        while t.startswith('{') and '}' in t:
+            end = t.index('}') + 1
+            mana = (mana or '') + t[:end]
+            t = t[end:].lstrip(' ,')
+        low = t.lower()
+        if low.startswith('pay ') and low.endswith(' life'):
+            d = {'kind': 'cost', 'action': 'pay_life',
+                 'amount': t[4:-5].strip()}
+            if mana:
+                d['mana'] = mana
+            return d
+        if low.startswith('discard '):
+            tgt = self._simple_target(t[len('discard '):])
+            if tgt:
+                d = {'kind': 'cost', 'action': 'discard',
+                     'card_target': tgt}
+                if mana:
+                    d['mana'] = mana
+                return d
+        if low.startswith('waterbend '):
+            return {'kind': 'cost', 'action': 'waterbend',
+                    'amount': t[len('waterbend '):].strip()}
+        if mana:
+            return {'kind': 'cost', 'action': 'pay_mana', 'mana': mana}
+        return None
+
     def i_ward_cost(self, children):
         # Children: "Ward", EMDASH, then the payload tokens/subtrees.
-        return {'keyword': 'Ward', 'modifier': self._text(children[2:]).strip()}
+        mod = self._text(children[2:]).strip()
+        d = {'keyword': 'Ward', 'modifier': mod}
+        cost = self._keyword_cost(mod)
+        if cost:
+            d.pop('modifier', None)
+            d['cost'] = cost
+        return d
 
     def i_keyword_cost(self, children):
         d = {'verb': 'keyword_cost'}
@@ -3899,7 +3942,13 @@ class Interpreter:
                 v = self.interp(ch)
                 (cost if after else words).append(str(v))
         name = ' '.join(w for w in words if not w.isdigit()).strip()
-        return {'keyword': name, 'modifier': ' '.join(cost).strip()}
+        mod = ' '.join(cost).strip()
+        d = {'keyword': name, 'modifier': mod}
+        kc = self._keyword_cost(mod)
+        if kc:
+            d.pop('modifier', None)
+            d['cost'] = kc
+        return d
 
     def i_static_keyword_sentence(self, children):
         d = {'type': 'static_keyword'}

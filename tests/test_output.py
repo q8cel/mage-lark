@@ -169,9 +169,11 @@ add("extra-turns-no-empty-actor",
                   and 'actor' not in d))
 add("ward-full-cost", "Ward—Pay 2 life",
     lambda o: has(o, lambda d: d.get('keyword') == 'Ward'
-                  and 'Pay 2 life' in str(d.get('modifier'))))
+                  and d.get('cost', {}).get('action') == 'pay_life'
+                  and d.get('cost', {}).get('amount') == '2'))
 add("flashback-full-cost", "Flashback {2}{B}{B}",
-    lambda o: has(o, lambda d: d.get('modifier') == '{2}{B}{B}'))
+    lambda o: has(o, lambda d: d.get('cost', {}).get('action') == 'pay_mana'
+                  and d.get('cost', {}).get('mana') == '{2}{B}{B}'))
 add("multiple-keywords-with-mod",
     "Lifelink, hexproof from instants",
     lambda o: has(o, lambda d: isinstance(d.get('keywords'), list)
