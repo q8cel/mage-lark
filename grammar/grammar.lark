@@ -446,7 +446,7 @@ gift_action: "Gift" ("a" | "an")? card_target
 explore_action: (V_IT)? "explore" "s"?
               | card_target V_EXPLORE ("X" "times" | amount "times" | "again")?
 manifest_action: (owner_subject)? V_MANIFEST "dread"
-empower_action: "empower" card_target number?
+empower_action: V_EMPOWER card_target (number | "X")?
 collect_evidence_action: "collect" "evidence" amount
 cloak_action: V_CLOAK card_target ("from" zone)?
 exchange_control_action: "Exchange" "control" "of" card_target "and" card_target
@@ -1270,6 +1270,7 @@ V_FLIP: /\bflip(s|ped)?\b/i
 V_MANIFEST: /\bmanifests?\b/i
 V_CYCLE: /\bcycle\b/i
 V_CLOAK: /\bcloak\b/i
+V_EMPOWER: /\bempowers?\b/i
 V_DOUBLE: /\bdouble\b/i
 V_TRIPLE: /\btriple(s)?\b/i
 V_DISTRIBUTE: /\bdistributes?\b/i
