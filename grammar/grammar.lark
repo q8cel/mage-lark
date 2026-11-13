@@ -887,6 +887,12 @@ cost_amount: amount | MANA+
 
 double_action: V_DOUBLE "the" "number" "of" any_text
              | V_DOUBLE card_target "'s" "power" ("until" "end" "of" "turn")?
+             | V_DOUBLE "the" "power" "and" "toughness" "of" card_target ("until" "end" "of" "turn")?
+             | V_DOUBLE card_target "'s" "power" "and" "toughness" ("until" "end" "of" "turn")?
+             | V_DOUBLE "all" "damage" ("that")? card_target "would" "deal"
+             | V_DOUBLE "the" "power" "of" card_target ("until" "end" "of" "turn")?
+             | V_DOUBLE ("its" | "their") "power" "and" "toughness" ("until" "end" "of" "turn")? "and" "it" "gains" kw_list
+             | V_TRIPLE ("the" "power" "and" "toughness" "of" card_target | card_target "'s" "power" "and" "toughness") ("until" "end" "of" "turn")?
 distribute_action: V_DISTRIBUTE any_text
                  | V_DISTRIBUTE counter_amount counter_kind "among" amount ("," amount)* ("," "or" amount)? "target" "creatures"
 separate_action: V_SEPARATE "them" "into" "a" "face-down" "pile" "and" "a" "face-up" "pile"
@@ -1264,6 +1270,7 @@ V_MANIFEST: /\bmanifests?\b/i
 V_CYCLE: /\bcycle\b/i
 V_CLOAK: /\bcloak\b/i
 V_DOUBLE: /\bdouble\b/i
+V_TRIPLE: /\btriple(s)?\b/i
 V_DISTRIBUTE: /\bdistributes?\b/i
 V_CHANGE: /\bchange\b/i
 V_SPEND: /\b(spend|spent)\b/i

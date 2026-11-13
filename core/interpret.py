@@ -3221,7 +3221,9 @@ class Interpreter:
         return d
 
     def i_double_action(self, children):
-        d = {'verb': 'double'}
+        triple = any(isinstance(c, Token) and c.type == 'V_TRIPLE'
+                     for c in children)
+        d = {'verb': 'triple' if triple else 'double'}
         d['text'] = self._text(children)
         return d
 

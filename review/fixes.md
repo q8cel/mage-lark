@@ -75,3 +75,15 @@ shape across heads, not head by head.
 | timing | ABBA 15-word parse 0.433 s -> 0.436 s (1.007x) |
 | corpus delta | Standard seeded parse 20,782 -> 20,804; failures 1,435 -> 1,413 occ / 760 -> 742 uniq. FDN honest unchanged 1,494/1,653 (90.4%) |
 | left | `Craft with four or more nonlands with activated abilities {8}{U}` (card_target lacks the relative "with activated abilities" modifier) |
+
+### batch: double/triple power and toughness
+
+| field | value |
+|---|---|
+| gap | `Double the power and toughness of X`, `Double target creature's power and toughness`, `Double the power of X`, `Double its power and toughness and it gains trample`, `Double all damage … would deal`, `Triple target creature's power and toughness` — double_action only knew "double the number of X" and "double X's power" |
+| change | double_action gains the power-and-toughness forms, the all-damage form, "the power of X", the anaphoric "its power and toughness and it gains kw", and V_TRIPLE forms; i_double_action reports verb triple when the V_TRIPLE token is present |
+| texts fixed | 8 unique / 16 occurrences measured for the drafted set; seeded Standard delta is +18 occurrences / +9 unique (one extra text resolved through the new alternatives) |
+| rule count | 3,351 -> 3,371 (+20) |
+| timing | ABBA 15-word parse 0.684 s -> 0.666 s (noise, no regression) |
+| honest | parse-only gain: the pipeline tags verb `double` as `raw_action` by design (`_unparsed_tag`), so these sentences add parse coverage but not honest coverage. FDN honest stays 1,494/1,653 (the single FDN "Double …" line becomes parse-only, not honest) |
+| left | relative-clause targets ("Double all damage that sources you control of the chosen type would deal" card-target tails) are now covered, but "double strike" texts are unrelated; making double honest needs an interpret-schema decision (out of this grammar phase) |
