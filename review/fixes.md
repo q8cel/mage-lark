@@ -95,3 +95,5 @@ shape across heads, not head by head.
 | timing | ABBA 15-word parse 0.684 s -> 0.666 s (noise, no regression) |
 | honest | parse-only gain: the pipeline tags verb `double` as `raw_action` by design (`_unparsed_tag`), so these sentences add parse coverage but not honest coverage. FDN honest stays 1,494/1,653 (the single FDN "Double …" line becomes parse-only, not honest) |
 | left | relative-clause targets ("Double all damage that sources you control of the chosen type would deal" card-target tails) are now covered, but "double strike" texts are unrelated; making double honest needs an interpret-schema decision (out of this grammar phase) |
+
+| condition shared cluster | i_if 513 / i_triggered 393 / i_effect 182 occ | gift-promised/not (27), you-control N or more/fewer (99), it was/is a <type> (51), x is N or more/less (11), player life threshold (10), five-or-more-mana-spent (13): ~211 occ closed across all condition sources; trailing-if reuses the same builder | remaining ledger heads: would-replacement 155, triggered-ability 42, there-are 37, you-put 23, opponent-comparison 19, plus other residual |
