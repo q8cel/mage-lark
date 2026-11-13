@@ -153,6 +153,7 @@ cost_item: MANA+
          | V_PAY amount "life"
          | V_BLIGHT amount
          | V_PAY amount "mana"
+         | V_COLLECT amount
          | V_PUT counter_amount counter_kind "on" card_target
          | V_RETURN card_target "to" "its" "owner's" "hand"
 
@@ -169,7 +170,7 @@ as_long_tail_sentence: effect "for" "as" "long" "as" any_text
 during_sentence: ability_word_prefix? "During" during_time "," effect
 until_sentence: "Until" "end" "of" "turn" "," effect
               | "Until" "the" "end" "of" "your" "next" "turn" "," effect
-as_cost_sentence: "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," effect
+as_cost_sentence: "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," effect (xdef_clause)?
                 | "As" "an" "additional" "cost" "to" "cast" "this" "spell" "," any_text
 during_time: "your" "turn" | "each" "of" "your" "turns" | "combat"
             | OWNER? "next" "turn"
@@ -418,9 +419,11 @@ action: add_mana_action
        | exchange_control_action
        | keyword_action
        | level_action
+       | endure_action
 
 investigate_action: (who)? V_INVESTIGATE ("twice" | amount "times")? ("for" "each" player "who" "lost" "life" "this" "turn")?
 level_action: "Level" number
+endure_action: (V_IT | card_target)? V_ENDURE amount?
 keyword_action: V_BLIGHT amount
               | V_WATERBEND MANA+
               | V_DISCOVER amount
@@ -447,7 +450,7 @@ explore_action: (V_IT)? "explore" "s"?
               | card_target V_EXPLORE ("X" "times" | amount "times" | "again")?
 manifest_action: (owner_subject)? V_MANIFEST "dread"
 empower_action: V_EMPOWER card_target (number | "X")?
-collect_evidence_action: "collect" "evidence" amount
+collect_evidence_action: V_COLLECT amount ("rather" "than" "pay" "the" "mana" "cost" "for" "spells" "you" "cast")?
 cloak_action: V_CLOAK card_target ("from" zone)?
 exchange_control_action: "Exchange" "control" "of" card_target "and" card_target
                       | "Exchange" "control" "of" card_target
@@ -1195,7 +1198,7 @@ kw_list_item: KEYWORD (number | MANA+)?
             | "protection" "from" prot_obj (("and" | "," | "," "and") "from" prot_obj)*
 prot_obj: CARDNAME | colors | GENERIC_TYPE | "the" "color" "of" "your" "choice" | "each" "color" | "each" "player" | "anything"
 kw_sep: "and" | "," | "," "and" | "or" | "," "or"
-KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted|bloodthirst|firebending)\b/i
+KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted|bloodthirst|firebending|harmonize|persist|rebound)\b/i
 
 //  modified static keywords (Ward {4}, Kicker {2}, Crew 3, ...)
 MOD_KEYWORD: /ward|kicker|crew|flashback|affinity|protection|hexproof|equip|firebending|web-slinging/i
@@ -1271,6 +1274,8 @@ V_MANIFEST: /\bmanifests?\b/i
 V_CYCLE: /\bcycle\b/i
 V_CLOAK: /\bcloak\b/i
 V_EMPOWER: /\bempowers?\b/i
+V_ENDURE: /\bendures?\b/i
+V_COLLECT: /\bcollect evidence\b/i
 V_DOUBLE: /\bdouble\b/i
 V_TRIPLE: /\btriple(s)?\b/i
 V_DISTRIBUTE: /\bdistributes?\b/i
