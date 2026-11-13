@@ -3545,8 +3545,47 @@ class Interpreter:
     def i_double_action(self, children):
         triple = any(isinstance(c, Token) and c.type == 'V_TRIPLE'
                      for c in children)
-        d = {'verb': 'triple' if triple else 'double'}
-        d['text'] = self._text(children)
+        d = {'verb': 'triple' if triple else 'double',
+             'multiplier': 3 if triple else 2}
+        txt = ' '.join(self._text(children).split()).strip()
+        low = txt.lower()
+        body = txt[len('triple '):] if low.startswith('triple ') else (
+            txt[len('double '):] if low.startswith('double ') else txt)
+        bl = body.lower()
+        duration = None
+        if bl.endswith(' until end of turn'):
+            body = body[:-len(' until end of turn')]
+            bl = body.lower()
+            duration = 'until end of turn'
+        if bl.startswith('the number of '):
+            rest = body[len('the number of '):]
+            unit, _, on = rest.partition(' on ')
+            if unit:
+                d['counter'] = unit.strip()
+            if on:
+                tgt = self._simple_target(on)
+                if tgt:
+                    d['on'] = tgt
+        elif bl.endswith("'s power") or bl.endswith("'s toughness"):
+            stat = 'power' if bl.endswith("'s power") else 'toughness'
+            tgt = self._simple_target(body[:-len("'s " + stat)])
+            if tgt:
+                d['target'] = tgt
+            d['stat'] = stat
+        elif 'power and toughness' in bl:
+            tgt = self._simple_target(body.split(' power')[0])
+            if tgt:
+                d['target'] = tgt
+            d['stat'] = 'power and toughness'
+        elif bl.startswith('the number of each kind of counter'):
+            d['counter'] = 'each kind of counter'
+            _, _, on = body.partition(' on ')
+            if on:
+                tgt = self._simple_target(on)
+                if tgt:
+                    d['on'] = tgt
+        if duration:
+            d['duration'] = duration
         return d
 
     def i_separate_action(self, children):
