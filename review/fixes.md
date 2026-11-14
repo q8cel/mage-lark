@@ -255,3 +255,30 @@ manifold/mana-value refs), phrase 40 (free-form relative clauses such as
 "that don't share a creature type with the chosen creature they control"),
 count 4, target 2. `quoted-ability` residual 118 is untouched: 36 unique
 quoted texts fail to parse and are grammar work.
+
+## Quoted-ability interpret gaps (grammar branch fix2b pending)
+
+Grammar in the working tree is still the master hash `69ca…`; the grammar
+worker's `fix2b` commits (`1fee187`, `46fb87d`) are not ancestors yet.
+
+- `_quoted_ability` now accepts single-quoted hosts, unescapes `\'`, and
+  recurses nested quote fields with a depth-2 guard (outer + one nested).
+  On fix2b the `Creatures you control have '{T}: Add …'` host parses; on this
+  tree that host still falls to grammar `UnexpectedCharacters`, so the detector
+  still counts those quotes as strings. Standalone inner single-quoted
+  abilities and nested quotes inside double-quoted hosts structure correctly.
+- Interpret handlers now close the three probe texts without grammar changes:
+  - `can block only <target>` -> `{type: static, effect: {verb: can_block,
+    subject, target, only: true}}`
+  - `saddles … and crews … as though its power were N greater` ->
+    `{verb: saddle_and_crew, objects: [mount, vehicle], as_though: {stat:
+    power, comparison: greater, amount: N}}`
+  - `a creature dying causes a triggered ability of … to trigger` ->
+    `{kind: causes_trigger, cause: {event: dies, subject: {kind: creature}},
+    triggered_abilities: [{kind: triggered_ability, source: …}, …]}`
+
+Detector after these changes on the master grammar: structured
+**18,268/20,874 parsed = 87.5%** (unique 5,881/7,260 = 81.0%); of corpus
+18,268/22,217 = 82.2% (unique 5,881/7,966 = 73.8%); stringy **958 occ / 479
+texts**; quoted-ability residual **96**. `bad_amount` and `bare_modifier`
+remain 0; fragment violations 0.
