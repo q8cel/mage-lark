@@ -47,7 +47,7 @@ Row rate = `bug / (ok + bug + legit)` over settled rows (excludes `todo`, `claim
 | classic | 789 | 48 | 6.1% | 1.9% |
 | FDN | 521 | 30 | 5.8% | 3.8% |
 
-Final grammar state (2026-11-13, measured at `9ade95c`):
+Interim grammar state (2026-11-13, measured at `9ade95c`):
 
 | corpus | honest occurrences | honest % | of accepted | parse occurrences | parse unique | parse_fail | interpret_unparsed |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -58,6 +58,24 @@ Final grammar state (2026-11-13, measured at `9ade95c`):
 Honest unique: Standard 5,734/7,966 = 72.0%, classic 1,867/2,148 = 86.9%, FDN 681/761 = 89.5%.
 Strict/honest counts a sentence only if its interpreted output has no `unparsed` node and no `text` key (parse ok is necessary, not sufficient); parse-only counts any successful parse. The `text` purge removed text/raw payloads from outputs, so honest coverage, not parse coverage, is the headline number. `interpret_unparsed` is now dominated by the four deferred classes: replacement-event 49 sites, while-nesting 38, modifier cost 20, residual other-clause 472 occurrence-weighted.
 A `--seed` run trusts passes from another grammar and **must never be quoted as absolute coverage**: the earlier 7,201/20,781 was 17 false seed passes plus 12 genuinely new passes; a no-cache reparse gives 7,184 (then 7,185 after the blob-text merge).
+
+## Freeze-point honesty (master `3762462`)
+Honest counts a sentence only if it parses and its interpreted output carries no `unparsed` marker; `of accepted` is honest / parsed occurrences. The Standard snapshot is `Standard_69cae293_525ee65e` (built from the frozen tree, not stale); classic and FDN are `tools/run.py` honest runs on the same tree.
+
+| corpus | honest occurrences | honest % | of accepted | parse occurrences | parse unique | parse_fail | interpret_unparsed |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Standard | 19,158 / 22,217 | 86.2% | 91.7% | 20,880 (94.0%) | 7,264 / 7,966 | 1,337 occ / 702 uniq | 1,722 occ / 936 uniq |
+| classic | 3,996 / 4,280 | 93.4% | 94.8% | 4,217 (98.5%) | 2,090 / 2,148 | 63 / 58 | 221 / 160 |
+| FDN | 1,572 / 1,653 | 95.1% | 95.1% | 1,653 (100%) | 761 / 761 | 0 | 81 / 45 |
+
+Honest unique: Standard 6,328/7,966 = 79.4%, classic 1,930/2,148 = 89.9%, FDN 716/761 = 94.1%.
+Phase trajectory: Standard honest 76.2% at the phase start -> **86.2%** at the freeze (ledger 1, measured at `9ade95c`, was 79.9%).
+### What is left
+Four deferred classes carry the residual (gap ledger 3: 1,638 texts / 3,059 occurrences, 13.8% of Standard rows):
+- condition/trigger long tails: `condition_text` 1,084 occ / 584 texts and `trigger_text` 358 / 207; 277 condition heads, top-20 cover 359 attributed occurrences.
+- `static_text` 166 occ / 84 texts (fixer residual 168) and `raw_action` 106 / 50 (fixer residual 91 non-double): free-form statics and one-off actions, no sub-family above the build threshold.
+- parse failures: 702 unique / 1,337 occurrences, flat one-offs (top-15 heads cover only 15.4%) -- grammar work, not review work.
+- passive replacement: 69 occurrences (would-replacement is 89/158 structured; the multiplication shape at 28 is below the 30-occurrence build threshold).
 
 ## Residual (cycle 12)
 Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. The 355 bugs are effect-slot detail:
