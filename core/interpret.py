@@ -1578,6 +1578,34 @@ class Interpreter:
                 node['count'] = int(low_cnt)
             elif low_cnt == 'x':
                 node['count'] = 'X'
+        byv = node.get('by')
+        if isinstance(byv, str) and 'in addition to paying' in byv.lower():
+            low_by = byv.strip().lower()
+            actions = []
+            mpay = re.match(r'paying ([0-9]+|x) life', low_by)
+            if mpay:
+                raw = mpay.group(1)
+                actions.append({'action': 'pay_life',
+                                'amount': int(raw) if raw.isdigit() else 'X'})
+            mdisc = re.match(r'discarding (a|an|one|two|three|[0-9]+) card', low_by)
+            if mdisc:
+                raw = mdisc.group(1)
+                n = {'a': 1, 'an': 1, 'one': 1, 'two': 2, 'three': 3}.get(
+                    raw, int(raw) if raw.isdigit() else 1)
+                actions.append({'action': 'discard', 'count': n, 'card': 'card'})
+            mrem = re.match(r'removing ([0-9]+|one|two|three|four|five|six|seven|eight|nine|ten) counters', low_by)
+            if mrem:
+                raw = mrem.group(1)
+                n = ({'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+                      'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10}
+                     .get(raw, int(raw) if raw.isdigit() else 1))
+                actions.append({'action': 'remove_counters', 'count': n,
+                                'from': 'creatures you control'})
+            if low_by.startswith('foraging'):
+                actions.append({'action': 'forage'})
+            if actions:
+                node['by'] = {'kind': 'cost_phrase', 'actions': actions,
+                              'addition_to_other_costs': True}
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
