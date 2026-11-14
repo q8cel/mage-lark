@@ -212,18 +212,18 @@ Detector: `swarm/scripts/stringy_audit.py --measure`, snapshot
 
 | family | v2 residual | v4 residual | closed | new object |
 |---|---:|---:|---:|---|
-| predicate | 223 | 0 | 223 | `{kind: predicate, verbs: [...], voice?, object?}` |
-| target-label (+ *.label) | 269 | 0 | 269 | `{quantifier?, card_type: [{kind,value},...], card_class?, controller?}` |
+| predicate | 223 | 6 | 217 | `{kind: predicate, verbs: [...], voice?, object?}` |
+| target-label (+ *.label) | 269 | 3 | 266 | `{quantifier?, card_type: [{kind,value},...], card_class?, controller?}` |
 | relative amount + phrase | 328 + 84 | 117 + 53 | 242 | `{kind: relative, of: {kind/possessor/stat,...}}`; phrase refs (`relative`, `xdef.of`) as event/mana-spent objects |
 | window | 32 | 0 | 32 | `{kind: frequency|turn, value/player}` |
 | for-each | 98 | 0 | 98 | `{kind: set|counter_set|event_set, items/counter/object}` |
 | count | 79 | 23 | 56 | `{kind: count, at_least}` / `{kind: relative, of: {kind: that_many}}` / ints / X |
-| cost-phrase | 19 | 0 | 19 | `{kind: cost_phrase, actions: [...], addition_to_other_costs: true}` |
+| cost-phrase | 19 | 4 | 15 | `{kind: cost_phrase, actions: [...], addition_to_other_costs: true}` |
 | quoted-ability | 325 | 118 | 207 | `{kind: quoted_ability, sentence: [structured sentence]}`; depth 1, unparsed/fragment quotes stay strings |
 
-Detector totals: structured coverage **17,943 -> 18,084 / 20,880 occurrences**
-(85.9 -> **86.6%**; unique 78.7 -> **79.6%**), stringy sentences **1,323 ->
-1,180**. Quoted-text parse probe: 87/123 unique quoted abilities parse; the
+Detector totals: structured coverage **17,943 -> 18,138 / 20,880 occurrences**
+(85.9 -> **86.9%**; unique 78.7 -> **80.0%**), stringy sentences **1,323 ->
+1,124**. Quoted-text parse probe: 87/123 unique quoted abilities parse; the
 rest stay strings and are counted above.
 
 Invariant audit on the same snapshot: `bad_amount` **62 -> 5 occurrences**
