@@ -1763,6 +1763,8 @@ class Interpreter:
                                      'object': 'mana'}
         def _sym_label(v):
             low = v.strip().lower()
+            low = re.sub(r'^(?:that|this) (?:creature|permanent|card) is (?:a|an) ', '', low)
+            low = re.sub(r"^it's (?:a|an) ", '', low)
             q = None
             for pre, qv in (('up to one target ', 'up_to_one'),
                             ('up to two target ', 'up_to_two'),
@@ -5624,6 +5626,10 @@ class Interpreter:
 
     @staticmethod
     def _struct_cause_trigger(text):
+        if isinstance(text, dict):
+            return text
+        if not isinstance(text, str):
+            return None
         low = text.strip().lower()
         if 'dying causes a triggered ability' not in low:
             return None

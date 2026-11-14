@@ -96,8 +96,9 @@ def main():
     assert out[0]['type'] == 'if'
     cond = out[0]['condition']
     assert cond['lists'][0]['logic'] == 'union'
-    # C1 label migration: the list surface is `label` + items, not `text`.
-    assert 'Bird, Frog, Otter, or Rat' in cond['label']
+    # C1 label migration: the list surface is structured `label` + items.
+    assert [x['value'] for x in cond['label']['card_type']] == [
+        'bird', 'frog', 'otter', 'rat']
     assert cond['items'] == ['a Bird', 'Frog', 'Otter', 'Rat']
 
     out = parse("If it's a noncreature, nonland card, you gain 2 life")
@@ -133,7 +134,7 @@ def main():
     out = parse("If it's a creature, it also has base power and toughness "
                 "2/2 until your next turn")
     assert out[0]['effect']['verb'] == 'set_base_pt'
-    assert out[0]['effect']['base_pt'] == '2/2'
+    assert out[0]['effect']['base_pt'] == {'power': 2, 'toughness': 2}
 
     # 'the copy' is an object; the redundant summary text was deleted (C2).
     out = parse('You may choose new targets for the copy')
