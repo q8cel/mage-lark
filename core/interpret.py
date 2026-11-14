@@ -1352,6 +1352,18 @@ class Interpreter:
                 oobj = _sym_object(ov)
                 if oobj:
                     node[okey] = oobj
+        colv = node.get('colors')
+        if isinstance(colv, str):
+            low_col = colv.strip().lower()
+            if ' and/or ' in low_col:
+                node['colors'] = {'kind': 'and_or',
+                                  'values': low_col.split(' and/or ')}
+            elif ' and ' in low_col:
+                node['colors'] = {'kind': 'all',
+                                  'values': low_col.split(' and ')}
+            elif ' or ' in low_col:
+                node['colors'] = {'kind': 'any',
+                                  'values': low_col.split(' or ')}
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
