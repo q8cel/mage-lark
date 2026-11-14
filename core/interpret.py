@@ -1051,6 +1051,32 @@ class Interpreter:
                            'object': mleave.group(1)}
             if dur:
                 node['duration'] = dur
+        for ckey in ('counter', 'counters'):
+            cv = node.get(ckey)
+            if not isinstance(cv, str):
+                continue
+            low_c = cv.strip().lower()
+            mcounter = re.fullmatch(
+                r'(?:an? )?(.+?)\s+counters?(?:\s+s)?', low_c)
+            if not mcounter:
+                continue
+            kind = mcounter.group(1).strip()
+            if kind in ('each kind of', 'those', 'this creature\'s',
+                        'plus one of each of those kinds of'):
+                continue
+            count = node.get('count', 1)
+            if isinstance(count, str):
+                lc = count.strip().lower()
+                words = {'a': 1, 'an': 1, 'one': 1, 'two': 2, 'three': 3,
+                         'four': 4, 'five': 5, 'six': 6, 'seven': 7,
+                         'eight': 8, 'nine': 9, 'ten': 10}
+                if lc.isdigit():
+                    count = int(lc)
+                elif lc in words:
+                    count = words[lc]
+                elif lc == 'x':
+                    count = 'X'
+            node[ckey] = {'kind': kind, 'count': count}
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
