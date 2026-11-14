@@ -203,3 +203,31 @@ FDN after every commit: parse 1,653/1,653; honest 1,572/1,653 (81 unparsed, 45
 unique). Tests 277/277. Standard gate on the final tree: parse 20,880/22,217 (94.0%); honest
 19,158/22,217 (86.2%, unique 6,328/7,966) — unchanged from the pre-change
 baseline.
+
+## Stringy round two (same Standard corpus, current snapshot)
+
+Detector: `swarm/scripts/stringy_audit.py --measure`, snapshot
+`Standard_69cae293a709a048_d6d6ad94bfcd62d0.json`, report
+`review/stringy_report_4.tsv` / `review/stringiness_4.md`.
+
+| family | v2 residual | v4 residual | closed | new object |
+|---|---:|---:|---:|---|
+| predicate | 223 | 0 | 223 | `{kind: predicate, verbs: [...], voice?, object?}` |
+| target-label (+ *.label) | 269 | 0 | 269 | `{quantifier?, card_type: [{kind,value},...], card_class?, controller?}` |
+| relative amount + phrase | 328 + 84 | 117 + 53 | 242 | `{kind: relative, of: {kind/possessor/stat,...}}`; phrase refs (`relative`, `xdef.of`) as event/mana-spent objects |
+| window | 32 | 0 | 32 | `{kind: frequency|turn, value/player}` |
+| for-each | 98 | 0 | 98 | `{kind: set|counter_set|event_set, items/counter/object}` |
+| count | 79 | 23 | 56 | `{kind: count, at_least}` / `{kind: relative, of: {kind: that_many}}` / ints / X |
+| cost-phrase | 19 | 0 | 19 | `{kind: cost_phrase, actions: [...], addition_to_other_costs: true}` |
+| quoted-ability | 325 | 118 | 207 | `{kind: quoted_ability, sentence: [structured sentence]}`; depth 1, unparsed/fragment quotes stay strings |
+
+Detector totals: structured coverage **17,943 -> 18,084 / 20,880 occurrences**
+(85.9 -> **86.6%**; unique 78.7 -> **79.6%**), stringy sentences **1,323 ->
+1,180**. Quoted-text parse probe: 87/123 unique quoted abilities parse; the
+rest stay strings and are counted above.
+
+Invariant audit on the same snapshot: `bad_amount` **62 -> 5 occurrences**
+(remaining: compound computed refs such as "2 plus the number of Lesson cards
+in your graveyard", "the power of the chosen creature or card"); `bare_modifier`
+**16 -> 0**. `fragment` violations 0; no new string field introduced (structured
+objects only).
