@@ -83,7 +83,7 @@ Keyword payloads are cleared; remaining cost rows are cost_mod/caster detail. Th
 - classic: 48 bugs (6.1%, 1.9%) — effect slots 25, actor/who 3, target/quantifier 4, coordinated 4.
 - FDN: 30 bugs (5.8%, 3.8%) — effect slots 9, target/quantifier 5, threshold/static 3, coordinated 3, for-each 2, actor/who 2.
 Family ranking by occurrence weight: `swarm/reports/residual_impact.md`.
-Deferral decisions: replacement-event is 49 sites and its top sub-shape is only 5, so it is not worth the chart cost; while-nesting is 38 sites and needs recursive conditions; modifier cost landed as `keywords.cost` (20 sites); residual other-clause is 472 occurrence-weighted and remains the triage bucket.
+At cycle 12 (superseded by the freeze-point section): replacement-event is 49 sites and its top sub-shape is only 5, so it is not worth the chart cost; while-nesting is 38 sites and needs recursive conditions; modifier cost landed as `keywords.cost` (20 sites); residual other-clause is 472 occurrence-weighted and remains the triage bucket.
 ## Adding a corpus
 Build a snapshot, `seed` a new root (`--exempt` if audit overlap exists), then `batch` and review; the corpus JSON only needs the `setdata.load` shape.
 ## Parallel fixers and the merge gate
