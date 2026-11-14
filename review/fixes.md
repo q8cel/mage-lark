@@ -256,10 +256,12 @@ manifold/mana-value refs), phrase 40 (free-form relative clauses such as
 count 4, target 2. `quoted-ability` residual 118 is untouched: 36 unique
 quoted texts fail to parse and are grammar work.
 
-## Quoted-ability interpret gaps (grammar branch fix2b pending)
+## Quoted-ability interpret gaps (grammar branch fix2b merged)
 
-Grammar in the working tree is still the master hash `69ca…`; the grammar
-worker's `fix2b` commits (`1fee187`, `46fb87d`) are not ancestors yet.
+The grammar worker's `fix2b` commits are merged as `9256d36` (period-separated
+quoted abilities, quoted static surfaces). The detector numbers in this section
+are the pre-merge master tree; the merged-tree probe is in the grammar section
+below.
 
 - `_quoted_ability` now accepts single-quoted hosts, unescapes `\'`, and
   recurses nested quote fields with a depth-2 guard (outer + one nested).
@@ -286,3 +288,65 @@ remain 0; fragment violations 0.
 Final Standard gate on this tree: parse 20,880/22,217 (94.0%); honest
 19,156/22,217 (86.2%, unique 6,326/7,966). FDN unchanged at 1,572/1,653.
 Tests 277/277.
+
+## Quoted abilities: sentence periods and static surfaces (grammar branch fix2b)
+
+Merged as `9256d36` on top of the quoted-ability interpret gaps. Probe set: the
+unique string-residual quotes in snapshot
+`Standard_69cae293a709a048_d6d6ad94bfcd62d0` (68 instances / 42 unique; the
+current snapshot reports 36 unique, the split of causes is the same).
+
+Causes fixed (rebased commits `ec150fd`, `9256d36`; branch history `1fee187`, `46fb87d`):
+
+- **Period-separated quoted abilities.** Quoted text keeps its internal
+  sentence periods (`segment()` only strips the corpus-level final period), so
+  `start: sentence+` rejected every multi-sentence quote (`{T}: Add {U}. Spend
+  this mana only to cast a spell…`, `{1}, {T}: Tap target creature. Return ~ to
+  its owner's hand`, …). `start: sentence+ (DOT sentence+)*` with `DOT: "."`
+  (corpus sentences never carry a period) structured 11 of the 42 and all
+  period-split quotes that were previously parse failures at the period.
+  Nested check: `Frogs you control have "{T}: Add {G} or {U}. Spend this mana
+  only to cast a creature spell."` emits
+  `{kind: quoted_ability, sentence: [...]}` instead of a string.
+- **Quoted static surfaces.** `storm` was missing from `KEYWORD`; there was no
+  possessive `card_target "'s" power and toughness are each equal to …` /
+  `base power is equal to …`; and no `can't block or be blocked by`. Additive
+  alternatives structured 5 more.
+
+Cost: rules 3,452 -> 3,460 (+8); ABBA 15-word parse 0.613 -> 0.636 s (1.038x,
+repeat run no regression) and 0.927 -> 0.930 s (1.003x). Gate: PASS on
+`fix2b` (tests 277/277, review, grammar, check_interp, FDN 1,653/1,653,
+classic 4,217/4,280, Standard unique delta 0, parser-cost ratio 1.02).
+
+Merged-tree quoted probe: **19/42 unique, 44/68 residual instances structured**
+(branch-only, before the interpret gaps merged: 16/42, 29/68). The interpret
+gap commit `adb4349` closed three of the probe texts on its own (`can block
+only`, `saddles…`, `dying causes a triggered ability`).
+
+Deferred (still strings):
+
+- Trailing-comma fragments, 6 unique (`Whenever this creature attacks, you
+  gain 1 life,`): quote capture ends at the comma, so the payload is not a
+  sentence — upstream capture/segmentation, not grammar.
+- `Creatures you control have '{T}: Add {R}, {G}, or {W}.'`: single-quoted
+  hosts are accepted, but a sentence with a quoted ability as its *payload*
+  (`have '<ability>'`) has no grammar form — grammar gap, needs a quoted-
+  ability sentence alternative rather than the interpret recursion.
+- Other remaining 16 unique: trigger/effect tails that parse but interpret
+  leaves unparsed (`untap it and you gain 2 life`, `this emblem deals 5 damage
+  to any target`, `sacrifice it`), computed/compound refs (`1 plus the number
+  of permanents named ~`, `copy of target token you control that entered this
+  turn`, `spend this mana only to cast a spell from anywhere other than your
+  hand`), and static shapes (`No more than one creature can attack this
+  planeswalker each combat`, `becomes a 0/0 Robot artifact creature`) —
+  interpret/grammar follow-ups, not closed by this branch.
+- Reverted as not paying for itself: `in_zone` `from anywhere other than your
+  hand/their hand` (+2 hoisted rules for 1 unique quote); the `that entered
+  this turn` modifier parses but its interpret output keeps an unparsed note,
+  so it yields no quoted-ability object.
+
+Merged-tree suites: test_output 277/277, test_review PASS, test_grammar_hoist
+5/5, test_normalize_map 6/6, test_invariant_check 4/4; test_lists fails with
+`AttributeError: 'dict' object has no attribute 'strip'` in
+`_struct_cause_trigger` — reproduced identically at base `6667be3`, so
+pre-existing master breakage (interpret `i_if_sentence`), not from this merge.
