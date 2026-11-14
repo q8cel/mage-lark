@@ -282,3 +282,7 @@ Detector after these changes on the master grammar: structured
 18,268/22,217 = 82.2% (unique 5,881/7,966 = 73.8%); stringy **958 occ / 479
 texts**; quoted-ability residual **96**. `bad_amount` and `bare_modifier`
 remain 0; fragment violations 0.
+
+Final Standard gate on this tree: parse 20,880/22,217 (94.0%); honest
+19,156/22,217 (86.2%, unique 6,326/7,966). FDN unchanged at 1,572/1,653.
+Tests 277/277.
