@@ -945,6 +945,8 @@ for_each_sentence: ("For" | "for") "each" card_target "," effect xdef_clause?
 enchanted_sentence: "Enchanted" card_kind effect
 keyword_static_sentence: COND_KEYWORD EMDASH effect ("as" "long" "as" any_text | trailing_if)?
 stat_define_action: "~'s" "power" "and" "toughness" "are" "each" "equal" "to" xdef
+                   | card_target "'s" "base" "power" "is" "equal" "to" xdef
+                   | card_target "'s" "power" "and" "toughness" "are" "each" "equal" "to" xdef
                    | "~'s" "power" "is" "equal" "to" xdef "and" ("its" | "their") "toughness" "is" "equal" "to" xdef
                    | card_target "'s" "power" "is" "equal" "to" xdef
                    | card_target "power" "is" "equal" "to" xdef
@@ -967,6 +969,7 @@ cant_action: (card_target)? V_CANT ("have" counter_kind "put" "on" card_target |
             | (card_target)? V_CANT "play" card_target "from" ("their" | "your") "hand"
             | (card_target)? V_CANT "cast" "spells" ("during" OWNER? "turn")?
             | (card_target)? V_CANT "activate" "abilities" "of" card_target ("or" card_target)*
+            | (card_target)? V_CANT "block" "or" "be" "blocked" "by" card_target
             | V_YOU V_CANT "lose" "this" "mana" ("as" "steps" "and" "phases" "end")?
             | V_ACTIVATED "abilities" "of" card_target V_CANT "be" "activated" ("unless" any_text)?
             | card_target V_CANT "gain" "life"
@@ -1220,7 +1223,7 @@ kw_list_item: KEYWORD (number | MANA+)?
             | "protection" "from" prot_obj (("and" | "," | "," "and") "from" prot_obj)*
 prot_obj: CARDNAME | colors | GENERIC_TYPE | "the" "color" "of" "your" "choice" | "each" "color" | "each" "player" | "anything"
 kw_sep: "and" | "," | "," "and" | "or" | "," "or"
-KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted|bloodthirst|firebending|harmonize|persist|rebound)\b/i
+KEYWORD: /\b(flying|convoke|first strike|double strike|trample|deathtouch|lifelink|reach|menace|vigilance|haste|defender|hexproof|shroud|indestructible|changeling|prowess|infect|blight|wither|toxic|flashback|flash|menace|ward|deathtouch|embalm|job select|land cycling|basic landcycling|landcycling|islandwalk|swampwalk|forestwalk|mountainwalk|plainswalk|exalted|bloodthirst|firebending|harmonize|persist|rebound|storm)\b/i
 
 //  modified static keywords (Ward {4}, Kicker {2}, Crew 3, ...)
 MOD_KEYWORD: /ward|kicker|crew|flashback|affinity|protection|hexproof|equip|firebending|web-slinging/i
