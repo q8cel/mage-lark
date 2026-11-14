@@ -557,6 +557,53 @@ class Interpreter:
     def _late_normalize(self, obj):
         """Structure values created after the normal child-finalizer pass."""
         if isinstance(obj, dict):
+            cnv = obj.get('count')
+            if isinstance(cnv, str):
+                low_cnt = cnv.strip().lower()
+                if low_cnt == 'that many':
+                    obj['count'] = {'kind': 'relative', 'of': {'kind': 'that_many'}}
+                elif low_cnt == 'one or more':
+                    obj['count'] = {'kind': 'count', 'at_least': 1}
+                elif low_cnt == 'that many plus one':
+                    obj['count'] = {'kind': 'relative',
+                                    'of': {'kind': 'that_many'}, 'plus': 1}
+            tv = obj.get('target')
+            if isinstance(tv, str):
+                low_t = tv.strip().lower()
+                if low_t in ('that ability', 'this ability'):
+                    obj['target'] = {'kind': 'target_ref',
+                                     'ref': low_t.replace(' ', '_')}
+                elif low_t in ('that spell', 'this spell'):
+                    obj['target'] = {'kind': 'target_ref',
+                                     'ref': low_t.replace(' ', '_')}
+            rv = obj.get('relative')
+            if isinstance(rv, str):
+                low_r = rv.strip().lower()
+                mrel = re.fullmatch(r'that (attacked|saddled it|was dealt damage) this turn', low_r)
+                if mrel:
+                    d = {'kind': 'event_ref', 'time': 'this_turn'}
+                    if mrel.group(1) == 'was dealt damage':
+                        d['event'] = 'dealt_damage'
+                        d['voice'] = 'passive'
+                    else:
+                        d['event'] = mrel.group(1).split()[0]
+                        if 'it' in mrel.group(1):
+                            d['object'] = 'it'
+                    obj['relative'] = d
+            ofv = obj.get('of')
+            if isinstance(ofv, str):
+                low_of = ofv.strip().lower()
+                if low_of == 'target spell or ability with a single target':
+                    obj['of'] = {'kind': 'choice',
+                                 'options': [{'kind': 'spell'},
+                                             {'kind': 'ability'}],
+                                 'single_target': True}
+            ctr = obj.get('counter')
+            if isinstance(ctr, dict) and isinstance(ctr.get('kind'), str):
+                k = ctr['kind'].strip().lower()
+                mctr = re.fullmatch(r'(.+?)\s+counters?(?:\s+s)?', k)
+                if mctr:
+                    ctr['kind'] = mctr.group(1)
             mv = obj.get('modifier')
             if isinstance(mv, str) and mv.strip().lower().startswith('that targets '):
                 rest = mv.strip().lower()[len('that targets '):]
@@ -612,6 +659,53 @@ class Interpreter:
         elif isinstance(obj, list):
             for v in obj:
                 self._late_normalize(v)
+
+    @staticmethod
+    def _amount_ref(text):
+        low = text.strip().lower()
+        d = {}
+        for pre in ('other ', 'each ', 'up to '):
+            if low.startswith(pre):
+                low = low[len(pre):]
+        for suf, ctl in ((' you control', 'you'),
+                         (' you already control', 'you'),
+                         (' an opponent controls', 'opponent'),
+                         (" you don't control", 'not_you')):
+            if low.endswith(suf):
+                d['controller'] = ctl
+                low = low[:-len(suf)]
+                break
+        for suf, zone in ((' in your graveyard', 'graveyard'),
+                          (' in your hand', 'hand'),
+                          (' in your library', 'library'),
+                          (' on the battlefield', 'battlefield')):
+            if low.endswith(suf):
+                d['zone'] = zone
+                low = low[:-len(suf)]
+                break
+        if low.endswith(' of the chosen type'):
+            d['chosen_type'] = True
+            low = low[:-len(' of the chosen type')]
+        for suf, cls in ((' cards', 'card'), (' card', 'card'),
+                         (' creatures', 'creature'), (' creature', 'creature'),
+                         (' permanents', 'permanent'), (' permanent', 'permanent')):
+            if low.endswith(suf):
+                d['card_class'] = cls
+                low = low[:-len(suf)]
+                break
+        parts = [x.strip() for x in re.split(r'\s+(?:and|or|and/or)\s+|,\s*(?:and\s+|or\s+)?', low) if x.strip()]
+        types = []
+        skip = {'a', 'an', 'the', 'nonland', 'nontoken', 'tapped', 'untapped'}
+        for part in parts:
+            word = re.sub(r'^(?:a|an|the) ', '', part)
+            if word in skip or not word:
+                continue
+            if word.endswith('s'):
+                word = word[:-1]
+            types.append({'kind': 'type', 'value': word})
+        if types:
+            d['card_type'] = types
+        return d
 
     @staticmethod
     def _window_obj(text):
@@ -1087,7 +1181,7 @@ class Interpreter:
             elif low_a == 'x':
                 node['amount'] = {'kind': 'x'}
             elif re.fullmatch(r'(?:\{[^}]+\}\s*)+', low_a):
-                syms = re.findall(r'\{[^}]+\}', av.strip())
+                syms = re.findall(r'\{[A-Za-z0-9/]+\}', av.strip())
                 node['amount'] = {'kind': 'mana', 'symbols': syms}
             elif ' or ' in low_a and all(
                     re.fullmatch(r'(?:\{[^}]+\}\s*)+', x.strip())
@@ -1166,10 +1260,88 @@ class Interpreter:
                     node['amount'] = {'kind': 'relative',
                                       'of': {**of,
                                              'stat': mref.group(2).replace(' ', '_')}}
-            mhalf = re.fullmatch(
-                r'(half|quarter|third) (their|your) (life|library)(?:,\s*rounded (up|down))?',
+            mplus = re.fullmatch(
+                r'(\d+|x) plus the number of (.+)', low_a)
+            if mplus:
+                raw = mplus.group(1)
+                node['amount'] = {
+                    'kind': 'computed',
+                    'base': int(raw) if raw.isdigit() else 'X',
+                    'op': 'plus',
+                    'of': {'kind': 'count_of',
+                           'set': self._amount_ref(mplus.group(2))}}
+            mnum = re.fullmatch(r'the number of (.+)', low_a)
+            if mnum:
+                node['amount'] = {'kind': 'count_of',
+                                  'set': self._amount_ref(mnum.group(1))}
+            msuper = re.fullmatch(
+                r'the (greatest|least) (power|toughness|mana value) among (.+)',
                 low_a)
-            if mhalf:
+            if msuper:
+                node['amount'] = {
+                    'kind': 'superlative', 'which': msuper.group(1),
+                    'stat': msuper.group(2).replace(' ', '_'),
+                    'set': self._amount_ref(msuper.group(3))}
+            mstatof = re.fullmatch(
+                r'the (mana value|power|toughness|loyalty) of (.+)', low_a)
+            if mstatof:
+                of_text = mstatof.group(2)
+                if of_text == 'the exiled card used to craft it':
+                    of = {'kind': 'exiled_card', 'used_to': 'craft'}
+                elif of_text == 'the chosen creature or card':
+                    of = {'kind': 'choice',
+                          'options': [{'kind': 'creature'}, {'kind': 'card'}]}
+                elif of_text == 'the creature you chose or the card you revealed':
+                    of = {'kind': 'choice',
+                          'options': [{'kind': 'chosen', 'card_class': 'creature'},
+                                      {'kind': 'revealed', 'card_class': 'card'}]}
+                else:
+                    of = self._amount_ref(of_text)
+                node['amount'] = {'kind': 'computed',
+                                  'base': {'kind': 'stat',
+                                           'stat': mstatof.group(1).replace(' ', '_')},
+                                  'of': of}
+            mfrac = re.fullmatch(
+                r'(half|quarter|third) your starting life total', low_a)
+            if mfrac:
+                node['amount'] = {'kind': 'fraction', 'fraction': mfrac.group(1),
+                                  'of': {'kind': 'life_total', 'player': 'you',
+                                         'which': 'starting'}}
+            mper = re.fullmatch(
+                r'(\{[^}]+\}(?:\s*\{[^}]+\})*) for each (.+)', low_a)
+            if mper:
+                per_text = mper.group(2)
+                if per_text.startswith('{'):
+                    import ast
+                    try:
+                        per = ast.literal_eval(per_text)
+                    except (ValueError, SyntaxError):
+                        per = self._amount_ref(per_text)
+                else:
+                    per = self._amount_ref(per_text)
+                if isinstance(per, dict) and isinstance(per.get('controller'), str):
+                    per = dict(per)
+                    per['controller'] = {'you control': 'you'}.get(
+                        per['controller'], per['controller'])
+                node['amount'] = {'kind': 'mana_per',
+                                  'mana': re.findall(r'\{[A-Za-z0-9/]+\}', av.strip()),
+                                  'per': per}
+            mthatmana = re.fullmatch(r'that much (\{[^}]+\}(?:\s*\{[^}]+\})*)', low_a)
+            if mthatmana:
+                node['amount'] = {'kind': 'relative',
+                                  'of': {'kind': 'that_much'},
+                                  'mana': re.findall(r'\{[A-Za-z0-9/]+\}', mthatmana.group(1))}
+            mtwice = re.fullmatch(r'twice (its|their|his|her) (power|toughness)', low_a)
+            if mtwice:
+                node['amount'] = {
+                    'kind': 'relative', 'multiplier': 2,
+                    'of': {'kind': 'possessive', 'possessor': mtwice.group(1),
+                           'stat': mtwice.group(2)}}
+            if node.get('amount') != av:
+                pass
+            elif mhalf := re.fullmatch(
+                r'(half|quarter|third) (their|your) (life|library)(?:,\s*rounded (up|down))?',
+                low_a):
                 d = {'kind': mhalf.group(1),
                      'of': {'possessive': mhalf.group(2).replace('their', 'they'),
                             'stat': mhalf.group(3)}}
