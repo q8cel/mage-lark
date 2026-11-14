@@ -340,7 +340,7 @@ add("prevent-combat-kind-this-turn",
 add("damage-cant-be-prevented",
     "The damage can't be prevented",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
-                  and d.get('predicate') == 'be prevented'))
+                  and d.get('predicate') == {'kind': 'predicate', 'verbs': ['prevented'], 'voice': 'passive'}))
 add("may-gain-life-actor",
     "You may gain 4 life",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_life'
@@ -559,7 +559,7 @@ add("stat-for-each", "This creature gets +1/+1 for each other creature on the ba
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and 'battlefield' in str(d.get('for_each', ''))))
 add("cant-except", "This creature can't be blocked except by black creatures",
-    lambda o: has(o, lambda d: d.get('verb') == "can't" and d.get('predicate') == 'be blocked'
+    lambda o: has(o, lambda d: d.get('verb') == "can't" and d.get('predicate') == {'kind': 'predicate', 'verbs': ['blocked'], 'voice': 'passive'}
                   and d.get('except_by')))
 add("search-zone", "Search your library for a card named Test Card",
     lambda o: has(o, lambda d: d.get('verb') == 'search' and d.get('zone') == 'library'))

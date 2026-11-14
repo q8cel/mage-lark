@@ -1364,6 +1364,30 @@ class Interpreter:
             elif ' or ' in low_col:
                 node['colors'] = {'kind': 'any',
                                   'values': low_col.split(' or ')}
+        pred = node.get('predicate')
+        if isinstance(pred, str):
+            low_p = pred.strip().lower()
+            verbs = [x.strip() for x in low_p.split(' or ')]
+            if len(verbs) > 1:
+                node['predicate'] = {'kind': 'predicate', 'verbs': verbs}
+            elif low_p in ('be blocked', 'be countered'):
+                node['predicate'] = {'kind': 'predicate',
+                                     'verbs': [low_p[3:]],
+                                     'voice': 'passive'}
+            elif low_p.startswith('be '):
+                node['predicate'] = {'kind': 'predicate',
+                                     'verbs': [low_p[3:]],
+                                     'voice': 'passive'}
+            elif low_p == 'cast spells':
+                node['predicate'] = {'kind': 'predicate', 'verbs': ['cast'],
+                                     'object': 'spells'}
+            elif low_p == 'activate abilities':
+                node['predicate'] = {'kind': 'predicate',
+                                     'verbs': ['activate'],
+                                     'object': 'abilities'}
+            elif low_p == 'lose mana':
+                node['predicate'] = {'kind': 'predicate', 'verbs': ['lose'],
+                                     'object': 'mana'}
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
