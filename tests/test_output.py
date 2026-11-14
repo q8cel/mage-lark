@@ -815,7 +815,7 @@ add("return-to-battlefield-mv",
     "Return to the battlefield target nonland permanent card in your graveyard with mana value less than or equal to the number of permanent cards in your graveyard",
     lambda o: has(o, lambda d: d.get('verb') == 'return'
                   and 'mana_value' in d
-                  and d.get('to') == 'to the battlefield'))
+                  and d.get('to') == {'zone': 'battlefield'}))
 add("cost-less-to-activate-this",
     "This ability costs {1} less to activate for each Island you control",
     lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
@@ -1026,11 +1026,11 @@ add("event-combat-damage",
     "Whenever this creature deals combat damage to a player, draw a card",
     lambda o: has(o, lambda d: d.get('verb') == 'deals'
                   and d.get('object', {}).get('damage') == 'combat'
-                  and d.get('object', {}).get('to') == 'a player'))
+                  and d.get('object', {}).get('to') == {'kind': 'player', 'quantifier': 'a'}))
 add("event-plain-damage-no-kind",
     "Whenever this creature deals damage to an opponent, you may draw a card",
     lambda o: has(o, lambda d: d.get('verb') == 'deals'
-                  and d.get('object', {}).get('to') == 'an opponent'
+                  and d.get('object', {}).get('to') == {'kind': 'opponent', 'quantifier': 'an'}
                   and 'damage' not in d.get('object', {})))
 add("event-passive-combat-damage",
     "Whenever this creature is dealt combat damage, you gain that much life",

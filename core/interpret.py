@@ -1155,6 +1155,92 @@ class Interpreter:
             td = _sym_timing(tv)
             if td:
                 node[tkey] = td
+        def _sym_dest(v):
+            low = v.strip().lower()
+            if low in ('any target', 'any other target'):
+                return {'kind': 'any_target'}
+            if low in ('a player', 'an opponent', 'defending player',
+                       'target player', 'target opponent'):
+                q = 'a' if low.startswith('a ') else (
+                    'an' if low.startswith('an ') else 'target')
+                kind = 'player' if 'player' in low else 'opponent'
+                d = {'kind': kind, 'quantifier': q}
+                if low == 'defending player':
+                    d['which'] = 'defending'
+                return d
+            if low.startswith('their choice of the top or bottom of their library'):
+                return {'zone': 'library', 'owner': 'they',
+                        'library_position': 'choice_top_or_bottom'}
+            if low.startswith('their library second from the top or on the bottom'):
+                return {'zone': 'library', 'owner': 'they',
+                        'library_position': 'second_from_top_or_bottom'}
+            if not low.startswith('to '):
+                return None
+            rest = low[3:]
+            zone = None
+            for z in ('battlefield', 'hand', 'graveyard', 'library', 'exile',
+                      'stack', 'command zone'):
+                if rest.startswith(z) or rest.startswith('the ' + z) or \
+                        rest.startswith('their ' + z) or \
+                        rest.startswith('your ' + z) or \
+                        rest.startswith("its owner's " + z):
+                    zone = z
+                    break
+            if zone is None:
+                if rest in ('you', 'them', 'it', 'that player'):
+                    return {'kind': 'recipient', 'recipient': rest}
+                return None
+            d = {'zone': zone}
+            if 'under its owner' in rest:
+                d['controller'] = 'owner'
+            elif 'under your control' in rest:
+                d['controller'] = 'you'
+            elif "under their owners' control" in rest:
+                d['controller'] = 'their owners'
+            elif 'under their control' in rest:
+                d['controller'] = 'they'
+            elif "under her owner's control" in rest:
+                d['controller'] = 'her owner'
+            if 'tapped' in rest:
+                d['tapped'] = True
+            if 'transformed' in rest:
+                d['transformed'] = True
+            if "its owner's hand" in rest or "their owner's hand" in rest:
+                d['owner'] = 'owner'
+            elif 'your hand' in rest:
+                d['owner'] = 'you'
+            elif 'their hands' in rest:
+                d['owner'] = 'their owners'
+            elif 'their hand' in rest:
+                d['owner'] = 'they'
+            if 'top of' in rest:
+                d['library_position'] = 'top'
+            elif 'bottom of' in rest:
+                d['library_position'] = 'bottom'
+            mwith = re.search(
+                r'with (?:an? |two |three |four |\d+ )?(?:(additional) )?'
+                r'(.+?) counters?(?:\s+s)?(?: on |$)', rest)
+            if mwith:
+                qraw = mwith.group(0)
+                mcount = re.search(r'with (an?|two|three|four|\d+)', qraw)
+                count = 1
+                if mcount:
+                    word = mcount.group(1)
+                    count = {'a': 1, 'an': 1, 'two': 2, 'three': 3,
+                             'four': 4}.get(word, word)
+                    if isinstance(count, str) and count.isdigit():
+                        count = int(count)
+                ctr = {'kind': mwith.group(2), 'count': count}
+                if mwith.group(1):
+                    ctr['additional'] = True
+                d['counter'] = ctr
+            return d
+        for dkey in ('to', 'destination'):
+            dval = node.get(dkey)
+            if isinstance(dval, str):
+                dobj = _sym_dest(dval)
+                if dobj:
+                    node[dkey] = dobj
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
