@@ -1256,6 +1256,68 @@ class Interpreter:
                 return int(raw)
             node[pkey] = {'power': _ptval(mptv.group(1)),
                           'toughness': _ptval(mptv.group(2))}
+        def _sym_modifier(v):
+            low = v.strip().lower()
+            mpay = re.fullmatch(
+                r'(?:(?:\{[^}]+\}(?:\s*,\s*)?)+ )?pay ([0-9]+|x) life', low)
+            if mpay:
+                raw = mpay.group(1)
+                return {'kind': 'pay_life',
+                        'cost': {'kind': 'number',
+                                 'value': int(raw) if raw.isdigit() else 'X',
+                                 'unit': 'life'}}
+            mput = re.fullmatch(r'that was put there this turn', low)
+            if mput:
+                return {'kind': 'relative', 'event': 'put',
+                        'location': 'there', 'time': 'this_turn'}
+            mstat = re.fullmatch(
+                r'with (?:total )?(mana value|power|toughness) '
+                r'([0-9]+|x) (or less|or greater)', low)
+            if mstat:
+                raw = mstat.group(2)
+                return {'kind': 'stat_filter', 'stat': mstat.group(1),
+                        'op': '<=' if mstat.group(3) == 'or less' else '>=',
+                        'value': int(raw) if raw.isdigit() else 'X'}
+            mkw = re.fullmatch(
+                r'with (flying|haste|deathtouch|trample|menace|defender|flash|'
+                r'lifelink|vigilance|reach|intimidate|indestructible)', low)
+            if mkw:
+                return {'kind': 'keyword', 'keyword': mkw.group(1)}
+            mtype = re.fullmatch(r'of (the chosen|that|the same) (type|color|name)', low)
+            if mtype:
+                return {'kind': mtype.group(2), 'which': mtype.group(1)}
+            mevent = re.fullmatch(
+                r'(exiled|discarded|destroyed|milled|revealed|tapped|sacrificed) this way', low)
+            if mevent:
+                return {'kind': 'event_filter', 'event': mevent.group(1),
+                        'source': 'this_way'}
+            mtarget = re.fullmatch(r'that targets (.+)', low)
+            if mtarget:
+                return {'kind': 'targets', 'target': mtarget.group(1)}
+            mname = re.fullmatch(r'(?:named ~|with the chosen name)', low)
+            if mname:
+                return {'kind': 'name', 'name': 'chosen'}
+            mnames = re.fullmatch(r'with (different|the same) names?', low)
+            if mnames:
+                return {'kind': 'names', 'mode': mnames.group(1)}
+            mfrom = re.fullmatch(r"from \['([^']+)'\]", low)
+            if mfrom:
+                return {'kind': 'from', 'values': [mfrom.group(1)]}
+            mother = re.fullmatch(r'other than (.+)', low)
+            if mother:
+                return {'kind': 'exclude', 'value': mother.group(1)}
+            mctr = re.fullmatch(
+                r'with (?:an? |two |three |four |\d+ )?(.+?) counters?(?:\s+s)? on (it|them|him|her)', low)
+            if mctr:
+                return {'kind': 'counter', 'counter': {'kind': mctr.group(1)},
+                        'on': mctr.group(2)}
+            return None
+        for mkey in ('modifier', 'with_modifier'):
+            mv = node.get(mkey)
+            if isinstance(mv, str):
+                mobj = _sym_modifier(mv)
+                if mobj:
+                    node[mkey] = mobj
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
