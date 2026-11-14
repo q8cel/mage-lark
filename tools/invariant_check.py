@@ -16,6 +16,9 @@ and flags structural anomalies that indicate a silent parse bug:
                 phrase, or a computed/relative expression
   empty_target  a card/card_type target with no kind/type/value (empty placeholders on
                 object-less verbs are ignored; ability words like "activated" still fire)
+  bare_fragment a `fragment` payload on a node that is not marked unparsed (free text
+                must only live on unparsed=true or type=unparsed)
+  fallback_text a `text` key anywhere in the output (the purge removed text payloads)
 
 Usage:
   python invariant_check.py [data.json]
@@ -146,6 +149,9 @@ def check(out, sent, flags):
             verb = o.get('verb') if isinstance(o.get('verb'), str) else None
             if 'text' in o:
                 flags.append(('fallback_text', sent, str(o['text'])[:80]))
+            if 'fragment' in o and not (o.get('unparsed') is True
+                                        or o.get('type') == 'unparsed'):
+                flags.append(('bare_fragment', sent, str(o['fragment'])[:80]))
             if 'label' in o and not (
                     'items' in o and any(k in o for k in ('connector', 'logic', 'kind'))):
                 flags.append(('label_without_structure', sent, str(o['label'])[:80]))

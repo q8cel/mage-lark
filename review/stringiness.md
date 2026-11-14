@@ -6,45 +6,51 @@ Snapshot `Standard_69cae293a709a048_525ee65ef6caf061.json` (grammar `69cae293a70
 
 A string is **structured coverage** only when the sentence is honest (no `unparsed` marker) **and** carries no `should_be_structured` string. `fragment` is the only legal free text and must sit on an unparsed marker. Closed vocabularies (types, zones, verbs, keywords, player/card references, mana strings, quantifiers) may be multi-word; values in the allow-lists (trigger heads Whenever/When/As/If/At, single colours) are benign.
 
-1179 string paths: closed_vocab 940, free_text 20, should_be_structured 219.
+1179 string paths: closed_vocab 977, free_text 20, should_be_structured 182.
 
 | class | paths |
 |---|---:|
-| closed_vocab | 940 |
+| closed_vocab | 977 |
 | free_text | 20 |
-| should_be_structured | 219 |
+| should_be_structured | 182 |
 
 ### should_be_structured rules
 
 | rule | paths |
 |---|---:|
 | modifier | 49 |
-| unclassified | 46 |
 | target-label | 18 |
 | counter | 16 |
 | count | 13 |
-| phrase | 12 |
-| amount | 11 |
+| phrase | 13 |
+| amount | 12 |
 | object-phrase | 10 |
 | pt | 9 |
+| timing | 8 |
+| duration | 7 |
 | destination | 7 |
-| duration | 6 |
 | pt-change | 5 |
 | quoted-ability | 4 |
-| timing | 4 |
 | predicate | 3 |
 | for-each | 2 |
+| condition | 2 |
 | colour-list | 2 |
 | cost-phrase | 1 |
 | target | 1 |
+
+### Leftover classification
+
+The 46 previously unclassified paths were hand-classified (2-3 values each): 37 are closed vocabularies (quantifier symbols, mana, card names, possessives, zones, player references, status flags) and 9 are should_be_structured; the 49 `modifier` paths stay should_be_structured. **None of the leftovers is legitimately free-form** — each enumerates a small vocabulary or encodes structure, and the only legal free text remains `fragment` on an unparsed marker.
+
+Structured leftovers: `[].activate_only` (timing), `[].effect.as_though` (phrase), `[].effect.mana_value` (condition), `[].effect.toughness_value` (amount), `[].effect.unless` (condition), `[].effect.until` (duration), `[].if.during` (timing), `[].trigger.event.condition` (timing), `[].trigger.event.object.condition` (timing).
 
 ## Totals
 
 - sentences: 7,264; occurrences: 20,880
 - honest (baseline): 6,328 texts / 19,158 occurrences
-- stringy sentences: 4,171 texts / 9,298 occurrences
-- **structured coverage: 2,629 / 7,264 texts (36.2%), 10,680 / 20,880 occurrences (51.1%)**
-- stringy report rows (site-level, a text can have several): 5,888
+- stringy sentences: 4,163 texts / 9,277 occurrences
+- **structured coverage: 2,637 / 7,264 texts (36.3%), 10,701 / 20,880 occurrences (51.2%)**
+- stringy report rows (site-level, a text can have several): 5,874
 
 ## Top 20 stringy families by occurrence
 

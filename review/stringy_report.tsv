@@ -95,7 +95,6 @@ f1638efe6ba4	[].effect.duration	until end of turn	4	9
 18b4be18dda0	[].effect.amount	3 life	2	8
 1aa98f40a483	[].effect.change	+2/+0	1	8
 28ef7d5b073c	[].effect.card.label	target creature or enchantment	4	8
-3e8df503563d	[].effect.for	the copies	2	8
 4cd843c5ded1	[].effect.object	a creature type	3	8
 56371ebd621e	[].effect[].predicate	be countered	2	8
 56371ebd621e	[].effect[].target.modifier	of the chosen type	4	8
@@ -186,7 +185,6 @@ fb4b08ab8ab0	[].effect.object	a card name	3	6
 1111384d0f05	[].effect.predicate	be blocked	2	5
 114785fd61d6	[].effect.cards.modifier	discarded this way	3	5
 114785fd61d6	[].effect.for_each.modifier	discarded this way	3	5
-114785fd61d6	[].effect.per	card type	2	5
 11a41ec11c6e	[].effect.inner.duration	for as long as it remains exiled	7	5
 12036fde3826	[].trigger.when	At the beginning of each opponent's draw step	8	5
 122191b3f7b4	[].effect.duration	until end of turn	4	5
@@ -370,7 +368,6 @@ fff7a60531ca	[].effect.counter	+1/+1 counter	2	5
 39d79376ef2d	[].effect.duration	until end of turn	4	4
 3a24e92a2399	[].effect[].to	to the battlefield transformed under its owner's control	8	4
 3a664959ee14	[].effect.effect.amount	1 mana of that color	5	4
-3a7547c18918	[].effect.per	card type	2	4
 3a7547c18918	[].trigger.when	At the beginning of your end step	7	4
 3ac10065021d	[].effect.duration	until end of turn	4	4
 3ac10065021d	[].effect.target.modifier	of that type	3	4
@@ -592,7 +589,6 @@ cd1787e743da	[].effect.token.power_toughness	2/1	1	4
 cdf0387c689f	[].effect.amount	{C} {C}	2	4
 ce8c90e1fc12	[].trigger.when	At the beginning of combat on your turn	8	4
 d1559ce1b381	[].effect.to	any target	2	4
-d21127999904	[].effect.per	charge counter	2	4
 d21127999904	[].trigger.when	At the beginning of your first main phase	8	4
 d2621649ce38	[].effect.inner.card.modifier	with mana value less than or equal to the number of creatures you control	14	4
 d346f665692c	[].trigger.when	At the beginning of the end step	7	4
@@ -1042,7 +1038,6 @@ b692474499a6	[].effect.for_each	creature you control with power 4 or greater	8	3
 b6b90ddac3dd	[].xdef.xdef[].modifier	with flying	2	3
 b8007635401b	[].effect[].to	to the battlefield under its owner's control	7	3
 b8007635401b	[].trigger.when	At the beginning of your end step	7	3
-b830bdfd9e97	[].effect[].inner.card.quantifier.up_to	that many	2	3
 b893b7b21757	[].trigger.when	At the beginning of your end step	7	3
 b95a5157f089	[].effect[].amount	2 life	2	3
 baa3c8ab91d7	[].effect.to	any target	2	3
@@ -1140,7 +1135,6 @@ e1f7a9d37492	[].effect.change	+1/+0	1	3
 e2985bfdaa0e	[].effect.trigger.event.object	an instant or sorcery spell	5	3
 e2985bfdaa0e	[].effect.trigger.event.window	this turn	2	3
 e3008c13033d	[].effect[].duration	until your next turn	4	3
-e3008c13033d	[].effect[].from	their hand	2	3
 e3008c13033d	[].effect[].predicate	play cards	2	3
 e4a1a9a71ac6	[].effect.to	to the battlefield	3	3
 e4de99a62cbe	[].effect.amount	3 life	2	3
@@ -1315,7 +1309,6 @@ ffe6ddd84137	[].effect[].duration	until end of turn	4	3
 0f00f0662328	[].effect.token.power_toughness	2/2	1	2
 0f0d663320b7	[].effect.duration	until end of turn	4	2
 0f0d663320b7	[].trigger.event.object.to	a player	2	2
-0f613ed10df0	[].effect.player	target opponent	2	2
 0f76affe060a	[].effect.unless.label	you control a Forest or a Plains	7	2
 0f76affe060a	[].effect.unless.lists[].label	a Forest or a Plains	5	2
 0f8e960dd1ef	[].effect.unless.label	you control a Mountain or a Forest	7	2
@@ -1610,7 +1603,6 @@ ffe6ddd84137	[].effect[].duration	until end of turn	4	3
 3aca99118d22	[].effect.card.modifier	exiled with this land	4	2
 3aca99118d22	[].effect.to	to its owner's hand	4	2
 3ae4d3983396	[].effect.inner.duration	this turn	2	2
-3b03d61f735f	[].effect.object.quantifier.up_to	that many	2	2
 3b5ff5644b1b	[].effect.card.modifier	with flying	2	2
 3b7f8ddbfc6c	[].effect[].token.power_toughness	2/2	1	2
 3be1b40bad28	[].effect[].change	+1/+1	1	2
@@ -1750,7 +1742,6 @@ ffe6ddd84137	[].effect[].duration	until end of turn	4	3
 4b9b32546d1e	[].effect.for_each	permanent sacrificed this way	4	2
 4bcb72d28520	[].effect.duration	until end of turn	4	2
 4c599d44346c	[].effect[].duration	until end of turn	4	2
-4c74eb08685a	[].effect.player	that player	2	2
 4cd50c86eed1	[].effect.change	+2/+2	1	2
 4cd50c86eed1	[].effect.target.modifier	of the chosen type	4	2
 4ce2de6f13a7	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Elves', 'note': 'unresolved'}}	8	2
@@ -1774,7 +1765,6 @@ ffe6ddd84137	[].effect[].duration	until end of turn	4	3
 4e83fa48bb16	[].effect.counter	-1/-1 counter s	3	2
 4e8e6b6d2ad3	[].effect.inner.counter	lore counter	2	2
 4eccd99bfbcb	[].effect.to	any target	2	2
-4f3b606a82eb	[].effect.inner.effect.named	Everflame, Heroes' Legacy	3	2
 4f55f8d140e2	[].effect[].amount	the sacrificed creature 's power	5	2
 4f5dbbeee5ec	[].effect.counter	+1/+1	1	2
 4f92f9ca8da2	[].effect.token.colors	blue and black	3	2
@@ -2080,7 +2070,6 @@ ffe6ddd84137	[].effect[].duration	until end of turn	4	3
 79411b76c4bc	[].effect.token.power_toughness	1/1	1	2
 79880c087485	[].effect.card.label	target creature, enchantment, or planeswalker	5	2
 79882cccc4b9	[].effect.destination	their choice of the top or bottom of their library	10	2
-798bd2bce372	[].effect[].card.quantifier.up_to	that many	2	2
 798bd2bce372	[].trigger.event.subject.modifier	with power 4 or greater	5	2
 79d496ec8fad	[].effect.token.quote	"When this token enters, it deals 2 damage to any target"	11	2
 79d53306aba1	[].effect.counter	+1/+1 counter	2	2
@@ -3580,7 +3569,6 @@ ffd899f3f3c9	[].effect.amount	1 life	2	2
 34cbc970fe17	[].effect[].amount	1 life	2	1
 3508228d795a	[].effect.token.power_toughness	1/1	1	1
 3508228d795a	[].effect.token.quote	"This token can't block."	4	1
-355f2b9bd4c1	[].effect.for	that spell	2	1
 3591964758ff	[].effect[].change	+3/+3	1	1
 3591964758ff	[].effect[].duration	until end of turn	4	1
 3591964758ff	[].effect[].duration	until end of turn	4	1
@@ -4211,7 +4199,6 @@ ffd899f3f3c9	[].effect.amount	1 life	2	2
 6b201d69e1bc	[].effect.token.power_toughness	1/1	1	1
 6b201d69e1bc	[].effect.token.quote	"This token can't block."	4	1
 6b27a3073d3d	[].effect.with.counter	wish counters	2	1
-6babf0406980	[].effect.or_pay	{3} {B}	2	1
 6bb00437847e	[].effect[].change	+1/+0	1	1
 6bca1a23aa53	[].effect.to	to your hand	3	1
 6c058fa7dba3	[].effect.token.power_toughness	X/X	1	1
@@ -4810,7 +4797,6 @@ a02a54daca45	[].effect.with.counter	finality counter	2	1
 a03949ac2f91	[].effect.change	+3/-3	1	1
 a03949ac2f91	[].effect.duration	until end of turn	4	1
 a048bf8533dc	[].effect[].base_pt	1/1	1	1
-a048bf8533dc	[].effect[].named	Legitimate Businessperson	2	1
 a0975561e0e5	[].effect.duration	until end of turn	4	1
 a0a65b757b9c	[].effect.duration	until end of turn	4	1
 a0c086f26015	[].effect.object	target creatures controlled by the same opponent	7	1
