@@ -166,3 +166,9 @@ the 30-occurrence build threshold, and the rest are distinct passivisations.
 Adding a passive replacement action would cost a broad action shape for <30
 occurrences, so the family is closed here; the 69 occurrences stay in the
 ledger for a future phase.
+
+| xdef closed forms | 83 occ residual; generic number-of/among/greatest + sacrificed/difference/total power | 78b1128: closed ~50; left ~33 (the number of times, rev/skewer/charge/cave counters, free-form) |
+| object_text / modifier_text | object 64, modifier 24 | aa5e3dc: put-library owner choice (14) and distribute counts (13) structured; remaining object text is for_each one-offs; modifier_text is free-form "you've cast/discarded this turn" qualifiers and compound keyword costs — left |
+| raw_action residual | ~91 non-double after 6924944 | top shapes pay-life-equal (9), it becomes plotted (8), additional-combat/end-step (5), cast-exiled-until (4); all below the 50-occ closed threshold — left |
+| static_text residual | 168 | arbitrary "Activate only if …" + free-form statics; no closed sub-family ≥20 in head grouping — left |
+| freeze point | Standard honest 19,158/22,217 = 86.2% (unique 6,328/7,966; interpret_unparsed 1,722 occ / 936 unique); FDN 1,572/1,653 = 95.1% (unparsed 81/45), parse 94.0% Standard | approximate remaining split: condition ~1,099 (would/free-form), trigger ~270 (compound), static 168, raw ~91, object ~37, xdef ~33, modifier 24, no_handler ~0 |
