@@ -1318,6 +1318,40 @@ class Interpreter:
                 mobj = _sym_modifier(mv)
                 if mobj:
                     node[mkey] = mobj
+        def _sym_object(v):
+            low = v.strip().lower()
+            if low == 'a noncreature spell':
+                return {'kind': 'spell', 'quantifier': 'a',
+                        'card_type': {'kind': 'type', 'value': 'spell'},
+                        'noncreature': True}
+            if low == 'a spell':
+                return {'kind': 'spell', 'quantifier': 'a'}
+            if low == 'a card':
+                return {'kind': 'card', 'quantifier': 'a'}
+            if low in ('a creature type', 'a basic land type', 'a card type',
+                       'a color', 'a card name', 'a nonland card name'):
+                return {'kind': low[2:].replace(' ', '_')}
+            if low == 'the battlefield':
+                return {'zone': 'battlefield'}
+            if low == 'top card of your library':
+                return {'kind': 'card', 'position': 'top',
+                        'zone': 'library', 'owner': 'you'}
+            if low == 'your second card each turn':
+                return {'kind': 'card', 'ordinal': 'second',
+                        'player': 'you', 'frequency': 'each_turn'}
+            if low == 'one or both':
+                return {'kind': 'choice', 'options': 'one_or_both'}
+            if low in ('odd or even', 'even or odd'):
+                return {'kind': 'choice', 'options': 'odd_or_even'}
+            if low == 'a player':
+                return {'kind': 'player', 'quantifier': 'a'}
+            return None
+        for okey in ('object',):
+            ov = node.get(okey)
+            if isinstance(ov, str):
+                oobj = _sym_object(ov)
+                if oobj:
+                    node[okey] = oobj
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
