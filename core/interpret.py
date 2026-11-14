@@ -520,6 +520,40 @@ class Interpreter:
                         'this_turn': True}
         return None
 
+    _quote_parser = None
+    _quote_depth = 0
+
+    def _quoted_ability(self, text):
+        raw = text.strip()
+        if len(raw) >= 2 and raw[0] == raw[-1] == '"':
+            raw = raw[1:-1].strip()
+        raw = raw.rstrip('.').strip()
+        if not raw or self._quote_depth > 0:
+            return None
+        if Interpreter._quote_parser is None:
+            from larkparser import build_parser
+            Interpreter._quote_parser = build_parser('interp')
+        try:
+            tree = Interpreter._quote_parser.parse(raw)
+        except Exception:
+            return None
+        self._quote_depth += 1
+        try:
+            res = self.interp(tree)
+        finally:
+            self._quote_depth -= 1
+
+        def _has_unparsed(x):
+            if isinstance(x, dict):
+                return bool(x.get('unparsed')) or any(
+                    _has_unparsed(v) for v in x.values())
+            if isinstance(x, list):
+                return any(_has_unparsed(v) for v in x)
+            return False
+        if not res or _has_unparsed(res):
+            return None
+        return {'kind': 'quoted_ability', 'sentence': res}
+
     def _late_normalize(self, obj):
         """Structure values created after the normal child-finalizer pass."""
         if isinstance(obj, dict):
@@ -533,6 +567,16 @@ class Interpreter:
                     d['target'] = {'kind': 'type',
                                    'value': rest[len('only a single '):]}
                 obj['modifier'] = d
+            qv = obj.get('quote')
+            if isinstance(qv, str):
+                qobj = self._quoted_ability(qv)
+                if qobj:
+                    obj['quote'] = qobj
+            qvs = obj.get('quotes')
+            if isinstance(qvs, list):
+                obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
+                                 and self._quoted_ability(x) else x
+                                 for x in qvs]
             for v in obj.values():
                 self._late_normalize(v)
         elif isinstance(obj, list):

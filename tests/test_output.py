@@ -193,7 +193,7 @@ add("become-lose-types-no-all-creature",
     "Enchanted permanent is a colorless land with \"{T}: Add {C}\" and loses all other card types and abilities",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
                   and 'all_creature_types' not in d
-                  and d.get('quote') == '"{T}: Add {C}"'
+                  and d.get('quote', {}).get('kind') == 'quoted_ability'
                   and d.get('loses_all_other_card_types_and_abilities') is True))
 add("lose-keywords-otherness",
     "Lizard Formula — When this creature enters, up to one other target creature loses all abilities and becomes a green Lizard creature with base power and toughness 4/4",
@@ -537,7 +537,7 @@ add("token-tapped",
     lambda o: has(o, lambda d: d.get('token', {}).get('tapped') is True))
 add("token-granted-ability",
     'Create a 0/1 black Wizard creature token with "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent."',
-    lambda o: has(o, lambda d: 'noncreature spell' in str(d.get('token', {}).get('quote', ''))))
+    lambda o: has(o, lambda d: d.get('token', {}).get('quote', {}).get('kind') == 'quoted_ability' and 'noncreature' in str(d.get('token', {}).get('quote', {}).get('sentence', ''))))
 add("token-crew",
     "When this creature enters, create a 3/2 colorless Vehicle artifact token with crew 1",
     lambda o: has(o, lambda d: {'keyword': 'crew', 'modifier': 1} in d.get('token', {}).get('kw', [])))
