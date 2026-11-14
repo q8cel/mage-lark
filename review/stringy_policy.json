@@ -107,15 +107,45 @@
   },
   "[].activate_only": {
    "class": "should_be_structured",
-   "texts": 4,
-   "distinct": 4,
+   "texts": 1,
+   "distinct": 1,
    "rule": "timing"
   },
-  "[].amount": {
+  "[].activate_only.frequency": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "once_each_turn"
+   ]
+  },
+  "[].activate_only.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "turn"
+   ]
+  },
+  "[].activate_only.player": {
    "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].activate_only.timing": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "timing"
+  },
+  "[].amount.kind": {
+   "class": "closed_vocab",
    "texts": 7,
-   "distinct": 7,
-   "rule": "amount"
+   "distinct": 1,
+   "vocab": [
+    "mana"
+   ]
   },
   "[].card_type": {
    "class": "closed_vocab",
@@ -806,11 +836,35 @@
     "{5}{W}{W}"
    ]
   },
-  "[].duration": {
-   "class": "should_be_structured",
+  "[].duration.event": {
+   "class": "closed_vocab",
    "texts": 41,
-   "distinct": 2,
-   "rule": "duration"
+   "distinct": 1,
+   "vocab": [
+    "end_of_turn"
+   ]
+  },
+  "[].duration.kind": {
+   "class": "closed_vocab",
+   "texts": 41,
+   "distinct": 1,
+   "vocab": [
+    "until"
+   ]
+  },
+  "[].duration.player": {
+   "class": "should_be_structured",
+   "texts": 6,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].duration.which": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 1,
+   "vocab": [
+    "next"
+   ]
   },
   "[].effect.actor": {
    "class": "closed_vocab",
@@ -910,9 +964,15 @@
   },
   "[].effect.amount": {
    "class": "should_be_structured",
-   "texts": 529,
-   "distinct": 116,
+   "texts": 119,
+   "distinct": 58,
    "rule": "amount"
+  },
+  "[].effect.amount.count": {
+   "class": "should_be_structured",
+   "texts": 6,
+   "distinct": 1,
+   "rule": "count"
   },
   "[].effect.amount.equal_to[].card_type.kind": {
    "class": "closed_vocab",
@@ -938,12 +998,39 @@
     "this"
    ]
   },
+  "[].effect.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 410,
+   "distinct": 5,
+   "vocab": [
+    "half",
+    "mana",
+    "mana_choice",
+    "number",
+    "x"
+   ]
+  },
+  "[].effect.amount.of": {
+   "class": "should_be_structured",
+   "texts": 43,
+   "distinct": 6,
+   "rule": "phrase"
+  },
   "[].effect.amount.possessor": {
    "class": "closed_vocab",
    "texts": 5,
    "distinct": 1,
    "vocab": [
     "its"
+   ]
+  },
+  "[].effect.amount.rounding": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 2,
+   "vocab": [
+    "down",
+    "up"
    ]
   },
   "[].effect.amount.stat": {
@@ -962,6 +1049,22 @@
    "vocab": [
     "{G}",
     "{R}"
+   ]
+  },
+  "[].effect.amount.unit": {
+   "class": "closed_vocab",
+   "texts": 138,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
+  },
+  "[].effect.amount.value": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 1,
+   "vocab": [
+    "X"
    ]
   },
   "[].effect.amount.xdef.reason": {
@@ -1140,11 +1243,22 @@
    "distinct": 2,
    "rule": "count"
   },
-  "[].effect.and[].counter": {
-   "class": "should_be_structured",
+  "[].effect.and[].counter.kind": {
+   "class": "closed_vocab",
    "texts": 9,
    "distinct": 10,
-   "rule": "counter"
+   "vocab": [
+    "+1/+1",
+    "deathtouch",
+    "double strike",
+    "first strike",
+    "flying",
+    "indestructible",
+    "lifelink",
+    "plan",
+    "reach",
+    "trample"
+   ]
   },
   "[].effect.and[].on.card_type.kind": {
    "class": "closed_vocab",
@@ -1209,11 +1323,17 @@
     "that"
    ]
   },
-  "[].effect.base_pt": {
+  "[].effect.base_pt.power": {
    "class": "should_be_structured",
-   "texts": 23,
-   "distinct": 14,
-   "rule": "pt"
+   "texts": 2,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect.base_pt.toughness": {
+   "class": "should_be_structured",
+   "texts": 2,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].effect.basis": {
    "class": "closed_vocab",
@@ -1252,11 +1372,30 @@
     "walls"
    ]
   },
-  "[].effect.blocked_by.modifier": {
-   "class": "should_be_structured",
+  "[].effect.blocked_by.modifier.kind": {
+   "class": "closed_vocab",
    "texts": 9,
-   "distinct": 3,
-   "rule": "modifier"
+   "distinct": 1,
+   "vocab": [
+    "stat_filter"
+   ]
+  },
+  "[].effect.blocked_by.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
+  },
+  "[].effect.blocked_by.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
   },
   "[].effect.by.card_type.kind": {
    "class": "closed_vocab",
@@ -1527,15 +1666,88 @@
   },
   "[].effect.card.modifier": {
    "class": "should_be_structured",
-   "texts": 128,
-   "distinct": 42,
+   "texts": 13,
+   "distinct": 8,
    "rule": "modifier"
+  },
+  "[].effect.card.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 3,
+   "vocab": [
+    "a",
+    "no",
+    "stash"
+   ]
+  },
+  "[].effect.card.modifier.event": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 3,
+   "vocab": [
+    "exiled",
+    "milled",
+    "revealed"
+   ]
   },
   "[].effect.card.modifier.fragment": {
    "class": "free_text",
    "texts": 1,
    "distinct": 1,
    "rule": "free_text"
+  },
+  "[].effect.card.modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 2,
+   "vocab": [
+    "flying",
+    "haste"
+   ]
+  },
+  "[].effect.card.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 115,
+   "distinct": 8,
+   "vocab": [
+    "counter",
+    "event_filter",
+    "exclude",
+    "keyword",
+    "name",
+    "names",
+    "stat_filter",
+    "type"
+   ]
+  },
+  "[].effect.card.modifier.mode": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect.card.modifier.name": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "chosen"
+   ]
+  },
+  "[].effect.card.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 3,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect.card.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 93,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
   },
   "[].effect.card.modifier.reason": {
    "class": "closed_vocab",
@@ -1547,10 +1759,39 @@
   },
   "[].effect.card.modifier.source": {
    "class": "closed_vocab",
-   "texts": 1,
+   "texts": 5,
+   "distinct": 2,
+   "vocab": [
+    "i_sentence",
+    "this_way"
+   ]
+  },
+  "[].effect.card.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 93,
+   "distinct": 3,
+   "vocab": [
+    "mana value",
+    "power",
+    "toughness"
+   ]
+  },
+  "[].effect.card.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 3,
+   "vocab": [
+    "X",
+    "enchanted creature",
+    "this creature"
+   ]
+  },
+  "[].effect.card.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 3,
    "distinct": 1,
    "vocab": [
-    "i_sentence"
+    "the chosen"
    ]
   },
   "[].effect.card.otherness": {
@@ -1720,15 +1961,48 @@
   },
   "[].effect.cards.modifier": {
    "class": "should_be_structured",
-   "texts": 5,
-   "distinct": 5,
+   "texts": 1,
+   "distinct": 1,
    "rule": "modifier"
+  },
+  "[].effect.cards.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect.cards.modifier.event": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "destroyed",
+    "discarded"
+   ]
   },
   "[].effect.cards.modifier.fragment": {
    "class": "free_text",
    "texts": 3,
    "distinct": 2,
    "rule": "free_text"
+  },
+  "[].effect.cards.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 3,
+   "vocab": [
+    "counter",
+    "event_filter",
+    "type"
+   ]
+  },
+  "[].effect.cards.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].effect.cards.modifier.reason": {
    "class": "closed_vocab",
@@ -1740,10 +2014,19 @@
   },
   "[].effect.cards.modifier.source": {
    "class": "closed_vocab",
-   "texts": 3,
+   "texts": 5,
+   "distinct": 2,
+   "vocab": [
+    "i_sentence",
+    "this_way"
+   ]
+  },
+  "[].effect.cards.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 1,
    "distinct": 1,
    "vocab": [
-    "i_sentence"
+    "that"
    ]
   },
   "[].effect.cards.otherness": {
@@ -1815,11 +2098,40 @@
     "you control"
    ]
   },
-  "[].effect.cards[].modifier": {
-   "class": "should_be_structured",
+  "[].effect.cards[].modifier.kind": {
+   "class": "closed_vocab",
    "texts": 3,
-   "distinct": 3,
-   "rule": "modifier"
+   "distinct": 2,
+   "vocab": [
+    "exclude",
+    "stat_filter"
+   ]
+  },
+  "[].effect.cards[].modifier.op": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
+  },
+  "[].effect.cards[].modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "mana value",
+    "power"
+   ]
+  },
+  "[].effect.cards[].modifier.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "~"
+   ]
   },
   "[].effect.cards[].possessive": {
    "class": "closed_vocab",
@@ -1855,11 +2167,17 @@
     "graveyard"
    ]
   },
-  "[].effect.change": {
+  "[].effect.change.power": {
    "class": "should_be_structured",
-   "texts": 402,
-   "distinct": 48,
-   "rule": "pt-change"
+   "texts": 43,
+   "distinct": 2,
+   "rule": "unclassified"
+  },
+  "[].effect.change.toughness": {
+   "class": "should_be_structured",
+   "texts": 29,
+   "distinct": 2,
+   "rule": "unclassified"
   },
   "[].effect.condition.card_target.card_type.kind": {
    "class": "closed_vocab",
@@ -2166,9 +2484,63 @@
   },
   "[].effect.counter": {
    "class": "should_be_structured",
-   "texts": 521,
-   "distinct": 55,
+   "texts": 19,
+   "distinct": 7,
    "rule": "counter"
+  },
+  "[].effect.counter.count": {
+   "class": "should_be_structured",
+   "texts": 27,
+   "distinct": 3,
+   "rule": "count"
+  },
+  "[].effect.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 502,
+   "distinct": 41,
+   "vocab": [
+    "+1/+1",
+    "-1/-1",
+    "bait",
+    "blight",
+    "bore",
+    "charge",
+    "chorus",
+    "coin",
+    "conqueror",
+    "deathtouch",
+    "decayed",
+    "double strike",
+    "dread",
+    "fire",
+    "flood",
+    "flying",
+    "growth",
+    "haste",
+    "hone",
+    "impostor",
+    "incubation",
+    "indestructible",
+    "ingenuity",
+    "landmark",
+    "lifelink",
+    "loot",
+    "lore",
+    "loyalty",
+    "nest",
+    "page",
+    "plan",
+    "possession",
+    "quest",
+    "rev",
+    "skewer",
+    "stash",
+    "stun",
+    "supply",
+    "time",
+    "trample",
+    "unlock"
+   ]
   },
   "[].effect.counters": {
    "class": "should_be_structured",
@@ -2185,11 +2557,27 @@
     "noncombat"
    ]
   },
-  "[].effect.destination": {
+  "[].effect.destination.library_position": {
    "class": "should_be_structured",
    "texts": 12,
    "distinct": 2,
-   "rule": "destination"
+   "rule": "unclassified"
+  },
+  "[].effect.destination.owner": {
+   "class": "closed_vocab",
+   "texts": 12,
+   "distinct": 1,
+   "vocab": [
+    "they"
+   ]
+  },
+  "[].effect.destination.zone": {
+   "class": "closed_vocab",
+   "texts": 12,
+   "distinct": 1,
+   "vocab": [
+    "library"
+   ]
   },
   "[].effect.direction": {
    "class": "closed_vocab",
@@ -2202,15 +2590,66 @@
   },
   "[].effect.duration": {
    "class": "should_be_structured",
-   "texts": 648,
-   "distinct": 18,
+   "texts": 12,
+   "distinct": 7,
    "rule": "duration"
   },
-  "[].effect.effect.amount": {
+  "[].effect.duration.event": {
+   "class": "closed_vocab",
+   "texts": 636,
+   "distinct": 6,
+   "vocab": [
+    "end_of_turn",
+    "leaves_battlefield",
+    "next_turn",
+    "rest_of_game",
+    "this_turn",
+    "your_turn"
+   ]
+  },
+  "[].effect.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 636,
+   "distinct": 2,
+   "vocab": [
+    "for",
+    "until"
+   ]
+  },
+  "[].effect.duration.object": {
    "class": "should_be_structured",
+   "texts": 26,
+   "distinct": 6,
+   "rule": "object-phrase"
+  },
+  "[].effect.duration.player": {
+   "class": "should_be_structured",
+   "texts": 8,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect.effect.amount.kind": {
+   "class": "closed_vocab",
    "texts": 4,
    "distinct": 2,
-   "rule": "amount"
+   "vocab": [
+    "mana",
+    "number"
+   ]
+  },
+  "[].effect.effect.amount.of": {
+   "class": "should_be_structured",
+   "texts": 3,
+   "distinct": 1,
+   "rule": "phrase"
+  },
+  "[].effect.effect.amount.unit": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
   },
   "[].effect.effect.card.card_type.kind": {
    "class": "closed_vocab",
@@ -2246,17 +2685,41 @@
    "distinct": 1,
    "rule": "count"
   },
-  "[].effect.effect.counter": {
+  "[].effect.effect.counter.count": {
    "class": "should_be_structured",
    "texts": 1,
    "distinct": 1,
-   "rule": "counter"
+   "rule": "count"
   },
-  "[].effect.effect.duration": {
+  "[].effect.effect.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "-1/-1"
+   ]
+  },
+  "[].effect.effect.duration.event": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "leaves_battlefield"
+   ]
+  },
+  "[].effect.effect.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "until"
+   ]
+  },
+  "[].effect.effect.duration.object": {
    "class": "should_be_structured",
    "texts": 1,
    "distinct": 1,
-   "rule": "duration"
+   "rule": "object-phrase"
   },
   "[].effect.effect.on.card_type.kind": {
    "class": "closed_vocab",
@@ -2338,12 +2801,6 @@
     "red"
    ]
   },
-  "[].effect.effect.token.power_toughness": {
-   "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 1,
-   "rule": "pt"
-  },
   "[].effect.effect.unless.fragment": {
    "class": "free_text",
    "texts": 1,
@@ -2399,11 +2856,21 @@
     "library"
    ]
   },
-  "[].effect.effect[].amount": {
-   "class": "should_be_structured",
+  "[].effect.effect[].amount.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "amount"
+   "vocab": [
+    "number"
+   ]
+  },
+  "[].effect.effect[].amount.unit": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
   },
   "[].effect.effect[].verb": {
    "class": "closed_vocab",
@@ -2466,11 +2933,21 @@
     "creatures"
    ]
   },
-  "[].effect.except_by.modifier": {
-   "class": "should_be_structured",
+  "[].effect.except_by.modifier.keyword": {
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 1,
-   "rule": "modifier"
+   "vocab": [
+    "haste"
+   ]
+  },
+  "[].effect.except_by.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "keyword"
+   ]
   },
   "[].effect.except_by.quantifier": {
    "class": "closed_vocab",
@@ -2622,15 +3099,49 @@
   },
   "[].effect.for_each.modifier": {
    "class": "should_be_structured",
-   "texts": 12,
-   "distinct": 9,
+   "texts": 5,
+   "distinct": 4,
    "rule": "modifier"
+  },
+  "[].effect.for_each.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect.for_each.modifier.event": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 3,
+   "vocab": [
+    "destroyed",
+    "discarded",
+    "tapped"
+   ]
   },
   "[].effect.for_each.modifier.fragment": {
    "class": "free_text",
    "texts": 4,
    "distinct": 2,
    "rule": "free_text"
+  },
+  "[].effect.for_each.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 3,
+   "vocab": [
+    "counter",
+    "event_filter",
+    "type"
+   ]
+  },
+  "[].effect.for_each.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].effect.for_each.modifier.reason": {
    "class": "closed_vocab",
@@ -2642,10 +3153,19 @@
   },
   "[].effect.for_each.modifier.source": {
    "class": "closed_vocab",
-   "texts": 4,
+   "texts": 9,
+   "distinct": 2,
+   "vocab": [
+    "i_sentence",
+    "this_way"
+   ]
+  },
+  "[].effect.for_each.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 1,
    "distinct": 1,
    "vocab": [
-    "i_sentence"
+    "that"
    ]
   },
   "[].effect.for_each.otherness": {
@@ -2798,9 +3318,27 @@
   },
   "[].effect.inner.amount": {
    "class": "should_be_structured",
-   "texts": 66,
-   "distinct": 24,
+   "texts": 2,
+   "distinct": 2,
    "rule": "amount"
+  },
+  "[].effect.inner.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 64,
+   "distinct": 3,
+   "vocab": [
+    "mana",
+    "number",
+    "x"
+   ]
+  },
+  "[].effect.inner.amount.unit": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
   },
   "[].effect.inner.amount[].card_type.kind": {
    "class": "closed_vocab",
@@ -3004,9 +3542,68 @@
   },
   "[].effect.inner.card.modifier": {
    "class": "should_be_structured",
-   "texts": 21,
-   "distinct": 9,
+   "texts": 5,
+   "distinct": 3,
    "rule": "modifier"
+  },
+  "[].effect.inner.card.modifier.event": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "exiled",
+    "milled"
+   ]
+  },
+  "[].effect.inner.card.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 3,
+   "vocab": [
+    "event_filter",
+    "stat_filter",
+    "type"
+   ]
+  },
+  "[].effect.inner.card.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 12,
+   "distinct": 1,
+   "vocab": [
+    "<="
+   ]
+  },
+  "[].effect.inner.card.modifier.source": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "this_way"
+   ]
+  },
+  "[].effect.inner.card.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 12,
+   "distinct": 1,
+   "vocab": [
+    "mana value"
+   ]
+  },
+  "[].effect.inner.card.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "X"
+   ]
+  },
+  "[].effect.inner.card.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that"
+   ]
   },
   "[].effect.inner.card.otherness": {
    "class": "closed_vocab",
@@ -3143,11 +3740,21 @@
     "spell"
    ]
   },
-  "[].effect.inner.cards[].modifier": {
-   "class": "should_be_structured",
+  "[].effect.inner.cards[].modifier.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "modifier"
+   "vocab": [
+    "name"
+   ]
+  },
+  "[].effect.inner.cards[].modifier.name": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "chosen"
+   ]
   },
   "[].effect.inner.cards[].quantifier": {
    "class": "closed_vocab",
@@ -3198,12 +3805,6 @@
     "them"
    ]
   },
-  "[].effect.inner.change": {
-   "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
-   "rule": "pt-change"
-  },
   "[].effect.inner.count": {
    "class": "should_be_structured",
    "texts": 12,
@@ -3212,15 +3813,59 @@
   },
   "[].effect.inner.counter": {
    "class": "should_be_structured",
-   "texts": 12,
-   "distinct": 5,
+   "texts": 2,
+   "distinct": 1,
    "rule": "counter"
+  },
+  "[].effect.inner.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 10,
+   "distinct": 4,
+   "vocab": [
+    "+1/+1",
+    "bird creature card from your hand or graveyard onto the battlefield with a finality",
+    "lore",
+    "stun"
+   ]
   },
   "[].effect.inner.duration": {
    "class": "should_be_structured",
-   "texts": 41,
-   "distinct": 11,
+   "texts": 10,
+   "distinct": 6,
    "rule": "duration"
+  },
+  "[].effect.inner.duration.event": {
+   "class": "closed_vocab",
+   "texts": 31,
+   "distinct": 3,
+   "vocab": [
+    "end_of_turn",
+    "next_end_step",
+    "this_turn"
+   ]
+  },
+  "[].effect.inner.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 31,
+   "distinct": 2,
+   "vocab": [
+    "for",
+    "until"
+   ]
+  },
+  "[].effect.inner.duration.player": {
+   "class": "should_be_structured",
+   "texts": 15,
+   "distinct": 2,
+   "rule": "unclassified"
+  },
+  "[].effect.inner.duration.which": {
+   "class": "closed_vocab",
+   "texts": 12,
+   "distinct": 1,
+   "vocab": [
+    "next"
+   ]
   },
   "[].effect.inner.effect.copy_of.card_type.kind": {
    "class": "closed_vocab",
@@ -3401,12 +4046,6 @@
     "battlefield",
     "graveyard"
    ]
-  },
-  "[].effect.inner.effect.pt": {
-   "class": "should_be_structured",
-   "texts": 1,
-   "distinct": 1,
-   "rule": "pt"
   },
   "[].effect.inner.effect.stat": {
    "class": "closed_vocab",
@@ -3600,9 +4239,31 @@
   },
   "[].effect.inner.from_among.modifier": {
    "class": "should_be_structured",
-   "texts": 4,
-   "distinct": 3,
+   "texts": 3,
+   "distinct": 2,
    "rule": "modifier"
+  },
+  "[].effect.inner.from_among.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "dream"
+   ]
+  },
+  "[].effect.inner.from_among.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "counter"
+   ]
+  },
+  "[].effect.inner.from_among.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].effect.inner.from_among.this_that": {
    "class": "closed_vocab",
@@ -3826,8 +4487,8 @@
   },
   "[].effect.inner.to": {
    "class": "should_be_structured",
-   "texts": 14,
-   "distinct": 6,
+   "texts": 2,
+   "distinct": 2,
    "rule": "destination"
   },
   "[].effect.inner.to.card_type.kind": {
@@ -3872,6 +4533,23 @@
     "you control"
    ]
   },
+  "[].effect.inner.to.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "any_target"
+   ]
+  },
+  "[].effect.inner.to.owner": {
+   "class": "closed_vocab",
+   "texts": 10,
+   "distinct": 2,
+   "vocab": [
+    "owner",
+    "you"
+   ]
+  },
   "[].effect.inner.to.quantifier": {
    "class": "closed_vocab",
    "texts": 2,
@@ -3889,6 +4567,15 @@
     "that"
    ]
   },
+  "[].effect.inner.to.zone": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 2,
+   "vocab": [
+    "battlefield",
+    "hand"
+   ]
+  },
   "[].effect.inner.token.colors": {
    "class": "closed_vocab",
    "texts": 2,
@@ -3897,12 +4584,6 @@
     "blue",
     "colorless"
    ]
-  },
-  "[].effect.inner.token.power_toughness": {
-   "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
-   "rule": "pt"
   },
   "[].effect.inner.verb": {
    "class": "closed_vocab",
@@ -4043,14 +4724,30 @@
   },
   "[].effect.modifier": {
    "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
+   "texts": 1,
+   "distinct": 1,
    "rule": "modifier"
+  },
+  "[].effect.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "exclude"
+   ]
+  },
+  "[].effect.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "enchanted creature"
+   ]
   },
   "[].effect.object": {
    "class": "should_be_structured",
-   "texts": 99,
-   "distinct": 42,
+   "texts": 72,
+   "distinct": 34,
    "rule": "object-phrase"
   },
   "[].effect.object.card_type.kind": {
@@ -4141,9 +4838,16 @@
   },
   "[].effect.object.kind": {
    "class": "closed_vocab",
-   "texts": 3,
-   "distinct": 2,
+   "texts": 30,
+   "distinct": 9,
    "vocab": [
+    "basic_land_type",
+    "card",
+    "card_name",
+    "choice",
+    "color",
+    "creature_type",
+    "nonland_card_name",
     "property",
     "set"
    ]
@@ -4165,9 +4869,40 @@
   },
   "[].effect.object.modifier": {
    "class": "should_be_structured",
-   "texts": 3,
-   "distinct": 3,
+   "texts": 1,
+   "distinct": 1,
    "rule": "modifier"
+  },
+  "[].effect.object.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "stat_filter"
+   ]
+  },
+  "[].effect.object.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "<="
+   ]
+  },
+  "[].effect.object.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "mana value",
+    "power"
+   ]
+  },
+  "[].effect.object.options": {
+   "class": "should_be_structured",
+   "texts": 4,
+   "distinct": 2,
+   "rule": "unclassified"
   },
   "[].effect.object.otherness": {
    "class": "closed_vocab",
@@ -4177,6 +4912,20 @@
     "another",
     "other"
    ]
+  },
+  "[].effect.object.owner": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.object.position": {
+   "class": "should_be_structured",
+   "texts": 2,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].effect.object.quantifier": {
    "class": "closed_vocab",
@@ -4237,6 +4986,14 @@
    "distinct": 1,
    "vocab": [
     "this"
+   ]
+  },
+  "[].effect.object.zone": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "library"
    ]
   },
   "[].effect.object.zone.possessor": {
@@ -4380,9 +5137,58 @@
   },
   "[].effect.on.modifier": {
    "class": "should_be_structured",
-   "texts": 5,
-   "distinct": 5,
+   "texts": 1,
+   "distinct": 1,
    "rule": "modifier"
+  },
+  "[].effect.on.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect.on.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 3,
+   "vocab": [
+    "counter",
+    "exclude",
+    "stat_filter"
+   ]
+  },
+  "[].effect.on.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect.on.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "<="
+   ]
+  },
+  "[].effect.on.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
+  },
+  "[].effect.on.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "that creature",
+    "this creature"
+   ]
   },
   "[].effect.on.otherness": {
    "class": "closed_vocab",
@@ -4507,12 +5313,6 @@
    "texts": 104,
    "distinct": 11,
    "rule": "predicate"
-  },
-  "[].effect.pt": {
-   "class": "should_be_structured",
-   "texts": 28,
-   "distinct": 12,
-   "rule": "pt"
   },
   "[].effect.quote": {
    "class": "should_be_structured",
@@ -5020,11 +5820,84 @@
     "union"
    ]
   },
-  "[].effect.target.modifier": {
-   "class": "should_be_structured",
+  "[].effect.target.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect.target.modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "flying"
+   ]
+  },
+  "[].effect.target.modifier.kind": {
+   "class": "closed_vocab",
    "texts": 31,
-   "distinct": 11,
-   "rule": "modifier"
+   "distinct": 7,
+   "vocab": [
+    "color",
+    "counter",
+    "exclude",
+    "keyword",
+    "name",
+    "stat_filter",
+    "type"
+   ]
+  },
+  "[].effect.target.modifier.name": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "chosen"
+   ]
+  },
+  "[].effect.target.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 8,
+   "distinct": 2,
+   "rule": "unclassified"
+  },
+  "[].effect.target.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
+  },
+  "[].effect.target.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 2,
+   "vocab": [
+    "mana value",
+    "power"
+   ]
+  },
+  "[].effect.target.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "~"
+   ]
+  },
+  "[].effect.target.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 2,
+   "vocab": [
+    "that",
+    "the chosen"
+   ]
   },
   "[].effect.target.otherness": {
    "class": "closed_vocab",
@@ -5183,16 +6056,36 @@
     "X"
    ]
   },
-  "[].effect.timing": {
+  "[].effect.timing.phase": {
    "class": "should_be_structured",
    "texts": 25,
-   "distinct": 3,
+   "distinct": 2,
    "rule": "timing"
+  },
+  "[].effect.timing.player": {
+   "class": "should_be_structured",
+   "texts": 3,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect.timing.position": {
+   "class": "should_be_structured",
+   "texts": 25,
+   "distinct": 2,
+   "rule": "unclassified"
+  },
+  "[].effect.timing.which": {
+   "class": "closed_vocab",
+   "texts": 24,
+   "distinct": 1,
+   "vocab": [
+    "next"
+   ]
   },
   "[].effect.to": {
    "class": "should_be_structured",
-   "texts": 328,
-   "distinct": 36,
+   "texts": 28,
+   "distinct": 10,
    "rule": "destination"
   },
   "[].effect.to.card_type.kind": {
@@ -5240,22 +6133,60 @@
   },
   "[].effect.to.controller": {
    "class": "closed_vocab",
-   "texts": 52,
-   "distinct": 6,
+   "texts": 77,
+   "distinct": 10,
    "vocab": [
     "an opponent controls",
+    "her owner",
+    "owner",
     "target player controls",
     "that player controls",
+    "their owners",
+    "you",
     "you control",
     "you don't control",
     "your opponents control"
    ]
   },
-  "[].effect.to.modifier": {
-   "class": "should_be_structured",
+  "[].effect.to.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 26,
+   "distinct": 8,
+   "vocab": [
+    "+1/+1",
+    "finality",
+    "flying",
+    "hexproof counter and an indestructible",
+    "indestructible",
+    "one fewer revival",
+    "stun",
+    "time"
+   ]
+  },
+  "[].effect.to.kind": {
+   "class": "closed_vocab",
+   "texts": 42,
+   "distinct": 2,
+   "vocab": [
+    "any_target",
+    "player"
+   ]
+  },
+  "[].effect.to.modifier.keyword": {
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 1,
-   "rule": "modifier"
+   "vocab": [
+    "flying"
+   ]
+  },
+  "[].effect.to.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "keyword"
+   ]
   },
   "[].effect.to.or[].card_type.kind": {
    "class": "closed_vocab",
@@ -5303,9 +6234,18 @@
     "other"
    ]
   },
+  "[].effect.to.owner": {
+   "class": "closed_vocab",
+   "texts": 131,
+   "distinct": 2,
+   "vocab": [
+    "owner",
+    "you"
+   ]
+  },
   "[].effect.to.quantifier": {
    "class": "closed_vocab",
-   "texts": 187,
+   "texts": 189,
    "distinct": 2,
    "vocab": [
     "each",
@@ -5334,6 +6274,23 @@
     "that",
     "the",
     "this"
+   ]
+  },
+  "[].effect.to.which": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "defending"
+   ]
+  },
+  "[].effect.to.zone": {
+   "class": "closed_vocab",
+   "texts": 258,
+   "distinct": 2,
+   "vocab": [
+    "battlefield",
+    "hand"
    ]
   },
   "[].effect.token.attached_to.card_type.kind": {
@@ -5403,10 +6360,25 @@
    ]
   },
   "[].effect.token.colors": {
-   "class": "should_be_structured",
-   "texts": 418,
-   "distinct": 15,
-   "rule": "colour-list"
+   "class": "closed_vocab",
+   "texts": 348,
+   "distinct": 6,
+   "vocab": [
+    "black",
+    "blue",
+    "colorless",
+    "green",
+    "red",
+    "white"
+   ]
+  },
+  "[].effect.token.colors.kind": {
+   "class": "closed_vocab",
+   "texts": 70,
+   "distinct": 1,
+   "vocab": [
+    "all"
+   ]
   },
   "[].effect.token.copy_of.card_type.kind": {
    "class": "closed_vocab",
@@ -5558,9 +6530,25 @@
   },
   "[].effect.token.for_each.modifier": {
    "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
+   "texts": 1,
+   "distinct": 1,
    "rule": "modifier"
+  },
+  "[].effect.token.for_each.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.for_each.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that"
+   ]
   },
   "[].effect.token.for_each.zone.possessor": {
    "class": "closed_vocab",
@@ -5602,11 +6590,17 @@
    "distinct": 1,
    "rule": "modifier"
   },
-  "[].effect.token.power_toughness": {
+  "[].effect.token.power_toughness.power": {
    "class": "should_be_structured",
-   "texts": 407,
-   "distinct": 18,
-   "rule": "pt"
+   "texts": 6,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect.token.power_toughness.toughness": {
+   "class": "should_be_structured",
+   "texts": 6,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].effect.token.quote": {
    "class": "should_be_structured",
@@ -5654,11 +6648,21 @@
     "you control"
    ]
   },
-  "[].effect.token.xdef[].modifier": {
-   "class": "should_be_structured",
+  "[].effect.token.xdef[].modifier.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "modifier"
+   "vocab": [
+    "name"
+   ]
+  },
+  "[].effect.token.xdef[].modifier.name": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "chosen"
+   ]
   },
   "[].effect.token.xdef[].otherness": {
    "class": "closed_vocab",
@@ -5729,9 +6733,17 @@
   },
   "[].effect.trigger.event.window": {
    "class": "should_be_structured",
-   "texts": 3,
+   "texts": 1,
    "distinct": 1,
    "rule": "timing"
+  },
+  "[].effect.trigger.event.window.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
   },
   "[].effect.trigger.fragment": {
    "class": "free_text",
@@ -6335,11 +7347,13 @@
    "distinct": 1,
    "rule": "count"
   },
-  "[].effect.with.and[].counter": {
-   "class": "should_be_structured",
+  "[].effect.with.and[].counter.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "counter"
+   "vocab": [
+    "lifelink"
+   ]
   },
   "[].effect.with.card_type.kind": {
    "class": "closed_vocab",
@@ -6374,11 +7388,35 @@
    "distinct": 3,
    "rule": "count"
   },
-  "[].effect.with.counter": {
+  "[].effect.with.counter.count": {
    "class": "should_be_structured",
+   "texts": 6,
+   "distinct": 1,
+   "rule": "count"
+  },
+  "[].effect.with.counter.kind": {
+   "class": "closed_vocab",
    "texts": 84,
-   "distinct": 23,
-   "rule": "counter"
+   "distinct": 17,
+   "vocab": [
+    "+1/+1",
+    "-1/-1",
+    "divinity",
+    "fellowship",
+    "film",
+    "finality",
+    "fire",
+    "flying",
+    "hexproof",
+    "hexproof counter and an indestructible",
+    "indestructible",
+    "net",
+    "revival",
+    "shield",
+    "stun",
+    "time",
+    "wish"
+   ]
   },
   "[].effect.with.for_each": {
    "class": "should_be_structured",
@@ -6433,15 +7471,50 @@
   },
   "[].effect[].amount": {
    "class": "should_be_structured",
-   "texts": 192,
-   "distinct": 21,
+   "texts": 11,
+   "distinct": 10,
    "rule": "amount"
   },
-  "[].effect[].base_pt": {
+  "[].effect[].amount.kind": {
+   "class": "closed_vocab",
+   "texts": 181,
+   "distinct": 4,
+   "vocab": [
+    "half",
+    "mana",
+    "number",
+    "x"
+   ]
+  },
+  "[].effect[].amount.of": {
    "class": "should_be_structured",
-   "texts": 18,
-   "distinct": 7,
-   "rule": "pt"
+   "texts": 2,
+   "distinct": 2,
+   "rule": "phrase"
+  },
+  "[].effect[].amount.rounding": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "down"
+   ]
+  },
+  "[].effect[].amount.unit": {
+   "class": "closed_vocab",
+   "texts": 172,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
+  },
+  "[].effect[].amount.value": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 1,
+   "vocab": [
+    "X"
+   ]
   },
   "[].effect[].blocked_by.card_type.kind": {
    "class": "closed_vocab",
@@ -6460,11 +7533,21 @@
     "creatures"
    ]
   },
-  "[].effect[].blocked_by.modifier": {
-   "class": "should_be_structured",
+  "[].effect[].blocked_by.modifier.keyword": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "modifier"
+   "vocab": [
+    "defender"
+   ]
+  },
+  "[].effect[].blocked_by.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "keyword"
+   ]
   },
   "[].effect[].card": {
    "class": "closed_vocab",
@@ -6622,9 +7705,91 @@
   },
   "[].effect[].card.modifier": {
    "class": "should_be_structured",
-   "texts": 20,
-   "distinct": 14,
+   "texts": 4,
+   "distinct": 3,
    "rule": "modifier"
+  },
+  "[].effect[].card.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "time"
+   ]
+  },
+  "[].effect[].card.modifier.event": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "milled",
+    "revealed"
+   ]
+  },
+  "[].effect[].card.modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "flash"
+   ]
+  },
+  "[].effect[].card.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 5,
+   "vocab": [
+    "counter",
+    "event_filter",
+    "keyword",
+    "names",
+    "stat_filter"
+   ]
+  },
+  "[].effect[].card.modifier.mode": {
+   "class": "should_be_structured",
+   "texts": 3,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect[].card.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect[].card.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
+  },
+  "[].effect[].card.modifier.source": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "this_way"
+   ]
+  },
+  "[].effect[].card.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 1,
+   "vocab": [
+    "mana value"
+   ]
+  },
+  "[].effect[].card.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "X"
+   ]
   },
   "[].effect[].card.otherness": {
    "class": "closed_vocab",
@@ -6808,11 +7973,54 @@
     "you control"
    ]
   },
-  "[].effect[].cards[].modifier": {
-   "class": "should_be_structured",
+  "[].effect[].cards[].modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "flash"
+   ]
+  },
+  "[].effect[].cards[].modifier.kind": {
+   "class": "closed_vocab",
    "texts": 4,
    "distinct": 4,
-   "rule": "modifier"
+   "vocab": [
+    "keyword",
+    "name",
+    "names",
+    "stat_filter"
+   ]
+  },
+  "[].effect[].cards[].modifier.mode": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect[].cards[].modifier.name": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "chosen"
+   ]
+  },
+  "[].effect[].cards[].modifier.op": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "<="
+   ]
+  },
+  "[].effect[].cards[].modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "mana value"
+   ]
   },
   "[].effect[].cards[].otherness": {
    "class": "closed_vocab",
@@ -6831,11 +8039,17 @@
     "an"
    ]
   },
-  "[].effect[].change": {
+  "[].effect[].change.power": {
    "class": "should_be_structured",
-   "texts": 262,
-   "distinct": 28,
-   "rule": "pt-change"
+   "texts": 13,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect[].change.toughness": {
+   "class": "should_be_structured",
+   "texts": 10,
+   "distinct": 2,
+   "rule": "unclassified"
   },
   "[].effect[].condition.fragment": {
    "class": "free_text",
@@ -6924,9 +8138,29 @@
   },
   "[].effect[].counter": {
    "class": "should_be_structured",
-   "texts": 89,
-   "distinct": 13,
+   "texts": 3,
+   "distinct": 3,
    "rule": "counter"
+  },
+  "[].effect[].counter.count": {
+   "class": "should_be_structured",
+   "texts": 5,
+   "distinct": 1,
+   "rule": "count"
+  },
+  "[].effect[].counter.kind": {
+   "class": "closed_vocab",
+   "texts": 86,
+   "distinct": 7,
+   "vocab": [
+    "+1/+1",
+    "-1/-1",
+    "bloodstain",
+    "plan",
+    "point",
+    "soul",
+    "stun"
+   ]
   },
   "[].effect[].counters": {
    "class": "should_be_structured",
@@ -6934,11 +8168,31 @@
    "distinct": 1,
    "rule": "counter"
   },
-  "[].effect[].duration": {
-   "class": "should_be_structured",
+  "[].effect[].duration.event": {
+   "class": "closed_vocab",
    "texts": 178,
    "distinct": 4,
-   "rule": "duration"
+   "vocab": [
+    "end_of_turn",
+    "next_turn",
+    "rest_of_game",
+    "this_turn"
+   ]
+  },
+  "[].effect[].duration.kind": {
+   "class": "closed_vocab",
+   "texts": 178,
+   "distinct": 2,
+   "vocab": [
+    "for",
+    "until"
+   ]
+  },
+  "[].effect[].duration.player": {
+   "class": "should_be_structured",
+   "texts": 2,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].effect[].for.kind": {
    "class": "closed_vocab",
@@ -7071,11 +8325,13 @@
     "i_create_token"
    ]
   },
-  "[].effect[].inner.amount": {
-   "class": "should_be_structured",
+  "[].effect[].inner.amount.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "amount"
+   "vocab": [
+    "mana"
+   ]
   },
   "[].effect[].inner.card.card_type.kind": {
    "class": "closed_vocab",
@@ -7155,9 +8411,67 @@
   },
   "[].effect[].inner.card.modifier": {
    "class": "should_be_structured",
-   "texts": 11,
-   "distinct": 10,
+   "texts": 4,
+   "distinct": 3,
    "rule": "modifier"
+  },
+  "[].effect[].inner.card.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "stash"
+   ]
+  },
+  "[].effect[].inner.card.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 3,
+   "vocab": [
+    "counter",
+    "name",
+    "stat_filter"
+   ]
+  },
+  "[].effect[].inner.card.modifier.name": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "chosen"
+   ]
+  },
+  "[].effect[].inner.card.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].effect[].inner.card.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
+  },
+  "[].effect[].inner.card.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 2,
+   "vocab": [
+    "mana value",
+    "power"
+   ]
+  },
+  "[].effect[].inner.card.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "X"
+   ]
   },
   "[].effect[].inner.card.quantifier": {
    "class": "closed_vocab",
@@ -7270,9 +8584,25 @@
   },
   "[].effect[].inner.cards[].modifier": {
    "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
+   "texts": 1,
+   "distinct": 1,
    "rule": "modifier"
+  },
+  "[].effect[].inner.cards[].modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "name"
+   ]
+  },
+  "[].effect[].inner.cards[].modifier.name": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "chosen"
+   ]
   },
   "[].effect[].inner.cards[].quantifier": {
    "class": "closed_vocab",
@@ -7301,9 +8631,27 @@
   },
   "[].effect[].inner.duration": {
    "class": "should_be_structured",
-   "texts": 7,
-   "distinct": 4,
+   "texts": 3,
+   "distinct": 2,
    "rule": "duration"
+  },
+  "[].effect[].inner.duration.event": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 2,
+   "vocab": [
+    "end_of_turn",
+    "this_turn"
+   ]
+  },
+  "[].effect[].inner.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 2,
+   "vocab": [
+    "for",
+    "until"
+   ]
   },
   "[].effect[].inner.from_among.card_type.kind": {
    "class": "closed_vocab",
@@ -7337,11 +8685,21 @@
     "~"
    ]
   },
-  "[].effect[].inner.to": {
-   "class": "should_be_structured",
+  "[].effect[].inner.to.owner": {
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 1,
-   "rule": "destination"
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect[].inner.to.zone": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "hand"
+   ]
   },
   "[].effect[].inner.verb": {
    "class": "closed_vocab",
@@ -7423,8 +8781,8 @@
   },
   "[].effect[].object": {
    "class": "should_be_structured",
-   "texts": 8,
-   "distinct": 7,
+   "texts": 7,
+   "distinct": 6,
    "rule": "object-phrase"
   },
   "[].effect[].object.card_type.kind": {
@@ -7450,6 +8808,14 @@
    "distinct": 1,
    "vocab": [
     "they control"
+   ]
+  },
+  "[].effect[].object.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "color"
    ]
   },
   "[].effect[].object.quantifier": {
@@ -7604,12 +8970,6 @@
    "texts": 21,
    "distinct": 7,
    "rule": "predicate"
-  },
-  "[].effect[].pt": {
-   "class": "should_be_structured",
-   "texts": 1,
-   "distinct": 1,
-   "rule": "pt"
   },
   "[].effect[].quantifier": {
    "class": "closed_vocab",
@@ -7789,11 +9149,48 @@
     "union"
    ]
   },
-  "[].effect[].target.modifier": {
-   "class": "should_be_structured",
+  "[].effect[].target.modifier.kind": {
+   "class": "closed_vocab",
    "texts": 6,
-   "distinct": 4,
-   "rule": "modifier"
+   "distinct": 3,
+   "vocab": [
+    "exclude",
+    "stat_filter",
+    "type"
+   ]
+  },
+  "[].effect[].target.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "<="
+   ]
+  },
+  "[].effect[].target.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
+  },
+  "[].effect[].target.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "enchanted creature",
+    "this creature"
+   ]
+  },
+  "[].effect[].target.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "the chosen"
+   ]
   },
   "[].effect[].target.otherness": {
    "class": "closed_vocab",
@@ -7877,8 +9274,8 @@
   },
   "[].effect[].to": {
    "class": "should_be_structured",
-   "texts": 48,
-   "distinct": 14,
+   "texts": 7,
+   "distinct": 3,
    "rule": "destination"
   },
   "[].effect[].to.card_type.kind": {
@@ -7920,10 +9317,29 @@
   },
   "[].effect[].to.controller": {
    "class": "closed_vocab",
-   "texts": 1,
+   "texts": 21,
+   "distinct": 4,
+   "vocab": [
+    "an opponent controls",
+    "her owner",
+    "owner",
+    "you"
+   ]
+  },
+  "[].effect[].to.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
    "distinct": 1,
    "vocab": [
-    "an opponent controls"
+    "+1/+1"
+   ]
+  },
+  "[].effect[].to.kind": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 1,
+   "vocab": [
+    "any_target"
    ]
   },
   "[].effect[].to.or[].card_type.kind": {
@@ -7959,6 +9375,15 @@
     "other"
    ]
   },
+  "[].effect[].to.owner": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 2,
+   "vocab": [
+    "owner",
+    "you"
+   ]
+  },
   "[].effect[].to.possessive": {
    "class": "closed_vocab",
    "texts": 1,
@@ -7984,11 +9409,34 @@
     "that"
    ]
   },
-  "[].effect[].token.colors": {
-   "class": "should_be_structured",
+  "[].effect[].to.zone": {
+   "class": "closed_vocab",
    "texts": 32,
-   "distinct": 8,
-   "rule": "colour-list"
+   "distinct": 2,
+   "vocab": [
+    "battlefield",
+    "hand"
+   ]
+  },
+  "[].effect[].token.colors": {
+   "class": "closed_vocab",
+   "texts": 25,
+   "distinct": 5,
+   "vocab": [
+    "black",
+    "colorless",
+    "green",
+    "red",
+    "white"
+   ]
+  },
+  "[].effect[].token.colors.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 1,
+   "vocab": [
+    "all"
+   ]
   },
   "[].effect[].token.copy_of.card_type.kind": {
    "class": "closed_vocab",
@@ -8049,12 +9497,6 @@
    "texts": 1,
    "distinct": 1,
    "rule": "modifier"
-  },
-  "[].effect[].token.power_toughness": {
-   "class": "should_be_structured",
-   "texts": 32,
-   "distinct": 8,
-   "rule": "pt"
   },
   "[].effect[].token.quote": {
    "class": "should_be_structured",
@@ -8268,11 +9710,14 @@
    "distinct": 1,
    "rule": "count"
   },
-  "[].effect[].with.counter": {
-   "class": "should_be_structured",
+  "[].effect[].with.counter.kind": {
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 2,
-   "rule": "counter"
+   "vocab": [
+    "+1/+1",
+    "finality"
+   ]
   },
   "[].effect[].zone": {
    "class": "closed_vocab",
@@ -8400,11 +9845,13 @@
     "or"
    ]
   },
-  "[].if.counter": {
-   "class": "should_be_structured",
+  "[].if.counter.kind": {
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 1,
-   "rule": "counter"
+   "vocab": [
+    "+1/+1"
+   ]
   },
   "[].if.during": {
    "class": "should_be_structured",
@@ -9036,11 +10483,13 @@
     "anaphora"
    ]
   },
-  "[].instead.counter": {
-   "class": "should_be_structured",
+  "[].instead.counter.kind": {
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 1,
-   "rule": "counter"
+   "vocab": [
+    "+1/+1"
+   ]
   },
   "[].instead.on.card_type.raw": {
    "class": "closed_vocab",
@@ -9122,9 +10571,25 @@
   },
   "[].instead[].amount": {
    "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
+   "texts": 1,
+   "distinct": 1,
    "rule": "amount"
+  },
+  "[].instead[].amount.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "number"
+   ]
+  },
+  "[].instead[].amount.unit": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
   },
   "[].instead[].card.card_type.kind": {
    "class": "closed_vocab",
@@ -9164,11 +10629,19 @@
    "distinct": 1,
    "rule": "count"
   },
-  "[].instead[].counter": {
+  "[].instead[].counter.count": {
    "class": "should_be_structured",
    "texts": 1,
    "distinct": 1,
-   "rule": "counter"
+   "rule": "count"
+  },
+  "[].instead[].counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
   },
   "[].instead[].object": {
    "class": "should_be_structured",
@@ -9232,11 +10705,13 @@
     "waterbend"
    ]
   },
-  "[].keywords.cost.amount": {
-   "class": "should_be_structured",
-   "texts": 10,
-   "distinct": 5,
-   "rule": "amount"
+  "[].keywords.cost.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "mana"
+   ]
   },
   "[].keywords.cost.card_target.card_type.kind": {
    "class": "closed_vocab",
@@ -9362,8 +10837,8 @@
   },
   "[].keywords.modifier": {
    "class": "should_be_structured",
-   "texts": 24,
-   "distinct": 19,
+   "texts": 22,
+   "distinct": 17,
    "rule": "modifier"
   },
   "[].keywords.modifier.fragment": {
@@ -9371,6 +10846,14 @@
    "texts": 2,
    "distinct": 2,
    "rule": "free_text"
+  },
+  "[].keywords.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "from"
+   ]
   },
   "[].keywords.modifier.reason": {
    "class": "closed_vocab",
@@ -9567,11 +11050,30 @@
     "your opponents control"
    ]
   },
-  "[].on.modifier": {
-   "class": "should_be_structured",
+  "[].on.modifier.event": {
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 2,
-   "rule": "modifier"
+   "vocab": [
+    "destroyed",
+    "exiled"
+   ]
+  },
+  "[].on.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "event_filter"
+   ]
+  },
+  "[].on.modifier.source": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "this_way"
+   ]
   },
   "[].on.otherness": {
    "class": "closed_vocab",
@@ -10029,13 +11531,13 @@
   },
   "[].trigger.event.object": {
    "class": "should_be_structured",
-   "texts": 167,
-   "distinct": 15,
+   "texts": 62,
+   "distinct": 9,
    "rule": "object-phrase"
   },
   "[].trigger.event.object.card_type.kind": {
    "class": "closed_vocab",
-   "texts": 208,
+   "texts": 248,
    "distinct": 3,
    "vocab": [
     "spell or ability",
@@ -10053,7 +11555,7 @@
   },
   "[].trigger.event.object.card_type.value": {
    "class": "closed_vocab",
-   "texts": 208,
+   "texts": 248,
    "distinct": 54,
    "vocab": [
     "Adventure spell",
@@ -10145,12 +11647,23 @@
     "noncombat"
    ]
   },
-  "[].trigger.event.object.kind": {
+  "[].trigger.event.object.frequency": {
    "class": "closed_vocab",
-   "texts": 31,
+   "texts": 17,
    "distinct": 1,
    "vocab": [
-    "set"
+    "each_turn"
+   ]
+  },
+  "[].trigger.event.object.kind": {
+   "class": "closed_vocab",
+   "texts": 116,
+   "distinct": 4,
+   "vocab": [
+    "card",
+    "player",
+    "set",
+    "spell"
    ]
   },
   "[].trigger.event.object.label": {
@@ -10169,9 +11682,61 @@
   },
   "[].trigger.event.object.modifier": {
    "class": "should_be_structured",
-   "texts": 55,
-   "distinct": 27,
+   "texts": 37,
+   "distinct": 20,
    "rule": "modifier"
+  },
+  "[].trigger.event.object.modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "flying"
+   ]
+  },
+  "[].trigger.event.object.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 18,
+   "distinct": 4,
+   "vocab": [
+    "color",
+    "keyword",
+    "stat_filter",
+    "type"
+   ]
+  },
+  "[].trigger.event.object.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
+  },
+  "[].trigger.event.object.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 1,
+   "vocab": [
+    "mana value"
+   ]
+  },
+  "[].trigger.event.object.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "the chosen"
+   ]
+  },
+  "[].trigger.event.object.ordinal": {
+   "class": "closed_vocab",
+   "texts": 17,
+   "distinct": 1,
+   "vocab": [
+    "second"
+   ]
   },
   "[].trigger.event.object.otherness": {
    "class": "closed_vocab",
@@ -10181,6 +11746,12 @@
     "another",
     "other"
    ]
+  },
+  "[].trigger.event.object.player": {
+   "class": "should_be_structured",
+   "texts": 17,
+   "distinct": 1,
+   "rule": "unclassified"
   },
   "[].trigger.event.object.possessive": {
    "class": "closed_vocab",
@@ -10192,7 +11763,7 @@
   },
   "[].trigger.event.object.quantifier": {
    "class": "closed_vocab",
-   "texts": 119,
+   "texts": 187,
    "distinct": 6,
    "vocab": [
     "2 or more",
@@ -10220,12 +11791,6 @@
     "this"
    ]
   },
-  "[].trigger.event.object.to": {
-   "class": "should_be_structured",
-   "texts": 83,
-   "distinct": 2,
-   "rule": "destination"
-  },
   "[].trigger.event.object.to.card_type.kind": {
    "class": "closed_vocab",
    "texts": 1,
@@ -10242,12 +11807,30 @@
     "Spider"
    ]
   },
+  "[].trigger.event.object.to.kind": {
+   "class": "closed_vocab",
+   "texts": 83,
+   "distinct": 2,
+   "vocab": [
+    "opponent",
+    "player"
+   ]
+  },
   "[].trigger.event.object.to.quantifier": {
    "class": "closed_vocab",
-   "texts": 1,
+   "texts": 84,
+   "distinct": 2,
+   "vocab": [
+    "a",
+    "an"
+   ]
+  },
+  "[].trigger.event.object.zone": {
+   "class": "closed_vocab",
+   "texts": 20,
    "distinct": 1,
    "vocab": [
-    "a"
+    "battlefield"
    ]
   },
   "[].trigger.event.object.zone.possessor": {
@@ -10462,11 +12045,69 @@
     "union"
    ]
   },
-  "[].trigger.event.subject.modifier": {
-   "class": "should_be_structured",
+  "[].trigger.event.subject.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 10,
+   "distinct": 4,
+   "vocab": [
+    "+1/+1",
+    "a",
+    "impostor",
+    "one or more"
+   ]
+  },
+  "[].trigger.event.subject.modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 3,
+   "vocab": [
+    "deathtouch",
+    "flying",
+    "menace"
+   ]
+  },
+  "[].trigger.event.subject.modifier.kind": {
+   "class": "closed_vocab",
    "texts": 31,
-   "distinct": 13,
-   "rule": "modifier"
+   "distinct": 4,
+   "vocab": [
+    "counter",
+    "keyword",
+    "stat_filter",
+    "type"
+   ]
+  },
+  "[].trigger.event.subject.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 10,
+   "distinct": 2,
+   "rule": "unclassified"
+  },
+  "[].trigger.event.subject.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 13,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
+  },
+  "[].trigger.event.subject.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 13,
+   "distinct": 2,
+   "vocab": [
+    "mana value",
+    "power"
+   ]
+  },
+  "[].trigger.event.subject.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "the chosen"
+   ]
   },
   "[].trigger.event.subject.or[].card_type.kind": {
    "class": "closed_vocab",
@@ -10511,11 +12152,38 @@
     "you control"
    ]
   },
-  "[].trigger.event.subject.or[].modifier": {
-   "class": "should_be_structured",
+  "[].trigger.event.subject.or[].modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "flying"
+   ]
+  },
+  "[].trigger.event.subject.or[].modifier.kind": {
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 2,
-   "rule": "modifier"
+   "vocab": [
+    "keyword",
+    "stat_filter"
+   ]
+  },
+  "[].trigger.event.subject.or[].modifier.op": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    ">="
+   ]
+  },
+  "[].trigger.event.subject.or[].modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
   },
   "[].trigger.event.subject.or[].otherness": {
    "class": "closed_vocab",
@@ -10630,9 +12298,17 @@
   },
   "[].trigger.event.window": {
    "class": "should_be_structured",
-   "texts": 38,
+   "texts": 30,
    "distinct": 5,
    "rule": "timing"
+  },
+  "[].trigger.event.window.kind": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
   },
   "[].trigger.fragment": {
    "class": "free_text",
@@ -10657,10 +12333,42 @@
    ]
   },
   "[].trigger.when": {
+   "class": "closed_vocab",
+   "texts": 2344,
+   "distinct": 3,
+   "vocab": [
+    "As",
+    "When",
+    "Whenever"
+   ]
+  },
+  "[].trigger.when.phase": {
    "class": "should_be_structured",
-   "texts": 2634,
-   "distinct": 18,
+   "texts": 290,
+   "distinct": 6,
    "rule": "timing"
+  },
+  "[].trigger.when.player": {
+   "class": "should_be_structured",
+   "texts": 287,
+   "distinct": 4,
+   "rule": "unclassified"
+  },
+  "[].trigger.when.position": {
+   "class": "should_be_structured",
+   "texts": 290,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].trigger.when.which": {
+   "class": "closed_vocab",
+   "texts": 35,
+   "distinct": 3,
+   "vocab": [
+    "first",
+    "next",
+    "second"
+   ]
   },
   "[].type": {
    "class": "closed_vocab",
@@ -10840,15 +12548,57 @@
   },
   "[].xdef.xdef.of.modifier": {
    "class": "should_be_structured",
-   "texts": 8,
-   "distinct": 6,
+   "texts": 1,
+   "distinct": 1,
    "rule": "modifier"
+  },
+  "[].xdef.xdef.of.modifier.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].xdef.xdef.of.modifier.event": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "discarded",
+    "exiled"
+   ]
   },
   "[].xdef.xdef.of.modifier.fragment": {
    "class": "free_text",
    "texts": 2,
    "distinct": 2,
    "rule": "free_text"
+  },
+  "[].xdef.xdef.of.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 3,
+   "vocab": [
+    "counter",
+    "event_filter",
+    "stat_filter"
+   ]
+  },
+  "[].xdef.xdef.of.modifier.on": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "unclassified"
+  },
+  "[].xdef.xdef.of.modifier.op": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "<=",
+    ">="
+   ]
   },
   "[].xdef.xdef.of.modifier.reason": {
    "class": "closed_vocab",
@@ -10860,10 +12610,19 @@
   },
   "[].xdef.xdef.of.modifier.source": {
    "class": "closed_vocab",
-   "texts": 2,
+   "texts": 5,
+   "distinct": 2,
+   "vocab": [
+    "i_sentence",
+    "this_way"
+   ]
+  },
+  "[].xdef.xdef.of.modifier.stat": {
+   "class": "closed_vocab",
+   "texts": 3,
    "distinct": 1,
    "vocab": [
-    "i_sentence"
+    "power"
    ]
   },
   "[].xdef.xdef.of.otherness": {
@@ -11047,11 +12806,38 @@
     "you own"
    ]
   },
-  "[].xdef.xdef[].modifier": {
-   "class": "should_be_structured",
+  "[].xdef.xdef[].modifier.event": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "discarded"
+   ]
+  },
+  "[].xdef.xdef[].modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "flying"
+   ]
+  },
+  "[].xdef.xdef[].modifier.kind": {
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 2,
-   "rule": "modifier"
+   "vocab": [
+    "event_filter",
+    "keyword"
+   ]
+  },
+  "[].xdef.xdef[].modifier.source": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_way"
+   ]
   },
   "[].xdef.xdef[].otherness": {
    "class": "closed_vocab",
@@ -11142,12 +12928,6 @@
     "This"
    ]
   },
-  "[][].change": {
-   "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
-   "rule": "pt-change"
-  },
   "[][].kind": {
    "class": "closed_vocab",
    "texts": 1,
@@ -11210,17 +12990,13 @@
    "distinct": 1,
    "rule": "count"
   },
-  "[][].with.counter": {
-   "class": "should_be_structured",
+  "[][].with.counter.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "counter"
-  },
-  "[][][].change": {
-   "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
-   "rule": "pt-change"
+   "vocab": [
+    "+1/+1"
+   ]
   },
   "[][][].condition.kind": {
    "class": "closed_vocab",
@@ -11304,12 +13080,12 @@
    ]
   }
  },
- "snapshot": "Standard_69cae293a709a048_525ee65ef6caf061.json",
+ "snapshot": "Standard_69cae293a709a048_d314f10efd7e9d40.json",
  "grammar_sha1": "69cae293a709a048",
- "interp_sha1": "525ee65ef6caf061",
+ "interp_sha1": "d314f10efd7e9d40",
  "classes": {
-  "closed_vocab": 977,
-  "should_be_structured": 182,
+  "closed_vocab": 1173,
+  "should_be_structured": 178,
   "free_text": 20
  },
  "leftovers": {

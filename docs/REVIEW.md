@@ -70,6 +70,19 @@ Honest counts a sentence only if it parses and its interpreted output carries no
 
 Honest unique: Standard 6,328/7,966 = 79.4%, classic 1,930/2,148 = 89.9%, FDN 716/761 = 94.1%.
 Phase trajectory: Standard honest 76.2% at the phase start -> **86.2%** at the freeze (ledger 1, measured at `9ade95c`, was 79.9%).
+
+## Structured headline (master `6972653`)
+Honest is now an intermediate layer: it only requires that the parsed output carry no `unparsed` marker. The headline adds the stringiness policy (`review/stringy_policy.json`): every string field must be a closed vocabulary, a free-text marker, or a structured object.
+
+| corpus | parse occurrences | honest occurrences | structured occurrences | structured unique |
+|---|---:|---:|---:|---:|
+| Standard | 20,880 (94.0%) | 19,158 (86.2%) | 17,257 (82.6%) | 5,395 / 7,264 (74.3%) |
+| classic | 4,217 (98.5%) | 3,996 (93.4%) | 3,576 (84.8%) | 1,657 / 2,090 (79.3%) |
+
+Structured coverage uses each corpus's parsed occurrences as the denominator. Classic was measured with the Standard policy (new paths default to structured), so its rate is a conservative cross-check; FDN was not re-policied.
+
+The ten stringy-family commits moved Standard structured coverage from 10,701 / 20,880 (51.2%) to 17,257 / 20,880 (82.6%); the leading closed families are duration 1,675 -> 63, amount 1,813 -> 328, counter 1,438 -> 43, pt-change 1,155 -> 0, destination 1,060 -> 48, pt 901 -> 0. The remaining families are `predicate` (222), `quoted-ability` (325), `target-label` (246), `modifier` (289), `phrase` (84, up 24 as new `of`/`relative` subfields surfaced) and `object-phrase` (133); `keywords.modifier` is still a stringified dict (29).
+
 ### What is left
 Four deferred classes carry the residual (gap ledger 3: 1,638 texts / 3,059 occurrences, 13.8% of Standard rows):
 - condition/trigger long tails: `condition_text` 1,084 occ / 584 texts and `trigger_text` 358 / 207; 277 condition heads, top-20 cover 359 attributed occurrences.
