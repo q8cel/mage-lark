@@ -1093,6 +1093,68 @@ class Interpreter:
                 if mpt.group(1):
                     dpt['additional'] = True
                 node['change'] = dpt
+        def _sym_timing(v):
+            low_t = v.strip().lower()
+            if low_t == 'as a sorcery':
+                return {'timing': 'sorcery'}
+            if low_t == 'once each turn':
+                return {'frequency': 'once_each_turn'}
+            if low_t == 'each turn':
+                return {'frequency': 'each_turn'}
+            if low_t == 'this turn':
+                return {'kind': 'this_turn'}
+            if low_t == 'during your turn':
+                return {'kind': 'turn', 'player': 'you'}
+            if low_t == "an opponent's turn":
+                return {'kind': 'turn', 'player': 'opponent'}
+            if low_t == 'your turn':
+                return {'kind': 'turn', 'player': 'you'}
+            if low_t == 'at end of combat':
+                return {'phase': 'combat', 'position': 'end'}
+            mbegin = re.fullmatch(
+                r'at the beginning of (?:the )?(.+)', low_t)
+            if not mbegin:
+                return None
+            rest = mbegin.group(1)
+            d = {'position': 'beginning'}
+            mplayer = re.match(
+                r"(your|their|each player's|each opponent's|an opponent's|each) (.+)",
+                rest)
+            player = None
+            if mplayer:
+                player = {'your': 'you', 'their': 'they',
+                          "each player's": 'each_player',
+                          "each opponent's": 'each_opponent',
+                          "an opponent's": 'opponent',
+                          'each': 'each'}[mplayer.group(1)]
+                rest = mplayer.group(2)
+            if rest.endswith(' on your turn'):
+                player = player or 'you'
+                rest = rest[:-len(' on your turn')]
+            if player:
+                d['player'] = player
+            if rest.startswith('next '):
+                d['which'] = 'next'
+                rest = rest[5:]
+            elif rest.startswith('first '):
+                d['which'] = 'first'
+                rest = rest[6:]
+            elif rest.startswith('second '):
+                d['which'] = 'second'
+                rest = rest[7:]
+            rest = rest.replace('end step', 'end_step')
+            rest = rest.replace('draw step', 'draw_step')
+            rest = rest.replace('main phase', 'main_phase')
+            rest = rest.replace('combat on your turn', 'combat')
+            d['phase'] = rest
+            return d
+        for tkey in ('activate_only', 'when', 'timing', 'window'):
+            tv = node.get(tkey)
+            if not isinstance(tv, str):
+                continue
+            td = _sym_timing(tv)
+            if td:
+                node[tkey] = td
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:

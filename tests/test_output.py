@@ -286,7 +286,7 @@ add("search-named-qualifier",
 add("sacrifice-delayed-timing",
     "Sacrifice it at the beginning of your next end step",
     lambda o: has(o, lambda d: d.get('verb') == 'sacrifice'
-                  and d.get('timing') == 'at the beginning of your next end step'))
+                  and d.get('timing') == {'position': 'beginning', 'player': 'you', 'which': 'next', 'phase': 'end_step'}))
 add("play-permission-duration", "You may play those cards this turn",
     lambda o: has(o, lambda d: d.get('verb') == 'play'
                   and d.get('duration') == {'kind': 'for', 'event': 'this_turn'}))
@@ -360,7 +360,7 @@ add("until-sentence-duration",
 add("effect-timing-delayed",
     "At the beginning of the next end step, return those creatures to their owner's hand",
     lambda o: has(o, lambda d: d.get('verb') == 'return'
-                  and d.get('timing') == 'at the beginning of the next end step'))
+                  and d.get('timing') == {'position': 'beginning', 'which': 'next', 'phase': 'end_step'}))
 add("gain-quote-duration-keywords",
     '{T}: Until end of turn, target creature you control gains trample and "Whenever this creature deals combat damage to a player, draw a card."',
     lambda o: has(o, lambda d: d.get('verb') == 'gain_quote'
@@ -485,7 +485,7 @@ add("remove-counter-and-transform",
 add("unattach-timing",
     "If you do, unattach it at the beginning of the next end step",
     lambda o: has(o, lambda d: d.get('verb') == 'unattach'
-                  and d.get('timing') == 'at the beginning of the next end step'))
+                  and d.get('timing') == {'position': 'beginning', 'which': 'next', 'phase': 'end_step'}))
 add("then-if-not-empty",
     "Then if it has three or more +1/+1 counters on it, transform it",
     lambda o: has(o, lambda d: d.get('type') == 'effect'
