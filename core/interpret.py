@@ -1241,6 +1241,21 @@ class Interpreter:
                 dobj = _sym_dest(dval)
                 if dobj:
                     node[dkey] = dobj
+        for pkey in ('power_toughness', 'pt', 'base_pt'):
+            pv = node.get(pkey)
+            if not isinstance(pv, str):
+                continue
+            low_p = pv.strip().lower()
+            mptv = re.fullmatch(
+                r'([+-]?(?:\d+|x|\*))/([+-]?(?:\d+|x|\*))', low_p)
+            if not mptv:
+                continue
+            def _ptval(raw):
+                if raw in ('x', '*'):
+                    return raw.upper()
+                return int(raw)
+            node[pkey] = {'power': _ptval(mptv.group(1)),
+                          'toughness': _ptval(mptv.group(2))}
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:

@@ -256,7 +256,7 @@ add("until-in-activated-duration",
 add("become-base-pt",
     "Until end of turn, this creature becomes a Plant with base power and toughness 0/8",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
-                  and d.get('base_pt') == '0/8'))
+                  and d.get('base_pt') == {'power': 0, 'toughness': 8}))
 add("become-generic-types",
     "If it's a Vehicle, it becomes an artifact creature",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
@@ -574,12 +574,12 @@ add("put-counter", "put a -1/-1 counter on it",
                   and '-1/-1' in str(d.get('counter', ''))))
 add("token-pt-kw", "Create a 1/1 colorless Thopter artifact creature token with flying",
     lambda o: has(o, lambda d: d.get('verb') == 'create_token'
-                  and d.get('token', {}).get('power_toughness') == '1/1'
+                  and d.get('token', {}).get('power_toughness') == {'power': 1, 'toughness': 1}
                   and 'flying' in str(d.get('token', {}).get('kw', []))))
 add("counter-unless", "Counter target spell unless its controller pays {1}",
     lambda o: has(o, lambda d: d.get('verb') == 'counter' and '{1}' in str(d.get('unless', ''))))
 add("become-pt", "Target land you control becomes a 4/4 Elemental creature with trample",
-    lambda o: has(o, lambda d: d.get('verb') == 'become' and d.get('pt') == '4/4'))
+    lambda o: has(o, lambda d: d.get('verb') == 'become' and d.get('pt') == {'power': 4, 'toughness': 4}))
 add("stat-condition", "This creature gets +4/+4 as long as an opponent has ten or more cards in their graveyard",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and 'graveyard' in str(d.get('condition', ''))))
