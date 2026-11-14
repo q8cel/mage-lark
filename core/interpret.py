@@ -1077,6 +1077,22 @@ class Interpreter:
                 elif lc == 'x':
                     count = 'X'
             node[ckey] = {'kind': kind, 'count': count}
+        chg = node.get('change')
+        if isinstance(chg, str):
+            low_ch = chg.strip().lower()
+            mpt = re.fullmatch(
+                r'(an additional )?([+-]?)(\d+|x)/([+-]?)(\d+|x)', low_ch)
+            if mpt:
+                def _signed(sign, raw):
+                    if raw == 'x':
+                        return 'X' if sign != '-' else '-X'
+                    v = int(raw)
+                    return -v if sign == '-' else v
+                dpt = {'power': _signed(mpt.group(2), mpt.group(3)),
+                       'toughness': _signed(mpt.group(4), mpt.group(5))}
+                if mpt.group(1):
+                    dpt['additional'] = True
+                node['change'] = dpt
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:

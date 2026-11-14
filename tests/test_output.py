@@ -844,7 +844,8 @@ add("put-with-subject", "that player puts it into their hand",
     lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'hand'
                   and d.get('who') == 'that player'))
 add("stat-loses-kw", "Equipped creature gets +10/+10 and loses flying",
-    lambda o: has(o, lambda d: d.get('verb') == 'stat_change' and d.get('change') == '+10/+10'
+    lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
+                  and d.get('change') == {'power': 10, 'toughness': 10}
                   and 'flying' in d.get('loses', [])))
 add("prevent-that-damage", "If a source would deal damage to you, prevent that damage",
     lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'))
