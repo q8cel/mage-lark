@@ -517,6 +517,17 @@ class Interpreter:
                         'this_turn': True}
         return None
 
+    @staticmethod
+    def _window_obj(text):
+        low = text.strip().lower()
+        if low == 'your turn':
+            return {'kind': 'turn', 'player': 'you'}
+        if low == 'each turn':
+            return {'kind': 'frequency', 'value': 'each_turn'}
+        if low == 'this turn':
+            return {'kind': 'turn', 'value': 'this_turn'}
+        return {'kind': 'turn', 'phrase': low}
+
     def _trigger_event(self, text):
         """Closed trigger-event fragments from a stashed trigger text."""
         low = ' '.join(str(text).lower().split()).rstrip('.')
@@ -568,9 +579,9 @@ class Interpreter:
                 if ordinal:
                     ev['ordinal'] = ordinal
                 if 'each turn' in low:
-                    ev['window'] = 'each turn'
+                    ev['window'] = {'kind': 'frequency', 'value': 'each_turn'}
                 elif 'this turn' in low:
-                    ev['window'] = 'this turn'
+                    ev['window'] = {'kind': 'turn', 'value': 'this_turn'}
                 return ev
         if low.endswith('is turned face up') or low == 'this creature turns face up':
             return {'subject': {'card_type': {'kind': 'this_card',
@@ -584,7 +595,7 @@ class Interpreter:
         if low.startswith('you commit a crime'):
             ev = {'subject': 'you', 'verb': 'commit_crime'}
             if 'during your turn' in low:
-                ev['window'] = 'your turn'
+                ev['window'] = {'kind': 'turn', 'player': 'you'}
             return ev
         m_exp = re.match(r'^you expend ([0-9]+|\w+)$', low)
         if m_exp:
@@ -1009,14 +1020,64 @@ class Interpreter:
                     'kind': 'mana',
                     'count': int(raw) if raw.isdigit() else 'X',
                     'of': 'any_combination'}
+            if low_a == 'that much life':
+                node['amount'] = {'kind': 'relative',
+                                  'of': {'kind': 'that_much'}, 'unit': 'life'}
+            elif low_a == 'that much':
+                node['amount'] = {'kind': 'relative',
+                                  'of': {'kind': 'that_much'}}
+            elif low_a == 'that many':
+                node['amount'] = {'kind': 'relative',
+                                  'of': {'kind': 'that_many'}}
+            elif low_a == 'double that':
+                node['amount'] = {'kind': 'relative',
+                                  'of': {'kind': 'that_much'},
+                                  'multiplier': 2}
+            elif low_a == 'the difference':
+                node['amount'] = {'kind': 'relative',
+                                  'of': {'kind': 'difference'}}
+            else:
+                mref = re.fullmatch(
+                    r"(its|his|her|their|that [a-z ]+?'s|the [a-z ]+? ?'s) "
+                    r"(power|toughness|mana cost|mana value|loyalty)", low_a)
+                if mref:
+                    owner = mref.group(1).replace(" 's", "'s")
+                    if owner in ('its', 'his', 'her', 'their'):
+                        of = {'kind': 'possessive', 'possessor': owner}
+                    else:
+                        of = {'kind': 'ref', 'phrase': owner[:-2]}
+                    node['amount'] = {'kind': 'relative',
+                                      'of': {**of, 'stat': mref.group(2)}}
             mhalf = re.fullmatch(
                 r'(half|quarter|third) (their|your) (life|library)(?:,\s*rounded (up|down))?',
                 low_a)
             if mhalf:
-                d = {'kind': mhalf.group(1), 'of': mhalf.group(2) + ' ' + mhalf.group(3)}
+                d = {'kind': mhalf.group(1),
+                     'of': {'possessive': mhalf.group(2).replace('their', 'they'),
+                            'stat': mhalf.group(3)}}
                 if mhalf.group(4):
                     d['rounding'] = mhalf.group(4)
                 node['amount'] = d
+        if node.get('kind') in ('half', 'quarter', 'third') and \
+                isinstance(node.get('of'), str):
+            mof = re.fullmatch(r'(their|your) (life|library)', node['of'])
+            if mof:
+                node['of'] = {'possessive': mof.group(1).replace('their', 'they'),
+                              'stat': mof.group(2)}
+        relv = node.get('relative')
+        if isinstance(relv, str):
+            low_rel = relv.strip().lower()
+            if low_rel == 'that was dealt damage this turn':
+                node['relative'] = {'kind': 'event_ref', 'event': 'dealt_damage',
+                                    'voice': 'passive', 'time': 'this_turn'}
+        if 'xdef' in node and isinstance(node.get('of'), str):
+            low_xof = node['of'].strip().lower()
+            mxof = re.fullmatch(
+                r'mana spent to cast (this spell|that spell|it|this creature)',
+                low_xof)
+            if mxof:
+                node['of'] = {'kind': 'mana_spent', 'action': 'cast',
+                              'object': mxof.group(1)}
         dv = node.get('duration')
         if isinstance(dv, str):
             low_d = dv.strip().lower()
@@ -1476,7 +1537,8 @@ class Interpreter:
                              'event': {'subject': 'you', 'verb': 'cast',
                                        'object': {'card_type': {
                                            'kind': 'type', 'value': 'spell'}}},
-                             'window': frag[len('you cast a spell during '):]})
+                             'window': self._window_obj(
+                                 frag[len('you cast a spell during '):])})
         if top:
             if node.get('type') == 'effect':
                 eff = node.get('effect')
@@ -4347,7 +4409,7 @@ class Interpreter:
             d.setdefault('verb', 'cast')
             d['next'] = True
             if 'this' in words and 'turn' in words:
-                d['window'] = 'this turn'
+                d['window'] = {'kind': 'turn', 'value': 'this_turn'}
             if 'you' in words:
                 d.setdefault('subject', 'you')
         if 'put' in words:
