@@ -523,12 +523,17 @@ class Interpreter:
     _quote_parser = None
     _quote_depth = 0
 
-    def _quoted_ability(self, text):
+    def _quoted_ability(self, text, depth=0):
+        if depth >= 2:
+            return None
         raw = text.strip()
-        if len(raw) >= 2 and raw[0] == raw[-1] == '"':
+        if len(raw) >= 2 and raw[0] == raw[-1] and raw[0] in ('"', "'"):
+            quote = raw[0]
             raw = raw[1:-1].strip()
+            if quote == "'":
+                raw = raw.replace("\\'", "'")
         raw = raw.rstrip('.').strip()
-        if not raw or self._quote_depth > 0:
+        if not raw:
             return None
         if Interpreter._quote_parser is None:
             from larkparser import build_parser
@@ -537,11 +542,7 @@ class Interpreter:
             tree = Interpreter._quote_parser.parse(raw)
         except Exception:
             return None
-        self._quote_depth += 1
-        try:
-            res = self.interp(tree)
-        finally:
-            self._quote_depth -= 1
+        res = self.interp(tree)
 
         def _has_unparsed(x):
             if isinstance(x, dict):
@@ -552,6 +553,27 @@ class Interpreter:
             return False
         if not res or _has_unparsed(res):
             return None
+
+        def _nested_quotes(x, level):
+            if isinstance(x, dict):
+                for k in ('quote', 'quotes'):
+                    v = x.get(k)
+                    if isinstance(v, str):
+                        q = self._quoted_ability(v, level)
+                        if q:
+                            x[k] = q
+                    elif isinstance(v, list):
+                        x[k] = [self._quoted_ability(e, level)
+                                if isinstance(e, str) else e for e in v]
+                        if any(e is None for e in x[k]):
+                            x[k] = [e for e in x[k] if e is not None]
+                for v in x.values():
+                    _nested_quotes(v, level)
+            elif isinstance(x, list):
+                for v in x:
+                    _nested_quotes(v, level)
+
+        _nested_quotes(res, depth + 1)
         return {'kind': 'quoted_ability', 'sentence': res}
 
     def _late_normalize(self, obj):
@@ -5317,6 +5339,25 @@ class Interpreter:
                 return {'type': 'static', 'activate_only': 'once each turn'}
             if 'once' in toks:
                 return {'type': 'static', 'activate_only': 'once'}
+        if 'can' in toks and 'block' in toks and 'only' in toks:
+            cts = self._find_all(children, 'card_target')
+            if len(cts) >= 2:
+                return {'type': 'static',
+                        'effect': {'verb': 'can_block',
+                                   'subject': self.interp(cts[0]),
+                                   'target': self.interp(cts[1]),
+                                   'only': True}}
+        if 'saddles' in toks and 'crews' in toks:
+            amt = self._find_one(children, 'amount')
+            as_though = {'stat': 'power', 'comparison': 'greater'}
+            if amt is not None:
+                as_though['amount'] = self.interp(amt)
+            return {'type': 'static',
+                    'effect': {'verb': 'saddle_and_crew',
+                               'objects': [
+                                   {'kind': 'type', 'value': 'mount'},
+                                   {'kind': 'type', 'value': 'vehicle'}],
+                               'as_though': as_though}}
         d = {'type': 'static', 'text': self._text(children)}
         eff = self._find_one(children, 'effect')
         if eff is not None:
@@ -5570,7 +5611,8 @@ class Interpreter:
                     d['xdef'] = self.interp(ch)
         if eff is not None:
             if texts:
-                d['condition'] = texts[0]
+                d['condition'] = (self._struct_cause_trigger(texts[0])
+                                  or texts[0])
             d['effect'] = eff
         elif len(texts) >= 2:
             d['condition'] = texts[0]
@@ -5579,6 +5621,20 @@ class Interpreter:
         else:
             d['text'] = self._text(children)
         return d
+
+    @staticmethod
+    def _struct_cause_trigger(text):
+        low = text.strip().lower()
+        if 'dying causes a triggered ability' not in low:
+            return None
+        return {'kind': 'causes_trigger',
+                'cause': {'event': 'dies',
+                          'subject': {'kind': 'creature'}},
+                'triggered_abilities': [
+                    {'kind': 'triggered_ability',
+                     'source': {'kind': 'this', 'card_class': 'creature'}},
+                    {'kind': 'triggered_ability',
+                     'source': {'kind': 'emblem', 'controller': 'you'}}]}
 
     def _structured_consequence(self, text):
         """Give a few frequent raw if-consequences a structured verb.
