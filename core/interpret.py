@@ -1512,6 +1512,72 @@ class Interpreter:
             lobj = _sym_label(node['label'])
             if lobj:
                 node['label'] = lobj
+        fev = node.get('for_each')
+        if isinstance(fev, str):
+            low_fe = fev.strip().lower()
+            if low_fe == 'opponent who lost life this turn':
+                node['for_each'] = {'kind': 'event_set', 'subject': 'opponent',
+                                    'event': 'lost_life', 'time': 'this_turn'}
+            elif 'counter on ' in low_fe:
+                kind, obj = low_fe.split(' counter on ', 1)
+                node['for_each'] = {'kind': 'counter_set',
+                                    'counter': {'kind': kind}, 'object': obj}
+            else:
+                parts = [x.strip() for x in
+                         re.split(r'\s+and each\s+|\s+and\s+', low_fe)]
+                items = []
+                for part in parts:
+                    controller = None
+                    zone = None
+                    for ctl in ('you control', 'you already control',
+                                'you own'):
+                        if part.endswith(' ' + ctl):
+                            controller = ctl
+                            part = part[:-len(ctl) - 1]
+                            break
+                    mzone = re.search(
+                        r' (?:in|from) (your graveyard|your hand|your library|exile|the battlefield)$',
+                        part)
+                    if mzone:
+                        zone = mzone.group(1)
+                        part = part[:mzone.start()]
+                    card_class = None
+                    for suf, cv in ((' card', 'card'), (' creature', 'creature'),
+                                    (' permanent', 'permanent')):
+                        if part.endswith(suf):
+                            card_class = cv
+                            part = part[:-len(suf)]
+                            break
+                    part = re.sub(r'^each ', '', part).strip()
+                    item = {'kind': 'type', 'value': part}
+                    if card_class:
+                        item['card_class'] = card_class
+                    if controller:
+                        item['controller'] = controller
+                    if zone:
+                        item['zone'] = zone
+                    items.append(item)
+                node['for_each'] = {'kind': 'set',
+                                    'items': items if len(items) > 1 else items[0]}
+        cntv = node.get('count')
+        if isinstance(cntv, str):
+            low_cnt = cntv.strip().lower()
+            words = {'a': 1, 'an': 1, 'one': 1, 'two': 2, 'three': 3,
+                     'four': 4, 'five': 5, 'six': 6, 'seven': 7,
+                     'eight': 8, 'nine': 9, 'ten': 10}
+            if low_cnt == 'that many':
+                node['count'] = {'kind': 'relative', 'of': {'kind': 'that_many'}}
+            elif low_cnt == 'one or more':
+                node['count'] = {'kind': 'count', 'at_least': 1}
+            elif low_cnt == 'that many plus one':
+                node['count'] = {'kind': 'relative', 'of': {'kind': 'that_many'},
+                                 'plus': 1}
+            elif low_cnt in words:
+                node['count'] = words[low_cnt]
+            elif low_cnt.isdigit():
+                node['count'] = int(low_cnt)
+            elif low_cnt == 'x':
+                node['count'] = 'X'
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:

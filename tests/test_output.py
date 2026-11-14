@@ -506,7 +506,7 @@ add("deal-damage", "this enchantment deals 2 damage to that player",
 add("damage-equal-to-power",
     "It deals damage equal to its power to target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
-                  and d.get('amount') == 'its power'))
+                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'possessive', 'possessor': 'its', 'stat': 'power'}}))
 add("life-loss-equal-to-count",
     "Target opponent loses life equal to the number of creatures they control",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
@@ -551,7 +551,7 @@ add("token-except-clause",
                   and 'haste' in str(d.get('token', {}))))
 add("token-that-many",
     "Whenever one or more Dinosaurs you control attack, create that many Treasure tokens",
-    lambda o: has(o, lambda d: d.get('token', {}).get('count') == 'that many'))
+    lambda o: has(o, lambda d: d.get('token', {}).get('count') == {'kind': 'relative', 'of': {'kind': 'that_many'}}))
 add("token-two-quotes",
     'Whenever ~ enters or attacks, create a tapped colorless artifact token named Test Relic with "When this token enters, it deals 2 damage to any target" and "{T}: Add one mana of any color."',
     lambda o: has(o, lambda d: len(d.get('token', {}).get('quotes', [])) == 2))
@@ -787,7 +787,7 @@ add("max-hand-size",
 add("draw-the-difference",
     "At the beginning of your end step, if you have fewer than ten cards in hand, draw cards equal to the difference",
     lambda o: has(o, lambda d: d.get('verb') == 'draw'
-                  and d.get('amount') == 'the difference'))
+                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'difference'}}))
 add("type-disjunction",
     "Destroy target artifact or creature",
     lambda o: has(o, lambda d: (d.get('kind') == 'set'
@@ -1056,7 +1056,8 @@ add("event-becomes-the-target",
 add("event-counter-put",
     "Whenever you put one or more +1/+1 counters on this creature, draw a card",
     lambda o: has(o, lambda d: d.get('verb') == 'put'
-                  and 'one or more' in str(d.get('counter', {}))))
+                  and d.get('counter', {}).get('count') == {'kind': 'count',
+                                                            'at_least': 1}))
 add("token-for-each",
     "Create a 2/2 green Wolf creature token for each Forest you control",
     lambda o: has(o, lambda d: d.get('verb') == 'create_token'
