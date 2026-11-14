@@ -962,6 +962,61 @@ class Interpreter:
                 orig = node[key]
                 node[key] = {'unparsed': True, 'reason': reason,
                              'fragment': orig, 'source': src}
+        av = node.get('amount')
+        if isinstance(av, str):
+            low_a = av.strip().lower().replace(' ,', ',')
+            nums = {'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                    'five': 5, 'six': 6, 'seven': 7, 'eight': 8,
+                    'nine': 9, 'ten': 10}
+            mlife = re.fullmatch(r'([0-9]+|one|two|three|four|five|six|seven|eight|nine|ten|x) life', low_a)
+            if mlife:
+                raw = mlife.group(1)
+                val = (int(raw) if raw.isdigit()
+                       else 'X' if raw == 'x' else nums[raw])
+                node['amount'] = {'kind': 'number', 'value': val,
+                                  'unit': 'life'}
+            elif re.fullmatch(r'[0-9]+', low_a):
+                node['amount'] = int(low_a)
+            elif low_a == 'x':
+                node['amount'] = {'kind': 'x'}
+            elif re.fullmatch(r'(?:\{[^}]+\}\s*)+', low_a):
+                syms = re.findall(r'\{[^}]+\}', av.strip())
+                node['amount'] = {'kind': 'mana', 'symbols': syms}
+            elif ' or ' in low_a and all(
+                    re.fullmatch(r'(?:\{[^}]+\}\s*)+', x.strip())
+                    for x in low_a.split(' or ')):
+                node['amount'] = {
+                    'kind': 'mana_choice',
+                    'options': [re.findall(r'\{[^}]+\}', x)
+                                for x in av.strip().split(' or ')]}
+            elif low_a == 'one mana of any color':
+                node['amount'] = {'kind': 'mana', 'count': 1,
+                                  'of': 'any_color'}
+            elif low_a == 'one mana of the chosen color':
+                node['amount'] = {'kind': 'mana', 'count': 1,
+                                  'of': 'chosen_color'}
+            mman = re.fullmatch(
+                r'([0-9]+|x) mana of (any one color|that color|the chosen color)',
+                low_a)
+            if mman:
+                raw = mman.group(1)
+                count = int(raw) if raw.isdigit() else 'X'
+                node['amount'] = {'kind': 'mana', 'count': count,
+                                  'of': mman.group(2).replace(' ', '_')}
+            elif re.fullmatch(r'([0-9]+|x) mana in any combination of colors', low_a):
+                raw = low_a.split()[0]
+                node['amount'] = {
+                    'kind': 'mana',
+                    'count': int(raw) if raw.isdigit() else 'X',
+                    'of': 'any_combination'}
+            mhalf = re.fullmatch(
+                r'(half|quarter|third) (their|your) (life|library)(?:,\s*rounded (up|down))?',
+                low_a)
+            if mhalf:
+                d = {'kind': mhalf.group(1), 'of': mhalf.group(2) + ' ' + mhalf.group(3)}
+                if mhalf.group(4):
+                    d['rounding'] = mhalf.group(4)
+                node['amount'] = d
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:

@@ -134,7 +134,8 @@ add("second-damage-source",
                   and d.get('amount') == 3 and d.get('source')))
 add("pay-life-amount", "Whenever a Vampire you control dies, you may pay 2 life",
     lambda o: has(o, lambda d: d.get('verb') == 'pay'
-                  and d.get('amount') == '2 life'))
+                  and d.get('amount') == {'kind': 'number', 'value': 2,
+                                          'unit': 'life'}))
 add("for-each-colors",
     "Whenever you cast a spell, put a +1/+1 counter on this creature for each of that spell's colors",
     lambda o: has(o, lambda d: d.get('for_each', {}).get('colors') is True))
@@ -144,7 +145,8 @@ add("spend-mana-any-type",
                   and d.get('mana') == 'any type'))
 add("add-mana-bare", "Add {R}",
     lambda o: has(o, lambda d: d.get('verb') == 'add_mana'
-                  and d.get('amount') == '{R}'))
+                  and d.get('amount') == {'kind': 'mana',
+                                          'symbols': ['{R}']}))
 add("waterbend-not-keyword",
     "Waterbend {4}: Target creature can't be blocked this turn",
     lambda o: has(o, lambda d: d.get('type') == 'activated'
@@ -170,7 +172,7 @@ add("extra-turns-no-empty-actor",
 add("ward-full-cost", "Ward—Pay 2 life",
     lambda o: has(o, lambda d: d.get('keyword') == 'Ward'
                   and d.get('cost', {}).get('action') == 'pay_life'
-                  and d.get('cost', {}).get('amount') == '2'))
+                  and d.get('cost', {}).get('amount') == 2))
 add("flashback-full-cost", "Flashback {2}{B}{B}",
     lambda o: has(o, lambda d: d.get('cost', {}).get('action') == 'pay_mana'
                   and d.get('cost', {}).get('mana') == '{2}{B}{B}'))
@@ -398,7 +400,7 @@ add("fight-second-target",
                   and d.get('fights', {}).get('controller') == 'an opponent controls'))
 add("life-total-equal", "your life total becomes equal to X",
     lambda o: has(o, lambda d: d.get('verb') == 'life_total'
-                  and d.get('amount') == 'X'))
+                  and d.get('amount') == {'kind': 'x'}))
 add("xdef-your-speed",
     "Noncreature spells you cast cost {X} less to cast, where X is your speed",
     lambda o: has(o, lambda d: 'speed' in str(d.get('xdef', ''))))
@@ -449,7 +451,7 @@ add("skip-that-draw",
                   and d.get('object') == 'draw'))
 add("life-total-equal", "your life total becomes equal to X",
     lambda o: has(o, lambda d: d.get('verb') == 'life_total'
-                  and d.get('amount') == 'X'))
+                  and d.get('amount') == {'kind': 'x'}))
 add("xdef-your-speed",
     "Noncreature spells you cast cost {X} less to cast, where X is your speed",
     lambda o: has(o, lambda d: 'speed' in str(d.get('xdef', ''))))
@@ -760,7 +762,8 @@ add("cant-gain-life",
 add("half-life-rounded",
     "Whenever enchanted player is dealt damage, they lose half their life, rounded up",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
-                  and 'rounded up' in str(d.get('amount', ''))))
+                  and d.get('amount', {}).get('kind') == 'half'
+                  and d.get('amount', {}).get('rounding') == 'up'))
 add("add-mana-equal-x",
     "{T}: Add an amount of {G} equal to this creature's power",
     lambda o: has(o, lambda d: d.get('verb') == 'add_mana'
@@ -816,7 +819,8 @@ add("return-to-battlefield-mv",
 add("cost-less-to-activate-this",
     "This ability costs {1} less to activate for each Island you control",
     lambda o: has(o, lambda d: d.get('verb') == 'cost_mod'
-                  and d.get('amount') == '{1}'
+                  and d.get('amount') == {'kind': 'mana',
+                                          'symbols': ['{1}']}
                   and d.get('direction') == 'less'))
 add("ability-word-effect",
     "Fathomless descent \u2014 Return to the battlefield target nonland permanent card in your graveyard with mana value less than or equal to the number of permanent cards in your graveyard",
