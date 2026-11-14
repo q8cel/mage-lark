@@ -560,12 +560,24 @@ class Interpreter:
             mv = obj.get('modifier')
             if isinstance(mv, str) and mv.strip().lower().startswith('that targets '):
                 rest = mv.strip().lower()[len('that targets '):]
-                d = {'kind': 'targets', 'target': {'kind': 'type', 'value': rest}}
+                only = single = False
                 if rest.startswith('only a single '):
+                    only = single = True
+                    rest = rest[len('only a single '):]
+                q = None
+                if rest[:2] in ('a ', 'an '):
+                    q = rest[:2].strip()
+                    rest = rest[2:]
+                parts = [x.strip() for x in re.split(r'\s+(?:or|and)\s+', rest)]
+                d = {'kind': 'targets',
+                     'target': {'card_type': [{'kind': 'type', 'value': x}
+                                              for x in parts]}}
+                if q:
+                    d['target']['quantifier'] = q
+                if only:
                     d['only'] = True
+                if single:
                     d['single'] = True
-                    d['target'] = {'kind': 'type',
-                                   'value': rest[len('only a single '):]}
                 obj['modifier'] = d
             fev = obj.get('for_each')
             if isinstance(fev, dict):
@@ -610,7 +622,7 @@ class Interpreter:
             return {'kind': 'frequency', 'value': 'each_turn'}
         if low == 'this turn':
             return {'kind': 'turn', 'value': 'this_turn'}
-        return {'kind': 'turn', 'phrase': low}
+        return None
 
     def _trigger_event(self, text):
         """Closed trigger-event fragments from a stashed trigger text."""
@@ -1141,7 +1153,16 @@ class Interpreter:
                     if owner in ('its', 'his', 'her', 'their'):
                         of = {'kind': 'possessive', 'possessor': owner}
                     else:
-                        of = {'kind': 'ref', 'phrase': owner[:-2]}
+                        owner_text = owner[:-2]
+                        if owner_text.startswith('that '):
+                            of = {'kind': 'that', 'noun': owner_text[5:]}
+                        elif owner_text.startswith('the '):
+                            bits = owner_text[4:].split()
+                            of = {'kind': 'the', 'noun': bits[-1]}
+                            if len(bits) > 1:
+                                of['role'] = ' '.join(bits[:-1])
+                        else:
+                            of = {'kind': 'ref', 'noun': owner_text}
                     node['amount'] = {'kind': 'relative',
                                       'of': {**of,
                                              'stat': mref.group(2).replace(' ', '_')}}
@@ -1703,7 +1724,10 @@ class Interpreter:
                       'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10}
                      .get(raw, int(raw) if raw.isdigit() else 1))
                 actions.append({'action': 'remove_counters', 'count': n,
-                                'from': 'creatures you control'})
+                                'from': {'kind': 'set',
+                                         'card_type': [{'kind': 'type',
+                                                        'value': 'creature'}],
+                                         'controller': 'you'}})
             if low_by.startswith('foraging'):
                 actions.append({'action': 'forage'})
             if actions:
@@ -1734,8 +1758,9 @@ class Interpreter:
                              'event': {'subject': 'you', 'verb': 'cast',
                                        'object': {'card_type': {
                                            'kind': 'type', 'value': 'spell'}}},
-                             'window': self._window_obj(
-                                 frag[len('you cast a spell during '):])})
+                             **({'window': self._window_obj(
+                                 frag[len('you cast a spell during '):])}
+                                if self._window_obj(frag[len('you cast a spell during '):]) else {})})
         if top:
             if node.get('type') == 'effect':
                 eff = node.get('effect')
