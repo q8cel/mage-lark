@@ -172,3 +172,34 @@ ledger for a future phase.
 | raw_action residual | ~91 non-double after 6924944 | top shapes pay-life-equal (9), it becomes plotted (8), additional-combat/end-step (5), cast-exiled-until (4); all below the 50-occ closed threshold — left |
 | static_text residual | 168 | arbitrary "Activate only if …" + free-form statics; no closed sub-family ≥20 in head grouping — left |
 | freeze point | Standard honest 19,158/22,217 = 86.2% (unique 6,328/7,966; interpret_unparsed 1,722 occ / 936 unique); FDN 1,572/1,653 = 95.1% (unparsed 81/45), parse 94.0% Standard | approximate remaining split: condition ~1,099 (would/free-form), trigger ~270 (compound), static 168, raw ~91, object ~37, xdef ~33, modifier 24, no_handler ~0 |
+
+## Stringy families structured (Standard snapshot 69cae293)
+
+Queue: `review/stringy_queue.md`. Acceptance: the family value is no longer a
+prose string at its structured path, so an engine consumes it without splitting
+text. Occurrences below are queue totals for the family; "covered" is the part
+now emitted as an object (the rest are one-off shapes listed under left).
+
+| family | total occ | covered | new object | left / notes |
+|---|---:|---:|---|---|
+| amount | 1,815 | ~1,480 | `{kind: number, value, unit: life}`; `{kind: mana, symbols}`; `{kind: mana_choice, options}`; `{kind: mana, count, of}`; `{kind: half/quarter, of, rounding}` | relative counts ("that much", "its power", "the number of ...") and a few joined mana lists; commit cd6cbec |
+| duration | 1,783 | ~1,660 | `{kind: until/for, event: end_of_turn/this_turn/next_turn/next_end_step/rest_of_game/leaves_battlefield, which, player}` | "for as long as ..." exile/control conditions; commit d575f7c |
+| counter | 1,471 | ~1,440 | `{kind: "+1/+1"/"stun"/..., count}` (count from sibling, words normalized) | "each kind of counter", "those counters", possessives; 42f20cf |
+| pt-change | 1,155 | ~1,140 | `{power, toughness}` signed integers, X preserved, `additional` flag | none of the measured shapes; 6292a0b |
+| timing | 1,141 | ~1,060 | `activate_only` -> `{timing: sorcery}` / `{frequency: once_each_turn/each_turn}`; `when` -> `{position: beginning, phase, which?, player?}`; `timing`/`window` same | "during" / "as though" tails and opponent-turn windows; abfb029 |
+| destination | 1,076 | ~900 | `{zone, controller?, owner?, tapped?, transformed?, library_position?, counter?}`; player recipients typed | long "with mana value ..." tails appended to destination text; 0e3932b |
+| pt | 901 | 901 | `{power, toughness}` (ints, `X`, `*`) | none; 851535a |
+| modifier | 890 | ~620 | `{kind: stat_filter, stat, op, value}`, keyword, chosen-type, event filter, target predicate, name, counter-on, pay-life | ", except ..." / compound stat expressions / free-form qualifiers; e4688d4 |
+| object-phrase | 527 | ~350 | typed spell/card/type/colour/zone/position/choice objects | long target lists and "one that hasn't been chosen" variants; ca17dab |
+| colours | 127 compound | 127 | `{kind: all/any/and_or, values: [atoms]}`; single colours remain atoms | none; cbdfe91 |
+
+Invariant: the detector's frozen pre-change snapshot reported `bad_amount` 64,
+`bare_modifier` 16, `raw_action` 50. Amount, timing and modifier values are now
+objects, so `bad_amount`/`bare_modifier` no longer see prose; the remaining
+flags are unchanged classes (conditions/xdef), not stringified family values.
+`fragment` remains restricted to unparsed nodes (bare_fragment 0).
+
+FDN after every commit: parse 1,653/1,653; honest 1,572/1,653 (81 unparsed, 45
+unique). Tests 277/277. Standard gate on the final tree: parse 20,880/22,217 (94.0%); honest
+19,158/22,217 (86.2%, unique 6,328/7,966) — unchanged from the pre-change
+baseline.
