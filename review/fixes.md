@@ -231,3 +231,27 @@ Invariant audit on the same snapshot: `bad_amount` **62 -> 5 occurrences**
 in your graveyard", "the power of the chosen creature or card"); `bare_modifier`
 **16 -> 0**. `fragment` violations 0; no new string field introduced (structured
 objects only).
+
+## Stringy round three (computed refs only)
+
+Detector after commit 77447b2, snapshot
+`Standard_69cae293a709a048_c88263d60e922022.json`:
+
+- structured: **18,244/20,880 parsed occurrences = 87.4%**
+  (unique 5,865/7,264 = 80.7%); of the full corpus 18,244/22,217 = 82.1%
+  (unique 5,865/7,966 = 73.6%)
+- stringy: **986 occurrences / 498 texts** (was 1,124 / 560)
+- `bad_amount` **5 -> 0**; `bare_modifier` **0**; fragment violations 0
+
+| family | prior residual | now | closed | object |
+|---|---:|---:|---:|---|
+| amount | 117 | 32 | 85 | `{kind: computed, base, op: plus, of: {kind: count_of, set}}`; `count_of`, `superlative`, `fraction`, `mana_per`, `relative` with structured refs |
+| phrase | 53 | 40 | 13 | relative event refs (`that attacked/saddled it/was dealt damage this turn`), `of` choice refs with `single_target` |
+| count | 23 | 4 | 19 | late-created `{kind: count, at_least}` / relative `that_many` |
+| target | 58 | 2 | 56 | `{kind: target_ref, ref: 'that_ability'|'this_ability'|'that_spell'|'this_spell'}` |
+
+Remaining under the 50-occurrence ledger threshold: amount 32 (compound
+manifold/mana-value refs), phrase 40 (free-form relative clauses such as
+"that don't share a creature type with the chosen creature they control"),
+count 4, target 2. `quoted-ability` residual 118 is untouched: 36 unique
+quoted texts fail to parse and are grammar work.
