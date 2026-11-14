@@ -1388,6 +1388,69 @@ class Interpreter:
             elif low_p == 'lose mana':
                 node['predicate'] = {'kind': 'predicate', 'verbs': ['lose'],
                                      'object': 'mana'}
+        def _sym_label(v):
+            low = v.strip().lower()
+            q = None
+            for pre, qv in (('up to one target ', 'up_to_one'),
+                            ('up to two target ', 'up_to_two'),
+                            ('target ', 'target'), ('another ', 'another'),
+                            ('all ', 'all')):
+                if low.startswith(pre):
+                    q = qv
+                    low = low[len(pre):]
+                    break
+            if q is None and low[:2] in ('a ', 'an '):
+                q = low[:2].strip()
+                low = low[2:]
+            controller = None
+            for suf, cv in ((' you control', 'you control'),
+                            (' an opponent controls', 'opponent controls'),
+                            (" you don't control", "you don't control"),
+                            (' you own', 'you own')):
+                if low.endswith(suf):
+                    controller = cv
+                    low = low[:-len(suf)]
+                    break
+            card_class = None
+            for suf, cv in ((' spells', 'spell'), (' spell', 'spell'),
+                            (' cards', 'card'), (' card', 'card'),
+                            (' tokens', 'token'), (' token', 'token'),
+                            (' permanents', 'permanent'),
+                            (' permanent', 'permanent')):
+                if low.endswith(suf):
+                    card_class = cv
+                    low = low[:-len(suf)]
+                    break
+            parts = [x.strip(' ,') for x in
+                     re.split(r'\s*(?:,|\band\b|\bor\b)\s*', low)]
+            skip = {'tapped', 'untapped', 'attacking', 'blocking', 'red',
+                    'green', 'white', 'blue', 'black', 'colorless',
+                    'nontoken', 'legendary', 'basic', 'other', 'another',
+                    'each', 'all', 'chosen', 'single', 'first', 'second',
+                    'tokenn', 'attacking'}
+            types = []
+            for part in parts:
+                if not part or part in skip:
+                    continue
+                part = re.sub(r'^non-', '', part)
+                part = re.sub(r's$', '', part) if part.endswith('s') else part
+                part = part.replace('vehicle', 'vehicle').replace('spacecraft', 'spacecraft')
+                types.append({'kind': 'type', 'value': part})
+            if not types:
+                return None
+            d = {}
+            if q:
+                d['quantifier'] = q
+            d['card_type'] = types
+            if card_class:
+                d['card_class'] = card_class
+            if controller:
+                d['controller'] = controller
+            return d
+        if isinstance(node.get('label'), str):
+            lobj = _sym_label(node['label'])
+            if lobj:
+                node['label'] = lobj
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
