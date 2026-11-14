@@ -236,23 +236,23 @@ add("cost-name-equal",
 add("become-duration",
     "Until end of turn, this creature becomes a Plant with base power and toughness 0/8",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
-                  and d.get('duration') == 'until end of turn'))
+                  and d.get('duration') == {'kind': 'until', 'event': 'end_of_turn'}))
 add("anaphora-not-type", "It gains haste until end of turn",
     lambda o: has(o, lambda d: d.get('ref') == 'anaphora'))
 add("gain-kw-duration", "It gains haste until end of turn",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'
-                  and d.get('duration') == 'until end of turn'))
+                  and d.get('duration') == {'kind': 'until', 'event': 'end_of_turn'}))
 add("stat-duration", "Target creature gets +2/+0 until end of turn",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
-                  and d.get('duration') == 'until end of turn'))
+                  and d.get('duration') == {'kind': 'until', 'event': 'end_of_turn'}))
 add("coordinated-duration",
     "Target creature gets +1/+0 and gains first strike until end of turn",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
-                  and d.get('duration') == 'until end of turn'))
+                  and d.get('duration') == {'kind': 'until', 'event': 'end_of_turn'}))
 add("until-in-activated-duration",
     "{3}: Until end of turn, this creature loses defender and gains flying",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_keywords'
-                  and d.get('duration') == 'until end of turn'))
+                  and d.get('duration') == {'kind': 'until', 'event': 'end_of_turn'}))
 add("become-base-pt",
     "Until end of turn, this creature becomes a Plant with base power and toughness 0/8",
     lambda o: has(o, lambda d: d.get('verb') == 'become'
@@ -289,7 +289,7 @@ add("sacrifice-delayed-timing",
                   and d.get('timing') == 'at the beginning of your next end step'))
 add("play-permission-duration", "You may play those cards this turn",
     lambda o: has(o, lambda d: d.get('verb') == 'play'
-                  and d.get('duration') == 'this turn'))
+                  and d.get('duration') == {'kind': 'for', 'event': 'this_turn'}))
 add("cast-without-paying",
     "You may cast that card without paying its mana cost",
     lambda o: has(o, lambda d: d.get('verb') == 'cast'
@@ -325,18 +325,18 @@ add("look-possessor", "As this creature enters, look at an opponent's hand",
                   and d.get('possessor') == "an opponent's"))
 add("cant-block-duration", "Target creature can't block this turn",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
-                  and d.get('duration') == 'this turn'))
+                  and d.get('duration') == {'kind': 'for', 'event': 'this_turn'}))
 add("prevent-damage-object-duration",
     "Until your next turn, prevent all damage that would be dealt to you",
     lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'
                   and d.get('object') == 'damage'
                   and d.get('to') == 'you'
-                  and d.get('duration') == 'until your next turn'))
+                  and d.get('duration') == {'kind': 'until', 'event': 'next_turn', 'player': 'you'}))
 add("prevent-combat-kind-this-turn",
     "Prevent all combat damage that would be dealt this turn",
     lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'
                   and d.get('damage') == 'combat'
-                  and d.get('duration') == 'this turn'))
+                  and d.get('duration') == {'kind': 'for', 'event': 'this_turn'}))
 add("damage-cant-be-prevented",
     "The damage can't be prevented",
     lambda o: has(o, lambda d: d.get('verb') == "can't"
@@ -352,11 +352,11 @@ add("cast-permission-as-long",
 add("no-max-hand-duration",
     "You have no maximum hand size for the rest of the game",
     lambda o: has(o, lambda d: d.get('verb') == 'no_max_hand_size'
-                  and d.get('duration') == 'for the rest of the game'))
+                  and d.get('duration') == {'kind': 'for', 'event': 'rest_of_game'}))
 add("until-sentence-duration",
     "Until the end of your next turn, you may play those cards",
     lambda o: has(o, lambda d: d.get('type') == 'until'
-                  and d.get('duration') == 'until the end of your next turn'))
+                  and d.get('duration') == {'kind': 'until', 'event': 'end_of_turn', 'which': 'next', 'player': 'you'}))
 add("effect-timing-delayed",
     "At the beginning of the next end step, return those creatures to their owner's hand",
     lambda o: has(o, lambda d: d.get('verb') == 'return'
@@ -364,7 +364,7 @@ add("effect-timing-delayed",
 add("gain-quote-duration-keywords",
     '{T}: Until end of turn, target creature you control gains trample and "Whenever this creature deals combat damage to a player, draw a card."',
     lambda o: has(o, lambda d: d.get('verb') == 'gain_quote'
-                  and d.get('duration') == 'until end of turn'
+                  and d.get('duration') == {'kind': 'until', 'event': 'end_of_turn'}
                   and d.get('keywords') == ['trample']))
 add("passive-damage-object",
     "Whenever this creature is dealt damage, destroy it",

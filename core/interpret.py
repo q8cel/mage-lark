@@ -1017,6 +1017,40 @@ class Interpreter:
                 if mhalf.group(4):
                     d['rounding'] = mhalf.group(4)
                 node['amount'] = d
+        dv = node.get('duration')
+        if isinstance(dv, str):
+            low_d = dv.strip().lower()
+            dur = None
+            if low_d in ('until end of turn', 'end of turn'):
+                dur = {'kind': 'until', 'event': 'end_of_turn'}
+            elif low_d == 'this turn':
+                dur = {'kind': 'for', 'event': 'this_turn'}
+            elif low_d == 'until the end of your next turn':
+                dur = {'kind': 'until', 'event': 'end_of_turn',
+                       'which': 'next', 'player': 'you'}
+            elif low_d == 'until the end of their next turn':
+                dur = {'kind': 'until', 'event': 'end_of_turn',
+                       'which': 'next', 'player': 'they'}
+            elif low_d == 'until your next turn':
+                dur = {'kind': 'until', 'event': 'next_turn',
+                       'player': 'you'}
+            elif low_d == 'until your next end step':
+                dur = {'kind': 'until', 'event': 'next_end_step',
+                       'player': 'you'}
+            elif low_d == 'during your turn':
+                dur = {'kind': 'for', 'event': 'your_turn'}
+            elif low_d == 'for the rest of the game':
+                dur = {'kind': 'for', 'event': 'rest_of_game'}
+            else:
+                mleave = re.fullmatch(
+                    r'until this ([a-z ]+?) leaves the battlefield',
+                    low_d)
+                if mleave:
+                    dur = {'kind': 'until',
+                           'event': 'leaves_battlefield',
+                           'object': mleave.group(1)}
+            if dur:
+                node['duration'] = dur
         if 'text' in node and 'when' in node:
             ev = self._trigger_event(node.get('text'))
             if ev is not None:
