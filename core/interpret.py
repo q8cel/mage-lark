@@ -545,7 +545,7 @@ class Interpreter:
 
         def _has_unparsed(x):
             if isinstance(x, dict):
-                return bool(x.get('unparsed')) or any(
+                return bool(x.get('unparsed')) or 'fragment' in x or any(
                     _has_unparsed(v) for v in x.values())
             if isinstance(x, list):
                 return any(_has_unparsed(v) for v in x)
@@ -567,6 +567,24 @@ class Interpreter:
                     d['target'] = {'kind': 'type',
                                    'value': rest[len('only a single '):]}
                 obj['modifier'] = d
+            fev = obj.get('for_each')
+            if isinstance(fev, dict):
+                if isinstance(fev.get('controller'), str):
+                    fev['controller'] = {'you control': 'you',
+                                         'you already control': 'you',
+                                         'you own': 'you_own'}.get(
+                        fev['controller'], fev['controller'])
+                if isinstance(fev.get('zone'), str):
+                    fev['zone'] = fev['zone'].replace('your ', '')
+                for item in fev.get('items', []) if isinstance(fev.get('items'), list) else []:
+                    if isinstance(item, dict):
+                        if isinstance(item.get('controller'), str):
+                            item['controller'] = {'you control': 'you',
+                                                  'you already control': 'you',
+                                                  'you own': 'you_own'}.get(
+                                item['controller'], item['controller'])
+                        if isinstance(item.get('zone'), str):
+                            item['zone'] = item['zone'].replace('your ', '')
             qv = obj.get('quote')
             if isinstance(qv, str):
                 qobj = self._quoted_ability(qv)
@@ -1125,7 +1143,8 @@ class Interpreter:
                     else:
                         of = {'kind': 'ref', 'phrase': owner[:-2]}
                     node['amount'] = {'kind': 'relative',
-                                      'of': {**of, 'stat': mref.group(2)}}
+                                      'of': {**of,
+                                             'stat': mref.group(2).replace(' ', '_')}}
             mhalf = re.fullmatch(
                 r'(half|quarter|third) (their|your) (life|library)(?:,\s*rounded (up|down))?',
                 low_a)
@@ -1572,6 +1591,7 @@ class Interpreter:
                 if not part or part in skip:
                     continue
                 part = re.sub(r'^non-', '', part)
+                part = re.sub(r'^(?:a|an|the) ', '', part)
                 part = re.sub(r's$', '', part) if part.endswith('s') else part
                 part = part.replace('vehicle', 'vehicle').replace('spacecraft', 'spacecraft')
                 types.append({'kind': 'type', 'value': part})
@@ -1584,7 +1604,10 @@ class Interpreter:
             if card_class:
                 d['card_class'] = card_class
             if controller:
-                d['controller'] = controller
+                d['controller'] = {'you control': 'you',
+                                   'opponent controls': 'opponent',
+                                   "you don't control": 'not_you',
+                                   'you own': 'you_own'}.get(controller, controller)
             return d
         if isinstance(node.get('label'), str):
             lobj = _sym_label(node['label'])
@@ -1631,9 +1654,11 @@ class Interpreter:
                     if card_class:
                         item['card_class'] = card_class
                     if controller:
-                        item['controller'] = controller
+                        item['controller'] = {'you control': 'you',
+                                              'you already control': 'you',
+                                              'you own': 'you_own'}.get(controller, controller)
                     if zone:
-                        item['zone'] = zone
+                        item['zone'] = zone.replace('your ', '')
                     items.append(item)
                 node['for_each'] = {'kind': 'set',
                                     'items': items if len(items) > 1 else items[0]}
