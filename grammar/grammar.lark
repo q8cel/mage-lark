@@ -6,7 +6,7 @@
 //    quantifier | otherness | status | color | card_kind | controller | zone
 // ============================================================================
 
-start: sentence+
+start: sentence+ (DOT sentence+)*
 
 // ----------------------------------------------------------------------------
 //  sentence dispatch (deterministic by prefix)
@@ -1360,5 +1360,6 @@ POWER_MOD: /[+-](\d+|X)\/[+-](\d+|X)/
 NUMBER: /\d+/
 number: NUMBER
 
+DOT: "."
 %ignore WS
 WS: /[\s\u00A0]+/
