@@ -341,7 +341,10 @@ class Interpreter:
                     continue
             merged.append(item)
         cleaned = merged
-        return [self._finalize(x, top=True) for x in cleaned]
+        out = [self._finalize(x, top=True) for x in cleaned]
+        for x in out:
+            self._late_normalize(x)
+        return out
 
     @staticmethod
     def _unparsed_tag(d):
@@ -516,6 +519,25 @@ class Interpreter:
                                   'object': tgt},
                         'this_turn': True}
         return None
+
+    def _late_normalize(self, obj):
+        """Structure values created after the normal child-finalizer pass."""
+        if isinstance(obj, dict):
+            mv = obj.get('modifier')
+            if isinstance(mv, str) and mv.strip().lower().startswith('that targets '):
+                rest = mv.strip().lower()[len('that targets '):]
+                d = {'kind': 'targets', 'target': {'kind': 'type', 'value': rest}}
+                if rest.startswith('only a single '):
+                    d['only'] = True
+                    d['single'] = True
+                    d['target'] = {'kind': 'type',
+                                   'value': rest[len('only a single '):]}
+                obj['modifier'] = d
+            for v in obj.values():
+                self._late_normalize(v)
+        elif isinstance(obj, list):
+            for v in obj:
+                self._late_normalize(v)
 
     @staticmethod
     def _window_obj(text):
@@ -1020,6 +1042,18 @@ class Interpreter:
                     'kind': 'mana',
                     'count': int(raw) if raw.isdigit() else 'X',
                     'of': 'any_combination'}
+            if re.fullmatch(
+                    r'\{[^}]+\}(?:\s*,\s*(?:or\s+)?\{[^}]+\})+', low_a):
+                node['amount'] = {
+                    'kind': 'mana_choice',
+                    'options': [re.findall(r'\{[^}]+\}', x)
+                                for x in re.split(r'\s*,\s*(?:or\s+)?',
+                                                  av.strip())]}
+            elif low_a.startswith('your devotion to '):
+                node['amount'] = {'kind': 'devotion',
+                                  'color': low_a[len('your devotion to '):]}
+            elif low_a == 'your speed':
+                node['amount'] = {'kind': 'stat', 'stat': 'speed'}
             if low_a == 'that much life':
                 node['amount'] = {'kind': 'relative',
                                   'of': {'kind': 'that_much'}, 'unit': 'life'}
