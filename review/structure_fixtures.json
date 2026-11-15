@@ -1,0 +1,14 @@
+{
+  "comment": "Structural fixtures: positives must report an empty required slot; negatives are legitimately minimal outputs that must stay clean.",
+  "positives": [
+    {"id": "W027", "output": [{"type": "triggered", "trigger": {"when": "Whenever", "event": {"object": {"card_type": {"kind": "type", "value": "creature"}}}}, "effect": {"verb": "stat_change"}}], "note": "event verb dropped"},
+    {"id": "W031", "output": [{"type": "activated", "cost": ["Tap four untapped tokens you control"], "effect": {"verb": "tap"}}], "note": "cost item is prose, no action"}
+  ],
+  "negatives": [
+    {"id": "N1", "output": [{"type": "triggered", "trigger": {"when": {"phase": "end_step", "player": "you", "position": "beginning"}}, "effect": {"verb": "put_counter"}}], "note": "bare phase trigger is complete"},
+    {"id": "N2", "output": [{"type": "triggered", "trigger": {"event": {"kind": "event_ref", "actor": "you", "polarity": "positive"}}, "effect": {"verb": "draw"}}], "note": "event reference is complete"},
+    {"id": "N3", "output": [{"type": "activated", "cost": ["{T}"], "effect": {"verb": "add_mana"}}], "note": "brace-only mana cost"},
+    {"id": "N4", "output": [{"type": "static_keyword", "keywords": {"keyword": "Flying"}}], "note": "keyword-only static"},
+    {"id": "N5", "output": [{"type": "static", "effect": {"verb": "investigate"}}], "note": "investigate needs no target"}
+  ]
+}
