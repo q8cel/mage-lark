@@ -367,6 +367,8 @@ amount kinds, Plot in the keyword vocabulary, and `states: ["prepared"]`.
 Verification: no raw string remains in an activated/spree/cost_dash `cost`;
 W005/W025/W040 were already green on the current tree.
 
-Detector after these fixes and the merged grammar:
-`review/stringiness_4.md` — structured 17,963/20,882 = 86.0%
-(unique 5,712/7,265 = 78.6%); stringy 1,296/664.
+Detector after these fixes and the merged grammar, using the calibrated
+policy (`review/stringiness_8.md`): structured 17,744/20,882 = 85.0%
+(unique 5,630/7,265 = 77.5%); of corpus 17,744/22,217 = 79.9%; stringy
+1,515 occ / 746 texts. Raw activated/spree/cost_dash cost strings: 0;
+weighted fragment fields (unparsed raw sentences): 1,812.
