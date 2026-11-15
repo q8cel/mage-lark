@@ -71,6 +71,20 @@ Honest counts a sentence only if it parses and its interpreted output carries no
 Honest unique: Standard 6,328/7,966 = 79.4%, classic 1,930/2,148 = 89.9%, FDN 716/761 = 94.1%.
 Phase trajectory: Standard honest 76.2% at the phase start -> **86.2%** at the freeze (ledger 1, measured at `9ade95c`, was 79.9%).
 
+## Final three-layer headline (master `f05bc59`, merged grammar `9256d36`)
+Parse, honest and structured are all occurrence-based. `structured of corpus` uses the corpus's total occurrences; `structured of parsed` uses parsed occurrences only. Honest is now the middle layer, not the headline: it only requires that a parsed output carry no `unparsed` marker.
+
+| corpus | parse | honest | structured (of corpus) | structured (of parsed) | structured unique | stringy |
+|---|---:|---:|---:|---:|---:|---:|
+| Standard | 20,882 / 22,217 (94.0%) | 19,164 / 22,217 (86.3%) | 18,431 / 22,217 (83.0%) | 18,431 / 20,882 (88.3%) | 5,970 / 7,265 (82.2%; 74.9% of 7,966) | 393 texts / 798 occ |
+| classic | 4,217 / 4,280 (98.5%) | 4,002 / 4,280 (93.5%) | 3,833 / 4,280 (89.6%) | 3,833 / 4,217 (90.9%) | 1,803 / 2,090 (86.3%; 83.9% of 2,148) | 139 / 183 |
+| FDN | 1,653 / 1,653 (100%) | 1,572 / 1,653 (95.1%) | 1,488 / 1,653 (90.0%) | 1,488 / 1,653 (90.0%) | 672 / 761 (88.3%) | 45 / 85 |
+
+Phase trajectory (Standard, structured of parsed / stringy occurrences): 10,701 / 20,880 = 51.2% (v1) -> 17,257 / 20,880 = 82.6% (round one) -> **18,431 / 20,882 = 88.3%**; stringy 9,277 -> 2,062 -> **798**.
+Merged grammar: Standard parse 20,882 / 7,265 unique (was 20,880 / 7,264), classic 4,217 / 2,090 and FDN 1,653 / 761 unchanged -- no parse regression. Invariants on the final Standard snapshot: `bad_amount` 0, `bare_modifier` 0, `bare_fragment` 0, `raw_action` 50, `bad_quantifier` 49 (108 flags total, down from 173).
+Policy refresh: 1,856 paths (1,705 closed, 131 structured, 20 free text). Re-running the pre-refresh policy on the frozen snapshot gave 115 unclassified sites: 86 were canonical atoms/objects (controller/card_type/verb/which values such as 'you control', 'nonbasic land', 'is dealt', 'the chosen') and 29 were real prose, reclassified to their proper rules; 0 unclassified sites remain. The 136 `modifier` sites are real multi-word prose (137 after reclassification); the closed-vocabulary outlier guard added 24 real prose sites (27 -> 51).
+What is left (Standard stringy texts by family): modifier 133, object-phrase 60, closed-outlier 45, duration 27, phrase 26, destination 24, quoted-ability 24, counter 21, amount 20, timing 4. The remainder is a long tail: 217 of 275 (path, value-shape) families are single-text, carrying 54.9% of stringy family occurrences.
+
 ## Structured headline (master `6972653`)
 Honest is now an intermediate layer: it only requires that the parsed output carry no `unparsed` marker. The headline adds the stringiness policy (`review/stringy_policy.json`): every string field must be a closed vocabulary, a free-text marker, or a structured object.
 

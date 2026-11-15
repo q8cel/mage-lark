@@ -1,0 +1,410 @@
+2a5bd6ef374e	[].effect.object	a nonland card from it	5	15
+02a4fac1e7d9	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'artifacts'}}	6	11
+2356a666832f	[].effect.object	up to five {P} worth of modes	7	10
+342d95dc15c9	[].trigger.event.object	an instant or sorcery spell	5	7
+88a86f60059e	[].effect.to	to their owners' hands	4	6
+bc0737d65213	[].effect.object	of those piles	3	6
+00575e811955	[].effect.counter	each kind of counter	4	5
+03e0811d0c11	[].effect.with.for_each.items.value	color of mana spent to cast it	7	5
+11a41ec11c6e	[].effect.inner.duration	for as long as it remains exiled	7	5
+1a82fae6f2b8	[].effect.token.except	, except it's a 5/5 black Demon	7	5
+23377e972d45	[].effect.with.for_each.items.value	creature card exiled this way	5	5
+82831477d85c	[].effect.token.except	, except it has haste and "At the beginning of the end step, sacrifice this token."	16	5
+8a72e4586809	[].trigger.event.condition	during your turn	3	5
+09b961ef7f20	[].effect.token.except	, except it has "This Equipment's equip abilities cost {2} less to activate."	13	4
+1c3f22d45f79	[].effect[].inner.card.modifier	with mana value less than or equal to the number of lands you control	14	4
+26a74cf7ee3a	[].trigger.event.object.condition	during your turn	3	4
+5619ca51862b	[].effect.card.relative	that don't share a creature type with the chosen creature they control	12	4
+5ae45898aa39	[].effect.inner.effect.copy_of.modifier	exiled with it	3	4
+6d5a305b230d	[].effect.amount.set.card_type[].value	spells you've cast this turn	5	4
+862b5f80e3dc	[].condition.event.object.modifier	with mana value less than or equal to the amount of life you gained	14	4
+89a84b3bd703	[].effect.card.modifier	with mana value X	4	4
+92211c6b9eb6	[].if.card_target.modifier	with power 4 or greater	5	4
+a0b1f3402fcb	[].effect.duration	until they exile a nonland card	6	4
+a70a0d6255fe	[].effect.inner.duration	for as long as you control this creature	8	4
+b404c9181beb	[].effect.duration	for as long as you control this Vehicle	8	4
+babcf53850a5	[].effect.with.for_each.items.value	creature you control of the chosen type	7	4
+bdcdab21434a	[].effect.to	with mana value less than or equal to ~ 's power from your graveyard to the battlefield	17	4
+c18548594e99	[].effect.counter	each kind of counter	4	4
+c9c461b80de1	[].trigger.event.object.modifier	with three or more creatures	5	4
+d2621649ce38	[].effect.inner.card.modifier	with mana value less than or equal to the number of creatures you control	14	4
+d58320563b2b	[].effect.token.except	, except it's a Nightmare in addition to its other types	11	4
+d97ff9f0bc09	[].trigger.event.object.modifier	with a single target	4	4
+debc3b33f3e7	[].effect.quote	"Whenever an artifact you control enters, this emblem deals 3 damage to any target."	14	4
+ecbf204caf9e	[].trigger.event.object.modifier	with five or more creatures	5	4
+fb209c50f0e1	[].effect.for_each.object	this artifact	2	4
+fb52708c739c	[].effect[].inner.card.modifier	with mana value less than or equal to the number of lands you control	14	4
+02b1cce72e7d	[].effect.who	any number of target players	5	3
+02e93bccae52	[].effect.token.except	, except it isn't legendary	5	3
+03cce8650d3a	[].effect.token.except	, except it has haste and "At the beginning of the end step, sacrifice this token."	16	3
+10975e97d327	[].effect.quote	"{2}{U}{B}: Turn this creature face up. If you can't, exile it, then you may cast the exiled card without paying its mana cost."	23	3
+11d9841878fe	[].effect.counter	counter s	2	3
+12bc2a422e4c	[].instead.amount	that much life plus 1	5	3
+12c732f6a04b	[].effect.inner.duration	for as long as they remain exiled	7	3
+13eb3a9ee4a3	[].effect.to	to their owners' hands	4	3
+19986133781b	[].effect.to	to their owners' hands	4	3
+1c8ba96edae4	[].effect.duration	until they exile a nonland card	6	3
+205d0334a418	[].if.label.card_type[].value	it's the first instant spell	5	3
+205d0334a418	[].if.label.card_type[].value	first otter spell other than ~ you've cast this turn	10	3
+205d0334a418	[].if.lists[].label.card_type[].value	first otter spell other than ~ you've cast this turn	10	3
+205d0334a418	[].if.lists[].shared_suffix	other than ~ you've cast this turn	7	3
+2bdc4d205269	[].condition.card_target.modifier	with different powers	3	3
+2e2d16a5fd5e	[].effect.to	to their owners' hands	4	3
+2ee39fb6c605	[].effect.token.except	, except the tokens aren't legendary	6	3
+36daec19c513	[].effect.amount.per.modifier	exiled this way	3	3
+422fbef39c5d	[].effect[].card.modifier	with that name	3	3
+54c2187db369	[].trigger.event.object.modifier	with one or more blue mana symbols in its mana cost	11	3
+593a53c3e99a	[].effect.object	an artifact or creature card from it	7	3
+59ad8a71c921	[].effect.for_each.modifier	attached to ~	3	3
+617877b6920f	[].effect.object	a nonland permanent card from it	6	3
+6eabd018170a	[].effect.inner.counter.kind	bird creature card from your hand or graveyard onto the battlefield with a finality	14	3
+6ee46262b17d	[].effect[].who	any number of target players	5	3
+71bab82cd4b2	[].effect[].object	a card at random exiled with this enchantment	8	3
+74606868527a	[].condition.of.modifier	with power 2 or less	5	3
+78636b4d2eee	[].effect.object	one that hasn't been chosen	5	3
+78636b4d2eee	[].trigger.event.object.modifier	with mana value of the chosen quality	7	3
+7ddab883968d	[].effect.object	one that hasn't been chosen this turn	7	3
+87690bad22de	[].effect[].quote	"Whenever this creature deals combat damage to a player, draw cards equal to its toughness,"	15	3
+8ac7ed7baec8	[].keywords.modifier	from everything	2	3
+9739be8e0e8f	[].instead_of	putting it into its owner's graveyard	6	3
+a1ee7564c3a7	[].condition.of.counter	time counters	2	3
+a1ee7564c3a7	[].effect.counter	those counters	2	3
+a7ca4137b5aa	[].effect[].quote	"Whenever this creature deals combat damage to a player, draw a card for each modified creature you control."	18	3
+adfaba04019d	[].effect.for_each.modifier	attached to it	3	3
+b06e17e00a22	[].keywords.modifier	Collect evidence 4	3	3
+b5dd4f07acd9	[].effect.inner.card.modifier	exiled with ~	3	3
+b692474499a6	[].effect.for_each.items.value	creature you control with power 4 or greater	8	3
+ba8c871f4d8c	[].effect.who	any number of target players	5	3
+c0a5bd8f1aac	[].effect.object	a permanent they control of each permanent type and sacrifices the rest	12	3
+c16c48a7575f	[].effect.except	not legendary	2	3
+c16c48a7575f	[].trigger.event.object.modifier	with mana value equal to ~'s power	7	3
+c6314295ea62	[].effect.object	a number between 0 and 10	6	3
+c7e808439a4e	[].effect[].object	a card type other than creature	6	3
+cda730271c6d	[].effect.inner.duration	for as long as it remains exiled	7	3
+d63a01c9ae31	[].effect.quote	"Creatures you control have '{T}: Add {R}, {G}, or {W}.'"	10	3
+d70461f59fbf	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'creatures'}}	6	3
+d829eb7274b7	[].effect.until	end of turn	3	3
+e2985bfdaa0e	[].effect.trigger.event.object	an instant or sorcery spell	5	3
+e3008c13033d	[].effect[].predicate	play cards	2	3
+e66e6e249bc0	[].effect.inner.card.modifier	exiled with ~	3	3
+ec1927bd4ee1	[].effect.to	to their owners' hands	4	3
+efeb1bb04775	[].effect.counter	counter s	2	3
+f0760365cdfe	[].effect.except	not legendary	2	3
+f1ef781849e4	[].effect[].card.modifier	of each permanent type	4	3
+f20969446df6	[].trigger.event.object.modifier	with two or more Spiders	5	3
+f9d5701a4f11	[].effect.predicate	gain life	2	3
+fe7c748db991	[].effect.inner.duration	for as long as they remain exiled	7	3
+03e4052b5966	[].trigger.event.object.modifier	with one or more non-Gnome creatures	6	2
+04469b33f284	[].effect.token.quote	"This token gets +1/+1 for each other Rat you control,"	10	2
+0499f86df2d5	[].effect.token.except	, except it's 1/1	4	2
+072d3d41bd81	[].effect.as_though	mana of any color	4	2
+0d308e12e437	[].effect[].object	one that hasn't been chosen	5	2
+0fd06c51f7c6	[].effect.card.modifier	with mana value X	4	2
+11d2768ccd9e	[].effect.toughness_value	that number plus 1	4	2
+1495a41248de	[].effect[].inner.duration	for as long as it remains exiled	7	2
+158ea1f6c834	[].effect.to.counter.kind	hexproof counter and an indestructible	5	2
+158ea1f6c834	[].effect.with.counter.kind	hexproof counter and an indestructible	5	2
+1743de42b7cb	[].effect[].token.except	, except it's a 1/1 red Balloon creature in addition to its other colors and types	16	2
+184779e6f944	[].effect.object	a land card name	4	2
+1963be5c4cdc	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Slivers', 'note': 'unresolved'}}	8	2
+1aab310b988c	[].effect.inner.from_among.modifier	exiled with this creature	4	2
+2382ee4db5d3	[].effect.object	target opponent and up to one target creature they control	10	2
+2415184a8dd7	[].effect[].counters	this creature's	2	2
+241ec719537d	[].instead_of	putting it into your hand	5	2
+245f42d5df45	[].effect[].inner.duration	for as long as it remains exiled	7	2
+26dc2c723513	[].effect.token.quote	"This token can't block,"	4	2
+2a420e2a4d80	[].effect.to	from your graveyard to the battlefield attached to	8	2
+2bd3b18e3413	[].effect.object	an instant or sorcery card from it	7	2
+2f56026b0da5	[].xdef.xdef[].relative	that have a creature type in common	7	2
+2fdd7a8bace1	[].effect.object	target creature you control and target creature you don't control	10	2
+302e89cea081	[].if.object	cards in hand	3	2
+30dadaf0b95f	[].effect.inner.from_among.modifier	exiled with this creature	4	2
+3444787056e8	[].effect.owner	The owner of target spell or nonland permanent	8	2
+34b91981723d	[].if.card_target.modifier	with mana value 4 or greater	6	2
+362555ae1415	[].effect.duration	until you exile a nonland card	6	2
+38e0f69dc89b	[].effect.owner	Target nonland permanent 's owner	5	2
+38f9ce3ec91d	[].effect[].to	each of up to two other target s	8	2
+3a65b2e4504d	[].effect.trigger.event.object	an instant or sorcery spell	5	2
+3abaf23d7cfa	[].effect.duration	until you exile a nonland card	6	2
+3aca99118d22	[].effect.card.modifier	exiled with this land	4	2
+3d63543e91cf	[].instead.amount	twice that much life	4	2
+44d6c443520c	[].effect[].card.modifier	with that name	3	2
+4539adda5c23	[].effect.toughness_value	that number plus 1	4	2
+48b4e23336f2	[].condition.of.counter	growth counters	2	2
+49ac884d706b	[].effect.who	any number of target players	5	2
+4ce2de6f13a7	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Elves', 'note': 'unresolved'}}	8	2
+4ce30ff4c150	[].effect.except.modifier	chosen this way	3	2
+4f5dbbeee5ec	[].effect.counter	+1/+1	1	2
+538b221ea553	[].condition.label.card_type[].value	raccoon you control would deal damage to a permanent	9	2
+55f69019c006	[].trigger.event.object	an instant or sorcery spell	5	2
+57d867c0682f	[].effect[].who	any number of target players	5	2
+57d867c0682f	[].effect[].who	any number of target players	5	2
+59c9a3beb630	[].trigger.event.of	a spell or ability you control for the first time each turn	12	2
+5a2adbde8028	[].trigger.event.amount	4	1	2
+5b1275c6be90	[].trigger.event.into	~ and at the beginning of your first main phase	10	2
+5d67b52de298	[].condition.of.counter	bore counters	2	2
+5d67b52de298	[].effect.counter	those counters	2	2
+5d73c7e76cbd	[].effect.as_though	mana of any color	4	2
+610ef168add7	[].trigger.event.object.modifier	with {x} in its mana cost	6	2
+61ccb5f2093d	[].effect.for_each.items.value	creature that attacked this turn	5	2
+66f3bcd99844	[].effect.card.modifier	exiled with this artifact	4	2
+6825eaa0f966	[].effect.inner.from_among.modifier	exiled with it	3	2
+689f89cfdff9	[].effect[].quote	"Whenever this creature attacks, untap target attacking creature,"	8	2
+6a68a9b9d1aa	[].effect.token.except	, except it has haste and "At the beginning of the end step, if you don't control a planeswalker, sacrifice this creature."	22	2
+6c859399632d	[].if.event.object.modifier	with mana value 4 or greater	6	2
+6e12f91c0274	[].effect.mana_value	less than or equal to the number of permanent cards in your graveyard	13	2
+741031c9189b	[].effect.inner.card.modifier	exiled with ~	3	2
+748030c8c0a4	[].if.during	your turn	2	2
+748030c8c0a4	[].instead.amount	twice that much life	4	2
+74e32c4c3389	[].effect.inner.by	paying 1 life in addition to their other costs	9	2
+7613b0aec272	[].trigger.event.of	a spell or ability you control for the first time each turn	12	2
+79012c44ea8a	[].effect.count	any number of	3	2
+79882cccc4b9	[].effect.owner	The owner of target attacking creature you don't control	9	2
+7af74c43f8ce	[].condition.of.counter	landmark counters	2	2
+7af74c43f8ce	[].effect[].counter	those counters	2	2
+7c8fe1bc7085	[].effect.inner.effect.except	except his name is ~	5	2
+7e60fa2c0c13	[].trigger.event.object.modifier	with one or more Faeries	5	2
+7f01c80e540e	[].effect.inner.effect.except	except it's a Cave in addition to its other types	10	2
+7f5dee940017	[].effect.object	of those cards	3	2
+834c70fc4633	[].effect.object.modifier	exiled with ~	3	2
+83597b9eff73	[].trigger.event.verb	attacks for the first time each turn	7	2
+835c04a1c4cc	[].effect.duration	until you exile a nonland card	6	2
+83750f06122e	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Forests', 'note': 'unresolved'}}	8	2
+839cf6797941	[].effect.to	from your graveyard to the battlefield with two additional +1/+1 counter s on it	14	2
+8d15f0066709	[].trigger.event.object.modifier	with one or more Lizards	5	2
+8f3e4ec6c388	[].effect.who	any number of target players	5	2
+92749e9124e8	[].trigger.event.amount	4	1	2
+92f5b5a8c92b	[].effect.token.except	, except it isn't legendary	5	2
+93a4ee3282e1	[].effect.inner.by	discarding a card rather than paying its mana cost	9	2
+946bb3bfc241	[].effect.object	one that hasn't been chosen this turn	7	2
+949ef81b9fcd	[].effect.quote	"At the beginning of combat on your turn, put three +1/+1 counters on target artifact you control. If it's not a creature, it becomes a 0/0 Robot artifact creature."	29	2
+95a4cde95c2c	[].effect.quote	"{2}, Sacrifice this artifact: It deals damage to any target equal to 1 plus the number of permanents named ~ you control."	22	2
+9837dfee654b	[].effect.quote	"{T}: Create a token that's a copy of target token you control that entered this turn."	16	2
+9ae8743ba10c	[].effect.unless	mana value 2 or less	5	2
+9cf2cf27c429	[].xdef.xdef.of	mana spent to cast this spell	6	2
+9e6c8cf568e4	[].effect.to	to their owners' hands	4	2
+9ed9de0f16f2	[].effect.quote	"{T}: Add {U}. Spend this mana only to cast a spell from anywhere other than your hand."	17	2
+9ee8c2b4f1c8	[].effect.toughness_value	that number plus 1	4	2
+9f174a70d64d	[].trigger.event.amount	8	1	2
+9fe4850186d1	[].effect.inner.duration	for as long as that card remains exiled	8	2
+a1e88e3ad1ab	[].effect.object	of the piles	3	2
+a1ecbe9bc2df	[].effect.to	from your graveyard to the battlefield with an additional +1/+1 counter on it	13	2
+a417df8dad8c	[].effect.who.modifier	that crewed it this turn	5	2
+a64573aab1dd	[].effect.cards.controller	they gained control of this way	6	2
+a64573aab1dd	[].effect.for_each.controller	they gained control of this way	6	2
+a715e7456d3d	[].effect.amount	the total mana value of other permanents you control	9	2
+a82fe7e85ba3	[].effect.target	Unlock cost s you pay	5	2
+a84a6ac4d702	[].effect.card.modifier	exiled with this land	4	2
+ac0e70783f2e	[].effect.token.except	, except it isn't legendary	5	2
+ae71742b4184	[].effect.token.except	, except it's not legendary	5	2
+afef59ffdf81	[].effect.card.modifier	with mana value X	4	2
+b0fa80cd09ca	[].effect.inner.duration	until you exile another card with this creature	8	2
+b29e6494f7ee	[].effect.except	, except it has flying	5	2
+b4f695693bae	[].condition.label.card_type[].value	sorcery card is exiled this way	6	2
+b4f695693bae	[].effect[].inner.duration	for as long as you control this creature	8	2
+bb753191c8a3	[].effect.on.modifier	that crewed it this turn	5	2
+bb97e76a959f	[].effect.object	exactly two creatures you control	5	2
+be972b072942	[].effect.inner.duration	for as long as you control ~	7	2
+bea34f209729	[].effect.owner	Target artifact or creature 's owner	6	2
+bece0627ee72	[].effect.object	or more instead	3	2
+c4f87fd06f00	[].effect[].object	any card name	3	2
+c6d583923bfe	[].effect.object	of those cards	3	2
+c89d0f9be8ba	[].condition.of.counter	chorus counters	2	2
+ca5bb9c727d7	[].trigger.event.object.modifier	with three or more creatures	5	2
+cd019cbf8213	[].if.object	cards in hand	3	2
+cd6aa9074f15	[].effect.for_each.counter.kind	land you control with a flood	6	2
+cda187bf3c2b	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Birds', 'note': 'unresolved'}}	8	2
+cdb5fb60b52f	[].effect.object	up to that many target creatures you control	8	2
+cf998c55eae9	[].xdef.xdef.of	mana spent to cast this spell	6	2
+d13d614a39d7	[].trigger.event.object	an instant or sorcery spell	5	2
+d28b232233aa	[].effect.card.modifier	exiled with this enchantment	4	2
+d338b07a792d	[].effect[].card.modifier	exiled with this artifact	4	2
+d3cd5620e407	[].effect.with.for_each.items.value	land that entered the battlefield under your control this turn	10	2
+d4343d16ea14	[].effect.object	target creature you control and target Equipment	7	2
+d61b8acf2bf2	[].trigger.event.object	a noncreature or Dragon spell	5	2
+d866c67b83cc	[].effect.spell.label	target white or black spell	5	2
+daef8e55cd0b	[].effect.for_each.items.value	color of mana spent to cast that spell	8	2
+dbb9f1ffaa7d	[].if.card_target.modifier	with the greatest power or tied for the greatest power	10	2
+dc9d19d2a587	[].effect.counter	+1/+1	1	2
+dd7148a9672d	[].effect.for_each.items.value	color of the creature it targets	6	2
+e090501198f9	[].effect.counter	+1/+1	1	2
+e0cc777e70c7	[].effect.object	a number between 1 and 10	6	2
+e0f305ed9253	[].effect.amount	X {G} or X {W}	5	2
+e109f0533b5e	[].effect.inner.duration	for as long as it remains exiled	7	2
+e1f149d88022	[].effect.inner.effect.except	except it's a Bird in addition to its other types	10	2
+e1f149d88022	[].effect.inner.effect.of.modifier	with mana value less than or equal to the amount of mana spent to cast this creature	17	2
+e2957803a63c	[].effect.card.label.card_type[].value	nonland permanent with mana value 1	6	2
+e3ffe7c1dcf2	[].effect.object	a nonlegendary creature that saddled it this turn and create a tapped and attacking token that's a copy of it	20	2
+e4997ce20014	[].effect[].inner.card.modifier	exiled with ~	3	2
+e4d63fcd9b8a	[].effect.duration	for as long as that Aura is attached to it	10	2
+e59b05dc1e92	[].effect.for_each.modifier	attached to him	3	2
+e85077484ae7	[].condition.action.card_target.modifier	that type	2	2
+e97d6333e7c1	[].effect.object	one that hasn't been chosen	5	2
+e9f932be4b2d	[].effect.token.quote	"This token can't block,"	4	2
+eb7f6284ac24	[].effect.cards.modifier	with seven or more cards in it	7	2
+eb7f6284ac24	[].effect.for_each.modifier	with seven or more cards in it	7	2
+ece15f103719	[].effect.token.quote	"At the beginning of combat on your turn, if a card was put into exile this turn, put a +1/+1 counter on this token."	24	2
+ece4f580fcad	[].effect.object	target enchantment you control that doesn't have the same name as another permanent you control	15	2
+ed6cf2a4ae4c	[].effect.counter	+1/+1	1	2
+edbe5f8c4a14	[].effect.duration	until they have exiled cards with total mana value 5 or greater this way	14	2
+edc232ba6f4d	[].effect.object	one that hasn't been chosen this turn	7	2
+eeccefbf65b2	[].effect.quote	"Whenever you cast a spell, this emblem deals 5 damage to any target."	13	2
+f215dac56f13	[].effect.duration	until you exile cards with total mana value 4 or greater	11	2
+f66b3f628ed0	[].effect.to	to their owners' hands	4	2
+f98578eaafbf	[].effect.to	from your graveyard to the battlefield attached to	8	2
+fc12a74bfb75	[].effect.to	with mana value less than or equal to this creature 's power from your graveyard to the battlefield	18	2
+feca769d0e96	[].trigger.event.object.modifier	that isn't a mana ability	5	2
+04e709dc87d8	[].trigger.event.amount	4	1	1
+050b042bd739	[].effect[].amount.set.card_type[].value	stash counters on this enchantment	5	1
+09a69fcb4e84	[].instead_of	putting it into your hand	5	1
+0aacd1ae8ff4	[].effect.owner	The owner of target nonland permanent	6	1
+0ac04db29573	[].condition.of.counter	dread counters	2	1
+0e4100ecdf00	[].effect[].quote	"Whenever this creature attacks, you gain 1 life,"	8	1
+0efd1f624af0	[].effect.counter	+1/+1	1	1
+11587be12a3e	[].effect[].object	a nonland card from it	5	1
+11982c2aef51	[].effect.for_each.object	the creature it targets	4	1
+11d5c8927783	[].effect.token.except	, except it isn't legendary	5	1
+12b02f84ceab	[].effect.object	one that hasn't been chosen this turn	7	1
+136f85a7731b	[].effect.object	of those creatures	3	1
+15c140185abc	[].effect.inner.to	to their owner's hand	4	1
+15db451d9865	[].effect[].object	a nonland card from it	5	1
+17c0925b5c0d	[].effect.owner	The owner of target nonland permanent	6	1
+18b250a03461	[].effect.card.modifier	attached to that creature	4	1
+1ae6c55f8a8c	[].effect.to	with mana value less than or equal to this creature 's power from your graveyard to the battlefield	18	1
+1dce27d41214	[].effect.amount	the excess damage dealt this way	6	1
+1dec2909701a	[].effect.for_each.items[].value	sorcery spell you've cast before it this turn	8	1
+20b6d510a59c	[].effect.for_each.items.value	creature you control with power 4 or greater	8	1
+216e908d3d83	[].effect[].inner.card.modifier	with mana value 1	4	1
+229d05258677	[].condition.card_target.modifier	with greater mana value than that creature	7	1
+24ccff645504	[].trigger.event.object.modifier	with three or more creatures	5	1
+29ebddd78490	[].effect.card.modifier	with the greatest mana value among creatures and planeswalkers they control	11	1
+2aa8347027cc	[].if.card_target.modifier	with power 4 or greater	5	1
+2ac9e5fa6340	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'planeswalkers'}}	6	1
+2c7454fcaf23	[].xdef.xdef.of	mana spent to cast this spell	6	1
+2cf374e33cf8	[].effect.to	to their owner's hand	4	1
+2df542de2837	[].condition.card_target.modifier	with a counter on it	5	1
+2f875aa23903	[].effect.token.except	, except it isn't legendary	5	1
+314bfc87658e	[].effect.duration	until you exile a nonland card	6	1
+3176b5cd6883	[].trigger.event.object.modifier	with creatures	2	1
+320cf8c5432e	[].trigger.event.amount	4	1	1
+3431e44a30f6	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Towns', 'note': 'unresolved'}}	8	1
+363d0247b60a	[].trigger.event.object.modifier	with one or more creatures	5	1
+382b082685a5	[].effect.with.for_each.items.value	creature that died under your control this turn	8	1
+38ff818fe727	[].effect.object	target permanent card in your graveyard that was put there from anywhere this turn	14	1
+3c604abe8c1e	[].effect.owner	Target artifact or creature 's owner	6	1
+40104e200c21	[].effect.inner.effect.except	except it has changeling	4	1
+42e7933bd0b0	[].effect[].amount.set.card_type[].value	cards in target opponent's hand	5	1
+477cc8d9c0ea	[].effect.card.modifier	exiled with this Saga	4	1
+48834648dd1a	[].xdef.xdef.of	mana spent to cast this spell	6	1
+496745120103	[].effect.to	to their owners' hands	4	1
+49b71501e9e7	[].trigger.event.object	life for the first time each turn	7	1
+4b4d36ac33ed	[].trigger.event.object.modifier	with three or more creatures	5	1
+4bdcd4edfe53	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Cats', 'note': 'unresolved'}}	8	1
+4cf10f71fb10	[].effect.owner	The owner of target spell or creature	7	1
+4cf802befaf0	[].trigger.event.of	a spell or ability you control for the first time each turn	12	1
+522fbd6f5600	[].if.card_target.modifier	with power 4 or greater	5	1
+52b9dc34e6da	[].xdef.xdef.of.modifier	attached to him	3	1
+5351331495be	[].trailing_if.card_target.modifier	with power 4 or greater	5	1
+53bdbc1f5118	[].effect.until	end of turn	3	1
+53c62f83150f	[].effect.object	a creature you control or a warped creature card you own in exile	13	1
+5408bbd0ddfb	[].effect.to	to their owner's hand	4	1
+55a194bfe1b5	[].effect[].inner.cards[].modifier	with mana value 4	4	1
+56fb21280ac1	[].trigger.event.amount	4	1	1
+5721f1595efd	[].effect.spell.modifier	with mana value 2	4	1
+5726f757ce90	[].effect.to	from your graveyard to the battlefield with an additional +1/+1 counter on it	13	1
+59c31eda89ae	[].effect.except	, except it isn't legendary	5	1
+5a3e93baa430	[].trigger.event.of	a spell or ability you control for the first time each turn	12	1
+5a7e783d5462	[].effect.inner.duration	for as long as it remains exiled	7	1
+5bf61493bdf1	[].effect.for_each.modifier	with seven or more cards in it	7	1
+5cfe708729c1	[].effect.owner	The owner of target creature an opponent controls	8	1
+5e59976b58a2	[].effect.card.relative	that share a creature type	5	1
+5e5ce53d4d4f	[].effect.to	to their owners' hands	4	1
+5f5d062d8b77	[].effect.token.for_each.modifier	that crewed it this turn	5	1
+60aa46b9974d	[].if.card_target.modifier	with power 4 or greater	5	1
+622d2fe9712f	[].effect.counter	+1/+1	1	1
+64baf1c826e0	[].effect.owner	The owner of target creature or enchantment	7	1
+65c193dfe3e3	[].effect.unless.card_target.modifier	with power 2 or less	5	1
+6d29228e8494	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Allies', 'note': 'unresolved'}}	8	1
+6e0e7f79d010	[].effect.counter	+1/+1	1	1
+733e8d9112ad	[].if.card_target.modifier	with power 4 or greater	5	1
+734b443f2e4b	[].trigger.event.object	life for the first time during each of your turns	10	1
+75b358d9bd52	[].instead_of	putting it into your graveyard	5	1
+773b33aa3eed	[].trigger.event.of	a spell or ability you control for the first time each turn	12	1
+7903bacc7c79	[].effect.card.modifier	exiled with it	3	1
+7d2586ae3b0d	[].trigger.event.amount	4	1	1
+7e00fcfdc63d	[].effect[].quote	"When this creature dies, put a number of +1/+1 counters equal to its power on up to one target creature."	20	1
+7f705cae5990	[].effect.to	from your graveyard to the battlefield with two additional +1/+1 counter s on it	14	1
+855d6b67a20c	[].if.card_target.modifier	with power 4 or greater	5	1
+85a80ad4c888	[].condition.card_target.modifier	with different names	3	1
+85e58cb98949	[].effect.object	one that hasn't been chosen	5	1
+861a09cf87e8	[].if.card_target.modifier	with power 4 or greater	5	1
+87c60d056fbf	[].effect.owner	The owner of target artifact or enchantment an opponent controls	10	1
+8b0dac3e23c5	[].effect.to	from your graveyard to the battlefield attached to	8	1
+8c438e1f2917	[].effect.count	twice x	2	1
+8c438e1f2917	[].effect.counter.count	twice x	2	1
+8e87363a31e8	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Lizards', 'note': 'unresolved'}}	8	1
+929f201cd504	[].effect[].quote	"Whenever this creature deals combat damage, untap it and you gain 2 life."	13	1
+92eb0629416e	[].if.card_target.modifier	with a +1/+1 counter on it	6	1
+9363f9b7cec9	[].trigger.event.condition.of.counter	page counters	2	1
+95652c5951a9	[].effect.object	or more instead	3	1
+978d33f54fc7	[].effect.quote	"When this creature deals combat damage, sacrifice it."	8	1
+99b87a356d2e	[].effect[].quote	"Whenever this creature attacks, you may put a creature card from your hand onto the battlefield. If that card is an enchantment card, it enters tapped and attacking."	28	1
+99d3dde317f5	[].trigger.event.of	a spell or ability you control for the first time each turn	12	1
+9a139bd17125	[].if.card_target.modifier	with a counter on it	5	1
+9baab960492c	[].effect[].quote	"Whenever this creature deals combat damage to a player, draw a card, then discard a card. That player loses life equal to the discarded card's mana value."	27	1
+9bee105785b1	[].trigger.event.amount	4	1	1
+9f1da03a6061	[].trigger.event.object	life for the first time each turn	7	1
+a0c086f26015	[].effect.object	target creatures controlled by the same opponent	7	1
+a6c66e102781	[].effect.spell.label	target red or green spell	5	1
+a97a6aade2eb	[].effect.counter	counter s	2	1
+abea5f6dc28d	[].trigger.event.object.modifier	with {x} in its mana cost	6	1
+aca396050e56	[].effect.amount.set.card_type[].value	cards shuffled into your library this way	7	1
+ace4bab300fe	[].if.card_target.modifier	with power 4 or greater	5	1
+adb97bc3e3de	[].trigger.event.object	a noncreature or Otter spell	5	1
+adc3f0aefcb0	[].instead_of	putting it into its owner's graveyard	6	1
+af512cb18696	[].trigger.event.verb	attacks for the first time each turn	7	1
+b02149d937e2	[].if.card_target.modifier	with power 4 or greater	5	1
+b3c1cdfe139c	[].trigger.event.object.modifier	with one or more Rats	5	1
+b9252a7950bb	[].effect.unless	mana value 4 or greater	5	1
+bb10bdcf86b3	[].condition.card_target.modifier	with power 4 or greater	5	1
+bb82647f2f15	[].effect.quote	"No more than one creature can attack this planeswalker each combat."	11	1
+bcd02dbff9d1	[].effect.object	target nontoken creature you control that doesn't have the same name as a token you control	16	1
+c03eae390d28	[].trigger.event.of	a spell or ability you control for the first time each turn	12	1
+c16df16f94b5	[].xdef.xdef.of	mana spent to cast this spell	6	1
+c1adcabc8a9c	[].effect.object	target creature you control and target creature an opponent controls	10	1
+c85014882811	[].trigger.event.amount	4	1	1
+c86f8f8647ec	[].effect.duration	for as long as this Saga remains on the battlefield	10	1
+c882561d5634	[].effect.unless.card_target.modifier	with power 4 or greater	5	1
+c8dfa50c6260	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Frogs', 'note': 'unresolved'}}	8	1
+cd65015613e0	[].effect.object	a creature you control or reveal a creature card from your hand	12	1
+d08e68e98c16	[].effect.as_though	positive power	2	1
+d0a0c6ade4a8	[].effect[].quote	"Whenever this creature deals combat damage to a player, draw a card,"	12	1
+d16b358711b5	[].effect.owner	The owner of target artifact or creature with mana value 1 or greater	13	1
+d172d9bba597	[].effect.amount	life equal to the life lost this way	8	1
+d21cdc7671fa	[].condition.card_target.modifier	with power 4 or greater	5	1
+d2aa7ca601d0	[].xdef.xdef.of	mana spent to cast this spell	6	1
+d2b66c7bf4b4	[].effect.target.label.card_type[].value	max speed — sacrifice this enchantment: creature	7	1
+d405973194e7	[].effect[].quote	"Whenever you cast a noncreature spell, this creature deals 1 damage to each opponent,"	14	1
+d40bf22dc5cb	[].effect.token.copy_of.modifier	exiled with this Saga	4	1
+d40bf22dc5cb	[].effect.token.except	, except it isn't legendary	5	1
+d4f1a1688d8a	[].effect.counter	plus one of each of those kinds of counter s	10	1
+d6debcf3ccac	[].trigger.event.of	a spell or ability you control for the first time each turn	12	1
+d9fa679bc166	[].effect.card.modifier	with mana value X	4	1
+da822d3cc732	[].trigger.when.phase	upkeep of enchanted creature 's controller	6	1
+dae234377b86	[].effect.duration	until you exile a nonland card	6	1
+db9846b9ee8f	[].effect.trigger.event.object.modifier	with mana value less than or equal to ~'s power	10	1
+e0051e12cec7	[].effect.object	one that hasn't been chosen	5	1
+e12b3c2e1749	[].effect.quote.sentence[].effect.trigger.event.object	an instant or sorcery spell	5	1
+e2da77a3bfc9	[].effect.modifier	with the greatest mana value among creatures and planeswalkers they control	11	1
+e4ca50db282a	[].effect.card.modifier	with mana value X	4	1
+e56219be34ae	[].trailing_if.card_target.modifier	with a counter on it	5	1
+e72c3bccce56	[].effect.to	to their owner's hand	4	1
+eabe2184ee95	[].effect.for_each.object	this artifact	2	1
+edc28069830f	[].effect.amount.set.card_type[].value	creatures you control plus the number of equipment	8	1
+f227215acde2	[].trigger.event.object.modifier	with three or more creatures	5	1
+f44b002a5078	[].keywords.modifier	for {'card_type': {'kind': 'type', 'value': 'Gates', 'note': 'unresolved'}}	8	1
+f833e811d4b3	[].effect[].object	any number of creatures they control with total power 4 or less	12	1
+f94cf8dca09f	[].effect.inner.effect.except	except it's a Shapeshifter Rogue in addition to its other types	11	1
+f9d59d0533bc	[].trigger.event.amount	4	1	1
+fa9afcbb6bcd	[].trigger.event.object.modifier	with one or more creatures	5	1
+fb8307981e10	[].if.card_target.modifier	with power 4 or greater	5	1

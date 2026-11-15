@@ -128,10 +128,12 @@
    ]
   },
   "[].activate_only.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "you"
+   ]
   },
   "[].activate_only.timing": {
    "class": "should_be_structured",
@@ -457,11 +459,51 @@
     "xdef_compare"
    ]
   },
-  "[].condition.label": {
-   "class": "should_be_structured",
+  "[].condition.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].condition.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 5,
-   "distinct": 5,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].condition.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 15,
+   "vocab": [
+    "artifact",
+    "bird",
+    "creature",
+    "frog",
+    "instant",
+    "lizard",
+    "mouse",
+    "mutant",
+    "ninja",
+    "otter",
+    "player",
+    "raccoon you control would deal damage to a permanent",
+    "rat",
+    "sorcery card is exiled this way",
+    "turtle"
+   ]
+  },
+  "[].condition.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
   },
   "[].condition.lists[].connector": {
    "class": "closed_vocab",
@@ -479,11 +521,58 @@
     "set"
    ]
   },
-  "[].condition.lists[].label": {
-   "class": "should_be_structured",
+  "[].condition.lists[].label.card_class": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].condition.lists[].label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 5,
-   "distinct": 5,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].condition.lists[].label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 14,
+   "vocab": [
+    "artifact",
+    "bird",
+    "creature",
+    "frog",
+    "instant",
+    "lizard",
+    "mouse",
+    "mutant",
+    "ninja",
+    "otter",
+    "raccoon",
+    "rat",
+    "sorcery",
+    "turtle"
+   ]
+  },
+  "[].condition.lists[].label.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].condition.lists[].label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
   },
   "[].condition.lists[].logic": {
    "class": "closed_vocab",
@@ -853,10 +942,12 @@
    ]
   },
   "[].duration.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 6,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "you"
+   ]
   },
   "[].duration.which": {
    "class": "closed_vocab",
@@ -964,9 +1055,26 @@
   },
   "[].effect.amount": {
    "class": "should_be_structured",
-   "texts": 119,
-   "distinct": 58,
+   "texts": 4,
+   "distinct": 4,
    "rule": "amount"
+  },
+  "[].effect.amount.base.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "stat"
+   ]
+  },
+  "[].effect.amount.base.stat": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "mana_value",
+    "power"
+   ]
   },
   "[].effect.amount.count": {
    "class": "should_be_structured",
@@ -998,23 +1106,222 @@
     "this"
    ]
   },
+  "[].effect.amount.fraction": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "amount"
+  },
   "[].effect.amount.kind": {
    "class": "closed_vocab",
-   "texts": 410,
-   "distinct": 5,
+   "texts": 525,
+   "distinct": 12,
    "vocab": [
+    "computed",
+    "count_of",
+    "fraction",
     "half",
     "mana",
     "mana_choice",
+    "mana_per",
     "number",
+    "relative",
+    "stat",
+    "superlative",
     "x"
    ]
   },
   "[].effect.amount.of": {
    "class": "should_be_structured",
-   "texts": 43,
-   "distinct": 6,
+   "texts": 36,
+   "distinct": 4,
    "rule": "phrase"
+  },
+  "[].effect.amount.of.kind": {
+   "class": "closed_vocab",
+   "texts": 73,
+   "distinct": 10,
+   "vocab": [
+    "choice",
+    "count_of",
+    "difference",
+    "exiled_card",
+    "life_total",
+    "possessive",
+    "that",
+    "that_many",
+    "that_much",
+    "the"
+   ]
+  },
+  "[].effect.amount.of.noun": {
+   "class": "closed_vocab",
+   "texts": 12,
+   "distinct": 3,
+   "vocab": [
+    "card",
+    "creature",
+    "spell"
+   ]
+  },
+  "[].effect.amount.of.options[].card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "card",
+    "creature"
+   ]
+  },
+  "[].effect.amount.of.options[].kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 4,
+   "vocab": [
+    "card",
+    "chosen",
+    "creature",
+    "revealed"
+   ]
+  },
+  "[].effect.amount.of.player": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.amount.of.possessive": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 1,
+   "vocab": [
+    "they"
+   ]
+  },
+  "[].effect.amount.of.possessor": {
+   "class": "closed_vocab",
+   "texts": 35,
+   "distinct": 3,
+   "vocab": [
+    "his",
+    "its",
+    "their"
+   ]
+  },
+  "[].effect.amount.of.role": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "sacrificed"
+   ]
+  },
+  "[].effect.amount.of.set.card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].effect.amount.of.set.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.amount.of.set.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "lesson"
+   ]
+  },
+  "[].effect.amount.of.set.zone": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "graveyard"
+   ]
+  },
+  "[].effect.amount.of.stat": {
+   "class": "closed_vocab",
+   "texts": 54,
+   "distinct": 7,
+   "vocab": [
+    "library",
+    "life",
+    "loyalty",
+    "mana_cost",
+    "mana_value",
+    "power",
+    "toughness"
+   ]
+  },
+  "[].effect.amount.of.used_to": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "craft"
+   ]
+  },
+  "[].effect.amount.of.which": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "starting"
+   ]
+  },
+  "[].effect.amount.op": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "plus"
+   ]
+  },
+  "[].effect.amount.per.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.amount.per.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 6,
+   "vocab": [
+    "artifact",
+    "card",
+    "creature",
+    "elf",
+    "goblin",
+    "halfling"
+   ]
+  },
+  "[].effect.amount.per.controller": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.amount.per.modifier": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "modifier"
   },
   "[].effect.amount.possessor": {
    "class": "closed_vocab",
@@ -1033,12 +1340,69 @@
     "up"
    ]
   },
-  "[].effect.amount.stat": {
+  "[].effect.amount.set.card_class": {
    "class": "closed_vocab",
    "texts": 5,
+   "distinct": 3,
+   "vocab": [
+    "card",
+    "creature",
+    "permanent"
+   ]
+  },
+  "[].effect.amount.set.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 21,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.amount.set.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 21,
+   "distinct": 14,
+   "vocab": [
+    "artifact",
+    "card",
+    "cards shuffled into your library this way",
+    "colors among",
+    "creature",
+    "creatures you control",
+    "creatures you control plus the number of equipment",
+    "equipped",
+    "instant",
+    "land",
+    "sorcery",
+    "spells you've cast this turn",
+    "swamp",
+    "treasure"
+   ]
+  },
+  "[].effect.amount.set.controller": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.amount.set.zone": {
+   "class": "closed_vocab",
+   "texts": 3,
    "distinct": 2,
    "vocab": [
+    "graveyard",
+    "hand"
+   ]
+  },
+  "[].effect.amount.stat": {
+   "class": "closed_vocab",
+   "texts": 10,
+   "distinct": 3,
+   "vocab": [
     "power",
+    "speed",
     "toughness"
    ]
   },
@@ -1053,7 +1417,7 @@
   },
   "[].effect.amount.unit": {
    "class": "closed_vocab",
-   "texts": 138,
+   "texts": 143,
    "distinct": 1,
    "vocab": [
     "life"
@@ -1065,6 +1429,14 @@
    "distinct": 1,
    "vocab": [
     "X"
+   ]
+  },
+  "[].effect.amount.which": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "greatest"
    ]
   },
   "[].effect.amount.xdef.reason": {
@@ -1237,12 +1609,6 @@
     "transform"
    ]
   },
-  "[].effect.and[].count": {
-   "class": "should_be_structured",
-   "texts": 9,
-   "distinct": 2,
-   "rule": "count"
-  },
   "[].effect.and[].counter.kind": {
    "class": "closed_vocab",
    "texts": 9,
@@ -1291,6 +1657,22 @@
    "distinct": 2,
    "rule": "phrase"
   },
+  "[].effect.as_though.comparison": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "greater"
+   ]
+  },
+  "[].effect.as_though.stat": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
+  },
   "[].effect.as_though_without": {
    "class": "closed_vocab",
    "texts": 1,
@@ -1327,13 +1709,13 @@
    "class": "should_be_structured",
    "texts": 2,
    "distinct": 1,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect.base_pt.toughness": {
    "class": "should_be_structured",
    "texts": 2,
    "distinct": 1,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect.basis": {
    "class": "closed_vocab",
@@ -1457,11 +1839,38 @@
     "type"
    ]
   },
-  "[].effect.card.card_type.label": {
-   "class": "should_be_structured",
+  "[].effect.card.card_type.label.card_class": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "target-label"
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].effect.card.card_type.label.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.card.card_type.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "noncreature",
+    "nonland permanent"
+   ]
+  },
+  "[].effect.card.card_type.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
   },
   "[].effect.card.card_type.logic": {
    "class": "closed_vocab",
@@ -1649,11 +2058,71 @@
     "set"
    ]
   },
-  "[].effect.card.label": {
-   "class": "should_be_structured",
+  "[].effect.card.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 3,
+   "vocab": [
+    "card",
+    "permanent",
+    "spell"
+   ]
+  },
+  "[].effect.card.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 31,
-   "distinct": 24,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.card.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 31,
+   "distinct": 23,
+   "vocab": [
+    "artifact",
+    "blocking creature",
+    "creature",
+    "enchantment",
+    "equipment",
+    "instant",
+    "land",
+    "land creature",
+    "les",
+    "nonbasic land",
+    "noncreature",
+    "nonland",
+    "nonland permanent with mana value 1",
+    "planeswalker",
+    "skeleton",
+    "sorcery",
+    "spacecraft",
+    "spirit",
+    "tapped creature",
+    "up to one noncreature",
+    "vehicle",
+    "white creature",
+    "zombie"
+   ]
+  },
+  "[].effect.card.label.controller": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 2,
+   "vocab": [
+    "opponent",
+    "you"
+   ]
+  },
+  "[].effect.card.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 29,
+   "distinct": 2,
+   "vocab": [
+    "target",
+    "up_to_one"
+   ]
   },
   "[].effect.card.logic": {
    "class": "closed_vocab",
@@ -1721,10 +2190,12 @@
    ]
   },
   "[].effect.card.modifier.mode": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "different"
+   ]
   },
   "[].effect.card.modifier.name": {
    "class": "closed_vocab",
@@ -1735,10 +2206,12 @@
    ]
   },
   "[].effect.card.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "it"
+   ]
   },
   "[].effect.card.modifier.op": {
    "class": "closed_vocab",
@@ -1840,9 +2313,42 @@
   },
   "[].effect.card.relative": {
    "class": "should_be_structured",
-   "texts": 7,
-   "distinct": 4,
+   "texts": 2,
+   "distinct": 2,
    "rule": "phrase"
+  },
+  "[].effect.card.relative.event": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 2,
+   "vocab": [
+    "attacked",
+    "dealt_damage"
+   ]
+  },
+  "[].effect.card.relative.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "event_ref"
+   ]
+  },
+  "[].effect.card.relative.time": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
+  },
+  "[].effect.card.relative.voice": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
   },
   "[].effect.card.shared_prefix": {
    "class": "closed_vocab",
@@ -1999,10 +2505,12 @@
    ]
   },
   "[].effect.cards.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "it"
+   ]
   },
   "[].effect.cards.modifier.reason": {
    "class": "closed_vocab",
@@ -2171,13 +2679,13 @@
    "class": "should_be_structured",
    "texts": 43,
    "distinct": 2,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect.change.toughness": {
    "class": "should_be_structured",
    "texts": 29,
    "distinct": 2,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect.condition.card_target.card_type.kind": {
    "class": "closed_vocab",
@@ -2478,9 +2986,25 @@
   },
   "[].effect.count": {
    "class": "should_be_structured",
-   "texts": 422,
-   "distinct": 11,
+   "texts": 29,
+   "distinct": 5,
    "rule": "count"
+  },
+  "[].effect.count.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].effect.count.of.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 1,
+   "vocab": [
+    "that_many"
+   ]
   },
   "[].effect.counter": {
    "class": "should_be_structured",
@@ -2490,9 +3014,25 @@
   },
   "[].effect.counter.count": {
    "class": "should_be_structured",
-   "texts": 27,
-   "distinct": 3,
+   "texts": 21,
+   "distinct": 2,
    "rule": "count"
+  },
+  "[].effect.counter.count.kind": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].effect.counter.count.of.kind": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 1,
+   "vocab": [
+    "that_many"
+   ]
   },
   "[].effect.counter.kind": {
    "class": "closed_vocab",
@@ -2558,10 +3098,13 @@
    ]
   },
   "[].effect.destination.library_position": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 12,
    "distinct": 2,
-   "rule": "unclassified"
+   "vocab": [
+    "choice_top_or_bottom",
+    "second_from_top_or_bottom"
+   ]
   },
   "[].effect.destination.owner": {
    "class": "closed_vocab",
@@ -2623,10 +3166,12 @@
    "rule": "object-phrase"
   },
   "[].effect.duration.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 8,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "you"
+   ]
   },
   "[].effect.effect.amount.kind": {
    "class": "closed_vocab",
@@ -3017,12 +3562,6 @@
     "copy"
    ]
   },
-  "[].effect.for_each": {
-   "class": "should_be_structured",
-   "texts": 30,
-   "distinct": 29,
-   "rule": "for-each"
-  },
   "[].effect.for_each.card_type.kind": {
    "class": "closed_vocab",
    "texts": 61,
@@ -3093,8 +3632,144 @@
    "vocab": [
     "target opponent controls",
     "they gained control of this way",
-    "you control",
+    "you",
     "your opponents control"
+   ]
+  },
+  "[].effect.for_each.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 5,
+   "vocab": [
+    "+1/+1",
+    "charge",
+    "fellowship",
+    "land you control with a flood",
+    "page"
+   ]
+  },
+  "[].effect.for_each.event": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "lost_life"
+   ]
+  },
+  "[].effect.for_each.items.card_class": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 2,
+   "vocab": [
+    "card",
+    "creature"
+   ]
+  },
+  "[].effect.for_each.items.controller": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.for_each.items.kind": {
+   "class": "closed_vocab",
+   "texts": 18,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.for_each.items.value": {
+   "class": "closed_vocab",
+   "texts": 18,
+   "distinct": 17,
+   "vocab": [
+    "artifact and/or creature",
+    "attacking",
+    "basic island",
+    "color among allies",
+    "color among permanents",
+    "color of mana spent to cast that spell",
+    "color of the creature it targets",
+    "creature",
+    "creature that attacked this turn",
+    "creature you control with power 4 or greater",
+    "equipment",
+    "island",
+    "other town",
+    "permanent",
+    "permanent sacrificed this way",
+    "target beyond the first",
+    "town"
+   ]
+  },
+  "[].effect.for_each.items.zone": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "graveyard"
+   ]
+  },
+  "[].effect.for_each.items[].card_class": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].effect.for_each.items[].controller": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.for_each.items[].kind": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.for_each.items[].value": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 9,
+   "vocab": [
+    "artificer",
+    "cave",
+    "creature",
+    "creature card you own",
+    "in your graveyard",
+    "instant",
+    "other instant",
+    "sorcery",
+    "sorcery spell you've cast before it this turn"
+   ]
+  },
+  "[].effect.for_each.items[].zone": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 2,
+   "vocab": [
+    "exile",
+    "graveyard"
+   ]
+  },
+  "[].effect.for_each.kind": {
+   "class": "closed_vocab",
+   "texts": 30,
+   "distinct": 3,
+   "vocab": [
+    "counter_set",
+    "event_set",
+    "set"
    ]
   },
   "[].effect.for_each.modifier": {
@@ -3138,10 +3813,12 @@
    ]
   },
   "[].effect.for_each.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "it"
+   ]
   },
   "[].effect.for_each.modifier.reason": {
    "class": "closed_vocab",
@@ -3168,12 +3845,26 @@
     "that"
    ]
   },
+  "[].effect.for_each.object": {
+   "class": "should_be_structured",
+   "texts": 5,
+   "distinct": 4,
+   "rule": "object-phrase"
+  },
   "[].effect.for_each.otherness": {
    "class": "closed_vocab",
    "texts": 7,
    "distinct": 1,
    "vocab": [
     "other"
+   ]
+  },
+  "[].effect.for_each.subject": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "opponent"
    ]
   },
   "[].effect.for_each.this_that": {
@@ -3183,6 +3874,14 @@
    "vocab": [
     "that",
     "those"
+   ]
+  },
+  "[].effect.for_each.time": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
    ]
   },
   "[].effect.for_each.zone.possessor": {
@@ -3316,25 +4015,28 @@
     "i_enters"
    ]
   },
-  "[].effect.inner.amount": {
-   "class": "should_be_structured",
-   "texts": 2,
-   "distinct": 2,
-   "rule": "amount"
-  },
   "[].effect.inner.amount.kind": {
    "class": "closed_vocab",
-   "texts": 64,
-   "distinct": 3,
+   "texts": 66,
+   "distinct": 4,
    "vocab": [
     "mana",
     "number",
+    "relative",
     "x"
+   ]
+  },
+  "[].effect.inner.amount.of.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "that_much"
    ]
   },
   "[].effect.inner.amount.unit": {
    "class": "closed_vocab",
-   "texts": 8,
+   "texts": 9,
    "distinct": 1,
    "vocab": [
     "life"
@@ -3366,9 +4068,60 @@
   },
   "[].effect.inner.by": {
    "class": "should_be_structured",
-   "texts": 8,
-   "distinct": 8,
+   "texts": 2,
+   "distinct": 2,
    "rule": "cost-phrase"
+  },
+  "[].effect.inner.by.actions[].action": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 4,
+   "vocab": [
+    "discard",
+    "forage",
+    "pay_life",
+    "remove_counters"
+   ]
+  },
+  "[].effect.inner.by.actions[].card": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].effect.inner.by.actions[].from.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.inner.by.actions[].from.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect.inner.by.actions[].from.controller": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.inner.by.actions[].from.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "set"
+   ]
   },
   "[].effect.inner.by.card_type.kind": {
    "class": "closed_vocab",
@@ -3386,6 +4139,14 @@
    "vocab": [
     "artifact",
     "~"
+   ]
+  },
+  "[].effect.inner.by.kind": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 1,
+   "vocab": [
+    "cost_phrase"
    ]
   },
   "[].effect.inner.by.this_that": {
@@ -3414,11 +4175,31 @@
     "type"
    ]
   },
-  "[].effect.inner.card.card_type.label": {
-   "class": "should_be_structured",
+  "[].effect.inner.card.card_type.label.card_class": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "target-label"
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].effect.inner.card.card_type.label.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.inner.card.card_type.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 3,
+   "vocab": [
+    "artifact",
+    "instant",
+    "sorcery"
+   ]
   },
   "[].effect.inner.card.card_type.logic": {
    "class": "closed_vocab",
@@ -3526,11 +4307,39 @@
     "set"
    ]
   },
-  "[].effect.inner.card.label": {
-   "class": "should_be_structured",
+  "[].effect.inner.card.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "token"
+   ]
+  },
+  "[].effect.inner.card.label.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.inner.card.label.card_type[].value": {
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 3,
-   "rule": "target-label"
+   "vocab": [
+    "artifact",
+    "creature",
+    "enchantment"
+   ]
+  },
+  "[].effect.inner.card.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "another"
+   ]
   },
   "[].effect.inner.card.logic": {
    "class": "closed_vocab",
@@ -3626,11 +4435,35 @@
     "that many"
    ]
   },
-  "[].effect.inner.card.relative": {
+  "[].effect.inner.card.relative.event": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "saddled"
+   ]
+  },
+  "[].effect.inner.card.relative.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "event_ref"
+   ]
+  },
+  "[].effect.inner.card.relative.object": {
    "class": "should_be_structured",
    "texts": 2,
    "distinct": 1,
-   "rule": "phrase"
+   "rule": "object-phrase"
+  },
+  "[].effect.inner.card.relative.time": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
   },
   "[].effect.inner.card.shared_prefix": {
    "class": "closed_vocab",
@@ -3805,12 +4638,6 @@
     "them"
    ]
   },
-  "[].effect.inner.count": {
-   "class": "should_be_structured",
-   "texts": 12,
-   "distinct": 1,
-   "rule": "count"
-  },
   "[].effect.inner.counter": {
    "class": "should_be_structured",
    "texts": 2,
@@ -3854,10 +4681,13 @@
    ]
   },
   "[].effect.inner.duration.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 15,
    "distinct": 2,
-   "rule": "unclassified"
+   "vocab": [
+    "they",
+    "you"
+   ]
   },
   "[].effect.inner.duration.which": {
    "class": "closed_vocab",
@@ -4127,7 +4957,7 @@
    "texts": 1,
    "distinct": 1,
    "vocab": [
-    "you control"
+    "you"
    ]
   },
   "[].effect.inner.from.card_type.kind": {
@@ -4260,10 +5090,12 @@
    ]
   },
   "[].effect.inner.from_among.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "them"
+   ]
   },
   "[].effect.inner.from_among.this_that": {
    "class": "closed_vocab",
@@ -4852,11 +5684,51 @@
     "set"
    ]
   },
-  "[].effect.object.label": {
-   "class": "should_be_structured",
+  "[].effect.object.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].effect.object.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 3,
-   "distinct": 3,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.object.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 6,
+   "vocab": [
+    "artifact",
+    "creature",
+    "noncreature",
+    "nonland",
+    "planeswalker",
+    "vehicle"
+   ]
+  },
+  "[].effect.object.label.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.object.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "a",
+    "target"
+   ]
   },
   "[].effect.object.logic": {
    "class": "closed_vocab",
@@ -4899,10 +5771,13 @@
    ]
   },
   "[].effect.object.options": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 4,
    "distinct": 2,
-   "rule": "unclassified"
+   "vocab": [
+    "odd_or_even",
+    "one_or_both"
+   ]
   },
   "[].effect.object.otherness": {
    "class": "closed_vocab",
@@ -4922,10 +5797,12 @@
    ]
   },
   "[].effect.object.position": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "top"
+   ]
   },
   "[].effect.object.quantifier": {
    "class": "closed_vocab",
@@ -5020,11 +5897,39 @@
     "graveyard"
    ]
   },
-  "[].effect.of": {
-   "class": "should_be_structured",
+  "[].effect.objects[].kind": {
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 1,
-   "rule": "phrase"
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.objects[].value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "mount",
+    "vehicle"
+   ]
+  },
+  "[].effect.of.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "choice"
+   ]
+  },
+  "[].effect.of.options[].kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "ability",
+    "spell"
+   ]
   },
   "[].effect.on.card_type.kind": {
    "class": "closed_vocab",
@@ -5160,10 +6065,12 @@
    ]
   },
   "[].effect.on.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "it"
+   ]
   },
   "[].effect.on.modifier.op": {
    "class": "closed_vocab",
@@ -5212,11 +6119,35 @@
     "up to"
    ]
   },
-  "[].effect.on.relative": {
+  "[].effect.on.relative.event": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "saddled"
+   ]
+  },
+  "[].effect.on.relative.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "event_ref"
+   ]
+  },
+  "[].effect.on.relative.object": {
    "class": "should_be_structured",
    "texts": 1,
    "distinct": 1,
-   "rule": "phrase"
+   "rule": "object-phrase"
+  },
+  "[].effect.on.relative.time": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
   },
   "[].effect.on.this_that": {
    "class": "closed_vocab",
@@ -5310,15 +6241,1193 @@
   },
   "[].effect.predicate": {
    "class": "should_be_structured",
-   "texts": 104,
-   "distinct": 11,
+   "texts": 20,
+   "distinct": 3,
    "rule": "predicate"
+  },
+  "[].effect.predicate.kind": {
+   "class": "closed_vocab",
+   "texts": 84,
+   "distinct": 1,
+   "vocab": [
+    "predicate"
+   ]
+  },
+  "[].effect.predicate.object": {
+   "class": "should_be_structured",
+   "texts": 6,
+   "distinct": 3,
+   "rule": "object-phrase"
+  },
+  "[].effect.predicate.voice": {
+   "class": "closed_vocab",
+   "texts": 67,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
   },
   "[].effect.quote": {
    "class": "should_be_structured",
-   "texts": 63,
-   "distinct": 58,
+   "texts": 10,
+   "distinct": 10,
    "rule": "quoted-ability"
+  },
+  "[].effect.quote.kind": {
+   "class": "closed_vocab",
+   "texts": 53,
+   "distinct": 1,
+   "vocab": [
+    "quoted_ability"
+   ]
+  },
+  "[].effect.quote.sentence[].activate_only.timing": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "timing"
+  },
+  "[].effect.quote.sentence[].condition.actor": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.cause.event": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "dies"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.cause.subject.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "causes_trigger",
+    "event_ref"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.polarity": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "positive"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.triggered_abilities[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "triggered_ability"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.triggered_abilities[].source.card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.triggered_abilities[].source.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.quote.sentence[].condition.triggered_abilities[].source.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "emblem",
+    "this"
+   ]
+  },
+  "[].effect.quote.sentence[].cost": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 7,
+   "vocab": [
+    "[+1]",
+    "[+2]",
+    "[\u221210]",
+    "[\u22122]",
+    "[\u22123]",
+    "[\u22124]",
+    "[\u22128]"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.actor": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 4,
+   "vocab": [
+    "mana",
+    "mana_choice",
+    "number",
+    "relative"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.amount.of": {
+   "class": "should_be_structured",
+   "texts": 8,
+   "distinct": 2,
+   "rule": "phrase"
+  },
+  "[].effect.quote.sentence[].effect.amount.of.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that_much"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.amount.unit": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.as_though.comparison": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "greater"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.as_though.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.card.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "this_card",
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.card.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.card.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.card.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 3,
+   "vocab": [
+    "creature",
+    "token",
+    "~"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.card.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.card.this_that": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.count.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.count.of.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that_many"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.counter.count.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.counter.count.of.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that_many"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "+1/+1",
+    "bait"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.duration.event": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "end_of_turn"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "until"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.effect.target.this_that": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.effect.verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "copy"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.for.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "copy"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.for_each.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.for_each.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "creature",
+    "land"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.for_each.controller": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.inner.card.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.inner.card.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.inner.card.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.inner.verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "sacrifice"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.modal": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "may"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.objects[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.objects[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "mount",
+    "vehicle"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.on.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "this_card",
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.on.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.on.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.on.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "creature",
+    "~"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.on.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.relation": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "equal_to"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.subject": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "~"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 2,
+   "vocab": [
+    "this_card",
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.card_type.note": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "unresolved"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 6,
+   "vocab": [
+    "Ninjas",
+    "creature",
+    "creature spell",
+    "creatures",
+    "instant or sorcery",
+    "~"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.controller": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "you cast",
+    "you control"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target_ref"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.quantifier": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "a",
+    "target"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that_ability"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.target.this_that": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.to.controller": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "owner"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.to.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.to.owner": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "owner"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.to.zone": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "battlefield",
+    "hand"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.token.colors": {
+   "class": "closed_vocab",
+   "texts": 6,
+   "distinct": 3,
+   "vocab": [
+    "blue",
+    "colorless",
+    "green"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.token.kw[].keyword": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "hexproof"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.token.kw[].modifier": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "modifier"
+  },
+  "[].effect.quote.sentence[].effect.trigger.event.object": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "object-phrase"
+  },
+  "[].effect.quote.sentence[].effect.trigger.event.subject": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.trigger.event.verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "cast"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.trigger.event.window.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "turn"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.trigger.event.window.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.trigger.when": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "When"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.type": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "triggered"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.value[].card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.value[].card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "cards"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.value[].zone.possessor": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "your"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.value[].zone.prep": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "in"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.value[].zone.zone": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "hand"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.verb": {
+   "class": "closed_vocab",
+   "texts": 44,
+   "distinct": 19,
+   "vocab": [
+    "add_mana",
+    "choose_new_targets",
+    "create_token",
+    "draw",
+    "gain_kw",
+    "gain_life",
+    "lose_game",
+    "lose_life",
+    "may",
+    "put_counter",
+    "return",
+    "sacrifice",
+    "saddle_and_crew",
+    "spend_mana_only_to_cast",
+    "stat_change",
+    "stat_define",
+    "tap",
+    "trigger_extra",
+    "untap"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.who": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 3,
+   "vocab": [
+    "You",
+    "target opponent",
+    "that player"
+   ]
+  },
+  "[].effect.quote.sentence[].effect.with.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].amount.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "number",
+    "relative"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].amount.of.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that_much"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].amount.unit": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].card.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].card.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].source.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].source.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "planeswalker"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].source.this_that": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "This"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].target.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].target.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "creatures"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].target.controller": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "you control"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].target.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].target.modifier.which": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "the chosen"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].to.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].to.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "opponent",
+    "player"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].to.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "owner"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].to.or[].card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].to.or[].card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "creature",
+    "planeswalker"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].to.quantifier": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "each",
+    "target"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].to.zone": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "battlefield"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].token.attached_to.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].token.attached_to.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].verb": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 8,
+   "vocab": [
+    "create_token",
+    "deal_damage",
+    "draw",
+    "gain_kw",
+    "gain_life",
+    "lose_life",
+    "return",
+    "stat_change"
+   ]
+  },
+  "[].effect.quote.sentence[].effect[].who": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "target opponent",
+    "you"
+   ]
+  },
+  "[].effect.quote.sentence[].keywords.cost.action": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "pay_life"
+   ]
+  },
+  "[].effect.quote.sentence[].keywords.cost.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "cost"
+   ]
+  },
+  "[].effect.quote.sentence[].keywords.keyword": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "Ward"
+   ]
+  },
+  "[].effect.quote.sentence[].keywords[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].keywords[].note": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "unresolved"
+   ]
+  },
+  "[].effect.quote.sentence[].keywords[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "Surveil"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.ability_word": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "Landfall"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object": {
+   "class": "should_be_structured",
+   "texts": 3,
+   "distinct": 2,
+   "rule": "object-phrase"
+  },
+  "[].effect.quote.sentence[].trigger.event.object.connector": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "or"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.damage": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "combat"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "set",
+    "spell"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.label.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "instant",
+    "sorcery"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.logic": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "union"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.quantifier": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.to.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "player"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.object.to.quantifier": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.subject": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.subject.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.subject.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 3,
+   "vocab": [
+    "creature",
+    "land",
+    "player"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.subject.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you control"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.subject.quantifier": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.subject.this_that": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.event.verb": {
+   "class": "closed_vocab",
+   "texts": 14,
+   "distinct": 7,
+   "vocab": [
+    "cast",
+    "casts",
+    "deals",
+    "dies",
+    "enters",
+    "gain",
+    "is dealt"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.when": {
+   "class": "closed_vocab",
+   "texts": 14,
+   "distinct": 2,
+   "vocab": [
+    "When",
+    "Whenever"
+   ]
+  },
+  "[].effect.quote.sentence[].trigger.when.phase": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "timing"
+  },
+  "[].effect.quote.sentence[].trigger.when.position": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "beginning"
+   ]
+  },
+  "[].effect.quote.sentence[].type": {
+   "class": "closed_vocab",
+   "texts": 53,
+   "distinct": 8,
+   "vocab": [
+    "activated",
+    "during",
+    "effect",
+    "if",
+    "loyalty",
+    "static",
+    "static_keyword",
+    "triggered"
+   ]
   },
   "[].effect.reason": {
    "class": "closed_vocab",
@@ -5516,9 +7625,43 @@
   },
   "[].effect.spell.label": {
    "class": "should_be_structured",
-   "texts": 5,
-   "distinct": 5,
+   "texts": 2,
+   "distinct": 2,
    "rule": "target-label"
+  },
+  "[].effect.spell.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].effect.spell.label.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.spell.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 3,
+   "vocab": [
+    "artifact",
+    "creature",
+    "enchantment"
+   ]
+  },
+  "[].effect.spell.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
   },
   "[].effect.spell.logic": {
    "class": "closed_vocab",
@@ -5599,13 +7742,13 @@
   },
   "[].effect.target": {
    "class": "should_be_structured",
-   "texts": 25,
-   "distinct": 3,
+   "texts": 1,
+   "distinct": 1,
    "rule": "target"
   },
   "[].effect.target.card_type.kind": {
    "class": "closed_vocab",
-   "texts": 981,
+   "texts": 982,
    "distinct": 3,
    "vocab": [
     "ability",
@@ -5644,7 +7787,7 @@
   },
   "[].effect.target.card_type.value": {
    "class": "closed_vocab",
-   "texts": 981,
+   "texts": 982,
    "distinct": 116,
    "vocab": [
     "Allies",
@@ -5785,7 +7928,7 @@
   },
   "[].effect.target.controller": {
    "class": "closed_vocab",
-   "texts": 351,
+   "texts": 352,
    "distinct": 7,
    "vocab": [
     "an opponent controls",
@@ -5799,18 +7942,71 @@
   },
   "[].effect.target.kind": {
    "class": "closed_vocab",
-   "texts": 35,
-   "distinct": 2,
+   "texts": 59,
+   "distinct": 3,
    "vocab": [
     "set",
+    "target_ref",
     "type"
    ]
   },
-  "[].effect.target.label": {
-   "class": "should_be_structured",
+  "[].effect.target.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].effect.target.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 10,
-   "distinct": 10,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.target.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 10,
+   "distinct": 16,
+   "vocab": [
+    "artifact",
+    "bat",
+    "bird",
+    "creature",
+    "dragon spell",
+    "exhaust \u2014 {4}{r}{g}: creature",
+    "instant",
+    "max speed \u2014 sacrifice this enchantment: creature",
+    "mice",
+    "omen",
+    "orc",
+    "other rabbit",
+    "planeswalker",
+    "sorcery",
+    "vehicle",
+    "{1}{b}: goblin"
+   ]
+  },
+  "[].effect.target.label.controller": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 2,
+   "vocab": [
+    "opponent",
+    "you"
+   ]
+  },
+  "[].effect.target.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 3,
+   "vocab": [
+    "a",
+    "target",
+    "up_to_one"
+   ]
   },
   "[].effect.target.logic": {
    "class": "closed_vocab",
@@ -5859,10 +8055,13 @@
    ]
   },
   "[].effect.target.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 8,
    "distinct": 2,
-   "rule": "unclassified"
+   "vocab": [
+    "it",
+    "them"
+   ]
   },
   "[].effect.target.modifier.op": {
    "class": "closed_vocab",
@@ -5942,17 +8141,37 @@
   },
   "[].effect.target.ref": {
    "class": "closed_vocab",
+   "texts": 25,
+   "distinct": 3,
+   "vocab": [
+    "anaphora",
+    "that_ability",
+    "this_ability"
+   ]
+  },
+  "[].effect.target.relative.event": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
    "vocab": [
-    "anaphora"
+    "attacked"
    ]
   },
-  "[].effect.target.relative": {
-   "class": "should_be_structured",
+  "[].effect.target.relative.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "phrase"
+   "vocab": [
+    "event_ref"
+   ]
+  },
+  "[].effect.target.relative.time": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
   },
   "[].effect.target.shared_prefix": {
    "class": "closed_vocab",
@@ -6063,16 +8282,21 @@
    "rule": "timing"
   },
   "[].effect.timing.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "you"
+   ]
   },
   "[].effect.timing.position": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 25,
    "distinct": 2,
-   "rule": "unclassified"
+   "vocab": [
+    "beginning",
+    "end"
+   ]
   },
   "[].effect.timing.which": {
    "class": "closed_vocab",
@@ -6260,11 +8484,37 @@
     "X"
    ]
   },
-  "[].effect.to.relative": {
-   "class": "should_be_structured",
+  "[].effect.to.relative.event": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "phrase"
+   "vocab": [
+    "dealt_damage"
+   ]
+  },
+  "[].effect.to.relative.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "event_ref"
+   ]
+  },
+  "[].effect.to.relative.time": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
+  },
+  "[].effect.to.relative.voice": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
   },
   "[].effect.to.this_that": {
    "class": "closed_vocab",
@@ -6472,9 +8722,25 @@
   },
   "[].effect.token.count": {
    "class": "should_be_structured",
-   "texts": 28,
-   "distinct": 2,
+   "texts": 23,
+   "distinct": 1,
    "rule": "count"
+  },
+  "[].effect.token.count.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].effect.token.count.of.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "that_many"
+   ]
   },
   "[].effect.token.equip_cost": {
    "class": "closed_vocab",
@@ -6525,7 +8791,7 @@
    "texts": 5,
    "distinct": 1,
    "vocab": [
-    "you control"
+    "you"
    ]
   },
   "[].effect.token.for_each.modifier": {
@@ -6594,19 +8860,784 @@
    "class": "should_be_structured",
    "texts": 6,
    "distinct": 1,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect.token.power_toughness.toughness": {
    "class": "should_be_structured",
    "texts": 6,
    "distinct": 1,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect.token.quote": {
    "class": "should_be_structured",
-   "texts": 81,
-   "distinct": 31,
+   "texts": 4,
+   "distinct": 3,
    "rule": "quoted-ability"
+  },
+  "[].effect.token.quote.kind": {
+   "class": "closed_vocab",
+   "texts": 77,
+   "distinct": 1,
+   "vocab": [
+    "quoted_ability"
+   ]
+  },
+  "[].effect.token.quote.sentence[].activate_only.timing": {
+   "class": "should_be_structured",
+   "texts": 11,
+   "distinct": 1,
+   "rule": "timing"
+  },
+  "[].effect.token.quote.sentence[].effect.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 2,
+   "vocab": [
+    "mana",
+    "number"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.amount.of": {
+   "class": "should_be_structured",
+   "texts": 2,
+   "distinct": 2,
+   "rule": "phrase"
+  },
+  "[].effect.token.quote.sentence[].effect.amount.unit": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.as_though.comparison": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "greater"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.as_though.stat": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.blocked_by.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.blocked_by.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "creatures"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.card.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 22,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.card.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 22,
+   "distinct": 3,
+   "vocab": [
+    "creature",
+    "land",
+    "token"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.card.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.card.this_that": {
+   "class": "closed_vocab",
+   "texts": 21,
+   "distinct": 1,
+   "vocab": [
+    "This"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.duration.event": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 1,
+   "vocab": [
+    "end_of_turn"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 1,
+   "vocab": [
+    "until"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.for_each.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.for_each.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "artifact"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.for_each.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.inner.verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "mill"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.inner.who": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "You"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.objects[].kind": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.objects[].value": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 2,
+   "vocab": [
+    "mount",
+    "vehicle"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.on.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.on.card_type.note": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "unresolved"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.on.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "Zabu"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.predicate": {
+   "class": "should_be_structured",
+   "texts": 16,
+   "distinct": 1,
+   "rule": "predicate"
+  },
+  "[].effect.token.quote.sentence[].effect.predicate.kind": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "predicate"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.predicate.voice": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.relation": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "each_equal_to"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.source.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.source.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.source.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.source.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "token"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.source.this_that": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.stat": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "power_and_toughness"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.subject": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "Beau's",
+    "token"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.subject.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.subject.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "token"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.subject.this_that": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "This"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 28,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.card_type.note": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "unresolved"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 28,
+   "distinct": 4,
+   "vocab": [
+    "Beau's",
+    "creature",
+    "creatures",
+    "token"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.controller": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 1,
+   "vocab": [
+    "you control"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.modifier.keyword": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "flying"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "keyword"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.quantifier": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.target.this_that": {
+   "class": "closed_vocab",
+   "texts": 7,
+   "distinct": 2,
+   "vocab": [
+    "This",
+    "this"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.to.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.to.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "opponent"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.to.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "any_target"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.to.quantifier": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "each"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.value[].card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.value[].card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "lands"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.value[].controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you control"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.verb": {
+   "class": "closed_vocab",
+   "texts": 76,
+   "distinct": 13,
+   "vocab": [
+    "add_mana",
+    "attacks_each_combat",
+    "can't",
+    "can_block",
+    "deal_damage",
+    "destroy",
+    "gain_life",
+    "may",
+    "put_counter",
+    "saddle_and_crew",
+    "stat_change",
+    "stat_define",
+    "surveil"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect.who": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect[].target.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect[].target.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect.token.quote.sentence[].effect[].verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "gain_kw",
+    "stat_change"
+   ]
+  },
+  "[].effect.token.quote.sentence[].keywords.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].keywords.note": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "unresolved"
+   ]
+  },
+  "[].effect.token.quote.sentence[].keywords.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "The",
+    "Void"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.ability_word": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "Landfall"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.object.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.object.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.object.kind": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.object.quantifier": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.object.zone": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "battlefield"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.subject": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.subject.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.subject.card_type.note": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "unresolved"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.subject.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 4,
+   "vocab": [
+    "Galactus",
+    "Redwing",
+    "land",
+    "token"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.subject.controller": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "you control"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.subject.quantifier": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.subject.this_that": {
+   "class": "closed_vocab",
+   "texts": 9,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.event.verb": {
+   "class": "closed_vocab",
+   "texts": 20,
+   "distinct": 5,
+   "vocab": [
+    "attacks",
+    "cast",
+    "dies",
+    "enters",
+    "leaves"
+   ]
+  },
+  "[].effect.token.quote.sentence[].trigger.when": {
+   "class": "closed_vocab",
+   "texts": 20,
+   "distinct": 2,
+   "vocab": [
+    "When",
+    "Whenever"
+   ]
+  },
+  "[].effect.token.quote.sentence[].type": {
+   "class": "closed_vocab",
+   "texts": 77,
+   "distinct": 5,
+   "vocab": [
+    "activated",
+    "effect",
+    "static",
+    "static_keyword",
+    "triggered"
+   ]
+  },
+  "[].effect.token.quotes[].kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "quoted_ability"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].effect.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "mana"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].effect.amount.of": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "phrase"
+  },
+  "[].effect.token.quotes[].sentence[].effect.source.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].effect.source.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].effect.to.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "any_target"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].effect.verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "add_mana",
+    "deal_damage"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].trigger.event.subject.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].trigger.event.subject.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "token"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].trigger.event.subject.this_that": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].trigger.event.verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "enters"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].trigger.when": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "When"
+   ]
+  },
+  "[].effect.token.quotes[].sentence[].type": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "activated",
+    "triggered"
+   ]
   },
   "[].effect.token.xdef.reason": {
    "class": "closed_vocab",
@@ -6731,15 +9762,17 @@
     "cast"
    ]
   },
-  "[].effect.trigger.event.window": {
-   "class": "should_be_structured",
-   "texts": 1,
-   "distinct": 1,
-   "rule": "timing"
-  },
   "[].effect.trigger.event.window.kind": {
    "class": "closed_vocab",
-   "texts": 2,
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "turn"
+   ]
+  },
+  "[].effect.trigger.event.window.value": {
+   "class": "closed_vocab",
+   "texts": 3,
    "distinct": 1,
    "vocab": [
     "this_turn"
@@ -6898,11 +9931,30 @@
     "state"
    ]
   },
-  "[].effect.unless.label": {
-   "class": "should_be_structured",
+  "[].effect.unless.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 5,
-   "distinct": 5,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.unless.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 10,
+   "vocab": [
+    "forest",
+    "island",
+    "mountain",
+    "plain",
+    "swamp",
+    "you control a forest",
+    "you control a mountain",
+    "you control a plain",
+    "you control a swamp",
+    "you control an island"
+   ]
   },
   "[].effect.unless.lists[].connector": {
    "class": "closed_vocab",
@@ -6920,11 +9972,33 @@
     "set"
    ]
   },
-  "[].effect.unless.lists[].label": {
-   "class": "should_be_structured",
+  "[].effect.unless.lists[].label.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.unless.lists[].label.card_type[].value": {
+   "class": "closed_vocab",
    "texts": 5,
    "distinct": 5,
-   "rule": "target-label"
+   "vocab": [
+    "forest",
+    "island",
+    "mountain",
+    "plain",
+    "swamp"
+   ]
+  },
+  "[].effect.unless.lists[].label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
   },
   "[].effect.unless.lists[].logic": {
    "class": "closed_vocab",
@@ -7126,8 +10200,8 @@
   },
   "[].effect.verb": {
    "class": "closed_vocab",
-   "texts": 5661,
-   "distinct": 99,
+   "texts": 5664,
+   "distinct": 100,
    "vocab": [
     "add_mana",
     "additional_phase",
@@ -7209,6 +10283,7 @@
     "return",
     "reveal",
     "sacrifice",
+    "saddle_and_crew",
     "scry",
     "search",
     "set_base_pt",
@@ -7341,12 +10416,6 @@
     "this"
    ]
   },
-  "[].effect.with.and[].count": {
-   "class": "should_be_structured",
-   "texts": 1,
-   "distinct": 1,
-   "rule": "count"
-  },
   "[].effect.with.and[].counter.kind": {
    "class": "closed_vocab",
    "texts": 1,
@@ -7384,8 +10453,8 @@
   },
   "[].effect.with.count": {
    "class": "should_be_structured",
-   "texts": 47,
-   "distinct": 3,
+   "texts": 6,
+   "distinct": 1,
    "rule": "count"
   },
   "[].effect.with.counter.count": {
@@ -7418,11 +10487,69 @@
     "wish"
    ]
   },
-  "[].effect.with.for_each": {
-   "class": "should_be_structured",
+  "[].effect.with.for_each.event": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "lost_life"
+   ]
+  },
+  "[].effect.with.for_each.items.controller": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect.with.for_each.items.kind": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect.with.for_each.items.value": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 8,
+   "vocab": [
+    "angel",
+    "color of mana spent to cast it",
+    "creature card exiled this way",
+    "creature that died under your control this turn",
+    "creature you control of the chosen type",
+    "dog and/or wolf",
+    "land that entered the battlefield under your control this turn",
+    "other creature and/or artifact"
+   ]
+  },
+  "[].effect.with.for_each.kind": {
+   "class": "closed_vocab",
    "texts": 9,
-   "distinct": 9,
-   "rule": "for-each"
+   "distinct": 2,
+   "vocab": [
+    "event_set",
+    "set"
+   ]
+  },
+  "[].effect.with.for_each.subject": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "opponent"
+   ]
+  },
+  "[].effect.with.for_each.time": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
   },
   "[].effect.with.quantifier": {
    "class": "closed_vocab",
@@ -7469,28 +10596,80 @@
     "any number of tapped creatures your opponents control"
    ]
   },
-  "[].effect[].amount": {
-   "class": "should_be_structured",
-   "texts": 11,
-   "distinct": 10,
-   "rule": "amount"
+  "[].effect[].amount.color": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "red"
+   ]
   },
   "[].effect[].amount.kind": {
    "class": "closed_vocab",
-   "texts": 181,
-   "distinct": 4,
+   "texts": 192,
+   "distinct": 8,
    "vocab": [
+    "count_of",
+    "devotion",
     "half",
     "mana",
     "number",
+    "relative",
+    "superlative",
     "x"
    ]
   },
-  "[].effect[].amount.of": {
-   "class": "should_be_structured",
+  "[].effect[].amount.of.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 3,
+   "vocab": [
+    "possessive",
+    "that_much",
+    "the"
+   ]
+  },
+  "[].effect[].amount.of.noun": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].amount.of.possessive": {
+   "class": "closed_vocab",
    "texts": 2,
-   "distinct": 2,
-   "rule": "phrase"
+   "distinct": 1,
+   "vocab": [
+    "they"
+   ]
+  },
+  "[].effect[].amount.of.possessor": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "its"
+   ]
+  },
+  "[].effect[].amount.of.role": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "sacrificed"
+   ]
+  },
+  "[].effect[].amount.of.stat": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 3,
+   "vocab": [
+    "library",
+    "life",
+    "power"
+   ]
   },
   "[].effect[].amount.rounding": {
    "class": "closed_vocab",
@@ -7500,9 +10679,45 @@
     "down"
    ]
   },
+  "[].effect[].amount.set.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].amount.set.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 5,
+   "vocab": [
+    "cards discarded this way",
+    "cards in target opponent's hand",
+    "creature",
+    "differently named creature token",
+    "stash counters on this enchantment"
+   ]
+  },
+  "[].effect[].amount.set.controller": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect[].amount.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "toughness"
+   ]
+  },
   "[].effect[].amount.unit": {
    "class": "closed_vocab",
-   "texts": 172,
+   "texts": 173,
    "distinct": 1,
    "vocab": [
     "life"
@@ -7514,6 +10729,14 @@
    "distinct": 1,
    "vocab": [
     "X"
+   ]
+  },
+  "[].effect[].amount.which": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "greatest"
    ]
   },
   "[].effect[].blocked_by.card_type.kind": {
@@ -7689,11 +10912,30 @@
     "set"
    ]
   },
-  "[].effect[].card.label": {
-   "class": "should_be_structured",
+  "[].effect[].card.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "target-label"
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].card.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "creature",
+    "vehicle"
+   ]
+  },
+  "[].effect[].card.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
   },
   "[].effect[].card.logic": {
    "class": "closed_vocab",
@@ -7747,16 +10989,20 @@
    ]
   },
   "[].effect[].card.modifier.mode": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "different"
+   ]
   },
   "[].effect[].card.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "it"
+   ]
   },
   "[].effect[].card.modifier.op": {
    "class": "closed_vocab",
@@ -7993,10 +11239,12 @@
    ]
   },
   "[].effect[].cards[].modifier.mode": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "different"
+   ]
   },
   "[].effect[].cards[].modifier.name": {
    "class": "closed_vocab",
@@ -8043,13 +11291,13 @@
    "class": "should_be_structured",
    "texts": 13,
    "distinct": 1,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect[].change.toughness": {
    "class": "should_be_structured",
    "texts": 10,
    "distinct": 2,
-   "rule": "unclassified"
+   "rule": "pt"
   },
   "[].effect[].condition.fragment": {
    "class": "free_text",
@@ -8132,8 +11380,8 @@
   },
   "[].effect[].count": {
    "class": "should_be_structured",
-   "texts": 73,
-   "distinct": 4,
+   "texts": 6,
+   "distinct": 2,
    "rule": "count"
   },
   "[].effect[].counter": {
@@ -8189,10 +11437,12 @@
    ]
   },
   "[].effect[].duration.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 2,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "you"
+   ]
   },
   "[].effect[].for.kind": {
    "class": "closed_vocab",
@@ -8227,7 +11477,7 @@
    "texts": 6,
    "distinct": 1,
    "vocab": [
-    "you control"
+    "you"
    ]
   },
   "[].effect[].for_each.zone.possessor": {
@@ -8442,10 +11692,12 @@
    ]
   },
   "[].effect[].inner.card.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "them"
+   ]
   },
   "[].effect[].inner.card.modifier.op": {
    "class": "closed_vocab",
@@ -8967,9 +12219,31 @@
   },
   "[].effect[].predicate": {
    "class": "should_be_structured",
-   "texts": 21,
-   "distinct": 7,
+   "texts": 4,
+   "distinct": 3,
    "rule": "predicate"
+  },
+  "[].effect[].predicate.kind": {
+   "class": "closed_vocab",
+   "texts": 17,
+   "distinct": 1,
+   "vocab": [
+    "predicate"
+   ]
+  },
+  "[].effect[].predicate.object": {
+   "class": "should_be_structured",
+   "texts": 2,
+   "distinct": 1,
+   "rule": "object-phrase"
+  },
+  "[].effect[].predicate.voice": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
   },
   "[].effect[].quantifier": {
    "class": "closed_vocab",
@@ -8981,9 +12255,784 @@
   },
   "[].effect[].quote": {
    "class": "should_be_structured",
-   "texts": 37,
-   "distinct": 36,
+   "texts": 10,
+   "distinct": 10,
    "rule": "quoted-ability"
+  },
+  "[].effect[].quote.kind": {
+   "class": "closed_vocab",
+   "texts": 27,
+   "distinct": 1,
+   "vocab": [
+    "quoted_ability"
+   ]
+  },
+  "[].effect[].quote.sentence[].activate_only.timing": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "timing"
+  },
+  "[].effect[].quote.sentence[].effect.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 8,
+   "distinct": 3,
+   "vocab": [
+    "mana",
+    "number",
+    "relative"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.amount.of": {
+   "class": "should_be_structured",
+   "texts": 1,
+   "distinct": 1,
+   "rule": "phrase"
+  },
+  "[].effect[].quote.sentence[].effect.amount.of.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "possessive"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.amount.of.possessor": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "its"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.amount.of.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "power"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.amount.unit": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "life"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.blocked_by.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.blocked_by.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.card.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.card.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.card.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.card.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 5,
+   "distinct": 3,
+   "vocab": [
+    "artifact",
+    "artifact or enchantment",
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.card.controller": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "an opponent controls",
+    "that player controls"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.card.quantifier": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.card.this_that": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "This"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.counter.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "+1/+1"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.direction": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "less"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.duration.event": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "end_of_turn"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "until"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.card.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "this_card",
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.card.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 3,
+   "vocab": [
+    "artifact",
+    "card",
+    "~"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.card.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "an"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.card.this_that": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.duration.event": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_turn"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.duration.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "for"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.modifier.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "exclude"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.modifier.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "~"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.inner.verb": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "play",
+    "sacrifice"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.on.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.on.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.on.this_that": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.player": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target opponent"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.predicate.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "predicate"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.predicate.voice": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.relation": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "each_equal_to"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.source.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.source.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.source.this_that": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.stat": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "power_and_toughness"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.subject": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.target.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.target.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.target.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.target.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.target.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target_ref"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.target.ref": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this_ability"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.target.this_that": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "This",
+    "this"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.to.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.to.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.to.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "owner"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.to.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "any_target"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.to.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "target"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.to.zone": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "battlefield"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.value[].card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.value[].card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "lands"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.value[].controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you control"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.verb": {
+   "class": "closed_vocab",
+   "texts": 24,
+   "distinct": 19,
+   "vocab": [
+    "add_mana",
+    "can't",
+    "control_player",
+    "cost_mod",
+    "create_token",
+    "deal_damage",
+    "destroy",
+    "draw",
+    "exile",
+    "gain_kw",
+    "gain_life",
+    "investigate",
+    "may",
+    "put_counter",
+    "return",
+    "stat_change",
+    "stat_define",
+    "surveil",
+    "tap"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.who": {
+   "class": "closed_vocab",
+   "texts": 4,
+   "distinct": 2,
+   "vocab": [
+    "You",
+    "you"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect.zone": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "library"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].actor": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].card.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].card.card_type.raw": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "it"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].card.card_type.ref": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "anaphora"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].card.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "card"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].card.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].to.controller": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "owner"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].to.zone": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "battlefield"
+   ]
+  },
+  "[].effect[].quote.sentence[].effect[].verb": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 5,
+   "vocab": [
+    "create_token",
+    "discard",
+    "draw",
+    "return",
+    "suspect"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.actor": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "event_ref"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.object.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.object.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "noncreature spell and whenever you draw your third card",
+    "spell"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.object.damage": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "combat"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.object.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.object.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.object.to.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "player"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.object.to.quantifier": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.polarity": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "positive"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.subject": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.subject.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 2,
+   "vocab": [
+    "this_card",
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.subject.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 2,
+   "vocab": [
+    "creature",
+    "~"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.subject.this_that": {
+   "class": "closed_vocab",
+   "texts": 15,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.verb": {
+   "class": "closed_vocab",
+   "texts": 18,
+   "distinct": 4,
+   "vocab": [
+    "attacks",
+    "cast",
+    "deals",
+    "dies"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.window.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "frequency"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.event.window.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "each_turn"
+   ]
+  },
+  "[].effect[].quote.sentence[].trigger.when": {
+   "class": "closed_vocab",
+   "texts": 18,
+   "distinct": 2,
+   "vocab": [
+    "When",
+    "Whenever"
+   ]
+  },
+  "[].effect[].quote.sentence[].type": {
+   "class": "closed_vocab",
+   "texts": 27,
+   "distinct": 4,
+   "vocab": [
+    "activated",
+    "effect",
+    "static",
+    "triggered"
+   ]
+  },
+  "[].effect[].quote.sentence[].xdef.xdef[].card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].quote.sentence[].xdef.xdef[].card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].quote.sentence[].xdef.xdef[].this_that": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "this"
+   ]
   },
   "[].effect[].source.card_type.kind": {
    "class": "closed_vocab",
@@ -9135,11 +13184,40 @@
     "type"
    ]
   },
-  "[].effect[].target.label": {
-   "class": "should_be_structured",
+  "[].effect[].target.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 2,
-   "distinct": 2,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].target.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 4,
+   "vocab": [
+    "creature",
+    "skeleton",
+    "vehicle",
+    "zombie"
+   ]
+  },
+  "[].effect[].target.label.controller": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].effect[].target.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "all"
+   ]
   },
   "[].effect[].target.logic": {
    "class": "closed_vocab",
@@ -9488,9 +13566,25 @@
   },
   "[].effect[].token.count": {
    "class": "should_be_structured",
-   "texts": 4,
-   "distinct": 2,
+   "texts": 3,
+   "distinct": 1,
    "rule": "count"
+  },
+  "[].effect[].token.count.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].effect[].token.count.of.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that_many"
+   ]
   },
   "[].effect[].token.except": {
    "class": "should_be_structured",
@@ -9498,11 +13592,88 @@
    "distinct": 1,
    "rule": "modifier"
   },
-  "[].effect[].token.quote": {
-   "class": "should_be_structured",
+  "[].effect[].token.quote.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "quoted-ability"
+   "vocab": [
+    "quoted_ability"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].effect.blocked_by.card_type.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].effect.blocked_by.card_type.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "creature"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].effect.predicate.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "predicate"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].effect.predicate.voice": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].effect.verb": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "can't"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].keywords.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].keywords.note": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "unresolved"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].keywords.value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 3,
+   "vocab": [
+    "God",
+    "The",
+    "Tiger"
+   ]
+  },
+  "[].effect[].token.quote.sentence[].type": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 2,
+   "vocab": [
+    "effect",
+    "static_keyword"
+   ]
   },
   "[].effect[].type": {
    "class": "closed_vocab",
@@ -9704,12 +13875,6 @@
     "this"
    ]
   },
-  "[].effect[].with.count": {
-   "class": "should_be_structured",
-   "texts": 3,
-   "distinct": 1,
-   "rule": "count"
-  },
   "[].effect[].with.counter.kind": {
    "class": "closed_vocab",
    "texts": 3,
@@ -9756,8 +13921,8 @@
   },
   "[].fragment": {
    "class": "free_text",
-   "texts": 98,
-   "distinct": 90,
+   "texts": 96,
+   "distinct": 88,
    "rule": "free_text"
   },
   "[].if.card_target.card_type.kind": {
@@ -10010,11 +14175,23 @@
     "triggered_ability"
    ]
   },
-  "[].if.label": {
-   "class": "should_be_structured",
+  "[].if.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "target-label"
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].if.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 3,
+   "vocab": [
+    "first otter spell other than ~ you've cast this turn",
+    "first sorcery spell",
+    "it's the first instant spell"
+   ]
   },
   "[].if.lists[].connector": {
    "class": "closed_vocab",
@@ -10032,11 +14209,23 @@
     "set"
    ]
   },
-  "[].if.lists[].label": {
-   "class": "should_be_structured",
+  "[].if.lists[].label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "target-label"
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].if.lists[].label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 3,
+   "vocab": [
+    "first instant spell",
+    "first otter spell other than ~ you've cast this turn",
+    "first sorcery spell"
+   ]
   },
   "[].if.lists[].logic": {
    "class": "closed_vocab",
@@ -10315,11 +14504,40 @@
     "set"
    ]
   },
-  "[].if.subject.label": {
-   "class": "should_be_structured",
+  "[].if.subject.label.card_class": {
+   "class": "closed_vocab",
    "texts": 3,
    "distinct": 2,
-   "rule": "target-label"
+   "vocab": [
+    "card",
+    "token"
+   ]
+  },
+  "[].if.subject.label.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].if.subject.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 3,
+   "vocab": [
+    "card",
+    "instant",
+    "sorcery"
+   ]
+  },
+  "[].if.subject.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 1,
+   "vocab": [
+    "a"
+   ]
   },
   "[].if.subject.logic": {
    "class": "closed_vocab",
@@ -10463,9 +14681,25 @@
   },
   "[].instead.amount": {
    "class": "should_be_structured",
-   "texts": 6,
-   "distinct": 3,
+   "texts": 3,
+   "distinct": 2,
    "rule": "amount"
+  },
+  "[].instead.amount.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].instead.amount.of.kind": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 1,
+   "vocab": [
+    "that_much"
+   ]
   },
   "[].instead.card.card_type.raw": {
    "class": "closed_vocab",
@@ -10569,18 +14803,21 @@
     "library"
    ]
   },
-  "[].instead[].amount": {
-   "class": "should_be_structured",
-   "texts": 1,
-   "distinct": 1,
-   "rule": "amount"
-  },
   "[].instead[].amount.kind": {
+   "class": "closed_vocab",
+   "texts": 2,
+   "distinct": 2,
+   "vocab": [
+    "number",
+    "relative"
+   ]
+  },
+  "[].instead[].amount.of.kind": {
    "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
    "vocab": [
-    "number"
+    "that_many"
    ]
   },
   "[].instead[].amount.unit": {
@@ -10623,17 +14860,37 @@
     "~"
    ]
   },
-  "[].instead[].count": {
-   "class": "should_be_structured",
+  "[].instead[].count.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "count"
+   "vocab": [
+    "relative"
+   ]
   },
-  "[].instead[].counter.count": {
-   "class": "should_be_structured",
+  "[].instead[].count.of.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "count"
+   "vocab": [
+    "that_many"
+   ]
+  },
+  "[].instead[].counter.count.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "relative"
+   ]
+  },
+  "[].instead[].counter.count.of.kind": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "that_many"
+   ]
   },
   "[].instead[].counter.kind": {
    "class": "closed_vocab",
@@ -11093,7 +15350,7 @@
   },
   "[].reason": {
    "class": "closed_vocab",
-   "texts": 98,
+   "texts": 96,
    "distinct": 3,
    "vocab": [
     "no_handler",
@@ -11103,7 +15360,7 @@
   },
   "[].source": {
    "class": "closed_vocab",
-   "texts": 98,
+   "texts": 96,
    "distinct": 3,
    "vocab": [
     "i_for_each_sentence",
@@ -11464,22 +15721,23 @@
     "i_enters"
    ]
   },
-  "[].trigger.event.counter.count": {
-   "class": "should_be_structured",
-   "texts": 15,
-   "distinct": 3,
-   "rule": "count"
+  "[].trigger.event.counter.count.kind": {
+   "class": "closed_vocab",
+   "texts": 10,
+   "distinct": 1,
+   "vocab": [
+    "count"
+   ]
   },
   "[].trigger.event.counter.kind": {
    "class": "closed_vocab",
    "texts": 15,
-   "distinct": 5,
+   "distinct": 4,
    "vocab": [
-    "+1/+1 counter",
-    "+1/+1 counter s",
+    "+1/+1",
     "counter",
     "counter s",
-    "or more loyalty counter s"
+    "or more loyalty"
    ]
   },
   "[].trigger.event.event.object.card_type.kind": {
@@ -11666,11 +15924,45 @@
     "spell"
    ]
   },
-  "[].trigger.event.object.label": {
-   "class": "should_be_structured",
+  "[].trigger.event.object.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 30,
+   "distinct": 1,
+   "vocab": [
+    "spell"
+   ]
+  },
+  "[].trigger.event.object.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 31,
-   "distinct": 6,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].trigger.event.object.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 31,
+   "distinct": 8,
+   "vocab": [
+    "artifact",
+    "creature",
+    "dragon",
+    "instant",
+    "lesson",
+    "noncreature spell",
+    "red instant",
+    "sorcery"
+   ]
+  },
+  "[].trigger.event.object.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 3,
+   "distinct": 2,
+   "vocab": [
+    "a",
+    "another"
+   ]
   },
   "[].trigger.event.object.logic": {
    "class": "closed_vocab",
@@ -11682,8 +15974,8 @@
   },
   "[].trigger.event.object.modifier": {
    "class": "should_be_structured",
-   "texts": 37,
-   "distinct": 20,
+   "texts": 21,
+   "distinct": 15,
    "rule": "modifier"
   },
   "[].trigger.event.object.modifier.keyword": {
@@ -11696,12 +15988,13 @@
   },
   "[].trigger.event.object.modifier.kind": {
    "class": "closed_vocab",
-   "texts": 18,
-   "distinct": 4,
+   "texts": 34,
+   "distinct": 5,
    "vocab": [
     "color",
     "keyword",
     "stat_filter",
+    "targets",
     "type"
    ]
   },
@@ -11720,6 +16013,35 @@
    "distinct": 1,
    "vocab": [
     "mana value"
+   ]
+  },
+  "[].trigger.event.object.modifier.target.card_type[].kind": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].trigger.event.object.modifier.target.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 16,
+   "distinct": 6,
+   "vocab": [
+    "a creature",
+    "an artifact",
+    "an opponent",
+    "creature",
+    "land",
+    "player"
+   ]
+  },
+  "[].trigger.event.object.modifier.target.quantifier": {
+   "class": "closed_vocab",
+   "texts": 13,
+   "distinct": 1,
+   "vocab": [
+    "a"
    ]
   },
   "[].trigger.event.object.modifier.which": {
@@ -11748,10 +16070,12 @@
    ]
   },
   "[].trigger.event.object.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 17,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "you"
+   ]
   },
   "[].trigger.event.object.possessive": {
    "class": "closed_vocab",
@@ -12030,11 +16354,65 @@
     "set"
    ]
   },
-  "[].trigger.event.subject.label": {
-   "class": "should_be_structured",
+  "[].trigger.event.subject.label.card_class": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "permanent"
+   ]
+  },
+  "[].trigger.event.subject.label.card_type[].kind": {
+   "class": "closed_vocab",
    "texts": 13,
-   "distinct": 9,
-   "rule": "target-label"
+   "distinct": 1,
+   "vocab": [
+    "type"
+   ]
+  },
+  "[].trigger.event.subject.label.card_type[].value": {
+   "class": "closed_vocab",
+   "texts": 13,
+   "distinct": 20,
+   "vocab": [
+    "/",
+    "angel creature",
+    "army",
+    "artifact",
+    "bat",
+    "bird",
+    "creature",
+    "food",
+    "frog",
+    "goblin",
+    "mice",
+    "more noncreature",
+    "more other rabbit",
+    "nonland",
+    "one",
+    "orc",
+    "planeswalker",
+    "rabbit",
+    "raccoon",
+    "squirrel"
+   ]
+  },
+  "[].trigger.event.subject.label.controller": {
+   "class": "closed_vocab",
+   "texts": 12,
+   "distinct": 1,
+   "vocab": [
+    "you"
+   ]
+  },
+  "[].trigger.event.subject.label.quantifier": {
+   "class": "closed_vocab",
+   "texts": 11,
+   "distinct": 2,
+   "vocab": [
+    "a",
+    "another"
+   ]
   },
   "[].trigger.event.subject.logic": {
    "class": "closed_vocab",
@@ -12078,10 +16456,13 @@
    ]
   },
   "[].trigger.event.subject.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 10,
    "distinct": 2,
-   "rule": "unclassified"
+   "vocab": [
+    "it",
+    "them"
+   ]
   },
   "[].trigger.event.subject.modifier.op": {
    "class": "closed_vocab",
@@ -12296,17 +16677,29 @@
     "unlock"
    ]
   },
-  "[].trigger.event.window": {
-   "class": "should_be_structured",
-   "texts": 30,
-   "distinct": 5,
-   "rule": "timing"
-  },
   "[].trigger.event.window.kind": {
    "class": "closed_vocab",
-   "texts": 8,
+   "texts": 32,
+   "distinct": 2,
+   "vocab": [
+    "frequency",
+    "turn"
+   ]
+  },
+  "[].trigger.event.window.player": {
+   "class": "closed_vocab",
+   "texts": 1,
    "distinct": 1,
    "vocab": [
+    "you"
+   ]
+  },
+  "[].trigger.event.window.value": {
+   "class": "closed_vocab",
+   "texts": 31,
+   "distinct": 2,
+   "vocab": [
+    "each_turn",
     "this_turn"
    ]
   },
@@ -12349,16 +16742,23 @@
    "rule": "timing"
   },
   "[].trigger.when.player": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 287,
    "distinct": 4,
-   "rule": "unclassified"
+   "vocab": [
+    "each",
+    "each_opponent",
+    "each_player",
+    "you"
+   ]
   },
   "[].trigger.when.position": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 290,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "beginning"
+   ]
   },
   "[].trigger.when.which": {
    "class": "closed_vocab",
@@ -12372,7 +16772,7 @@
   },
   "[].type": {
    "class": "closed_vocab",
-   "texts": 7230,
+   "texts": 7231,
    "distinct": 17,
    "vocab": [
     "activated",
@@ -12586,10 +16986,12 @@
    ]
   },
   "[].xdef.xdef.of.modifier.on": {
-   "class": "should_be_structured",
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "unclassified"
+   "vocab": [
+    "them"
+   ]
   },
   "[].xdef.xdef.of.modifier.op": {
    "class": "closed_vocab",
@@ -12936,11 +17338,21 @@
     "this_card"
    ]
   },
-  "[][].predicate": {
-   "class": "should_be_structured",
+  "[][].predicate.kind": {
+   "class": "closed_vocab",
    "texts": 1,
    "distinct": 1,
-   "rule": "predicate"
+   "vocab": [
+    "predicate"
+   ]
+  },
+  "[][].predicate.voice": {
+   "class": "closed_vocab",
+   "texts": 1,
+   "distinct": 1,
+   "vocab": [
+    "passive"
+   ]
   },
   "[][].target.card_type.kind": {
    "class": "closed_vocab",
@@ -12983,12 +17395,6 @@
     "enters",
     "stat_change"
    ]
-  },
-  "[][].with.count": {
-   "class": "should_be_structured",
-   "texts": 1,
-   "distinct": 1,
-   "rule": "count"
   },
   "[][].with.counter.kind": {
    "class": "closed_vocab",
@@ -13080,12 +17486,12 @@
    ]
   }
  },
- "snapshot": "Standard_69cae293a709a048_d314f10efd7e9d40.json",
- "grammar_sha1": "69cae293a709a048",
- "interp_sha1": "d314f10efd7e9d40",
+ "snapshot": "Standard_1e032c36fb62eaea_a281987190b5d430.json",
+ "grammar_sha1": "1e032c36fb62eaea",
+ "interp_sha1": "a281987190b5d430",
  "classes": {
-  "closed_vocab": 1173,
-  "should_be_structured": 178,
+  "closed_vocab": 1705,
+  "should_be_structured": 131,
   "free_text": 20
  },
  "leftovers": {
