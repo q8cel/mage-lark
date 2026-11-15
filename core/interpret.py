@@ -22,7 +22,7 @@ import paths as _paths
 _paths.bootstrap()
 from lark import Token, Tree
 
-from lists import decode as decode_list_token
+from lists import decode as decode_list_token, KEYWORDS as LIST_KEYWORDS
 from mtd import card_type_set, name_set
 from clause_metric import classify_clause, CLAUSE, EXPRESSION
 
@@ -626,6 +626,31 @@ class Interpreter:
                 mctr = re.fullmatch(r'(.+?)\s+counters?(?:\s+s)?', k)
                 if mctr:
                     ctr['kind'] = mctr.group(1)
+            ct = obj.get('card_type')
+            if isinstance(ct, dict) and isinstance(ct.get('value'), str) \
+                    and (' or ' in ct['value'] or ',' in ct['value']):
+                parts = [x.strip() for x in re.split(
+                    r'\s*,\s*(?:or\s+)?|\s+or\s+', ct['value']) if x.strip()]
+                if len(parts) > 1:
+                    obj['card_type'] = [{'kind': 'type', 'value': x}
+                                        for x in parts]
+            if isinstance(obj.get('possessor'), str) \
+                    and isinstance(obj.get('stat'), str) \
+                    and 'kind' not in obj:
+                obj['kind'] = 'possessive'
+            fev2 = obj.get('for_each')
+            if isinstance(fev2, dict):
+                item = fev2.get('items')
+                if isinstance(item, dict):
+                    v = item.get('value')
+                    if isinstance(v, str) and v.startswith('color of mana spent to cast '):
+                        ref = v[len('color of mana spent to cast '):].strip()
+                        obj['for_each'] = {
+                            'kind': 'color_of',
+                            'of': {'kind': 'mana_spent', 'action': 'cast',
+                                   'object': {'kind': 'ref',
+                                              'ref': ref.replace(' ', '_'),
+                                              'anaphor': True}}}
             mv = obj.get('modifier')
             if isinstance(mv, str) and mv.strip().lower().startswith('that targets '):
                 rest = mv.strip().lower()[len('that targets '):]
@@ -1643,6 +1668,16 @@ class Interpreter:
             if mput:
                 return {'kind': 'relative', 'event': 'put',
                         'location': 'there', 'time': 'this_turn'}
+            mstatle = re.fullmatch(
+                r'with (?:total )?(mana value|power|toughness) '
+                r'less than or equal to the number of (.+)', low)
+            if mstatle:
+                return {'kind': 'stat_filter', 'stat': mstatle.group(1),
+                        'op': '<=',
+                        'value': {'kind': 'computed',
+                                  'of': {'kind': 'count_of',
+                                         'set': Interpreter._amount_ref(
+                                             mstatle.group(2))}}}
             mstat = re.fullmatch(
                 r'with (?:total )?(mana value|power|toughness) '
                 r'([0-9]+|x) (or less|or greater)', low)
@@ -3454,7 +3489,7 @@ class Interpreter:
         if 'tapped' in toks:
             d['tapped'] = True
         if 'prepared' in toks:
-            d['prepared'] = True
+            d.setdefault('states', []).append('prepared')
         if 'for' in toks and 'each' in toks:
             at = self._find_one(children, 'any_text')
             if at is not None:
@@ -4821,6 +4856,15 @@ class Interpreter:
             elif isinstance(ch, Token) and ch.type == 'EVENT_VERB':
                 d['verb'] = ch.value
         words = self._token_words(children)
+        flat_words = [w for word in words for w in word.split()]
+        event_verbs = [v for v in ('enters', 'attacks', 'blocks')
+                       if v in flat_words]
+        if len(event_verbs) > 1:
+            d['verb'] = {'kind': 'event', 'verbs': event_verbs}
+        elif isinstance(d.get('verb'), str) and ' or ' in d['verb']:
+            d['verb'] = {'kind': 'event',
+                         'verbs': [v.strip() for v in
+                                   d['verb'].split(' or ')]}
         if 'next' in words and 'cast' in words:
             # "When you next cast a creature spell this turn": the cast is
             # the event verb; keep the one-shot window.
@@ -5016,11 +5060,76 @@ class Interpreter:
         return d
 
     # ------------------------------------------------------------------ sentence types
+    def _structure_cost_item(self, item):
+        if not isinstance(item, str):
+            return item
+        raw = item.strip()
+        if not raw or raw == ',':
+            return None
+        low = raw.lower()
+        symbols = re.findall(r'\{[^}]+\}', raw)
+        if symbols and re.fullmatch(r'(?:\{[^}]+\}\s*)+', raw):
+            return {'kind': 'cost', 'action': 'pay_mana', 'mana': symbols}
+        mpay = re.fullmatch(r'pay ([0-9]+|x) life', low)
+        if mpay:
+            value = int(mpay.group(1)) if mpay.group(1).isdigit() else 'X'
+            return {'kind': 'cost', 'action': 'pay_life',
+                    'amount': {'kind': 'number', 'value': value,
+                               'unit': 'life'}}
+        if low.startswith('tap '):
+            rest = raw[4:].strip()
+            q = None
+            status = []
+            for word, qv in (('four ', 'four'), ('three ', 'three'),
+                             ('two ', 'two'), ('one ', 'one')):
+                if rest.lower().startswith(word):
+                    q = qv
+                    rest = rest[len(word):]
+                    break
+            if rest.lower().startswith('untapped '):
+                status.append('untapped')
+                rest = rest[len('untapped '):]
+            if rest.lower().endswith(' you control'):
+                rest = rest[:-len(' you control')]
+                controller = 'you'
+            else:
+                controller = None
+            if rest.lower().endswith('s'):
+                rest = rest[:-1]
+            target = {'card_type': [{'kind': 'type', 'value': rest}]}
+            if q:
+                target['quantifier'] = q
+            if status:
+                target['status'] = status
+            if controller:
+                target['controller'] = controller
+            return {'kind': 'cost', 'action': 'tap', 'target': target}
+        if low.startswith('sacrifice '):
+            target = self._simple_target(raw[len('sacrifice '):])
+            if target:
+                return {'kind': 'cost', 'action': 'sacrifice',
+                        'card': target}
+        if low.startswith('discard '):
+            target = self._simple_target(raw[len('discard '):])
+            if target:
+                return {'kind': 'cost', 'action': 'discard',
+                        'card': target}
+        verb = low.split(' ', 1)[0]
+        rest = raw[len(verb):].strip()
+        d = {'kind': 'cost', 'action': verb}
+        if rest:
+            target = self._simple_target(rest)
+            if target:
+                d['target'] = target
+        return d
+
     def i_cost_item(self, children):
-        return self._text(children) or (self.interp(children[0]) if children else None)
+        item = self._text(children) or (self.interp(children[0]) if children else None)
+        return self._structure_cost_item(item)
 
     def i_cost_list(self, children):
-        return [self.interp(c) for c in children]
+        out = [self.interp(c) for c in children]
+        return [x for x in out if x not in (None, ',')]
 
     def i_activated_sentence(self, children):
         cost = None
@@ -5510,6 +5619,14 @@ class Interpreter:
                 if mana:
                     return {'verb': 'add_mana', 'amount': mana}
             if kw is not None:
+                if isinstance(kw, list):
+                    kw = [x.get('value') if isinstance(x, dict)
+                          and x.get('note') == 'unresolved'
+                          and str(x.get('value', '')).lower() in LIST_KEYWORDS
+                          else x for x in kw]
+                elif isinstance(kw, dict) and kw.get('note') == 'unresolved' \
+                        and str(kw.get('value', '')).lower() in LIST_KEYWORDS:
+                    kw = kw['value']
                 d['keywords'] = kw
                 value = kw.get('value') if isinstance(kw, dict) else kw
                 if isinstance(value, str) and value.lower() == 'investigate':

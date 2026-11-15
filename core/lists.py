@@ -32,11 +32,11 @@ PROPERTY = {
     'modified','kicked','escaped','suspected','renowned','monstrous','equipped','enchanted',
     'flying','first strike','double strike','deathtouch','defender','haste','hexproof',
     'indestructible','lifelink','menace','reach','trample','vigilance','ward','flash',
-    'fear','intimidate','protection','shroud','prowess','exalted','convoke','delve',
+    'fear','intimidate','protection','shroud','prowess','exalted','convoke','delve','plot',
 }
 KEYWORDS = {'flying','first strike','double strike','deathtouch','defender','haste','hexproof',
     'indestructible','lifelink','menace','reach','trample','vigilance','ward','flash',
-    'fear','intimidate','protection','shroud','prowess','exalted','convoke','delve'}
+    'fear','intimidate','protection','shroud','prowess','exalted','convoke','delve','plot'}
 QUANT = {'one','two','three','four','five','six','seven','eight','nine','ten','eleven',
          'twelve','first','second','third','fourth','fifth','sixth','seventh','eighth',
          'ninth','tenth'}

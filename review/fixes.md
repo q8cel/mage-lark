@@ -350,3 +350,23 @@ Merged-tree suites: test_output 277/277, test_review PASS, test_grammar_hoist
 `AttributeError: 'dict' object has no attribute 'strip'` in
 `_struct_cause_trigger` — reproduced identically at base `6667be3`, so
 pre-existing master breakage (interpret `i_if_sentence`), not from this merge.
+
+## Human review v3 sheet_01 interpret fixes (W001–W050)
+
+Corpus/segmentation defect: W034 sid `5a1e39044d70` — source sentence is
+truncated before its modes ("When this creature enters, choose one"); recorded
+here, no interpreter change. W045 X context is upstream ambiguity; no change.
+
+Interpret changes: activated/spree/cost-dash cost items are structured
+(pay_mana as a symbol array, tap/target/status, pay_life, sacrifice/discard,
+generic action), `to` destination for W005 already carried zone/controller/
+transformed, computed stat filters (`value: {kind: computed, of: count_of}`),
+compound event verbs (`{kind: event, verbs: [...]}`), card-type disjunctions as
+typed arrays, `color_of` for-each mana-spent refs with anaphora, possessive
+amount kinds, Plot in the keyword vocabulary, and `states: ["prepared"]`.
+Verification: no raw string remains in an activated/spree/cost_dash `cost`;
+W005/W025/W040 were already green on the current tree.
+
+Detector after these fixes and the merged grammar:
+`review/stringiness_4.md` — structured 17,963/20,882 = 86.0%
+(unique 5,712/7,265 = 78.6%); stringy 1,296/664.
