@@ -533,3 +533,45 @@ Measured (200 anaphora cards, 660 records, 699 text lookups):
 
 Byte-identical checks: sample hash `ba1a3277…efd424` before/after memo;
 200-card hash `b77567a4…aa55b8` before/cold/warm.
+
+## Per-card compile workers
+
+`tools/compile_card.py --workers N` partitions cards across processes; each
+worker has its own plan/interpret caches and reads the persistent output cache,
+returning only its misses for a single parent merge. Records are sorted by
+(card, sentence_index, sid, canonical JSON) before writing, so JSONL is
+deterministic for every worker count.
+
+Warm throughput (200 cards / 660 records):
+| workers | wall | s/card |
+|---:|---:|---:|
+| 1 | 170 s | 0.85 |
+| 2 | 95 s | 0.475 |
+| 4 | 58 s | 0.29 |
+| 6 | 46 s | 0.23 |
+
+Warm throughput (500 cards / 1,610 records):
+| workers | wall | s/card |
+|---:|---:|---:|
+| 1 | 363 s | 0.726 |
+| 2 | 199 s | 0.398 |
+| 4 | 120 s | 0.24 |
+| 6 | 96 s | 0.192 |
+
+500-card cold at 6 workers: 205 s (0.41 s/card). 500-card warm cache hit
+counts: 1,713 lookups, 924 in-process hits (54.0%), 789 disk hits (46.1%).
+Projected full Standard at 6 workers: 8,921 × 0.192 = 1,713 s (28.6 min) warm;
+cold projection from the 500-card cold rate is ~61 min.
+
+Byte-identical JSONL:
+- 200 cards: `542cb59ae1e17b7e8c90603029232150f55dcd4674c3af98a5389344de9fa4c9`
+  at workers 1/2/4/6.
+- 500 cards: `963cabf5ac6ee2c82a951049c4b58b1392fad7f6cda6bcb7bc2fbc2487fbd00e`
+  at workers 1/2/4/6.
+
+Full Standard compile attempt: both `--workers 6` and `--workers 12` exceeded
+the 3,600 s cap before writing (no output file). The warm projection is under
+30 min, but the cold run does not complete within the cap, so no full-run
+record count/marker/SHA was produced. The cache only persists after a
+successful run, so a warm full run cannot be bootstrapped from the timed-out
+runs.
