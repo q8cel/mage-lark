@@ -372,3 +372,36 @@ policy (`review/stringiness_8.md`): structured 17,744/20,882 = 85.0%
 (unique 5,630/7,265 = 77.5%); of corpus 17,744/22,217 = 79.9%; stringy
 1,515 occ / 746 texts. Raw activated/spree/cost_dash cost strings: 0;
 weighted fragment fields (unparsed raw sentences): 1,812.
+
+## Calibrated compound/cost/modifier/anaphora families
+
+Sampled 20 distinct `compound_atom` sites before fixing: 15 are real
+alternatives (`artifacts and creatures`, `creature and planeswalker`,
+`Mounts and Vehicles`, `instant and/or sorcery cards`, `another untapped
+Mount or Vehicle`, etc.); 5 are malformed/capture flags rather than atom
+alternatives: `creature type and behold two creatures of`, `creature you
+control with power 4 or greater` (stat modifier inside a card_type string),
+`noncreature spell and whenever you draw your third card` (clause
+concatenation), `both a creature spell and a noncreature spell` (leading
+`both a` is not a type), and `spell from exile and whenever a permanent you
+control enters from exile` (clause concatenation). The real type lists are
+split; the malformed captures remain in the ledger rather than being forced
+into a wrong atom split.
+
+Fixes and same-policy deltas (current calibrated policy, snapshot before ->
+after):
+
+| family | before | after | change |
+|---|---:|---:|---:|
+| compound_atom | 126 occ / 55 texts | 0 | -126 |
+| raw_cost | 238 occ / 90 texts | 0 | -238 |
+| modifier_prose | 150 occ / 83 texts | 0 | -150 |
+| anaphora | 142 occ / 68 texts | 59 occ / 30 texts | -83 |
+
+Structured coverage under the current calibrated policy: 17,025/20,882
+(81.5%) -> 17,488/20,882 (**83.7%**); unique 5,348/7,265 (73.6%) ->
+5,553/7,265 (**76.4%**). Of corpus: 17,488/22,217 = 78.7% (unique
+5,553/7,966 = 69.7%). Stringy: 2,272 -> 1,788 occurrences. Note the headline
+moved from the earlier 85.0% because the concurrent calibrated policy change
+made many pre-existing list paths explicit; the before/after above uses the
+same current policy on both snapshots.
