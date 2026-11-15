@@ -8,9 +8,10 @@ resolution per sentence, this command keeps every card's own context:
     {"card", "sentence_index", "sid", "original_text", "resolved_text",
      "anaphora": [...], "output": [...]}
 
-A rewritten sentence is used only when it parses and its interpretation has no
-unparsed marker; otherwise the original sentence is compiled.  No grammar or
-interpreter schema changes.
+Resolution is on by default; use --no-resolve for parity. A rewritten
+sentence is used only when it parses and its interpretation has no unparsed
+marker; otherwise the original sentence is compiled. No grammar or interpreter
+schema changes.
 """
 
 import os as _os, sys as _sys
@@ -47,6 +48,12 @@ def main():
     ap.add_argument('--card', default=None, help='only this card name')
     ap.add_argument('--limit', type=int, default=0, help='card cap (testing)')
     ap.add_argument('--mentions', choices=('regex', 'parser'), default='regex')
+    ap.add_argument('--resolve', dest='resolve', action='store_true', default=True,
+                    help='resolve card context before compiling (default)')
+    ap.add_argument('--no-resolve', dest='resolve', action='store_false',
+                    help='compile the original text only (parity mode)')
+    ap.add_argument('--anaphora-only', action='store_true',
+                    help='only cards containing an anaphor')
     args = ap.parse_args()
 
     from larkparser import build_parser
@@ -80,12 +87,14 @@ def main():
                 continue
             if not raw:
                 continue
-            cards += 1
             text = normalize_text(raw, names)
             anas = find_anaphors(text)
+            if args.anaphora_only and not anas:
+                continue
+            cards += 1
             rewritten = text
             metas = []
-            if anas:
+            if anas and args.resolve:
                 try:
                     res = rulecoref.resolve(
                         text, refs.build(text, parser=args.mentions == 'parser'),

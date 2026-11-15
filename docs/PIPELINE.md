@@ -225,11 +225,17 @@ Why not consume `interpret()` output:
 3. **Config fragility.** Anaphor survival is a function of `keep_all_tokens`
    (see the table above), so depending on it would be depending on a flag.
 
-### Current state: not wired in
+### Wiring state (opt-in measurement, per-card engine)
 
-Nothing in `run.py`, `interpret.py`, `demo_output.py` or `resolve.py` imports
-`refs`/`rulecoref`; `coref_eval.py` is the shared, entity-aware harness for both
-the rules and the attention baseline. Today it is a standalone CLI:
+`tools/compile_card.py` is the engine artifact: resolution is **on by default**
+(`--no-resolve` is parity), it resolves one card at a time, and emits records
+keyed by `(card, sentence_index, sid)`. Because there is no cross-card dedupe,
+the same sentence can resolve differently on different cards without a
+collision. `tools/run.py --resolve` and `tools/snapshot.py build --resolve` are
+the sentence-keyed **measurement** paths; their one-resolution-per-sentence map
+records colliding cards in `meta.resolve.collisions`. Both are opt-in and keep
+the original sentence key. `coref_eval.py` remains the shared entity-aware
+harness for the rules and the attention baseline.
 
 ```bash
 python coref/refs.py --card "Fiery Annihilation"        # inspect the inventory
@@ -274,12 +280,12 @@ Possessives (`its owner's hand`) and set anaphora (`the rest`) are never rewritt
 the grammar accepts only `its/their/...` in possessor position, and a set needs a
 partitive ("the rest of the top five cards"), not a plain NP.
 
-### The second integration seam (not built)
+### Integration seams
 
-1. **Pre-parse rewrite** — `rulecoref` emits pronoun-free text, which is fed back
-   through `segment` → `Lark.parse` → `Interpreter`. Verified on Fiery
-   Annihilation: 3/3 rewritten sentences parse, 0 anaphors remain. This makes
-   resolution *feed* the compiler.
+1. **Pre-parse rewrite** — built and opt-in: `rulecoref` emits pronoun-free
+   text, fed through `segment` → `Lark.parse` → `Interpreter`; snapshot records
+   keep the original key and add `resolved_text`/`anaphora`. Rewrites that fail
+   to parse or still interpret with an unparsed marker fall back to the original.
 2. **Post-parse annotation** — attach entity ids to the semantic dicts. Needs
    `interpret` to preserve anaphor spans (i.e. a single, documented parser
    configuration plus an offset field).

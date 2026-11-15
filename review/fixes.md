@@ -484,3 +484,33 @@ cache 0.6 s; total snapshot 3,043.7 s cold / 34.3 s warm):
 - complete 17,452 / 20,887 = 83.6% (5,527 / 7,267) vs
   17,476 / 20,882 = 83.7% (5,544 / 7,265)
 - anaphora markers 873/1,988 weighted -> 395/877; 681 outputs changed.
+
+## Resolve thread freeze: default per-card compile + revert sample
+
+`tools/compile_card.py` now resolves by default (`--no-resolve` parity;
+`--anaphora-only` for measurement). `tools/run.py --resolve` and
+`tools/snapshot.py build --resolve` stay opt-in measurement paths; their
+sentence-keyed maps record collisions in `meta.resolve.collisions`. Docs
+`docs/PIPELINE.md` now describes the opt-in wiring, the per-card engine path,
+and the collision distinction.
+
+Reverted rewrites: sampled 30 unique reverted candidates on Standard. Causes
+(heuristic buckets): other slot substitution 13, slot accepts only the anaphor
+(`from among them`) 5, possessive antecedent NP 4, grammar alternative absent
+4, dropped copula/relative after substituted NP 3, antecedent NP too long 1.
+No cause dominates and none has a safe cheap canonicalisation (shortening the
+NP changes the referent); no revert fix was made. FDN reverts: regex 125/202
+decisions, parser 94/200.
+
+Per-card compile measurements (resolution default):
+- FDN: 260 anaphora entries (157 unique card names), 675 records, markers 76,
+  120 records changed, runtime 683 s (2.63 s/entry).
+- Standard sample: 162 anaphora entries, 523 records -> 386 unique per-card
+  keys; markers 62 -> 24, changed 72; runtime 513 s (3.17 s/card) vs parity
+  --no-resolve 319 s (1.97 s/card). Four layers on the sample: parse 386,
+  honest 332, structured 286/386 = 74.1%, complete 285/386 = 73.8% (parity:
+  structured 289, complete 288).
+- Collision spot check: Fiery Annihilation -> `target creature` and
+  Elspeth's Smite -> `attacking or blocking creature` for the same original
+  sentence; compile_card records each correctly. Pilfer/Duress likewise keep
+  `a nonland card` vs `a noncreature, nonland card`.
