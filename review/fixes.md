@@ -514,3 +514,22 @@ Per-card compile measurements (resolution default):
   Elspeth's Smite -> `attacking or blocking creature` for the same original
   sentence; compile_card records each correctly. Pilfer/Duress likewise keep
   `a nonland card` vs `a noncreature, nonland card`.
+
+## Per-card compile throughput: text memo + persistent output cache
+
+`tools/compile_card.py` now memoises `text -> interpretation` in-process and
+persists it in `.cache/compile_out_<interp>_<grammar>.json`. The record schema
+is unchanged; records remain per-card and byte-identical (sorted JSONL hash
+checked against the pre-optimisation files).
+
+Measured (200 anaphora cards, 660 records, 699 text lookups):
+- before memo: 3.245 s/card, 649 s total
+- in-process memo cold: 2.22 s/card, 444 s; 314/699 lookups hit (44.9%),
+  385 unique texts
+- persistent-cache warm: 0.87 s/card, 174 s; 385/699 disk hits (55.1%),
+  0 memory misses
+- projected Standard (8,921 rows): 8.0 h -> 5.5 h cold -> **2.2 h warm**
+  (still above the 20-minute target; resolution itself remains the floor)
+
+Byte-identical checks: sample hash `ba1a3277…efd424` before/after memo;
+200-card hash `b77567a4…aa55b8` before/cold/warm.

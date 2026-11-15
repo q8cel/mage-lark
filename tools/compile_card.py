@@ -54,6 +54,8 @@ def main():
                     help='compile the original text only (parity mode)')
     ap.add_argument('--anaphora-only', action='store_true',
                     help='only cards containing an anaphor')
+    ap.add_argument('--no-out-cache', action='store_true',
+                    help='do not read/write the persistent text->output cache')
     args = ap.parse_args()
 
     from larkparser import build_parser
@@ -73,11 +75,45 @@ def main():
         except Exception:
             return False
 
+    out_cache = {}
+    cache_stats = {'lookups': 0, 'hits': 0, 'misses': 0,
+                   'disk_hits': 0, 'disk_misses': 0}
+    disk_cache = {}
+    disk_path = None
+    if not args.no_out_cache:
+        def _fh(path):
+            h = hashlib.sha1()
+            with open(path, 'rb') as f:
+                for block in iter(lambda: f.read(1 << 20), b''):
+                    h.update(block)
+            return h.hexdigest()[:16]
+        key = _fh(_paths.source('interpret.py')) + '_' + _fh(_paths.GRAMMAR)
+        disk_path = _os.path.join(_paths.CACHE, 'compile_out_%s.json' % key)
+        if _os.path.exists(disk_path):
+            try:
+                disk_cache = json.load(open(disk_path))
+            except Exception:
+                disk_cache = {}
+    _MISSING = object()
+
     def interpret(text):
+        cache_stats['lookups'] += 1
+        if text in out_cache:
+            cache_stats['hits'] += 1
+            return out_cache[text]
+        sentinel = disk_cache.get(text, _MISSING)
+        if sentinel is not _MISSING:
+            cache_stats['disk_hits'] += 1
+            out_cache[text] = sentinel
+            return sentinel
+        cache_stats['disk_misses'] += 1
+        cache_stats['misses'] += 1
         try:
-            return interp.interp(parser.parse(text))
+            out = interp.interp(parser.parse(text))
         except Exception:
-            return None
+            out = None
+        out_cache[text] = out
+        return out
 
     cards = 0
     records = 0
@@ -135,7 +171,19 @@ def main():
                 records += 1
             if args.limit and cards >= args.limit:
                 break
-    print(json.dumps({'cards': cards, 'records': records, 'out': args.out},
+    if disk_path:
+        try:
+            disk_cache.update(out_cache)
+            _os.makedirs(_os.path.dirname(disk_path), exist_ok=True)
+            tmp = disk_path + '.tmp'
+            json.dump(disk_cache, open(tmp, 'w'))
+            _os.replace(tmp, disk_path)
+        except Exception:
+            pass
+    print(json.dumps({'cards': cards, 'records': records,
+                      'unique_texts': len(out_cache),
+                      'text_cache': cache_stats,
+                      'out_cache': disk_path, 'out': args.out},
                      indent=1))
 
 
