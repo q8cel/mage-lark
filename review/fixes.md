@@ -443,3 +443,44 @@ Blast radius (current Standard corpus): **3,870 context-dependent sentences**
 (anaphor present and not the first segment) across 3,017 cards; current outputs
 carry `ref: anaphora` on **818 sentences / 873 markers / 1,988 weighted
 occurrences**. No grammar changes.
+
+## Resolve hardening: per-card compile + full Standard measurement
+
+Collision fix: `tools/compile_card.py` compiles one card at a time and emits
+JSONL records keyed by `(card, sentence_index, sid)` with
+`original_text/resolved_text/anaphora/output`.  It shares no sentence-keyed
+map, so colliding cards keep their own antecedents.  The sentence-keyed
+snapshot remains the measurement path; `meta.resolve.collisions` records
+same-sentence/different-antecedent collisions (FDN 146, Standard 2,755).
+
+Measured collisions (same original sentence, different cards):
+- `If that creature would die this turn, exile it instead`
+  - Fiery Annihilation -> `If target creature would die ... exile target creature`
+  - Elspeth's Smite -> `If attacking or blocking creature would die ... exile attacking or blocking creature`
+- `That player discards that card`
+  - Pilfer -> `Target opponent discards a nonland card`
+  - Duress -> `Target opponent discards a noncreature, nonland card`
+`compile_card.py --card <name>` produces the card-local record for each; the
+first sentence's outputs above are correct per card, unlike the first-wins
+sentence map.
+
+Structured-drop investigation after resolution (FDN, current policy): flagged
+new paths/values were amount possessives (`target instant or sorcery card's
+mana cost`, `a creature's toughness`), object phrasing from concrete
+antecedents (`a permanent each opponent control ...`, `of the top two cards`,
+`a noncreature`, `nonland card`), quote strings whose rewrite no longer parses,
+and `if.subject.items[] = target creature`.  The amount possessives were fixed
+by mapping the antecedent NP to a structured target
+(`{kind:relative, of:{quantifier:target, card_type:[...], stat:mana_cost}}`);
+FDN structured recovered 83.6 -> 83.9%. Remaining resolution-only flags are
+the 9 object/quote/if shapes above (12 weighted occurrences), not suppressed.
+
+Full Standard resolved snapshot (regex, cold plan 2,765.6 s = 46 min; warm plan
+cache 0.6 s; total snapshot 3,043.7 s cold / 34.3 s warm):
+- parse 20,887 / 22,217 (7,267 unique) vs 20,882 (7,265) without resolve
+- honest 19,172 / 22,217 (6,335 unique) vs 19,164 (6,331)
+- structured 17,464 / 20,887 = 83.6% (5,536 / 7,267 unique) vs
+  17,488 / 20,882 = 83.7% (5,553 / 7,265)
+- complete 17,452 / 20,887 = 83.6% (5,527 / 7,267) vs
+  17,476 / 20,882 = 83.7% (5,544 / 7,265)
+- anaphora markers 873/1,988 weighted -> 395/877; 681 outputs changed.

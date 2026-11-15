@@ -143,6 +143,7 @@ def build_plan(items, names, mentions='regex', data_path=None):
             if rtext != otext:
                 stats['sentences_changed'] += 1
     stats['plan_sentences'] = len(plan)
+    stats['collisions'] = stats['sentence_collisions']
     if errors:
         stats['error_examples'] = errors
     stats = dict(stats)

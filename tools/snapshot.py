@@ -448,7 +448,7 @@ def build(args):
             "created_from_commit": commit,
             "count": len(sentences),
             "digest": digest.hexdigest(),
-            "occurrences": {t: occurrences.get(t, 0) for t in sorted(parsed)}}
+            "occurrences": {t: occurrences.get(t, 0) for t in sorted(sentences)}}
     if getattr(args, "resolve", False):
         meta["resolve"] = {"mentions": args.mentions, **resolve_stats}
     meta.update(sources_start)

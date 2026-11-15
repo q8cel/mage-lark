@@ -815,9 +815,11 @@ class Interpreter:
     def _amount_ref(text):
         low = text.strip().lower()
         d = {}
-        for pre in ('other ', 'each ', 'up to '):
+        target = low.startswith('target ')
+        for pre in ('target ', 'other ', 'each ', 'up to ', 'a ', 'an ', 'the '):
             if low.startswith(pre):
                 low = low[len(pre):]
+                break
         for suf, ctl in ((' you control', 'you'),
                          (' you already control', 'you'),
                          (' an opponent controls', 'opponent'),
@@ -856,6 +858,8 @@ class Interpreter:
             types.append({'kind': 'type', 'value': word})
         if types:
             d['card_type'] = types
+        if target:
+            d['quantifier'] = 'target'
         return d
 
     @staticmethod
@@ -1390,6 +1394,15 @@ class Interpreter:
                 node['amount'] = {'kind': 'relative',
                                   'of': {'kind': 'difference'}}
             else:
+                mposs = re.fullmatch(
+                    r"(target [a-z ]+|another [a-z ]+|an? [a-z ]+|the [a-z ]+)'s "
+                    r"(power|toughness|mana cost|mana value|loyalty)", low_a)
+                if mposs:
+                    ref = self._amount_ref(mposs.group(1))
+                    node['amount'] = {
+                        'kind': 'relative',
+                        'of': {**ref,
+                               'stat': mposs.group(2).replace(' ', '_')}}
                 mref = re.fullmatch(
                     r"(its|his|her|their|that [a-z ]+?'s|the [a-z ]+? ?'s) "
                     r"(power|toughness|mana cost|mana value|loyalty)", low_a)
