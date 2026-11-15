@@ -310,7 +310,27 @@ def build(args):
         corpus = os.path.splitext(os.path.basename(_paths.data(args.data)))[0]
         cache, cache_path = load_parse_cache()
 
+    resolve_plan = {}
+    resolve_stats = {}
+    resolve_t0 = time.time()
+    if getattr(args, "resolve", False):
+        if args.sentences:
+            sys.exit("build: --resolve requires --data (card context)")
+        from setdata import load
+        from coref.interpret_resolve import build_plan
+        items, _types, names2, _sets = load(_paths.data(args.data))
+        resolve_plan, resolve_stats = build_plan(items, names2,
+                                                 args.mentions, _paths.data(args.data))
+        print("[resolve] plan=%d changes=%d applied=%d reverted=%d in %.1fs" % (
+            len(resolve_plan), resolve_stats.get("sentences_changed", 0),
+            resolve_stats.get("applied", 0), resolve_stats.get("reverted", 0),
+            time.time() - resolve_t0), file=sys.stderr)
+
     taken = texts[:args.limit] if args.limit else texts
+    original_taken = list(taken)
+    if resolve_plan:
+        taken = taken + [r["resolved_text"] for s, r in resolve_plan.items()
+                         if s in set(taken) and r.get("resolved_text")]
     known_fail = [t for t in taken if cache and cache.get(t) == 0]
     todo = [t for t in taken if not (cache and cache.get(t) == 0)]
     if cache is None:
@@ -374,11 +394,42 @@ def build(args):
     sentences = {}
     outputs = {}
     digest = hashlib.sha256()
-    for text in sorted(parsed):
-        rec = parsed[text]
-        sentences[text] = {"out_sha1": rec["out_sha1"],
-                           "shape_sha1": rec["shape_sha1"],
-                           "cluster": rec["cluster"]}
+    record_texts = original_taken if resolve_plan else sorted(parsed)
+
+    def _out_unparsed(o):
+        stack = [o]
+        while stack:
+            x = stack.pop()
+            if isinstance(x, dict):
+                if x.get('unparsed') or x.get('type') == 'unparsed' or 'text' in x:
+                    return True
+                stack.extend(x.values())
+            elif isinstance(x, list):
+                stack.extend(x)
+        return False
+
+    def _chosen(text):
+        rec = resolve_plan.get(text) if resolve_plan else None
+        if rec and rec.get("resolved_text") in parsed:
+            resolved = parsed[rec["resolved_text"]]
+            if not _out_unparsed(resolved["output"]):
+                return rec["resolved_text"], rec
+        if text in parsed:
+            return text, None
+        return None, None
+
+    for text in sorted(record_texts):
+        chosen, meta_rec = _chosen(text)
+        if chosen is None:
+            continue
+        rec = parsed[chosen]
+        entry = {"out_sha1": rec["out_sha1"],
+                 "shape_sha1": rec["shape_sha1"],
+                 "cluster": rec["cluster"]}
+        if resolve_plan:
+            entry["resolved_text"] = chosen
+            entry["anaphora"] = (meta_rec or {}).get("anaphora", [])
+        sentences[text] = entry
         outputs[text] = rec["output"]
         digest.update(text.encode())
         digest.update(b"\0")
@@ -387,6 +438,10 @@ def build(args):
         digest.update(rec["shape_sha1"].encode())
         digest.update(b"\0")
         digest.update(rec["cluster"].encode())
+        if resolve_plan:
+            digest.update((entry.get("resolved_text") or "").encode())
+            digest.update(json.dumps(entry.get("anaphora", []),
+                                     sort_keys=True).encode())
         digest.update(b"\n")
 
     meta = {"corpus": corpus,
@@ -394,6 +449,8 @@ def build(args):
             "count": len(sentences),
             "digest": digest.hexdigest(),
             "occurrences": {t: occurrences.get(t, 0) for t in sorted(parsed)}}
+    if getattr(args, "resolve", False):
+        meta["resolve"] = {"mentions": args.mentions, **resolve_stats}
     meta.update(sources_start)
     blob = {"meta": meta, "sentences": sentences, "outputs": outputs}
     if args.unparsed:
@@ -522,6 +579,10 @@ def main(argv=None):
     b.add_argument("--timeout", type=float, default=0, help="per-sentence cap (0=off)")
     b.add_argument("--unparsed", action="store_true",
                    help="record texts known/observed to fail parsing")
+    b.add_argument("--resolve", action="store_true",
+                   help="use card-context anaphora resolution before interpretation")
+    b.add_argument("--mentions", choices=("regex", "parser"), default="regex",
+                   help="mention inventory for --resolve (default regex)")
 
     d = sub.add_parser("diff", help="classify changes between two snapshots")
     d.add_argument("a")

@@ -146,6 +146,10 @@ def main():
                     help='count parsed sentences as covered even if the output is unparsed')
     ap.add_argument('--timeout', type=float, default=0,
                     help='per-sentence parse cap in seconds (0 = no cap)')
+    ap.add_argument('--resolve', action='store_true',
+                    help='use card-context anaphora resolution before interpretation')
+    ap.add_argument('--mentions', choices=('regex', 'parser'), default='regex',
+                    help='mention inventory for --resolve (default regex)')
     ap.add_argument('--seed', default=None,
                     help='path to an older parse_<hash>.json; for strictly-additive '
                          'grammar edits, trust its passing (1) sentences and re-parse only '
@@ -180,6 +184,19 @@ def main():
         items = [it for it in items if it[2] in keep]
         sets = [s for s in sets if s in keep]
         print(f"filtered to sets {sets}: {len(items)} cards")
+
+    resolve_plan = {}
+    resolve_stats = {}
+    resolve_t0 = time.time()
+    if args.resolve:
+        from coref.interpret_resolve import build_plan
+        resolve_plan, resolve_stats = build_plan(items, names, args.mentions, args.data)
+        print(f"[resolve] mentions={args.mentions} plan={len(resolve_plan)} "
+              f"changes={resolve_stats.get('sentences_changed', 0)} "
+              f"applied={resolve_stats.get('applied', 0)} "
+              f"reverted={resolve_stats.get('reverted', 0)} "
+              f"cards={resolve_stats.get('cards', 0)} "
+              f"in {time.time()-resolve_t0:.1f}s")
 
     # segment (cached: keyed by data hash + preprocess.py hash, so a change to
     # the segmentation logic invalidates it automatically)
@@ -218,6 +235,12 @@ def main():
     print(f"occurrences={total_occ}  unique_texts={len(uniq)}")
 
     # ---- parse cache ----
+    parse_texts = set(uniq)
+    if args.resolve:
+        for s in uniq:
+            rec = resolve_plan.get(s)
+            if rec and rec.get('resolved_text'):
+                parse_texts.add(rec['resolved_text'])
     gh = file_hash(GRAMMAR)
     parse_cache_path = os.path.join(CACHE, f'parse_{gh}.json')
     cache = {}
@@ -240,7 +263,7 @@ def main():
     seed_sample = []
     if args.seed and os.path.exists(args.seed) and not args.no_cache:
         seed = json.load(open(args.seed))
-        uniq_set = set(uniq)
+        uniq_set = set(parse_texts)
         new_passes = [t for t, v in seed.items() if v == 1 and t in uniq_set and t not in cache]
         if new_passes:
             import random
@@ -249,11 +272,11 @@ def main():
                 cache[t] = 1
             print(f"[seed] trusting {len(new_passes)} old passes ({os.path.basename(args.seed)}); spot-check {len(seed_sample)}")
 
-    todo = [s for s in uniq if s not in cache]
+    todo = [s for s in parse_texts if s not in cache]
     if seed_sample:
         todo_set = set(todo)
         todo += [s for s in seed_sample if s not in todo_set]
-    print(f"cache hits={len(uniq)-len(todo)}  to-parse={len(todo)}  workers={args.workers}")
+    print(f"cache hits={len(parse_texts)-len(todo)}  to-parse={len(todo)}  workers={args.workers}")
 
     def _save_parse_cache():
         if args.no_cache:
@@ -306,34 +329,57 @@ def main():
         print("all unique texts cached -> nothing to parse")
 
     # ---- roll up to occurrences ----
-    parse_ok = sum(1 for s in work if cache.get(s))
-    total = len(work)
+    def chosen_text(original):
+        rec = resolve_plan.get(original) if args.resolve else None
+        if rec and cache.get(rec.get('resolved_text')):
+            return rec['resolved_text']
+        return original
+
+    # Interpret both sides of a rewrite when available: a rewrite that parses
+    # but whose interpretation still carries an unparsed marker falls back to
+    # the original, so resolution never lowers honest coverage.
+    candidates = set()
+    for s in work:
+        for t in (s, chosen_text(s)):
+            if cache.get(t):
+                candidates.add(t)
     unparsed = {}
     if not args.lenient:
-        passing = [s for s in uniq if cache.get(s)]
+        passing = sorted(candidates)
         batches = list(_chunked(passing, max(1, args.chunk * 4)))
         with mp.Pool(args.workers, initializer=_init,
                      initargs=(GRAMMAR, types, names, args.timeout)) as pool:
             for res in pool.imap_unordered(_check_outputs, batches):
                 for s, bad in res:
                     unparsed[s] = bad
+
+    def final_text(original):
+        alt = chosen_text(original)
+        if alt != original and cache.get(alt) and not unparsed.get(alt):
+            return alt
+        return original
+
+    chosen = {s: final_text(s) for s in work}
+    parse_ok = sum(1 for s in work if cache.get(chosen[s]))
+    total = len(work)
     honest_ok = 0
     parse_fails = []
     interp_fails = []
     for s in work:
-        if not cache.get(s):
+        if not cache.get(chosen[s]):
             parse_fails.append(s)
-        elif unparsed.get(s):
+        elif unparsed.get(chosen[s]):
             interp_fails.append(s)
         else:
             honest_ok += 1
+    uniq_chosen = {chosen[s] for s in uniq if cache.get(chosen[s])}
     print(f"\n==== PARSE COVERAGE: {parse_ok}/{total} = {100*parse_ok/total:.1f}%  "
-          f"(unique {sum(cache.get(s,0) for s in uniq)}/{len(uniq)}) ====")
+          f"(unique {len(uniq_chosen)}/{len(uniq)}) ====")
     if args.lenient:
         print("==== HONEST COVERAGE: lenient (unparsed outputs counted as covered) ====")
     else:
         print(f"==== HONEST COVERAGE: {honest_ok}/{total} = {100*honest_ok/total:.1f}% "
-              f"(unique {sum(1 for s in uniq if cache.get(s) and not unparsed.get(s))}/{len(uniq)}) ====")
+              f"(unique {sum(1 for s in uniq if cache.get(chosen[s]) and not unparsed.get(chosen[s]))}/{len(uniq)}) ====")
     print(f"Failures (occurrences): parse_fail {len(parse_fails)} "
           f"(unique {len(set(parse_fails))}), interpret_unparsed {len(interp_fails)} "
           f"(unique {len(set(interp_fails))})")

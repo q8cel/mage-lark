@@ -405,3 +405,41 @@ Structured coverage under the current calibrated policy: 17,025/20,882
 moved from the earlier 85.0% because the concurrent calibrated policy change
 made many pre-existing list paths explicit; the before/after above uses the
 same current policy on both snapshots.
+
+## Card-aware interpretation (opt-in `--resolve`) 
+
+Flag: `tools/run.py --resolve [--mentions regex|parser]` and
+`tools/snapshot.py build --resolve [--mentions ...]`. Default is unchanged.
+
+Contract: the plan is keyed by the original segmented sentence and resolves the
+whole card with `rulecoref`; a rewritten sentence is interpreted only when it
+parses and its interpretation has no unparsed marker, otherwise the original
+sentence is used (so honest coverage never drops). Snapshot records keep the
+original key and add `resolved_text` + `anaphora:[{surface,antecedent,status}]`
+under `sentences[sid]`. Fallback rejected rewrites are counted in
+`meta.resolve` (`applied`/`reverted`, mentions source, plan cache state).
+
+FDN (260 anaphora cards, 474 anaphor occurrences):
+- anaphora markers in output (weighted occurrences): 144 -> **76 (regex)** /
+  **74 (parser)**; changed output sentences 76 / 79; honest 1,572/1,653
+  unchanged; parse 1,653/1,653.
+- rewrite decisions: regex 202 applied / 125 reverted; parser 200 / 94 (parser
+  mentions also skip 52 embedded slots vs 0 regex).
+- plan runtime: regex cache miss **192.6 s** -> cache hit **0.0 s**; parser plan
+  394 s (separate mentions key). Snapshot build with regex cache: 222.5 s cold,
+  **4.5 s warm**.
+- structured detector on FDN: base 84.2%, regex 83.6%, parser 83.8% (resolution
+  replaces some prose targets with concrete NPs; the detector's generic paths
+  see the new concrete text, so this small drop is not a lost structure).
+
+Standard sample (162 cards, 520 anaphora-bearing sentences, 329 unique parsed):
+- anaphora markers 83 -> 26; 72 rewritten-sentence outputs changed, 33 rewrites
+  fell back to the original; parse 487/520 and unparsed 74/520 unchanged.
+- structured coverage 256/329 = 77.8% on the sample.
+- sample plan 139.8 s (0.86 s/card); full sample parse+interpret both sides
+  756 s.
+
+Blast radius (current Standard corpus): **3,870 context-dependent sentences**
+(anaphor present and not the first segment) across 3,017 cards; current outputs
+carry `ref: anaphora` on **818 sentences / 873 markers / 1,988 weighted
+occurrences**. No grammar changes.
