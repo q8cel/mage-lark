@@ -17507,7 +17507,11 @@
   "modifier_prose": "modifier values containing with/greater/less/or more/or less (unless already structured)",
   "amount_mana": "amount values containing a mana symbol",
   "raw_cost": "cost values with spaces beyond mana symbols",
-  "anaphora": "its/their/his/her in a structured slot (possessive field excluded)"
+  "anaphora": "its/their/his/her in a structured slot (possessive field excluded)",
+  "path_aliases": {
+   "to": "destination",
+   "costs": "cost"
+  }
  },
  "rules": {
   "free_text": "legal only on a node with unparsed=true or type=unparsed",

@@ -1,0 +1,22 @@
+{
+  "comment": "Human-attested detector fixtures (review v3). Positives must be flagged; negatives are canonical closed values that must stay clean.",
+  "positives": [
+    {"id": "W005", "path": "[].effect[].to", "value": "to the battlefield transformed under its owner's control", "expect": "flag", "note": "alias to -> destination"},
+    {"id": "W031", "path": "[].cost[]", "value": "Tap four untapped tokens you control", "expect": "flag", "note": "whole sentence in a cost"},
+    {"id": "W014", "path": "[].trigger.event.verb", "value": "enters or attacks", "expect": "flag", "note": "compound verb"},
+    {"id": "W022", "path": "[].effect.target.card_type.value", "value": "instant or sorcery", "expect": "flag", "note": "compound type"},
+    {"id": "W025", "path": "[].effect.card.modifier", "value": "with mana value 3 or greater", "expect": "flag", "note": "prose modifier"},
+    {"id": "W040", "path": "[].effect.amount", "value": "{G} or {W}", "expect": "flag", "note": "mana choice"},
+    {"id": "W041", "path": "[].cost[]", "value": "Pay 2 life", "expect": "flag", "note": "cost phrase"},
+    {"id": "W049", "path": "[].effect.power", "value": "its", "expect": "flag", "note": "anaphoric possessive"},
+    {"id": "W030", "path": "[].effect.card.modifier", "value": "with mana value less than or equal to the number of lands you control", "expect": "flag", "note": "computed bound"},
+    {"id": "W032", "path": "[].trigger.event.verb", "value": "enters or attacks", "expect": "flag", "note": "true positive"}
+  ],
+  "negatives": [
+    {"id": "N1", "path": "[].effect.target.controller", "value": "you control", "expect": "clean"},
+    {"id": "N2", "path": "[].effect.card.card_type.value", "value": "nonbasic land", "expect": "clean"},
+    {"id": "N3", "path": "[].effect.target.modifier.which", "value": "the chosen", "expect": "clean"},
+    {"id": "N4", "path": "[].keywords.cost.mana", "value": "{2} {U}", "expect": "clean"},
+    {"id": "N5", "path": "[].trigger.when", "value": "Whenever", "expect": "clean"}
+  ]
+}
