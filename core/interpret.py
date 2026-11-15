@@ -627,15 +627,52 @@ class Interpreter:
                 if mctr:
                     ctr['kind'] = mctr.group(1)
             ct = obj.get('card_type')
-            if isinstance(ct, dict) and isinstance(ct.get('value'), str) \
-                    and (' or ' in ct['value'] or ',' in ct['value']):
+            def _split_type_value(v):
                 parts = [x.strip() for x in re.split(
-                    r'\s*,\s*(?:or\s+)?|\s+or\s+', ct['value']) if x.strip()]
+                    r'\s*,\s*(?:or\s+)?|\s+(?:or|and)\s+|\s+and/or\s+',
+                    v) if x.strip()]
+                parts = [re.sub(r'^both (?:a |an )?', '', x) for x in parts]
+                return parts
+            if isinstance(ct, dict) and isinstance(ct.get('value'), str) \
+                    and (' or ' in ct['value'] or ' and ' in ct['value']
+                         or ',' in ct['value']):
+                parts = _split_type_value(ct['value'])
                 if len(parts) > 1:
                     obj['card_type'] = [{'kind': 'type', 'value': x}
                                         for x in parts]
+            elif isinstance(ct, list):
+                expanded = []
+                changed = False
+                for item in ct:
+                    if isinstance(item, dict) and isinstance(item.get('value'), str) \
+                            and (' or ' in item['value'] or ' and ' in item['value']
+                                 or ',' in item['value']):
+                        parts = _split_type_value(item['value'])
+                        if len(parts) > 1:
+                            changed = True
+                            expanded.extend({'kind': item.get('kind', 'type'),
+                                             'value': x} for x in parts)
+                            continue
+                    expanded.append(item)
+                if changed:
+                    obj['card_type'] = expanded
             if isinstance(obj.get('possessor'), str) \
-                    and isinstance(obj.get('stat'), str) \
+                    and obj['possessor'].lower() in {'its', 'their', 'his', 'her'}:
+                obj['possessor'] = {'kind': 'anaphora',
+                                    'possessive': obj['possessor'].lower(),
+                                    'anaphor': True}
+            if isinstance(obj.get('stat'), str) and ' and ' in obj['stat']:
+                obj['stat'] = {'kind': 'stats',
+                               'values': [x.strip() for x in
+                                          obj['stat'].split(' and ')]}
+            ctr2 = obj.get('counter')
+            if isinstance(ctr2, dict) and isinstance(ctr2.get('kind'), str) \
+                    and ' and ' in ctr2['kind']:
+                ctr2['kind'] = {'kind': 'counter_list',
+                                'values': [x.strip() for x in
+                                           ctr2['kind'].split(' and ')]}
+            if isinstance(obj.get('possessor'), (str, dict)) \
+                    and isinstance(obj.get('stat'), (str, dict)) \
                     and 'kind' not in obj:
                 obj['kind'] = 'possessive'
             fev2 = obj.get('for_each')
@@ -652,6 +689,73 @@ class Interpreter:
                                               'ref': ref.replace(' ', '_'),
                                               'anaphor': True}}}
             mv = obj.get('modifier')
+            if isinstance(mv, str):
+                low_m = mv.strip().lower()
+                mstat = re.fullmatch(
+                    r'with (?:total )?(mana value|power|toughness) '
+                    r'([0-9]+|x) (?:or less|or greater|or more)', low_m)
+                if mstat:
+                    raw = mstat.group(2)
+                    obj['modifier'] = {
+                        'kind': 'stat_filter', 'stat': mstat.group(1),
+                        'op': '<=' if 'less' in low_m else '>=',
+                        'value': int(raw) if raw.isdigit() else 'X'}
+                elif re.fullmatch(r'with (?:total )?mana value (?:[0-9]+|x)', low_m):
+                    raw = low_m.rsplit(' ', 1)[-1]
+                    obj['modifier'] = {'kind': 'stat_filter',
+                                       'stat': 'mana value', 'op': '=',
+                                       'value': int(raw) if raw.isdigit() else 'X'}
+                else:
+                    mcount = re.fullmatch(
+                        r'with ([0-9]+|x|one|two|three|four|five|six|seven|eight|nine|ten) '
+                        r'or more (.+)', low_m)
+                    if mcount:
+                        raw = mcount.group(1)
+                        n = ({'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                              'five': 5, 'six': 6, 'seven': 7, 'eight': 8,
+                              'nine': 9, 'ten': 10}.get(raw,
+                              int(raw) if raw.isdigit() else 'X'))
+                        obj['modifier'] = {
+                            'kind': 'count_filter', 'min': n,
+                            'set': Interpreter._amount_ref(mcount.group(2))}
+                    elif low_m.startswith('exiled with '):
+                        with_text = low_m[len('exiled with '):]
+                        if with_text == '~':
+                            ref = {'kind': 'this_card', 'value': '~'}
+                        elif with_text == 'it':
+                            ref = {'kind': 'anaphora', 'possessive': 'it',
+                                   'anaphor': True}
+                        elif with_text.startswith('this '):
+                            ref = {'kind': 'this',
+                                   'card_class': with_text[len('this '):]}
+                        else:
+                            ref = Interpreter._amount_ref(with_text)
+                        obj['modifier'] = {'kind': 'event_filter',
+                                           'event': 'exiled', 'with': ref}
+                    elif low_m in ('with that name', 'with the chosen name'):
+                        obj['modifier'] = {'kind': 'name',
+                                           'which': 'that' if 'that' in low_m
+                                           else 'chosen'}
+                    elif low_m == 'with a single target':
+                        obj['modifier'] = {'kind': 'target_limit',
+                                           'single': True}
+                    else:
+                        mcomp = re.fullmatch(
+                            r'with (different|the same) (names?|powers?)', low_m)
+                        if mcomp:
+                            obj['modifier'] = {
+                                'kind': 'comparison',
+                                'mode': mcomp.group(1).replace('the ', ''),
+                                'property': mcomp.group(2).rstrip('s')}
+                        else:
+                            mctr2 = re.fullmatch(
+                                r'with (?:a|an|one|two|three|[0-9]+) (.+?) '
+                                r'counter on it', low_m)
+                            if mctr2:
+                                obj['modifier'] = {
+                                    'kind': 'counter_filter',
+                                    'counter': {'kind': mctr2.group(1)},
+                                    'on': 'it'}
             if isinstance(mv, str) and mv.strip().lower().startswith('that targets '):
                 rest = mv.strip().lower()[len('that targets '):]
                 only = single = False
@@ -5220,7 +5324,20 @@ class Interpreter:
         xdef = None
         for ch in children:
             if isinstance(ch, Token) and ch.type == 'LOY_COST':
-                cost = ch.value
+                raw = ch.value.strip().strip('[]').replace('−', '-')
+                m = re.fullmatch(r'([+-]?)([0-9]+|x)', raw.lower())
+                if m:
+                    sign = -1 if m.group(1) == '-' else 1
+                    v = m.group(2)
+                    cost = {'kind': 'cost', 'action': 'loyalty',
+                            'amount': {'kind': 'number',
+                                       'value': (int(v) * sign
+                                                 if v.isdigit() else 'X'),
+                                       'unit': 'loyalty'}}
+                    if v == 'x' and sign < 0:
+                        cost['amount']['sign'] = -1
+                else:
+                    cost = ch.value
             elif isinstance(ch, Tree) and ch.data in ('effect', 'triggered_sentence'):
                 eff = self.interp(ch)
             elif isinstance(ch, Tree) and ch.data == 'xdef_clause':

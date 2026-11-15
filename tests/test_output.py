@@ -506,7 +506,7 @@ add("deal-damage", "this enchantment deals 2 damage to that player",
 add("damage-equal-to-power",
     "It deals damage equal to its power to target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
-                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'possessive', 'possessor': 'its', 'stat': 'power'}}))
+                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'possessive', 'possessor': {'kind': 'anaphora', 'possessive': 'its', 'anaphor': True}, 'stat': 'power'}}))
 add("life-loss-equal-to-count",
     "Target opponent loses life equal to the number of creatures they control",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
@@ -1075,7 +1075,9 @@ add("counter-with-modifier",
     "Counter target spell with mana value X",
     lambda o: has(o, lambda d: d.get('verb') == 'counter'
                   and isinstance(d.get('spell'), dict)
-                  and 'mana value X' in str(d['spell'].get('modifier'))))
+                  and d['spell'].get('modifier') == {
+                      'kind': 'stat_filter', 'stat': 'mana value',
+                      'op': '=', 'value': 'X'}))
 
 add("unparsed-static-fallback",
     "Activate only if you control a Sliver",
