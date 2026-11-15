@@ -71,21 +71,27 @@ Honest counts a sentence only if it parses and its interpreted output carries no
 Honest unique: Standard 6,328/7,966 = 79.4%, classic 1,930/2,148 = 89.9%, FDN 716/761 = 94.1%.
 Phase trajectory: Standard honest 76.2% at the phase start -> **86.2%** at the freeze (ledger 1, measured at `9ade95c`, was 79.9%).
 
-## Final three-layer headline (master `f05bc59`, merged grammar `9256d36`)
-Parse, honest and structured are all occurrence-based. `structured of corpus` uses the corpus's total occurrences; `structured of parsed` uses parsed occurrences only. Honest is now the middle layer, not the headline: it only requires that a parsed output carry no `unparsed` marker.
+## Authoritative final table (master `5fc06ad`, merged grammar `9256d36`)
 
-| corpus | parse | honest | structured (of corpus) | structured (of parsed) | structured unique | stringy |
-|---|---:|---:|---:|---:|---:|---:|
-| Standard | 20,882 / 22,217 (94.0%) | 19,164 / 22,217 (86.3%) | 18,431 / 22,217 (83.0%) | 18,431 / 20,882 (88.3%) | 5,970 / 7,265 (82.2%; 74.9% of 7,966) | 393 texts / 798 occ |
-| classic | 4,217 / 4,280 (98.5%) | 4,002 / 4,280 (93.5%) | 3,833 / 4,280 (89.6%) | 3,833 / 4,217 (90.9%) | 1,803 / 2,090 (86.3%; 83.9% of 2,148) | 139 / 183 |
-| FDN | 1,653 / 1,653 (100%) | 1,572 / 1,653 (95.1%) | 1,488 / 1,653 (90.0%) | 1,488 / 1,653 (90.0%) | 672 / 761 (88.3%) | 45 / 85 |
+| layer | definition |
+|---|---|
+| parse | the sentence parses |
+| honest | parsed and the output carries no `unparsed` marker |
+| structured | honest and no stringy field under `review/stringy_policy.json` |
+| complete | structured and no structurally empty required slot |
 
-Phase trajectory (Standard, structured of parsed / stringy occurrences): 10,701 / 20,880 = 51.2% (v1) -> 17,257 / 20,880 = 82.6% (round one) -> **18,431 / 20,882 = 88.3%**; stringy 9,277 -> 2,062 -> **798**.
-Merged grammar: Standard parse 20,882 / 7,265 unique (was 20,880 / 7,264), classic 4,217 / 2,090 and FDN 1,653 / 761 unchanged -- no parse regression. Invariants on the final Standard snapshot: `bad_amount` 0, `bare_modifier` 0, `bare_fragment` 0, `raw_action` 50, `bad_quantifier` 49 (108 flags total, down from 173).
-Policy refresh: 1,856 paths (1,705 closed, 131 structured, 20 free text). Re-running the pre-refresh policy on the frozen snapshot gave 115 unclassified sites: 86 were canonical atoms/objects (controller/card_type/verb/which values such as 'you control', 'nonbasic land', 'is dealt', 'the chosen') and 29 were real prose, reclassified to their proper rules; 0 unclassified sites remain. The 136 `modifier` sites are real multi-word prose (137 after reclassification); the closed-vocabulary outlier guard added 24 real prose sites (27 -> 51).
-What is left (Standard stringy texts by family): modifier 133, object-phrase 60, closed-outlier 45, duration 27, phrase 26, destination 24, quoted-ability 24, counter 21, amount 20, timing 4. The remainder is a long tail: 217 of 275 (path, value-shape) families are single-text, carrying 54.9% of stringy family occurrences.
+| corpus | parse (of corpus) | honest (of corpus) | structured (of parsed) | complete (of parsed) | complete unique |
+|---|---:|---:|---:|---:|---:|
+| Standard | 20,882 / 22,217 (94.0%) | 19,164 / 22,217 (86.3%) | 17,488 / 20,882 (83.7%) | 17,476 / 20,882 (83.7%) | 5,544 / 7,265 (76.3%) |
+| classic | 4,217 / 4,280 (98.5%) | 4,002 / 4,280 (93.5%) | 3,632 / 4,217 (86.1%) | 3,606 / 4,217 (85.5%) | 1,681 / 2,090 (80.4%) |
+| FDN | 1,653 / 1,653 (100%) | 1,572 / 1,653 (95.1%) | 1,391 / 1,653 (84.2%) | 1,390 / 1,653 (84.1%) | 622 / 761 (81.7%) |
 
-## Structured headline (master `6972653`)
+Of corpus, structural completeness is Standard 17,476 / 22,217 = 78.7%, classic 3,606 / 4,280 = 84.3%, FDN 1,390 / 1,653 = 84.1%. Standard stringy is 839 texts / 1,788 occurrences; the only empty-slot shapes left are event/verb (12 texts / 16 occ) and target/type (2 / 5) -- cost/action fell from 479 texts / 912 occurrences to 0 when the fixer structured cost items.
+
+One walk, one truth: the earlier 74.8% stringy figure was the corrected list walk on the pre-fix snapshot; the fixer's 2,272 baseline used the pre-fix dict-only walk, which never saw strings inside lists. On this snapshot the corrected walk and the fixer's after count agree at **1,788 occurrences / 83.7% of parsed**. The pre-fix 74.8% is superseded.
+Human calibration: the first 50 v3 labels found three detector false negatives (compound atomic fields W014/W022, prose cost W031, possessive anaphora W049); `review/detector_fixtures.json` (15) and `review/structure_fixtures.json` (7) now cover them. A list-string walk bug found while building this table is why W031 was invisible to earlier stringy runs.
+
+## Structured headline (master `6972653`) — historical, superseded
 Honest is now an intermediate layer: it only requires that the parsed output carry no `unparsed` marker. The headline adds the stringiness policy (`review/stringy_policy.json`): every string field must be a closed vocabulary, a free-text marker, or a structured object.
 
 | corpus | parse occurrences | honest occurrences | structured occurrences | structured unique |
