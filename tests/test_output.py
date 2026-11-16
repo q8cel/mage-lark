@@ -506,7 +506,7 @@ add("deal-damage", "this enchantment deals 2 damage to that player",
 add("damage-equal-to-power",
     "It deals damage equal to its power to target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
-                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'possessive', 'possessor': {'kind': 'anaphora', 'possessive': 'its', 'anaphor': True}, 'stat': 'power'}}))
+                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'possessive', 'possessor': {'kind': 'anaphora', 'possessive': 'its', 'anaphor': True}, 'stat': 'power'}, 'relation': 'equal'}))
 add("life-loss-equal-to-count",
     "Target opponent loses life equal to the number of creatures they control",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
@@ -787,7 +787,7 @@ add("max-hand-size",
 add("draw-the-difference",
     "At the beginning of your end step, if you have fewer than ten cards in hand, draw cards equal to the difference",
     lambda o: has(o, lambda d: d.get('verb') == 'draw'
-                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'difference'}}))
+                  and d.get('amount') == {'kind': 'relative', 'of': {'kind': 'difference'}, 'relation': 'equal'}))
 add("type-disjunction",
     "Destroy target artifact or creature",
     lambda o: has(o, lambda d: (d.get('kind') == 'set'
