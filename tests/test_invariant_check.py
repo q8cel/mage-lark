@@ -53,6 +53,37 @@ def t_text_key_flagged():
     assert any(f[0] == 'fallback_text' for f in flags), flags
 
 
+def t_quantifier_range_ok():
+    out = [{'card': {'quantifier': {'at_least': 1, 'at_most': 2}}}]
+    flags = []
+    ic.check(out, 'synthetic', flags)
+    assert not any(f[0] == 'bad_quantifier' for f in flags), flags
+
+
+def t_quantifier_anaphor_ok():
+    out = [{'card': {'quantifier': 'that many'}},
+           {'card': {'quantifier': 'another'}}]
+    flags = []
+    ic.check(out, 'synthetic', flags)
+    assert not any(f[0] == 'bad_quantifier' for f in flags), flags
+
+
+def t_quantifier_only_card_ok():
+    out = [{'verb': 'put', 'card': {'quantifier': 1}, 'zone': 'hand'}]
+    flags = []
+    ic.check(out, 'synthetic', flags)
+    assert not any(f[0] == 'empty_target' for f in flags), flags
+
+
+def t_ability_object_not_empty():
+    out = [{'trigger': {'event': {'object': {
+        'card_type': {'kind': 'type', 'value': 'ability'},
+        'quantifier': 'an'}}}}]
+    flags = []
+    ic.check(out, 'synthetic', flags)
+    assert not any(f[0] == 'empty_target' for f in flags), flags
+
+
 CASES = [(k[2:], v) for k, v in sorted(globals().items()) if k.startswith('t_')]
 
 if __name__ == '__main__':

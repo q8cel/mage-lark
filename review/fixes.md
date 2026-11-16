@@ -652,3 +652,40 @@ Final plain-vs-resolved artifacts (same 22,217-record basis, after owner fix):
 
 Both are untracked and covered by `.gitignore`; plain compile took 1,148 s at
 6 workers with the owner-structure cache invalidation.
+
+## Invariant flag classes (current Standard snapshot)
+
+Initial current counts: raw_action 106, bad_quantifier 115, empty_target 13,
+unknown_zone 2 (total 236). Final: raw_action 67 only.
+
+- bad_quantifier 115 -> 0: numeric cost/target quantifiers become ints,
+  `up_to_one` -> `{up_to:1}`, `one or two` -> `{at_least:1, at_most:2}`,
+  `N or more` -> `{at_least:N}`. Checker accepts the legitimate anaphoric
+  quantifiers `another` and `that many`, plus `at_most`. Fixtures added in
+  tests/test_invariant_check.py.
+- empty_target 13 -> 0: a `card` with only a quantifier (`one`, `any number of`)
+  is semantically non-empty; a trigger object whose card_type is literally
+  `ability` is a real ability object, not a lost activated/triggered noun.
+  Checker changed accordingly; fixtures pin both.
+- unknown_zone 2 -> 0: `cards exiled with this creature` was emitted as a
+  pseudo-zone `this creature`; now `{state:'exiled', source:<target>}`.
+- raw_action 106 -> 67: structured the recurring shapes `it becomes plotted`
+  (8), pay life equal to mana value (9), return with finality counter (6),
+  up-to-three lore counters (3), additional combat/end step (5), untap +
+  additional combat (4), cast exiled nonland card until end of turn (4).
+  Residual 67 are long-tail replacement/compound actions (damage-plus,
+  token instead, extra phases, etc.) left for grammar/action work; not
+  suppressed.
+
+## Content-loss scan (label-free)
+
+Script: `swarm/scripts/content_loss_scan.py` (outside the repo), output
+`review/certain_defects.md` + `review/certain_defects.tsv` (top 100 by
+length × missing content units, with sentence, output, missing units).
+
+Current snapshot: 4,005 sentences >=12 words checked; 1,274 (31.8%) have at
+least one missing content unit after the explicit function-word allowlist and
+stemmed match against all JSON string values/keys/numbers. Top missing units:
+target 179, number 121, cast 119, equal 102, loses 96, among 70, turn 70,
+spell 62, card 56, greater 55. The list includes full unflagged long sentences,
+not just invariant-flagged ones; judgment cases remain in the file.

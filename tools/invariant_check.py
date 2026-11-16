@@ -44,9 +44,9 @@ ANAPHORIC_ZONE = {'them', 'it', 'those', 'these'}
 ZONE_PREPS     = {'from'}
 QUANT     = {'a', 'an', 'each', 'all', 'other', 'target', 'up', 'no', 'x', 'that', 'their',
              'the', 'any', 'every', 'any number of', 'up to', 'some',
-             'half', 'half the', 'one', 'one or more'}      # S24, S36, S42
+             'half', 'half the', 'one', 'one or more', 'another', 'that many', 'one or two'}      # S24, S36, S42
 # structured quantifier encodings: "up to N" / "one or more" (S13, S42)
-QUANT_KEYS = {'up_to', 'one_or_more', 'at_least'}
+QUANT_KEYS = {'up_to', 'one_or_more', 'at_least', 'at_most'}
 WORD_AMT  = {'a', 'an', 'x', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
              'nine', 'ten', 'each', 'equal'}
 PT_ITEM   = r'[+-]?(?:x|\d+)/[+-]?(?:x|\d+)'
@@ -77,7 +77,7 @@ OBJECTLESS_VERBS = {'no_untap', 'assign_combat', 'can_attack_as_though',
                     'attacks_each_combat'}
 # card_kind's literal ability alternatives lose the noun ("activated abilities" ->
 # kind=type value='activated'), leaving no real card type (S10).
-ABILITY_WORDS = {'activated', 'triggered', 'ability', 'abilities'}
+ABILITY_WORDS = {'activated', 'triggered'}
 
 
 def _amount_ok(a):
@@ -199,7 +199,7 @@ def check(out, sent, flags):
                             # "its activated abilities" loses the noun, leaving
                             # kind=type value='activated': no card type was captured.
                             flags.append(('empty_target', sent, f"card_type={val!r}"))
-                    if not any(x in v for x in ('kind', 'value', 'type', 'card_type', 'this_that', 'ref')):
+                    if not any(x in v for x in ('kind', 'value', 'type', 'card_type', 'this_that', 'ref', 'quantifier')):
                         # empty card placeholder on an intransitive action: the real
                         # target is the sentence-level subject, nothing was lost.
                         if not (k == 'card' and verb in OBJECTLESS_VERBS):

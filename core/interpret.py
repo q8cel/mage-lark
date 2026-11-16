@@ -578,7 +578,80 @@ class Interpreter:
 
     def _late_normalize(self, obj):
         """Structure values created after the normal child-finalizer pass."""
+        if isinstance(obj, dict) and obj.get('verb') == 'raw' \
+                and isinstance(obj.get('fragment'), str):
+            frag = obj['fragment'].strip()
+            low = frag.lower()
+            repl = None
+            if low == 'it becomes plotted':
+                repl = {'verb': 'become', 'state': 'plotted',
+                        'target': {'card_type': {'ref': 'anaphora',
+                                                 'raw': 'it'}}}
+            elif low.startswith('pay life equal to its mana value rather than'):
+                repl = {'verb': 'pay_life',
+                        'amount': {'kind': 'relative',
+                                   'of': {'kind': 'possessive',
+                                          'possessive': 'its',
+                                          'stat': 'mana_value'}},
+                        'instead_of': {'verb': 'pay_mana', 'object': 'mana_cost'}}
+            elif low.startswith('return that card under your control with a finality counter'):
+                repl = {'verb': 'return',
+                        'card': {'this_that': 'that',
+                                 'card_type': {'kind': 'type', 'value': 'card'}},
+                        'to': {'zone': 'battlefield', 'controller': 'you',
+                               'counter': {'kind': 'finality', 'count': 1}}}
+            elif low.startswith('put up to three lore counters on it'):
+                repl = {'verb': 'put_counter', 'count': {'up_to': 3},
+                        'counter': {'kind': 'lore'},
+                        'on': {'card_type': {'ref': 'anaphora', 'raw': 'it'}}}
+            elif low.startswith('untap him and there is an additional combat phase'):
+                repl = {'verb': 'and', 'items': [
+                    {'verb': 'untap',
+                     'card': {'card_type': {'ref': 'anaphora', 'raw': 'him'}}},
+                    {'verb': 'additional_phase', 'phase': 'combat',
+                     'position': 'after'}]}
+            elif re.fullmatch(r'there is an additional (combat phase|end step) after this (phase|step)', low):
+                m = re.match(r'there is an additional (combat phase|end step)', low)
+                repl = {'verb': 'additional_phase',
+                        'phase': ('combat' if 'combat' in m.group(1)
+                                  else 'end_step'),
+                        'position': 'after'}
+            elif low.startswith('you may cast the exiled nonland card until end of turn'):
+                repl = {'verb': 'may', 'inner': {
+                    'verb': 'cast',
+                    'card': {'status': ['exiled'],
+                             'card_type': {'kind': 'type', 'value': 'card'}},
+                    'duration': {'kind': 'until', 'event': 'end_of_turn'},
+                    'mana_any_type': True}}
+            if repl is not None:
+                obj.clear()
+                obj.update(repl)
         if isinstance(obj, dict):
+            qv = obj.get('quantifier')
+            if isinstance(qv, str):
+                low_q = qv.strip().lower()
+                words = {'two': 2, 'three': 3, 'four': 4, 'five': 5,
+                         'six': 6, 'seven': 7, 'eight': 8, 'nine': 9,
+                         'ten': 10}
+                if low_q in words:
+                    obj['quantifier'] = words[low_q]
+                elif low_q.startswith('up_to_'):
+                    raw_q = low_q[len('up_to_'):]
+                    obj['quantifier'] = {
+                        'up_to': int(raw_q) if raw_q.isdigit() else raw_q}
+                elif low_q == 'one or two':
+                    obj['quantifier'] = {'at_least': 1, 'at_most': 2}
+                else:
+                    mq = re.fullmatch(
+                        r'([0-9]+|one|two|three|four|five|six|seven|eight|nine|ten) or more',
+                        low_q)
+                    if mq:
+                        raw_q = mq.group(1)
+                        n = (int(raw_q) if raw_q.isdigit()
+                             else {'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                                   'five': 5, 'six': 6, 'seven': 7,
+                                   'eight': 8, 'nine': 9, 'ten': 10}[raw_q])
+                        obj['quantifier'] = {'at_least': n}
             cnv = obj.get('count')
             if isinstance(cnv, str):
                 low_cnt = cnv.strip().lower()
@@ -1206,11 +1279,12 @@ class Interpreter:
                                                             'value': 'cards'}},
                                           'zone': z}
                             elif al.startswith('cards exiled with '):
+                                src = among[len('cards exiled with '):].strip()
                                 of = {'card_target': {
                                           'card_type': {'kind': 'type',
                                                         'value': 'cards'}},
-                                      'zone': {'prep': 'exiled with',
-                                               'zone': among[len('cards exiled with '):].strip()}}
+                                      'state': 'exiled',
+                                      'source': self._simple_target(src)}
                             elif al.startswith('creatures you control'):
                                 of = {'card_target': self._simple_target(among)}
                             if of:
