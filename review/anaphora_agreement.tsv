@@ -1,229 +1,39 @@
 card	sid	sentence_index	surface	antecedent	antecedent_head_type	antecedent_number	violation_kind	severity	evidence
-Additive Evolution	60f119cbca02	1	It	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 110
-Alien Symbiosis	c0a66e3386c8	1	its	this card	card	sg	cross_clause	high	antecedent 'this card' starts after the anaphor at 93
-Angelic Destiny	60d89fd6c804	1	its	this card	card	sg	cross_clause	high	antecedent 'this card' starts after the anaphor at 108
-Archangel of Tithes	8b412791daab	1	their	those creatures	creature	pl	cross_clause	high	antecedent 'those creatures' starts after the anaphor at 108
-Archdruid's Charm	46145cb14fe2	0	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 74
-Archdruid's Charm	46145cb14fe2	0	It	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 74
-Archdruid's Charm	192fbc7ccf31	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 82
-Archdruid's Charm	192fbc7ccf31	1	It	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 82
-Archdruid's Charm	f6b86a19553d	2	It	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 149
-Avatar Destiny	7530edd56204	1	its	this card	card	sg	cross_clause	high	antecedent 'this card' starts after the anaphor at 132
-Avatar Destiny	1d00c38c195c	2	its	this card	card	sg	cross_clause	high	antecedent 'this card' starts after the anaphor at 199
-Bandit's Talent	a22207dd7cdb	0	they	that player	player	sg	cross_clause	high	antecedent 'that player' starts after the anaphor at 64
-Baron Helmut Zemo	73be06fac365	1	their	those exiled cards	card	pl	cross_clause	high	antecedent 'those exiled cards' starts after the anaphor at 166
-Belladonna Took	3f1367ec9c3e	1	it's	a card	card	sg	cross_clause	high	antecedent 'a card' starts after the anaphor at 119
-Beseech the Mirror	734c2c9e25ee	1	it	your hand	hand	sg	cross_clause	high	antecedent 'your hand' starts after the anaphor at 46
-Blazing Bomb	64ce86912d39	0	It	this creature	creature	sg	cross_clause	high	antecedent 'this creature' starts after the anaphor at 79
-Braided Net // Braided Quipu	0ac274b1f833	0	it	another target nonland permanent	permanent	sg	cross_clause	high	antecedent 'another target nonland permanent' starts after the anaphor at 48
 Break Out	4c599d44346c	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 142
-Brilliance Unleashed	6ceaf3013c42	3	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 116
-Caradora, Heart of Alacria	782fa9acb4cf	0	it	a creature	creature	sg	cross_clause	high	antecedent 'a creature' starts after the anaphor at 79
 Carnage, Crimson Chaos	dbbda2b3242f	2	it	this creature	creature	sg	cross_clause	high	antecedent 'this creature' starts after the anaphor at 117
-Case of the Stashed Skeleton	c1ae394934e3	0	it	a card	card	sg	cross_clause	high	antecedent 'a card' starts after the anaphor at 78
-Celestial Reunion	9475d75b22c9	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 186
-Champion of the Path	dae9a4d54e44	1	its	the exiled card	card	sg	cross_clause	high	antecedent 'the exiled card' starts after the anaphor at 148
-Chocobo Kick	5758c6733fe0	0	its	Target creature	creature	sg	cross_clause	high	antecedent 'Target creature' starts after the anaphor at 36
-Clash of Elements	155b51ba5181	1	it	the card	card	sg	cross_clause	high	antecedent 'the card' starts after the anaphor at 51
-Come Back Wrong	bbde2a9c7085	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 85
-Compel Brutality	cfae849bfc15	0	its	Target planeswalker	planeswalker	sg	cross_clause	high	antecedent 'Target planeswalker' starts after the anaphor at 65
-Cosmium Confluence	37f3bf589990	1	It	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 102
-Cracked Skull	09f7705037d5	2	it	enchanted creature	creature	sg	cross_clause	high	antecedent 'enchanted creature' starts after the anaphor at 105
-Cruelclaw's Heist	2a5bd6ef374e	2	it	that card	card	sg	cross_clause	high	antecedent 'that card' starts after the anaphor at 79
-Cut Propulsion	62cc4830da7d	0	itself	that creature	creature	sg	cross_clause	high	antecedent 'that creature' starts after the anaphor at 32
-Dazzling Denial	5c2a54a14983	0	its	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 28
-Deceit	12afa42e6336	0	it	their hand	hand	sg	cross_clause	high	antecedent 'their hand' starts after the anaphor at 55
-Deceit	b99f333bc64e	1	it	their hand	hand	sg	cross_clause	high	antecedent 'their hand' starts after the anaphor at 183
-Demonic Counsel	c70f4d721a4e	0	it	any card	card	pl	cross_clause	high	antecedent 'any card' starts after the anaphor at 45
-Dire Downdraft	6d14456b6ec3	0	it	attacking or tapped creature	creature	sg	cross_clause	high	antecedent 'attacking or tapped creature' starts after the anaphor at 37
-Dispelling Exhale	5c2a54a14983	1	its	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 95
-Donatello, Mutant Mechanic	0289b4bed249	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 65
-Donatello, Mutant Mechanic	0289b4bed249	1	it	an artifact	artifact	sg	cross_clause	high	antecedent 'an artifact' starts after the anaphor at 65
-Doom Reigns Supreme	cab70fbdd743	3	their	up to two spells	spell	pl	cross_clause	high	antecedent 'up to two spells' starts after the anaphor at 255
-Doran, Besieged by Time	6d9d4d3a0725	0	its	a creature	creature	sg	cross_clause	high	antecedent 'a creature' starts after the anaphor at 57
-Doubling Season	94a49a70a885	0	it	a permanent	permanent	sg	cross_clause	high	antecedent 'a permanent' starts after the anaphor at 65
 Dragonbroods' Relic	d98ce93ca44c	2	it	this token	token	sg	cross_clause	high	antecedent 'this token' starts after the anaphor at 192
-Dream Harvest	edbe5f8c4a14	0	their	exiled cards	card	pl	cross_clause	high	antecedent 'exiled cards' starts after the anaphor at 43
-Earthbender Ascension	5b67c7ea223e	1	It	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 95
-Earthbender Ascension	e9cb682ce77c	3	It	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 245
-Eluge, the Shoreless Sea	8748d1a3526c	2	it	each land	land	pl	cross_clause	high	antecedent 'each land' starts after the anaphor at 204
-Enduring Courage	9d3720257dbb	0	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 46
 Eriette, the Beguiler	e4d63fcd9b8a	1	that Aura	that permanent	permanent	sg	cross_clause	high	antecedent 'that permanent' starts after the anaphor at 137
-Esper Origins // Summon: Esper Maduin	a3d7ed0d546d	2	it	its owner	player	sg	cross_clause	high	antecedent 'its owner' starts after the anaphor at 75
-Expedited Inheritance	b542ff4a89c2	0	their	those cards	card	pl	cross_clause	high	antecedent 'those cards' starts after the anaphor at 94
-Explorer's Cache	53a5e0ff6a34	0	it	a creature	creature	sg	cross_clause	high	antecedent 'a creature' starts after the anaphor at 48
-Fated Firepower	2a9bcf496f37	1	it	a source	source	sg	cross_clause	high	antecedent 'a source' starts after the anaphor at 54
-Faunsbane Troll	04072fa3cf8f	0	it	that creature	creature	sg	cross_clause	high	antecedent 'that creature' starts after the anaphor at 67
-Fecund Greenshell	4388e36d8a16	3	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 253
-Formation Breaker	a8ccd798f166	0	it	a creature	creature	sg	cross_clause	high	antecedent 'a creature' starts after the anaphor at 65
+Esper Origins // Summon: Esper Maduin	a3d7ed0d546d	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 75
 Fortune, Loyal Steed	94898152e2cc	1	it	up to one creature	creature	sg	cross_clause	high	antecedent 'up to one creature' starts after the anaphor at 81
-Gathering Stone	c8ff86a7561a	3	it	the card	card	sg	cross_clause	high	antecedent 'the card' starts after the anaphor at 258
-Gnarlid Colony	40d86c27c017	1	it	Each creature	creature	pl	cross_clause	high	antecedent 'Each creature' starts after the anaphor at 43
 Goliath Daydreamer	fa65e4f6ee38	0	it	your graveyard	graveyard	sg	cross_clause	high	antecedent 'your graveyard' starts after the anaphor at 102
-Gonti, Night Minister	c23041cd48db	0	They	that opponent	opponent	sg	cross_clause	high	antecedent 'that opponent' starts after the anaphor at 32
-Gonti, Night Minister	0fb46a1f2a43	1	it	that card	card	sg	cross_clause	high	antecedent 'that card' starts after the anaphor at 227
-Grasping Shadows // Shadows' Lair	bd7c419a7fa2	0	it	this enchantment	enchantment	sg	cross_clause	high	antecedent 'this enchantment' starts after the anaphor at 47
-Guidelight Pathmaker	716adaf35815	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 96
-Guidelight Pathmaker	ad6e65571019	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 104
 Gwen Stacy // Ghost-Spider	7a0fbf231bd4	3	that card	the top card	card	sg	cross_clause	high	antecedent 'the top card' starts after the anaphor at 13
 Heaped Harvest	3a09cf720c5d	0	it	a basic land card	card	sg	cross_clause	high	antecedent 'a basic land card' starts after the anaphor at 49
-Into the Flood Maw	ddc8dc69ba16	1	its	target nonland permanent	permanent	sg	cross_clause	high	antecedent 'target nonland permanent' starts after the anaphor at 66
-Jace Reawakened	b257b61f8f29	3	it	a spell	spell	sg	cross_clause	high	antecedent 'a spell' starts after the anaphor at 200
-Jailbreak Scheme	1b25bce6b6d2	2	it	Target artifact or creature	creature	sg	cross_clause	high	antecedent 'Target artifact or creature' starts after the anaphor at 54
 Joshua, Phoenix's Dominant // Phoenix, Warden of Fire	e8f9f80ad1d1	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 27
-Justice, Vance Astrovik	3715c434065e	1	its	another nonland permanent	permanent	sg	cross_clause	high	antecedent 'another nonland permanent' starts after the anaphor at 77
-Kotis, the Fangkeeper	4de31643cc0b	1	their	any number of spells	spell	pl	cross_clause	high	antecedent 'any number of spells' starts after the anaphor at 84
-Kylox's Voltstrider	6825eaa0f966	1	it	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 182
-Kylox, Visionary Inventor	5fcecabe6fcb	1	their	the exiled cards	card	pl	cross_clause	high	antecedent 'the exiled cards' starts after the anaphor at 140
-Last Light of Durin's Day	9c79d4e05d39	1	it	a Dragon card	card	sg	cross_clause	high	antecedent 'a Dragon card' starts after the anaphor at 84
-Leyline of the Void	ff796ee6b020	0	it	a card	card	sg	cross_clause	high	antecedent 'a card' starts after the anaphor at 66
 Lilah, Undefeated Slickshot	e00a9ccf4f93	1	it	your graveyard	graveyard	sg	cross_clause	high	antecedent 'your graveyard' starts after the anaphor at 118
-Loch Mare	6ce042ec1ea3	0	it	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 50
-March of the World Ooze	3f62877bda79	0	their	an opponent	opponent	sg	cross_clause	high	antecedent 'an opponent' starts after the anaphor at 85
-Marshals' Pathcruiser	df82b559cadb	0	it	your hand	hand	sg	cross_clause	high	antecedent 'your hand' starts after the anaphor at 76
-Matterbending Mage	898d7ef88f9e	0	its	a spell	spell	sg	cross_clause	high	antecedent 'a spell' starts after the anaphor at 69
-Meathook Massacre II	b0c45867091e	2	it	a creature an opponent	creature	sg	cross_clause	high	antecedent 'a creature an opponent' starts after the anaphor at 199
-Mimeoplasm, Revered One	23377e972d45	1	it	target creature card	creature	sg	cross_clause	high	antecedent 'target creature card' starts after the anaphor at 63
-Mistbreath Elder	8d30449f151c	0	its	this creature	creature	sg	cross_clause	high	antecedent 'this creature' starts after the anaphor at 72
-Mjölnir, Hammer of Thor	2ccb871365ec	0	It	this card	card	sg	cross_clause	high	antecedent 'this card' starts after the anaphor at 15
-Nita, Forum Conciliator	c0cf66ab2be6	2	it	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 204
-No More Lies	81e2f86e35fd	0	its	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 28
 Not Dead After All	4f33e2400570	0	it	a Wicked Role token	token	sg	cross_clause	high	antecedent 'a Wicked Role token' starts after the anaphor at 86
-Null Summoner	3c751a868d80	0	it	their hand	hand	sg	cross_clause	high	antecedent 'their hand' starts after the anaphor at 39
-Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	0c4dee2a4ce0	1	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 58
-Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	0c4dee2a4ce0	1	it	its owner	player	sg	cross_clause	high	antecedent 'its owner' starts after the anaphor at 58
-Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	bfd56733af52	2	it	its owner	player	sg	cross_clause	high	antecedent 'its owner' starts after the anaphor at 96
-Parker Luck	810db6838bea	0	their	the other player	player	sg	cross_clause	high	antecedent 'the other player' starts after the anaphor at 82
-Parker Luck	ada3edc8f317	1	they	the other player	player	sg	cross_clause	high	antecedent 'the other player' starts after the anaphor at 97
-Parker Luck	ada3edc8f317	1	they	each put the card	card	sg	cross_clause	high	antecedent 'each put the card' starts after the anaphor at 97
-Parker Luck	4385f77bb6d6	2	they	each put the card	card	sg	cross_clause	high	antecedent 'each put the card' starts after the anaphor at 188
-Part in Friendship	8a20cb460928	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 203
-Portent of Calamity	5de14e03aee0	2	the rest	the exiled cards	card	pl	cross_clause	high	antecedent 'the exiled cards' starts after the anaphor at 115
-Presumed Dead	20e5de7bfa9c	0	it	its owner	player	sg	cross_clause	high	antecedent 'its owner' starts after the anaphor at 89
-Retched Wretch	c52c074821e3	0	it	its owner	player	sg	cross_clause	high	antecedent 'its owner' starts after the anaphor at 28
-Run Behind	b6e5a5fa6580	0	it	an attacking creature	creature	sg	cross_clause	high	antecedent 'an attacking creature' starts after the anaphor at 37
+Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	bfd56733af52	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 96
+Presumed Dead	20e5de7bfa9c	0	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 89
+Retched Wretch	c52c074821e3	0	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 28
 Sahagin	a481f43362b3	0	it	this creature	creature	sg	cross_clause	high	antecedent 'this creature' starts after the anaphor at 79
-Secret of Bloodbending	eddf3f361712	1	their	that player	player	sg	cross_clause	high	antecedent 'that player' starts after the anaphor at 101
-Seifer Almasy	adc808f58899	0	it	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 47
 Sidequest: Raise a Chocobo // Black Chocobo	997b337a304c	0	it	a land card	land	sg	cross_clause	high	antecedent 'a land card' starts after the anaphor at 80
-Sothera, the Supervoid	c7a9715df497	0	it	a creature card	creature	sg	cross_clause	high	antecedent 'a creature card' starts after the anaphor at 95
-Spikeshell Harrier	9d32f1d3398e	1	that opponent	each other player	player	pl	cross_clause	high	antecedent 'each other player' starts after the anaphor at 106
-Syncopate	2b9f214c8251	0	its	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 28
 Taigam, Master Opportunist	f16d305f5ae1	0	it	the spell	spell	sg	cross_clause	high	antecedent 'the spell' starts after the anaphor at 61
-Team Avatar	5409bf1bd7dd	0	It	this card	card	sg	cross_clause	high	antecedent 'this card' starts after the anaphor at 47
-Terra, Magical Adept // Esper Terra	c7168a212b02	1	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 0
-Tezzeret, Cruel Captain	d7db22f83dcc	2	it	an artifact card	artifact	sg	cross_clause	high	antecedent 'an artifact card' starts after the anaphor at 169
-The Cloning of Shredder	11d5c8927783	1	its	a card	card	sg	cross_clause	high	antecedent 'a card' starts after the anaphor at 145
-The Darkness Crystal	bd9628bcb21b	1	it	target creature card	creature	sg	cross_clause	high	antecedent 'target creature card' starts after the anaphor at 114
 The Emperor of Palamecia // The Lord Master of Hell	def3cd27d9d9	0	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 31
-The Emperor of Palamecia // The Lord Master of Hell	6c1f23d21862	2	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 150
 The Ooze	a10753b99fa8	0	it	a Mutagen token	token	sg	cross_clause	high	antecedent 'a Mutagen token' starts after the anaphor at 56
-Thranduil's Decree	adc3f0aefcb0	1	its	that card	card	sg	cross_clause	high	antecedent 'that card' starts after the anaphor at 102
-Thranduil's Decree	adc3f0aefcb0	1	it	that card	card	sg	cross_clause	high	antecedent 'that card' starts after the anaphor at 72
-Thunderbolts Conspiracy	057688626849	1	it	its owner	player	sg	cross_clause	high	antecedent 'its owner' starts after the anaphor at 50
-Thunderbolts Conspiracy	057688626849	1	its	That creature	creature	sg	cross_clause	high	antecedent 'That creature' starts after the anaphor at 78
+Thunderbolts Conspiracy	057688626849	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 50
 Tinybones, Bauble Burglar	906dbba36111	0	it	their graveyard	graveyard	sg	cross_clause	high	antecedent 'their graveyard' starts after the anaphor at 44
-Traveling Botanist	8600ca266f5c	1	it	the card	card	sg	cross_clause	high	antecedent 'the card' starts after the anaphor at 113
-Triple Triad	041b09179cd0	0	their	each other card	card	pl	cross_clause	high	antecedent 'each other card' starts after the anaphor at 68
-Turtle Van	bb753191c8a3	0	it	that creature	creature	sg	cross_clause	high	antecedent 'that creature' starts after the anaphor at 82
-Turtles in Time	88a86f60059e	0	their	Each player	player	pl	cross_clause	high	antecedent 'Each player' starts after the anaphor at 24
-Ultron, Artificial Malevolence	082635f79c74	1	it	the token	token	sg	cross_clause	high	antecedent 'the token' starts after the anaphor at 115
 Ultros, Obnoxious Octopus	0c44b8b16212	0	it	target creature an opponent	creature	sg	cross_clause	high	antecedent 'target creature an opponent' starts after the anaphor at 79
-Uneasy Partings	811bcfac206c	0	it	an attacking nontoken creature	creature	sg	cross_clause	high	antecedent 'an attacking nontoken creature' starts after the anaphor at 37
-Unexpected Request	5680fe29d364	2	it	an Equipment	equipment	sg	cross_clause	high	antecedent 'an Equipment' starts after the anaphor at 72
 Vaultborn Tyrant	a826479009f8	2	it's	a token	token	sg	cross_clause	high	antecedent 'a token' starts after the anaphor at 156
-Vibrance	9cb41ee701dd	0	it	a land card	card	sg	cross_clause	high	antecedent 'a land card' starts after the anaphor at 55
 Vibrance	6ff9cac6643f	1	it	a land card	card	sg	cross_clause	high	antecedent 'a land card' starts after the anaphor at 158
-Victor, Valgavoth's Seneschal	7bb1d21c524e	1	it's	a card	card	sg	cross_clause	high	antecedent 'a card' starts after the anaphor at 165
 Vincent Valentine // Galian Beast	a2b27ee6641b	1	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 20
-Vindictive Triumph	2b18faecd080	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 92
-Vision Quest	4281547c68f4	0	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 101
-Vito, Fanatic of Aclazotz	bd57badb4ce3	2	it's	each opponent	opponent	pl	cross_clause	high	antecedent 'each opponent' starts after the anaphor at 131
-Warrior's Blades	72deec5809b4	0	it	the creature	creature	sg	cross_clause	high	antecedent 'the creature' starts after the anaphor at 28
-We Say Thee Nay!	5c2a54a14983	1	its	that spell	spell	sg	cross_clause	high	antecedent 'that spell' starts after the anaphor at 39
-Whiskervale Forerunner	b81847aabf48	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 246
-Wickerfolk Thresher	225c4664ac22	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 182
 Wilt-Leaf Liege	75b358d9bd52	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 170
-Wishclaw Talisman	6b27a3073d3d	0	it	a card	card	sg	cross_clause	high	antecedent 'a card' starts after the anaphor at 49
-World Map	21562aca46f3	0	it	a land card	card	sg	cross_clause	high	antecedent 'a land card' starts after the anaphor at 85
-World War Hulk	afabcee16ad8	0	its	target creature	creature	sg	cross_clause	high	antecedent 'target creature' starts after the anaphor at 87
-Worlds Within Worlds	5e75665dd917	1	their	all cards	card	pl	cross_clause	high	antecedent 'all cards' starts after the anaphor at 75
-Yarus, Roar of the Old Gods	9c2c55d11f6c	2	it	its owner	player	sg	cross_clause	high	antecedent 'its owner' starts after the anaphor at 193
-Archangel of Tithes	8b412791daab	1	their	this creature	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Azure Beastbinder	a5a1d909d35f	1	it	an opponent	opponent	sg	kind_mismatch	high	object pronoun it bound to opponent 'an opponent'
-Azure Beastbinder	9795afb5b3d2	2	it	an opponent	opponent	sg	kind_mismatch	high	object pronoun it bound to opponent 'an opponent'
-Azure Beastbinder	373a99b05823	3	it	an opponent	opponent	sg	kind_mismatch	high	object pronoun it bound to opponent 'an opponent'
-Badgermole	46edd26d185e	1	them	this creature	creature	sg	kind_mismatch	high	plural possessive them bound to singular creature in player-position clause
-Brackish Blunder	95b37c180c3f	0	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Brackish Blunder	c423d369611a	1	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Brightglass Gearhulk	efd7aa5a2e23	1	them	up to two artifact	artifact	sg	kind_mismatch	high	plural possessive them bound to singular artifact in player-position clause
-Bulwark Ox	e84f1aedbcf9	1	them	this creature	creature	sg	kind_mismatch	high	plural possessive them bound to singular creature in player-position clause
-Cracked Skull	09f7705037d5	2	it	target player's hand	player	sg	kind_mismatch	high	"object pronoun it bound to player ""target player's hand"""
-Cracked Skull	e8453282d1e8	4	it	target player's hand	player	sg	kind_mismatch	high	"object pronoun it bound to player ""target player's hand"""
-Dawnhand Dissident	1aab310b988c	2	their	exiled with this creature	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Deep-Cavern Bat	ef5e8596d75e	2	it	target opponent's hand	opponent	sg	kind_mismatch	high	"object pronoun it bound to opponent ""target opponent's hand"""
-Desculpting Blast	9bc4dce97785	0	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Desculpting Blast	b47aba6fac63	1	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Don & Leo, Problem Solvers	6c35a074c890	2	their	the battlefield	battlefield	sg	kind_mismatch	high	plural possessive their bound to singular battlefield in player-position clause
-Esper Origins // Summon: Esper Maduin	a3d7ed0d546d	2	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Festival of Embers	74e32c4c3389	0	their	your graveyard	graveyard	sg	kind_mismatch	high	plural possessive their bound to singular graveyard in player-position clause
-Ghalta the Immovable	c2940cb143f0	1	they	This spell	spell	sg	kind_mismatch	high	plural possessive they bound to singular spell in player-position clause
-Grow from the Ashes	fec8e0d3b15a	2	them	a basic land card	card	sg	kind_mismatch	high	plural possessive them bound to singular card in player-position clause
-Honest Work	9df89400b182	1	it	an opponent	opponent	sg	kind_mismatch	high	object pronoun it bound to opponent 'an opponent'
-Honest Work	8931b1608727	2	it	an opponent	opponent	sg	kind_mismatch	high	object pronoun it bound to opponent 'an opponent'
-Hotshot Investigators	898d7ef88f9e	0	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Hotshot Investigators	4b81fa725275	1	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
+Yarus, Roar of the Old Gods	9c2c55d11f6c	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 193
 Ice Magic	3774c538c2da	2	their	Target creature's owner	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
 Ice Magic	c251b750caab	3	their	Target creature's owner	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Impostor Syndrome	02e93bccae52	0	it	a player	player	sg	kind_mismatch	high	object pronoun it bound to player 'a player'
-Infernal Vessel	9ffb6a7c4601	1	It's	its owner	player	sg	kind_mismatch	high	object pronoun It's bound to player 'its owner'
-Innkeeper's Talent	784fb7f4b74a	2	them	target creature	creature	sg	kind_mismatch	high	plural possessive them bound to singular creature in player-position clause
-Inspiring Paladin	340fa7502593	1	them	this creature	creature	sg	kind_mismatch	high	plural possessive them bound to singular creature in player-position clause
-Jailbreak Scheme	3c604abe8c1e	3	their	Target artifact or creature	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Leyline of Transformation	232c6319fb63	2	their	a creature	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Lost in Space	bea34f209729	0	their	Target artifact or creature	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Malcolm, Alluring Scoundrel	a7374df31b7a	2	it	a player	player	sg	kind_mismatch	high	object pronoun it bound to player 'a player'
-Malcolm, Alluring Scoundrel	c89d0f9be8ba	4	it	a player	player	sg	kind_mismatch	high	object pronoun it bound to player 'a player'
-Mardu Monument	e195c7acb024	2	They	this artifact	artifact	sg	kind_mismatch	high	plural possessive They bound to singular artifact in player-position clause
-Misleading Motes	816e16e56e0c	0	it	Target creature's owner	player	sg	kind_mismatch	high	"object pronoun it bound to player ""Target creature's owner"""
 Ninja Teen	bcf06c9f213f	5	their	the battlefield, each opponent	battlefield	sg	kind_mismatch	high	plural possessive their bound to singular battlefield in player-position clause
-Noctis, Prince of Lucis	028014432df5	1	their	your graveyard	graveyard	sg	kind_mismatch	high	plural possessive their bound to singular graveyard in player-position clause
-Oildeep Gearhulk	84fa1bc2a11f	2	it	target player's hand	player	sg	kind_mismatch	high	"object pronoun it bound to player ""target player's hand"""
-Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	0c4dee2a4ce0	1	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	bfd56733af52	2	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Omnipresence	d2621649ce38	0	their	your hand	hand	sg	kind_mismatch	high	plural possessive their bound to singular hand in player-position clause
-Omniscience	0871d788a668	0	their	your hand	hand	sg	kind_mismatch	high	plural possessive their bound to singular hand in player-position clause
-Osteomancer Adept	c2af1b5714c8	1	their	your graveyard	graveyard	sg	kind_mismatch	high	plural possessive their bound to singular graveyard in player-position clause
-Ovika, Enigma Goliath	f1638efe6ba4	3	They	that spell	spell	sg	kind_mismatch	high	plural possessive They bound to singular spell in player-position clause
-Paradox Surveyor	63d1a2aa791f	2	them	a land card or a card	card	sg	kind_mismatch	high	plural possessive them bound to singular card in player-position clause
-Parker Luck	ada3edc8f317	1	they	each put the card	card	sg	kind_mismatch	high	plural possessive they bound to singular card in player-position clause
-Planar Engineering	a73aba0e43a2	1	them	your library	library	sg	kind_mismatch	high	plural possessive them bound to singular library in player-position clause
-Presumed Dead	20e5de7bfa9c	0	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Push // Pull	f1638efe6ba4	1	They	the battlefield	battlefield	sg	kind_mismatch	high	plural possessive They bound to singular battlefield in player-position clause
-Recursive Recruitment	466bc97046bd	1	them	a graveyard	graveyard	sg	kind_mismatch	high	plural possessive them bound to singular graveyard in player-position clause
-Requiem Monolith	82fd1df33b8e	1	it	That creature's controller	player	sg	kind_mismatch	high	"object pronoun it bound to player ""That creature's controller"""
-Retched Wretch	c52c074821e3	0	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Return to the Sewers	816e16e56e0c	0	it	Target creature's owner	player	sg	kind_mismatch	high	"object pronoun it bound to player ""Target creature's owner"""
-Salt Road Skirmish	f1638efe6ba4	2	They	target creature	creature	sg	kind_mismatch	high	plural possessive They bound to singular creature in player-position clause
-Sanctum Lurker	0c64143d38f4	1	their	this creature	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Stargaze	b3c95992ac36	1	them	your library	library	sg	kind_mismatch	high	plural possessive them bound to singular library in player-position clause
-Sunpearl Kirin	b6ee793cf520	2	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Sunpearl Kirin	8ec841cd6346	3	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Thunderbolts Conspiracy	057688626849	1	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Thunderbolts Conspiracy	1d98a039171f	2	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Trip Up	38e0f69dc89b	0	their	Target nonland permanent	permanent	sg	kind_mismatch	high	plural possessive their bound to singular permanent in player-position clause
-Uncharted Voyage	816e16e56e0c	0	it	Target creature's owner	player	sg	kind_mismatch	high	"object pronoun it bound to player ""Target creature's owner"""
-Unlucky Drop	bea34f209729	0	their	Target artifact or creature	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
-Vanish from Sight	38e0f69dc89b	0	their	Target nonland permanent	permanent	sg	kind_mismatch	high	plural possessive their bound to singular permanent in player-position clause
-Vito, Fanatic of Aclazotz	bd57badb4ce3	2	it's	each opponent	opponent	pl	kind_mismatch	high	object pronoun it's bound to opponent 'each opponent'
-Vito, Fanatic of Aclazotz	7a8c5098a1c8	3	it's	each opponent	opponent	pl	kind_mismatch	high	object pronoun it's bound to opponent 'each opponent'
-Y'shtola Rhul	39e3ff237b84	1	it's	its owner	player	sg	kind_mismatch	high	object pronoun it's bound to player 'its owner'
-Yarus, Roar of the Old Gods	9c2c55d11f6c	2	it	its owner	player	sg	kind_mismatch	high	object pronoun it bound to player 'its owner'
-Bilbo, Luckwearer // Burglar's Plot	9d18ede0a573	0	that share a card	target nonland permanents	permanent	pl	not_a_mention	high	antecedent 'target nonland permanents' has no span/mention in the card text
+Requiem Monolith	82fd1df33b8e	1	it	That creature	player	sg	kind_mismatch	high	object pronoun it bound to player 'That creature'
 Bloomvine Regent // Claim Territory	420032220dc4	0	them	up to two basic Forest cards	card	pl	not_a_mention	high	antecedent 'up to two basic Forest cards' has no span/mention in the card text
 Brass's Tunnel-Grinder // Tecutlan, the Searing Rift	d1d0d39659b3	1	that spell	a permanent spell	permanent	sg	not_a_mention	high	antecedent 'a permanent spell' has no span/mention in the card text
 Callous Sell-Sword // Burn Together	08aeb5f53f76	0	its	Target creature	creature	sg	not_a_mention	high	antecedent 'Target creature' has no span/mention in the card text
-Callous Sell-Sword // Burn Together	08aeb5f53f76	0	it	Target creature	creature	sg	not_a_mention	high	antecedent 'Target creature' has no span/mention in the card text
 Callous Sell-Sword // Burn Together	4e26df8a314e	1	it	Target creature	creature	sg	not_a_mention	high	antecedent 'Target creature' has no span/mention in the card text
 Carnivorous Cultivator // Enroot	f2f7f2a1afd0	0	it	a land card	card	sg	not_a_mention	high	antecedent 'a land card' has no span/mention in the card text
 Clive, Ifrit's Dominant // Ifrit, Warden of Inferno	b14b8f743338	2	it	up to one other target creature	creature	sg	not_a_mention	high	antecedent 'up to one other target creature' has no span/mention in the card text
@@ -231,6 +41,7 @@ Decadent Dragon // Expensive Taste	f9d9d4e38f95	1	those cards	the top two cards	
 Decadent Dragon // Expensive Taste	f9d9d4e38f95	1	they	those cards	card	pl	not_a_mention	high	antecedent 'those cards' has no span/mention in the card text
 Derelict Attic // Widow's Walk	256666c5132c	0	it	a creature	creature	sg	not_a_mention	high	antecedent 'a creature' has no span/mention in the card text
 Dion, Bahamut's Dominant // Bahamut, Warden of Light	50498f30cb70	1	Those creatures	each other creature	creature	pl	not_a_mention	high	antecedent 'each other creature' has no span/mention in the card text
+Dion, Bahamut's Dominant // Bahamut, Warden of Light	652b493b5aba	3	it	target permanent	permanent	sg	not_a_mention	high	antecedent 'target permanent' has no span/mention in the card text
 Dire Flail // Dire Blunderbuss	3a2de521f270	0	its	this creature	creature	sg	not_a_mention	high	antecedent 'this creature' has no span/mention in the card text
 Diviner of Victory // Unwind History	1d69bad364c7	0	its	target creature an opponent	creature	sg	not_a_mention	high	antecedent 'target creature an opponent' has no span/mention in the card text
 Emeritus of Truce // Swords to Plowshares	20a904ae945d	1	Its	target creature	creature	sg	not_a_mention	high	antecedent 'target creature' has no span/mention in the card text
@@ -240,16 +51,11 @@ Emet-Selch, Unsundered // Hades, Sorcerer of Eld	6fad24a294a1	2	it	a card or tok
 Esper Origins // Summon: Esper Maduin	128eb8230164	1	it's	the top card	card	sg	not_a_mention	high	antecedent 'the top card' has no span/mention in the card text
 Esper Origins // Summon: Esper Maduin	128eb8230164	1	it	the top card	card	sg	not_a_mention	high	antecedent 'the top card' has no span/mention in the card text
 Flotsam // Jetsam	22131a5408a2	0	its	a spell	spell	sg	not_a_mention	high	antecedent 'a spell' has no span/mention in the card text
-Flotsam // Jetsam	22131a5408a2	0	it	a spell	spell	sg	not_a_mention	high	antecedent 'a spell' has no span/mention in the card text
 Flotsam // Jetsam	c45e9ac834a9	1	it	a spell	spell	sg	not_a_mention	high	antecedent 'a spell' has no span/mention in the card text
-Gandalf, Goblins' Bane // Flameshape	e2174f7d64be	0	them	the top two cards	card	pl	not_a_mention	high	antecedent 'the top two cards' has no span/mention in the card text
-Gandalf, Goblins' Bane // Flameshape	fe7c748db991	1	them	the top two cards	card	pl	not_a_mention	high	antecedent 'the top two cards' has no span/mention in the card text
 Gandalf, Goblins' Bane // Flameshape	fe7c748db991	1	they	the top two cards	card	pl	not_a_mention	high	antecedent 'the top two cards' has no span/mention in the card text
 Garland, Knight of Cornelia // Chaos, the Endless	abe736533945	1	it	~		sg	not_a_mention	high	antecedent '~' has no span/mention in the card text
 Garland, Knight of Cornelia // Chaos, the Endless	abe736533945	1	its	~		sg	not_a_mention	high	antecedent '~' has no span/mention in the card text
-Glamdring, Foe-hammer // Gleam of Death	8b54d17d4f89	0	them	six cards	card	pl	not_a_mention	high	antecedent 'six cards' has no span/mention in the card text
 Grave Researcher // Reanimate	3a69462455b1	1	that card	target creature card	creature	sg	not_a_mention	high	antecedent 'target creature card' has no span/mention in the card text
-Greenhouse // Rickety Gazebo	536a8688450e	0	them	four cards	card	pl	not_a_mention	high	antecedent 'four cards' has no span/mention in the card text
 Grub, Storied Matriarch // Grub, Notorious Auntie	d302256b028f	2	it	tapped and attacking token	token	sg	not_a_mention	high	antecedent 'tapped and attacking token' has no span/mention in the card text
 Horned Loch-Whale // Lagoon Breach	79882cccc4b9	0	it	target attacking creature	creature	sg	not_a_mention	high	antecedent 'target attacking creature' has no span/mention in the card text
 Horned Loch-Whale // Lagoon Breach	79882cccc4b9	0	their	The owner of target attacking creature you don't control	player	sg	not_a_mention	high	"antecedent ""The owner of target attacking creature you don't control"" has no span/mention in the card text"
@@ -258,21 +64,15 @@ Idol of the Deep King // Sovereign's Macuahuitl	848716697058	0	it	this Equipment
 Jade Seedstones // Jadeheart Attendant	afa88a8d00d5	0	it	the exiled card	card	sg	not_a_mention	high	antecedent 'the exiled card' has no span/mention in the card text
 Jecht, Reluctant Guardian // Braska's Final Aeon	0a70fee1e95e	1	their	Each opponent	opponent	pl	not_a_mention	high	antecedent 'Each opponent' has no span/mention in the card text
 Jidoor, Aristocratic Capital // Overture	adefbda1c52f	0	their	Target opponent	opponent	sg	not_a_mention	high	antecedent 'Target opponent' has no span/mention in the card text
+Jill, Shiva's Dominant // Shiva, Warden of Ice	652b493b5aba	2	it	Target creature	creature	sg	not_a_mention	high	antecedent 'Target creature' has no span/mention in the card text
 Kellan, the Fae-Blooded // Birthright Boon	1691ec2f8330	0	it	an Aura or Equipment	equipment	sg	not_a_mention	high	antecedent 'an Aura or Equipment' has no span/mention in the card text
 Kirol, History Buff // Pack a Punch	4a40a03f8b22	2	It	target creature	creature	sg	not_a_mention	high	antecedent 'target creature' has no span/mention in the card text
 Kuja, Genome Sorcerer // Trance Kuja, Fate Defied	c920649b7424	0	it	a permanent or player	permanent	sg	not_a_mention	high	antecedent 'a permanent or player' has no span/mention in the card text
-Lake-town Mariners // Gone Fishing	f3cf73e38855	0	them	target creatures	creature	pl	not_a_mention	high	antecedent 'target creatures' has no span/mention in the card text
-Lake-town Mariners // Gone Fishing	f3cf73e38855	0	their	target creatures	creature	pl	not_a_mention	high	antecedent 'target creatures' has no span/mention in the card text
-Most Decrepit Old Bird // Speak Secrets	5c5907450016	0	them	four cards	card	pl	not_a_mention	high	antecedent 'four cards' has no span/mention in the card text
-Norman Osborn // Green Goblin	c9ecb966490d	3	its	Each nonland card	card	pl	not_a_mention	high	antecedent 'Each nonland card' has no span/mention in the card text
+Norman Osborn // Green Goblin	c9ecb966490d	3	its	your graveyard	graveyard	sg	not_a_mention	high	antecedent 'your graveyard' has no span/mention in the card text
 Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	09099283fd1c	3	it	this land	land	sg	not_a_mention	high	antecedent 'this land' has no span/mention in the card text
-Oko, Lorwyn Liege // Oko, Shadowmoor Scion	4d3d5ca27c19	3	them	three cards	card	pl	not_a_mention	high	antecedent 'three cards' has no span/mention in the card text
 Pigment Wrangler // Striking Palette	342d95dc15c9	0	that spell	an instant or sorcery spell	spell	sg	not_a_mention	high	antecedent 'an instant or sorcery spell' has no span/mention in the card text
-Push // Pull	f1638efe6ba4	1	They	the battlefield	battlefield	sg	not_a_mention	high	antecedent 'the battlefield' has no span/mention in the card text
-Push // Pull	14b959b6234e	2	them	the battlefield	battlefield	sg	not_a_mention	high	antecedent 'the battlefield' has no span/mention in the card text
 Questing Druid // Seek the Beast	c9ad60d78d0b	1	those cards	the top two cards	card	pl	not_a_mention	high	antecedent 'the top two cards' has no span/mention in the card text
 Sagu Wildling // Roost Seek	2db4b2b8e7e3	0	it	a basic land card	card	sg	not_a_mention	high	antecedent 'a basic land card' has no span/mention in the card text
-Saheeli's Lattice // Mastercraft Raptor	8eafa53055cb	0	it	the exiled cards	card	pl	not_a_mention	high	antecedent 'the exiled cards' has no span/mention in the card text
 Sanar, Unfinished Genius // Wild Idea	0b7f29ea0e65	0	it	an instant or sorcery card	card	sg	not_a_mention	high	antecedent 'an instant or sorcery card' has no span/mention in the card text
 Scalding Viper // Steam Clean	9bc4dce97785	0	its	target nonland permanent	permanent	sg	not_a_mention	high	antecedent 'target nonland permanent' has no span/mention in the card text
 Sidequest: Hunt the Mark // Yiazmat, Ultimate Mark	da3f8f256684	1	it	~		sg	not_a_mention	high	antecedent '~' has no span/mention in the card text
@@ -280,25 +80,14 @@ Skycoach Conductor // All Aboard	211b2a204b03	0	that card	target non-Pilot creat
 Skycoach Conductor // All Aboard	211b2a204b03	0	its	that card	card	sg	not_a_mention	high	antecedent 'that card' has no span/mention in the card text
 Spellscorn Coven // Take It Back	d31a0835060a	0	its	target spell	spell	sg	not_a_mention	high	antecedent 'target spell' has no span/mention in the card text
 Studious First-Year // Rampant Growth	1ab420d4b277	0	that card	a basic land card	card	sg	not_a_mention	high	antecedent 'a basic land card' has no span/mention in the card text
-Sunbird Standard // Sunbird Effigy	e45a86338e60	1	it	the exiled cards	card	pl	not_a_mention	high	antecedent 'the exiled cards' has no span/mention in the card text
 Tarrian's Journal // The Tomb of Aclazotz	a5226a07ac65	2	it	a creature spell	creature	sg	not_a_mention	high	antecedent 'a creature spell' has no span/mention in the card text
 Tarrian's Journal // The Tomb of Aclazotz	a5226a07ac65	2	its	a creature spell	creature	sg	not_a_mention	high	antecedent 'a creature spell' has no span/mention in the card text
 Terra, Magical Adept // Esper Terra	c7168a212b02	1	It	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	c7168a212b02	1	it	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	c7168a212b02	1	it	target nonlegendary enchantment	enchantment	sg	not_a_mention	high	antecedent 'target nonlegendary enchantment' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	c74ee58259f3	2	It	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
 Terra, Magical Adept // Esper Terra	c74ee58259f3	2	it's	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
 Terra, Magical Adept // Esper Terra	c74ee58259f3	2	it	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	c74ee58259f3	2	it	target nonlegendary enchantment	enchantment	sg	not_a_mention	high	antecedent 'target nonlegendary enchantment' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	bfdca5c6216f	3	It	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	bfdca5c6216f	3	it	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
 Terra, Magical Adept // Esper Terra	bfdca5c6216f	3	it	target nonlegendary enchantment	enchantment	sg	not_a_mention	high	antecedent 'target nonlegendary enchantment' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	652b493b5aba	5	It	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	652b493b5aba	5	it	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
 Terra, Magical Adept // Esper Terra	652b493b5aba	5	it	target nonlegendary enchantment	enchantment	sg	not_a_mention	high	antecedent 'target nonlegendary enchantment' has no span/mention in the card text
 The Arkenstone // Seek the Heart	8a9e0a20af9d	0	it	a legendary creature card	creature	sg	not_a_mention	high	antecedent 'a legendary creature card' has no span/mention in the card text
-The Enigma Jewel // Locus of Enlightenment	1469bb9dc81f	0	it	an ability		sg	not_a_mention	high	antecedent 'an ability' has no span/mention in the card text
-The Enigma Jewel // Locus of Enlightenment	1577361a4058	1	it	an ability		sg	not_a_mention	high	antecedent 'an ability' has no span/mention in the card text
 The Enigma Jewel // Locus of Enlightenment	feca769d0e96	2	it	an ability		sg	not_a_mention	high	antecedent 'an ability' has no span/mention in the card text
 The Everflowing Well // The Myriad Pools	3f8cbfa38921	1	that spell	a permanent spell	permanent	sg	not_a_mention	high	antecedent 'a permanent spell' has no span/mention in the card text
 The Rise of Sozin // Fire Lord Sozin	f796f14d6f4d	2	that player	a player	player	sg	not_a_mention	high	antecedent 'a player' has no span/mention in the card text
@@ -307,7 +96,6 @@ Tony Stark // The Invincible Iron Man	4996b1d5ed43	2	it's	the battlefield	battle
 Tony Stark // The Invincible Iron Man	4996b1d5ed43	2	it	the battlefield	battlefield	sg	not_a_mention	high	antecedent 'the battlefield' has no span/mention in the card text
 Twining Twins // Swift Spiral	29726a644252	1	it	target nontoken creature	creature	sg	not_a_mention	high	antecedent 'target nontoken creature' has no span/mention in the card text
 Twining Twins // Swift Spiral	29726a644252	1	its	target nontoken creature	creature	sg	not_a_mention	high	antecedent 'target nontoken creature' has no span/mention in the card text
-Twists and Turns // Mycoid Maze	286e38734a3e	2	them	the top four cards	card	pl	not_a_mention	high	antecedent 'the top four cards' has no span/mention in the card text
 Twists and Turns // Mycoid Maze	3fe0fc2bd9bc	3	the rest	the top four cards	card	pl	not_a_mention	high	antecedent 'the top four cards' has no span/mention in the card text
 Unstable Glyphbridge // Sandswirl Wanderglyph	7ac7e564709a	1	their	an opponent	opponent	sg	not_a_mention	high	antecedent 'an opponent' has no span/mention in the card text
 Unstable Glyphbridge // Sandswirl Wanderglyph	7ac7e564709a	1	they	an opponent	opponent	sg	not_a_mention	high	antecedent 'an opponent' has no span/mention in the card text
@@ -316,141 +104,27 @@ Vastlands Scavenger // Bind to Life	f45afe06d5e2	1	them	seven cards	card	pl	not_
 Venat, Heart of Hydaelyn // Hydaelyn, the Mothercrystal	7136b433c7f6	2	it	another target creature	creature	sg	not_a_mention	high	antecedent 'another target creature' has no span/mention in the card text
 Venat, Heart of Hydaelyn // Hydaelyn, the Mothercrystal	4f6797e496bf	3	that creature	another target creature	creature	sg	not_a_mention	high	antecedent 'another target creature' has no span/mention in the card text
 Walk-In Closet // Forgotten Cellar	de094d619488	0	it	a card	card	sg	not_a_mention	high	antecedent 'a card' has no span/mention in the card text
-Arcanis the Omnipotent	dc708a81bc0a	1	its	three cards	card	pl	number_mismatch	high	its (sg) bound to 'three cards' (pl)
-Artistic Process	5d3d9f2e88c3	2	It	each creature	creature	pl	number_mismatch	high	It (sg) bound to 'each creature' (pl)
-Artistic Process	5680fe29d364	3	It	each creature	creature	pl	number_mismatch	high	It (sg) bound to 'each creature' (pl)
-Avatar Destiny	7530edd56204	1	its	each creature card	creature	pl	number_mismatch	high	its (sg) bound to 'each creature card' (pl)
-Avatar Destiny	1d00c38c195c	2	its	each creature card	creature	pl	number_mismatch	high	its (sg) bound to 'each creature card' (pl)
-Avatar Destiny	5c8ab8d79b16	3	its	each creature card	creature	pl	number_mismatch	high	its (sg) bound to 'each creature card' (pl)
-Back for Seconds	09a69fcb4e84	2	it	those cards	card	pl	number_mismatch	high	it (sg) bound to 'those cards' (pl)
-Baron Helmut Zemo	73be06fac365	1	their	your graveyard	graveyard	sg	number_mismatch	high	their (pl) bound to 'your graveyard' (sg)
-Baron Helmut Zemo	8ce6ef7d1f8c	2	their	your graveyard	graveyard	sg	number_mismatch	high	their (pl) bound to 'your graveyard' (sg)
-Bedrock Tortoise	bfe07797c1ac	1	its	Each creature	creature	pl	number_mismatch	high	its (sg) bound to 'Each creature' (pl)
-Bioengineered Future	d3cd5620e407	1	it	Each creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each creature' (pl)
-Brightglass Gearhulk	efd7aa5a2e23	1	them	up to two artifact	artifact	sg	number_mismatch	high	them (pl) bound to 'up to two artifact' (sg)
-Cosmogoyf	9ee8c2b4f1c8	0	its	~'s		pl	number_mismatch	high	"its (sg) bound to ""~'s"" (pl)"
-Curious Colossus	d2362d9db944	0	its	each creature target opponent	creature	pl	number_mismatch	high	its (sg) bound to 'each creature target opponent' (pl)
-Dawnhand Dissident	1aab310b988c	2	their	exiled with this creature	creature	sg	number_mismatch	high	their (pl) bound to 'exiled with this creature' (sg)
-Demonic Counsel	c70f4d721a4e	0	it	any card	card	pl	number_mismatch	high	it (sg) bound to 'any card' (pl)
-Demonic Counsel	d83e2180d53d	1	it	any card	card	pl	number_mismatch	high	it (sg) bound to 'any card' (pl)
-Diligent Zookeeper	843e80c486ce	0	its	Each non-Human creature	creature	pl	number_mismatch	high	its (sg) bound to 'Each non-Human creature' (pl)
 Does Machines	0289b4bed249	5	it	target artifact	card	pl	number_mismatch	high	it (sg) bound to 'target artifact' (pl)
 Does Machines	0289b4bed249	5	its	target artifact	card	pl	number_mismatch	high	its (sg) bound to 'target artifact' (pl)
-Don & Leo, Problem Solvers	6c35a074c890	2	them	up to one target creature	creature	sg	number_mismatch	high	them (pl) bound to 'up to one target creature' (sg)
-Don & Leo, Problem Solvers	6c35a074c890	2	their	the battlefield	battlefield	sg	number_mismatch	high	their (pl) bound to 'the battlefield' (sg)
-Doran, Besieged by Time	6d9d4d3a0725	0	its	Each creature spell	creature	pl	number_mismatch	high	its (sg) bound to 'Each creature spell' (pl)
-Doran, Besieged by Time	c14382ff6406	1	its	Each creature spell	creature	pl	number_mismatch	high	its (sg) bound to 'Each creature spell' (pl)
-Doubling Season	94a49a70a885	0	it	one or more tokens	token	pl	number_mismatch	high	it (sg) bound to 'one or more tokens' (pl)
-Doubling Season	6f444c4118f0	1	it	one or more tokens	token	pl	number_mismatch	high	it (sg) bound to 'one or more tokens' (pl)
-Drix Fatemaker	ff65180ba1d3	1	it	Each creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each creature' (pl)
-Edgar, Moonlit Sovereign	9daf7808aaf9	2	it	each creature	creature	pl	number_mismatch	high	it (sg) bound to 'each creature' (pl)
-Eluge, the Shoreless Sea	8748d1a3526c	2	it	each land	land	pl	number_mismatch	high	it (sg) bound to 'each land' (pl)
-Eluge, the Shoreless Sea	7674f27cfc7b	3	it	each land	land	pl	number_mismatch	high	it (sg) bound to 'each land' (pl)
-Elvish Refueler	1eb64f555c8d	0	they	an exhaust ability		sg	number_mismatch	high	they (pl) bound to 'an exhaust ability' (sg)
-Extraordinary Journey	e109f0533b5e	1	it	each of those cards, its owner	card	pl	number_mismatch	high	it (sg) bound to 'each of those cards, its owner' (pl)
-Extraordinary Journey	f5c446f06002	3	it	each of those cards, its owner	card	pl	number_mismatch	high	it (sg) bound to 'each of those cards, its owner' (pl)
-Fear of Abduction	2f9b95e0b42a	0	it	each card	card	pl	number_mismatch	high	it (sg) bound to 'each card' (pl)
-Fear of Abduction	7903bacc7c79	3	it	each card	card	pl	number_mismatch	high	it (sg) bound to 'each card' (pl)
-Fear of Abduction	7903bacc7c79	3	its	each card	card	pl	number_mismatch	high	its (sg) bound to 'each card' (pl)
-Festival of Embers	74e32c4c3389	0	their	your graveyard	graveyard	sg	number_mismatch	high	their (pl) bound to 'your graveyard' (sg)
-Foggy Swamp Visions	c05b57cd1f86	0	it	each creature card	creature	pl	number_mismatch	high	it (sg) bound to 'each creature card' (pl)
-Foggy Swamp Visions	30fd5627ce78	2	it	each creature card	creature	pl	number_mismatch	high	it (sg) bound to 'each creature card' (pl)
-Gallia, the Merrymaker	b229e0610cb8	1	it	Each other creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each other creature' (pl)
-Ghalta the Immovable	bfe07797c1ac	2	its	Each creature	creature	pl	number_mismatch	high	its (sg) bound to 'Each creature' (pl)
-Gnarlid Colony	40d86c27c017	1	it	Each creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each creature' (pl)
-Gnarlid Colony	ff65180ba1d3	2	it	Each creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each creature' (pl)
-Great Train Heist	960625498efc	2	it's	all creatures	creature	pl	number_mismatch	high	it's (sg) bound to 'all creatures' (pl)
-Great Ugly-Looking Goblin // Clap! Snap!	272b73e75547	0	it	Each creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each creature' (pl)
-Grow from the Ashes	fec8e0d3b15a	2	them	a basic land card	card	sg	number_mismatch	high	them (pl) bound to 'a basic land card' (sg)
 Ice Magic	3774c538c2da	2	their	Target creature's owner	creature	sg	number_mismatch	high	"their (pl) bound to ""Target creature's owner"" (sg)"
 Ice Magic	c251b750caab	3	their	Target creature's owner	creature	sg	number_mismatch	high	"their (pl) bound to ""Target creature's owner"" (sg)"
-Innkeeper's Talent	784fb7f4b74a	2	them	target creature	creature	sg	number_mismatch	high	them (pl) bound to 'target creature' (sg)
-Inspiring Call	af79e6815056	0	it	each creature	creature	pl	number_mismatch	high	it (sg) bound to 'each creature' (pl)
-Jailbreak Scheme	3c604abe8c1e	3	their	Target artifact or creature	creature	sg	number_mismatch	high	their (pl) bound to 'Target artifact or creature' (sg)
-Krenko's Buzzcrusher	5a44f50b3618	2	its	each land	land	pl	number_mismatch	high	its (sg) bound to 'each land' (pl)
-Kutzil, Malamet Exemplar	219a420e16d5	1	its	one or more creatures	creature	pl	number_mismatch	high	its (sg) bound to 'one or more creatures' (pl)
-Leyline of Transformation	232c6319fb63	2	their	a creature	creature	sg	number_mismatch	high	their (pl) bound to 'a creature' (sg)
-Lifecraft Engine	a7443d40ebac	1	their	a creature	creature	sg	number_mismatch	high	their (pl) bound to 'a creature' (sg)
-Lost in Space	bea34f209729	0	their	Target artifact or creature	creature	sg	number_mismatch	high	their (pl) bound to 'Target artifact or creature' (sg)
-Machinist's Arsenal	f1f4e0cc7988	1	its	each artifact	artifact	pl	number_mismatch	high	its (sg) bound to 'each artifact' (pl)
-Michelangelo, Mutant BFF	9162a673587e	0	it	Each creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each creature' (pl)
 Ninja Teen	bcf06c9f213f	5	their	the battlefield, each opponent	battlefield	sg	number_mismatch	high	their (pl) bound to 'the battlefield, each opponent' (sg)
-Noctis, Prince of Lucis	028014432df5	1	their	your graveyard	graveyard	sg	number_mismatch	high	their (pl) bound to 'your graveyard' (sg)
-Norman Osborn // Green Goblin	c9ecb966490d	3	its	Each nonland card	card	pl	number_mismatch	high	its (sg) bound to 'Each nonland card' (pl)
-Northampton Farm	3aca99118d22	3	its	each other card	card	pl	number_mismatch	high	its (sg) bound to 'each other card' (pl)
-Omnipresence	d2621649ce38	0	their	your hand	hand	sg	number_mismatch	high	their (pl) bound to 'your hand' (sg)
-Omniscience	0871d788a668	0	their	your hand	hand	sg	number_mismatch	high	their (pl) bound to 'your hand' (sg)
-Osteomancer Adept	c2af1b5714c8	1	their	your graveyard	graveyard	sg	number_mismatch	high	their (pl) bound to 'your graveyard' (sg)
-Ovika, Enigma Goliath	f1638efe6ba4	3	They	that spell	spell	sg	number_mismatch	high	They (pl) bound to 'that spell' (sg)
-Paradox Surveyor	63d1a2aa791f	2	them	a land card or a card	card	sg	number_mismatch	high	them (pl) bound to 'a land card or a card' (sg)
-Parker Luck	ada3edc8f317	1	they	each put the card	card	sg	number_mismatch	high	they (pl) bound to 'each put the card' (sg)
-Parker Luck	4385f77bb6d6	2	they	each put the card	card	sg	number_mismatch	high	they (pl) bound to 'each put the card' (sg)
-Petrified Hamlet	12b5ab983e93	1	they	a land card	card	sg	number_mismatch	high	they (pl) bound to 'a land card' (sg)
-Pinnacle Starcage	d338b07a792d	1	its	each card	card	pl	number_mismatch	high	its (sg) bound to 'each card' (pl)
-Planar Engineering	a73aba0e43a2	1	them	your library	library	sg	number_mismatch	high	them (pl) bound to 'your library' (sg)
-Push // Pull	f1638efe6ba4	1	They	the battlefield	battlefield	sg	number_mismatch	high	They (pl) bound to 'the battlefield' (sg)
-Push // Pull	14b959b6234e	2	them	the battlefield	battlefield	sg	number_mismatch	high	them (pl) bound to 'the battlefield' (sg)
-Push the Limit	14b959b6234e	1	them	the battlefield	battlefield	sg	number_mismatch	high	them (pl) bound to 'the battlefield' (sg)
-Recursive Recruitment	466bc97046bd	1	them	a graveyard	graveyard	sg	number_mismatch	high	them (pl) bound to 'a graveyard' (sg)
-Relive the Past	acef808ee004	1	They	up to one target artifact card, up to one target land card, and up to one target non-Aura enchantment	card	sg	number_mismatch	high	They (pl) bound to 'up to one target artifact card, up to one target land card, and up to one target non-Aura enchantment' (sg)
 Relive the Past	acef808ee004	1	their	up to one target artifact card, up to one target land card, and up to one target non-Aura enchantment	card	sg	number_mismatch	high	their (pl) bound to 'up to one target artifact card, up to one target land card, and up to one target non-Aura enchantment' (sg)
-Renet, Temporal Apprentice	f78b6a4c197f	1	its	each other nonland permanent	permanent	pl	number_mismatch	high	its (sg) bound to 'each other nonland permanent' (pl)
-Saheeli's Lattice // Mastercraft Raptor	8eafa53055cb	0	it	the exiled cards	card	pl	number_mismatch	high	it (sg) bound to 'the exiled cards' (pl)
-Salt Road Skirmish	f1638efe6ba4	2	They	target creature	creature	sg	number_mismatch	high	They (pl) bound to 'target creature' (sg)
-Salt Road Skirmish	14b959b6234e	3	them	target creature	creature	sg	number_mismatch	high	them (pl) bound to 'target creature' (sg)
-Scout for Survivors	64385c13549a	1	them	your graveyard	graveyard	sg	number_mismatch	high	them (pl) bound to 'your graveyard' (sg)
-Season of Weaving	6e99ad97436d	5	its	each nonland, nontoken permanent	permanent	pl	number_mismatch	high	its (sg) bound to 'each nonland, nontoken permanent' (pl)
-Stargaze	b3c95992ac36	1	them	your library	library	sg	number_mismatch	high	them (pl) bound to 'your library' (sg)
-Summon: Leviathan	8925561fce1f	0	its	each creature	creature	pl	number_mismatch	high	its (sg) bound to 'each creature' (pl)
-Sunbird Standard // Sunbird Effigy	e45a86338e60	1	it	the exiled cards	card	pl	number_mismatch	high	it (sg) bound to 'the exiled cards' (pl)
-Suspend Aggression	5411f49d84c9	1	it	each of those cards, its owner	card	pl	number_mismatch	high	it (sg) bound to 'each of those cards, its owner' (pl)
-Tam, Mindful First-Year	61b9fc6d9453	0	its	Each other creature	creature	pl	number_mismatch	high	its (sg) bound to 'Each other creature' (pl)
-Tapestry Warden	bfe07797c1ac	1	its	Each creature	creature	pl	number_mismatch	high	its (sg) bound to 'Each creature' (pl)
-Tapestry Warden	f0db551b017e	2	its	Each creature	creature	pl	number_mismatch	high	its (sg) bound to 'Each creature' (pl)
-Tarmogoyf	4539adda5c23	0	its	~'s		pl	number_mismatch	high	"its (sg) bound to ""~'s"" (pl)"
-Taster of Wares	93716fdcb002	2	it	those cards	card	pl	number_mismatch	high	it (sg) bound to 'those cards' (pl)
-Taster of Wares	b4f695693bae	3	it	those cards	card	pl	number_mismatch	high	it (sg) bound to 'those cards' (pl)
-Tinybones, Bauble Burglar	2be6262bec7a	1	them	their graveyard	graveyard	sg	number_mismatch	high	them (pl) bound to 'their graveyard' (sg)
-Trip Up	38e0f69dc89b	0	their	Target nonland permanent	permanent	sg	number_mismatch	high	their (pl) bound to 'Target nonland permanent' (sg)
-Triple Triad	dd18d9bda4ec	1	it	each other card	card	pl	number_mismatch	high	it (sg) bound to 'each other card' (pl)
-Ugin, Eye of the Storms	1280334d9d9d	4	them	your library	library	sg	number_mismatch	high	them (pl) bound to 'your library' (sg)
-Ugin, Eye of the Storms // Ugin, Eye of the Storms	1280334d9d9d	4	them	your library	library	sg	number_mismatch	high	them (pl) bound to 'your library' (sg)
-Unlucky Drop	bea34f209729	0	their	Target artifact or creature	creature	sg	number_mismatch	high	their (pl) bound to 'Target artifact or creature' (sg)
-Valley Floodcaller	d7636d5f4a12	3	them	a noncreature spell	spell	sg	number_mismatch	high	them (pl) bound to 'a noncreature spell' (sg)
-Vanish from Sight	38e0f69dc89b	0	their	Target nonland permanent	permanent	sg	number_mismatch	high	their (pl) bound to 'Target nonland permanent' (sg)
-Vigorbloom Vanguard // Seed Suture	5535b72f6ea4	1	it	Each creature	creature	pl	number_mismatch	high	it (sg) bound to 'Each creature' (pl)
-Voyager Glidecar	b3e23ce4bf90	2	it	other untapped creatures	creature	pl	number_mismatch	high	it (sg) bound to 'other untapped creatures' (pl)
-Vraska, the Cutting Glare	2aa734c2f156	2	They	target permanent an opponent	permanent	sg	number_mismatch	high	They (pl) bound to 'target permanent an opponent' (sg)
-Wanderwine Farewell	56cf4e919933	2	its	each permanent	permanent	pl	number_mismatch	high	its (sg) bound to 'each permanent' (pl)
-Infernal Vessel	9ffb6a7c4601	1	It's	its owner	player	sg	owner_confusion	medium	possessive It's bound to player 'its owner'
-Vito, Fanatic of Aclazotz	bd57badb4ce3	2	it's	each opponent	opponent	pl	owner_confusion	medium	possessive it's bound to opponent 'each opponent'
-Vito, Fanatic of Aclazotz	7a8c5098a1c8	3	it's	each opponent	opponent	pl	owner_confusion	medium	possessive it's bound to opponent 'each opponent'
-Y'shtola Rhul	39e3ff237b84	1	it's	its owner	player	sg	owner_confusion	medium	possessive it's bound to player 'its owner'
-Airbender Ascension	08475a1d8289	2	it	this enchantment	enchantment	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Annie Flash, the Veteran	f2d4f0e4768d	1	it	~		sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Barrels of Blasting Jelly	0bac5db61333	2	It	this artifact	artifact	sg	self_binding	medium	It bound to the source card while the clause acts on a target
 Bear Trap	e2f964a07259	1	It	this artifact	artifact	sg	self_binding	medium	It bound to the source card while the clause acts on a target
 Blazing Bomb	9ae9fb9e026c	1	It	this creature	creature	sg	self_binding	medium	It bound to the source card while the clause acts on a target
-Carnage, Crimson Chaos	8fe114e7df78	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Champions of the Shoal	de37d2a9546d	1	it	this spell	spell	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Deceit	12afa42e6336	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Dockworker Drone	e0a15a2af2c9	1	it	This creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Dockworker Drone	e0a15a2af2c9	1	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
-Earthbender Ascension	e9cb682ce77c	3	it	this enchantment	enchantment	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Emptiness	9dcb4e47374e	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Emptiness	4e83fa48bb16	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Essence Channeler	e0a15a2af2c9	2	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
 Fake Your Own Death	73b00c7c8681	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Fake Your Own Death	73b00c7c8681	0	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
 Galuf's Final Act	7e00fcfdc63d	0	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
-Graft Surgeon	804f373a46ec	1	it	This creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Graft Surgeon	804f373a46ec	1	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
-Harbinger of the Tides	13f9a183f6e5	1	it	this spell	spell	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Heartfire Immolator	a5680e9226ec	1	It	this creature	creature	sg	self_binding	medium	It bound to the source card while the clause acts on a target
-Host of the Hereafter	a21b0167b81c	1	it	This creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Host of the Hereafter	a21b0167b81c	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Host of the Hereafter	a21b0167b81c	1	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
-Jill, Shiva's Dominant // Shiva, Warden of Ice	a080b984dfd0	0	it	~		sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Mouser Foundry	969994d48c7c	1	It	this artifact	artifact	sg	self_binding	medium	It bound to the source card while the clause acts on a target
 Not Dead After All	4f33e2400570	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Not Dead After All	4f33e2400570	0	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
@@ -461,29 +135,20 @@ Perigee Beckoner	b3252a2a484b	0	it	this creature	creature	sg	self_binding	medium
 Perigee Beckoner	b3252a2a484b	0	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
 Presumed Dead	20e5de7bfa9c	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Presumed Dead	20e5de7bfa9c	0	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
-Rakdos, the Muscle	00c9d3de4a42	1	it	~		sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Reluctant Role Model	11d9841878fe	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Roadside Blowout	c73ee3dc139d	1	it	This spell	spell	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Sandbender Scavengers	fc12a74bfb75	2	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Scolding Administrator	a97a6aade2eb	2	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Scrap Compactor	e2f964a07259	0	It	this artifact	artifact	sg	self_binding	medium	It bound to the source card while the clause acts on a target
 Seedglaive Mentor	4cf802befaf0	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Slumbering Walker	e21a4fa39761	2	it	This creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Stadium Headliner	0cb1c7250903	1	It	this creature	creature	sg	self_binding	medium	It bound to the source card while the clause acts on a target
 Strength of Will	58d9c4a30e97	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Sun-Blessed Healer	8d53cdbd53a3	2	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Sunset Strikemaster	658c16ee3029	1	It	this creature	creature	sg	self_binding	medium	It bound to the source card while the clause acts on a target
-Syr Vondam, Sunstar Exemplar	a6cbdb9823d6	2	its	~		sg	self_binding	medium	its bound to the source card while the clause acts on a target
 Team Avatar	35edde6a0d81	1	It	this card	card	sg	self_binding	medium	It bound to the source card while the clause acts on a target
 Tenacious Tomeseeker	427a24a27ab1	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Territory Forge	77f2fcdb1b63	0	it	this artifact	artifact	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-The Fire Nation Drill	d6bd9c1b7d9b	2	it	~		sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Troublemaker Ouphe	7ca46dc5c594	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Trumpeting Carnosaur	d70720b9ab8d	2	It	this card	card	sg	self_binding	medium	It bound to the source card while the clause acts on a target
-Trusty Boomerang	e1b061c747c5	0	its	~		sg	self_binding	medium	its bound to the source card while the clause acts on a target
 Undying Malice	2bef8e1f03eb	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Undying Malice	2bef8e1f03eb	0	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
 Vincent's Limit Break	9c9644a11c7c	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
 Vincent's Limit Break	9c9644a11c7c	1	its	this creature	creature	sg	self_binding	medium	its bound to the source card while the clause acts on a target
 Wistfulness	10e43fa248d1	0	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target
-Yathan Roadwatcher	37575023a3ed	1	it	this creature	creature	sg	self_binding	medium	it bound to the source card while the clause acts on a target

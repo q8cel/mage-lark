@@ -469,10 +469,7 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                  if ms[i]["number"] == anum
                  or (allow_singular_players
                      and ms[i]["head_type"] in ("player", "opponent"))
-                 or (anum == "sg"
-                     and re.match(r"^(?:each|every|any)\s+",
-                                  ms[i]["surface"].strip(), re.I)
-                     and not ms[i]["surface"].strip().lower().endswith("s"))]
+ ]
             if f:
                 pool = f
                 evidence.append(f"number={anum}")
@@ -896,6 +893,9 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f and len(f) != len(pool):
                 pool = f
                 evidence.append("object-not-player")
+            elif not f:
+                pool = []
+                evidence.append("object-not-player-no-match")
 
         # ---- search "for A or B, reveal it": the teacher convention is the
         # first card NP in the search target, not the last disjunct.
@@ -1377,6 +1377,55 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                     pool = f
                     evidence.append("sacrifice-choice-owner")
 
+        # ---- final agreement/provenance filters
+        if anum:
+            allow_singular_players = (rec["kind"] == "pronoun"
+                                      and rec["surface"].lower()
+                                      in ("they", "their", "theirs",
+                                          "themselves"))
+            f = [i for i in pool
+                 if ms[i]["number"] == anum
+                 or (allow_singular_players
+                     and ms[i]["head_type"] in ("player", "opponent"))]
+            if f:
+                pool = f
+                evidence.append(f"number={anum}-final")
+            else:
+                pool = []
+                evidence.append(f"number={anum}-no-match")
+        surf_low = rec["surface"].lower().replace("\u2019", "'")
+        if surf_low in ("it", "its", "it's", "itself"):
+            f = [i for i in pool
+                 if ms[i].get("head_type") not in ("player", "opponent")]
+            if f and len(f) != len(pool):
+                pool = f
+                evidence.append("object-not-player")
+            elif not f:
+                pool = []
+                evidence.append("object-not-player-no-match")
+        if surf_low in ("they", "them", "their", "theirs", "themselves"):
+            window = text[max(0, rec["start"] - 45):rec["start"] + 45].lower()
+            if re.search(r"\b(choice|hand|library|graveyard|deck|control|life|turn)\b", window):
+                f = [i for i in pool
+                     if ms[i].get("head_type") in ("player", "opponent")]
+                if f:
+                    pool = f
+                    evidence.append("plural-player-context")
+                else:
+                    pool = []
+                    evidence.append("plural-player-context-no-match")
+        if surf_low in ("it", "its", "this"):
+            window = text[max(0, rec["start"] - 45):rec["start"] + 45].lower()
+            has_target = any(ms[j].get("is_target") for j in pool) or any(
+                ms[j].get("is_target") for j in range(len(ms)))
+            if has_target and re.search(
+                    r"\b(exile|destroy|sacrifice|return|counter|tap|untap|discard|put)\b",
+                    window):
+                f = [i for i in pool if not ms[i].get("is_self")]
+                if f and len(f) != len(pool):
+                    pool = f
+                    evidence.append("target-not-self")
+
         # ---- decision
         status, pred = None, None
         if not pool:
@@ -1395,9 +1444,14 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 status = "ambiguous" if same else "resolved"
             else:
                 status = "resolved"
+            if pred is not None and ms[pred]["start"] > rec["start"]:
+                status = "ambiguous"
+                pred = None
+                evidence.append("forward-antecendent")
             if status == "resolved":
                 evidence.append("recency")
-            uf.union(a_from, pred)
+            if pred is not None:
+                uf.union(a_from, pred)
 
         rec["set_valued"] = rec["kind"] == "phrase"
         if rec["set_valued"]:

@@ -689,3 +689,25 @@ stemmed match against all JSON string values/keys/numbers. Top missing units:
 target 179, number 121, cast 119, equal 102, loses 96, among 70, turn 70,
 spell 62, card 56, greater 55. The list includes full unflagged long sentences,
 not just invariant-flagged ones; judgment cases remain in the file.
+
+## Anaphora agreement classes
+
+Audit input `compile_standard.jsonl`, fresh artifact SHA
+`c1b84208fb64ae8000397d4119444511f62b32dbbc643ebde11c75fe5f14f0ca`.
+Before: 4,504 resolved bindings, 488 violation rows / 439 bindings passing
+90.3%. After: 3,241 bindings, 153 rows / 150 bindings, passing 95.4%.
+
+| class | before | after | fix |
+|---|---:|---:|---|
+| cross_clause | 150 | 28 | compile_card anaphora metadata is filtered by the actual sentence span (cursor-based, not surface substring), plus a final forward-antecedent guard that downgrades to ambiguous |
+| number_mismatch | 106 | 6 | strict final number filter (no fallback to an off-number pool); singular-player exemption retained only for they/their; removed the each/every singular exemption |
+| not_a_mention | 97 | 73 | provenance fix above; residual is audit card_context keyed by first printing of a repeated card name (record/printing mismatch), not resolver-generated text |
+| kind_mismatch | 70 | 4 | object pronouns reject player/opponent heads; plural possessives in player-position clauses must select a player, else unresolved |
+| self_binding | 61 | 42 | it/its/this cannot select the source card when a target NP exists and the clause is an action |
+| owner_confusion | 4 | 0 | owner-of binding from the previous commit; `it's`/`its` no longer bind player heads |
+
+Fixtures: `review/anaphora_agreement_fixtures.json` now includes
+`number-each-creature` (expects number_mismatch); the existing owner/cataphora/
+kind/not-a-mention fixtures still pass (9/9). Residual self_binding rows are
+audit heuristic windows where the pronoun genuinely refers to the source
+(“cast it” on the source spell), not mechanical resolver errors.

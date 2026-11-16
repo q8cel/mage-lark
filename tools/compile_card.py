@@ -141,7 +141,8 @@ def _compile_card(card):
             metas = [
                 {'surface': a.get('surface'),
                  'antecedent': (a.get('antecedent') or {}).get('surface'),
-                 'status': a.get('status')}
+                 'status': a.get('status'),
+                 'start': a.get('start'), 'end': a.get('end')}
                 for a in res.get('anaphors', [])]
         except Exception:
             rewritten = text
@@ -150,6 +151,17 @@ def _compile_card(card):
     rewr = [it['text'] for it in segment(rewritten, W.get('names') or set())
             if it['text'] and not it['modal']]
     records = []
+    cursor = 0
+    spans = []
+    for otext in orig:
+        pos = text.find(otext, cursor)
+        if pos < 0:
+            pos = text.find(otext)
+        if pos < 0:
+            spans.append((0, len(text)))
+        else:
+            spans.append((pos, pos + len(otext)))
+            cursor = pos + len(otext)
     for idx, otext in enumerate(orig):
         rtext = rewr[idx] if idx < len(rewr) else otext
         out = interpret(rtext) if rtext != otext else None
@@ -166,8 +178,12 @@ def _compile_card(card):
             'original_text': otext,
             'resolved_text': rtext,
             'anaphora': [m for m in metas
-                         if m.get('surface') and m['surface'].lower()
-                         in otext.lower()],
+                         if m.get('surface')
+                         and ((idx < len(spans)
+                               and spans[idx][0] <= (m.get('start') or -1)
+                               < spans[idx][1])
+                              if m.get('start') is not None
+                              else m['surface'].lower() in otext.lower())],
             'output': out,
         }
         records.append(rec)
