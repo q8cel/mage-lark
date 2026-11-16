@@ -195,6 +195,8 @@ def main():
     ap.add_argument('--out', required=True, help='JSONL output')
     ap.add_argument('--card', default=None, help='only this card name')
     ap.add_argument('--limit', type=int, default=0, help='card cap (testing)')
+    ap.add_argument('--sets', default=None,
+                    help='comma list of set codes to compile (slice for chunking)')
     ap.add_argument('--mentions', choices=('regex', 'parser'), default='regex')
     ap.add_argument('--resolve', dest='resolve', action='store_true', default=True,
                     help='resolve card context before compiling (default)')
@@ -209,6 +211,9 @@ def main():
     args = ap.parse_args()
 
     items, types, names, _sets = load(args.data)
+    if args.sets:
+        keep = set(args.sets.split(','))
+        items = [it for it in items if it[2] in keep]
     if args.card:
         items = [it for it in items if it[0].lower() == args.card.lower()]
     work = _iter_cards(items, names, args.anaphora_only, args.limit)

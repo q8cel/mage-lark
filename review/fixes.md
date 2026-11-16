@@ -575,3 +575,25 @@ the 3,600 s cap before writing (no output file). The warm projection is under
 record count/marker/SHA was produced. The cache only persists after a
 successful run, so a warm full run cannot be bootstrapped from the timed-out
 runs.
+
+## Chunked full Standard compile artifact
+
+`tools/compile_card.py --sets CODE[,CODE]` slices by set (the loader's set
+codes). Standard was compiled one set at a time with `--workers 6`, each chunk
+written as `compile_standard_<SET>.jsonl`; all 21 chunks completed and warmed
+the persistent output cache. Per-set wall times (s): BIG 16, BLB 81, DFT 89,
+DSK 119, ECL 159, EOE 127, FDN 205, FIN 266, FRA 147, HOB 124, LCI 159,
+MKM 164, MSH 169, OM1 60, OTJ 135, SOS 117, SPM 19, TDM 130, TLA 149,
+TMT 97, WOE 123. Total 2,655 s (44.3 min).
+
+Merged and sorted by `(card, sentence_index, sid, canonical JSON)` into
+`compile_standard.jsonl`:
+- records 22,217; unique card names 5,153
+- anaphora markers 893 unweighted / 3,654 weighted (per-card occurrence
+  weights from the corpus; no sentence dedupe)
+- changed records 1,610
+- SHA-256 `eaaaec437a66a0c1414b00a0487817188965df3a07ca102f217e26819092bb2b`
+
+Ordering contract: 200-card all-card slice with `--limit 200` is byte-identical
+at workers 1 and 6: `44a19bac47ae88803dbd3cd22225d12a2c6eb3b9a3dd6020687e795765d347e2`
+(wall 95 s vs 27 s).
