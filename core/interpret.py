@@ -626,6 +626,9 @@ class Interpreter:
                 mctr = re.fullmatch(r'(.+?)\s+counters?(?:\s+s)?', k)
                 if mctr:
                     ctr['kind'] = mctr.group(1)
+            own = obj.get('owner')
+            if isinstance(own, str) and own.strip().lower().startswith('the owner of '):
+                obj['owner'] = self._owner_ref(own)
             ct = obj.get('card_type')
             def _split_type_value(v):
                 parts = [x.strip() for x in re.split(
@@ -810,6 +813,42 @@ class Interpreter:
         elif isinstance(obj, list):
             for v in obj:
                 self._late_normalize(v)
+
+    def _owner_ref(self, text):
+        """Structured owner reference; "owner of X" keeps X as a card target."""
+        raw = text.strip()
+        low = raw.lower()
+        if low.startswith('the owner of '):
+            rest = raw[len('The owner of '):]
+            ct = self._simple_target(rest)
+            if ct:
+                status = []
+                ctl = None
+                val = ct.get('card_type', {}).get('value')
+                if isinstance(val, str):
+                    v = val
+                    for suf, c in ((" you don't control", "you don't control"),
+                                   (' an opponent controls', 'opponent controls')):
+                        if v.lower().endswith(suf):
+                            v = v[:-len(suf)]
+                            ctl = c
+                            break
+                    for st in ('attacking', 'blocking', 'tapped', 'untapped'):
+                        if re.search(rf'\b{st}\b', v, re.I):
+                            status.append(st)
+                            v = re.sub(rf'\b{st}\b', '', v, flags=re.I)
+                    ct['card_type']['value'] = ' '.join(v.split())
+                    if ctl:
+                        ct['controller'] = ctl
+                    if status:
+                        ct['status'] = status
+                return {'kind': 'owner_of', 'of': ct}
+        m = re.fullmatch(r'(its|their|his|her) owners?', low)
+        if m:
+            return {'kind': 'owner_of',
+                    'of': {'kind': 'anaphora', 'possessive': m.group(1),
+                           'anaphor': True}}
+        return {'kind': 'player', 'ref': low.replace(' ', '_')}
 
     @staticmethod
     def _amount_ref(text):

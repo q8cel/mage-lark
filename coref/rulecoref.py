@@ -763,7 +763,8 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
         if rec["kind"] == "pronoun" and _PUT_LEAD.search(
                 text[max(0, rec["start"] - 14):rec["start"]]):
             f = [i for i in pool
-                 if ms[i]["head_type"] not in ("hand", "graveyard", "library", "exile")
+                 if ms[i]["head_type"] not in ("hand", "graveyard", "library",
+                                               "exile", "player", "opponent")
                  and not _MODIFIER_LEAD.search(
                      text[max(0, ms[i]["start"] - 14):ms[i]["start"]])]
             if f and len(f) != len(pool):
@@ -1059,6 +1060,17 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             if f:
                 pool = f
                 evidence.append("possessive-same-clause")
+            # "The owner of X puts it on their choice": a player possessive in
+            # the owner-of clause belongs to the owner, not to X.
+            if rec["is_possessive"] and rec["surface"].lower() in (
+                    "their", "his", "her"):
+                owners = [i for i in pool
+                          if ms[i].get("sentence") == rec["sentence"]
+                          and re.search(r"\bowners?\b",
+                                        ms[i].get("surface", ""), re.I)]
+                if owners:
+                    pool = owners
+                    evidence.append("possessive-owner-of")
             if on["possessive_role"]:
                 want = possessive_role(text, rec["start"])
                 if want:

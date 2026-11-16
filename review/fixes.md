@@ -617,3 +617,28 @@ Collision check against the first-wins sentence-keyed plan: **506 cards /
 935 records** now resolve differently per card (plan-level collisions: 2,755).
 Plain compile: 265 s at 6 workers (warm cache); resolved chunks total 2,655 s.
 Artifacts stay untracked; `.gitignore` covers `compile_standard*.jsonl`.
+
+## Owner-of possessive binding and owner structure
+
+Horned Loch-Whale // Lagoon Breach: `it` still resolves to the target creature;
+`their` now resolves to the player owner, not the creature. The owner mention
+is added after mention cleaning (so the inner target NP is not swallowed), and
+a possessive in an owner-of clause prefers that player mention. The `it`
+object-of-put rule also excludes player/opponent candidates.
+
+`owner` prose is structured: `The owner of <target>` becomes
+`{kind: owner_of, of: <card_target>}`; `its/their owner` becomes
+`{kind: owner_of, of: {kind: anaphora, possessive: ...}}`.
+
+Occurrence count (Standard corpus): 12 `the owner of ...` sentence occurrences
+(10 unique), plus 391 possessive-owner expressions (168 unique) elsewhere;
+11 artifact sites carried the prose owner string. After the fix, the rebuilt
+artifact has 0 prose owner strings and 11 `owner_of` objects (the remaining
+corpus occurrence maps to a record without that field).
+
+Rebuilt affected set chunks (DSK ECL FRA LCI MKM MSH TDM TLA WOE), merged
+`compile_standard.jsonl`: 22,217 records, 5,153 cards, 893 unweighted / 3,654
+weighted markers, 1,610 changed records, SHA-256
+`bd6678fec89635e5fa0a82e76048bf187427b94336c8b87af3ecc23e8d12c39b`.
+200-card ordering slice remains byte-identical at workers 1/6
+(`44a19bac…d347e2`).

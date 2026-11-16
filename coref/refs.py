@@ -32,7 +32,7 @@ BASE = _paths.ROOT
 sys.path.insert(0, BASE)
 
 from preprocess import split_sentences
-from mentions import candidate_mentions
+from mentions import candidate_mentions, OWNER_OF_CAND
 from anaphora import find_anaphors, PRONOUNS
 
 # ---------------------------------------------------------------- type lattice
@@ -396,6 +396,13 @@ def build(text, parser=True, struct=None):
     """Live inventory for a card text (regex ∪ parse-tree spans, then clean)."""
     raw = candidate_mentions(text, parser=parser)
     cleaned = [trim_long(text, m) for m in clean(raw)]
+    # "The owner of X" is a player entity; keep its inner X mention too by
+    # adding the owner span after cleaning (the raw regex would swallow X).
+    for m in OWNER_OF_CAND.finditer(text):
+        surface = m.group(0).strip()
+        if surface:
+            cleaned.append({"surface": surface,
+                            "start": m.start(), "end": m.end()})
     cleaned = merge_coordinated(text, cleaned)
     ms = annotate(text, cleaned, struct=struct)
     for m in ms:

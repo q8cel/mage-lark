@@ -38,6 +38,15 @@ PLAYER_CAND = re.compile(
     rf"(?:players?|opponents?)\b", re.I)
 OWNER_CAND = re.compile(
     r"\b(?:its|their|his|her|target \w+'s|target [A-Z][\w'\-]*'s|each \w+'s)\s+owners?\b", re.I)
+# "The owner of target attacking creature you don't control" is a player
+# entity; otherwise possessive `their` in the same clause binds to the creature.
+OWNER_OF_CAND = re.compile(
+    r"\b(?:the\s+)?owner\s+of\s+(?:target\s+)?"
+    r"(?:[A-Za-z][\w'’\-]*\s+){1,8}"
+    r"(?:creatures?|permanents?|cards?|tokens?|artifacts?|lands?|"
+    r"enchantments?|planeswalkers?|spells?)\b"
+    r"(?:\s+(?:you|an opponent|each player)\s+(?:don't|doesn't|do not|"
+    r"does not)\s+control)?", re.I)
 CONTROLLER_CAND = re.compile(
     rf"\b(?:{DET}|its|their)\s+(?:[A-Za-z][\w'\-]*\s+){{0,2}}controllers?\b", re.I)
 # A spell/ability is often embedded in a larger event NP ("the target of a
