@@ -1,0 +1,150 @@
+# review-ui
+
+A local, offline web UI for human review of MTG parser outputs. It is a
+labelling tool, not a nicer markdown sheet: machine claims sit inline with
+accept/reject keys, bug notes are built by clicking the offending JSON node, the
+judged sentence is aligned word by word against the output, and state is
+append-only so a vim session and the UI can coexist.
+
+```
+cd /home/q8/Documents/mage-lark
+./myenv/bin/python tools/review_ui.py --pack ../swarm/work/human_review_v5 --open
+```
+
+Stdlib only (`http.server`), no build step, no CDN, no external requests.
+Defaults: `--port 8765`, `--artifact compile_standard.jsonl` (or `meta.json`'s
+`source`), claims read from the repo's `review/`.
+
+## What the app does beyond layout
+
+For every item it shows the judged sentence with each content word marked
+**green** (found in the output by the content-loss scan's stemmed/allowlisted
+match), **red** (the scan says missing), or **grey** (function word from the
+allowlist); clicking a token lists the JSON paths where it landed, or says it did
+not. Machine claims (content-loss units, prose in a structured slot, empty
+required slots, invariant flags, anaphora-agreement violations) are listed at
+their JSON paths in the `triage` lane and confirmed or rejected one key at a
+time — rejections are recorded as data, not discarded. A `bug` verdict is
+committed by clicking a node in the collapsible JSON tree (or a claim's path);
+the note is then composed as `axis: path: value — free text` with no typing
+needed, and the axis comes from one of nine chips. Items are hash-assigned to a
+`triage` lane (claims shown) or a `blind` lane (claims hidden, measuring the
+parser alone); the lane is persisted in the state file and only revealed in the
+UI after the item is labelled. Ten-item batches with a clickable progress strip
+and per-label persistence make it resumable, and `u` undoes a label.
+
+## Keys
+
+| key | action |
+| --- | --- |
+| `j` / `k` | next / previous item |
+| `g` / `G` | first / last item |
+| `o` / `b` / `l` | verdict `ok` / `bug` / `legit` |
+| `1`–`9` | bug axis: target, actor, zone, quantity, referent, condition, timing, polarity, other |
+| click JSON node | set the bug path (note becomes `path: value`) |
+| `Enter` | commit the label and advance to the next unlabelled item in the batch |
+| `u` | undo the current item's label |
+| `[` / `]` | previous / next machine claim |
+| `y` / `n` | accept / reject the focused claim (again to clear) |
+| `i` / `x` / `r` | re-import `labels.tsv` / export `labels.tsv` / reload state |
+| `?` | help overlay |
+
+Clicking a node selects it; `Escape` clears the selection. Clicking a sentence
+token shows its landing paths; clicking a path jumps to the node.
+
+## Lanes
+
+`hash(id)` decides the lane deterministically: ids are ranked by
+`sha256(id)` and alternate `triage` / `blind`, giving an exact 50/50 split for
+the 100-item pack. The split is written to `<pack>/review_state.json` and to
+every `labels.jsonl` record, never to the sheets. Blind items return no claims
+from the API; the lane badge appears only after the item is labelled.
+
+## Importing the vim `labels.tsv`
+
+The reviewer may already be editing `<pack>/labels.tsv` (`id<TAB>verdict<TAB>note`).
+On startup (or with `--import other.tsv`, or `i` in the UI) the file is read:
+
+* the first token of the verdict column is the verdict (`ok|bug|legit`), the
+  rest of the line is free-text note, so a loosely typed
+  `bug "zone": it should be exile` is understood;
+* rows with a blank verdict are ignored; unknown ids and duplicates are reported
+  and skipped (the eval script rejects both);
+* each imported row is appended to `labels.jsonl` with `source: "import"` and its
+  raw line preserved;
+* for a `bug` note that names a JSON path (`$.effect...`, `[].effect...`) or a
+  quoted/backticked key (`"zone"`), the axis and path are inferred for display
+  **only when they resolve in that item's output** — nothing is invented;
+* the file is never modified by importing, and re-importing the same content is
+  a no-op (per-row fingerprints in `review_state.json`).
+
+Exports never duplicate imported rows: the imported line is written back
+verbatim; UI labels are written as `id<TAB>verdict<TAB>note`; unlabelled ids keep
+blank rows so the file stays diff-stable. Undoing an imported row suppresses
+that exact row on later imports.
+
+## Export
+
+Click `export`, press `x`, or run:
+
+```
+./myenv/bin/python tools/review_ui.py --pack ../swarm/work/human_review_v5 --export
+```
+
+This writes `<pack>/labels.tsv` (override with `--export-out PATH`) in vim- and
+eval-compatible form, backing up a differing previous file as `labels.tsv.bak`.
+`swarm/scripts/human_audit_eval.py --pack <dir>` accepts the result.
+
+State lives in two append-only files inside the pack:
+
+* `labels.jsonl` — one record per label or undo:
+  `{id, verdict, axis, path, note, claims_accepted, claims_rejected, lane,
+  timestamp, source, op}` (`source` is `ui` or `import`; latest record per id
+  wins);
+* `review_state.json` — lane map, per-item claim decisions, import fingerprints.
+
+## How claims are joined
+
+`review/claims.json` is the consolidated source when it exists: an object
+`{artifact_sha256, generated_at, counts, records}`, where each record is
+`{card, sid, sentence_index, claims}` and each claim has
+`{kind, path, detail, severity, source}`. It is joined by
+`(card, sid, sentence_index)`; claims whose JSON path no longer resolves are
+shown without a link (the artifact may have moved on).
+
+When `claims.json` is absent or malformed the audit TSVs in `review/` are joined
+instead, with the same semantics:
+
+| file | join | claim |
+| --- | --- | --- |
+| `certain_defects.tsv` | sentence text (or `sid`) | missing content units, at sentence level |
+| `stringy_report_N.tsv` (highest N) | `sid` | prose in a structured slot, at `path` |
+| `structure_report.tsv` | `sid` | empty required slot, at `path` |
+| `invariant_flags.tsv` | sentence text | invariant flag (e.g. `bare_modifier`) |
+| `anaphora_agreement.tsv` | `(card, sid, sentence_index)` | anaphor bound to a bad antecedent |
+
+The loaded artifact is SHA-256 hashed at startup and compared with
+`claims.json`'s and `meta.json`'s `artifact_sha256`; a mismatch shows a warning
+banner (non-blocking) and an item with no claims is simply a normal item.
+
+## Files
+
+```
+tools/review_ui.py            server: pack/artifact/claims, import, export, HTTP API
+tools/review_ui/index.html    shell
+tools/review_ui/app.js        keyboard state machine, tree, claims, alignment
+tools/review_ui/style.css     dark, monospace, no webfonts
+tests/test_review_ui.py       smoke test (HTTP, import, export, eval round-trip)
+```
+
+## Smoke test
+
+```
+./myenv/bin/python tests/test_review_ui.py
+```
+
+Copies the pack to a temp dir (with two loosely typed vim rows), starts the
+server on an ephemeral port, and checks: 100 items, 50/50 lanes, import (2 rows)
+and its idempotency, lane hiding, claims gating, claim accept persistence, label
++ note composition, undo, export, that `human_audit_eval.py` accepts the TSV,
+and that state survives a restart.

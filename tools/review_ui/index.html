@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>review-ui</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="topbar">
+  <span class="brand">review&ndash;ui</span>
+  <span id="packname" class="muted"></span>
+  <div id="progress" title="labelled / total"><div id="progressfill"></div></div>
+  <span id="counts" class="counts"></span>
+  <span class="spacer"></span>
+  <button id="importBtn" class="btn" title="re-import labels.tsv (i)">import</button>
+  <button id="exportBtn" class="btn" title="export labels.tsv (x)">export</button>
+  <button id="helpBtn" class="btn" title="keyboard help (?)">?</button>
+</header>
+<div id="banner" class="banner hidden"></div>
+
+<main>
+  <section id="left" class="col">
+    <div class="cardline">
+      <span id="itemid" class="itemid"></span>
+      <h2 id="cardname"></h2>
+      <span id="lanebadge" class="lanebadge"></span>
+    </div>
+    <div id="judged"></div>
+    <div id="legend" class="legend">
+      <span class="tok found">found</span>
+      <span class="tok missing">missing</span>
+      <span class="tok function">function word</span>
+      <span class="muted">click a token to see where it landed</span>
+    </div>
+    <div id="tokeninfo" class="tokeninfo"></div>
+    <details id="resolvedwrap" class="fold">
+      <summary>resolved text (antecedent substitution)</summary>
+      <div id="resolved" class="resolved"></div>
+    </details>
+    <details id="cardtextwrap" class="fold" open>
+      <summary>card oracle text (context)</summary>
+      <div id="cardtext" class="cardtext"></div>
+    </details>
+    <details id="anaphorawrap" class="fold">
+      <summary>anaphora metadata</summary>
+      <div id="anaphora"></div>
+    </details>
+  </section>
+
+  <section id="json" class="col">
+    <div class="panelhead">interpreted output <span id="jsonhint" class="muted"></span></div>
+    <div id="tree" class="tree"></div>
+  </section>
+
+  <section id="right" class="col">
+    <div class="panelhead">machine claims <span id="claimssrc" class="muted"></span></div>
+    <div id="claims" class="claims"></div>
+    <div class="panelhead">verdict</div>
+    <div id="verdicts" class="verdicts"></div>
+    <div id="axes" class="axes"></div>
+    <div id="selection" class="selection"></div>
+    <input id="notetext" type="text" autocomplete="off" spellcheck="false"
+           placeholder="optional free-text note (Enter commits)">
+    <div id="notepreview" class="notepreview"></div>
+    <div class="commitbar">
+      <button id="commitBtn" class="btn primary">commit (Enter)</button>
+      <button id="undoBtn" class="btn">undo (u)</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+</main>
+
+<footer id="batchstrip" class="batchstrip"></footer>
+
+<div id="help" class="overlay hidden">
+  <div class="helpbox">
+    <h3>keys <span class="muted">&mdash; press ? or Escape to close</span></h3>
+    <table id="helptable"></table>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
