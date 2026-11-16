@@ -43,8 +43,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ir_render  # noqa: E402  (ships next to this file)
 
 VERDICTS = ("ok", "bug", "legit")
-AXES = ("target", "actor", "zone", "quantity", "referent",
+AXES = ("anaphora", "list", "keyword", "modal",
+        "target", "actor", "zone", "quantity", "referent",
         "condition", "timing", "polarity", "other")
+# Old names and loose spellings still validate; they normalise to an axis.
+AXIS_ALIASES = {
+    "anaphor": "anaphora", "anaphora_agreement": "anaphora", "antecedent": "anaphora",
+    "coref": "anaphora", "self_reference": "anaphora", "self-reference": "anaphora",
+    "coordination": "list", "list_shape": "list", "conjunction": "list", "coord": "list",
+    "keyword_ability": "keyword", "ability": "keyword", "ability_word": "keyword",
+    "optionality": "modal", "optional": "modal", "may": "modal",
+    **{name: name for name in AXES},
+}
 BATCH = 10
 STATE_FILE = "review_state.json"
 LABELS_FILE = "labels.jsonl"
@@ -1012,11 +1022,19 @@ class Pack:
         axis = ""
         low = note.lower()
         axis_words = [
+            ("anaphora", r"anaphor|antecedent|self[- ]?refer|this creature|this card|"
+                         r"pronoun|\bit\b ->|wrong antecedent|not resolv"),
+            ("list", r"\blist\b|coordination|conjunct|\bsplit\b|alternatives?\b|"
+                     r"shared (quantifier|subject|player)|separate items"),
+            ("keyword", r"unresolved|\bkeyword\b|ability word|\bwarp\b|\bsneak\b|"
+                        r"\bplot\b|landcycl|mis[- ]?shaped"),
+            ("modal", r"\bmay\b|\bmust\b|optional|optionality|negation|"
+                      r"negated|\bcan't\b|\bcannot\b|\boptionality\b"),
             ("target", r"\btarget\b|\bquantifier\b"),
             ("actor", r"\bactor\b|\bcontroller|controlled\b|\bowner\b|\bwho\b"),
             ("zone", r"\bzone\b|graveyard|battlefield|exile|\blibrary\b|\bhand\b|bottom|top of"),
             ("quantity", r"\bquantity\b|\bamount\b|\bcount\b|\bnumber\b|\bsum\b|\blife\b|\bx is\b"),
-            ("referent", r"\breferent\b|antecedent|pronoun|\bit\b ->|wrong antecedent"),
+            ("referent", r"\breferent\b"),
             ("condition", r"\bcondition\b|\bunless\b|\bif\b|\bwhen\b|\btrigger"),
             ("timing", r"\btiming\b|\bphase\b|\bturn\b|\bbeginning\b|\buntil\b|\bend of\b|\bstep\b"),
             ("polarity", r"\bpolarity\b|\bnegat|\bnot\b|\binstead\b|\bcan't\b|\bcannot\b"),
@@ -1135,9 +1153,10 @@ class Pack:
             verdict = (verdict or "").strip().lower()
             if verdict not in VERDICTS:
                 raise ApiError(400, f"verdict must be one of {', '.join(VERDICTS)}")
-            axis = (axis or "").strip()
-            if axis and axis not in AXES:
-                raise ApiError(400, f"unknown axis: {axis}")
+            raw_axis = (axis or "").strip()
+            axis = AXIS_ALIASES.get(raw_axis.lower(), "") if raw_axis else ""
+            if raw_axis and not axis:
+                raise ApiError(400, f"unknown axis: {raw_axis}")
             path = (path or "").strip()
             value = ""
             if verdict == "bug" and path:
@@ -1458,8 +1477,9 @@ HELP = {
     },
     "verdict": {
         "o": "ok", "b": "bug", "l": "legit",
-        "1-9": "axis for a bug (target, actor, zone, quantity, referent, "
-               "condition, timing, polarity, other)",
+        "1-9": "axis for a bug: anaphora, list, keyword, modal, target, actor, "
+               "zone, quantity, referent",
+        "click chip": "remaining axes: condition, timing, polarity, other",
         "click JSON node": "record path: value in the note (sets verdict bug)",
         "Enter": "commit the label and advance",
         "u": "undo the current item's label",

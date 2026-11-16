@@ -807,7 +807,10 @@ function renderClaims() {
       link.className = 'pathlink';
       link.textContent = claim.path;
       link.title = 'select this JSON node';
-      link.addEventListener('click', () => selectPath(claim.path, claim.value, { json: true }));
+      link.addEventListener('click', () => {
+        if (!S.axis && /anaphora/i.test(claim.kind)) S.axis = 'anaphora';
+        selectPath(claim.path, claim.value, { json: true });
+      });
       head.appendChild(link);
     }
     const dec = document.createElement('span');
@@ -834,6 +837,22 @@ function renderClaims() {
     acts.appendChild(accept);
     acts.appendChild(reject);
     card.appendChild(acts);
+
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('button') || event.target.closest('.pathlink')) return;
+      S.claimCur = i;
+      const hay = `${claim.kind} ${claim.text} ${claim.value}`.toLowerCase();
+      if (!S.axis) {
+        if (hay.includes('anaphora') || hay.includes('antecedent')) S.axis = 'anaphora';
+        else if (hay.includes('unresolved')) S.axis = 'keyword';
+      }
+      if (claim.path) selectPath(claim.path, claim.value, { json: true });
+      else {
+        if (S.verdict !== 'bug') S.verdict = 'bug';
+        afterVerdictChange();
+        renderClaims();
+      }
+    });
 
     host.appendChild(card);
   });
@@ -867,7 +886,8 @@ function focusClaim(delta) {
 
 /* --------------------------------------------------------------- verdicts */
 
-const AXES = ['target', 'actor', 'zone', 'quantity', 'referent', 'condition', 'timing', 'polarity', 'other'];
+const AXES = ['anaphora', 'list', 'keyword', 'modal', 'target', 'actor', 'zone',
+  'quantity', 'referent', 'condition', 'timing', 'polarity', 'other'];
 
 function renderVerdicts() {
   const host = $('#verdicts');
@@ -886,8 +906,8 @@ function renderVerdicts() {
   AXES.forEach((axis, i) => {
     const btn = document.createElement('button');
     btn.className = 'abtn' + (S.axis === axis ? ' active' : '');
-    btn.textContent = `${i + 1} ${axis}`;
-    btn.title = `axis ${i + 1}`;
+    btn.textContent = i < 9 ? `${i + 1} ${axis}` : axis;
+    btn.title = i < 9 ? `axis ${i + 1}` : `axis ${axis}`;
     btn.addEventListener('click', () => { S.axis = axis; S.verdict = 'bug'; afterVerdictChange(); });
     axes.appendChild(btn);
   });

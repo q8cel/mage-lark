@@ -261,6 +261,32 @@ def main():
     tmp = Path(tempfile.mkdtemp(prefix="review-ui-test-"))
     pack, ids, rich_id, ok_id = build_pack(tmp, src)
     print(f"pack: {src}")
+
+    # ---- axis set, aliases and note inference -----------------------
+    sys.path.insert(0, str(ROOT / "tools"))
+    import review_ui
+
+    check("axis order", review_ui.AXES[:9] == (
+        "anaphora", "list", "keyword", "modal", "target", "actor", "zone",
+        "quantity", "referent"), str(review_ui.AXES))
+    check("legacy axes remain", set(review_ui.AXES[9:]) == {
+        "condition", "timing", "polarity", "other"}, str(review_ui.AXES))
+    for alias, canonical in (("antecedent", "anaphora"), ("coordination", "list"),
+                             ("keyword_ability", "keyword"), ("optionality", "modal"),
+                             ("zone", "zone"), ("polarity", "polarity")):
+        check(f"alias {alias} -> {canonical}",
+              review_ui.AXIS_ALIASES.get(alias) == canonical)
+    probe = review_ui.Pack(pack, artifact=ARTIFACT, do_import=False)
+    for note, expected in (
+            ("self-reference: this creature should be ~", "anaphora"),
+            ("this card does not resolve to its owner", "anaphora"),
+            ("unresolved Warp keyword", "keyword"),
+            ("list split into two separate items", "list"),
+            ("may should be must", "modal"),
+            ("wrong zone: exile not library", "zone"),
+            ("wrong referent for the relative clause", "referent")):
+        got = probe._infer_from_note(note, rich_id)[0]
+        check(f"note inference: {note!r} -> {expected}", got == expected, got)
     labels_jsonl = pack / "labels.jsonl"
     labels_tsv = pack / "labels.tsv"
     import_bytes = labels_tsv.read_bytes()
@@ -442,6 +468,22 @@ def main():
         status, resp = request_json(port, "/api/label", {
             "id": ids[2], "verdict": "ok", "axis": "", "path": "", "note": ""})
         check("ok label without a path", status == 200 and resp["record"]["note"] == "")
+        status, resp = request_json(port, "/api/label", {
+            "id": ids[3], "verdict": "bug", "axis": "coordination", "path": "",
+            "note": "list split into separate items"})
+        check("axis alias normalises on commit",
+              status == 200 and resp["record"]["axis"] == "list",
+              str(resp.get("record", {}).get("axis")))
+        check("note uses the canonical axis",
+              resp["record"]["note"].startswith("list:"), resp["record"]["note"])
+        status, resp = request_json(port, "/api/label", {
+            "id": ids[4], "verdict": "bug", "axis": "anaphora", "path": "",
+            "note": "this creature never binds to ~"})
+        check("new anaphora axis accepted",
+              status == 200 and resp["record"]["axis"] == "anaphora")
+        status, resp = request_json(port, "/api/label", {
+            "id": ids[5], "verdict": "bug", "axis": "nonsense", "path": "", "note": ""})
+        check("unknown axis rejected", status == 400, str(status))
 
         # ---- import is idempotent ----------------------------------
         status, resp = request_json(port, "/api/import", {})
@@ -490,7 +532,7 @@ def main():
         proc, port = start_server(pack)
         status, state = request_json(port, "/api/state")
         check("state persists across restart", status == 200
-              and state["counts"]["done"] == 4, str(state["counts"]))
+              and state["counts"]["done"] == 6, str(state["counts"]))
         check("labels.jsonl untouched by restart",
               labels_jsonl.read_text(encoding="utf-8") == before)
         status, payload = request_json(port, f"/api/item?id={hid}")

@@ -66,7 +66,16 @@ their JSON paths in the `triage` lane and confirmed or rejected one key at a
 time — rejections are recorded as data, not discarded. A `bug` verdict is
 committed by clicking a node in the collapsible JSON tree (or a claim's path);
 the note is then composed as `axis: path: value — free text` with no typing
-needed, and the axis comes from one of nine chips. Items are hash-assigned to a
+needed, and the axis comes from the axis chips. Axes are `anaphora`
+(unresolved/wrong anaphora, "this creature" not binding to `~`), `list`
+(coordination/list shape), `keyword` (unresolved or mis-shaped keyword/ability),
+`modal` (may/must/optionality, lost or added negation), then `target`, `actor`,
+`zone`, `quantity`, `referent`, `condition`, `timing`, `polarity`, `other`;
+digits `1`–`9` cover the first nine, the rest are click-only. Old names and loose
+spellings (`antecedent`, `coordination`, `keyword_ability`, `optionality`, …)
+are accepted as aliases and normalise to a canonical axis, so imported vim notes
+keep mapping, and clicking an anaphora claim preselects the `anaphora` axis.
+Items are hash-assigned to a
 `triage` lane (claims shown) or a `blind` lane (claims hidden, measuring the
 parser alone); the lane is persisted in the state file and only revealed in the
 UI after the item is labelled. Ten-item batches with a clickable progress strip
@@ -79,7 +88,8 @@ and per-label persistence make it resumable, and `u` undoes a label.
 | `j` / `k` | next / previous item |
 | `g` / `G` | first / last item |
 | `o` / `b` / `l` | verdict `ok` / `bug` / `legit` |
-| `1`–`9` | bug axis: target, actor, zone, quantity, referent, condition, timing, polarity, other |
+| `1`–`9` | bug axis: anaphora, list, keyword, modal, target, actor, zone, quantity, referent |
+| click chip | the remaining axes: condition, timing, polarity, other |
 | click key/value | select that JSON node for the bug note (`path: value`) |
 | click ▸ / ▾ | expand / collapse that node (toggling never changes the path) |
 | `e` | collapse all / expand all |
