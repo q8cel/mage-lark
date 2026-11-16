@@ -1,42 +1,42 @@
 # Anaphora agreement audit — Standard
 
-Input `compile_standard.jsonl`: 22,217 lines, 13,357 unique records, **3,241 resolved bindings**. Checks use `coref/refs.py` annotation (`head_type`, `number`, `is_self`, `is_target`) and its regex mention inventory (`refs.build(parser=False)`).
+Input `compile_standard.jsonl`: 22,217 lines, 13,357 unique records, **3,241 resolved bindings**. Checks use `coref/refs.py` annotation (`head_type`, `number`, `is_self`, `is_target`) and its regex mention inventory (`refs.build(parser=False)`). The earlier report keyed card context by card name (first printing); keying each record to its own printing via sentence containment cut not_a_mention from 83 to 3 - those were audit-side, not resolver errors.
 
 ## Totals
 
-- resolved bindings: 3,241; violation rows: 153
-- bindings with at least one provable violation: 150
-- **bindings passing all checks: 3,091 (95.4%)**
+- resolved bindings: 3,241; violation rows: 78
+- bindings with at least one provable violation: 75
+- **bindings passing all checks: 3,166 (97.7%)**
 
 | violation | count | severity |
 |---|---:|---|
-| not_a_mention | 73 | high |
 | self_binding | 42 | medium |
-| cross_clause | 28 | high |
+| cross_clause | 23 | high |
 | number_mismatch | 6 | high |
 | kind_mismatch | 4 | high |
+| not_a_mention | 3 | high |
 
-Severity totals: high 111, medium 42.
+Severity totals: high 36, medium 42.
 
 ## Top offending cards
 
 | card | violations |
 |---|---:|
-| Terra, Magical Adept // Esper Terra | 5 |
 | Ice Magic | 4 |
-| Esper Origins // Summon: Esper Maduin | 3 |
 | Not Dead After All | 3 |
 | Presumed Dead | 3 |
-| Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time | 2 |
 | Ninja Teen | 2 |
-| Callous Sell-Sword // Burn Together | 2 |
-| Decadent Dragon // Expensive Taste | 2 |
-| Dion, Bahamut's Dominant // Bahamut, Warden of Light | 2 |
-| Emeritus of Truce // Swords to Plowshares | 2 |
-| Flotsam // Jetsam | 2 |
-| Garland, Knight of Cornelia // Chaos, the Endless | 2 |
-| Horned Loch-Whale // Lagoon Breach | 2 |
-| Skycoach Conductor // All Aboard | 2 |
+| Does Machines | 2 |
+| Fake Your Own Death | 2 |
+| Host of the Hereafter | 2 |
+| Pain 101 | 2 |
+| Perigee Beckoner | 2 |
+| Undying Malice | 2 |
+| Vincent's Limit Break | 2 |
+| Break Out | 1 |
+| Carnage, Crimson Chaos | 1 |
+| Dragonbroods' Relic | 1 |
+| Eriette, the Beguiler | 1 |
 
 ## Examples
 
@@ -54,10 +54,10 @@ Severity totals: high 111, medium 42.
   `it` -> `up to one creature` [cross_clause, high]: antecedent 'up to one creature' starts after the anaphor at 81.
 - **Goliath Daydreamer** (sentence 0): "Whenever you cast an instant or sorcery spell from your hand, exile that card with a dream counter on it instead of putting it into your graveyard as it resolves"
   `it` -> `your graveyard` [cross_clause, high]: antecedent 'your graveyard' starts after the anaphor at 102.
-- **Gwen Stacy // Ghost-Spider** (sentence 3): "You may play that card this turn"
-  `that card` -> `the top card` [cross_clause, high]: antecedent 'the top card' starts after the anaphor at 13.
 - **Heaped Harvest** (sentence 0): "When this artifact enters and when you sacrifice it, you may search your library for a basic land card, put it onto the battlefield tapped, then shuffle"
   `it` -> `a basic land card` [cross_clause, high]: antecedent 'a basic land card' starts after the anaphor at 49.
-- **Joshua, Phoenix's Dominant // Phoenix, Warden of Fire** (sentence 2): "Exile Phoenix, then return it to the battlefield"
-  `it` -> `the battlefield` [cross_clause, high]: antecedent 'the battlefield' starts after the anaphor at 27.
+- **Lilah, Undefeated Slickshot** (sentence 1): "Whenever you cast a multicolored instant or sorcery spell from your hand, exile that spell instead of putting it into your graveyard as it resolves"
+  `it` -> `your graveyard` [cross_clause, high]: antecedent 'your graveyard' starts after the anaphor at 118.
+- **Not Dead After All** (sentence 0): "Until end of turn, target creature you control gains "When this creature dies, return it to the battlefield tapped under its owner's control, then create a Wicked Role to"
+  `it` -> `a Wicked Role token` [cross_clause, high]: antecedent 'a Wicked Role token' starts after the anaphor at 86.
 

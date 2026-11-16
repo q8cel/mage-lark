@@ -6,104 +6,29 @@ Eriette, the Beguiler	e4d63fcd9b8a	1	that Aura	that permanent	permanent	sg	cross
 Esper Origins // Summon: Esper Maduin	a3d7ed0d546d	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 75
 Fortune, Loyal Steed	94898152e2cc	1	it	up to one creature	creature	sg	cross_clause	high	antecedent 'up to one creature' starts after the anaphor at 81
 Goliath Daydreamer	fa65e4f6ee38	0	it	your graveyard	graveyard	sg	cross_clause	high	antecedent 'your graveyard' starts after the anaphor at 102
-Gwen Stacy // Ghost-Spider	7a0fbf231bd4	3	that card	the top card	card	sg	cross_clause	high	antecedent 'the top card' starts after the anaphor at 13
 Heaped Harvest	3a09cf720c5d	0	it	a basic land card	card	sg	cross_clause	high	antecedent 'a basic land card' starts after the anaphor at 49
-Joshua, Phoenix's Dominant // Phoenix, Warden of Fire	e8f9f80ad1d1	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 27
 Lilah, Undefeated Slickshot	e00a9ccf4f93	1	it	your graveyard	graveyard	sg	cross_clause	high	antecedent 'your graveyard' starts after the anaphor at 118
 Not Dead After All	4f33e2400570	0	it	a Wicked Role token	token	sg	cross_clause	high	antecedent 'a Wicked Role token' starts after the anaphor at 86
 Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	bfd56733af52	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 96
 Presumed Dead	20e5de7bfa9c	0	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 89
 Retched Wretch	c52c074821e3	0	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 28
 Sahagin	a481f43362b3	0	it	this creature	creature	sg	cross_clause	high	antecedent 'this creature' starts after the anaphor at 79
-Sidequest: Raise a Chocobo // Black Chocobo	997b337a304c	0	it	a land card	land	sg	cross_clause	high	antecedent 'a land card' starts after the anaphor at 80
 Taigam, Master Opportunist	f16d305f5ae1	0	it	the spell	spell	sg	cross_clause	high	antecedent 'the spell' starts after the anaphor at 61
-The Emperor of Palamecia // The Lord Master of Hell	def3cd27d9d9	0	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 31
 The Ooze	a10753b99fa8	0	it	a Mutagen token	token	sg	cross_clause	high	antecedent 'a Mutagen token' starts after the anaphor at 56
 Thunderbolts Conspiracy	057688626849	1	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 50
 Tinybones, Bauble Burglar	906dbba36111	0	it	their graveyard	graveyard	sg	cross_clause	high	antecedent 'their graveyard' starts after the anaphor at 44
 Ultros, Obnoxious Octopus	0c44b8b16212	0	it	target creature an opponent	creature	sg	cross_clause	high	antecedent 'target creature an opponent' starts after the anaphor at 79
 Vaultborn Tyrant	a826479009f8	2	it's	a token	token	sg	cross_clause	high	antecedent 'a token' starts after the anaphor at 156
 Vibrance	6ff9cac6643f	1	it	a land card	card	sg	cross_clause	high	antecedent 'a land card' starts after the anaphor at 158
-Vincent Valentine // Galian Beast	a2b27ee6641b	1	it	~		sg	cross_clause	high	antecedent '~' starts after the anaphor at 20
 Wilt-Leaf Liege	75b358d9bd52	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 170
 Yarus, Roar of the Old Gods	9c2c55d11f6c	2	it	the battlefield	battlefield	sg	cross_clause	high	antecedent 'the battlefield' starts after the anaphor at 193
 Ice Magic	3774c538c2da	2	their	Target creature's owner	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
 Ice Magic	c251b750caab	3	their	Target creature's owner	creature	sg	kind_mismatch	high	plural possessive their bound to singular creature in player-position clause
 Ninja Teen	bcf06c9f213f	5	their	the battlefield, each opponent	battlefield	sg	kind_mismatch	high	plural possessive their bound to singular battlefield in player-position clause
 Requiem Monolith	82fd1df33b8e	1	it	That creature	player	sg	kind_mismatch	high	object pronoun it bound to player 'That creature'
-Bloomvine Regent // Claim Territory	420032220dc4	0	them	up to two basic Forest cards	card	pl	not_a_mention	high	antecedent 'up to two basic Forest cards' has no span/mention in the card text
-Brass's Tunnel-Grinder // Tecutlan, the Searing Rift	d1d0d39659b3	1	that spell	a permanent spell	permanent	sg	not_a_mention	high	antecedent 'a permanent spell' has no span/mention in the card text
-Callous Sell-Sword // Burn Together	08aeb5f53f76	0	its	Target creature	creature	sg	not_a_mention	high	antecedent 'Target creature' has no span/mention in the card text
-Callous Sell-Sword // Burn Together	4e26df8a314e	1	it	Target creature	creature	sg	not_a_mention	high	antecedent 'Target creature' has no span/mention in the card text
-Carnivorous Cultivator // Enroot	f2f7f2a1afd0	0	it	a land card	card	sg	not_a_mention	high	antecedent 'a land card' has no span/mention in the card text
-Clive, Ifrit's Dominant // Ifrit, Warden of Inferno	b14b8f743338	2	it	up to one other target creature	creature	sg	not_a_mention	high	antecedent 'up to one other target creature' has no span/mention in the card text
-Decadent Dragon // Expensive Taste	f9d9d4e38f95	1	those cards	the top two cards	card	pl	not_a_mention	high	antecedent 'the top two cards' has no span/mention in the card text
-Decadent Dragon // Expensive Taste	f9d9d4e38f95	1	they	those cards	card	pl	not_a_mention	high	antecedent 'those cards' has no span/mention in the card text
-Derelict Attic // Widow's Walk	256666c5132c	0	it	a creature	creature	sg	not_a_mention	high	antecedent 'a creature' has no span/mention in the card text
-Dion, Bahamut's Dominant // Bahamut, Warden of Light	50498f30cb70	1	Those creatures	each other creature	creature	pl	not_a_mention	high	antecedent 'each other creature' has no span/mention in the card text
 Dion, Bahamut's Dominant // Bahamut, Warden of Light	652b493b5aba	3	it	target permanent	permanent	sg	not_a_mention	high	antecedent 'target permanent' has no span/mention in the card text
-Dire Flail // Dire Blunderbuss	3a2de521f270	0	its	this creature	creature	sg	not_a_mention	high	antecedent 'this creature' has no span/mention in the card text
-Diviner of Victory // Unwind History	1d69bad364c7	0	its	target creature an opponent	creature	sg	not_a_mention	high	antecedent 'target creature an opponent' has no span/mention in the card text
-Emeritus of Truce // Swords to Plowshares	20a904ae945d	1	Its	target creature	creature	sg	not_a_mention	high	antecedent 'target creature' has no span/mention in the card text
-Emeritus of Truce // Swords to Plowshares	20a904ae945d	1	its	target creature	creature	sg	not_a_mention	high	antecedent 'target creature' has no span/mention in the card text
-Emeritus of Woe // Demonic Tutor	e45e9d4edf6c	0	that card	a card	card	sg	not_a_mention	high	antecedent 'a card' has no span/mention in the card text
-Emet-Selch, Unsundered // Hades, Sorcerer of Eld	6fad24a294a1	2	it	a card or token	token	sg	not_a_mention	high	antecedent 'a card or token' has no span/mention in the card text
-Esper Origins // Summon: Esper Maduin	128eb8230164	1	it's	the top card	card	sg	not_a_mention	high	antecedent 'the top card' has no span/mention in the card text
-Esper Origins // Summon: Esper Maduin	128eb8230164	1	it	the top card	card	sg	not_a_mention	high	antecedent 'the top card' has no span/mention in the card text
-Flotsam // Jetsam	22131a5408a2	0	its	a spell	spell	sg	not_a_mention	high	antecedent 'a spell' has no span/mention in the card text
-Flotsam // Jetsam	c45e9ac834a9	1	it	a spell	spell	sg	not_a_mention	high	antecedent 'a spell' has no span/mention in the card text
-Gandalf, Goblins' Bane // Flameshape	fe7c748db991	1	they	the top two cards	card	pl	not_a_mention	high	antecedent 'the top two cards' has no span/mention in the card text
-Garland, Knight of Cornelia // Chaos, the Endless	abe736533945	1	it	~		sg	not_a_mention	high	antecedent '~' has no span/mention in the card text
-Garland, Knight of Cornelia // Chaos, the Endless	abe736533945	1	its	~		sg	not_a_mention	high	antecedent '~' has no span/mention in the card text
-Grave Researcher // Reanimate	3a69462455b1	1	that card	target creature card	creature	sg	not_a_mention	high	antecedent 'target creature card' has no span/mention in the card text
-Grub, Storied Matriarch // Grub, Notorious Auntie	d302256b028f	2	it	tapped and attacking token	token	sg	not_a_mention	high	antecedent 'tapped and attacking token' has no span/mention in the card text
-Horned Loch-Whale // Lagoon Breach	79882cccc4b9	0	it	target attacking creature	creature	sg	not_a_mention	high	antecedent 'target attacking creature' has no span/mention in the card text
-Horned Loch-Whale // Lagoon Breach	79882cccc4b9	0	their	The owner of target attacking creature you don't control	player	sg	not_a_mention	high	"antecedent ""The owner of target attacking creature you don't control"" has no span/mention in the card text"
-Huatli, Poet of Unity // Roar of the Fifth People	20b2ba6450cf	2	it	a Dinosaur card	card	sg	not_a_mention	high	antecedent 'a Dinosaur card' has no span/mention in the card text
-Idol of the Deep King // Sovereign's Macuahuitl	848716697058	0	it	this Equipment	equipment	sg	not_a_mention	high	antecedent 'this Equipment' has no span/mention in the card text
-Jade Seedstones // Jadeheart Attendant	afa88a8d00d5	0	it	the exiled card	card	sg	not_a_mention	high	antecedent 'the exiled card' has no span/mention in the card text
-Jecht, Reluctant Guardian // Braska's Final Aeon	0a70fee1e95e	1	their	Each opponent	opponent	pl	not_a_mention	high	antecedent 'Each opponent' has no span/mention in the card text
-Jidoor, Aristocratic Capital // Overture	adefbda1c52f	0	their	Target opponent	opponent	sg	not_a_mention	high	antecedent 'Target opponent' has no span/mention in the card text
 Jill, Shiva's Dominant // Shiva, Warden of Ice	652b493b5aba	2	it	Target creature	creature	sg	not_a_mention	high	antecedent 'Target creature' has no span/mention in the card text
-Kellan, the Fae-Blooded // Birthright Boon	1691ec2f8330	0	it	an Aura or Equipment	equipment	sg	not_a_mention	high	antecedent 'an Aura or Equipment' has no span/mention in the card text
-Kirol, History Buff // Pack a Punch	4a40a03f8b22	2	It	target creature	creature	sg	not_a_mention	high	antecedent 'target creature' has no span/mention in the card text
-Kuja, Genome Sorcerer // Trance Kuja, Fate Defied	c920649b7424	0	it	a permanent or player	permanent	sg	not_a_mention	high	antecedent 'a permanent or player' has no span/mention in the card text
-Norman Osborn // Green Goblin	c9ecb966490d	3	its	your graveyard	graveyard	sg	not_a_mention	high	antecedent 'your graveyard' has no span/mention in the card text
-Ojer Pakpatiq, Deepest Epoch // Temple of Cyclical Time	09099283fd1c	3	it	this land	land	sg	not_a_mention	high	antecedent 'this land' has no span/mention in the card text
-Pigment Wrangler // Striking Palette	342d95dc15c9	0	that spell	an instant or sorcery spell	spell	sg	not_a_mention	high	antecedent 'an instant or sorcery spell' has no span/mention in the card text
-Questing Druid // Seek the Beast	c9ad60d78d0b	1	those cards	the top two cards	card	pl	not_a_mention	high	antecedent 'the top two cards' has no span/mention in the card text
-Sagu Wildling // Roost Seek	2db4b2b8e7e3	0	it	a basic land card	card	sg	not_a_mention	high	antecedent 'a basic land card' has no span/mention in the card text
-Sanar, Unfinished Genius // Wild Idea	0b7f29ea0e65	0	it	an instant or sorcery card	card	sg	not_a_mention	high	antecedent 'an instant or sorcery card' has no span/mention in the card text
-Scalding Viper // Steam Clean	9bc4dce97785	0	its	target nonland permanent	permanent	sg	not_a_mention	high	antecedent 'target nonland permanent' has no span/mention in the card text
-Sidequest: Hunt the Mark // Yiazmat, Ultimate Mark	da3f8f256684	1	it	~		sg	not_a_mention	high	antecedent '~' has no span/mention in the card text
-Skycoach Conductor // All Aboard	211b2a204b03	0	that card	target non-Pilot creature	creature	sg	not_a_mention	high	antecedent 'target non-Pilot creature' has no span/mention in the card text
-Skycoach Conductor // All Aboard	211b2a204b03	0	its	that card	card	sg	not_a_mention	high	antecedent 'that card' has no span/mention in the card text
-Spellscorn Coven // Take It Back	d31a0835060a	0	its	target spell	spell	sg	not_a_mention	high	antecedent 'target spell' has no span/mention in the card text
-Studious First-Year // Rampant Growth	1ab420d4b277	0	that card	a basic land card	card	sg	not_a_mention	high	antecedent 'a basic land card' has no span/mention in the card text
-Tarrian's Journal // The Tomb of Aclazotz	a5226a07ac65	2	it	a creature spell	creature	sg	not_a_mention	high	antecedent 'a creature spell' has no span/mention in the card text
-Tarrian's Journal // The Tomb of Aclazotz	a5226a07ac65	2	its	a creature spell	creature	sg	not_a_mention	high	antecedent 'a creature spell' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	c7168a212b02	1	It	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	c74ee58259f3	2	it's	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	c74ee58259f3	2	it	a token	token	sg	not_a_mention	high	antecedent 'a token' has no span/mention in the card text
-Terra, Magical Adept // Esper Terra	bfdca5c6216f	3	it	target nonlegendary enchantment	enchantment	sg	not_a_mention	high	antecedent 'target nonlegendary enchantment' has no span/mention in the card text
 Terra, Magical Adept // Esper Terra	652b493b5aba	5	it	target nonlegendary enchantment	enchantment	sg	not_a_mention	high	antecedent 'target nonlegendary enchantment' has no span/mention in the card text
-The Arkenstone // Seek the Heart	8a9e0a20af9d	0	it	a legendary creature card	creature	sg	not_a_mention	high	antecedent 'a legendary creature card' has no span/mention in the card text
-The Enigma Jewel // Locus of Enlightenment	feca769d0e96	2	it	an ability		sg	not_a_mention	high	antecedent 'an ability' has no span/mention in the card text
-The Everflowing Well // The Myriad Pools	3f8cbfa38921	1	that spell	a permanent spell	permanent	sg	not_a_mention	high	antecedent 'a permanent spell' has no span/mention in the card text
-The Rise of Sozin // Fire Lord Sozin	f796f14d6f4d	2	that player	a player	player	sg	not_a_mention	high	antecedent 'a player' has no span/mention in the card text
-Throne of the Grim Captain // The Grim Captain	a40f033bdc37	1	their	each opponent	opponent	pl	not_a_mention	high	antecedent 'each opponent' has no span/mention in the card text
-Tony Stark // The Invincible Iron Man	4996b1d5ed43	2	it's	the battlefield	battlefield	sg	not_a_mention	high	antecedent 'the battlefield' has no span/mention in the card text
-Tony Stark // The Invincible Iron Man	4996b1d5ed43	2	it	the battlefield	battlefield	sg	not_a_mention	high	antecedent 'the battlefield' has no span/mention in the card text
-Twining Twins // Swift Spiral	29726a644252	1	it	target nontoken creature	creature	sg	not_a_mention	high	antecedent 'target nontoken creature' has no span/mention in the card text
-Twining Twins // Swift Spiral	29726a644252	1	its	target nontoken creature	creature	sg	not_a_mention	high	antecedent 'target nontoken creature' has no span/mention in the card text
-Twists and Turns // Mycoid Maze	3fe0fc2bd9bc	3	the rest	the top four cards	card	pl	not_a_mention	high	antecedent 'the top four cards' has no span/mention in the card text
-Unstable Glyphbridge // Sandswirl Wanderglyph	7ac7e564709a	1	their	an opponent	opponent	sg	not_a_mention	high	antecedent 'an opponent' has no span/mention in the card text
-Unstable Glyphbridge // Sandswirl Wanderglyph	7ac7e564709a	1	they	an opponent	opponent	sg	not_a_mention	high	antecedent 'an opponent' has no span/mention in the card text
-Variable Chaser // Arc of Fortune	3f62e031a1ae	0	their	Each player	player	pl	not_a_mention	high	antecedent 'Each player' has no span/mention in the card text
-Vastlands Scavenger // Bind to Life	f45afe06d5e2	1	them	seven cards	card	pl	not_a_mention	high	antecedent 'seven cards' has no span/mention in the card text
-Venat, Heart of Hydaelyn // Hydaelyn, the Mothercrystal	7136b433c7f6	2	it	another target creature	creature	sg	not_a_mention	high	antecedent 'another target creature' has no span/mention in the card text
-Venat, Heart of Hydaelyn // Hydaelyn, the Mothercrystal	4f6797e496bf	3	that creature	another target creature	creature	sg	not_a_mention	high	antecedent 'another target creature' has no span/mention in the card text
-Walk-In Closet // Forgotten Cellar	de094d619488	0	it	a card	card	sg	not_a_mention	high	antecedent 'a card' has no span/mention in the card text
 Does Machines	0289b4bed249	5	it	target artifact	card	pl	number_mismatch	high	it (sg) bound to 'target artifact' (pl)
 Does Machines	0289b4bed249	5	its	target artifact	card	pl	number_mismatch	high	its (sg) bound to 'target artifact' (pl)
 Ice Magic	3774c538c2da	2	their	Target creature's owner	creature	sg	number_mismatch	high	"their (pl) bound to ""Target creature's owner"" (sg)"
