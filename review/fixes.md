@@ -597,3 +597,23 @@ Merged and sorted by `(card, sentence_index, sid, canonical JSON)` into
 Ordering contract: 200-card all-card slice with `--limit 200` is byte-identical
 at workers 1 and 6: `44a19bac47ae88803dbd3cd22225d12a2c6eb3b9a3dd6020687e795765d347e2`
 (wall 95 s vs 27 s).
+
+## Standard artifact before/after on the record basis
+
+Artifacts (untracked): `compile_standard.jsonl` (resolved) and
+`compile_standard_plain.jsonl` (`--no-resolve`), same per-card record basis,
+22,217 records / 5,153 unique card names each.
+
+| layer | plain | resolved |
+|---|---:|---:|
+| records | 22,217 | 22,217 |
+| unique cards | 5,153 | 5,153 |
+| anaphora markers (unweighted) | 1,988 | **893** |
+| anaphora markers (per-card weights) | 10,018 | **3,654** |
+| records with changed resolved_text | 0 | 1,610 |
+| records whose output differs | — | 1,580 |
+
+Collision check against the first-wins sentence-keyed plan: **506 cards /
+935 records** now resolve differently per card (plan-level collisions: 2,755).
+Plain compile: 265 s at 6 workers (warm cache); resolved chunks total 2,655 s.
+Artifacts stay untracked; `.gitignore` covers `compile_standard*.jsonl`.
