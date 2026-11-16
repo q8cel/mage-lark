@@ -794,3 +794,39 @@ Z049/Z053/Z067/Z086/Z059/Z092 lists/compound effects.
   112 -> 28; type strings containing “ or ” 0.
 - Z047 add_mana recipient: when a player `who` is present, `on` is no longer
   emitted for the source object. Z095 target opponent hand is a zone_set.
+
+## v6 human-label verification (per-card compile at HEAD)
+
+All 20 bug ids pass on a per-card compile; `PASS` proofs (JSON snippets):
+
+| id | card | result | proof |
+|---|---|---|---|
+| Z003 | Wildgrowth Archaic | PASS | `"card":{"card_type":{"kind":"this_card","value":"~"},"anaphor":true}` |
+| Z004 | Red Tiger Mechan | PASS | `"type":"static_ability","keyword":"Warp","cost":{"action":"pay_mana","mana":["{1}","{R}"]}` |
+| Z015 | Unidentified Hovership | PASS | `"who":{"kind":"owner_of","of":{"kind":"anaphora","ref":"the_exiled_card","status":"unresolved"}}` |
+| Z018 | The Princess Takes Flight | PASS | `"card_type":{"kind":"anaphora","ref":"the_exiled_card","status":"unresolved"}` |
+| Z030 | Fiery Annihilation | PASS | `"modifier":{"kind":"attached_to","target":{"kind":"anaphora","ref":"that_creature","status":"unresolved"}}` |
+| Z047 | Cheering Crowd | PASS | `"add_mana","who":{"card_type":{"ref":"anaphora","raw":"they"}},"symbol":"{C}","per":"counter"` (no `on`) |
+| Z049 | Ether | PASS | event object `{"card_class":"spell","card_type":[{"value":"instant"},{"value":"sorcery"}]}` |
+| Z051 | Rescue Girl, First Responder | PASS | `"to":{"owner":{"kind":"owner_of","of":{"kind":"anaphora","ref":"its","status":"unresolved"}}}` |
+| Z053 | Wrath of the Bloodmane | PASS | `"to":{"card_type":[{"value":"creature"},{"value":"planeswalker"}],"quantifier":"target"}` |
+| Z059 | Tinybones Joins Up | PASS | `"effect":{"verb":"shared_effects","shared":{"who":"any number of target players"},"items":[...]}` |
+| Z062 | Faunsbane Troll | PASS | `"card_type":{"kind":"type","value":"aura"},"modifier":{"kind":"attached_to","target":{"card_type":{"kind":"this_card","value":"~"},"anaphor":true}}` |
+| Z067 | Eclipsed Boggart | PASS | `"card_type":[{"value":"Goblin"},{"value":"Swamp"},{"value":"Mountain"}],"any_of":true` |
+| Z068 | Shark Shredder, Killer Clone | PASS | `"type":"static_ability","keyword":"Sneak","cost":{"action":"pay_mana","mana":["{3}","{B}","{B}"]}` |
+| Z074 | Starbreach Whale | PASS | `"keyword":"Warp","cost":{"action":"pay_mana","mana":["{1}","{U}"]}` |
+| Z076 | Drix Fatemaker | PASS | `"keyword":"Warp","cost":{"action":"pay_mana","mana":["{1}","{G}"]}` |
+| Z079 | Rotisserie Elemental | PASS | both trigger subject and counter target `{"kind":"this_card","value":"~"},"anaphor":true` |
+| Z082 | Boar-q-pine | PASS | counter target `{"kind":"this_card","value":"~"},"anaphor":true` |
+| Z084 | Bold Biochemist | PASS | counter target `{"kind":"this_card","value":"~"},"anaphor":true` |
+| Z085 | Wishclaw Talisman | PASS | control target `{"kind":"this_card","value":"~"},"anaphor":true` |
+| Z086 | High Stride | PASS | `"verb":"shared_effects","shared":{"target":{"card_type":{"value":"creature"},"quantifier":"target"}}` |
+| Z092 | Temur Battlecrier | PASS | `for_each.items={"kind":"type","value":"creature","controller":"you","modifier":{"stat_filter","power",">=",4}}` |
+| Z093 | Witch's Mark | PASS | `{"verb":"may","inner":{"verb":"discard",...}}` |
+| Z095 | Borrowed Knowledge | PASS | `{"kind":"zone_set","zone":{"zone":"hand","possessor":"target opponent"}}` |
+| Z099 | Moonlit Lamenter | PASS | enters card `{"kind":"this_card","value":"~"},"anaphor":true` |
+
+Refreshed per-card artifact at HEAD: **22,217 records, 5,153 cards, 898
+unweighted / 3,731 weighted anaphora markers, 4,592 records changed vs
+`5d074f72`**, SHA-256
+`cfb6aa556cde33454c1384b48611b87f7b9ad9129b76c98d285b51585f2ac388`.
