@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "c1b84208fb64ae8000397d4119444511f62b32dbbc643ebde11c75fe5f14f0ca",
- "generated_at": "2026-11-16T17:25:30",
- "artifact_mtime": "2026-11-16T15:51:48",
+ "artifact_sha256": "5d074f726a4f067d5d4eef98ed89a5ff13f00cc336947ab5cf1b0ca280565c1f",
+ "generated_at": "2026-11-16T18:24:09",
+ "artifact_mtime": "2026-11-16T18:23:36",
  "counts": {
-  "records": 2053,
-  "claims": 2820,
+  "records": 1853,
+  "claims": 2457,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1303,
+   "content_loss": 951,
    "empty_slot": 14,
    "invariant": 209,
-   "stringy": 1225
+   "stringy": 1214
   }
  },
  "records": [
@@ -425,13 +425,6 @@
    "sid": "c9e244bbecf7",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -986,27 +979,6 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "first",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "empty_slot",
      "path": "[].trigger.event",
      "detail": "event/verb",
@@ -1044,31 +1016,10 @@
    ]
   },
   {
-   "card": "Ara\u00f1a, Heart of the Spider",
-   "sid": "016ac4ccd3e1",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Arcane Epiphany",
    "sid": "c4efa5363750",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -1103,20 +1054,6 @@
      "detail": "mana spent to cast this spell",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Archdruid's Charm",
-   "sid": "634518d80ca1",
-   "sentence_index": 5,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -1247,48 +1184,6 @@
    ]
   },
   {
-   "card": "Armament Dragon",
-   "sid": "2ee641685950",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "3",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "counters",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "2",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Armasaur Guide",
    "sid": "4b4d36ac33ed",
    "sentence_index": 1,
@@ -1339,20 +1234,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "among",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Ashiok's Reaper",
-   "sid": "9d691d9f518f",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -1432,20 +1313,6 @@
      "detail": "bare_condition: if=you pay {2} more to cast it",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Assert Perfection",
-   "sid": "64de59456725",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -1642,13 +1509,6 @@
      "detail": "another creature",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     },
     {
      "kind": "invariant",
@@ -2011,20 +1871,6 @@
   },
   {
    "card": "Bartz and Boko",
-   "sid": "83473fd12833",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Bartz and Boko",
    "sid": "cda187bf3c2b",
    "sentence_index": 0,
    "claims": [
@@ -2076,20 +1922,6 @@
      "detail": "first strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Beastie Beatdown",
-   "sid": "4fb044700f4c",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -2181,34 +2013,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Betor, Kin to All",
-   "sid": "b893b7b21757",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Betrayal at the Vault",
-   "sid": "5f34643f75d1",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -2346,34 +2150,6 @@
    ]
   },
   {
-   "card": "Biogenic Upgrade",
-   "sid": "f01f36530950",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "3",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Biomechan Engineer",
-   "sid": "b7496c6a1061",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Biorganic Carapace",
    "sid": "a7ca4137b5aa",
    "sentence_index": 1,
@@ -2393,32 +2169,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bad_amount: amount='its power'",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Bite Down on Crime",
-   "sid": "634518d80ca1",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -2573,13 +2328,6 @@
      "detail": "spent",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -2655,13 +2403,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "blow",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     },
@@ -2878,20 +2619,6 @@
    ]
   },
   {
-   "card": "Bolg of the North",
-   "sid": "fc9a87e8a3ef",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Bolg's Company",
    "sid": "fee1927efce1",
    "sentence_index": 1,
@@ -2924,13 +2651,6 @@
    "sid": "60aa46b9974d",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -2972,20 +2692,6 @@
      "detail": "this card from your graveyard",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Bonehoard Dracosaur",
-   "sid": "ecbbafaccc5c",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -3424,20 +3130,6 @@
    ]
   },
   {
-   "card": "Break the Spell",
-   "sid": "d71fd4a88801",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Breeches, Eager Pillager",
    "sid": "617b6a3834d9",
    "sentence_index": 0,
@@ -3462,20 +3154,6 @@
      "detail": "one that hasn't been chosen this turn",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Breeches, the Blastmaker",
-   "sid": "621330651b8d",
-   "sentence_index": 5,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -3623,20 +3301,6 @@
      "detail": "double strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Brush Off",
-   "sid": "49778e4abd81",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -3879,20 +3543,6 @@
    ]
   },
   {
-   "card": "Burrog Barrage",
-   "sid": "8408286d19e4",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Burst Lightning",
    "sid": "56fd23e58000",
    "sentence_index": 2,
@@ -3959,20 +3609,6 @@
      "detail": "bare_condition: if=a creature died this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Cactarantula",
-   "sid": "7eb03d649e34",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -4155,20 +3791,6 @@
      "detail": "ward {1}",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Captain Howler, Sea Scourge",
-   "sid": "5c6cbcae21b3",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -4362,20 +3984,6 @@
    ]
   },
   {
-   "card": "Case of the Crimson Pulse",
-   "sid": "675463ea6649",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Case of the Filched Falcon",
    "sid": "3ba7ceef9a89",
    "sentence_index": 2,
@@ -4486,18 +4094,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.among.card_type[].value",
-     "detail": "two target creatures",
+     "kind": "content_loss",
+     "path": null,
+     "detail": "control",
      "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.counter",
-     "detail": "+1/+1",
-     "severity": "high",
-     "source": "artifact:output"
+     "source": "artifact:content_loss"
     }
    ]
   },
@@ -4534,34 +4135,6 @@
    "sid": "3c642dadcb3d",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "4",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "graveyard",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -4622,34 +4195,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Cavernous Maw",
-   "sid": "dacd266bdb94",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -4804,20 +4349,6 @@
   },
   {
    "card": "Champion of the Path",
-   "sid": "dae9a4d54e44",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Champion of the Path",
    "sid": "f673bd3230b1",
    "sentence_index": 0,
    "claims": [
@@ -4911,13 +4442,6 @@
      "detail": "get",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -4943,21 +4467,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "divided",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "choose",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -5048,20 +4558,6 @@
    ]
   },
   {
-   "card": "Charred Foyer // Warped Space",
-   "sid": "f5540a9db0a4",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Chart a Course",
    "sid": "118511751d47",
    "sentence_index": 1,
@@ -5086,13 +4582,6 @@
      "detail": "artifact and/or creature",
      "severity": "high",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -5126,20 +4615,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "twice",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Chocobo Kick",
-   "sid": "8a6193457971",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -5265,27 +4740,6 @@
    ]
   },
   {
-   "card": "Clifftop Lookout",
-   "sid": "aa582e0b363e",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "land",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Clive, Ifrit's Dominant // Ifrit, Warden of Inferno",
    "sid": "b13e5bef8195",
    "sentence_index": 0,
@@ -5346,13 +4800,6 @@
    "sid": "ebb334da45ce",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -5417,18 +4864,11 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.among.card_type[].value",
-     "detail": "two other target Vehicles",
+     "kind": "content_loss",
+     "path": null,
+     "detail": "control",
      "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.counter",
-     "detail": "+1/+1",
-     "severity": "high",
-     "source": "artifact:output"
+     "source": "artifact:content_loss"
     }
    ]
   },
@@ -5552,13 +4992,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "targets",
      "severity": "medium",
      "source": "artifact:content_loss"
@@ -5672,34 +5105,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "among",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Compel Brutality",
-   "sid": "46a6fb20813e",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Compel Brutality",
-   "sid": "cfae849bfc15",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -5853,27 +5258,6 @@
    ]
   },
   {
-   "card": "Consuming Aberration",
-   "sid": "d706eb791f2f",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "land",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Cool but Rude",
    "sid": "16a76f88b44a",
    "sentence_index": 1,
@@ -5903,20 +5287,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "put",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Coordinated Clobbering",
-   "sid": "9988a16b89a4",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -6049,20 +5419,6 @@
    ]
   },
   {
-   "card": "Count on Luck",
-   "sid": "f5540a9db0a4",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Countersculpt",
    "sid": "b2cf62cfd174",
    "sentence_index": 0,
@@ -6161,28 +5517,21 @@
    ]
   },
   {
-   "card": "Crawling Barrens",
-   "sid": "e7a647a0ac7c",
-   "sentence_index": 2,
+   "card": "Crashing Wave",
+   "sid": "3cb70f4647b4",
+   "sentence_index": 1,
    "claims": [
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "until",
+     "detail": "opponents",
      "severity": "medium",
      "source": "artifact:content_loss"
     },
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
+     "detail": "control",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -6770,20 +6119,6 @@
    ]
   },
   {
-   "card": "Daredevil, Man Without Fear",
-   "sid": "4249ea6875d9",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Daring Waverider",
    "sid": "ba7651f253c1",
    "sentence_index": 0,
@@ -6836,20 +6171,6 @@
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Dark Endurance",
-   "sid": "7ec1ac0134de",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -7064,21 +6385,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "divided",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "choose",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
      "severity": "medium",
      "source": "artifact:content_loss"
     },
@@ -7156,41 +6463,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "void",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Deepfathom Echo",
-   "sid": "59d3a2d364e1",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -7323,48 +6595,6 @@
    ]
   },
   {
-   "card": "Demonic Ruckus",
-   "sid": "78989cc0ffb5",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Depower",
-   "sid": "0ef7fdcf4582",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Derelict Attic // Widow's Walk",
-   "sid": "a57c4d085578",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Desecration Demon",
    "sid": "97943e364a45",
    "sentence_index": 1,
@@ -7428,20 +6658,6 @@
    ]
   },
   {
-   "card": "Diamond Weapon",
-   "sid": "ebd268f2cf78",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Diary of Dreams",
    "sid": "67bcd5e45a2e",
    "sentence_index": 0,
@@ -7478,20 +6694,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "activate",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Dictate of Kruphix",
-   "sid": "339878da442a",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -7543,48 +6745,6 @@
      "detail": "not_a_mention",
      "severity": "high",
      "source": "review/anaphora_agreement.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Diplomatic Relations",
-   "sid": "77a3e80b7208",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Dire Downdraft",
-   "sid": "6d14456b6ec3",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Dire Flail // Dire Blunderbuss",
-   "sid": "3a2de521f270",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -7757,34 +6917,6 @@
    ]
   },
   {
-   "card": "Doctor Doom",
-   "sid": "8ece241488cd",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Doctor Octopus, Master Planner",
-   "sid": "2d5b854f3bc2",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Does Machines",
    "sid": "0289b4bed249",
    "sentence_index": 5,
@@ -7828,20 +6960,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "costs",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Doom Reigns Supreme",
-   "sid": "cab70fbdd743",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -7904,20 +7022,6 @@
    ]
   },
   {
-   "card": "Dour Port-Mage",
-   "sid": "2ac953ce0630",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Draconautics Engineer",
    "sid": "79c1a62eb579",
    "sentence_index": 0,
@@ -7953,49 +7057,28 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "cast",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "4",
-     "severity": "high",
+     "severity": "medium",
      "source": "artifact:content_loss"
     },
     {
      "kind": "content_loss",
      "path": null,
      "detail": "types",
-     "severity": "high",
+     "severity": "medium",
      "source": "artifact:content_loss"
     },
     {
      "kind": "content_loss",
      "path": null,
      "detail": "among",
-     "severity": "high",
+     "severity": "medium",
      "source": "artifact:content_loss"
     },
     {
      "kind": "content_loss",
      "path": null,
      "detail": "graveyard",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Dragon's Prey",
-   "sid": "dd874e3c2b70",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -8170,20 +7253,6 @@
    ]
   },
   {
-   "card": "Dreaded Bat-Cloud",
-   "sid": "55710874feba",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Dreadmaw's Ire",
    "sid": "e689fb2cbdf3",
    "sentence_index": 0,
@@ -8324,20 +7393,6 @@
    ]
   },
   {
-   "card": "Dual-Sun Technique",
-   "sid": "2d150418e4bb",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Duelist of the Mind",
    "sid": "a039b3ae3ef6",
    "sentence_index": 1,
@@ -8451,20 +7506,6 @@
   },
   {
    "card": "Dyadrine, Synthesis Amalgam",
-   "sid": "3b7f8ddbfc6c",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Dyadrine, Synthesis Amalgam",
    "sid": "55fc47f105ce",
    "sentence_index": 1,
    "claims": [
@@ -8558,27 +7599,6 @@
      "detail": "creature card from your graveyard",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -8682,20 +7702,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "source",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Eddymurk Crab",
-   "sid": "b6a32fe13120",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -8810,13 +7816,6 @@
      "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -8871,20 +7870,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "artifact",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "nonland",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "graveyard",
      "severity": "medium",
      "source": "artifact:content_loss"
     },
@@ -8985,13 +7970,6 @@
      "detail": "target land",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -9001,11 +7979,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.counter",
-     "detail": "+1/+1",
-     "severity": "high",
-     "source": "artifact:output"
+     "kind": "content_loss",
+     "path": null,
+     "detail": "control",
+     "severity": "medium",
+     "source": "artifact:content_loss"
     }
    ]
   },
@@ -9206,34 +8184,6 @@
    ]
   },
   {
-   "card": "Endrider Spikespitter",
-   "sid": "6f737e765103",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Enduring Innocence",
-   "sid": "01083a275adb",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Enigma Drake",
    "sid": "2517fd145099",
    "sentence_index": 1,
@@ -9279,20 +8229,6 @@
      "detail": "first strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Entity Tracker",
-   "sid": "0d440709c314",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -9472,20 +8408,6 @@
    ]
   },
   {
-   "card": "Essenceknit Scholar",
-   "sid": "d57269892b6f",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Etali, Primal Storm",
    "sid": "fc90d1c5827a",
    "sentence_index": 0,
@@ -9629,13 +8551,6 @@
      "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -9774,20 +8689,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Extraordinary Journey",
-   "sid": "1d6f9a82610e",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -9941,20 +8842,6 @@
    ]
   },
   {
-   "card": "Faller's Faithful",
-   "sid": "a43653ed6a9a",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Fanatical Offering",
    "sid": "24175650b649",
    "sentence_index": 0,
@@ -9990,20 +8877,6 @@
    ]
   },
   {
-   "card": "Fate of the Sun-Cryst",
-   "sid": "440b56d31817",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Faunsbane Troll",
    "sid": "3df04f73b7b1",
    "sentence_index": 2,
@@ -10028,20 +8901,6 @@
      "detail": "Aura attached to this creature",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Fblthp, Impossibly Lost",
-   "sid": "f9a25a5adf0a",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -10275,13 +9134,6 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bad_amount: amount='its power'",
@@ -10329,13 +9181,6 @@
      "detail": "paying 1 life in addition to their other costs",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spells",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -10530,13 +9375,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "lost",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -10753,27 +9591,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "creature",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "stun",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "counter",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "owners'",
      "severity": "medium",
      "source": "artifact:content_loss"
@@ -10806,13 +9623,6 @@
    "sid": "d076d4facca3",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -11054,20 +9864,6 @@
    ]
   },
   {
-   "card": "Fungal Colossus",
-   "sid": "97984e08252a",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Fynn, the Fangbearer",
    "sid": "8e58442ca4df",
    "sentence_index": 1,
@@ -11111,20 +9907,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "enters",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Gadwick's First Duel",
-   "sid": "aa17a790d9d7",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -11215,21 +9997,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "divided",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "choose",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
      "severity": "medium",
      "source": "artifact:content_loss"
     },
@@ -11244,20 +10012,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "targets",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Gargantuan Leech",
-   "sid": "6376c7edc96d",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -11330,27 +10084,6 @@
      "detail": "another creature",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Gastal Thrillroller",
-   "sid": "2755d0b50a5e",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -11607,48 +10340,6 @@
    ]
   },
   {
-   "card": "Ghalta the Immovable",
-   "sid": "87326e29c61f",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Ghalta the Unstoppable",
-   "sid": "b54a0b27e9ac",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Ghalta, Primal Hunger",
-   "sid": "c998f763cc2e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Ghired, Mirror of the Wilds",
    "sid": "9837dfee654b",
    "sentence_index": 1,
@@ -11699,20 +10390,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "counter",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Giantfall",
-   "sid": "8a6193457971",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -11859,48 +10536,6 @@
    ]
   },
   {
-   "card": "Glint Weaver",
-   "sid": "2bad88ef9f68",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "3",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "counters",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "2",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Glitch Ghost Surveyor",
    "sid": "c836694835db",
    "sentence_index": 2,
@@ -11933,13 +10568,6 @@
    "sid": "35cc5a6f35a2",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -11995,20 +10623,6 @@
      "detail": "bare_condition: condition=that creature would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Go Ninja Go",
-   "sid": "40508bd30ce6",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -12613,32 +11227,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: if=it targets a tapped creature",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Grow Extra Arms",
-   "sid": "55e0e94d1e5c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -12681,27 +11274,6 @@
      "detail": "end of turn",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Guidelight Matrix",
-   "sid": "5ee0393fcadf",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -12846,28 +11418,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "rather",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "HULK SMASH!",
-   "sid": "8a6193457971",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -12884,48 +11435,6 @@
      "detail": "First strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Haliya, Guided by Light",
-   "sid": "2da29ff6a537",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Hall of Echoes",
-   "sid": "e855a61fff67",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -12962,13 +11471,6 @@
    "sid": "d757e9b7a35a",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -13038,13 +11540,6 @@
      "detail": "a noncreature or Otter spell",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -13059,20 +11554,6 @@
      "detail": "Its",
      "severity": "high",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Harvestrite Host",
-   "sid": "92a5539d09b9",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -13109,13 +11590,6 @@
    "sid": "a5680e9226ec",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -13448,20 +11922,6 @@
    ]
   },
   {
-   "card": "Hollow Marauder",
-   "sid": "3e573352debc",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Honorbound Page // Forum's Favor",
    "sid": "617b6a3834d9",
    "sentence_index": 0,
@@ -13498,20 +11958,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Hope Estheim",
-   "sid": "dc7fe7efd389",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -13591,20 +12037,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "land",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -13631,20 +12063,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "owner",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Huatli's Final Strike",
-   "sid": "77a3e80b7208",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -13742,20 +12160,6 @@
    ]
   },
   {
-   "card": "Hunter's Talent",
-   "sid": "8eb320b466cb",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Hurl into History",
    "sid": "6e13e61d7056",
    "sentence_index": 0,
@@ -13773,20 +12177,6 @@
      "detail": "creature spell",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Huskburster Swarm",
-   "sid": "af57e098e363",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -13893,13 +12283,6 @@
    "sid": "610727056a5d",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -14025,20 +12408,6 @@
      "detail": "Its",
      "severity": "high",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Infernal Phantom",
-   "sid": "88c9cc167302",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -14194,13 +12563,6 @@
    "sid": "6d4392465063",
    "sentence_index": 2,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -14512,20 +12874,6 @@
    ]
   },
   {
-   "card": "Itzquinth, Firstborn of Gishath",
-   "sid": "fa36e713d05b",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Ixalli's Lorekeeper",
    "sid": "34d2dbd2ac4a",
    "sentence_index": 1,
@@ -14599,62 +12947,6 @@
      "detail": "exiled card used to craft the exiled",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Jade Seedstones // Jadeheart Attendant",
-   "sid": "b8ea2be3fd29",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "3",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "counters",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "2",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creatures",
-     "severity": "high",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -14729,31 +13021,10 @@
    ]
   },
   {
-   "card": "Jem Lightfoote, Sky Explorer",
-   "sid": "63da406eac40",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Jenova, Ancient Calamity",
    "sid": "cd322daeec70",
    "sentence_index": 2,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -14988,20 +13259,6 @@
    ]
   },
   {
-   "card": "Kain, Traitorous Dragoon",
-   "sid": "ffd19af5362e",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Kaito, Cunning Infiltrator",
    "sid": "244ee8e7db6d",
    "sentence_index": 4,
@@ -15173,13 +13430,6 @@
      "detail": "during your turn",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -15640,27 +13890,6 @@
   },
   {
    "card": "Kolodin, Triumph Caster",
-   "sid": "963f825c6074",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Kolodin, Triumph Caster",
    "sid": "d829eb7274b7",
    "sentence_index": 1,
    "claims": [
@@ -15751,34 +13980,6 @@
    ]
   },
   {
-   "card": "Krang, Master Mind",
-   "sid": "838e88d99fea",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Kraven's Last Hunt",
-   "sid": "aa36d5b84dc9",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Kree Sentinel",
    "sid": "1cab687d012a",
    "sentence_index": 1,
@@ -15845,20 +14046,6 @@
      "detail": "Basic landcycling {1}{R}",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Kutzil, Malamet Exemplar",
-   "sid": "219a420e16d5",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -15943,27 +14130,6 @@
      "detail": "evidence 6",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -15978,20 +14144,6 @@
      "detail": "ward {2}",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Lady of Laughter",
-   "sid": "bec53afb5495",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -16034,20 +14186,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Lashwhip Predator",
-   "sid": "493a587d380c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -16146,55 +14284,6 @@
      "detail": "ward {1}",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Lazav, Familiar Stranger",
-   "sid": "efd3e1c44b83",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Lazav, Wearer of Faces",
-   "sid": "5ae45898aa39",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -16822,20 +14911,6 @@
    ]
   },
   {
-   "card": "Loki, God of Mischief",
-   "sid": "8a2fd4407ee5",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Long River Lurker",
    "sid": "5ee427bc86a5",
    "sentence_index": 1,
@@ -17044,13 +15119,6 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: if=it targets a tapped creature",
@@ -17159,20 +15227,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Macabre Reconstruction",
-   "sid": "e5562c16c71a",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -17330,13 +15384,6 @@
    "sid": "c9e244bbecf7",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -17537,20 +15584,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "among",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Market Gnome",
-   "sid": "19528fbc8ffa",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -17796,20 +15829,6 @@
   },
   {
    "card": "Melek, Reforged Researcher",
-   "sid": "7bd1573831f9",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Melek, Reforged Researcher",
    "sid": "7c89004a9c01",
    "sentence_index": 0,
    "claims": [
@@ -17903,20 +15922,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Mephitic Draught",
-   "sid": "d1c5c62d4269",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -18187,27 +16192,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "instant",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "sorcery",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "player",
      "severity": "medium",
      "source": "artifact:content_loss"
@@ -18285,20 +16269,6 @@
    ]
   },
   {
-   "card": "Mister Fantastic, Reed Richards",
-   "sid": "eb8492697faf",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Mister Hyde, Monster Within",
    "sid": "16a76f88b44a",
    "sentence_index": 3,
@@ -18309,20 +16279,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Mistmeadow Council",
-   "sid": "3076e22102e0",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -18422,13 +16378,6 @@
    "sid": "fa0a3cc1f774",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -18624,20 +16573,6 @@
      "detail": "Job select",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Monstrous Emergence",
-   "sid": "b0c61d4981a7",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -18887,13 +16822,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "targets",
      "severity": "medium",
      "source": "artifact:content_loss"
@@ -18960,13 +16888,6 @@
      "detail": "8",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -19182,34 +17103,6 @@
   },
   {
    "card": "Naga Fleshcrafter",
-   "sid": "0d24c90725cb",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Naga Fleshcrafter",
    "sid": "5207ddb7d81f",
    "sentence_index": 0,
    "claims": [
@@ -19345,20 +17238,6 @@
      "detail": "a spell or ability you control for the first time each turn",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Nibelheim Aflame",
-   "sid": "9b26e266633c",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -19720,20 +17599,6 @@
    ]
   },
   {
-   "card": "Nutrient Block",
-   "sid": "1955757476b4",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Oaken Siren",
    "sid": "6c8790a96e59",
    "sentence_index": 2,
@@ -19793,20 +17658,6 @@
      "detail": "bare_condition: condition=that creature or planeswalker would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Oblivious Bookworm",
-   "sid": "15fc4295d519",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -19896,20 +17747,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "enters",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Officious Interrogation",
-   "sid": "48d169880ddb",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -20105,27 +17942,6 @@
    ]
   },
   {
-   "card": "Omnivorous Flytrap",
-   "sid": "ed6cf2a4ae4c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.among.card_type[].value",
-     "detail": "two target creatures",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.counter",
-     "detail": "+1/+1",
-     "severity": "high",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "One Last Job",
    "sid": "f98578eaafbf",
    "sentence_index": 3,
@@ -20210,20 +18026,6 @@
    ]
   },
   {
-   "card": "Orysa, Tide Choreographer",
-   "sid": "4d51a6199340",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Osseous Exhale",
    "sid": "01b104ec4014",
    "sentence_index": 0,
@@ -20274,34 +18076,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Out of Air",
-   "sid": "18c58f0eb43d",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Outrageous Robbery",
-   "sid": "f118e0ecfe1c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -20406,20 +18180,6 @@
    ]
   },
   {
-   "card": "Painter's Studio // Defaced Gallery",
-   "sid": "5dc683385a25",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Paladin's Arms",
    "sid": "17b07e3ba91b",
    "sentence_index": 1,
@@ -20448,34 +18208,6 @@
    ]
   },
   {
-   "card": "Part in Friendship",
-   "sid": "f464b4020961",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Party Dude",
-   "sid": "f37b0295ab7b",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Patched Plaything",
    "sid": "ca385067dfee",
    "sentence_index": 0,
@@ -20500,20 +18232,6 @@
      "detail": "this Aura",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Pearl of Wisdom",
-   "sid": "ea94dc13a924",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -20749,20 +18467,6 @@
    ]
   },
   {
-   "card": "Phyrexian Arena",
-   "sid": "ef9257e02e1c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Picnic Ruiner // Stolen Goodies",
    "sid": "5df47ab2b1f1",
    "sentence_index": 0,
@@ -20782,11 +18486,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.counter",
-     "detail": "+1/+1",
-     "severity": "high",
-     "source": "artifact:output"
+     "kind": "content_loss",
+     "path": null,
+     "detail": "control",
+     "severity": "medium",
+     "source": "artifact:content_loss"
     }
    ]
   },
@@ -20820,20 +18524,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Piercing Exhale",
-   "sid": "230d2b18ec5b",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -20887,20 +18577,6 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "first",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "empty_slot",
      "path": "[].trigger.event",
      "detail": "event/verb",
@@ -20918,20 +18594,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Plunder the Trollshaws",
-   "sid": "226ba993dc4f",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -20970,13 +18632,6 @@
    "sid": "dae26fb123e0",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -21491,28 +19146,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "twice",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Punishing Punch",
-   "sid": "c3a96965097d",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -21580,13 +19214,6 @@
      "source": "artifact:content_loss"
     },
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "empty_slot",
      "path": "[].trigger.event",
      "detail": "event/verb",
@@ -21604,13 +19231,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "control",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -21701,20 +19321,6 @@
    ]
   },
   {
-   "card": "Quarrel",
-   "sid": "8a6193457971",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Queen's Bay Paladin",
    "sid": "2ef2464430be",
    "sentence_index": 1,
@@ -21761,13 +19367,6 @@
    "sid": "c9e244bbecf7",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -21862,6 +19461,20 @@
    ]
   },
   {
+   "card": "Quina, Qu Gourmet",
+   "sid": "910614a6ca15",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "plus",
+     "severity": "medium",
+     "source": "artifact:content_loss"
+    }
+   ]
+  },
+  {
    "card": "Quintessential Katana",
    "sid": "929f201cd504",
    "sentence_index": 0,
@@ -21933,34 +19546,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Rabid Bite",
-   "sid": "60cdfa420c08",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Rabid Gnaw",
-   "sid": "3c788c3031e8",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -22040,20 +19625,6 @@
      "detail": "Double strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rakdos Joins Up",
-   "sid": "262d51593f76",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -22187,13 +19758,6 @@
      "detail": "get",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spells",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -22272,13 +19836,6 @@
    "sid": "eded92f72458",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -22446,20 +20003,6 @@
      "detail": "attacking or blocking",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Reach for the Sky",
-   "sid": "78989cc0ffb5",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -22828,20 +20371,6 @@
    ]
   },
   {
-   "card": "Resonating Lute",
-   "sid": "830b18be22c2",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spells",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Rest in Peace",
    "sid": "4582c6cb1829",
    "sentence_index": 1,
@@ -22852,146 +20381,6 @@
      "detail": "a card",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Restless Bivouac",
-   "sid": "1649e9485a37",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Restless Cottage",
-   "sid": "dd783eb79a2f",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Restless Fortress",
-   "sid": "42d12380c41b",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Restless Prairie",
-   "sid": "3c5dfe2b2e03",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Restless Ridgeline",
-   "sid": "5d57a835361c",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -23095,27 +20484,6 @@
   },
   {
    "card": "Reverberating Summons",
-   "sid": "2f6eb601733e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Reverberating Summons",
    "sid": "f646f3fd7585",
    "sentence_index": 1,
    "claims": [
@@ -23125,55 +20493,6 @@
      "detail": "your hand",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Revival of the Ancestors",
-   "sid": "072b5c260b3a",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "3",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "counters",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "2",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creatures",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -23262,20 +20581,6 @@
    ]
   },
   {
-   "card": "Ride's End",
-   "sid": "4a13352c0cae",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Rig for War",
    "sid": "9f16b566db4c",
    "sentence_index": 0,
@@ -23300,20 +20605,6 @@
      "detail": "times you chose a mode for that spell",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rime Chill",
-   "sid": "39c718c9c753",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -23409,35 +20700,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "player",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "4",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "graveyard",
      "severity": "medium",
      "source": "artifact:content_loss"
     },
@@ -23570,20 +20833,6 @@
    ]
   },
   {
-   "card": "Roadside Blowout",
-   "sid": "c2ad6a0e4793",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Roamer's Routine",
    "sid": "9f9a92a5705f",
    "sentence_index": 1,
@@ -23641,20 +20890,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "gets",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Rocky Rebuke",
-   "sid": "8a6193457971",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -23809,20 +21044,6 @@
   },
   {
    "card": "Rottenmouth Viper",
-   "sid": "4b9b32546d1e",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Rottenmouth Viper",
    "sid": "993d82711c4f",
    "sentence_index": 0,
    "claims": [
@@ -23895,13 +21116,6 @@
      "detail": "creature that attacked this turn",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -24025,48 +21239,6 @@
    ]
   },
   {
-   "card": "Run Behind",
-   "sid": "b6e5a5fa6580",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Run Over",
-   "sid": "16e5c6b0dc73",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Run Over",
-   "sid": "8a6193457971",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Rune-Brand Juggler",
    "sid": "ced771c5d717",
    "sentence_index": 1,
@@ -24168,34 +21340,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "SP//dr, Piloted by Peni",
-   "sid": "6bf59e981279",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Sab-Sunen, Luxa Embodied",
-   "sid": "154a431ce76b",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -24387,13 +21531,6 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: if=you've gained 3 or more life this turn",
@@ -24431,20 +21568,6 @@
    ]
   },
   {
-   "card": "Satoru, the Infiltrator",
-   "sid": "2d15409e1028",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Savage Land Dinosaur",
    "sid": "1cab687d012a",
    "sentence_index": 1,
@@ -24474,20 +21597,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "phases",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Saved by the Shell",
-   "sid": "166e212bbda4",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -24648,20 +21757,6 @@
    ]
   },
   {
-   "card": "Scrabbling Skullcrab",
-   "sid": "ce0c305378b7",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Scrap Compactor",
    "sid": "e2f964a07259",
    "sentence_index": 0,
@@ -24721,20 +21816,6 @@
      "detail": "up to five {P} worth of modes",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Season of Gathering",
-   "sid": "724a6e1eceef",
-   "sentence_index": 6,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -25005,31 +22086,10 @@
    ]
   },
   {
-   "card": "Seize the Secrets",
-   "sid": "8815ad2ef417",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Seized from Slumber",
    "sid": "c9e244bbecf7",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -25181,20 +22241,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "land",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Sharae of Numbing Depths",
-   "sid": "0572fab8f57d",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -25398,20 +22444,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "second",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -25775,48 +22807,6 @@
    ]
   },
   {
-   "card": "Slumbering Trudge",
-   "sid": "a90fbed5cd8d",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "stun",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "counters",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "3",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "minus",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Smaug's Fury",
    "sid": "9f16b566db4c",
    "sentence_index": 0,
@@ -25827,20 +22817,6 @@
      "detail": "first strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Smaug, Wicked Worm",
-   "sid": "8cb855b0ebd8",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -26125,20 +23101,6 @@
    ]
   },
   {
-   "card": "South Pole Voyager",
-   "sid": "14b4e491f7b1",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "South Wind Avatar",
    "sid": "43dd3b467d40",
    "sentence_index": 1,
@@ -26240,13 +23202,6 @@
      "detail": "creature you control with power 4 or greater",
      "severity": "high",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -26350,20 +23305,6 @@
   },
   {
    "card": "Spider-Man 2099",
-   "sid": "11c76a10ac03",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Spider-Man 2099",
    "sid": "cb4e35988c09",
    "sentence_index": 1,
    "claims": [
@@ -26387,20 +23328,6 @@
      "detail": "this card from your graveyard",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Spider-UK",
-   "sid": "ee3aae81f04c",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -26429,34 +23356,6 @@
      "detail": "sorcery spell",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Spinner of Souls",
-   "sid": "ed5a80c51f0d",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Spinneret and Spiderling",
-   "sid": "e5e9e8627810",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -26525,20 +23424,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Spirit Water Revival",
-   "sid": "daf04f270aa7",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -26625,27 +23510,6 @@
      "detail": "other untapped artifact",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -26874,20 +23738,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "enchanted",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "owner",
      "severity": "medium",
      "source": "artifact:content_loss"
@@ -27098,6 +23948,20 @@
    ]
   },
   {
+   "card": "Stonesplitter Bolt",
+   "sid": "002718b21bd8",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "twice",
+     "severity": "medium",
+     "source": "artifact:content_loss"
+    }
+   ]
+  },
+  {
    "card": "Stop Cold",
    "sid": "3738209435c2",
    "sentence_index": 3,
@@ -27129,20 +23993,6 @@
      "detail": "bare_condition: if=you attacked this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Storm, Windrider",
-   "sid": "23e21fa3a0b3",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -27547,20 +24397,6 @@
   },
   {
    "card": "Sunderflock",
-   "sid": "7c456d01404e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Sunderflock",
    "sid": "f66b3f628ed0",
    "sentence_index": 2,
    "claims": [
@@ -27784,20 +24620,6 @@
    ]
   },
   {
-   "card": "Suspicious Detonation",
-   "sid": "bfd2ff56b0a5",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Suspicious Shambler",
    "sid": "717a6d6b7f6e",
    "sentence_index": 0,
@@ -27808,20 +24630,6 @@
      "detail": "this card from your graveyard",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Susur Secundi, Void Altar",
-   "sid": "1d1fffa46a4b",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -27840,20 +24648,6 @@
    ]
   },
   {
-   "card": "Swampsnare Trap",
-   "sid": "4f5965c92f3f",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Swarm Culler",
    "sid": "16a76f88b44a",
    "sentence_index": 2,
@@ -27864,20 +24658,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Swat Away",
-   "sid": "4c3bc05fc622",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -28020,18 +24800,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.among.card_type[].value",
-     "detail": "two target creatures",
+     "kind": "content_loss",
+     "path": null,
+     "detail": "control",
      "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.counter",
-     "detail": "+1/+1",
-     "severity": "high",
-     "source": "artifact:output"
+     "source": "artifact:content_loss"
     }
    ]
   },
@@ -28197,20 +24970,6 @@
    ]
   },
   {
-   "card": "Taii Wakeen, Perfect Shot",
-   "sid": "712a6da83c02",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Tainted Treats",
    "sid": "a57b60a4ad84",
    "sentence_index": 0,
@@ -28267,34 +25026,6 @@
    ]
   },
   {
-   "card": "Tangle Tumbler",
-   "sid": "729200ac3158",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "turn",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Tangled Colony",
    "sid": "26dc2c723513",
    "sentence_index": 1,
@@ -28305,20 +25036,6 @@
      "detail": "\"This token can't block,\"",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Tannuk, Memorial Ensign",
-   "sid": "14b4e491f7b1",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -28487,13 +25204,6 @@
      "detail": "spent",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -28568,20 +25278,6 @@
    ]
   },
   {
-   "card": "Tellah, Great Sage",
-   "sid": "00429dc20af7",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Temporal Cleansing",
    "sid": "17c0925b5c0d",
    "sentence_index": 1,
@@ -28592,20 +25288,6 @@
      "detail": "nonland permanent",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Temporal Intervention",
-   "sid": "18b84510019d",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -28666,20 +25348,6 @@
    ]
   },
   {
-   "card": "Tenderize",
-   "sid": "8a6193457971",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Tenth District Hero",
    "sid": "416bd43b376f",
    "sentence_index": 0,
@@ -28718,27 +25386,6 @@
      "detail": "mana value",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Terrific Team-Up",
-   "sid": "9988a16b89a4",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -28795,20 +25442,6 @@
      "detail": "Double strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Terror of the Peaks",
-   "sid": "7288e92d9a7d",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -29009,20 +25642,6 @@
    ]
   },
   {
-   "card": "The Chief Warg",
-   "sid": "ad62c8e98f05",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "The Clone Saga",
    "sid": "f0760365cdfe",
    "sentence_index": 1,
@@ -29033,20 +25652,6 @@
      "detail": "not legendary",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "The Clone Saga",
-   "sid": "f2396eac49ed",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -29101,20 +25706,6 @@
   },
   {
    "card": "The Dawning Archaic",
-   "sid": "b6a32fe13120",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "The Dawning Archaic",
    "sid": "f8da90f101e3",
    "sentence_index": 3,
    "claims": [
@@ -29161,18 +25752,11 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.among.card_type[].value",
-     "detail": "two target creatures",
+     "kind": "content_loss",
+     "path": null,
+     "detail": "control",
      "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.counter",
-     "detail": "+1/+1",
-     "severity": "high",
-     "source": "artifact:output"
+     "source": "artifact:content_loss"
     }
    ]
   },
@@ -29187,20 +25771,6 @@
      "detail": "target creature",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "The End",
-   "sid": "47d7ad51682e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -29250,27 +25820,6 @@
      "detail": "that isn't a mana ability",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "The Everflowing Well // The Myriad Pools",
-   "sid": "3f8cbfa38921",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -29395,20 +25944,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "activate",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "The Lord of the Eagles",
-   "sid": "b6b90ddac3dd",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
      "severity": "medium",
      "source": "artifact:content_loss"
     }
@@ -29548,62 +26083,6 @@
    ]
   },
   {
-   "card": "The Pride of Hull Clade",
-   "sid": "9f26005f13f3",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "The Prima Vista",
-   "sid": "4d69ce7d2ba5",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "end",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "The Regalia",
-   "sid": "ec3c04572650",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "until",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "land",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "The Rise of Sozin // Fire Lord Sozin",
    "sid": "422fbef39c5d",
    "sentence_index": 2,
@@ -29695,34 +26174,6 @@
    ]
   },
   {
-   "card": "The Skullspore Nexus",
-   "sid": "b54a0b27e9ac",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "The Speed Demon",
-   "sid": "5f664f90e1b2",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "The Spot, Living Portal",
    "sid": "19986133781b",
    "sentence_index": 2,
@@ -29761,34 +26212,6 @@
      "detail": "target/type",
      "severity": "high",
      "source": "review/structure_report.tsv"
-    }
-   ]
-  },
-  {
-   "card": "The Ten Rings",
-   "sid": "364058df7b93",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "The Theorist, Jace Beleren",
-   "sid": "12036fde3826",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -29950,13 +26373,6 @@
      "detail": "noncreature spell",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -29989,20 +26405,6 @@
    ]
   },
   {
-   "card": "Thorin, Mountain-king",
-   "sid": "5e6af02d814d",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Thought Shucker",
    "sid": "6eb391062f0a",
    "sentence_index": 0,
@@ -30027,20 +26429,6 @@
      "detail": "a nonland card from it",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Thoughtweft Charge",
-   "sid": "bb8dc2f39820",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -30216,20 +26604,6 @@
      "detail": "another artifact",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Throw from the Saddle",
-   "sid": "3c788c3031e8",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -30493,20 +26867,6 @@
    ]
   },
   {
-   "card": "Tolarian Terror",
-   "sid": "b6a32fe13120",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Tolsimir, Midnight's Light",
    "sid": "9a03a5c8cb20",
    "sentence_index": 1,
@@ -30531,13 +26891,6 @@
      "detail": "another creature",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -30955,20 +27308,6 @@
    ]
   },
   {
-   "card": "Triple Triad",
-   "sid": "041b09179cd0",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Troop of Ponies",
    "sid": "92230a20b5ef",
    "sentence_index": 0,
@@ -31028,20 +27367,6 @@
      "detail": "self_binding",
      "severity": "medium",
      "source": "review/anaphora_agreement.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Truck Toss",
-   "sid": "9ae29671491e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -31186,21 +27511,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "divided",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "choose",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
      "severity": "medium",
      "source": "artifact:content_loss"
     },
@@ -31299,20 +27610,6 @@
   },
   {
    "card": "Twinned Vision",
-   "sid": "aa064b2ef9ff",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Twinned Vision",
    "sid": "d82f76392b1d",
    "sentence_index": 2,
    "claims": [
@@ -31333,7 +27630,14 @@
     {
      "kind": "stringy",
      "path": "[].keywords.cost.card_target.card_type[].value",
-     "detail": "'value': 'card'}}",
+     "detail": "'value': 'card'}",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].keywords.cost.card_target.card_type[].value",
+     "detail": "'card_class': 'card'}",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -31620,20 +27924,6 @@
    ]
   },
   {
-   "card": "Uneasy Partings",
-   "sid": "811bcfac206c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Unending Whisper",
    "sid": "5c6394cd24e4",
    "sentence_index": 1,
@@ -31704,20 +27994,6 @@
    ]
   },
   {
-   "card": "Unravel",
-   "sid": "c40c924bfcd3",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Unrooted Ancestor",
    "sid": "2eea28f9c139",
    "sentence_index": 1,
@@ -31749,20 +28025,6 @@
      "detail": "sorcery spell",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Unscrupulous Contractor",
-   "sid": "1479603fc885",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -31844,21 +28106,7 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "divided",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "choose",
-     "severity": "high",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
      "severity": "high",
      "source": "artifact:content_loss"
     },
@@ -31904,13 +28152,6 @@
    "sid": "6d4392465063",
    "sentence_index": 4,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -32190,20 +28431,6 @@
      "detail": "bare_condition: condition=this is the second time this ability has resolved this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Venom's Hunger",
-   "sid": "8a32aa2c0847",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -32523,20 +28750,6 @@
    ]
   },
   {
-   "card": "Visions of Villainy",
-   "sid": "eb99659c00aa",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Vito's Inquisitor",
    "sid": "36cde8b0d432",
    "sentence_index": 0,
@@ -32603,20 +28816,6 @@
      "detail": "speed",
      "severity": "medium",
      "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -32631,20 +28830,6 @@
      "detail": "there are seven or more cards in your graveyard",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Voidforged Titan",
-   "sid": "2e27f462e5a2",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -32845,20 +29030,6 @@
    ]
   },
   {
-   "card": "Waltz of Rage",
-   "sid": "60229e94e3a3",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Wanderbrine Trapper",
    "sid": "6c2f7d3f0408",
    "sentence_index": 0,
@@ -32946,20 +29117,6 @@
      "detail": "Job select",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Waterbender Ascension",
-   "sid": "8767b8f4c7a4",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -33086,20 +29243,6 @@
      "detail": "another creature",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "West Wind Avatar",
-   "sid": "c16e3c8e7d20",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "card",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -33244,48 +29387,6 @@
    ]
   },
   {
-   "card": "Wick, the Whorled Mind",
-   "sid": "86821d688446",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
-   "card": "Wickerfolk Indomitable",
-   "sid": "7fb2c6ec9a48",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "sacrificing",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Wickerfolk Thresher",
    "sid": "6e433cc6623a",
    "sentence_index": 2,
@@ -33377,20 +29478,6 @@
    ]
   },
   {
-   "card": "Wildvine Pummeler",
-   "sid": "39c718c9c753",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    }
-   ]
-  },
-  {
    "card": "Wilt in the Heat",
    "sid": "3df04f73b7b1",
    "sentence_index": 2,
@@ -33401,20 +29488,6 @@
      "detail": "bare_condition: condition=that creature would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Wilt in the Heat",
-   "sid": "fd23eb99bbc8",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -33695,13 +29768,6 @@
      "detail": "creature that attacked this turn",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -33790,6 +29856,20 @@
    ]
   },
   {
+   "card": "Worldwalker Helm",
+   "sid": "ed961aa155dc",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "plus",
+     "severity": "medium",
+     "source": "artifact:content_loss"
+    }
+   ]
+  },
+  {
    "card": "Worthy Cost",
    "sid": "04186edb9670",
    "sentence_index": 1,
@@ -33814,20 +29894,6 @@
      "detail": "Double strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Wrath of the Bloodmane",
-   "sid": "5ac76fd92b0b",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cast",
-     "severity": "medium",
-     "source": "artifact:content_loss"
     }
    ]
   },
@@ -33948,13 +30014,6 @@
    "sid": "69409c4359ec",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
-     "severity": "medium",
-     "source": "artifact:content_loss"
-    },
     {
      "kind": "content_loss",
      "path": null,
