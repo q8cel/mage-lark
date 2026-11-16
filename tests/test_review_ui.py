@@ -10,6 +10,7 @@ accepts the exported file.
 Run with ``./myenv/bin/python tests/test_review_ui.py`` from the repo root.
 """
 
+import argparse
 import hashlib
 import json
 import os
@@ -25,7 +26,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 UI = ROOT / "tools" / "review_ui.py"
 ARTIFACT = ROOT / "compile_standard.jsonl"
-SRC_PACK = ROOT.parent / "swarm" / "work" / "human_review_v5"
+DEFAULT_PACK = ROOT.parent / "swarm" / "work" / "human_review_v5"
+V5_LABELS = ROOT.parent / "swarm" / "work" / "human_review_v5" / "labels.tsv"
 EVAL = ROOT.parent / "swarm" / "scripts" / "human_audit_eval.py"
 PY = sys.executable
 
@@ -73,23 +75,25 @@ def request_json(port, path, payload=None):
         return status, {"raw": body.decode("utf-8", "replace")}
 
 
-def build_pack(tmp):
+def build_pack(tmp, src):
     pack = tmp / "pack"
     pack.mkdir()
-    for name in ("key.json", "meta.json", "sheet_01.md", "sheet_02.md"):
-        shutil.copy2(SRC_PACK / name, pack / name)
+    for name in ("key.json", "meta.json", "items.json", "sheet_01.md", "sheet_02.md"):
+        if (src / name).exists():
+            shutil.copy2(src / name, pack / name)
     key = json.loads((pack / "key.json").read_text(encoding="utf-8"))
     ids = sorted(key)
+    rich_id, ok_id = ids[0], ids[1]
     rows = ["id\tverdict\tnote"]
     for hid in ids:
-        if hid == "Y001":
-            rows.append('Y001\tbug "zone": destination says library but it should be exile')
-        elif hid == "Y002":
-            rows.append("Y002\tok")
+        if hid == rich_id:
+            rows.append(f'{hid}\tbug "zone": destination says library but it should be exile')
+        elif hid == ok_id:
+            rows.append(f"{hid}\tok")
         else:
             rows.append(f"{hid}\t\t")
     (pack / "labels.tsv").write_text("\n".join(rows) + "\n", encoding="utf-8")
-    return pack, ids
+    return pack, ids, rich_id, ok_id
 
 
 def start_server(pack, extra=()):
@@ -141,6 +145,16 @@ def last_label(path, hid):
     return found
 
 
+def walk_keys(node):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            yield key
+            yield from walk_keys(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from walk_keys(value)
+
+
 def leaf_paths(node, path="$"):
     if isinstance(node, dict):
         for key, value in node.items():
@@ -152,14 +166,101 @@ def leaf_paths(node, path="$"):
         yield path
 
 
+def real_import_case(tmp, src):
+    """Copy the pack, drop the user's in-progress v5 labels.tsv in, import it."""
+    if not V5_LABELS.exists():
+        print("  [skip] real import case: no v5 labels.tsv")
+        return
+    if src.resolve() == V5_LABELS.parent.resolve():
+        print("  [skip] real import case: source pack is the v5 pack")
+        return
+    pack = tmp / "pack_real"
+    pack.mkdir()
+    for name in ("meta.json", "key.json", "items.json", "sheet_01.md", "sheet_02.md"):
+        if (src / name).exists():
+            shutil.copy2(src / name, pack / name)
+    shutil.copy2(V5_LABELS, pack / "labels.tsv")
+    key = json.loads((pack / "key.json").read_text(encoding="utf-8"))
+    if "Y001" not in key:
+        with (pack / "labels.tsv").open("a", encoding="utf-8") as fh:
+            fh.write("Y001\tok\tstray id from the v5 sheet\n")
+    original = (pack / "labels.tsv").read_bytes()
+    expected_imported = 0
+    expected_unknown = set()
+    for line in original.decode("utf-8-sig").splitlines()[1:]:
+        parts = line.split("\t")
+        if not parts or not parts[0].strip():
+            continue
+        hid = parts[0].strip()
+        rest = parts[1].split() if len(parts) > 1 else []
+        verdict = rest[0].lower() if rest else ""
+        if verdict not in ("ok", "bug", "legit"):
+            continue
+        if hid in key:
+            expected_imported += 1
+        else:
+            expected_unknown.add(hid)
+    proc, port = start_server(pack)
+    try:
+        status, state = request_json(port, "/api/state")
+        check("real import: server started on the v6 pack", status == 200
+              and state["n"] == len(key), str(state.get("n")))
+        check("real import: import counts", state["counts"]["imported"] == expected_imported,
+              f"got {state['counts']['imported']}, expected {expected_imported}")
+        check("real import: labels.tsv not modified",
+              (pack / "labels.tsv").read_bytes() == original)
+        status, resp = request_json(port, "/api/import", {})
+        check("real import: unknown ids reported",
+              set(resp.get("unknown", [])) == expected_unknown,
+              f"got {resp.get('unknown')}, expected {sorted(expected_unknown)}")
+        check("real import: no rows re-imported",
+              resp.get("imported") == 0, str(resp.get("imported")))
+        # Simulate the reviewer having typed verdicts into the same v5 file:
+        # rows for v5-only ids stay unknown, rows for v6 ids import.
+        v5_ids = []
+        for line in original.decode("utf-8-sig").splitlines()[1:]:
+            hid = line.split("\t")[0].strip()
+            if hid and hid not in key:
+                v5_ids.append(hid)
+        v5_ids = v5_ids[:3]
+        simulate = ["id\tverdict\tnote"]
+        for hid in v5_ids:
+            simulate.append(f'{hid}\tbug "zone": v5 sheet note for a v5-only id')
+        simulate.append(f"{key and sorted(key)[2]}\tlegit\tlooks parsed but cosmetic")
+        simulate.append(f"{sorted(key)[3]}\tok\t")
+        (pack / "labels.tsv").write_text("\n".join(simulate) + "\n", encoding="utf-8")
+        simulated = (pack / "labels.tsv").read_bytes()
+        status, resp = request_json(port, "/api/import", {})
+        check("in-progress import: v6 rows imported, v5-only rows unknown",
+              status == 200 and resp["imported"] == 2
+              and set(resp["unknown"]) == set(v5_ids),
+              f"imported={resp.get('imported')} unknown={resp.get('unknown')}")
+        check("in-progress import: file not modified",
+              (pack / "labels.tsv").read_bytes() == simulated)
+        status, resp2 = request_json(port, "/api/import", {})
+        check("in-progress import: second pass imports nothing",
+              resp2["imported"] == 0 and resp2["skipped"] >= 2, str(resp2))
+        print(f"  real import: user file {expected_imported} rows imported / "
+              f"{len(expected_unknown)} unknown; simulated in-progress file "
+              f"2 imported / {len(v5_ids)} unknown")
+        return state
+    finally:
+        stop_server(proc)
+
+
 def main():
-    if not SRC_PACK.is_dir():
-        raise SystemExit(f"missing review pack: {SRC_PACK}")
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--pack", type=Path, default=DEFAULT_PACK)
+    args = ap.parse_args()
+    src = args.pack.resolve()
+    if not src.is_dir():
+        raise SystemExit(f"missing review pack: {src}")
     if not ARTIFACT.exists():
         raise SystemExit(f"missing artifact: {ARTIFACT}")
 
     tmp = Path(tempfile.mkdtemp(prefix="review-ui-test-"))
-    pack, ids = build_pack(tmp)
+    pack, ids, rich_id, ok_id = build_pack(tmp, src)
+    print(f"pack: {src}")
     labels_jsonl = pack / "labels.jsonl"
     labels_tsv = pack / "labels.tsv"
     import_bytes = labels_tsv.read_bytes()
@@ -188,6 +289,20 @@ def main():
         check("lane recorded on labelled items",
               all(it.get("lane") in ("triage", "blind")
                   for it in state["items"] if it["done"]))
+        meta = json.loads((pack / "meta.json").read_text(encoding="utf-8"))
+        claims_file = ROOT / "review" / "claims.json"
+        declared_art = meta.get("artifact_sha256")
+        declared_claims = meta.get("claims_sha256")
+        shas_match = (declared_art == sha256(ARTIFACT)
+                      and (not declared_claims or not claims_file.exists()
+                           or declared_claims == sha256(claims_file)))
+        if shas_match:
+            check("no SHA warning banner", state["warnings"] == [], str(state["warnings"]))
+            check("state reports the matching SHAs",
+                  state["artifact_sha256"] == declared_art
+                  and (not declared_claims or state["claims_sha256"] == declared_claims))
+        else:
+            print(f"  [skip] SHA banner check (pack declares {declared_art[:12] if declared_art else '?'}")
         lanes = json.loads((pack / "review_state.json").read_text())["lanes"]
         check("state file records the lane split",
               len(lanes) == 100 and set(lanes) == set(ids))
@@ -202,8 +317,8 @@ def main():
               "http://" not in page and "https://" not in page)
 
         # ---- imported label shape ----------------------------------
-        status, item = request_json(port, "/api/item?id=Y001")
-        check("GET /api/item", status == 200 and item["id"] == "Y001")
+        status, item = request_json(port, f"/api/item?id={rich_id}")
+        check("GET /api/item", status == 200 and item["id"] == rich_id)
         label = item.get("label") or {}
         check("imported verdict/note preserved",
               label.get("verdict") == "bug"
@@ -211,11 +326,24 @@ def main():
               str(label))
         check("imported axis inferred from the loose note",
               label.get("axis") == "zone", str(label.get("axis")))
+        zone_present = any(key == "zone" for key in walk_keys(item.get("output")))
         check("imported path resolved against the output",
-              label.get("path", "").startswith("$") and label.get("source") == "import",
+              (label.get("path", "").startswith("$") if zone_present else
+               label.get("path", "") == "") and label.get("source") == "import",
               str(label.get("path")))
         check("resolved text and card context present",
               item.get("resolved_text") and len(item.get("cards", [])) >= 1)
+        items_json = pack / "items.json"
+        if items_json.exists():
+            entries = {e["id"]: e for e in json.loads(items_json.read_text())
+                       if isinstance(e, dict)}
+            first = entries.get(item["id"], {})
+            expected_text = (first.get("original_text") or first.get("sentence")
+                             or first.get("text") or "")
+            check("items.json payload drives the item text",
+                  expected_text and item["original_text"] == expected_text)
+            check("items.json card_text rendered",
+                  any(row["text"] for row in item["cards"]))
         check("content alignment tokens present",
               any(t["cls"] == "found" for t in item["tokens"])
               and any(t["cls"] == "function" for t in item["tokens"]))
@@ -302,7 +430,7 @@ def main():
             "note": "", "claims_accepted": [claim["key"]], "claims_rejected": []})
         check("re-label", status == 200)
         status, resp = request_json(port, "/api/label", {
-            "id": "Y003", "verdict": "ok", "axis": "", "path": "", "note": ""})
+            "id": ids[2], "verdict": "ok", "axis": "", "path": "", "note": ""})
         check("ok label without a path", status == 200 and resp["record"]["note"] == "")
 
         # ---- import is idempotent ----------------------------------
@@ -327,8 +455,8 @@ def main():
         check("export has no duplicate ids",
               all(len(v) == 1 for v in by_id.values()))
         check("imported rows survive export verbatim",
-              by_id["Y001"][0].startswith("Y001\tbug \"zone\":") and
-              by_id["Y002"][0].startswith("Y002\tok"))
+              by_id[rich_id][0].startswith(f'{rich_id}\tbug "zone":') and
+              by_id[ok_id][0].startswith(f"{ok_id}\tok"))
         check("UI label exported",
               by_id[hid][0].startswith(f"{hid}\tbug\t") and path in by_id[hid][0],
               by_id.get(hid))
@@ -357,6 +485,10 @@ def main():
               labels_jsonl.read_text(encoding="utf-8") == before)
         status, payload = request_json(port, f"/api/item?id={hid}")
         check("label survives restart", payload["label"]["verdict"] == "bug")
+
+        stop_server(proc)
+        proc = None
+        real_import_case(tmp, src)
 
         print(f"\nimported rows at startup: {state['counts']['imported']}")
         print(f"labels in state: {state['counts']['done']}")

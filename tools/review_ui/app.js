@@ -206,8 +206,13 @@ function renderCardText() {
   const it = S.item;
   for (const row of it.cards || []) {
     const line = document.createElement('div');
-    line.className = 'ctx-line' +
-      (row.sentence_index === it.sentence_index && row.text === it.original_text ? ' judged' : '');
+    const judgedText = it.original_text || '';
+    const lineText = row.text || '';
+    const isJudged = lineText === judgedText ||
+      (judgedText && (lineText.includes(judgedText) || judgedText.includes(lineText)) &&
+       lineText.length > 3) ||
+      (row.sentence_index === it.sentence_index && !judgedText);
+    line.className = 'ctx-line' + (isJudged ? ' judged' : '');
     const idx = document.createElement('span');
     idx.className = 'idx';
     idx.textContent = String(row.sentence_index);

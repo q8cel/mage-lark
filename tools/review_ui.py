@@ -362,6 +362,46 @@ def now_iso():
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def normalize_card_rows(raw):
+    """Card oracle text as [{sentence_index, text}] from a string or list."""
+    rows = []
+    if isinstance(raw, str):
+        for i, line in enumerate(ln for ln in raw.splitlines() if ln.strip()):
+            rows.append({"sentence_index": i, "text": line})
+    elif isinstance(raw, list):
+        for i, row in enumerate(raw):
+            if isinstance(row, str):
+                rows.append({"sentence_index": i, "text": row})
+            elif isinstance(row, dict):
+                rows.append({"sentence_index": row.get("sentence_index", i),
+                             "text": row.get("text") or row.get("original_text") or ""})
+    return rows
+
+
+def load_items_json(path):
+    """{id: entry} from items.json (list, or {id: entry}, or {items: [...]})."""
+    path = Path(path)
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise SystemExit(f"cannot parse {path}: {exc}")
+    entries = data
+    if isinstance(data, dict):
+        entries = data.get("items") or data.get("records") or data
+        if isinstance(entries, dict):
+            entries = [dict(entry, id=entry.get("id", hid))
+                       for hid, entry in entries.items()]
+    if not isinstance(entries, list):
+        raise SystemExit(f"{path}: expected a list of items")
+    out = {}
+    for entry in entries:
+        if isinstance(entry, dict) and entry.get("id"):
+            out[entry["id"]] = entry
+    return out
+
+
 def file_sha256(path, chunk=1 << 20):
     h = hashlib.sha256()
     with Path(path).open("rb") as fh:
@@ -384,28 +424,48 @@ class Pack:
         if not self.dir.is_dir():
             raise SystemExit(f"pack directory not found: {self.dir}")
         key_path = self.dir / "key.json"
-        if not key_path.exists():
-            raise SystemExit(f"missing {key_path}")
-        self.key = json.loads(key_path.read_text(encoding="utf-8"))
+        self.key = (json.loads(key_path.read_text(encoding="utf-8"))
+                    if key_path.exists() else {})
         meta_path = self.dir / "meta.json"
         self.meta = (json.loads(meta_path.read_text(encoding="utf-8"))
                      if meta_path.exists() else {})
+        # items.json (v6+) carries the same item payloads the UI serves; older
+        # packs only have key.json, so identity comes from there.
+        self.items_path = self.dir / "items.json"
+        self.items_json = load_items_json(self.items_path)
+        self.embedded = {}
+        self.embedded_cards = {}
+        if self.items_json:
+            self._merge_items_json()
+        if not self.key:
+            raise SystemExit(f"missing {key_path} and {self.items_path}")
+        for hid in sorted(self.key):
+            entry = self.key[hid]
+            if not all(entry.get(f) is not None for f in ("card", "sid", "sentence_index")):
+                raise SystemExit(f"{hid}: item is missing card/sid/sentence_index")
         self.ids = sorted(self.key)
         self.strata = {it.get("id"): it.get("stratum")
                        for it in self.meta.get("items", []) if isinstance(it, dict)}
-        self.artifact_path = self._find_artifact(artifact)
+        for hid, entry in self.key.items():
+            if entry.get("stratum") is not None:
+                self.strata[hid] = entry["stratum"]
+        self.warnings = []
+        self.claims_mode = "none"
+        self.claims_meta = {}
+        self.artifact_path = self._find_artifact(
+            artifact, required=any(hid not in self.embedded for hid in self.ids))
         self.claims_dir = Path(claims_dir).resolve() if claims_dir else ROOT / "review"
         self.import_path = (Path(import_path).resolve() if import_path
                             else self.dir / TSV_FILE)
         self.lock = threading.RLock()
         self.state = self._load_state()
         self.records = {}
-        self.cards = defaultdict(list)
-        self._index_artifact()
-        self.artifact_sha = file_sha256(self.artifact_path)
-        self.warnings = []
-        self.claims_mode = "none"
-        self.claims_meta = {}
+        self.cards = defaultdict(list, self.embedded_cards)
+        if self.artifact_path is not None:
+            self._index_artifact()
+        self.artifact_sha = (file_sha256(self.artifact_path)
+                             if self.artifact_path else "")
+        self.claims_sha = ""
         self._load_claims()
         self.labels = {}
         self.lane = {}
@@ -424,7 +484,7 @@ class Pack:
             self.import_labels()
 
     # -- paths ---------------------------------------------------------
-    def _find_artifact(self, artifact):
+    def _find_artifact(self, artifact, required=True):
         cands = []
         if artifact:
             cands.append(Path(artifact))
@@ -439,8 +499,50 @@ class Pack:
                 p = (Path.cwd() / p) if artifact else p
             if p.exists():
                 return p.resolve()
+        if not required:
+            return None
         raise SystemExit("artifact not found; pass --artifact compile_standard.jsonl "
                          f"(tried: {', '.join(str(c) for c in cands)})")
+
+    def _merge_items_json(self):
+        """Fold items.json entries into the key map and cache embedded payloads."""
+        for raw_entry in self.items_json.values():
+            entry = dict(raw_entry)
+            hid = entry.get("id")
+            if not hid:
+                continue
+            if isinstance(entry.get("record"), dict):
+                entry = {**entry["record"], **{k: v for k, v in entry.items()
+                                               if k != "record"}}
+            if entry.get("sentence_index") is None:
+                for alias in ("index", "sentence_idx", "si"):
+                    if entry.get(alias) is not None:
+                        entry["sentence_index"] = entry[alias]
+                        break
+            base = dict(self.key.get(hid) or {})
+            for field in ("card", "sid", "sentence_index", "weight", "stratum",
+                          "commit", "artifact_sha256"):
+                if entry.get(field) is not None:
+                    base[field] = entry[field]
+            self.key[hid] = base
+            if any(k in entry for k in ("output", "original_text", "sentence")):
+                self.embedded[hid] = {
+                    "card": base.get("card"),
+                    "sid": base.get("sid"),
+                    "sentence_index": base.get("sentence_index"),
+                    "original_text": (entry.get("original_text")
+                                      or entry.get("sentence") or entry.get("text") or ""),
+                    "resolved_text": entry.get("resolved_text")
+                    or entry.get("original_text") or entry.get("sentence") or "",
+                    "anaphora": entry.get("anaphora") or [],
+                    "output": entry.get("output"),
+                }
+            raw_cards = (entry.get("cards") or entry.get("card_text")
+                         or entry.get("full_card_text"))
+            if raw_cards and base.get("card"):
+                rows = normalize_card_rows(raw_cards)
+                if rows:
+                    self.embedded_cards[base["card"]] = rows
 
     # -- state ---------------------------------------------------------
     def _load_state(self):
@@ -516,13 +618,19 @@ class Pack:
                 if (card, sid) in wanted:
                     triple = (card, sid, rec.get("sentence_index"))
                     self.records.setdefault(triple, rec)
-                if card in wanted_cards:
+                if card in wanted_cards and card not in self.embedded_cards:
                     self.cards[card].append(
                         (rec.get("sentence_index"), rec.get("original_text") or ""))
-        for card, rows in self.cards.items():
+        for card, rows in list(self.cards.items()):
+            pairs = []
+            for row in rows:
+                if isinstance(row, dict):
+                    pairs.append((row.get("sentence_index"), row.get("text") or ""))
+                else:
+                    pairs.append((row[0], row[1]))
             seen = set()
             uniq = []
-            for si, text in sorted(rows, key=lambda r: (r[0] if r[0] is not None else -1)):
+            for si, text in sorted(pairs, key=lambda r: (r[0] if r[0] is not None else -1)):
                 if (si, text) in seen:
                     continue
                 seen.add((si, text))
@@ -530,6 +638,8 @@ class Pack:
             self.cards[card] = uniq
 
     def record_for(self, hid):
+        if hid in self.embedded:
+            return self.embedded[hid]
         k = self.key[hid]
         rec = self.records.get((k["card"], k["sid"], k["sentence_index"]))
         if rec is not None:
@@ -653,13 +763,22 @@ class Pack:
             self.claims_mode = ("tsv" if (self.stringy or self.structure or self.cd_text
                                           or self.inv_text or self.ana) else "none")
         claimed_sha = self.claims_meta.get("artifact_sha256") or ""
-        if claimed_sha and claimed_sha != self.artifact_sha:
+        if claimed_sha and self.artifact_sha and claimed_sha != self.artifact_sha:
             self.warnings.append(
                 "claims.json was generated for artifact sha "
                 f"{claimed_sha[:12]}… but the loaded artifact is {self.artifact_sha[:12]}… "
                 "— claims are shown, unresolved paths are dropped")
+        claims_path = self.claims_json_path
+        if claims_path.exists():
+            self.claims_sha = file_sha256(claims_path)
+            pack_claims_sha = self.meta.get("claims_sha256") or ""
+            if pack_claims_sha and pack_claims_sha != self.claims_sha:
+                self.warnings.append(
+                    "pack meta names claims sha " + pack_claims_sha[:12]
+                    + "…, loaded claims.json is " + self.claims_sha[:12]
+                    + "… — claims may be stale")
         pack_sha = self.meta.get("artifact_sha256") or ""
-        if pack_sha and pack_sha != self.artifact_sha:
+        if pack_sha and self.artifact_sha and pack_sha != self.artifact_sha:
             self.warnings.append(
                 f"pack meta names artifact sha {pack_sha[:12]}…, loaded artifact is "
                 f"{self.artifact_sha[:12]}… — item texts may have changed since the pack was built")
@@ -1083,13 +1202,14 @@ class Pack:
             items.append(entry)
         return {
             "pack": str(self.dir),
-            "artifact": str(self.artifact_path),
+            "artifact": str(self.artifact_path or ""),
             "claims_dir": str(self.claims_dir),
             "claims_json": self.claims_json_path.exists(),
             "claims_mode": self.claims_mode,
             "claims_meta": {"generated_at": self.claims_meta.get("generated_at", ""),
                             "artifact_sha256": self.claims_meta.get("artifact_sha256", "")},
             "artifact_sha256": self.artifact_sha,
+            "claims_sha256": self.claims_sha,
             "stringy_report": self.stringy_path.name if self.stringy_path else None,
             "warnings": list(self.warnings),
             "n": len(self.ids), "batch": BATCH,

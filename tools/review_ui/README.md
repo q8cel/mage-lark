@@ -8,7 +8,8 @@ append-only so a vim session and the UI can coexist.
 
 ```
 cd /home/q8/Documents/mage-lark
-./myenv/bin/python tools/review_ui.py --pack ../swarm/work/human_review_v5 --open
+./myenv/bin/python tools/review_ui.py --pack ../swarm/work/human_review_v6 --open
+# older packs: --pack ../swarm/work/human_review_v5
 ```
 
 Stdlib only (`http.server`), no build step, no CDN, no external requests.
@@ -51,6 +52,21 @@ and per-label persistence make it resumable, and `u` undoes a label.
 
 Clicking a node selects it; `Escape` clears the selection. Clicking a sentence
 token shows its landing paths; clicking a path jumps to the node.
+
+## Pack formats
+
+A pack is either v6 (`items.json`) or v3–v5 (`key.json` + the artifact):
+
+* `items.json` — a list of items with the payloads the UI serves: `id`, `card`,
+  `sid`, `sentence_index`, `sentence` (the judged text), `card_text` (full oracle
+  text, string or list), `resolved_text`, `anaphora`, `output`, `weight`. When it
+  is present the UI reads items from it and does not parse the sheets; the
+  artifact is optional if every item embeds its output.
+* `key.json` — identity only (`card`, `sid`, `sentence_index`, `weight`,
+  `commit`); item text and output are looked up in the artifact, whose 22k
+  records are indexed once at startup by `(card, sid, sentence_index)`.
+* `meta.json` — `artifact_sha256` and, for v6, `claims_sha256`; both are compared
+  with the files actually loaded and a mismatch yields a non-blocking banner.
 
 ## Lanes
 
@@ -123,9 +139,10 @@ instead, with the same semantics:
 | `invariant_flags.tsv` | sentence text | invariant flag (e.g. `bare_modifier`) |
 | `anaphora_agreement.tsv` | `(card, sid, sentence_index)` | anaphor bound to a bad antecedent |
 
-The loaded artifact is SHA-256 hashed at startup and compared with
-`claims.json`'s and `meta.json`'s `artifact_sha256`; a mismatch shows a warning
-banner (non-blocking) and an item with no claims is simply a normal item.
+The loaded artifact and `claims.json` are SHA-256 hashed at startup and compared
+with each other and with `meta.json`'s `artifact_sha256` / `claims_sha256`; a
+mismatch shows a warning banner (non-blocking) and an item with no claims is
+simply a normal item. A v6 pack with matching SHAs shows no banner.
 
 ## Files
 
@@ -141,10 +158,19 @@ tests/test_review_ui.py       smoke test (HTTP, import, export, eval round-trip)
 
 ```
 ./myenv/bin/python tests/test_review_ui.py
+./myenv/bin/python tests/test_review_ui.py --pack ../swarm/work/human_review_v6
 ```
 
 Copies the pack to a temp dir (with two loosely typed vim rows), starts the
 server on an ephemeral port, and checks: 100 items, 50/50 lanes, import (2 rows)
 and its idempotency, lane hiding, claims gating, claim accept persistence, label
 + note composition, undo, export, that `human_audit_eval.py` accepts the TSV,
-and that state survives a restart.
+and that state survives a restart. With `items.json` it also checks that the
+item text and card text come from it and that the SHA banner is absent when the
+declared SHAs match.
+
+A final phase copies the pack again, drops the user's in-progress
+`human_review_v5/labels.tsv` in, and imports it: rows whose ids exist in the pack
+must import, v5-only ids must be reported as unknown, and the file must be left
+byte-identical. It then simulates verdicts typed into that file to exercise both
+sides at once.
