@@ -1,0 +1,93 @@
+[
+  {
+    "id": "owner-of-horned-loch-whale",
+    "card": "Horned Loch-Whale // Lagoon Breach",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "The owner of target attacking creature you don't control puts it on their choice of the top or bottom of their library",
+    "surface": "their",
+    "antecedent": "The owner of target attacking creature you don't control",
+    "expect": []
+  },
+  {
+    "id": "owner-of-object-pronoun",
+    "card": "Horned Loch-Whale // Lagoon Breach",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "The owner of target attacking creature you don't control puts it on their choice of the top or bottom of their library",
+    "surface": "it",
+    "antecedent": "target attacking creature",
+    "expect": []
+  },
+  {
+    "id": "number-plural-antecedent",
+    "card": "Fixture",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "Two target creatures attack, then exile it",
+    "surface": "it",
+    "antecedent": "Two target creatures",
+    "expect": [
+      "number_mismatch"
+    ]
+  },
+  {
+    "id": "kind-player-antecedent",
+    "card": "Fixture",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "Target player draws a card, then exile it",
+    "surface": "it",
+    "antecedent": "Target player",
+    "expect": [
+      "kind_mismatch"
+    ]
+  },
+  {
+    "id": "antecedent-absent",
+    "card": "Fixture",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "Exile it",
+    "surface": "it",
+    "antecedent": "a golden elephant",
+    "expect": [
+      "not_a_mention"
+    ]
+  },
+  {
+    "id": "possessive-bound-to-player",
+    "card": "Fixture",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "Target player draws a card and its owner draws a card",
+    "surface": "its",
+    "antecedent": "target player",
+    "expect": [
+      "kind_mismatch",
+      "owner_confusion"
+    ]
+  },
+  {
+    "id": "cataphora",
+    "card": "Fixture",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "It deals damage to target creature",
+    "surface": "it",
+    "antecedent": "target creature",
+    "expect": [
+      "cross_clause"
+    ]
+  },
+  {
+    "id": "clean-self",
+    "card": "Fixture",
+    "sid": "fixture",
+    "sentence_index": 0,
+    "original_text": "Whenever this creature attacks, put a +1/+1 counter on it",
+    "surface": "it",
+    "antecedent": "this creature",
+    "expect": []
+  }
+]
