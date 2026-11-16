@@ -22,6 +22,9 @@ const S = {
   activeToken: null,
   focusPath: null,
   treeExpanded: true,
+  view: 'semantic',
+  parserOn: false,
+  parserData: null,
   warnedBugNoAxis: false,
   busy: false,
 };
@@ -139,7 +142,7 @@ function renderItem() {
   $('#resolvedwrap').hidden = !it.resolved_text || it.resolved_text === it.original_text;
   renderCardText();
   renderAnaphora();
-  renderTree();
+  renderOutput();
   renderClaims();
   renderVerdicts();
   renderSelection();
@@ -196,7 +199,7 @@ function showToken(token) {
       const link = document.createElement('span');
       link.className = 'hitlink';
       link.textContent = path;
-      link.addEventListener('click', () => reveal(path));
+      link.addEventListener('click', () => gotoPath(path));
       host.appendChild(link);
     });
   }
@@ -306,6 +309,196 @@ function valueOfNode(path) {
   return el ? el.dataset.value : '';
 }
 
+function renderOutput() {
+  renderSemantic();
+  renderGraph();
+  renderTree();
+  applyView();
+}
+
+const VIEWS = ['semantic', 'graph', 'json'];
+
+function setView(view, opts = {}) {
+  if (!VIEWS.includes(view)) return;
+  S.view = view;
+  applyView();
+  if (opts.reveal && S.path) reveal(S.path);
+}
+
+function applyView() {
+  for (const view of VIEWS) {
+    const host = document.querySelector(`.outview[data-view="${view}"]`);
+    if (host) host.classList.toggle('active', view === S.view);
+  }
+  document.querySelectorAll('.viewbtn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.view === S.view);
+  });
+  const toggle = $('#treeToggle');
+  if (toggle) toggle.style.display = S.view === 'json' ? '' : 'none';
+  applyStatusClasses();
+}
+
+function hostFor(view) {
+  return document.querySelector(`.outview[data-view="${view}"]`);
+}
+
+function nodeInView(path, view = S.view) {
+  if (!path) return null;
+  const host = hostFor(view);
+  return host ? host.querySelector(`[data-path="${CSS.escape(path)}"]`) : null;
+}
+
+function renderSemantic() {
+  const host = $('#semantic');
+  host.textContent = '';
+  const ir = S.item.ir;
+  const lines = (ir && ir.lines) || [];
+  if (!lines.length) {
+    host.textContent = 'no semantic rendering for this output';
+    return;
+  }
+  for (const line of lines) {
+    const row = document.createElement('div');
+    row.className = 'irline' + (line.kind === 'fallback' ? ' has-fallback' : '');
+    const role = document.createElement('span');
+    role.className = 'role role-' + line.role.replace(/[^A-Z_]/g, '_');
+    role.textContent = line.role;
+    row.appendChild(role);
+    const body = document.createElement('span');
+    body.className = 'irtext';
+    appendFragments(body, line.fragments || []);
+    row.appendChild(body);
+    host.appendChild(row);
+  }
+}
+
+function appendFragments(host, frags) {
+  let prev = '';
+  for (const frag of frags) {
+    if (prev && !/^[,;:.)\]]/.test(frag.text) && !/[([[]$/.test(prev)) {
+      host.appendChild(document.createTextNode(' '));
+    }
+    const span = document.createElement('span');
+    span.className = 'frag' + (frag.kind === 'fallback' ? ' fb' : '');
+    span.dataset.path = frag.path;
+    span.textContent = frag.text;
+    host.appendChild(span);
+    prev = frag.text;
+  }
+}
+
+const GRAPH_LAYER = {
+  cost: 0, condition: 0, event: 0, subject: 0,
+  verb: 1,
+  object: 2, token: 2,
+  amount: 3, destination: 3, duration: 3, keyword: 3,
+  anaphor: 4,
+};
+
+function renderGraph() {
+  const host = $('#graph');
+  host.textContent = '';
+  const graph = (S.item.ir && S.item.ir.graph) || { nodes: [], edges: [] };
+  if (!graph.nodes.length) {
+    const note = document.createElement('div');
+    note.className = 'graphempty';
+    note.textContent = 'no semantic graph for this output';
+    host.appendChild(note);
+    return;
+  }
+  const NW = 180;
+  const NH = 40;
+  const GX = 54;
+  const GY = 64;
+  const PAD = 16;
+  const byLayer = new Map();
+  for (const node of graph.nodes) {
+    const layer = GRAPH_LAYER[node.kind] ?? 2;
+    if (!byLayer.has(layer)) byLayer.set(layer, []);
+    byLayer.get(layer).push(node);
+  }
+  const layers = [...byLayer.keys()].sort((a, b) => a - b);
+  const rows = Math.max(...layers.map((layer) => byLayer.get(layer).length), 1);
+  const width = PAD * 2 + layers.length * (NW + GX) - GX;
+  const height = PAD * 2 + rows * GY - (GY - NH);
+  const pos = new Map();
+  layers.forEach((layer, li) => {
+    const nodes = byLayer.get(layer);
+    const offset = ((rows - nodes.length) * GY) / 2;
+    nodes.forEach((node, ri) => {
+      pos.set(node.id, { x: PAD + li * (NW + GX), y: PAD + offset + ri * GY });
+    });
+  });
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', String(Math.max(width, 320)));
+  svg.setAttribute('height', String(Math.max(height, 120)));
+  svg.setAttribute('class', 'graphsvg');
+
+  for (const edge of graph.edges) {
+    const from = pos.get(edge.from);
+    const to = pos.get(edge.to);
+    if (!from || !to) continue;
+    let x1 = from.x + NW;
+    let y1 = from.y + NH / 2;
+    let x2 = to.x;
+    let y2 = to.y + NH / 2;
+    let path;
+    if (x2 <= x1) {
+      const bulge = Math.max(30, Math.abs(y2 - y1) / 2 + 24);
+      path = `M ${x1} ${y1} C ${x1 + bulge} ${y1}, ${x1 + bulge} ${y2}, ${x2} ${y2}`;
+    } else {
+      const mid = (x1 + x2) / 2;
+      path = `M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`;
+    }
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    line.setAttribute('d', path);
+    line.setAttribute('class', 'gedge' + (edge.dashed ? ' dashed' : ''));
+    svg.appendChild(line);
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', String((x1 + x2) / 2));
+    label.setAttribute('y', String((y1 + y2) / 2 - 5));
+    label.setAttribute('class', 'gelabel');
+    label.textContent = edge.role;
+    svg.appendChild(label);
+  }
+
+  for (const node of graph.nodes) {
+    const { x, y } = pos.get(node.id);
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('class', `gnode kind-${node.kind}`);
+    group.setAttribute('data-path', node.path);
+    group.setAttribute('transform', `translate(${x},${y})`);
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    title.textContent = `${node.label} — ${node.kind} — ${node.path}`;
+    group.appendChild(title);
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('class', 'gbox');
+    rect.setAttribute('width', String(NW));
+    rect.setAttribute('height', String(NH));
+    rect.setAttribute('rx', '5');
+    group.appendChild(rect);
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('class', 'glabel');
+    text.setAttribute('x', '10');
+    text.setAttribute('y', '17');
+    text.textContent = node.label.length > 24 ? node.label.slice(0, 23) + '…' : node.label;
+    group.appendChild(text);
+    const kind = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    kind.setAttribute('class', 'gkind');
+    kind.setAttribute('x', '10');
+    kind.setAttribute('y', '31');
+    kind.textContent = node.kind;
+    group.appendChild(kind);
+    svg.appendChild(group);
+  }
+  const tip = document.createElement('div');
+  tip.className = 'graphtip';
+  tip.textContent = 'conditions / costs ← · → objects / amounts · dashed = anaphora · scroll for wide graphs';
+  host.appendChild(tip);
+  host.appendChild(svg);
+}
+
 function renderTree() {
   const host = $('#tree');
   host.textContent = '';
@@ -329,16 +522,6 @@ function renderTreeControls() {
   btn.textContent = S.treeExpanded ? 'collapse all (e)' : 'expand all (e)';
 }
 
-function nearestVisible(path) {
-  let candidate = path;
-  while (candidate) {
-    const el = nodeEl(candidate);
-    if (el && isNodeVisible(el)) return candidate;
-    candidate = parentPath(candidate);
-  }
-  return '$';
-}
-
 function toggleTree(force) {
   const want = force === undefined ? !S.treeExpanded : !!force;
   S.treeExpanded = want;
@@ -351,8 +534,28 @@ function toggleTree(force) {
   setFocus(S.focusPath, false);
 }
 
+function nearestVisible(path) {
+  let candidate = path;
+  while (candidate) {
+    const el = nodeEl(candidate);
+    if (el && isNodeVisible(el)) return candidate;
+    candidate = parentPath(candidate);
+  }
+  return '$';
+}
+
+function nodeEl(path) {
+  if (!path) return null;
+  return document.querySelector(`#tree [data-path="${CSS.escape(path)}"]`);
+}
+
+function valueOfNode(path) {
+  const el = nodeEl(path) || nodeInView(path);
+  return el ? el.dataset.value || '' : '';
+}
+
 function reveal(path, scroll = true) {
-  const el = nodeEl(path);
+  const el = nodeInView(path) || nodeInView(path, 'json');
   if (!el) return false;
   let node = el;
   while (node) {
@@ -364,21 +567,27 @@ function reveal(path, scroll = true) {
 }
 
 function applyStatusClasses() {
-  document.querySelectorAll('#tree .sel, #tree .focus').forEach((el) => {
-    el.classList.remove('sel', 'focus');
+  document.querySelectorAll('.sel, .focus').forEach((el) => {
+    if (el.closest('[data-view]')) el.classList.remove('sel', 'focus');
   });
-  const sel = nodeEl(S.path);
-  if (sel) sel.classList.add('sel');
-  const focus = nodeEl(S.focusPath);
-  if (focus) focus.classList.add('focus');
+  for (const view of VIEWS) {
+    const sel = nodeInView(S.path, view);
+    if (sel) sel.classList.add('sel');
+    const focus = nodeInView(S.focusPath, view);
+    if (focus && view === 'json') focus.classList.add('focus');
+  }
 }
 
 function applyHighlights() {
-  document.querySelectorAll('#tree .hit').forEach((el) => el.classList.remove('hit'));
+  document.querySelectorAll('.hit').forEach((el) => {
+    if (el.closest('[data-view]')) el.classList.remove('hit');
+  });
   if (S.hits && S.hits.size) {
-    for (const path of S.hits) {
-      const el = nodeEl(path);
-      if (el) el.classList.add('hit');
+    for (const view of VIEWS) {
+      for (const path of S.hits) {
+        const el = nodeInView(path, view);
+        if (el) el.classList.add('hit');
+      }
     }
   }
   applyStatusClasses();
@@ -435,12 +644,14 @@ function collapseFocus() {
   if (parent) setFocus(parent);
 }
 
-function selectPath(path, valueJson) {
+function selectPath(path, valueJson, opts = {}) {
   S.path = path || '';
   S.pathValue = valueJson || '';
   S.focusPath = S.path || S.focusPath;
   if (S.verdict !== 'bug') S.verdict = 'bug';
   S.hits = new Set(path ? [path] : []);
+  if (path && opts.json) setView('json');
+  if (path && !nodeInView(path)) setView('json');
   if (path) reveal(path);
   applyHighlights();
   renderVerdicts();
@@ -448,7 +659,114 @@ function selectPath(path, valueJson) {
   renderNote();
 }
 
-/* ----------------------------------------------------------------- claims */
+function gotoPath(path) {
+  setView('json');
+  reveal(path, true);
+  applyStatusClasses();
+}
+
+async function toggleParser(force) {
+  S.parserOn = force === undefined ? !S.parserOn : !!force;
+  const btn = $('#parserBtn');
+  if (btn) btn.classList.toggle('on', S.parserOn);
+  if (!S.parserOn) {
+    $('#parser').textContent = '';
+    $('#parserinfo').textContent = '';
+    renderSentence();
+    return;
+  }
+  await loadParser();
+}
+
+async function loadParser() {
+  if (!S.item) return;
+  if (S.parserData && S.parserData.id === S.item.id) {
+    renderParser();
+    return;
+  }
+  const info = $('#parserinfo');
+  info.innerHTML = '<span class="spin"></span> parsing…';
+  const res = await api('/api/parser?id=' + encodeURIComponent(S.item.id));
+  if (res.error) {
+    info.textContent = 'parser failed: ' + res.error;
+    return;
+  }
+  S.parserData = Object.assign({ id: S.item.id }, res);
+  renderParser();
+}
+
+function renderParser() {
+  const data = S.parserData;
+  $('#parser').textContent = '';
+  if (!data || !S.parserOn) return;
+  const info = $('#parserinfo');
+  if (!data.available) {
+    info.textContent = 'ptree unavailable — ' + (data.error || 'no spans');
+    renderSentence();
+    return;
+  }
+  info.textContent = `${data.source} · ${data.ms} ms · ${data.spans.length} spans`;
+  renderParserSentence(data.spans);
+  const table = document.createElement('table');
+  const head = document.createElement('tr');
+  for (const name of ['span', 'role', 'verb', 'node', 'flags']) {
+    const th = document.createElement('th');
+    th.textContent = name;
+    head.appendChild(th);
+  }
+  table.appendChild(head);
+  for (const span of data.spans) {
+    const tr = document.createElement('tr');
+    const flags = [span.predicate ? 'predicate' : '',
+                   span.in_condition ? 'in_condition' : ''].filter(Boolean).join(' ');
+    const cells = [span.text, span.role || '—', span.verb || '—', span.node || '—',
+                   flags || '—'];
+    cells.forEach((text, index) => {
+      const td = document.createElement('td');
+      td.textContent = text;
+      if (index === 0) td.className = 'span';
+      if (index === 1) td.className = 'role';
+      tr.appendChild(td);
+    });
+    table.appendChild(tr);
+  }
+  $('#parser').appendChild(table);
+}
+
+function renderParserSentence(spans) {
+  const host = $('#judged');
+  const text = S.item.original_text || '';
+  host.textContent = '';
+  if (!spans.length) {
+    host.textContent = text;
+    return;
+  }
+  const classes = new Array(text.length).fill('role-unknown');
+  const sources = new Array(text.length).fill(null);
+  const ordered = [...spans].sort((a, b) => (a.end - a.start) - (b.end - b.start));
+  for (const span of ordered) {
+    const role = span.role
+      || (span.predicate ? 'predicate' : span.in_condition ? 'in_condition' : 'unknown');
+    for (let i = span.start; i < Math.min(span.end, text.length); i++) {
+      classes[i] = 'role-' + role;
+      sources[i] = span;
+    }
+  }
+  let i = 0;
+  while (i < text.length) {
+    let j = i;
+    while (j < text.length && classes[j] === classes[i] && sources[j] === sources[i]) j++;
+    const piece = document.createElement('span');
+    piece.className = 'pspan ' + classes[i];
+    piece.textContent = text.slice(i, j);
+    const meta = sources[i];
+    if (meta) {
+      piece.title = [meta.role || 'span', meta.verb, meta.node].filter(Boolean).join(' · ');
+    }
+    host.appendChild(piece);
+    i = j;
+  }
+}
 
 function renderClaims() {
   const host = $('#claims');
@@ -489,7 +807,7 @@ function renderClaims() {
       link.className = 'pathlink';
       link.textContent = claim.path;
       link.title = 'select this JSON node';
-      link.addEventListener('click', () => selectPath(claim.path, claim.value));
+      link.addEventListener('click', () => selectPath(claim.path, claim.value, { json: true }));
       head.appendChild(link);
     }
     const dec = document.createElement('span');
@@ -646,6 +964,13 @@ async function loadItem(index) {
   $('#notetext').blur();
   renderItem();
   renderStrip();
+  if (S.parserOn) {
+    S.parserData = null;
+    loadParser();
+  } else {
+    $('#parser').textContent = '';
+    $('#parserinfo').textContent = '';
+  }
   if (label) {
     renderSelection();
     renderNote();
@@ -866,6 +1191,12 @@ function handleKey(event) {
     case 'x': doExport(); break;
     case 'r': reloadState(); break;
     case 'e': toggleTree(); break;
+    case 'v': {
+      const index = VIEWS.indexOf(S.view);
+      setView(VIEWS[(index + 1) % VIEWS.length], { reveal: true });
+      break;
+    }
+    case 'p': toggleParser(); break;
     case 's':
       if (S.focusPath) selectPath(S.focusPath, valueOfNode(S.focusPath));
       break;
@@ -910,6 +1241,21 @@ function wire() {
     selectPath(el.dataset.path, el.dataset.value);
   });
   $('#treeToggle').addEventListener('click', () => toggleTree());
+  document.querySelectorAll('.viewbtn').forEach((btn) => {
+    btn.addEventListener('click', () => setView(btn.dataset.view, { reveal: true }));
+  });
+  $('#semantic').addEventListener('click', (event) => {
+    const frag = event.target.closest('.frag');
+    if (!frag) return;
+    selectPath(frag.dataset.path, valueOfNode(frag.dataset.path));
+  });
+  $('#graph').addEventListener('click', (event) => {
+    const node = event.target.closest('[data-path]');
+    if (!node) return;
+    const value = valueAtPath(S.item.output, node.dataset.path);
+    selectPath(node.dataset.path, value === undefined ? '' : shortJson(value));
+  });
+  $('#parserBtn').addEventListener('click', () => toggleParser());
   $('#notetext').addEventListener('input', (event) => {
     S.noteText = event.target.value;
     renderNote();

@@ -34,6 +34,11 @@
       <span class="muted">click a token to see where it landed</span>
     </div>
     <div id="tokeninfo" class="tokeninfo"></div>
+    <div class="parser-head">
+      <button id="parserBtn" class="btn" title="parser span roles (p)">parser view (p)</button>
+      <span id="parserinfo" class="muted"></span>
+    </div>
+    <div id="parser" class="parser"></div>
     <details id="resolvedwrap" class="fold">
       <summary>resolved text (antecedent substitution)</summary>
       <div id="resolved" class="resolved"></div>
@@ -49,8 +54,18 @@
   </section>
 
   <section id="json" class="col">
-    <div class="panelhead">interpreted output <span id="jsonhint" class="muted"></span><button id="treeToggle" class="btn treebtn">collapse all (e)</button></div>
-    <div id="tree" class="tree"></div>
+    <div class="panelhead">
+      <span>interpreted output</span>
+      <span class="viewsw">
+        <button class="btn viewbtn" data-view="semantic" title="semantic view (v)">semantic</button>
+        <button class="btn viewbtn" data-view="graph" title="graph view (v)">graph</button>
+        <button class="btn viewbtn" data-view="json" title="json view (v)">json</button>
+      </span>
+      <button id="treeToggle" class="btn treebtn">collapse all (e)</button>
+    </div>
+    <div id="semantic" class="semview outview" data-view="semantic"></div>
+    <div id="graph" class="graphview outview" data-view="graph"></div>
+    <div id="tree" class="tree outview" data-view="json"></div>
   </section>
 
   <section id="right" class="col">

@@ -313,8 +313,10 @@ def main():
             code, body = request(port, name)
             check(f"static {name}", code == 200 and needle.encode() in body)
         page = request(port, "/")[1].decode() + request(port, "/app.js")[1].decode()
+        # the SVG namespace URI is the only http:// string allowed
         check("no external requests in static assets",
-              "http://" not in page and "https://" not in page)
+              "https://" not in page
+              and page.replace("http://www.w3.org/2000/svg", "").count("http://") == 0)
 
         # ---- imported label shape ----------------------------------
         status, item = request_json(port, f"/api/item?id={rich_id}")
@@ -331,6 +333,14 @@ def main():
               (label.get("path", "").startswith("$") if zone_present else
                label.get("path", "") == "") and label.get("source") == "import",
               str(label.get("path")))
+        ir = item.get("ir") or {}
+        check("item carries the semantic IR",
+              bool(ir.get("lines")) and all(
+                  frag["path"].startswith("$")
+                  for line in ir["lines"] for frag in line["fragments"]))
+        check("semantic IR has a graph",
+              isinstance(ir.get("graph", {}).get("nodes"), list)
+              and isinstance(ir.get("graph", {}).get("edges"), list))
         check("resolved text and card context present",
               item.get("resolved_text") and len(item.get("cards", [])) >= 1)
         items_json = pack / "items.json"

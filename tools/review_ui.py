@@ -38,6 +38,9 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC = Path(__file__).resolve().parent / "review_ui"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import ir_render  # noqa: E402  (ships next to this file)
 
 VERDICTS = ("ok", "bug", "legit")
 AXES = ("target", "actor", "zone", "quantity", "referent",
@@ -452,6 +455,7 @@ class Pack:
         self.warnings = []
         self.claims_mode = "none"
         self.claims_meta = {}
+        self.parser_cache = {}
         self.artifact_path = self._find_artifact(
             artifact, required=any(hid not in self.embedded for hid in self.ids))
         self.claims_dir = Path(claims_dir).resolve() if claims_dir else ROOT / "review"
@@ -1086,6 +1090,43 @@ class Pack:
         atomic_write(out, payload)
         return {"path": str(out), "rows": written, "lines": len(lines) - 1}
 
+    def parser_view(self, hid):
+        """Parser span roles for the judged sentence (cached per item)."""
+        with self.lock:
+            if hid in self.parser_cache:
+                return self.parser_cache[hid]
+            if hid not in self.key:
+                raise ApiError(404, f"unknown item id: {hid}")
+            rec = self.record_for(hid)
+            text = (rec.get("original_text") if rec else "") or ""
+            started = time.perf_counter()
+            payload = {"available": False, "source": "unavailable", "ms": 0.0,
+                       "spans": [], "error": ""}
+            try:
+                for extra in (str(ROOT), str(ROOT / "core"), str(ROOT / "coref")):
+                    if extra not in sys.path:
+                        sys.path.insert(0, extra)
+                import paths as _paths
+                _paths.bootstrap()
+                import ptree
+                spans = ptree.structure(text)
+                source = "cache"
+                if not spans:
+                    spans = ptree.nodes(text)
+                    source = "parse"
+                payload.update(available=True, source=source, spans=[
+                    {"start": s.get("start"), "end": s.get("end"),
+                     "node": s.get("node"), "role": s.get("role"),
+                     "verb": s.get("verb"), "predicate": bool(s.get("predicate")),
+                     "in_condition": bool(s.get("in_condition")),
+                     "text": text[s.get("start", 0):s.get("end", 0)]}
+                    for s in spans])
+            except Exception as exc:  # noqa: BLE001 - report, never fail the UI
+                payload["error"] = f"{type(exc).__name__}: {exc}"
+            payload["ms"] = round((time.perf_counter() - started) * 1000, 1)
+            self.parser_cache[hid] = payload
+            return payload
+
     # -- mutation ------------------------------------------------------
     def commit_label(self, hid, verdict, axis, path, note_text, accepted, rejected):
         with self.lock:
@@ -1255,6 +1296,7 @@ class Pack:
             "output": output,
             "cards": self.card_text(k["card"]),
             "tokens": align(rec.get("original_text", ""), output, missing_units),
+            "ir": ir_render.render(output),
             "claims": claims if lane == "triage" else [],
             "claim_state": claim_state or {"accepted": [], "rejected": [], "note": ""},
             "label": label,
@@ -1346,6 +1388,9 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/item":
                 hid = (query.get("id") or [""])[0]
                 return self._json(200, self.server.pack.item_payload(hid))
+            if path == "/api/parser":
+                hid = (query.get("id") or [""])[0]
+                return self._json(200, self.server.pack.parser_view(hid))
             if path == "/api/help":
                 return self._json(200, HELP)
             raise ApiError(404, f"no route: {path}")
@@ -1423,6 +1468,10 @@ HELP = {
         "y": "accept the focused claim",
         "n": "reject the focused claim",
         "y/n again": "clear the decision",
+    },
+    "views": {
+        "v": "cycle semantic / graph / json output views",
+        "p": "parser span view for the judged sentence",
     },
     "json tree": {
         "click key/value": "select that node for the bug note (path: value)",

@@ -368,3 +368,92 @@ main {
   main { grid-template-columns: 1fr 1fr; }
   #right { grid-column: 1 / -1; max-height: 45vh; }
 }
+
+/* ---- output views -------------------------------------------------- */
+.viewsw { float: right; margin-left: 10px; display: inline-flex; gap: 3px; }
+.viewbtn { font-size: 10px; padding: 0 6px; text-transform: none; letter-spacing: 0; }
+.viewbtn.active { border-color: var(--accent); color: var(--accent); }
+
+.semview, .graphview, .tree { display: none; }
+.semview.active, .graphview.active, .tree.active { display: block; }
+
+.irline {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(43, 48, 56, .55);
+  align-items: baseline;
+}
+.irline.has-fallback { background: rgba(239, 107, 115, .05); }
+.role {
+  flex: 0 0 82px;
+  font-size: 10px;
+  letter-spacing: .06em;
+  color: var(--dim);
+  text-transform: uppercase;
+  text-align: right;
+  padding-top: 2px;
+}
+.role-DO, .role-THEN, .role-INSTEAD, .role-STATIC { color: var(--green); }
+.role-COST { color: var(--amber); }
+.role-WHEN, .role-IF, .role-AS_LONG_AS { color: var(--violet); }
+.role-TYPE, .role-WORD, .role-XDEF, .role-LEVEL { color: #6f7783; }
+.role-DURATION, .role-TIME, .role-WITH { color: #8fb7d9; }
+.role-UNPARSED, .role-OTHER { color: var(--red); }
+.irtext { flex: 1 1 auto; font-size: 13.5px; line-height: 1.55; }
+.frag { border-radius: 2px; cursor: pointer; padding: 0 1px; }
+.frag:hover { background: var(--bg3); }
+.frag.fb { color: var(--red); }
+.frag.sel { background: rgba(224, 179, 83, .22); outline: 1px solid var(--amber); }
+.frag.hit { background: rgba(110, 168, 254, .18); }
+
+.graphview { overflow: auto; }
+.graphsvg { min-width: 100%; }
+.graphsvg .gbox {
+  fill: var(--bg3);
+  stroke: var(--line);
+  cursor: pointer;
+}
+.gnode.kind-verb .gbox { stroke: var(--green); }
+.gnode.kind-subject .gbox { stroke: var(--accent); }
+.gnode.kind-object .gbox, .gnode.kind-token .gbox { stroke: var(--amber); }
+.gnode.kind-amount .gbox { stroke: var(--violet); }
+.gnode.kind-condition .gbox, .gnode.kind-cost .gbox { stroke: var(--red); }
+.gnode.kind-duration .gbox, .gnode.kind-destination .gbox { stroke: #8fb7d9; }
+.gnode.kind-anaphor .gbox { stroke: var(--dim); stroke-dasharray: 4 3; }
+.graphsvg .glabel { fill: var(--fg); font-size: 13px; font-family: var(--mono); pointer-events: none; }
+.graphsvg .gkind { fill: var(--dim); font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; font-family: var(--mono); pointer-events: none; }
+.graphsvg .gedge { fill: none; stroke: #55606e; stroke-width: 1.2; }
+.graphsvg .gedge.dashed { stroke-dasharray: 5 4; stroke: #6f7783; }
+.graphsvg .gelabel { fill: var(--dim); font-size: 9.5px; font-family: var(--mono); text-anchor: middle; }
+.graphsvg .gnode.hit .gbox { fill: rgba(110, 168, 254, .22); }
+.graphsvg .gnode.sel .gbox { stroke: var(--amber); stroke-width: 2; }
+.graphempty { color: var(--dim); padding: 10px 0; }
+
+/* ---- parser view --------------------------------------------------- */
+.parser-head { display: flex; align-items: center; gap: 8px; margin: 8px 0 4px; }
+#parserBtn.on { border-color: var(--violet); color: var(--violet); }
+.pspan { border-radius: 2px; padding: 0 1px; }
+.pspan.role-subject { background: rgba(110, 168, 254, .26); }
+.pspan.role-object { background: rgba(88, 201, 138, .24); }
+.pspan.role-predicate { background: rgba(224, 179, 83, .26); }
+.pspan.role-in_condition { background: rgba(177, 140, 240, .26); }
+.pspan.role-unknown { background: rgba(131, 140, 152, .16); }
+.parser table { border-collapse: collapse; font-size: 11px; margin-top: 6px; width: 100%; }
+.parser td, .parser th { text-align: left; padding: 2px 8px 2px 0; border-bottom: 1px solid rgba(43, 48, 56, .6); vertical-align: top; }
+.parser th { color: var(--dim); font-weight: 400; text-transform: uppercase; font-size: 9.5px; letter-spacing: .06em; }
+.parser td.span { color: var(--fg); }
+.parser td.role { flex: none; color: var(--violet); }
+
+.graphtip { color: #5d6673; font-size: 10px; margin-bottom: 6px; }
+.spin {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 4px;
+  border: 1.5px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

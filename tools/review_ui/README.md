@@ -16,6 +16,44 @@ Stdlib only (`http.server`), no build step, no CDN, no external requests.
 Defaults: `--port 8765`, `--artifact compile_standard.jsonl` (or `meta.json`'s
 `source`), claims read from the repo's `review/`.
 
+## Semantic views
+
+The output is shown as **semantics, not JSON**, by default. `tools/ir_render.py`
+is a stdlib schema-aware renderer over the interpreted output:
+
+* `render(output) -> {"lines", "graph", "stats"}` — logical-form lines (`[activated]`,
+  `COST pay {2}, {T}; sacrifice THIS`, `DO THIS deal_damage → target(creature)
+  [amount = relative(its power, equal)]`, `WHEN …`, `IF …`, `THEN …`, `DURATION …`,
+  `STATIC …`, `KEYWORDS …`), a small semantic graph (nodes for verbs, subjects,
+  objects, amounts, conditions, costs; role-labelled edges, dashed anaphora edges)
+  and coverage stats. Every fragment carries the JSON `path` it came from.
+  Unmapped constructs render as `⟨key: value⟩` and are counted as fallback.
+
+The UI has three views, cycled with `v` or the buttons in the output header:
+
+| view | content |
+| --- | --- |
+| semantic (default) | logic-form lines; click any fragment to select its JSON path for the bug note |
+| graph | layered left→right DAG (condition/cost gates, verb, object/amount); click a node to select it |
+| json | the raw tree, kept for debugging; the claim and token links jump here |
+
+The **parser view** (`p`, or the button under the sentence) runs
+`core/ptree.structure(text)` on demand — falling back to `ptree.nodes(text)` on a
+cache miss — and paints the judged sentence by span role (`subject`, `object`,
+`predicate`, `in_condition`) with a span → role → verb → node table and the
+measured time. It is cached per item; if ptree is unavailable the app says so
+instead of failing. Nothing under `core/` is modified.
+
+Coverage over the corpus (13,357 unique records):
+
+```
+./myenv/bin/python tools/ir_render.py --artifact compile_standard.jsonl --unique
+```
+
+currently renders 97.1% of fragments semantically with 0 crashes; the remaining
+fallback is mostly raw unparsed prose (`unparsed.fragment`, condition/if text
+fragments) plus a small long tail of unmodelled keys.
+
 ## What the app does beyond layout
 
 For every item it shows the judged sentence with each content word marked
@@ -53,6 +91,8 @@ and per-label persistence make it resumable, and `u` undoes a label.
 | `[` / `]` | previous / next machine claim |
 | `y` / `n` | accept / reject the focused claim (again to clear) |
 | `i` / `x` / `r` | re-import `labels.tsv` / export `labels.tsv` / reload state |
+| `v` | cycle semantic / graph / json views |
+| `p` | parser span view for the judged sentence |
 | `?` | help overlay |
 
 The tree opens fully by default (outputs are 7–41 nodes), so every leaf is
@@ -159,15 +199,18 @@ simply a normal item. A v6 pack with matching SHAs shows no banner.
 
 ```
 tools/review_ui.py            server: pack/artifact/claims, import, export, HTTP API
+tools/ir_render.py            semantic renderer: logical-form lines, graph, stats
 tools/review_ui/index.html    shell
 tools/review_ui/app.js        keyboard state machine, tree, claims, alignment
 tools/review_ui/style.css     dark, monospace, no webfonts
 tests/test_review_ui.py       smoke test (HTTP, import, export, eval round-trip)
+tests/test_ir_render.py       golden renderer tests on v6 items
 ```
 
 ## Smoke test
 
 ```
+./myenv/bin/python tests/test_ir_render.py
 ./myenv/bin/python tests/test_review_ui.py
 ./myenv/bin/python tests/test_review_ui.py --pack ../swarm/work/human_review_v6
 ```
@@ -176,7 +219,9 @@ Copies the pack to a temp dir (with two loosely typed vim rows), starts the
 server on an ephemeral port, and checks: 100 items, 50/50 lanes, import (2 rows)
 and its idempotency, lane hiding, claims gating, claim accept persistence, label
 + note composition, undo, export, that `human_audit_eval.py` accepts the TSV,
-and that state survives a restart. With `items.json` it also checks that the
+and that state survives a restart. Every item payload must also carry a semantic
+`ir` whose fragment paths are JSON paths, so a broken renderer fails the smoke
+test. With `items.json` it also checks that the
 item text and card text come from it and that the SHA banner is absent when the
 declared SHAs match.
 
