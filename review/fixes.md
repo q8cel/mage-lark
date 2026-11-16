@@ -751,3 +751,15 @@ change, gains suspend, turn face up. Remaining groups: other replacement/
 action ~? (diverse one-offs), state/ability tails, zone/action tails,
 damage-plus complex, cast/spend permissions. Anything requiring new grammar
 is deferred, not suppressed.
+
+## Per-card Standard artifact refresh (current HEAD)
+
+Rebuilt chunked per-set with `--workers 6` at current HEAD; sorted by
+(card, sentence_index, sid, canonical JSON). `compile_standard.jsonl`:
+22,217 records, 5,153 unique card names, 903 unweighted / 3,736 weighted
+anaphora markers, 1,625 records with changed resolved_text, 4,603 records
+changed vs the previous `c1b84208` artifact. SHA-256
+`5d074f726a4f067d5d4eef98ed89a5ff13f00cc336947ab5cf1b0ca280565c1f`.
+
+`compile_standard_plain.jsonl` is stale (predates the latest interpret
+changes); it was intentionally not rebuilt because the cache key changed.
