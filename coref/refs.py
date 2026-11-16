@@ -403,6 +403,13 @@ def build(text, parser=True, struct=None):
         if surface:
             cleaned.append({"surface": surface,
                             "start": m.start(), "end": m.end()})
+    # "reveal a Goblin, Swamp, or Mountain card from among them": keep the
+    # selected-card NP as a candidate for the following "put it".
+    for m in re.finditer(
+            r"\b(?:reveal|search(?: your library)? for|exile)\s+(.+?)\s+from among them\b",
+            text, re.I):
+        cleaned.append({"surface": m.group(1).strip(),
+                        "start": m.start(1), "end": m.end(1)})
     cleaned = merge_coordinated(text, cleaned)
     ms = annotate(text, cleaned, struct=struct)
     for m in ms:

@@ -812,7 +812,7 @@ All 20 bug ids pass on a per-card compile; `PASS` proofs (JSON snippets):
 | Z053 | Wrath of the Bloodmane | PASS | `"to":{"card_type":[{"value":"creature"},{"value":"planeswalker"}],"quantifier":"target"}` |
 | Z059 | Tinybones Joins Up | PASS | `"effect":{"verb":"shared_effects","shared":{"who":"any number of target players"},"items":[...]}` |
 | Z062 | Faunsbane Troll | PASS | `"card_type":{"kind":"type","value":"aura"},"modifier":{"kind":"attached_to","target":{"card_type":{"kind":"this_card","value":"~"},"anaphor":true}}` |
-| Z067 | Eclipsed Boggart | PASS | `"card_type":[{"value":"Goblin"},{"value":"Swamp"},{"value":"Mountain"}],"any_of":true` |
+| Z067 | Eclipsed Boggart | PASS | `"card_type":[{"value":"Goblin"},{"value":"Swamp"},{"value":"Mountain"}],"any_of":true`; `it` -> `a Goblin, Swamp, or Mountain card` (not this creature) |
 | Z068 | Shark Shredder, Killer Clone | PASS | `"type":"static_ability","keyword":"Sneak","cost":{"action":"pay_mana","mana":["{3}","{B}","{B}"]}` |
 | Z074 | Starbreach Whale | PASS | `"keyword":"Warp","cost":{"action":"pay_mana","mana":["{1}","{U}"]}` |
 | Z076 | Drix Fatemaker | PASS | `"keyword":"Warp","cost":{"action":"pay_mana","mana":["{1}","{G}"]}` |
@@ -830,3 +830,16 @@ Refreshed per-card artifact at HEAD: **22,217 records, 5,153 cards, 898
 unweighted / 3,731 weighted anaphora markers, 4,592 records changed vs
 `5d074f72`**, SHA-256
 `cfb6aa556cde33454c1384b48611b87f7b9ad9129b76c98d285b51585f2ac388`.
+
+
+### Z067 selected-card binding follow-up
+
+Shape: `reveal/search/exile … from among them … put it/exile it`.
+Corpus occurrences: **58 records / 26 unique sentences**; previously **14**
+records bound `it` to the source (`this creature`). The resolver now keeps the
+selected-card NP from `reveal … from among them` as a candidate and prefers it
+for the following put/exile pronoun; `them` after `among` is also exempt from
+the player-context filter. Wrong self-bindings in this shape: **14 -> 0**.
+Z067 resolved_text is now unchanged from the original and the output card is
+`{raw:'it',ref:'anaphora'}` with metadata antecedent
+`a Goblin, Swamp, or Mountain card`.

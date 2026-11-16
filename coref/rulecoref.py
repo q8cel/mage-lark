@@ -769,6 +769,19 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
                 evidence.append("put-object")
             si0 = rec.get("sentence")
             if (si0 is not None and si0 < len(sents)
+                    and 'from among them' in
+                    text[sents[si0][0]:rec["start"]].lower()):
+                cards = [i for i in pool
+                         if not ms[i].get("is_self")
+                         and ms[i].get("head_type") not in
+                         ("hand", "graveyard", "library", "exile",
+                          "player", "opponent", None)
+                         and re.search(r"\bcards?\b|creature",
+                                      ms[i].get("surface", ""), re.I)]
+                if cards:
+                    pool = [max(cards, key=lambda i: ms[i]["start"])]
+                    evidence.append("put-object-among-selection")
+            if (si0 is not None and si0 < len(sents)
                     and re.search(r"\bsearch(?:es|ed|ing)?\b",
                                   text[sents[si0][0]:rec["start"]], re.I)):
                 cards = [i for i in pool
@@ -1403,7 +1416,10 @@ def resolve(text, mentions, anaphors, rewrite=True, rules=None, struct=None,
             elif not f:
                 pool = []
                 evidence.append("object-not-player-no-match")
-        if surf_low in ("they", "them", "their", "theirs", "themselves"):
+        if surf_low in ("they", "them", "their", "theirs", "themselves") \
+                and not re.search(r"\bamong\s*$",
+                                  text[max(0, rec["start"] - 12):rec["start"]],
+                                  re.I):
             window = text[max(0, rec["start"] - 45):rec["start"] + 45].lower()
             if re.search(r"\b(choice|hand|library|graveyard|deck|control|life|turn)\b", window):
                 f = [i for i in pool
