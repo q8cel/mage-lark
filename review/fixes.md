@@ -826,10 +826,10 @@ All 20 bug ids pass on a per-card compile; `PASS` proofs (JSON snippets):
 | Z095 | Borrowed Knowledge | PASS | `{"kind":"zone_set","zone":{"zone":"hand","possessor":"target opponent"}}` |
 | Z099 | Moonlit Lamenter | PASS | enters card `{"kind":"this_card","value":"~"},"anaphor":true` |
 
-Refreshed per-card artifact at HEAD: **22,217 records, 5,153 cards, 898
-unweighted / 3,731 weighted anaphora markers, 4,592 records changed vs
-`5d074f72`**, SHA-256
-`cfb6aa556cde33454c1384b48611b87f7b9ad9129b76c98d285b51585f2ac388`.
+Refreshed per-card artifact after the Z067 selected-card fix: **22,217
+records, 5,153 cards, 955 unweighted / 3,920 weighted anaphora markers,
+1,567 records with changed resolved_text, 114 records changed vs `cfb6aa55`**,
+SHA-256 `45b5f4230b2c032b8e4a9483b5316a268d6fe9fe52a47fbc5de30ee99eb2b959`.
 
 
 ### Z067 selected-card binding follow-up
