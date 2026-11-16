@@ -1424,6 +1424,14 @@ HELP = {
         "n": "reject the focused claim",
         "y/n again": "clear the decision",
     },
+    "json tree": {
+        "click key/value": "select that node for the bug note (path: value)",
+        "click \u25b8 / \u25be": "expand / collapse that node",
+        "e": "collapse all / expand all",
+        "\u2191 / \u2193": "move the tree focus",
+        "\u2190 / \u2192": "collapse / expand the focused node",
+        "s": "select the focused node",
+    },
     "housekeeping": {
         "i": "re-import labels.tsv from the pack",
         "x": "export labels.tsv",

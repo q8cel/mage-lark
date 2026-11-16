@@ -42,7 +42,12 @@ and per-label persistence make it resumable, and `u` undoes a label.
 | `g` / `G` | first / last item |
 | `o` / `b` / `l` | verdict `ok` / `bug` / `legit` |
 | `1`–`9` | bug axis: target, actor, zone, quantity, referent, condition, timing, polarity, other |
-| click JSON node | set the bug path (note becomes `path: value`) |
+| click key/value | select that JSON node for the bug note (`path: value`) |
+| click ▸ / ▾ | expand / collapse that node (toggling never changes the path) |
+| `e` | collapse all / expand all |
+| `↑` / `↓` | move the tree focus |
+| `←` / `→` | collapse / expand the focused node |
+| `s` | select the focused node |
 | `Enter` | commit the label and advance to the next unlabelled item in the batch |
 | `u` | undo the current item's label |
 | `[` / `]` | previous / next machine claim |
@@ -50,8 +55,14 @@ and per-label persistence make it resumable, and `u` undoes a label.
 | `i` / `x` / `r` | re-import `labels.tsv` / export `labels.tsv` / reload state |
 | `?` | help overlay |
 
-Clicking a node selects it; `Escape` clears the selection. Clicking a sentence
-token shows its landing paths; clicking a path jumps to the node.
+The tree opens fully by default (outputs are 7–41 nodes), so every leaf is
+reviewable without clicking. Clicking a key/value label selects that node;
+clicking its ▸/▾ triangle toggles it, so expanding never changes the note path.
+`e` collapses or expands the whole tree for the current view — that preference
+lives only in the session, never in `labels.jsonl`. Arrow keys walk the visible
+tree and `s` selects the focused node. Clicking a claim's path, or a sentence
+token's landing path, expands the ancestors and scrolls the node into view.
+`Escape` clears the selection.
 
 ## Pack formats
 

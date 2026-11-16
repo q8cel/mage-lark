@@ -197,10 +197,19 @@ main {
 .tree { font-size: 12px; line-height: 1.5; }
 .tree details { margin-left: 10px; }
 .tree > details { margin-left: 0; }
+.panelhead .treebtn {
+  float: right;
+  margin-top: -3px;
+  font-size: 10px;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 0 6px;
+}
 .tree summary { cursor: pointer; list-style: none; }
 .tree summary::-webkit-details-marker { display: none; }
-.tree summary::before { content: "\25B8 "; color: #4e5764; }
-.tree details[open] > summary::before { content: "\25BE "; }
+.tree .tw { display: inline-block; width: 12px; color: #4e5764; user-select: none; }
+.tree .tw:hover { color: var(--accent); }
+.tree .label { cursor: pointer; }
 .tree .k { color: #9ecbff; }
 .tree .idx { color: #4e5764; }
 .tree .leaf { margin-left: 20px; padding: 0 2px; border-radius: 2px; cursor: pointer; }
@@ -209,9 +218,9 @@ main {
 .tree .leaf .v.num { color: var(--amber); }
 .tree .leaf .v.bool { color: var(--violet); }
 .tree .leaf .v.null { color: var(--dim); }
-.tree .leaf.sel, .tree summary.sel { background: rgba(224, 179, 83, .18); outline: 1px solid var(--amber); }
-.tree .leaf.hit, .tree summary.hit { background: rgba(110, 168, 254, .16); }
-.tree .leaf.claimhit, .tree summary.claimhit { box-shadow: inset 2px 0 0 var(--red); }
+.tree .leaf.sel, .tree details.sel > summary { background: rgba(224, 179, 83, .18); outline: 1px solid var(--amber); }
+.tree .leaf.focus, .tree details.focus > summary { outline: 1px dashed var(--accent); }
+.tree .leaf.hit, .tree details.hit > summary { background: rgba(110, 168, 254, .16); }
 
 /* ---- right column ---- */
 .claims { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }

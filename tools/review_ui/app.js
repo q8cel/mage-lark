@@ -20,6 +20,8 @@ const S = {
   claimCur: 0,
   hits: new Set(),
   activeToken: null,
+  focusPath: null,
+  treeExpanded: true,
   warnedBugNoAxis: false,
   busy: false,
 };
@@ -264,13 +266,24 @@ function buildNode(path, keyLabel, value, depth) {
   const det = document.createElement('details');
   det.dataset.path = path;
   det.dataset.value = shortJson(value);
-  if (depth < 2) det.open = true;
+  det.open = S.treeExpanded;
   const summary = document.createElement('summary');
+  const twisty = document.createElement('span');
+  twisty.className = 'tw';
+  twisty.textContent = det.open ? '\u25BE' : '\u25B8';
+  twisty.title = 'expand / collapse';
+  summary.appendChild(twisty);
+  const label = document.createElement('span');
+  label.className = 'label';
   const size = Array.isArray(value) ? `[${value.length}]` : `{${Object.keys(value).length}}`;
-  summary.innerHTML = (keyLabel !== null
+  label.innerHTML = (keyLabel !== null
     ? `<span class="${/^\[\d+\]$/.test(keyLabel) ? 'idx' : 'k'}">${esc(keyLabel)}</span> `
     : '') + `<span class="idx">${size}</span>`;
+  summary.appendChild(label);
   det.appendChild(summary);
+  det.addEventListener('toggle', () => {
+    twisty.textContent = det.open ? '\u25BE' : '\u25B8';
+  });
   const kids = document.createElement('div');
   if (Array.isArray(value)) {
     value.forEach((child, i) => kids.appendChild(buildNode(`${path}[${i}]`, `[${i}]`, child, depth + 1)));
@@ -283,20 +296,63 @@ function buildNode(path, keyLabel, value, depth) {
   return det;
 }
 
+function nodeEl(path) {
+  if (!path) return null;
+  return document.querySelector(`#tree [data-path="${CSS.escape(path)}"]`);
+}
+
+function valueOfNode(path) {
+  const el = nodeEl(path);
+  return el ? el.dataset.value : '';
+}
+
 function renderTree() {
   const host = $('#tree');
   host.textContent = '';
   if (S.item.output === null || S.item.output === undefined) {
     host.textContent = '(no output)';
+    renderTreeControls();
     return;
   }
   host.appendChild(buildNode('$', null, S.item.output, 0));
+  const start = S.path || S.focusPath || '$';
+  S.focusPath = nodeEl(start) ? start : '$';
+  if (S.path) reveal(S.path, true);
+  else reveal(S.focusPath, false);
   applyHighlights();
-  if (S.path) reveal(S.path, false);
+  renderTreeControls();
+}
+
+function renderTreeControls() {
+  const btn = $('#treeToggle');
+  if (!btn) return;
+  btn.textContent = S.treeExpanded ? 'collapse all (e)' : 'expand all (e)';
+}
+
+function nearestVisible(path) {
+  let candidate = path;
+  while (candidate) {
+    const el = nodeEl(candidate);
+    if (el && isNodeVisible(el)) return candidate;
+    candidate = parentPath(candidate);
+  }
+  return '$';
+}
+
+function toggleTree(force) {
+  const want = force === undefined ? !S.treeExpanded : !!force;
+  S.treeExpanded = want;
+  document.querySelectorAll('#tree details').forEach((det) => {
+    if (det.open !== want) det.open = want;
+  });
+  renderTreeControls();
+  if (want) reveal(S.path || S.focusPath, false);
+  S.focusPath = nearestVisible(S.focusPath);
+  setFocus(S.focusPath, false);
 }
 
 function reveal(path, scroll = true) {
-  const el = document.querySelector(`#tree [data-path="${CSS.escape(path)}"]`);
+  const el = nodeEl(path);
   if (!el) return false;
   let node = el;
   while (node) {
@@ -304,27 +360,89 @@ function reveal(path, scroll = true) {
     node = node.parentElement;
   }
   if (scroll) el.scrollIntoView({ block: 'nearest' });
-  document.querySelectorAll('#tree [data-path]').forEach((n) => n.classList.remove('sel'));
-  el.classList.add('sel');
   return true;
+}
+
+function applyStatusClasses() {
+  document.querySelectorAll('#tree .sel, #tree .focus').forEach((el) => {
+    el.classList.remove('sel', 'focus');
+  });
+  const sel = nodeEl(S.path);
+  if (sel) sel.classList.add('sel');
+  const focus = nodeEl(S.focusPath);
+  if (focus) focus.classList.add('focus');
 }
 
 function applyHighlights() {
   document.querySelectorAll('#tree .hit').forEach((el) => el.classList.remove('hit'));
-  if (!S.hits || !S.hits.size) return;
-  for (const path of S.hits) {
-    const el = document.querySelector(`#tree [data-path="${CSS.escape(path)}"]`);
-    if (el) el.classList.add('hit');
+  if (S.hits && S.hits.size) {
+    for (const path of S.hits) {
+      const el = nodeEl(path);
+      if (el) el.classList.add('hit');
+    }
   }
+  applyStatusClasses();
+}
+
+function setFocus(path, scroll = true) {
+  if (!path) return;
+  S.focusPath = path;
+  const el = nodeEl(path);
+  if (el && scroll) el.scrollIntoView({ block: 'nearest' });
+  applyStatusClasses();
+}
+
+function isNodeVisible(el) {
+  if (!el) return false;
+  if (typeof el.checkVisibility === 'function') return el.checkVisibility();
+  return el.getClientRects().length > 0;
+}
+
+function visibleTreeNodes() {
+  return [...document.querySelectorAll('#tree [data-path]')].filter(isNodeVisible);
+}
+
+function moveFocus(delta) {
+  const nodes = visibleTreeNodes();
+  if (!nodes.length) return;
+  let index = nodes.findIndex((el) => el.dataset.path === S.focusPath);
+  if (index < 0) index = 0;
+  const next = Math.max(0, Math.min(nodes.length - 1, index + delta));
+  setFocus(nodes[next].dataset.path);
+}
+
+function parentPath(path) {
+  if (!path || path === '$') return null;
+  const match = path.match(/^(.*?)(?:\.[A-Za-z_][A-Za-z0-9_]*|\[\d+\])$/);
+  return match ? match[1] : null;
+}
+
+function expandFocus() {
+  const el = nodeEl(S.focusPath);
+  if (!el) return;
+  if (el.tagName === 'DETAILS') {
+    if (!el.open) { el.open = true; return; }
+    const first = el.querySelector('[data-path]');
+    if (first) setFocus(first.dataset.path);
+  }
+}
+
+function collapseFocus() {
+  const el = nodeEl(S.focusPath);
+  if (!el) return;
+  if (el.tagName === 'DETAILS' && el.open) { el.open = false; return; }
+  const parent = parentPath(S.focusPath);
+  if (parent) setFocus(parent);
 }
 
 function selectPath(path, valueJson) {
   S.path = path || '';
   S.pathValue = valueJson || '';
+  S.focusPath = S.path || S.focusPath;
   if (S.verdict !== 'bug') S.verdict = 'bug';
   S.hits = new Set(path ? [path] : []);
+  if (path) reveal(path);
   applyHighlights();
-  reveal(path);
   renderVerdicts();
   renderSelection();
   renderNote();
@@ -522,6 +640,7 @@ async function loadItem(index) {
   S.claims = res.claims || [];
   S.claimCur = 0;
   S.hits = new Set(S.path ? [S.path] : []);
+  S.focusPath = S.path || null;
   S.warnedBugNoAxis = false;
   $('#notetext').value = '';
   $('#notetext').blur();
@@ -746,6 +865,14 @@ function handleKey(event) {
     case 'i': doImport(); break;
     case 'x': doExport(); break;
     case 'r': reloadState(); break;
+    case 'e': toggleTree(); break;
+    case 's':
+      if (S.focusPath) selectPath(S.focusPath, valueOfNode(S.focusPath));
+      break;
+    case 'ArrowDown': moveFocus(1); break;
+    case 'ArrowUp': moveFocus(-1); break;
+    case 'ArrowRight': expandFocus(); break;
+    case 'ArrowLeft': collapseFocus(); break;
     case 'Enter': commit(); break;
     default:
       if (/^[1-9]$/.test(event.key)) {
@@ -763,10 +890,26 @@ function handleKey(event) {
 function wire() {
   document.addEventListener('keydown', handleKey);
   $('#tree').addEventListener('click', (event) => {
+    const twisty = event.target.closest('.tw');
+    if (twisty) {
+      event.preventDefault();
+      event.stopPropagation();
+      const det = twisty.closest('details');
+      if (det) det.open = !det.open;
+      return;
+    }
+    const summary = event.target.closest('summary');
+    if (summary) {
+      event.preventDefault();           // the label selects; it must not toggle
+      const det = summary.parentElement;
+      if (det && det.dataset.path) selectPath(det.dataset.path, det.dataset.value);
+      return;
+    }
     const el = event.target.closest('[data-path]');
     if (!el) return;
     selectPath(el.dataset.path, el.dataset.value);
   });
+  $('#treeToggle').addEventListener('click', () => toggleTree());
   $('#notetext').addEventListener('input', (event) => {
     S.noteText = event.target.value;
     renderNote();
