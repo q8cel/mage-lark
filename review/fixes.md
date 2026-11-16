@@ -763,3 +763,34 @@ changed vs the previous `c1b84208` artifact. SHA-256
 
 `compile_standard_plain.jsonl` is stale (predates the latest interpret
 changes); it was intentionally not rebuilt because the cache key changed.
+
+## Human review v6 semantic bugs (20)
+
+All 20 bug rows addressed in six families; Z004/Z068/Z074/Z076 are keyword
+abilities, Z003/Z062/Z079/Z082/Z084/Z085/Z099 self-reference, Z015/Z017/Z018/
+Z030/Z051 contextual anaphora, Z093 modality, Z047/Z095 recipient/zone,
+Z049/Z053/Z067/Z086/Z059/Z092 lists/compound effects.
+
+- Self-reference: source `this creature/card/permanent/artifact/token/
+  enchantment` targets become `{kind:this_card,value:'~'}` and carry
+  `anaphor:true`; attached-Aura strings split into card type + attached_to
+  target. Corpus records with an unmarked source self phrase: **3126 -> 150**.
+- Contextual anaphora: `the exiled card` -> `{kind:anaphora,ref:the_exiled_card,
+  status:unresolved}`; owner strings -> `{kind:owner_of,of:<anaphora>}`;
+  `attached to that creature` -> `{kind:attached_to,target:<anaphora>}`;
+  `that many` list -> relative amount; target opponent hand -> zone_set.
+- Modality: `you may discard` now wraps `{verb:may,inner:{verb:discard}}`.
+  Sentences starting “you may” with no may wrapper: **347 -> 25**; residual
+  rows carry `may:true`, `condition.kind:may`, or quoted/raw forms.
+- Keyword abilities: Warp/Sneak and other mana-payload keywords (Cycling,
+  Disguise, Mayhem, Offspring, Evoke, Foretell, Ninjutsu, …) become
+  `{type:static_ability,keyword,cost:{action:pay_mana,mana:[...]}}`; unresolved
+  keyword items **485 -> 31** (remaining no-mana params/keyword actions).
+- Lists/compound: trigger object “instant or sorcery spell” -> type list +
+  card_class spell; `target creature or planeswalker` -> one typed list with
+  quantifier; three-card “Goblin, Swamp, or Mountain card” merged; Z092 for_each
+  item split into type/controller/power filter; Z086/Z059 same target/who wrap
+  as `{verb:shared_effects,shared:{...},items:[...]}`. `or` structures
+  112 -> 28; type strings containing “ or ” 0.
+- Z047 add_mana recipient: when a player `who` is present, `on` is no longer
+  emitted for the source object. Z095 target opponent hand is a zone_set.

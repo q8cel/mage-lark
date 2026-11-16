@@ -611,7 +611,7 @@ add("gain-control-chosen",
 add("put-library-choice",
     "Its owner puts it on their choice of the top or bottom of their library",
     lambda o: has(o, lambda d: d.get('verb') == 'put_library'
-                  and 'Its owner' == d.get('owner')
+                  and d.get('owner', {}).get('kind') == 'owner_of'
                   and 'bottom' in str(d.get('destination', ''))))
 add("reveal-until-that-many",
     "Exile all creatures you control, then reveal cards from the top of your library until you reveal that many creature cards",
@@ -901,7 +901,7 @@ add("scorch-relative-damage",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
                   and isinstance(d.get('to'), dict)
                   and d['to'].get('attacking') is True
-                  and len(d['to'].get('or', [])) == 2))
+                  and [x['value'] for x in d['to'].get('card_type', [])] == ['player', 'planeswalker']))
 add("convoke-keyword", "Artifact spells you cast have convoke",
     lambda o: has(o, lambda d: d.get('keywords') == ['convoke']))
 add("enchanted-target", "Enchanted creature gets +1/+0 and has trample",
@@ -939,9 +939,10 @@ add("coordinated-card-target",
                   or has(o, lambda d: d.get('verb') == 'gain_kw'
                   and 'Equipped' in d.get('card', {}).get('status', [])))
 add("coordinated-target", "When this creature enters, target creature gets +2/+0 and gains first strike until end of turn",
-    lambda o: has(o, lambda d: isinstance(d.get('effect'), list)
-                  and all(a.get('target') for a in d['effect']
-                          if isinstance(a, dict))))
+    lambda o: has(o, lambda d: isinstance(d.get('effect'), dict)
+                  and d['effect'].get('verb') == 'shared_effects'
+                  and d['effect'].get('shared', {}).get('target')
+                  and len(d['effect'].get('items', [])) == 2))
 
 add("also-gain-kw", "White creatures you control also gain first strike until end of turn",
     lambda o: has(o, lambda d: d.get('keywords') == ['first strike']))
@@ -953,7 +954,7 @@ add("replace-counter",
     "If one or more +1/+1 counters would be put on a creature you control, that many plus one +1/+1 counters are put on that creature instead",
     lambda o: has(o, lambda d: d.get('verb') == 'replace_counter'
                   and d.get('extra') == 1
-                  and d.get('on', {}).get('card_type', {}).get('value') == 'creature'))
+                  and d.get('on', {}).get('card_type', {}).get('kind') == 'anaphora'))
 
 add("aetherspouts-owner-choice",
     "For each attacking creature, its owner puts it on their choice of the top or bottom of their library",

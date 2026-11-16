@@ -677,6 +677,29 @@ class Interpreter:
             if repl is not None:
                 obj.clear()
                 obj.update(repl)
+        if isinstance(obj, dict) and isinstance(obj.get('effect'), list) \
+                and len(obj['effect']) >= 2:
+            effs = obj['effect']
+            verbs = {e.get('verb') for e in effs if isinstance(e, dict)}
+            if not (verbs <= {'stat_change', 'gain_kw'} or
+                    verbs <= {'mill', 'lose_life'}) or any(
+                        isinstance(e, dict) and e.get('condition') for e in effs):
+                effs = []
+            for skey in ('target', 'who'):
+                if not effs:
+                    break
+                vals = [e.get(skey) for e in effs if isinstance(e, dict)]
+                if len(vals) == len(effs) and vals and all(v == vals[0] for v in vals) \
+                        and vals[0] is not None:
+                    items = []
+                    for e in effs:
+                        e2 = dict(e)
+                        e2.pop(skey, None)
+                        items.append(e2)
+                    obj['effect'] = {'verb': 'shared_effects',
+                                     'shared': {skey: vals[0]},
+                                     'items': items}
+                    break
         if isinstance(obj, dict):
             if obj.get('verb') == 'cost_mod':
                 obj.setdefault('action', 'cast')
@@ -763,6 +786,104 @@ class Interpreter:
                 mctr = re.fullmatch(r'(.+?)\s+counters?(?:\s+s)?', k)
                 if mctr:
                     ctr['kind'] = mctr.group(1)
+            # --- v6 anaphora/list normalizations (output-side, no grammar)
+            ct_self = obj.get('card_type')
+            if isinstance(ct_self, dict) and isinstance(ct_self.get('value'), str):
+                v = ct_self['value']
+                m_att = re.fullmatch(r'(.+?) attached to this creature', v, re.I)
+                if m_att:
+                    obj['card_type'] = {'kind': 'type',
+                                        'value': m_att.group(1).strip().lower()}
+                    obj['modifier'] = {
+                        'kind': 'attached_to',
+                        'target': {'card_type': {'kind': 'this_card', 'value': '~'},
+                                   'anaphor': True}}
+                elif str(obj.get('this_that', '')).lower() in ('this', 'that') \
+                        and v.lower() in (
+                            'creature', 'card', 'permanent', 'artifact', 'token',
+                            'enchantment', 'land', 'equipment', 'aura'):
+                    if str(obj['this_that']).lower() == 'this':
+                        obj['card_type'] = {'kind': 'this_card', 'value': '~'}
+                    else:
+                        obj['card_type'] = {'kind': 'anaphora',
+                                            'ref': 'that_' + v.lower(),
+                                            'status': 'unresolved'}
+                    obj['anaphor'] = True
+                elif 'cards in target opponent' in v.lower():
+                    obj['card_type'] = {'kind': 'zone_set',
+                                        'zone': {'zone': 'hand',
+                                                 'possessor': 'target opponent'}}
+            modv = obj.get('modifier')
+            if isinstance(modv, str) and modv.lower().startswith('attached to '):
+                tgt = modv[len('attached to '):].strip().lower()
+                if tgt in ('this creature', 'this permanent', 'this artifact'):
+                    tar = {'card_type': {'kind': 'this_card', 'value': '~'},
+                           'anaphor': True}
+                else:
+                    tar = {'kind': 'anaphora',
+                           'ref': tgt.replace(' ', '_'),
+                           'status': 'unresolved'}
+                obj['modifier'] = {'kind': 'attached_to', 'target': tar}
+            for ok in ('who', 'owner'):
+                ov = obj.get(ok)
+                if isinstance(ov, str) and ov.lower().endswith("owner"):
+                    ref = 'the_exiled_card' if 'exiled card' in ov.lower() else 'its'
+                    obj[ok] = {'kind': 'owner_of',
+                               'of': {'kind': 'anaphora', 'ref': ref,
+                                      'status': 'unresolved'}}
+            if isinstance(obj.get('owner'), str) and obj['owner'] == 'owner' \
+                    and obj.get('zone'):
+                obj['owner'] = {'kind': 'owner_of',
+                                'of': {'kind': 'anaphora', 'ref': 'its',
+                                       'status': 'unresolved'}}
+            if isinstance(obj.get('status'), list) and 'exiled' in obj['status'] \
+                    and str(obj.get('this_that', '')).lower() == 'the':
+                obj['card_type'] = {'kind': 'anaphora',
+                                    'ref': 'the_exiled_card',
+                                    'status': 'unresolved'}
+            av = obj.get('amount')
+            if av == ['that', 'many']:
+                obj['amount'] = {'kind': 'relative',
+                                 'of': {'kind': 'that_many'}}
+            if isinstance(obj.get('object'), str) \
+                    and 'instant or sorcery spell' in obj['object'].lower():
+                obj['object'] = {'quantifier': 'an',
+                                 'card_type': [{'kind': 'type', 'value': 'instant'},
+                                               {'kind': 'type', 'value': 'sorcery'}],
+                                 'card_class': 'spell'}
+            tov = obj.get('to')
+            if isinstance(tov, dict) and isinstance(tov.get('or'), list):
+                items = tov['or']
+                types = []
+                quant = None
+                for it in items:
+                    if not isinstance(it, dict):
+                        continue
+                    quant = quant or it.get('quantifier')
+                    ct2 = it.get('card_type')
+                    if isinstance(ct2, dict):
+                        types.append(ct2)
+                    elif isinstance(ct2, list):
+                        types.extend(ct2)
+                if types:
+                    base = {k: v for k, v in tov.items() if k != 'or'}
+                    base['card_type'] = types
+                    if quant:
+                        base.setdefault('quantifier', quant)
+                    obj['to'] = base
+            fe_i = obj.get('for_each')
+            if isinstance(fe_i, dict) and isinstance(fe_i.get('items'), dict):
+                item = fe_i['items']
+                val = item.get('value')
+                if isinstance(val, str) and 'you control with power' in val.lower():
+                    m_p = re.search(r'power (\d+) or greater', val, re.I)
+                    item.clear()
+                    item.update({'kind': 'type', 'value': 'creature',
+                                 'controller': 'you'})
+                    if m_p:
+                        item['modifier'] = {'kind': 'stat_filter',
+                                            'stat': 'power', 'op': '>=',
+                                            'value': int(m_p.group(1))}
             av = obj.get('amount')
             if isinstance(av, dict) and av.get('kind') in (
                     'computed', 'relative', 'superlative', 'count_of',
@@ -795,18 +916,78 @@ class Interpreter:
                 expanded = []
                 changed = False
                 for item in ct:
-                    if isinstance(item, dict) and isinstance(item.get('value'), str) \
-                            and (' or ' in item['value'] or ' and ' in item['value']
-                                 or ',' in item['value']):
-                        parts = _split_type_value(item['value'])
-                        if len(parts) > 1:
+                    if isinstance(item, dict) and isinstance(item.get('value'), str):
+                        vitem = item['value']
+                        if 'cards in target opponent' in vitem.lower():
                             changed = True
-                            expanded.extend({'kind': item.get('kind', 'type'),
-                                             'value': x} for x in parts)
+                            expanded.append({'kind': 'zone_set',
+                                             'zone': {'zone': 'hand',
+                                                      'possessor': 'target opponent'}})
                             continue
+                        if (' or ' in vitem or ' and ' in vitem
+                                or ',' in vitem):
+                            parts = _split_type_value(vitem)
+                            if len(parts) > 1:
+                                changed = True
+                                expanded.extend({'kind': item.get('kind', 'type'),
+                                                 'value': x} for x in parts)
+                                continue
                     expanded.append(item)
                 if changed:
                     obj['card_type'] = expanded
+            # "a Goblin, Swamp, or Mountain card": the grammar splits the first
+            # item out of the list; merge identical card-list targets.
+            cards = obj.get('cards')
+            card_parent = obj.get('card')
+            if obj.get('verb') in ('reveal',) and isinstance(cards, list) \
+                    and isinstance(card_parent, dict) \
+                    and isinstance(card_parent.get('card_type'), dict) \
+                    and len(cards) == 2:
+                pct = card_parent['card_type']
+                first = cards[0]
+                if isinstance(pct, dict) and isinstance(first, dict):
+                    fct = first.get('card_type')
+                    fv = fct.get('value') if isinstance(fct, dict) else None
+                    if isinstance(pct.get('value'), str) and fv == pct['value']:
+                        merged = [{'kind': 'type', 'value': pct['value']}]
+                        for c in cards:
+                            cct = c.get('card_type') if isinstance(c, dict) else None
+                            if isinstance(cct, dict):
+                                merged.append({'kind': 'type',
+                                               'value': cct.get('value')})
+                            elif isinstance(cct, list):
+                                merged.extend(cct)
+                        seen_v = set()
+                        dedup = []
+                        for x in merged:
+                            v = x.get('value')
+                            if v in seen_v:
+                                continue
+                            seen_v.add(v)
+                            dedup.append(x)
+                        card_parent['card_type'] = dedup
+                        card_parent['any_of'] = True
+                        obj.pop('cards', None)
+                        cards = None
+            ct_merge = obj.get('card_type')
+            if isinstance(cards, list) and isinstance(ct_merge, dict) \
+                    and isinstance(ct_merge.get('value'), str) and len(cards) == 2:
+                first = cards[0]
+                if isinstance(first, dict):
+                    fct = first.get('card_type')
+                    fv = fct.get('value') if isinstance(fct, dict) else None
+                    if fv == ct_merge['value']:
+                        merged = [{'kind': 'type', 'value': ct_merge['value']}]
+                        for c in cards:
+                            cct = c.get('card_type') if isinstance(c, dict) else None
+                            if isinstance(cct, dict):
+                                merged.append({'kind': 'type',
+                                               'value': cct.get('value')})
+                            elif isinstance(cct, list):
+                                merged.extend(cct)
+                        obj['card_type'] = merged
+                        obj['any_of'] = True
+                        obj.pop('cards', None)
             if isinstance(obj.get('possessor'), str) \
                     and obj['possessor'].lower() in {'its', 'their', 'his', 'her'}:
                 obj['possessor'] = {'kind': 'anaphora',
@@ -3091,6 +3272,8 @@ class Interpreter:
         words = self._token_words(children)
         if 'at' in words and 'random' in words:
             d['random'] = True
+        if 'may' in words:
+            return {'verb': 'may', 'inner': d}
         return d
 
     def i_exile_action(self, children):
@@ -4607,7 +4790,7 @@ class Interpreter:
             if ck is not None:
                 d['per'] = self._text(ck.children).strip()
             ct = self._find_one(children, 'card_target')
-            if ct is not None:
+            if ct is not None and 'who' not in d:
                 d['on'] = self.interp(ct)
             return d
         for name in ('mana_amount', 'xdef', 'amount'):
@@ -6019,6 +6202,15 @@ class Interpreter:
                 for gk in ch.children:
                     if not isinstance(gk, Tree) or gk.data != 'generic_kw':
                         continue
+                    toks_g = [c for c in gk.children if isinstance(c, Token)]
+                    word = next((str(c) for c in toks_g
+                                 if not str(c).startswith('{')), None)
+                    mana = [str(c) for c in toks_g if str(c).startswith('{')]
+                    if word and mana and word.lower() not in ('add', 'pay'):
+                        return {'type': 'static_ability',
+                                'keyword': word,
+                                'cost': {'kind': 'cost', 'action': 'pay_mana',
+                                         'mana': mana}}
                     eff = next((c for c in gk.children
                                 if isinstance(c, Tree) and c.data == 'effect'), None)
                     if eff is None:
