@@ -627,6 +627,8 @@ class Interpreter:
                 obj.clear()
                 obj.update(repl)
         if isinstance(obj, dict):
+            if obj.get('verb') == 'cost_mod':
+                obj.setdefault('action', 'cast')
             qv = obj.get('quantifier')
             if isinstance(qv, str):
                 low_q = qv.strip().lower()
@@ -699,9 +701,20 @@ class Interpreter:
                 mctr = re.fullmatch(r'(.+?)\s+counters?(?:\s+s)?', k)
                 if mctr:
                     ctr['kind'] = mctr.group(1)
+            av = obj.get('amount')
+            if isinstance(av, dict) and av.get('kind') in (
+                    'computed', 'relative', 'superlative', 'count_of',
+                    'fraction', 'stat'):
+                av.setdefault('relation', 'equal')
             own = obj.get('owner')
             if isinstance(own, str) and own.strip().lower().startswith('the owner of '):
                 obj['owner'] = self._owner_ref(own)
+            ct0 = obj.get('card_type')
+            if isinstance(ct0, list) and 'card_class' not in obj:
+                vals = {str(x.get('value', '')).lower()
+                        for x in ct0 if isinstance(x, dict)}
+                if vals & {'instant', 'sorcery'}:
+                    obj['card_class'] = 'spell'
             ct = obj.get('card_type')
             def _split_type_value(v):
                 parts = [x.strip() for x in re.split(
@@ -2178,6 +2191,12 @@ class Interpreter:
                 n = {'a': 1, 'an': 1, 'one': 1, 'two': 2, 'three': 3}.get(
                     raw, int(raw) if raw.isdigit() else 1)
                 actions.append({'action': 'discard', 'count': n, 'card': 'card'})
+            msac = re.search(r'(?:and )?sacrificing (?:an? )?(.+?)(?: in addition| and |$)', low_by)
+            if msac:
+                tgt = self._simple_target(msac.group(1).strip())
+                actions.append({'action': 'sacrifice',
+                                'card': tgt or {'kind': 'type',
+                                                'value': msac.group(1).strip()}})
             mrem = re.match(r'removing ([0-9]+|one|two|three|four|five|six|seven|eight|nine|ten) counters', low_by)
             if mrem:
                 raw = mrem.group(1)
@@ -2281,6 +2300,12 @@ class Interpreter:
                 if 'other' in self._token_words(q.children):
                     d['otherness'] = 'other'
                     break
+        words = self._text(children).lower().split()
+        if d.get('card_type') is not None and 'card_class' not in d:
+            if 'spell' in words or 'spells' in words:
+                d['card_class'] = 'spell'
+            elif 'card' in words or 'cards' in words:
+                d['card_class'] = 'card'
         if d.get('quantifier') == 'each':
             # "each of up to two target creatures": the distributive `each`
             # wraps a nested card_target that carries the real quantifier.
@@ -3689,18 +3714,34 @@ class Interpreter:
         d = self._card_action('enters', children)
         ca = self._find_one(children, 'counter_amount')
         ck = self._find_one(children, 'counter_kind')
+        cn = self._find_one(children, 'counter_name')
         pm = [ch for ch in children if isinstance(ch, Token) and ch.type == 'POWER_MOD']
-        if ca is not None or ck is not None or pm:
+        if ca is not None or ck is not None or cn is not None or pm:
             w = {}
             if ca is not None:
                 w['count'] = self.interp(ca)
             if ck is not None:
-                w['counter'] = self._counter_text(ck) if isinstance(ck, Tree) else str(ck)
+                w['counter'] = {'kind': self._counter_text(ck) if isinstance(ck, Tree) else str(ck)}
+            elif cn is not None:
+                w['counter'] = {'kind': self._text(cn.children).strip()}
             if pm:
                 w['counter'] = pm[0].value + ' counter'
             if 'additional' in [str(c).lower() for c in children
                                 if isinstance(c, Token)]:
                 w['additional'] = True
+            at = self._find_one(children, 'any_text')
+            if at is not None:
+                expr = self._text(at.children).strip().lower()
+                m = re.fullmatch(r'(\d+|one|two|three|four|five|six|seven|eight|nine|ten) minus (x|\d+)', expr)
+                if m:
+                    words = {'one':1,'two':2,'three':3,'four':4,'five':5,
+                             'six':6,'seven':7,'eight':8,'nine':9,'ten':10}
+                    a = m.group(1)
+                    b = m.group(2)
+                    w['count'] = {'kind': 'computed',
+                                  'base': int(a) if a.isdigit() else words[a],
+                                  'op': 'minus',
+                                  'value': int(b) if b.isdigit() else b.upper()}
             d['with'] = w
         cas = self._find(children, 'counter_amount')
         cks = self._find(children, 'counter_kind')
@@ -3824,6 +3865,10 @@ class Interpreter:
             d['state'] = 'saddled'
             if 'until' in toks_low:
                 d['until'] = 'end of turn'
+        if 'until' in toks_low:
+            dur = self._duration(children)
+            if dur:
+                d['duration'] = dur
         if any(isinstance(c, Token) and c.value == 'addition' for c in children):
             d['in_addition'] = True
         cts = self._find(children, 'card_target')
@@ -3841,6 +3886,10 @@ class Interpreter:
         tail = self._find_one(children, 'become_tail')
         if tail is not None:
             tail_words = self._token_words(tail.children)
+            if 'until' in tail_words:
+                dur = self._duration(tail.children)
+                if dur:
+                    d['duration'] = dur
             if 'addition' in tail_words:
                 # "… creature in addition to its other types"
                 d['in_addition'] = True
@@ -4032,22 +4081,51 @@ class Interpreter:
         d = {'verb': 'distribute'}
         at = self._find_one(children, 'any_text')
         if at is not None:
-            txt = self.interp(at)
-            if isinstance(txt, str):
-                m = re.match(r'^(.*?)\s+counters? among (.+)$', txt,
-                             re.I)
-                if m:
-                    left = m.group(1).strip().split()
-                    if left:
-                        d['count'] = left[0]
-                        kind = ' '.join(left[1:]).strip()
-                        if kind:
-                            d['counter'] = kind
-                    tgt = self._simple_target(m.group(2))
-                    if tgt:
-                        d['among'] = tgt
-                        return d
-            d['text'] = txt
+            txt = self._text(at.children).strip()
+            m = re.match(r'(.+?)\s+counters?\s+among\s+(.+)$', txt, re.I)
+            if m:
+                left = m.group(1).strip().split()
+                nums = {'one':1,'two':2,'three':3,'four':4,'five':5,
+                        'six':6,'seven':7,'eight':8,'nine':9,'ten':10}
+                if left:
+                    n = left[0]
+                    d['count'] = int(n) if n.isdigit() else nums.get(n.lower(), n)
+                    kind = ' '.join(left[1:]).strip()
+                    if kind:
+                        d['counter'] = {'kind': kind}
+                tail = m.group(2)
+                d['among'] = {'kind': 'choice'}
+                mt = re.search(r'\b(?:target|other target)\s+(.+?)(?:\s+you control)?$',
+                               tail, re.I)
+                if mt:
+                    words = re.split(r'\s+and/or\s+|\s+or\s+|,\s*', mt.group(1))
+                    d['target'] = {'quantifier': 'target',
+                                   'card_type': [{'kind': 'type',
+                                                  'value': w.strip().lower()}
+                                                 for w in words if w.strip()]}
+                return d
+        ca = self._find_one(children, 'counter_amount')
+        ck = self._find_one(children, 'counter_kind')
+        if ca is not None:
+            d['count'] = self.interp(ca)
+        if ck is not None:
+            d['counter'] = {'kind': self._counter_text(ck)}
+        toks = [str(c) for c in children if isinstance(c, Token)]
+        low = [t.lower() for t in toks]
+        # target type words after "target" in "... among one, two, or three
+        # target creatures".
+        if 'target' in low:
+            i = low.index('target')
+            words = toks[i + 1:]
+            types = [w.lower() for w in words
+                     if w.lower() not in ('or', ',', 'and')]
+            if types:
+                d['target'] = {'quantifier': 'target',
+                               'card_type': [{'kind': 'type', 'value': types[-1]}]}
+        if 'among' in low:
+            amts = [self.interp(x) for x in self._find(children, 'amount')]
+            if amts:
+                d['among'] = {'kind': 'choice', 'options': amts}
         return d
 
     def i_copy_action(self, children):
@@ -5095,6 +5173,17 @@ class Interpreter:
             d['verb'] = {'kind': 'event',
                          'verbs': [v.strip() for v in
                                    d['verb'].split(' or ')]}
+        if 'cast' in flat_words:
+            d.setdefault('verb', 'cast')
+            if 'you' in flat_words:
+                d.setdefault('subject', 'you')
+            if isinstance(d.get('object'), dict) and 'spell' in self._text(children).lower():
+                d['object'].setdefault('card_class', 'spell')
+            if 'first' in flat_words:
+                d.setdefault('ordinal', 'first')
+            if 'each' in flat_words and 'turn' in flat_words:
+                d.setdefault('window', {'kind': 'frequency',
+                                        'value': 'each_turn'})
         if 'next' in words and 'cast' in words:
             # "When you next cast a creature spell this turn": the cast is
             # the event verb; keep the one-shot window.

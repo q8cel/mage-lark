@@ -711,3 +711,24 @@ Fixtures: `review/anaphora_agreement_fixtures.json` now includes
 kind/not-a-mention fixtures still pass (9/9). Residual self_binding rows are
 audit heuristic windows where the pronoun genuinely refers to the source
 (“cast it” on the source spell), not mechanical resolver errors.
+
+## Content-loss families (calibrated, 792-row baseline)
+
+Scan: `review/certain_defects.tsv` / `.md`. Baseline 792/4,005 long sentences;
+after fixes **666 / 4,005 = 16.6%**. Family counts:
+
+| family | before | after | fixed shape |
+|---|---:|---:|---|
+| cast | 119 | 59 | trigger events now carry `verb:cast`/`subject:you`; cost_mod gets `action:cast`; card class spell on cast targets |
+| equal | 73 | 23 | relative/computed/superlative/count amounts carry `relation:equal` |
+| spell | 61 | 57 | cast targets with instant/sorcery lists get `card_class:spell`; trigger events set it too |
+| card | 56 | 56 | unchanged; remaining are representation/allowlist or other actions |
+| creature | 54 | 54 | unchanged; e.g. search/shuffle sequences still drop the put target |
+| cards | 44 | 44 | unchanged; sequence/zone targets still incomplete |
+| until | 34 | 11 | become_tail duration is structured for “becomes … until end of turn” |
+| end | 28 | <9 | same become_tail duration fix |
+| among | 34 | 27 | distribute actions now carry count/counter/target (both counter_kind and any_text grammar forms) |
+| artifact | 24 | 23 | unchanged beyond cast/spell paths |
+
+The remaining 666 are not suppressed: top rows are sequence actions
+(`search ... put ...`), dropped conditions, and source/controller clauses.
