@@ -642,3 +642,13 @@ weighted markers, 1,610 changed records, SHA-256
 `bd6678fec89635e5fa0a82e76048bf187427b94336c8b87af3ecc23e8d12c39b`.
 200-card ordering slice remains byte-identical at workers 1/6
 (`44a19bac…d347e2`).
+
+Final plain-vs-resolved artifacts (same 22,217-record basis, after owner fix):
+
+| artifact | markers | weighted markers | output differs | resolved_text changed | SHA-256 |
+|---|---:|---:|---:|---:|---|
+| `compile_standard_plain.jsonl` | 1,988 | 10,018 | — | 0 | `2845b526fa80917ff888d8c10472598ea3a8931cf67625f4a912337d0d09e7d8` |
+| `compile_standard.jsonl` | 893 | 3,654 | 1,580 | 1,610 | `bd6678fec89635e5fa0a82e76048bf187427b94336c8b87af3ecc23e8d12c39b` |
+
+Both are untracked and covered by `.gitignore`; plain compile took 1,148 s at
+6 workers with the owner-structure cache invalidation.
