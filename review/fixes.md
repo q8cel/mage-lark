@@ -732,3 +732,22 @@ after fixes **666 / 4,005 = 16.6%**. Family counts:
 
 The remaining 666 are not suppressed: top rows are sequence actions
 (`search ... put ...`), dropped conditions, and source/controller clauses.
+
+## Content-loss closure round 2 + raw_action groups
+
+Calibrated content loss: 792/4,005 (19.8%) -> **591/4,005 (14.8%)**.
+Family residuals: cast 59, creature 52, spell 50, equal 23, among 23,
+artifact 23, cards 15, end 5, card 4, until 3, loses 0. Fixed this round:
+cast 119->59 (trigger cast verb/subject + card class; cost_mod cast action),
+equal 73->23 (relation:equal on structured amounts), spell 61->50 (spell class
+on cast targets and event objects), card 56->4 (draw/mill/exile card objects),
+cards 44->15, creature 54->52 (damage divided targets), among 34->23
+(distribute + damage divided forms), until 34->3 and end 28->5 (become_tail
+durations), artifact 24->23.
+
+`raw_action` grouping on a fresh snapshot: **67 -> 46 occurrences / 30 shapes**.
+Structured groups added: damage-plus/relative, token-instead, mana colour
+change, gains suspend, turn face up. Remaining groups: other replacement/
+action ~? (diverse one-offs), state/ability tails, zone/action tails,
+damage-plus complex, cast/spend permissions. Anything requiring new grammar
+is deferred, not suppressed.

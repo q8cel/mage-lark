@@ -604,6 +604,57 @@ class Interpreter:
                 repl = {'verb': 'put_counter', 'count': {'up_to': 3},
                         'counter': {'kind': 'lore'},
                         'on': {'card_type': {'ref': 'anaphora', 'raw': 'it'}}}
+            elif re.fullmatch(r'it deals that much damage plus (\d+|x) instead', low):
+                m = re.fullmatch(r'it deals that much damage plus (\d+|x) instead', low)
+                raw = m.group(1)
+                repl = {'verb': 'deal_damage',
+                        'amount': {'kind': 'relative',
+                                   'of': {'kind': 'that_much'},
+                                   'plus': int(raw) if raw.isdigit() else 'X'},
+                        'instead': True}
+            elif low.startswith("that source deals damage equal to ~'s power"):
+                repl = {'verb': 'deal_damage',
+                        'amount': {'kind': 'relative',
+                                   'of': {'kind': 'ref', 'noun': '~',
+                                          'stat': 'power'}},
+                        'instead': True}
+            elif re.fullmatch(r'it deals twice x damage to that permanent instead', low):
+                repl = {'verb': 'deal_damage',
+                        'amount': {'kind': 'x', 'multiplier': 2},
+                        'to': {'this_that': 'that',
+                               'card_type': {'kind': 'type',
+                                             'value': 'permanent'}},
+                        'instead': True}
+            elif low == 'instead create those tokens plus an additional map token':
+                repl = {'verb': 'create_token',
+                        'base': {'kind': 'ref', 'ref': 'those_tokens'},
+                        'additional': {'count': 1,
+                                       'types': ['Map']},
+                        'instead': True}
+            elif low == 'those tokens plus a 1/1 green frog creature token are created instead':
+                repl = {'verb': 'create_token',
+                        'base': {'kind': 'ref', 'ref': 'those_tokens'},
+                        'additional': {'count': 1,
+                                       'token': {'power_toughness': {'power': 1, 'toughness': 1},
+                                                 'colors': 'green',
+                                                 'types': ['Frog', 'creature']}},
+                        'instead': True}
+            elif re.fullmatch(r'that many 5/5 red dragon creature tokens with flying are created instead', low):
+                repl = {'verb': 'create_token',
+                        'count': {'kind': 'that_many'},
+                        'token': {'power_toughness': {'power': 5, 'toughness': 5},
+                                  'colors': 'red', 'types': ['Dragon', 'creature'],
+                                  'kw': ['flying']},
+                        'instead': True}
+            elif low == 'that mana becomes red instead':
+                repl = {'verb': 'become', 'object': 'mana', 'color': 'red',
+                        'instead': True}
+            elif low == 'it gains suspend':
+                repl = {'verb': 'gain_kw', 'keywords': ['suspend'],
+                        'target': {'card_type': {'ref': 'anaphora', 'raw': 'it'}}}
+            elif low == 'you may turn it face up':
+                repl = {'verb': 'turn_face_up', 'may': True,
+                        'card': {'card_type': {'ref': 'anaphora', 'raw': 'it'}}}
             elif low.startswith('untap him and there is an additional combat phase'):
                 repl = {'verb': 'and', 'items': [
                     {'verb': 'untap',
@@ -629,6 +680,17 @@ class Interpreter:
         if isinstance(obj, dict):
             if obj.get('verb') == 'cost_mod':
                 obj.setdefault('action', 'cast')
+            if obj.get('verb') in ('draw', 'mill') and 'card' not in obj:
+                obj.setdefault('card', {'card_type': {'kind': 'type',
+                                                      'value': 'cards'}})
+            if obj.get('verb') == 'exile' and obj.get('top') \
+                    and not obj.get('card'):
+                obj['card'] = {'card_type': {'kind': 'type',
+                                             'value': 'cards'}}
+            if obj.get('verb') == 'cast':
+                card_obj = obj.get('card')
+                if isinstance(card_obj, dict):
+                    card_obj.setdefault('card_class', 'spell')
             qv = obj.get('quantifier')
             if isinstance(qv, str):
                 low_q = qv.strip().lower()
@@ -3285,6 +3347,10 @@ class Interpreter:
         if 'until' in toks:
             if len(cts) > 1:
                 d['until'] = self.interp(cts[-1])
+            elif 'land' in toks or ' land ' in (' ' + self._text(children).lower() + ' '):
+                d['until'] = {'card_type': {'kind': 'type', 'value': 'land'}}
+            elif len(cts) == 1:
+                d['until'] = self.interp(cts[0])
         if {'from', 'among', 'them'} <= set(toks):
             # The source is the set revealed/exiled earlier, not a zone.  Keep
             # the same {prep, zone} shape as i_in_zone so consumers see one form.
@@ -4258,6 +4324,22 @@ class Interpreter:
         dw = self._find(children, 'damage_who')
         if dw:
             d['to'] = self.interp(dw[0]) if len(dw) == 1 else [self.interp(x) for x in dw]
+        toks_low = [str(ch).lower() for ch in children if isinstance(ch, Token)]
+        dr = self._find_one(children, 'divided_rest')
+        if dr is not None:
+            toks_low.extend(self._token_words(dr.children))
+        if 'divided' in toks_low or 'choose' in toks_low:
+            d['divided'] = True
+        at_dmg = self._find_one(children, 'any_text')
+        if isinstance(at_dmg, Tree) and 'among' in self._text(at_dmg.children).lower():
+            toks_low.append('among')
+        if 'among' in toks_low:
+            d['among'] = {'kind': 'choice'}
+            amts = [self.interp(x) for x in self._find(children, 'amount')]
+            if amts:
+                d['among']['options'] = amts
+            if 'to' not in d and 'target' in toks_low:
+                d['to'] = {'quantifier': 'target'}
         xd = self._find_one(children, 'xdef')
         if xd is not None:
             d['amount'] = {'xdef': self.interp(xd)}
@@ -4693,6 +4775,10 @@ class Interpreter:
             owner = self._text(own.children)
             if owner:
                 d['owner'] = owner
+        cts = self._find(children, 'card_target')
+        if cts:
+            vals = [self.interp(c) for c in cts]
+            d['cards'] = vals
         return d
 
     def i_no_max_hand_action(self, children):
@@ -5173,12 +5259,25 @@ class Interpreter:
             d['verb'] = {'kind': 'event',
                          'verbs': [v.strip() for v in
                                    d['verb'].split(' or ')]}
+        if (isinstance(d.get('object'), list)
+                and set(x.lower() for x in d['object'] if isinstance(x, str))
+                & {'white', 'blue', 'black', 'red', 'green', 'colorless'}
+                and ({'instant', 'sorcery'} &
+                     set(self._text(children).lower().split()))):
+            d['object'] = {'quantifier': 'a',
+                           'card_type': [{'kind': 'type', 'value': 'instant'},
+                                         {'kind': 'type', 'value': 'sorcery'}],
+                           'card_class': 'spell',
+                           'colors': d['object']}
         if 'cast' in flat_words:
             d.setdefault('verb', 'cast')
             if 'you' in flat_words:
                 d.setdefault('subject', 'you')
             if isinstance(d.get('object'), dict) and 'spell' in self._text(children).lower():
                 d['object'].setdefault('card_class', 'spell')
+            elif 'spell' in flat_words and 'object' not in d:
+                d['object'] = {'card_type': {'kind': 'type', 'value': 'spell'},
+                               'card_class': 'spell'}
             if 'first' in flat_words:
                 d.setdefault('ordinal', 'first')
             if 'each' in flat_words and 'turn' in flat_words:

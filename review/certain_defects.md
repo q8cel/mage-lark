@@ -1,10 +1,10 @@
 # Certain defects — content loss in long sentences
 
-Snapshot `std_content_fix3.json`.
+Snapshot `std_final_defects.json`.
 
 - sentences >=12 words checked: 4005
-- sentences with >=1 missing content unit: 666 (16.6%)
-- rows with missing units or defect evidence: 1773; top 100 written
+- sentences with >=1 missing content unit: 591 (14.8%)
+- rows with missing units or defect evidence: 1742; top 100 written
 
 Function-word allowlist: a after again all already also am an and another any are aren't as at back be been before being but by can can't cannot could delirium did didn't do does doesn't doing don't done down during each every few for from further had has have having he her here hers him his i if in into is isn't it it's its just least less little long many may me might mine more most much must my no none nor not of on once one only onto or other our ours out over own same shall she should so some such than that that's the their theirs them then there these they they're this those to under up us very was wasn't we we're were weren't when whenever where which who whom whose will with within without won't would wouldn't yet you you're your yours
 
@@ -13,35 +13,179 @@ Calibration (25 stratified samples): 15 true_loss, 5 structured_repr, 2 allowlis
 ## Top missing units
 
 | cast | 59 |
-| spell | 57 |
-| card | 56 |
-| creature | 54 |
-| cards | 44 |
-| among | 27 |
-| land | 24 |
+| creature | 52 |
+| spell | 50 |
 | equal | 23 |
+| among | 23 |
 | artifact | 23 |
 | mana | 20 |
+| land | 20 |
 | control | 19 |
 | cost | 17 |
 | time | 16 |
 | power | 16 |
 | activate | 15 |
+| cards | 15 |
 | choice | 15 |
 | spent | 13 |
 | exhaust | 13 |
 | owner | 13 |
+| twice | 12 |
 | renew | 12 |
 | opponent | 11 |
-| twice | 11 |
 | battlefield | 11 |
 | library | 11 |
-| until | 11 |
 | enchantment | 9 |
 | enters | 9 |
 | enter | 9 |
 | dealt | 8 |
 | get | 8 |
+| costs | 8 |
+| though | 7 |
+| flash | 7 |
+| hand | 7 |
+| lost | 6 |
+| targets | 6 |
+| step | 6 |
+| abilities | 5 |
+| damage | 5 |
+| rather | 5 |
+| controller | 5 |
+| instead | 5 |
+| max | 5 |
+| speed | 5 |
+| source | 5 |
+| end | 5 |
+| choose | 5 |
+| color | 4 |
+| gets | 4 |
+| card | 4 |
+| double | 4 |
+| graveyard | 4 |
+| paying | 4 |
+| plus | 4 |
+| permanent | 4 |
+| counters | 4 |
+| put | 4 |
+| tapped | 4 |
+| ability | 4 |
+| named | 4 |
+| untap | 4 |
+| able | 3 |
+| types | 3 |
+| chosen | 3 |
+| greater | 3 |
+| single | 3 |
+| 2 | 3 |
+| solved | 3 |
+| play | 3 |
+| until | 3 |
+| tap | 3 |
+| counter | 3 |
+| detective | 3 |
+| activated | 2 |
+| 4 | 2 |
+| creatures | 2 |
+| player | 2 |
+| times | 2 |
+| deals | 2 |
+| process | 2 |
+| turn | 2 |
+| anywhere | 2 |
+| planeswalker | 2 |
+| opponents | 2 |
+| way | 2 |
+| threshold | 2 |
+| colors | 2 |
+| owners' | 2 |
+| turns | 1 |
+| both | 1 |
+| becomes | 1 |
+| blow | 1 |
+| brontosaurus | 1 |
+| channel | 1 |
+| cura | 1 |
+| curaga | 1 |
+| cure | 1 |
+| descend | 1 |
+| name | 1 |
+| formula | 1 |
+| sources | 1 |
+| deal | 1 |
+| different | 1 |
+| artifacts | 1 |
+| enchantments | 1 |
+| vehicle | 1 |
+| instants | 1 |
+| sorceries | 1 |
+| dying | 1 |
+| fathomless | 1 |
+| descent | 1 |
+| find | 1 |
+| new | 1 |
+| host | 1 |
+| flare | 1 |
+| star | 1 |
+| names | 1 |
+| unless | 1 |
+| entered | 1 |
+| face | 1 |
+| turned | 1 |
+| attacking | 1 |
+| nonland | 1 |
+| 5 | 1 |
+| dragons | 1 |
+| produces | 1 |
+| kinds | 1 |
+| mardu | 1 |
+| nosh | 1 |
+| rest | 1 |
+| piles | 1 |
+| additional | 1 |
+| sensational | 1 |
+| save | 1 |
+| share | 1 |
+| smear | 1 |
+| campaign | 1 |
+| summon | 1 |
+| sacrificed | 1 |
+| reduced | 1 |
+| using | 1 |
+| toughness | 1 |
+| fewer | 1 |
+| take | 1 |
+| tyrannosaurus | 1 |
+| rex | 1 |
+| gains | 1 |
+| trample | 1 |
+| steps | 1 |
+| phases | 1 |
+| base | 1 |
+| exiled | 1 |
+| next | 1 |
+| vivid | 1 |
+| void | 1 |
+| web | 1 |
+| support | 1 |
+| equipment | 1 |
+| blocks | 1 |
+| finality | 1 |
+| total | 1 |
+| coin | 1 |
+| alone | 1 |
+| planeswalkers | 1 |
+| dies | 1 |
+| between | 1 |
+| first | 1 |
+| sacrifice | 1 |
+| game | 1 |
+| pay | 1 |
+| spells | 1 |
+| second | 1 |
+| libraries | 1 |
+| flying | 1 |
+| elves | 1 |
+| combat | 1 |
 
 ## Top 100 by length x missing content
 
@@ -63,14 +207,6 @@ Missing: unless, permanent, entered, battlefield, face, control, turn, turned
 
 Output (truncated): `[{"condition": {"actor": "you", "kind": "event_ref", "polarity": "positive"}, "effect": {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "card"}, "quantifier": "a"}, "verb": "discard"}, "type": "if"}]`
 
-### `a3058542f02d` — 31 words, score 186
-
-Sentence: When ~ enters, it deals X damage divided as you choose among any number of target creatures and/or planeswalkers your opponents control, where X is the number of lands you control
-
-Missing: divided, choose, target, creatures, planeswalkers, opponents
-
-Output (truncated): `[{"effect": {"amount": {"kind": "x"}, "source": {"card_type": {"raw": "it", "ref": "anaphora"}}, "verb": "deal_damage"}, "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "enters"}, "when": "When"}, "type": "triggered", "xdef": {"xdef": {"kind": "count", "of": {"card_type": {"kind": "type", "value": "lands"}, "controller": "you control"}, "unit": "lands"}}}]`
-
 ### `92230a20b5ef` — 31 words, score 124
 
 Sentence: {2}, {T}, Sacrifice this creature: Search your library for up to two basic land cards, reveal them, put one onto the battlefield tapped and the other into your hand, then shuffle
@@ -78,6 +214,14 @@ Sentence: {2}, {T}, Sacrifice this creature: Search your library for up to two b
 Missing: creature, library, put, battlefield
 
 Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{2}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}, {"action": "sacrifice", "card": {"card_type": {"kind": "this_card", "value": "~"}}, "kind": "cost"}], "effect": {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "basic land"}, "quantifier": {"up_to": 2}}, "reveal": true, "then_shuffle": true, "verb": "search", "zone": "hand"}, "type": "activated"}]`
+
+### `a3058542f02d` — 31 words, score 124
+
+Sentence: When ~ enters, it deals X damage divided as you choose among any number of target creatures and/or planeswalkers your opponents control, where X is the number of lands you control
+
+Missing: choose, creatures, planeswalkers, opponents
+
+Output (truncated): `[{"effect": {"among": {"kind": "choice"}, "amount": {"kind": "x"}, "divided": true, "source": {"card_type": {"raw": "it", "ref": "anaphora"}}, "to": {"quantifier": "target"}, "verb": "deal_damage"}, "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "enters"}, "when": "When"}, "type": "triggered", "xdef": {"xdef": {"kind": "count", "of": {"card_type": {"kind": "type", "value": "lands"}, "controller": "you control"}, "unit": "lands"}}}]`
 
 ### `d9fa679bc166` — 20 words, score 120
 
@@ -109,15 +253,7 @@ Sentence: Whenever this creature or another Detective you control enters and whe
 
 Missing: creature, detective, control, enters
 
-Output (truncated): `[{"effect": {"inner": {"amount": 1, "verb": "draw", "who": "You"}, "verb": "may"}, "trigger": {"event": {"subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "turn_face_up"}, "when": "Whenever"}, "type": "triggered"}]`
-
-### `c7c08a932515` — 19 words, score 95
-
-Sentence: {1}{U}, {T}: Shuffle this creature and target creature with a stun counter on it into their owners' libraries
-
-Missing: creature, stun, counter, owners', libraries
-
-Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{1}", "{U}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}], "effect": {"verb": "shuffle"}, "type": "activated"}]`
+Output (truncated): `[{"effect": {"inner": {"amount": 1, "card": {"card_type": {"kind": "type", "value": "cards"}}, "verb": "draw", "who": "You"}, "verb": "may"}, "trigger": {"event": {"subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "turn_face_up"}, "when": "Whenever"}, "type": "triggered"}]`
 
 ### `a9afab0bd06e` — 23 words, score 92
 
@@ -143,46 +279,6 @@ Missing: permanent, control, enters
 
 Output (truncated): `[{"effect": {"count": 1, "counter": {"count": 1, "kind": "+1/+1"}, "on": {"card_type": {"kind": "type", "value": "creature"}, "this_that": "this"}, "verb": "put_counter"}, "trigger": {"event": {"subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "turn_face_up"}, "when": "Whenever"}, "type": "triggered"}]`
 
-### `78339424f0da` — 28 words, score 84
-
-Sentence: Survival — At the beginning of your second main phase, if this creature is tapped, reveal cards from the top of your library until you reveal a land card
-
-Missing: creature, until, land
-
-Output (truncated): `[{"effect": {"amount": 1, "card": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}}, "top": true, "verb": "reveal", "zone": "library"}, "if": {"kind": "state", "state": {"status": "tapped"}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}}, "trigger": {"ability_word": "Survival", "when": {"phase": "main_phase", "player": "you", "position": "beginning", "which": "second"}}, "type": "triggered"}]`
-
-### `68534a12072e` — 14 words, score 84
-
-Sentence: Target player shuffles up to four target cards from their graveyard into their library
-
-Missing: target, player, 4, cards, graveyard, library
-
-Output (truncated): `[{"effect": {"verb": "shuffle"}, "type": "effect"}]`
-
-### `1fb4a4a8d5a3` — 16 words, score 80
-
-Sentence: When ~ enters, he deals 3 damage divided as you choose among one, two, or three targets
-
-Missing: divided, choose, among, 2, targets
-
-Output (truncated): `[{"effect": {"amount": 3, "source": {"card_type": {"raw": "he", "ref": "anaphora"}}, "verb": "deal_damage"}, "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "enters"}, "when": "When"}, "type": "triggered"}]`
-
-### `6399cc6ceb8d` — 16 words, score 80
-
-Sentence: When you do, it deals 7 damage divided as you choose among one or two targets
-
-Missing: divided, choose, among, 2, targets
-
-Output (truncated): `[{"effect": {"amount": 7, "source": {"card_type": {"raw": "it", "ref": "anaphora"}}, "verb": "deal_damage"}, "trigger": {"event": {"actor": "you", "kind": "event_ref", "polarity": "positive"}, "when": "When"}, "type": "triggered"}]`
-
-### `110ba3a3b129` — 26 words, score 78
-
-Sentence: If you don't, you may cast the exiled nonland card until end of turn and mana of any type can be spent to cast that spell
-
-Missing: nonland, spent, spell
-
-Output (truncated): `[{"condition": {"actor": "you", "kind": "event_ref", "polarity": "negative"}, "effect": {"inner": {"card": {"card_type": {"kind": "type", "value": "card"}, "status": ["exiled"]}, "duration": {"event": "end_of_turn", "kind": "until"}, "mana_any_type": true, "verb": "cast"}, "verb": "may"}, "type": "if"}]`
-
 ### `5a6a024a553a` — 25 words, score 75
 
 Sentence: Whenever another Detective you control enters and whenever a Detective you control is turned face up, this creature gets +1/+1 until end of turn
@@ -198,14 +294,6 @@ Sentence: Target player adds three mana of the chosen color for each artifact sa
 Missing: chosen, color, artifact, sacrificed, way
 
 Output (truncated): `[{"effect": {"amount": 3, "verb": "add_mana", "who": "Target player"}, "type": "effect"}]`
-
-### `3c642dadcb3d` — 14 words, score 70
-
-Sentence: You may shuffle up to four target cards from your graveyard into your library
-
-Missing: 4, target, cards, graveyard, library
-
-Output (truncated): `[{"effect": {"inner": {"verb": "shuffle"}, "verb": "may"}, "type": "effect"}]`
 
 ### `6ae50147e2a1` — 23 words, score 69
 
@@ -297,22 +385,6 @@ Missing: mana, spent, cast
 
 Output (truncated): `[{"effect": {"card": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "enters", "with": {"counter": {"count": 1, "kind": "+1/+1"}}}, "type": "effect"}]`
 
-### `6da928a37087` — 20 words, score 60
-
-Sentence: Whenever an opponent casts a white or blue instant or sorcery spell, this creature deals 2 damage to that player
-
-Missing: instant, sorcery, spell
-
-Output (truncated): `[{"effect": {"amount": 2, "source": {"card_type": {"kind": "type", "value": "creature"}, "this_that": "this"}, "to": {"card_type": {"kind": "type", "value": "player"}, "this_that": "that"}, "verb": "deal_damage"}, "trigger": {"event": {"object": ["white", "blue"], "subject": {"card_type": {"kind": "type", "value": "opponent"}, "quantifier": "an"}, "verb": "casts"}, "when": "Whenever"}, "type": "triggered"}]`
-
-### `084acb14c3d2` — 15 words, score 60
-
-Sentence: {5}, {T}, Exile this artifact: Shuffle all nonland cards from your graveyard into your library
-
-Missing: artifact, nonland, graveyard, library
-
-Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{5}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}, {"action": "exile", "kind": "cost", "target": {"card_type": {"kind": "this_card", "value": "~"}}}], "effect": {"verb": "shuffle"}, "type": "activated"}]`
-
 ### `1893bbd0313f` — 15 words, score 60
 
 Sentence: If this spell was kicked, the creature you control deals twice that much damage instead
@@ -338,24 +410,6 @@ Missing: dealt, damage, dies
 Evidence: empty:1
 
 Output (truncated): `[{"effect": {"count": 1, "counter": {"count": 1, "kind": "+1/+1"}, "on": {"card_type": {"kind": "type", "value": "creature"}, "this_that": "this"}, "verb": "put_counter"}, "trigger": {"event": {"object": {"card_type": {"kind": "type", "value": "creature"}, "quantifier": "a"}}, "when": "Whenever"}, "type": "triggered"}]`
-
-### `d706eb791f2f` — 28 words, score 56
-
-Sentence: Whenever you cast a spell, each opponent reveals cards from the top of their library until they reveal a land card, then puts those cards into their graveyard
-
-Missing: until, land
-
-Output (truncated): `[{"effect": [{"amount": 1, "card": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}}, "top": true, "verb": "reveal", "who": "each opponent", "zone": "library"}, {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "this_that": "those"}, "verb": "put", "zone": "graveyard"}], "trigger": {"event": {"object": {"kind": "spell", "quantifier": "a"}, "subject": "you", "verb": "cast"}, "when": "Whenever"}, "type": "triggered"}]`
-
-### `e7df53999db9` — 28 words, score 56
-
-Sentence: Void — If a nonland permanent left the battlefield this turn or a spell was warped this turn, instead you draw two cards and each opponent loses 2 life
-
-Missing: void, cards
-
-Evidence: unparsed
-
-Output (truncated): `[{"condition": {"fragment": "a nonland permanent left the battlefield this turn or a spell was warped this turn", "reason": "condition_text", "source": "i_if", "unparsed": true}, "effect": [{"amount": 2, "instead": true, "verb": "draw", "who": "you"}, {"amount": {"kind": "number", "unit": "life", "value": 2}, "instead": true, "verb": "lose_life", "who": "each opponent"}], "type": "if"}]`
 
 ### `10552c3be5cb` — 14 words, score 56
 
@@ -399,15 +453,7 @@ Sentence: Whenever ~ attacks, exile the top card of each player's library, then 
 
 Missing: mana, costs
 
-Output (truncated): `[{"effect": [{"possessor": "each player", "top": true, "verb": "exile", "zone": "library"}, {"inner": {"card": {"card_class": "spell", "card_type": {"kind": "type", "value": "spells"}, "quantifier": "any number of"}, "from_among": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "this_that": "those"}, "verb": "cast", "without_paying": true}, "verb": "may"}], "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "attacks"}, "when": "Whenever"}, "type": "triggered"}]`
-
-### `061c3dd191ca` — 18 words, score 54
-
-Sentence: [−4]: Chandra deals 8 damage divided as you choose among any number of target creatures and/or planeswalkers
-
-Missing: divided, choose, among
-
-Output (truncated): `[{"cost": {"action": "loyalty", "amount": {"kind": "number", "unit": "loyalty", "value": -4}, "kind": "cost"}, "effect": {"amount": 8, "source": {"card_type": {"kind": "type", "value": "Chandra"}}, "to": {"or": [{"card_type": {"kind": "type", "value": "creatures"}, "quantifier": "target"}, {"card_type": {"kind": "type", "value": "planeswalkers"}}]}, "verb": "deal_damage"}, "type": "loyalty"}]`
+Output (truncated): `[{"effect": [{"card": {"card_type": {"kind": "type", "value": "cards"}}, "possessor": "each player", "top": true, "verb": "exile", "zone": "library"}, {"inner": {"card": {"card_class": "spell", "card_type": {"kind": "type", "value": "spells"}, "quantifier": "any number of"}, "from_among": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "this_that": "those"}, "verb": "cast", "without_paying": true}, "verb": "may"}], "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "attacks"}, "when": "Whenever"}, "type": "triggered"}]`
 
 ### `e3bc08f81b30` — 18 words, score 54
 
@@ -423,15 +469,15 @@ Sentence: If ~ would be put into a graveyard from anywhere, reveal ~ and shuffle
 
 Missing: anywhere, owner, library
 
-Output (truncated): `[{"if": {"subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "put_into", "zone": "graveyard"}, "instead": [{"card": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "reveal"}, {"verb": "shuffle"}], "type": "replacement"}]`
+Output (truncated): `[{"if": {"subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "put_into", "zone": "graveyard"}, "instead": [{"card": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "reveal"}, {"cards": [{"card_type": {"raw": "it", "ref": "anaphora"}}], "verb": "shuffle"}], "type": "replacement"}]`
 
-### `4d57b57cd14a` — 26 words, score 52
+### `110ba3a3b129` — 26 words, score 52
 
-Sentence: Whenever you cast a spell during your turn other than your first spell that turn, create a 2/2 blue and black Zombie Rogue creature token
+Sentence: If you don't, you may cast the exiled nonland card until end of turn and mana of any type can be spent to cast that spell
 
-Missing: spell, first
+Missing: nonland, spent
 
-Output (truncated): `[{"effect": {"token": {"colors": {"kind": "all", "values": ["blue", "black"]}, "power_toughness": {"power": 2, "toughness": 2}, "types": ["Zombie", "Rogue", "creature"]}, "verb": "create_token"}, "trigger": {"event": {"subject": "you", "verb": "cast"}, "when": "Whenever"}, "type": "triggered"}]`
+Output (truncated): `[{"condition": {"actor": "you", "kind": "event_ref", "polarity": "negative"}, "effect": {"inner": {"card": {"card_class": "spell", "card_type": {"kind": "type", "value": "card"}, "status": ["exiled"]}, "duration": {"event": "end_of_turn", "kind": "until"}, "mana_any_type": true, "verb": "cast"}, "verb": "may"}, "type": "if"}]`
 
 ### `b47a39f2f185` — 26 words, score 52
 
@@ -448,14 +494,6 @@ Sentence: Whenever this creature attacks, you may cast a spell from among cards 
 Missing: mana, cost
 
 Output (truncated): `[{"effect": {"inner": {"card": {"card_class": "spell", "card_type": {"kind": "type", "value": "spell"}, "quantifier": "a"}, "from_among": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "controller": "you own", "modifier": {"counter": {"kind": "dream"}, "kind": "counter", "on": "them"}, "zone": {"prep": "in", "zone": "exile"}}, "verb": "cast", "without_paying": true}, "verb": "may"}, "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "type", "value": "creature"}, "this_that": "this"}, "verb": "attacks"}, "when": "Whenever"}, "type": "triggered"}]`
-
-### `0e13d0df93b6` — 13 words, score 52
-
-Sentence: {4}{U}{U}: Shuffle enchanted creature into its owner's library, then manifest dread
-
-Missing: enchanted, creature, owner, library
-
-Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{4}", "{U}", "{U}"]}], "effect": [{"verb": "shuffle"}, {"verb": "manifest_dread"}], "type": "activated"}]`
 
 ### `31f19673efdd` — 17 words, score 51
 
@@ -527,6 +565,14 @@ Evidence: unparsed
 
 Output (truncated): `[{"effect": {"inner": {"card": {"card_class": "spell", "card_type": {"kind": "type", "value": "spell"}, "quantifier": "a"}, "from_among": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "status": ["exiled"], "this_that": "the"}, "verb": "cast", "without_paying": true}, "verb": "may"}, "if": {"fragment": "you exiled four or more cards this way", "reason": "condition_text", "source": "i_effect", "unparsed": true}, "type": "effect"}]`
 
+### `1fb4a4a8d5a3` — 16 words, score 48
+
+Sentence: When ~ enters, he deals 3 damage divided as you choose among one, two, or three targets
+
+Missing: choose, 2, targets
+
+Output (truncated): `[{"effect": {"among": {"kind": "choice"}, "amount": 3, "divided": true, "source": {"card_type": {"raw": "he", "ref": "anaphora"}}, "verb": "deal_damage"}, "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "enters"}, "when": "When"}, "type": "triggered"}]`
+
 ### `28ca6b0fbf66` — 16 words, score 48
 
 Sentence: When this creature enters or is turned face up, target creature blocks this turn if able
@@ -535,13 +581,13 @@ Missing: enters, blocks, able
 
 Output (truncated): `[{"effect": {"card": {"card_type": {"kind": "type", "value": "creature"}, "quantifier": "target"}, "verb": "attacks_each_combat"}, "trigger": {"event": {"subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "turn_face_up"}, "when": "When"}, "type": "triggered"}]`
 
-### `610727056a5d` — 16 words, score 48
+### `6399cc6ceb8d` — 16 words, score 48
 
-Sentence: Reveal cards from the top of your library until you reveal a creature or planeswalker card
+Sentence: When you do, it deals 7 damage divided as you choose among one or two targets
 
-Missing: until, creature, planeswalker
+Missing: choose, 2, targets
 
-Output (truncated): `[{"effect": {"amount": 1, "card": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}}, "top": true, "verb": "reveal", "zone": "library"}, "type": "effect"}]`
+Output (truncated): `[{"effect": {"among": {"kind": "choice"}, "amount": 7, "divided": true, "source": {"card_type": {"raw": "it", "ref": "anaphora"}}, "verb": "deal_damage"}, "trigger": {"event": {"actor": "you", "kind": "event_ref", "polarity": "positive"}, "when": "When"}, "type": "triggered"}]`
 
 ### `dd22519ddb95` — 16 words, score 48
 
@@ -553,22 +599,6 @@ Evidence: stringy:2
 
 Output (truncated): `[{"effect": {"card": {"card_type": {"kind": "type", "value": "opponents"}, "possessive": "your"}, "predicate": {"kind": "predicate", "verbs": ["cast spells", "activate abilities"]}, "verb": "can't"}, "time": ["your", "turn"], "type": "during"}]`
 
-### `038e1f9ad822` — 12 words, score 48
-
-Sentence: Max speed — If you would draw a card, draw two cards instead
-
-Missing: max, speed, card, cards
-
-Output (truncated): `[{"if": {"verb": "draw"}, "instead": {"amount": 2, "verb": "draw"}, "type": "replacement"}]`
-
-### `e0778dc00bd0` — 12 words, score 48
-
-Sentence: ~ deals 2 damage divided as you choose among one or two targets
-
-Missing: divided, choose, among, targets
-
-Output (truncated): `[{"effect": {"amount": 2, "source": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "deal_damage"}, "type": "effect"}]`
-
 ### `e1f149d88022` — 46 words, score 46
 
 Sentence: You may have this creature enter as a copy of any creature on the battlefield with mana value less than or equal to the amount of mana spent to cast this creature, except it's a Bird in addition to its other types and it has flying
@@ -579,14 +609,6 @@ Evidence: stringy:2
 
 Output (truncated): `[{"effect": {"inner": {"effect": {"except": "except it's a Bird in addition to its other types", "except_keywords": ["flying"], "of": {"card_type": {"kind": "type", "value": "creature"}, "modifier": "with mana value less than or equal to the amount of mana spent to cast this creature", "this_that": "this", "zone": {"possessor": "the", "prep": "on", "zone": "battlefield"}}, "verb": "copy"}, "target": {"card_type": {"kind": "type", "value": "creature"}, "this_that": "this"}, "verb": "have"}, "verb": "may"}, "type": "effect"}]`
 
-### `80e5cb9a2fc8` — 23 words, score 46
-
-Sentence: At the beginning of your second main phase, if an opponent lost life this turn, exile the top two cards of your library
-
-Missing: lost, cards
-
-Output (truncated): `[{"effect": {"amount": 2, "top": true, "verb": "exile", "zone": "library"}, "if": {"event": {"object": "life", "subject": "an opponent", "verb": "lose"}, "kind": "event", "this_turn": true}, "trigger": {"when": {"phase": "main_phase", "player": "you", "position": "beginning", "which": "second"}}, "type": "triggered"}]`
-
 ### `02b1cce72e7d` — 22 words, score 44
 
 Sentence: Exhaust — {2}{U}{U}, {T}: Any number of target players each mill cards equal to the number of cards in their graveyard
@@ -595,7 +617,7 @@ Missing: exhaust, equal
 
 Evidence: stringy:1
 
-Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{2}", "{U}", "{U}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}], "effect": {"amount": ["the", "number", "of", {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "zone": {"possessor": {"anaphor": true, "kind": "anaphora", "possessive": "their"}, "prep": "in", "zone": "graveyard"}}], "verb": "mill", "who": "any number of target players"}, "type": "activated"}]`
+Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{2}", "{U}", "{U}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}], "effect": {"amount": ["the", "number", "of", {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "zone": {"possessor": {"anaphor": true, "kind": "anaphora", "possessive": "their"}, "prep": "in", "zone": "graveyard"}}], "card": {"card_type": {"kind": "type", "value": "cards"}}, "verb": "mill", "who": "any number of target players"}, "type": "activated"}]`
 
 ### `2bdc4d205269` — 22 words, score 44
 
@@ -771,14 +793,6 @@ Evidence: stringy:1
 
 Output (truncated): `[{"condition": {"kind": "count", "of": {"counter": "chorus counters", "on": {"card_type": {"kind": "type", "value": "~"}}}, "quantity": {"at_least": 4}}, "effect": {"inner": {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "card"}, "status": ["discarded"], "this_that": "the"}, "verb": "cast", "without_paying": true}, "verb": "may"}, "type": "if"}]`
 
-### `fd87203bd913` — 20 words, score 40
-
-Sentence: Whenever you cast a spell during an opponent's turn, put a -1/-1 counter on up to one target creature
-
-Missing: spell, opponent
-
-Output (truncated): `[{"effect": {"count": 1, "counter": {"count": 1, "kind": "-1/-1"}, "on": {"card_type": {"kind": "type", "value": "creature"}, "quantifier": {"up_to": 1}}, "verb": "put_counter"}, "trigger": {"event": {"subject": "you", "verb": "cast"}, "when": "Whenever"}, "type": "triggered"}]`
-
 ### `765da95306d1` — 13 words, score 39
 
 Sentence: Activated abilities of sources with the chosen name cost {2} more to activate
@@ -793,7 +807,7 @@ Sentence: Draw a card for each different mana value among nonland permanents you
 
 Missing: different, mana, among
 
-Output (truncated): `[{"effect": {"amount": 1, "cards": {"card_type": {"kind": "type", "value": "permanents"}, "controller": "you control", "nontoken": ["nonland"]}, "for_each": {"card_type": {"kind": "type", "value": "permanents"}, "controller": "you", "nontoken": ["nonland"]}, "verb": "draw"}, "type": "effect"}]`
+Output (truncated): `[{"effect": {"amount": 1, "card": {"card_type": {"kind": "type", "value": "cards"}}, "cards": {"card_type": {"kind": "type", "value": "permanents"}, "controller": "you control", "nontoken": ["nonland"]}, "for_each": {"card_type": {"kind": "type", "value": "permanents"}, "controller": "you", "nontoken": ["nonland"]}, "verb": "draw"}, "type": "effect"}]`
 
 ### `b6cffb424828` — 13 words, score 39
 
@@ -845,13 +859,21 @@ Missing: gets, counters
 
 Output (truncated): `[{"effect": {"amount": 2, "verb": "gain_poison", "who": "that player"}, "trigger": {"event": {"object": {"damage": "combat", "to": {"kind": "player", "quantifier": "a"}}, "subject": {"card_type": {"kind": "type", "value": "creature"}, "controller": "you control", "modifier": {"keyword": "deathtouch", "kind": "keyword"}, "quantifier": "a"}, "verb": "deals"}, "when": "Whenever"}, "type": "triggered"}]`
 
+### `c7c08a932515` — 19 words, score 38
+
+Sentence: {1}{U}, {T}: Shuffle this creature and target creature with a stun counter on it into their owners' libraries
+
+Missing: owners', libraries
+
+Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{1}", "{U}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}], "effect": {"cards": [{"card_type": {"kind": "type", "value": "creature"}, "this_that": "this"}, {"card_type": {"kind": "type", "value": "creature"}, "modifier": {"counter": {"kind": "stun"}, "kind": "counter", "on": "it"}, "quantifier": "target"}], "verb": "shuffle"}, "type": "activated"}]`
+
 ### `e4997ce20014` — 19 words, score 38
 
 Sentence: During your turn, you may cast cards exiled with ~ and you may cast them as though they had flash
 
 Missing: though, flash
 
-Output (truncated): `[{"effect": [{"inner": {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "modifier": {"event": "exiled", "kind": "event_filter", "with": {"kind": "this_card", "value": "~"}}}, "verb": "cast"}, "verb": "may"}, {"inner": {"card": {"card_type": {"raw": "them", "ref": "anaphora"}}, "verb": "cast"}, "verb": "may"}], "time": ["your", "turn"], "type": "during"}]`
+Output (truncated): `[{"effect": [{"inner": {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "modifier": {"event": "exiled", "kind": "event_filter", "with": {"kind": "this_card", "value": "~"}}}, "verb": "cast"}, "verb": "may"}, {"inner": {"card": {"card_class": "spell", "card_type": {"raw": "them", "ref": "anaphora"}}, "verb": "cast"}, "verb": "may"}], "time": ["your", "turn"], "type": "during"}]`
 
 ### `949ef81b9fcd` — 37 words, score 37
 
@@ -881,14 +903,6 @@ Missing: mana, cost
 
 Output (truncated): `[{"effect": {"inner": {"card": {"card_class": "card", "card_type": [{"kind": "type", "value": "instant"}, {"kind": "type", "value": "sorcery"}], "quantifier": "target", "zone": {"possessor": "your", "prep": "from", "zone": "graveyard"}}, "verb": "cast", "without_paying": true}, "verb": "may"}, "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "this_card", "value": "~"}}, "verb": "attacks"}, "when": "Whenever"}, "type": "triggered"}]`
 
-### `aa582e0b363e` — 18 words, score 36
-
-Sentence: When this creature enters, reveal cards from the top of your library until you reveal a land card
-
-Missing: until, land
-
-Output (truncated): `[{"effect": {"amount": 1, "card": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}}, "top": true, "verb": "reveal", "zone": "library"}, "trigger": {"event": {"object": {}, "subject": {"card_type": {"kind": "type", "value": "creature"}, "this_that": "this"}, "verb": "enters"}, "when": "When"}, "type": "triggered"}]`
-
 ### `b82c016ec826` — 18 words, score 36
 
 Sentence: You may cast this spell as though it had flash if you pay {2} more to cast it
@@ -899,11 +913,157 @@ Evidence: unparsed
 
 Output (truncated): `[{"effect": {"inner": {"card": {"card_class": "spell", "card_type": {"kind": "type", "value": "spell"}, "this_that": "this"}, "verb": "cast"}, "verb": "may"}, "if": {"fragment": "you pay {2} more to cast it", "reason": "condition_text", "source": "i_effect", "unparsed": true}, "type": "effect"}]`
 
-### `d1e36f23607c` — 18 words, score 36
+### `f8eaa153f762` — 18 words, score 36
 
-Sentence: If five or more mana was spent to cast that spell, exile the top card of your library
+Sentence: If you tap a basic land for mana, it produces three times as much of that mana instead
 
-Missing: cast, card
+Missing: produces, times
 
-Output (truncated): `[{"condition": {"amount": 5, "kind": "spell_state", "state": "mana_spent_at_least"}, "effect": {"top": true, "verb": "exile", "zone": "library"}, "type": "if"}]`
+Evidence: unparsed
+
+Output (truncated): `[{"condition": {"fragment": "you tap a basic land for mana", "reason": "condition_text", "source": "i_if", "unparsed": true}, "effect": {"instead": true, "multiplier": 3, "verb": "replace_mana"}, "type": "if"}]`
+
+### `fa9afcbb6bcd` — 18 words, score 36
+
+Sentence: Whenever you attack a player with one or more creatures with power 4 or greater, draw a card
+
+Missing: power, greater
+
+Output (truncated): `[{"effect": {"amount": 1, "card": {"card_type": {"kind": "type", "value": "cards"}}, "verb": "draw"}, "trigger": {"event": {"object": {"card_type": {"kind": "type", "value": "player"}, "modifier": {"kind": "count_filter", "min": 1, "set": {"card_type": [{"kind": "type", "value": "creature"}]}}, "quantifier": "a"}, "subject": "you", "verb": "attack"}, "when": "Whenever"}, "type": "triggered"}]`
+
+### `80f0690e151f` — 12 words, score 36
+
+Sentence: Activated abilities of artifact tokens you control cost {1} less to activate
+
+Missing: activated, abilities, activate
+
+Output (truncated): `[{"effect": {"action": "cast", "amount": {"kind": "mana", "symbols": ["{1}"]}, "direction": "less", "target": {"card_type": {"kind": "type", "value": "artifact token"}, "controller": "you control"}, "verb": "cost_mod"}, "type": "effect"}]`
+
+### `3dab1c64af81` — 34 words, score 34
+
+Sentence: Delirium — If a source you control would deal noncombat damage to a permanent or player while there are four or more card types among cards in your graveyard, it deals double that damage instead
+
+Missing: double
+
+Evidence: unparsed
+
+Output (truncated): `[{"condition": {"fragment": "a source you control would deal noncombat damage to a permanent or player while there are four or more card types among cards in your graveyard", "reason": "condition_text", "source": "i_if", "unparsed": true}, "effect": {"amount": {"kind": "relative", "multiplier": 2, "of": {"kind": "that_much"}, "relation": "equal"}, "source": {"ref": "anaphora"}, "verb": "deal_damage"}, "instead": true, "type": "if"}]`
+
+### `b4f695693bae` — 34 words, score 34
+
+Sentence: If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
+
+Missing: spent
+
+Evidence: stringy:6
+
+Output (truncated): `[{"condition": {"connector": "or", "items": ["an instant", "sorcery card"], "kind": "set", "label": {"card_class": "spell", "card_type": [{"kind": "type", "value": "instant"}, {"kind": "type", "value": "sorcery card is exiled this way"}]}, "lists": [{"connector": "or", "items": ["an instant", "sorcery card"], "kind": "set", "label": {"card_class": "card", "card_type": [{"kind": "type", "value": "instant"}, {"kind": "type", "value": "sorcery"}]}, "logic": "union"}], "logic": "union"}, "effect": [{"inner": {"card": {"card_class": "spell", "card_type": {"raw": "it", "ref": "anaphora"}}, "duration": "for as long as you control this creature", "verb": "cast"}, "verb": "may"}, {"mana": "any type", "target": {"card_class": "spell", "card_type": {"kind": "type", "value": "spell"}, "this_that": "that"}, "verb": "spend_mana_only_to_cast"}], "type": "if"}]`
+
+### `35e0f7df7515` — 17 words, score 34
+
+Sentence: As an additional cost to cast this spell, return a permanent you control to its owner's hand
+
+Missing: cast, spell
+
+Output (truncated): `[{"effect": {"card": {"card_type": {"kind": "type", "value": "permanent"}, "controller": "you control", "quantifier": "a"}, "to": {"owner": "owner", "zone": "hand"}, "verb": "return"}, "type": "additional_cost"}]`
+
+### `5932a830e65e` — 17 words, score 34
+
+Sentence: You may cast up to two spells from among the exiled cards without paying their mana costs
+
+Missing: mana, costs
+
+Output (truncated): `[{"effect": {"inner": {"card": {"card_class": "spell", "card_type": {"kind": "type", "value": "spells"}, "quantifier": {"up_to": 2}}, "from_among": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "status": ["exiled"], "this_that": "the"}, "verb": "cast", "without_paying": true}, "verb": "may"}, "type": "effect"}]`
+
+### `5a7e783d5462` — 17 words, score 34
+
+Sentence: You may cast that card without paying its mana cost for as long as it remains exiled
+
+Missing: mana, cost
+
+Evidence: stringy:1
+
+Output (truncated): `[{"effect": {"inner": {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "card"}, "this_that": "that"}, "duration": "for as long as it remains exiled", "verb": "cast", "without_paying": true}, "verb": "may"}, "type": "effect"}]`
+
+### `6a46245d524c` — 17 words, score 34
+
+Sentence: Share — {W}, {T}, Sacrifice this artifact: Put a +1/+1 counter on up to one target creature
+
+Missing: share, artifact
+
+Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{W}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}, {"action": "sacrifice", "card": {"card_type": {"kind": "this_card", "value": "~"}}, "kind": "cost"}], "effect": {"count": 1, "counter": {"count": 1, "kind": "+1/+1"}, "on": {"card_type": {"kind": "type", "value": "creature"}, "quantifier": {"up_to": 1}}, "verb": "put_counter"}, "type": "activated"}]`
+
+### `a90d7e969f1a` — 17 words, score 34
+
+Sentence: As an additional cost to cast this spell, tap two untapped creatures and/or lands you control
+
+Missing: cast, spell
+
+Evidence: unparsed
+
+Output (truncated): `[{"condition": {"fragment": "tap two untapped creatures and/or lands you control", "reason": "condition_text", "source": "i_additional_cost", "unparsed": true}, "type": "additional_cost"}]`
+
+### `1aab310b988c` — 33 words, score 33
+
+Sentence: During your turn, you may cast creature spells from among cards you own exiled with this creature by removing three counters from among creatures you control in addition to paying their other costs
+
+Missing: paying
+
+Output (truncated): `[{"effect": {"inner": {"by": {"actions": [{"action": "remove_counters", "count": 3, "from": {"card_type": [{"kind": "type", "value": "creature"}], "controller": "you", "kind": "set"}}], "addition_to_other_costs": true, "kind": "cost_phrase"}, "card": {"card_class": "spell", "card_type": {"kind": "type", "value": "creature spells"}}, "from_among": {"card_class": "card", "card_type": {"kind": "type", "value": "cards"}, "controller": "you own", "modifier": {"event": "exiled", "kind": "event_filter", "with": {"card_class": "creature", "kind": "this"}}, "this_that": "this"}, "verb": "cast"}, "verb": "may"}, "time": ["your", "turn"], "type": "during"}]`
+
+### `d338b07a792d` — 33 words, score 33
+
+Sentence: {6}{W}{W}: Put each card exiled with this artifact into its owner's graveyard, then create a 2/2 colorless Robot artifact creature token for each card put into a graveyard this way
+
+Missing: owner
+
+Evidence: unparsed
+
+Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{6}", "{W}", "{W}"]}], "effect": [{"card": {"card_class": "card", "card_type": {"kind": "type", "value": "card"}, "modifier": {"event": "exiled", "kind": "event_filter", "with": {"card_class": "artifact", "kind": "this"}}, "quantifier": "each", "this_that": "this"}, "verb": "put", "zone": "graveyard"}, {"if": {"fragment": "card put into a graveyard this way", "reason": "condition_text", "source": "i_create_token", "unparsed": true}, "token": {"colors": "colorless", "power_toughness": {"power": 2, "toughness": 2}, "types": ["Robot", "artifact", "creature"]}, "verb": "create_token"}], "type": "activated"}]`
+
+### `ec4796706ee1` — 33 words, score 33
+
+Sentence: {4}{B}{G}, {T}, Sacrifice this creature: Create a number of 1/1 black and green Insect creature tokens with flying equal to the number of card types among cards in your graveyard
+
+Missing: equal
+
+Evidence: unparsed, stringy:1
+
+Output (truncated): `[{"cost": [{"action": "pay_mana", "kind": "cost", "mana": ["{4}", "{B}", "{G}"]}, {"action": "pay_mana", "kind": "cost", "mana": ["{T}"]}, {"action": "sacrifice", "card": {"card_type": {"kind": "this_card", "value": "~"}}, "kind": "cost"}], "effect": {"token": {"colors": {"kind": "all", "values": ["black", "green"]}, "kw": [["flying"]], "power_toughness": {"power": 1, "toughness": 1}, "types": ["Insect", "creature"], "xdef": {"fragment": ["the", "number", "of", "card types among cards in your graveyard"], "reason": "xdef_text", "source": "i_sentence", "unparsed": true}}, "verb": "create_token"}, "type": "activated"}]`
+
+### `862b5f80e3dc` — 32 words, score 32
+
+Sentence: If you put a card with mana value less than or equal to the amount of life you gained this turn into your graveyard this way, put that card into your hand
+
+Missing: graveyard
+
+Evidence: stringy:1
+
+Output (truncated): `[{"condition": {"event": {"object": {"card_type": {"kind": "type", "value": "card"}, "modifier": "with mana value less than or equal to the amount of life you gained", "quantifier": "a"}, "subject": "you", "this_turn": true, "this_way": true, "verb": "put"}, "kind": "event"}, "effect": {"card": {"card_class": "card", "card_type": {"kind": "type", "value": "card"}, "this_that": "that"}, "verb": "put", "zone": "hand"}, "type": "if"}]`
+
+### `d01690d313f5` — 32 words, score 32
+
+Sentence: Put up to two creature cards with total mana value 6 or less from among them onto the battlefield and the rest on the bottom of your library in a random order
+
+Missing: among
+
+Output (truncated): `[{"effect": [{"card": {"card_class": "card", "card_type": {"kind": "type", "value": "creature"}, "modifier": {"kind": "stat_filter", "op": "<=", "stat": "mana value", "value": 6}, "quantifier": {"up_to": 2}, "zone": {"prep": "from", "zone": "them"}}, "verb": "put", "zone": "battlefield"}, {"card": "the rest", "order": "random", "placement": "bottom", "rest": true, "verb": "put", "zone": "library"}], "type": "effect"}]`
+
+### `25deaef1a166` — 16 words, score 32
+
+Sentence: As an additional cost to cast this spell, pay {4} or sacrifice an artifact or creature
+
+Missing: cast, spell
+
+Evidence: unparsed
+
+Output (truncated): `[{"condition": {"fragment": "pay {4} or sacrifice an artifact or creature", "reason": "condition_text", "source": "i_additional_cost", "unparsed": true}, "type": "additional_cost"}]`
+
+### `4937c7a017b6` — 16 words, score 32
+
+Sentence: Enchanted permanent doesn't untap during its controller's untap step and its activated abilities can't be activated
+
+Missing: controller, step
+
+Output (truncated): `[{"effect": [{"card": {}, "verb": "no_untap"}, {"card": {"card_type": {"kind": "ability", "value": "activated abilities"}, "possessive": "its"}, "predicate": {"kind": "predicate", "object": "abilities", "verbs": ["activate"]}, "verb": "can't"}], "target": {"kind": "type", "status": ["Enchanted"], "value": "permanent"}, "type": "static"}]`
 
