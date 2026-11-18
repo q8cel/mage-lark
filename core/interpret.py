@@ -3191,6 +3191,23 @@ class Interpreter:
             # produced before the structured action existed.
             out[0]['and'] = out[1]
             out = [out[0]]
+        # A026: manifest dread produces the creature a following attach names.
+        if any(isinstance(a, dict) and a.get('verb') == 'manifest_dread'
+               for a in out):
+            for a in out:
+                if not isinstance(a, dict) or a.get('verb') != 'attach':
+                    continue
+                for key in ('object', 'to'):
+                    val = a.get(key)
+                    if not isinstance(val, dict):
+                        continue
+                    ct = val.get('card_type')
+                    if isinstance(ct, dict):
+                        val['card_type'] = {'kind': 'anaphora',
+                                            'ref': 'manifested_creature',
+                                            'status': 'resolved'}
+                        val.pop('this_that', None)
+                        val['anaphor'] = True
         if len(out) == 1:
             return out[0]
         return out
