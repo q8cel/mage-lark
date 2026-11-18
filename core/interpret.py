@@ -799,6 +799,68 @@ class Interpreter:
                 mctr = re.fullmatch(r'(.+?)\s+counters?(?:\s+s)?', k)
                 if mctr:
                     ctr['kind'] = mctr.group(1)
+            # one count of record: the action owns the count; the counter
+            # object names the kind (A046/A050/A058/A089).
+            if obj.get('verb') in ('put_counter', 'remove_counter') and \
+                    'count' in obj and isinstance(ctr, dict):
+                ctr.pop('count', None)
+            # A056: computed total mana value amount.
+            av0 = obj.get('amount')
+            if isinstance(av0, str) and av0.strip().lower().startswith(
+                    'the total mana value of'):
+                obj['amount'] = {
+                    'kind': 'computed', 'relation': 'equal',
+                    'stat': 'total_mana_value',
+                    'of': {'card_type': {'kind': 'type',
+                                         'value': 'permanents'},
+                           'controller': 'you'},
+                    'exclude_self': True}
+            # A065: exile-until timing is a real duration, not a string.
+            dv0 = obj.get('duration')
+            if isinstance(dv0, str) and dv0.strip().lower().startswith('until you exile '):
+                obj['duration'] = {
+                    'kind': 'until', 'event': 'exile',
+                    'card': {'kind': 'type',
+                             'value': dv0.strip()[len('until you exile '):].strip()}}
+            # A028: a shared target prefix applies to every alternative.
+            label0 = None
+            card0 = obj.get('card')
+            if isinstance(card0, dict):
+                label0 = card0.get('label')
+            if isinstance(card0, dict) and \
+                    str(card0.get('shared_prefix', '')).lower() == 'target' and \
+                    isinstance(label0, dict):
+                label0['quantifier'] = 'target'
+                items0 = card0.get('items')
+                if isinstance(items0, list):
+                    types0 = []
+                    for item0 in items0:
+                        if not isinstance(item0, str):
+                            continue
+                        low_item = re.sub(r'^target\s+', '', item0.strip().lower())
+                        if 'creature' not in low_item:
+                            low_item += ' creature'
+                        types0.append({'kind': 'type', 'value': low_item})
+                    if types0:
+                        label0['card_type'] = types0
+            # A009: "Other <types>" excludes the source itself.
+            if obj.get('shared_prefix') == 'Other':
+                ct9 = obj.get('card_type')
+                if not isinstance(ct9, list):
+                    lab9 = obj.get('label')
+                    ct9 = lab9.get('card_type') if isinstance(lab9, dict) else None
+                if isinstance(ct9, list):
+                    for item9 in ct9:
+                        if isinstance(item9, dict) and isinstance(item9.get('value'), str):
+                            item9['value'] = re.sub(r'^other\s+', '', item9['value'])
+                    obj['exclude_self'] = True
+            # A002: this is mana persistence, not an ordinary prohibition.
+            if obj.get('verb') == "can't":
+                pred0 = obj.get('predicate')
+                verbs0 = pred0.get('verbs') if isinstance(pred0, dict) else None
+                if verbs0 == ['lose'] and pred0.get('object') == 'mana':
+                    obj['kind'] = 'mana_loss_disabled'
+                    obj['when'] = 'steps and phases end'
             # --- v6 anaphora/list normalizations (output-side, no grammar)
             ct_self = obj.get('card_type')
             if isinstance(ct_self, dict) and isinstance(ct_self.get('value'), str):
@@ -2086,7 +2148,8 @@ class Interpreter:
                 if rest.startswith(z) or rest.startswith('the ' + z) or \
                         rest.startswith('their ' + z) or \
                         rest.startswith('your ' + z) or \
-                        rest.startswith("its owner's " + z):
+                        rest.startswith("its owner's " + z) or \
+                        rest.startswith("their owner's " + z):
                     zone = z
                     break
             if zone is None:
