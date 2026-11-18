@@ -57,7 +57,7 @@ A079	v7	legit	quoted ability, mentioned earlier. here, '~' inside the quoted abi
 A084	v7	bug	parse mentions only casting spells from exile; by the rules, playing a land is not equal to casting a spell, it is a different action. but it is not mentioned in the parse, thus it's a bug	FIXED	trigger.event.any_of=[play land,cast spell]
 A089	v7	legit	count duplicate	FIXED	effect.count=4; counter={kind:-1/-1}
 A092	v7	bug	there was a similar card earlier in this labeling session; don't want to explan bug again, just look for it, same or almost the same text	FIXED	attach object/to ref=manifested_creature,status=resolved
-A095	v7	legit	"again, unclear ""equal"" to what; ""cards discarded this way"", it is probably an anaphor to ""hand"" yeah? like, the reference to previous action should be resolved"	FIXED	artifact amount={kind:count_of,of:{link:L1->0:quantity:this_way}}; no prose
+A095	v7	legit	"again, unclear ""equal"" to what; ""cards discarded this way"", it is probably an anaphor to ""hand"" yeah? like, the reference to previous action should be resolved"	FIXED	artifact amount.link=L1->0:quantity:this_way (additive post-pass; set prose retained)
 B007	v8	legit	sacrifice or pay could be parsed as an 'or' block, without this 'or_pay'	FIXED	effect.or={kind:or,items:[sacrifice,pay_mana]}; or_pay retained
 B011	v8	legit	"counters: ""its"" is not a way to parse. should rather be written as the type of counter in 'put_counter', or something like that."	FIXED	counters field removed; counter={kind:all,possessor:{kind:anaphora,ref:its}}
 B018	v8	bug	parse sets mana_value<=6; it should be 'total' mana_value <= 6	FIXED	modifier.total=true on stat mana value

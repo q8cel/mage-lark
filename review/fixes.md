@@ -890,4 +890,5 @@ The post-pass adds only `link` keys. On the v8 build: 230 links added,
 Timing: BIG 31 s with in-compiler links, 32 s without (282 cards; 0.11 s/card
 both ways). Full sequential build: 5,302 s (~88 min), 21 sets, workers=2.
 Final SHAs: fresh `ef223b4a68b0489e2cd06267ae80be22254d55ac0cae2b7c4277f979b797200d`;
-post-pass `14f713fe4fa8409c12532dffcc904f405918478c12bb937b66a90c0ee0f82d1f`.
+post-pass `14f713fe4fa8409c12532dffcc904f405918478c12bb937b66a90c0ee0f82d1f`;
+card IR `eecd035098496487f965c29e71a9386c981f963b8c369c5b92a9699334370175`.

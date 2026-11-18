@@ -2,7 +2,7 @@
 
 Rows: 69. FIXED 67, PARTIAL 2, SAME 0, REGRESSED 0.
 
-Every id was compiled live with `tools/compile_card.py --card`; artifact evidence is from `compile_standard.jsonl` SHA `53a6bcc3...`.
+Every id was compiled live with `tools/compile_card.py --card`; artifact evidence is from `compile_standard.jsonl` SHA `14f713fe...`.
 
 | id | pack | verdict | status | evidence |
 |---|---|---|---|---|
