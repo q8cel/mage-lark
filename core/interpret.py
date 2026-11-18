@@ -711,6 +711,9 @@ class Interpreter:
                                      'items': items}
                     break
         if isinstance(obj, dict):
+            if obj.get('xdef') and isinstance(obj.get('effect'), dict) \
+                    and obj['effect'].get('verb') == 'empower':
+                obj['effect']['amount'] = {'kind': 'x'}
             if obj.get('verb') == 'cost_mod':
                 obj.setdefault('action', 'cast')
             if obj.get('verb') in ('draw', 'mill') and 'card' not in obj:
