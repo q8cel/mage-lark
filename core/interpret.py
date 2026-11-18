@@ -1274,13 +1274,23 @@ class Interpreter:
                         t['status_logic'] = 'or'
             # B036/B039: keyword abilities are ability records, not raw words.
             kws = obj.get('keywords')
-            if obj.get('type') == 'static_keyword' and isinstance(kws, list) \
-                    and len(kws) == 2 and isinstance(kws[0], dict) \
-                    and kws[0].get('value') in ('Surveil', 'Discover'):
-                obj['type'] = 'static_ability'
-                obj['keyword'] = kws[0]['value']
-                obj['amount'] = kws[1]
-                obj.pop('keywords', None)
+            KEYWORD_ACTIONS = {'Scry', 'Surveil', 'Discover', 'Saddle',
+                               'Station', 'Spree', 'Bargain'}
+            if obj.get('type') in ('static_keyword', 'static_ability'):
+                if obj.get('type') == 'static_ability' \
+                        and obj.get('keyword') in KEYWORD_ACTIONS:
+                    obj['type'] = 'keyword_action'
+                if obj.get('type') == 'static_keyword' and isinstance(kws, list) and len(kws) == 2 \
+                        and isinstance(kws[0], dict) \
+                        and kws[0].get('value') in KEYWORD_ACTIONS:
+                    obj['type'] = 'keyword_action'
+                    obj['keyword'] = kws[0]['value']
+                    obj['amount'] = kws[1]
+                    obj.pop('keywords', None)
+                elif isinstance(kws, dict) and kws.get('value') in KEYWORD_ACTIONS:
+                    obj['type'] = 'keyword_action'
+                    obj['keyword'] = kws['value']
+                    obj.pop('keywords', None)
             # Z040: an event_ref is an anaphor.
             if obj.get('kind') == 'event_ref':
                 obj.setdefault('anaphor', True)

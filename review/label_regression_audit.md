@@ -2,7 +2,7 @@
 
 Rows: 69. FIXED 67, PARTIAL 2, SAME 0, REGRESSED 0.
 
-Every id was compiled live with `tools/compile_card.py --card`; IR evidence is from `compile_cards.jsonl` (whole parse build).
+Every id was compiled live with `tools/compile_card.py --card`; artifact evidence is from `compile_standard.jsonl` SHA `2e9019ca...`.
 
 | id | pack | verdict | status | evidence |
 |---|---|---|---|---|
@@ -48,7 +48,7 @@ Every id was compiled live with `tools/compile_card.py --card`; IR evidence is f
 | A026 | v7 | bug | FIXED | attach object/to ref=manifested_creature,status=resolved |
 | A028 | v7 | bug | FIXED | label.quantifier=target; card_type=[attacking creature, blocking creature] |
 | A031 | v7 | bug | FIXED | quote.quoted_text preserved; token=Beau; named=[Beau]; target this_card/~ |
-| A033 | v7 | bug | FIXED | subject.quantifier={relation:>=,amount:1}; IR L0->0:intra:that_many kept; golden updated |
+| A033 | v7 | bug | FIXED | artifact amount.of={kind:that_many,link:L0->0:intra:that_many}; quantifier={relation:>=,amount:1}; IR intra kept |
 | A035 | v7 | bug | FIXED | blocked_by.max=1 |
 | A046 | v7 | legit | FIXED | effect.count=1; counter={kind:+1/+1} |
 | A047 | v7 | legit | FIXED | destination.library_position=second_from_top_or_bottom |
@@ -59,12 +59,12 @@ Every id was compiled live with `tools/compile_card.py --card`; IR evidence is f
 | A058 | v7 | legit | FIXED | effect.count=X; counter={kind:+1/+1}; xdef count |
 | A064 | v7 | bug | FIXED | effect.amount={kind:x}; xdef count |
 | A065 | v7 | bug | FIXED | duration={kind:until,event:exile,card:a nonland card} |
-| A070 | v7 | legit | FIXED | IR L1->1:intra:that_many; amount.of.that_many.link=L1->1:intra:that_many |
+| A070 | v7 | legit | FIXED | artifact amount.of={kind:that_many,link:L0->0:intra:that_many}; IR intra kept |
 | A079 | v7 | legit | FIXED | quote.quoted_text preserved; sentence type activated |
 | A084 | v7 | bug | FIXED | trigger.event.any_of=[play land,cast spell] |
 | A089 | v7 | legit | FIXED | effect.count=4; counter={kind:-1/-1} |
 | A092 | v7 | bug | FIXED | attach object/to ref=manifested_creature,status=resolved |
-| A095 | v7 | legit | FIXED | IR L1->0:quantity:this_way; amount={kind:count_of,of:{link:L1->0...}} |
+| A095 | v7 | legit | FIXED | artifact amount={kind:count_of,of:{link:L1->0:quantity:this_way}}; no prose |
 | B007 | v8 | legit | FIXED | effect.or={kind:or,items:[sacrifice,pay_mana]}; or_pay retained |
 | B011 | v8 | legit | FIXED | counters field removed; counter={kind:all,possessor:{kind:anaphora,ref:its}} |
 | B018 | v8 | bug | FIXED | modifier.total=true on stat mana value |
@@ -72,6 +72,6 @@ Every id was compiled live with `tools/compile_card.py --card`; IR evidence is f
 | B020 | v8 | legit | FIXED | effect.xdef={kind:x,source:mana_cost} |
 | B023 | v8 | bug | FIXED | to.status=[attacking,blocking]; status_logic=or |
 | B029 | v8 | legit | FIXED | effect.xdef={kind:x,source:mana_cost} |
-| B034 | v8 | bug | FIXED | IR L2->2:intra:that_many; amount.of.that_many.link=L2->2:intra:that_many |
-| B036 | v8 | bug | FIXED | type=static_ability; keyword=Surveil; amount=2 |
-| B039 | v8 | bug | FIXED | type=static_ability; keyword=Discover; amount=10 |
+| B034 | v8 | bug | FIXED | artifact amount.of={kind:that_many,link:L2->2:intra:that_many}; IR intra kept |
+| B036 | v8 | bug | FIXED | artifact type=keyword_action; keyword=Surveil; amount=2 |
+| B039 | v8 | bug | FIXED | artifact type=keyword_action; keyword=Discover; amount=10 |
