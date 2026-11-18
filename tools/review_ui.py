@@ -1646,7 +1646,10 @@ HELP = {
     },
     "views": {
         "v": "cycle semantic / graph / card / json output views",
+        "w": "split pane: semantic/card beside json (remembered)",
         "p": "parser span view for the judged sentence",
+        "layout button": "split layout: auto / columns / stacked",
+        "claims toggle": "collapse the claims panel (remembered)",
     },
     "json tree": {
         "click key/value": "select that node for the bug note (path: value)",

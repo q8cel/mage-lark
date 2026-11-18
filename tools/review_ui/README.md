@@ -38,6 +38,25 @@ The UI has four views, cycled with `v` or the buttons in the output header:
 | card | card-level pane: segments, cross-segment links, entities, `whole_text_parse` |
 | json | the raw tree, kept for debugging; the claim and token links jump here |
 
+### Split pane and narrow windows
+
+`w` (or the header `split` button) shows two panes at once: the selected
+semantic/graph/card view on the left, the JSON tree on the right. Above 1000px
+they sit side by side; below that they stack vertically with the sentence pinned
+at the top (capped at 30 vh, scrolls internally), the verdict/axis/note bar
+pinned at the bottom, and each pane given a 35 vh minimum and its own scroll, so
+the JSON pane scrolls horizontally inside its own box instead of the page. The
+claims panel starts collapsed on a narrow first run to keep that bottom bar
+compact, and the batch strip stays at the very bottom. The `layout` button cycles
+`auto → columns → stacked` (auto = stacked under 1000px, columns above). The
+choice, the split state and the claims-collapsed state live in `localStorage`
+under `review-ui-layout` and are restored on reload; wide windows default to
+side-by-side split, narrow ones to stacked split with both panes visible. Claims
+collapse with the `hide/show` button on their header. Switching views in split
+mode replaces only the left pane; the JSON tree keeps its own container. The
+verdict bar stays at the bottom of the right column (and of the viewport when
+stacked), so labelling never needs scrolling.
+
 The **card view** reads `compile_cards.jsonl` (indexed once by card name at
 startup, `--cards PATH` to override) and shows the card as one unit rather than
 dot-separated sentences: every segment in order with its index, text, link

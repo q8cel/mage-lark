@@ -28,6 +28,9 @@ const S = {
   cardData: null,
   cardCache: new Map(),
   cardLoading: new Set(),
+  split: true,
+  splitLayout: 'auto',
+  claimsCollapsed: false,
   warnedBugNoAxis: false,
   busy: false,
 };
@@ -323,23 +326,111 @@ const VIEWS = ['semantic', 'graph', 'card', 'json'];
 
 function setView(view, opts = {}) {
   if (!VIEWS.includes(view)) return;
+  if (S.split && view === 'json') return;   // json already owns the other pane
   S.view = view;
   applyView();
   if (opts.reveal && S.path) reveal(S.path);
 }
 
+const LAYOUT_KEY = 'review-ui-layout';
+
+function loadLayout() {
+  let saved = {};
+  try {
+    saved = JSON.parse(localStorage.getItem(LAYOUT_KEY) || '{}');
+  } catch (err) { /* first run or storage disabled */ }
+  if (typeof saved.split === 'boolean') S.split = saved.split;
+  if (saved.layout) S.splitLayout = saved.layout;
+  if (typeof saved.claimsCollapsed === 'boolean') {
+    S.claimsCollapsed = saved.claimsCollapsed;
+  } else if (window.innerWidth < 1000) {
+    S.claimsCollapsed = true;   // keep the bottom bar compact on first run
+  }
+}
+
+function saveLayout() {
+  try {
+    localStorage.setItem(LAYOUT_KEY, JSON.stringify({
+      split: S.split, layout: S.splitLayout, claimsCollapsed: S.claimsCollapsed,
+    }));
+  } catch (err) { /* storage disabled */ }
+}
+
+function paneAView() {
+  return S.view === 'json' ? 'semantic' : S.view;
+}
+
+function resolvedLayout() {
+  if (window.innerWidth < 1000) return 'stacked';
+  return S.splitLayout === 'auto' ? 'columns' : S.splitLayout;
+}
+
+function applyLayout() {
+  const split = S.split;
+  const layout = resolvedLayout();
+  document.body.classList.toggle('split', split);
+  const json = $('#json');
+  json.classList.toggle('split', split);
+  json.classList.toggle('layout-columns', split && layout === 'columns');
+  json.classList.toggle('layout-stacked', split && layout === 'stacked');
+  const splitBtn = $('#splitBtn');
+  if (splitBtn) splitBtn.classList.toggle('on', split);
+  const layoutBtn = $('#layoutBtn');
+  if (layoutBtn) {
+    layoutBtn.classList.toggle('hidden', !split);
+    layoutBtn.textContent = `layout: ${S.splitLayout}`;
+  }
+  const tree = $('#tree');
+  const toggle = $('#treeToggle');
+  if (split) {
+    $('#paneBhost').appendChild(tree);
+    $('#paneBhead').appendChild(toggle);
+  } else {
+    $('#paneAhost').appendChild(tree);
+    $('#paneAhead').appendChild(toggle);
+  }
+  const claims = $('#claims');
+  claims.classList.toggle('collapsed', S.claimsCollapsed);
+  $('#claimsToggle').textContent = S.claimsCollapsed ? 'show' : 'hide';
+  applyView();
+}
+
+function toggleSplit(force) {
+  S.split = force === undefined ? !S.split : !!force;
+  if (S.split && S.view === 'json') S.view = 'semantic';
+  saveLayout();
+  applyLayout();
+}
+
+function cycleLayout() {
+  const order = ['auto', 'columns', 'stacked'];
+  S.splitLayout = order[(order.indexOf(S.splitLayout) + 1) % order.length];
+  saveLayout();
+  applyLayout();
+}
+
+function toggleClaims(force) {
+  S.claimsCollapsed = force === undefined ? !S.claimsCollapsed : !!force;
+  saveLayout();
+  applyLayout();
+}
+
 function applyView() {
+  const split = S.split;
+  const active = split ? paneAView() : S.view;
   for (const view of VIEWS) {
-    const host = document.querySelector(`.outview[data-view="${view}"]`);
-    if (host) host.classList.toggle('active', view === S.view);
+    const host = hostFor(view);
+    if (!host) continue;
+    const visible = split ? (view === 'json' || view === active) : view === S.view;
+    host.classList.toggle('active', visible);
   }
   document.querySelectorAll('.viewbtn').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.view === S.view);
+    btn.classList.toggle('active', btn.dataset.view === active);
   });
   const toggle = $('#treeToggle');
-  if (toggle) toggle.style.display = S.view === 'json' ? '' : 'none';
+  if (toggle) toggle.style.display = (split || S.view === 'json') ? '' : 'none';
   applyStatusClasses();
-  if (S.view === 'card') ensureCard();
+  if (active === 'card') ensureCard();
 }
 
 function hostFor(view) {
@@ -1450,6 +1541,7 @@ function handleKey(event) {
       break;
     }
     case 'p': toggleParser(); break;
+    case 'w': toggleSplit(); break;
     case 's':
       if (S.focusPath) selectPath(S.focusPath, valueOfNode(S.focusPath));
       break;
@@ -1517,6 +1609,10 @@ function wire() {
   $('#undoBtn').addEventListener('click', undo);
   $('#exportBtn').addEventListener('click', doExport);
   $('#importBtn').addEventListener('click', doImport);
+  $('#splitBtn').addEventListener('click', () => toggleSplit());
+  $('#layoutBtn').addEventListener('click', () => cycleLayout());
+  $('#claimsToggle').addEventListener('click', () => toggleClaims());
+  window.addEventListener('resize', () => { if (S.split) applyLayout(); });
   $('#helpBtn').addEventListener('click', () => toggleHelp());
   $('#help').addEventListener('click', (event) => {
     if (event.target.id === 'help') toggleHelp(false);
@@ -1525,12 +1621,14 @@ function wire() {
 
 async function boot() {
   wire();
+  loadLayout();
   await buildHelp();
   const st = await api('/api/state');
   if (st.error) { status('cannot load state: ' + st.error, true); return; }
   S.state = st;
   S.ids = st.items.map((it) => it.id);
   renderTop();
+  applyLayout();
   let index = st.items.findIndex((it) => !it.done);
   if (index < 0) index = 0;
   await loadItem(index);

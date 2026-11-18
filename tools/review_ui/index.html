@@ -13,6 +13,8 @@
   <div id="progress" title="labelled / total"><div id="progressfill"></div></div>
   <span id="counts" class="counts"></span>
   <span class="spacer"></span>
+  <button id="splitBtn" class="btn" title="split pane: semantic/card beside json (w)">split</button>
+  <button id="layoutBtn" class="btn hidden" title="split layout: auto / columns / stacked">layout: auto</button>
   <button id="importBtn" class="btn" title="re-import labels.tsv (i)">import</button>
   <button id="exportBtn" class="btn" title="export labels.tsv (x)">export</button>
   <button id="helpBtn" class="btn" title="keyboard help (?)">?</button>
@@ -54,38 +56,55 @@
   </section>
 
   <section id="json" class="col">
-    <div class="panelhead">
-      <span>interpreted output</span>
-      <span class="viewsw">
-        <button class="btn viewbtn" data-view="semantic" title="semantic view (v)">semantic</button>
-        <button class="btn viewbtn" data-view="graph" title="graph view (v)">graph</button>
-        <button class="btn viewbtn" data-view="card" title="card view (v)">card</button>
-        <button class="btn viewbtn" data-view="json" title="json view (v)">json</button>
-      </span>
-      <button id="treeToggle" class="btn treebtn">collapse all (e)</button>
+    <div class="pane" id="paneA">
+      <div class="panelhead panehead" id="paneAhead">
+        <span>interpreted output</span>
+        <span class="viewsw">
+          <button class="btn viewbtn" data-view="semantic" title="semantic view (v)">semantic</button>
+          <button class="btn viewbtn" data-view="graph" title="graph view (v)">graph</button>
+          <button class="btn viewbtn" data-view="card" title="card view (v)">card</button>
+          <button class="btn viewbtn" data-view="json" title="json view (v)">json</button>
+        </span>
+        <button id="treeToggle" class="btn treebtn">collapse all (e)</button>
+      </div>
+      <div class="panehost" id="paneAhost">
+        <div id="semantic" class="semview outview" data-view="semantic"></div>
+        <div id="graph" class="graphview outview" data-view="graph"></div>
+        <div id="cardhost" class="cardview outview" data-view="card"></div>
+        <div id="tree" class="tree outview" data-view="json"></div>
+      </div>
     </div>
-    <div id="semantic" class="semview outview" data-view="semantic"></div>
-    <div id="graph" class="graphview outview" data-view="graph"></div>
-    <div id="cardhost" class="cardview outview" data-view="card"></div>
-    <div id="tree" class="tree outview" data-view="json"></div>
+    <div class="pane" id="paneB">
+      <div class="panelhead panehead" id="paneBhead">
+        <span>json</span>
+        <span class="muted">raw output</span>
+      </div>
+      <div class="panehost" id="paneBhost"></div>
+    </div>
   </section>
 
   <section id="right" class="col">
-    <div class="panelhead">machine claims <span id="claimssrc" class="muted"></span></div>
-    <div id="claims" class="claims"></div>
-    <div class="panelhead">verdict</div>
-    <div id="verdicts" class="verdicts"></div>
-    <div id="axes" class="axes"></div>
-    <div id="selection" class="selection"></div>
-    <input id="notetext" type="text" autocomplete="off" spellcheck="false"
-           placeholder="optional free-text note (Enter commits)">
-    <div id="notepreview" class="notepreview"></div>
-    <div class="commitbar">
-      <button id="commitBtn" class="btn primary">commit (Enter)</button>
-      <button id="undoBtn" class="btn">undo (u)</button>
+    <div class="panelhead claimshead">
+      <span>machine claims <span id="claimssrc" class="muted"></span></span>
+      <button id="claimsToggle" class="btn treebtn" title="collapse / show claims">hide</button>
     </div>
-    <div id="status" class="status"></div>
+    <div id="claims" class="claims"></div>
+    <div id="labelbar">
+      <div class="panelhead"><span>verdict</span></div>
+      <div id="verdicts" class="verdicts"></div>
+      <div id="axes" class="axes"></div>
+      <div id="selection" class="selection"></div>
+      <input id="notetext" type="text" autocomplete="off" spellcheck="false"
+             placeholder="optional free-text note (Enter commits)">
+      <div id="notepreview" class="notepreview"></div>
+      <div class="commitbar">
+        <button id="commitBtn" class="btn primary">commit (Enter)</button>
+        <button id="undoBtn" class="btn">undo (u)</button>
+      </div>
+      <div id="status" class="status"></div>
+    </div>
   </section>
+
 </main>
 
 <footer id="batchstrip" class="batchstrip"></footer>

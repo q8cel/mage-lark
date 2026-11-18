@@ -343,6 +343,25 @@ def main():
         check("no external requests in static assets",
               "https://" not in page
               and page.replace("http://www.w3.org/2000/svg", "").count("http://") == 0)
+        html = request(port, "/")[1].decode()
+        app_js = request(port, "/app.js")[1].decode()
+        css = request(port, "/style.css")[1].decode()
+        check("split panes and label bar in the markup",
+              all(token in html for token in ('id="paneA"', 'id="paneB"',
+                                              'id="claimsToggle"', 'id="labelbar"',
+                                              'id="splitBtn"', 'id="layoutBtn"')))
+        check("exactly one container per output view",
+              html.count('id="tree"') == 1 and all(
+                  f'class="{cls} outview" data-view="{view}"' in html
+                  for cls, view in (("semview", "semantic"), ("graphview", "graph"),
+                                    ("cardview", "card"), ("tree", "json"))))
+        check("split layout is remembered in localStorage",
+              "review-ui-layout" in app_js and "localStorage" in app_js
+              and "case 'w'" in app_js and "toggleSplit" in app_js)
+        check("narrow layout is CSS-driven",
+              "max-width: 999px" in css and "layout-stacked" in css
+              and "position: fixed" in css and "overflow-x: hidden" in css
+              and ".panehost" in css)
 
         # ---- imported label shape ----------------------------------
         status, item = request_json(port, f"/api/item?id={rich_id}")

@@ -364,10 +364,6 @@ main {
 #helptable td.k { color: var(--amber); white-space: nowrap; }
 #helptable tr.grp td { padding-top: 10px; color: var(--dim); text-transform: uppercase; font-size: 10px; letter-spacing: .08em; }
 
-@media (max-width: 1100px) {
-  main { grid-template-columns: 1fr 1fr; }
-  #right { grid-column: 1 / -1; max-height: 45vh; }
-}
 
 /* ---- output views -------------------------------------------------- */
 .viewsw { float: right; margin-left: 10px; display: inline-flex; gap: 3px; }
@@ -601,4 +597,148 @@ main {
   font-size: 11px;
   color: #c3cbd6;
   font-family: var(--mono);
+}
+
+/* ---- panes, split mode and responsive layout ----------------------- */
+html, body { font-size: 13px; }
+body { line-height: 1.35; }
+
+main { grid-template-columns: minmax(250px, .95fr) minmax(0, 1.5fr) minmax(250px, .95fr); }
+
+#json.col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--line);
+}
+#json .pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--bg);
+}
+#json .panehead {
+  position: static;
+  margin: 0;
+  padding: 5px 8px 4px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--line);
+}
+#json .panehead .treebtn { float: right; margin-top: -1px; }
+#json .panehost {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 6px 8px 14px;
+}
+#paneB { display: none; }
+#json.split #paneB { display: flex; }
+#json.split.layout-columns { grid-template-columns: 1fr 1fr; }
+#json.split.layout-stacked { grid-template-columns: 1fr; grid-auto-rows: minmax(40vh, auto); }
+#json.split.layout-stacked .panehost { min-height: 30vh; }
+body.split #json .viewbtn[data-view="json"] { display: none; }
+
+/* right column: claims scroll, verdict bar stays at the bottom */
+#right.col {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+#right .claimshead {
+  position: static;
+  margin: 0;
+  padding: 5px 8px 4px;
+}
+#claims {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 6px 8px;
+}
+#claims.collapsed { display: none; }
+#labelbar {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: 4px 8px 6px;
+  background: var(--bg2);
+  border-top: 1px solid var(--line);
+}
+#labelbar .panelhead {
+  position: static;
+  margin: 0 0 3px;
+  padding: 0;
+  background: none;
+  border: none;
+}
+#labelbar .selection { min-height: 0; }
+#labelbar .notepreview { margin: 3px 0 5px; }
+#labelbar .commitbar { margin-bottom: 2px; }
+#labelbar .status { min-height: 14px; }
+
+/* readability at narrow widths */
+.irtext { font-size: 13px; line-height: 1.35; overflow-wrap: anywhere; }
+.role { flex-basis: 64px; }
+.tree { font-size: 13px; line-height: 1.35; width: max-content; min-width: 100%; }
+.tree .leaf, .tree summary { white-space: pre; }
+.segir .irtext { font-size: 12.5px; }
+
+@media (max-width: 999px) {
+  main {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 34vh;
+    scroll-padding-bottom: calc(46vh + 40px);
+  }
+  #left, #json, #right { width: 100%; min-width: 0; }
+
+  #left {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    flex: 0 0 auto;
+    min-height: 96px;
+    max-height: 30vh;
+    overflow: auto;
+    padding: 6px 8px 8px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  #left #judged { font-size: 13px; }
+
+  #json { flex: 0 0 auto; }
+  #json.split.layout-columns,
+  #json.split.layout-stacked {
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(35vh, auto);
+  }
+  #json .pane { min-height: 35vh; }
+  #json .panehost { max-height: 52vh; }
+
+  #right {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 27px;
+    z-index: 6;
+    max-height: 46vh;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -8px 16px rgba(0, 0, 0, .45);
+  }
+  #claims { max-height: 20vh; }
+  #labelbar { flex: 0 0 auto; padding-top: 3px; }
+  #labelbar .panelhead { display: none; }
+
+  #topbar { flex-wrap: wrap; gap: 6px; }
+  #packname { display: none; }
+  #progress { width: 90px; }
+  .counts { display: none; }
+  .cardline h2 { font-size: 14px; }
+  .irline { gap: 6px; }
+  .role { flex-basis: 52px; font-size: 9px; }
 }
