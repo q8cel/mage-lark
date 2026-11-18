@@ -168,6 +168,8 @@ def _whole_phrase_links(segments, whole):
                 target, lkind = prev, 'quantity'
             elif phrase == 'that many':
                 target = _pick_back(segments, i, _has_quantity)
+                if target == seg['index']:
+                    target = None
                 lkind = 'quantity' if target is not None else 'intra'
             elif phrase in ('the rest', 'those cards'):
                 target = _pick_back(
@@ -214,6 +216,8 @@ def build_card(name, text, segments, whole=None):
                 lkind = 'quantity'
             elif phrase == 'that many':
                 target = _pick_back(segments, i, _has_quantity)
+                if target == seg['index']:
+                    target = None
                 lkind = 'quantity' if target is not None else 'intra'
             elif phrase in ('the rest', 'those cards'):
                 # Prefer the actual set-producing action (look at/top of
