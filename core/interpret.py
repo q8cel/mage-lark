@@ -1218,6 +1218,87 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # --- v8 audit normalizations
+            # Z044: expose the inner block inside the must wrapper.
+            if obj.get('type') == 'effect' and obj.get('if_able') \
+                    and isinstance(obj.get('effect'), dict) \
+                    and obj['effect'].get('verb') == 'must_block':
+                obj.pop('if_able', None)
+            if obj.get('verb') == 'must_block':
+                obj.setdefault('inner', {'verb': 'block', 'card': obj.get('card')})
+            # A033: a known creature type is not an unresolved anaphor.
+            ct0 = obj.get('card_type')
+            if isinstance(ct0, dict) and ct0.get('note') == 'unresolved' \
+                    and isinstance(ct0.get('value'), str) \
+                    and ct0['value'].lower() in getattr(self, 'types', set()):
+                ct0.pop('note', None)
+            # B007: keep the or_pay compatibility field, but expose the choice.
+            if isinstance(obj.get('or_pay'), str) and obj.get('verb') == 'sacrifice':
+                obj.setdefault('or', {'kind': 'or', 'items': [
+                    {'verb': 'sacrifice', 'card': obj.get('card')},
+                    {'verb': 'pay_mana',
+                     'mana': obj['or_pay'].split()}]})
+            # B011: "its counters" is not a counter kind.
+            if obj.get('counters') == 'its' and obj.get('verb') == 'put_counter':
+                obj.pop('counters', None)
+                obj.setdefault('counter', {
+                    'kind': 'all',
+                    'possessor': {'kind': 'anaphora', 'ref': 'its',
+                                  'status': 'unresolved'}})
+            # B018: total mana value rather than a per-card mana-value cap.
+            mod = obj.get('modifier')
+            if isinstance(mod, dict) and mod.get('stat') == 'mana value' \
+                    and str(obj.get('quantifier', '')).startswith('any number'):
+                mod['total'] = True
+            # B019: a cost target's "from your graveyard" is a zone.
+            tgt = obj.get('target')
+            if isinstance(tgt, dict):
+                ct = tgt.get('card_type')
+                if isinstance(ct, dict) and isinstance(ct.get('value'), str) \
+                        and ' from your graveyard' in ct['value']:
+                    ct['value'] = ct['value'].split(' from your graveyard')[0].strip()
+                    tgt['zone'] = {'prep': 'from', 'zone': 'graveyard',
+                                   'possessor': 'your'}
+            # B023: split attacking/blocking status; retain the OR relation.
+            for key in ('target', 'to', 'on', 'card'):
+                t = obj.get(key)
+                if isinstance(t, dict) and isinstance(t.get('status'), list):
+                    if 'attacking or blocking' in t['status']:
+                        t['status'] = ['attacking', 'blocking']
+                        t['status_logic'] = 'or'
+            # B036/B039: keyword abilities are ability records, not raw words.
+            kws = obj.get('keywords')
+            if obj.get('type') == 'static_keyword' and isinstance(kws, list) \
+                    and len(kws) == 2 and isinstance(kws[0], dict) \
+                    and kws[0].get('value') in ('Surveil', 'Discover'):
+                obj['type'] = 'static_ability'
+                obj['keyword'] = kws[0]['value']
+                obj['amount'] = kws[1]
+                obj.pop('keywords', None)
+            # Z040: an event_ref is an anaphor.
+            if obj.get('kind') == 'event_ref':
+                obj.setdefault('anaphor', True)
+            # Z061: source is the structured name for top-of-library position.
+            if obj.get('top') is True:
+                obj.setdefault('source', 'top')
+            # Z072: colors are the actual colors, not a bag labelled "all".
+            colors = obj.get('colors')
+            if isinstance(colors, dict) and colors.get('kind') == 'all' \
+                    and isinstance(colors.get('values'), list):
+                obj['colors'] = colors['values']
+            # A055: the controller is a player, not the verb "controls".
+            if obj.get('controller') == 'target player controls':
+                obj['controller'] = 'target player'
+            # B020/B029: X on a spell/effect comes from the mana cost.
+            eff0 = obj.get('effect')
+            if isinstance(eff0, dict) and isinstance(eff0.get('amount'), dict) \
+                    and eff0['amount'].get('kind') == 'x' and 'xdef' not in obj:
+                obj['xdef'] = {'kind': 'x', 'source': 'mana_cost'}
+            chg0 = obj.get('change')
+            if isinstance(chg0, dict) and 'xdef' not in obj and any(
+                    isinstance(chg0.get(k), str) and 'X' in chg0[k]
+                    for k in ('power', 'toughness')):
+                obj['xdef'] = {'kind': 'x', 'source': 'mana_cost'}
             for v in obj.values():
                 self._late_normalize(v)
         elif isinstance(obj, list):
