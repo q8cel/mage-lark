@@ -226,6 +226,7 @@ Doom Reigns Supreme	5932a830e65e	4	17	mana costs	34	You may cast up to two spell
 Fear of Exposure	a90d7e969f1a	0	17	cast spell	34	As an additional cost to cast this spell, tap two untapped creatures and/or lands you control
 Fear of Isolation	35e0f7df7515	0	17	cast spell	34	As an additional cost to cast this spell, return a permanent you control to its owner's hand
 Frilled Sparkshooter	f2e4f3ef9052	1	17	creature lost	34	This creature enters with a +1/+1 counter on it if an opponent lost life this turn
+Jolene, Plundering Pugilist	363d0247b60a	0	17	power greater	34	Whenever you attack with one or more creatures with power 4 or greater, create a Treasure token
 Taster of Wares	b4f695693bae	3	34	spent	34	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
 Taster of Wares	b4f695693bae	3	34	spent	34	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
 The Rollercrusher Ride	3dab1c64af81	0	34	double	34	Delirium — If a source you control would deal noncombat damage to a permanent or player while there are four or more card types among cards in your graveyard, it deals double that damage instead
@@ -454,8 +455,6 @@ Stillness in Motion	48120cf6ba6c	1	27	enchantment	27	Then if your library has no
 Tempest Hawk	2b97c5886d11	1	27	creature	27	Whenever this creature deals combat damage to a player, you may search your library for a card named ~, reveal it, put it into your hand, then shuffle
 The Earth Crystal	6e498839a208	1	27	twice	27	If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead
 The Earth Crystal	6e498839a208	1	27	twice	27	If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead
-The Rise of Sozin // Fire Lord Sozin	f796f14d6f4d	2	27	total	27	When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control
-The Rise of Sozin // Fire Lord Sozin	f796f14d6f4d	2	27	total	27	When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control
 Traveling Chocobo	894a7626c4f1	2	27	time	27	If a land or Bird you control entering the battlefield causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time
 Traveling Chocobo	894a7626c4f1	2	27	time	27	If a land or Bird you control entering the battlefield causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time
 Traveling Chocobo	894a7626c4f1	2	27	time	27	If a land or Bird you control entering the battlefield causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time
@@ -1202,7 +1201,6 @@ Iron Hills	2ba96ea0f47f	2	17	land	17	{2}{R}{W}, {T}, Sacrifice this land: Put tw
 Ixalli's Lorekeeper	34d2dbd2ac4a	1	17	source	17	Spend this mana only to cast a Dinosaur spell or activate an ability of a Dinosaur source
 Jeskai Shrinekeeper	157ef6e48626	1	17	creature	17	Whenever this creature deals combat damage to a player, you gain 1 life and draw a card
 Jeskai Shrinekeeper	157ef6e48626	1	17	creature	17	Whenever this creature deals combat damage to a player, you gain 1 life and draw a card
-Jolene, Plundering Pugilist	363d0247b60a	0	17	power	17	Whenever you attack with one or more creatures with power 4 or greater, create a Treasure token
 Lake-town	d13c4b9467e1	2	17	land	17	{2}{W}{U}, {T}, Sacrifice this land: Put two +1/+1 counters on target Human you control
 Lathril, Blade of the Elves	50e3c2707317	2	17	elves	17	{T}, Tap ten untapped Elves you control: Each opponent loses 10 life and you gain 10 life
 Lathril, Blade of the Elves	50e3c2707317	2	17	elves	17	{T}, Tap ten untapped Elves you control: Each opponent loses 10 life and you gain 10 life

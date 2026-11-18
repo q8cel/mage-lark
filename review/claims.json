@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "7c4a588f7be92bc8ac1575091482a7e7e2cc32ea9a04b5358093943f22abaadf",
- "generated_at": "2026-11-18T06:00:51",
- "artifact_mtime": "2026-11-18T05:57:26",
+ "artifact_sha256": "198a60b56d951c161d33552c597c3fad84c76fea8ce9fccca47a2b1243a78a5f",
+ "generated_at": "2026-11-18T19:10:26",
+ "artifact_mtime": "2026-11-18T18:43:00",
  "counts": {
-  "records": 2685,
-  "claims": 3543,
+  "records": 2671,
+  "claims": 3535,
   "by_kind": {
    "anaphora_agreement": 69,
    "content_loss": 1681,
    "empty_slot": 14,
    "invariant": 209,
-   "stringy": 1570
+   "stringy": 1562
   }
  },
  "records": [
@@ -267,7 +267,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -540,7 +540,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -827,7 +827,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -2864,7 +2864,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -3050,6 +3050,13 @@
    "sid": "c725f338685b",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.or.kind",
+     "detail": "or",
+     "severity": "high",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -3949,7 +3956,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -4718,7 +4725,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.counters",
+     "path": "[].effect.counter.possessor.ref",
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
@@ -4957,7 +4964,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -5089,7 +5096,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.counters",
+     "path": "[].effect.counter.possessor.ref",
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
@@ -5251,7 +5258,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -6021,7 +6028,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -7267,7 +7274,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -7554,7 +7561,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -7856,20 +7863,6 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "first strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Cosmium Blast",
-   "sid": "978531782642",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -8296,7 +8289,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10045,7 +10038,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.counters",
+     "path": "[].effect.counter.possessor.ref",
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
@@ -11054,7 +11047,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type[].value",
-     "detail": "creature card from your graveyard",
+     "detail": "creature card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -11093,6 +11086,13 @@
    "sid": "6babf0406980",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.or.kind",
+     "detail": "or",
+     "severity": "high",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -11500,32 +11500,11 @@
      "source": "artifact:output"
     },
     {
-     "kind": "stringy",
-     "path": "[].instead.card.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: condition=that creature would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Elspeth's Smite",
-   "sid": "9e166dd664e2",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -12257,7 +12236,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.counters",
+     "path": "[].effect.counter.possessor.ref",
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
@@ -12342,7 +12321,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -12811,7 +12790,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -15282,20 +15261,6 @@
    ]
   },
   {
-   "card": "Gideon's Memorial",
-   "sid": "a7dc59968e23",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Gigantoad",
    "sid": "51b091728d19",
    "sentence_index": 0,
@@ -15527,7 +15492,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -15723,7 +15688,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -15807,7 +15772,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -15946,7 +15911,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.counters",
+     "path": "[].effect.counter.possessor.ref",
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
@@ -16136,7 +16101,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -16220,7 +16185,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "creature card from your graveyard",
+     "detail": "creature card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -16479,7 +16444,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.shared.target.controller",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -17066,37 +17031,9 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.counters",
+     "path": "[].effect.counter.possessor.ref",
      "detail": "its",
      "severity": "high",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Helicarrier Strike",
-   "sid": "4c52bed27d37",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Helicarrier Strike",
-   "sid": "80e246d6a075",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -17626,7 +17563,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.counters",
+     "path": "[].effect.counter.possessor.ref",
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
@@ -19499,20 +19436,13 @@
      "detail": "power",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Joust Through",
-   "sid": "9e166dd664e2",
-   "sentence_index": 0,
-   "claims": [
+    },
     {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
+     "kind": "content_loss",
+     "path": null,
+     "detail": "greater",
      "severity": "medium",
-     "source": "artifact:output"
+     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -19972,34 +19902,6 @@
    ]
   },
   {
-   "card": "Kellan's Lightblades",
-   "sid": "01c4792639f6",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.card.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Kellan's Lightblades",
-   "sid": "9e166dd664e2",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Kellan, Planar Trailblazer",
    "sid": "4aef34730c4f",
    "sentence_index": 1,
@@ -20091,7 +19993,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -20980,7 +20882,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -21113,7 +21015,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -21183,7 +21085,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -21687,7 +21589,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "creature card from your graveyard",
+     "detail": "creature card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -22028,6 +21930,20 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.or.items[].card.card_type.value",
+     "detail": "legendary creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.or.kind",
+     "detail": "or",
+     "severity": "high",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "cast",
@@ -22065,7 +21981,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -23976,20 +23892,6 @@
    ]
   },
   {
-   "card": "Molt Tender",
-   "sid": "43a4e9d7e97f",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "card from your graveyard",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Molten Collapse",
    "sid": "0c9ff882e8a6",
    "sentence_index": 1,
@@ -24284,7 +24186,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -24704,7 +24606,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -24816,7 +24718,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -26160,20 +26062,6 @@
    ]
   },
   {
-   "card": "Osseous Exhale",
-   "sid": "9d03718c17c5",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Osteomancer Adept",
    "sid": "c2af1b5714c8",
    "sentence_index": 1,
@@ -27364,7 +27252,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type[].value",
-     "detail": "sorcery card from your graveyard",
+     "detail": "sorcery card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -28155,7 +28043,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -29129,20 +29017,6 @@
      "kind": "stringy",
      "path": "[].effect.amount",
      "detail": "the excess damage dealt this way",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Razor Rings",
-   "sid": "978531782642",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -30871,7 +30745,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -31068,20 +30942,6 @@
   },
   {
    "card": "Rubble Rouser",
-   "sid": "09e651baf6b5",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "card from your graveyard",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rubble Rouser",
    "sid": "16a76f88b44a",
    "sentence_index": 1,
    "claims": [
@@ -31102,7 +30962,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -31291,7 +31151,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "artifact card from your graveyard",
+     "detail": "artifact card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -31417,7 +31277,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -31466,7 +31326,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -32215,7 +32075,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -33143,6 +33003,13 @@
    "sid": "cad249274f54",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.or.kind",
+     "detail": "or",
+     "severity": "high",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -34427,7 +34294,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -35113,20 +34980,6 @@
    ]
   },
   {
-   "card": "Steer Clear",
-   "sid": "80e246d6a075",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.status[]",
-     "detail": "attacking or blocking",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Stegron the Dinosaur Man",
    "sid": "de2e1f012794",
    "sentence_index": 1,
@@ -35237,6 +35090,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.or.kind",
+     "detail": "or",
+     "severity": "high",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "cast",
@@ -35323,7 +35183,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -35365,7 +35225,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36352,7 +36212,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36492,7 +36352,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -38081,20 +37941,6 @@
    ]
   },
   {
-   "card": "The Rise of Sozin // Fire Lord Sozin",
-   "sid": "f796f14d6f4d",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "total",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "The Rollercrusher Ride",
    "sid": "3dab1c64af81",
    "sentence_index": 0,
@@ -38319,7 +38165,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -41203,7 +41049,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "this card from your graveyard",
+     "detail": "this card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -42897,7 +42743,7 @@
     {
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
-     "detail": "X artifact cards from your graveyard",
+     "detail": "X artifact cards",
      "severity": "medium",
      "source": "artifact:output"
     },
