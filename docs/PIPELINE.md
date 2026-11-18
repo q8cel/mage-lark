@@ -290,6 +290,31 @@ partitive ("the rest of the top five cards"), not a plain NP.
    `interpret` to preserve anaphor spans (i.e. a single, documented parser
    configuration plus an offset field).
 
+## Card-level IR
+
+`tools/compile_cards.py` groups the sentence artifact into one record per card
+and adds cross-segment links that the per-sentence grammar cannot express:
+
+```bash
+python tools/compile_cards.py --artifact compile_standard.jsonl \
+    --data Standard.json --out compile_cards.jsonl --whole-parse
+```
+
+Records are `{card, text, segments:[{index,text,resolved_text,output}],
+links:[{from,to,kind,detail}], entities, whole_text_parse}`. Link kinds are
+`event_positive`/`event_negative` (`If you do`/`If you don't`), `quantity`
+(`that many`/`this way`), `anaphora` (`the rest`, `those cards`, resolved
+pronouns) and `self` (`this creature`/`this card`). `whole_text_parse` records
+whether the grammar's `start: sentence+ (DOT sentence+)*` accepted the card's
+normalized text; sentence records remain the atomic fallback either way.
+
+Quoted abilities are parsed independently (`Interpreter._quoted_ability`) and
+kept as `{kind:'quoted_ability', quoted_text, sentence, token?}`. A named token
+(`create Beau, ... token with "Beau's ..."`) is parsed in token context:
+`Beau's`/`~`/`this creature` inside the quote refer to the created token, and
+the original quoted text stays alongside the parse for card creation.
+Unparseable quotes are retained as `{quoted_text, unparsed: true}`.
+
 ## JSON contract
 
 `rulecoref.resolve(text, mentions, anaphors)` returns:
