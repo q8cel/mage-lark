@@ -1232,6 +1232,12 @@ class Interpreter:
                     and isinstance(ct0.get('value'), str) \
                     and ct0['value'].lower() in getattr(self, 'types', set()):
                 ct0.pop('note', None)
+            # Z048: a destination zone with an owner/possessor gets the same
+            # canonical prep/zone/owner-or-possessor shape as a source zone.
+            tov0 = obj.get('to')
+            if isinstance(tov0, dict) and isinstance(tov0.get('zone'), str) \
+                    and ('owner' in tov0 or 'possessor' in tov0):
+                tov0.setdefault('prep', 'to')
             # B007: keep the or_pay compatibility field, but expose the choice.
             if isinstance(obj.get('or_pay'), str) and obj.get('verb') == 'sacrifice':
                 obj.setdefault('or', {'kind': 'or', 'items': [
@@ -2847,7 +2853,7 @@ class Interpreter:
             # "one or more creatures" is a batched quantity, not the number 1.
             n = self._first_number(children)
             if n == 1:
-                return {'one_or_more': 1}
+                return {'relation': '>=', 'amount': 1}
             if n is not None:
                 return '%s or more' % n
         if trees:

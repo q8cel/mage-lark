@@ -46,7 +46,7 @@ QUANT     = {'a', 'an', 'each', 'all', 'other', 'target', 'up', 'no', 'x', 'that
              'the', 'any', 'every', 'any number of', 'up to', 'some',
              'half', 'half the', 'one', 'one or more', 'another', 'that many', 'one or two'}      # S24, S36, S42
 # structured quantifier encodings: "up to N" / "one or more" (S13, S42)
-QUANT_KEYS = {'up_to', 'one_or_more', 'at_least', 'at_most'}
+QUANT_KEYS = {'up_to', 'one_or_more', 'at_least', 'at_most', 'relation'}
 WORD_AMT  = {'a', 'an', 'x', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
              'nine', 'ten', 'each', 'equal'}
 PT_ITEM   = r'[+-]?(?:x|\d+)/[+-]?(?:x|\d+)'

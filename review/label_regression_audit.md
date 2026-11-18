@@ -1,6 +1,6 @@
 # Label regression audit
 
-Rows: 69. FIXED 65, PARTIAL 4, SAME 0, REGRESSED 0.
+Rows: 69. FIXED 67, PARTIAL 2, SAME 0, REGRESSED 0.
 
 Every id was compiled live with `tools/compile_card.py --card`; IR evidence is from `compile_cards.jsonl` (whole parse build).
 
@@ -15,7 +15,7 @@ Every id was compiled live with `tools/compile_card.py --card`; IR evidence is f
 | Z040 | v6 | legit | FIXED | trigger.event.kind=event_ref; anaphor=true |
 | Z044 | v6 | legit | FIXED | effect={verb:must_block,if_able:true,inner:{verb:block,card:...}}; duplicate top-level if_able removed |
 | Z047 | v6 | bug | FIXED | add_mana symbol {C}; no on/source object for mana |
-| Z048 | v6 | legit | PARTIAL | card.zone(graveyard) and to.zone(hand) still use different shapes |
+| Z048 | v6 | legit | FIXED | card.zone={prep:from,zone:graveyard,possessor:your}; to={zone:hand,owner:you,prep:to}; both canonical prep/zone/owner-or-possessor shape |
 | Z049 | v6 | bug | FIXED | trigger.event.object.card_type=[instant,sorcery]; card_class=spell |
 | Z051 | v6 | bug | FIXED | to.owner={kind:owner_of,of:{kind:anaphora,ref:its}} |
 | Z052 | v6 | bug | FIXED | IR L0->0:intra:that_many; amount.of.that_many.link=L0->0:intra:that_many |
@@ -48,7 +48,7 @@ Every id was compiled live with `tools/compile_card.py --card`; IR evidence is f
 | A026 | v7 | bug | FIXED | attach object/to ref=manifested_creature,status=resolved |
 | A028 | v7 | bug | FIXED | label.quantifier=target; card_type=[attacking creature, blocking creature] |
 | A031 | v7 | bug | FIXED | quote.quoted_text preserved; token=Beau; named=[Beau]; target this_card/~ |
-| A033 | v7 | bug | PARTIAL | quantifier still {one_or_more:1}; note requested relation/amount; Birds unresolved note cleaned |
+| A033 | v7 | bug | FIXED | subject.quantifier={relation:>=,amount:1}; IR L0->0:intra:that_many kept; golden updated |
 | A035 | v7 | bug | FIXED | blocked_by.max=1 |
 | A046 | v7 | legit | FIXED | effect.count=1; counter={kind:+1/+1} |
 | A047 | v7 | legit | FIXED | destination.library_position=second_from_top_or_bottom |
