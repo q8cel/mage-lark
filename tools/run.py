@@ -97,6 +97,10 @@ def _has_unparsed(node, top=False):
         return any(_has_unparsed(x) for x in node)
     if not isinstance(node, dict):
         return False
+    if node.get('kind') == 'quoted_ability':
+        # An unparseable quoted ability is retained as a payload; it does not
+        # make the host sentence's interpretation unparsed.
+        return False
     if node.get('unparsed') or node.get('type') == 'unparsed' or 'text' in node:
         return True
     return any(_has_unparsed(v) for k, v in node.items() if k != 'meta')

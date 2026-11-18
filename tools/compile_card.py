@@ -41,6 +41,8 @@ _W = {}
 
 def _has_unparsed(obj):
     if isinstance(obj, dict):
+        if obj.get('kind') == 'quoted_ability':
+            return False
         return (bool(obj.get('unparsed')) or obj.get('type') == 'unparsed'
                 or 'text' in obj
                 or any(_has_unparsed(v) for v in obj.values()))
