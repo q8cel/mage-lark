@@ -126,7 +126,70 @@ def _apply_scalars(segments, links):
                 d['anaphor'] = True
 
 
-def build_card(name, text, segments, whole=False):
+def _whole_phrase_links(segments, whole):
+    """Links derived from the whole-card tree's sentence spans.
+
+    Only phrase links are derived here; pronoun/self links stay heuristic.
+    Return None unless every compiled segment maps exactly, in order, to one
+    parsed sentence span.
+    """
+    if not isinstance(whole, dict) or not whole.get('ok'):
+        return None
+    spans = whole.get('sentences') or []
+    if len(spans) != len(segments):
+        return None
+    mapped = []
+    ti = 0
+    for seg in segments:
+        target = None
+        for j in range(ti, len(spans)):
+            st = (spans[j].get('text') or '').strip().rstrip('.')
+            se = (seg.get('text') or '').strip().rstrip('.')
+            if st == se or se in st or st in se:
+                target = j
+                break
+        if target is None:
+            return None
+        mapped.append(target)
+        ti = target + 1
+    links = []
+    for i, seg in enumerate(segments):
+        low = _low(seg)
+        prev = segments[i - 1]['index'] if i else None
+        for phrase, kind in (
+                ('this way', 'quantity'),
+                ('that many', 'quantity'),
+                ('the rest', 'anaphora'),
+                ('those cards', 'anaphora'),
+                ('that card', 'anaphora')):
+            if phrase not in low:
+                continue
+            if phrase == 'this way':
+                target, lkind = prev, 'quantity'
+            elif phrase == 'that many':
+                target = _pick_back(segments, i, _has_quantity)
+                lkind = 'quantity' if target is not None else 'intra'
+            elif phrase in ('the rest', 'those cards'):
+                target = _pick_back(
+                    segments, i,
+                    lambda x: bool(re.search(
+                        r'(look at|top .*library)', _low(x))))
+                if target is None:
+                    target = _pick_back(segments, i, _is_source)
+                lkind = 'anaphora'
+            else:
+                target = _pick_back(segments, i, _has_quantity)
+                lkind = 'anaphora'
+            if target is not None:
+                links.append({'from': seg['index'], 'to': target,
+                              'kind': lkind, 'detail': phrase})
+            elif phrase == 'that many':
+                links.append({'from': seg['index'], 'to': seg['index'],
+                              'kind': 'intra', 'detail': phrase})
+    return links
+
+
+def build_card(name, text, segments, whole=None):
     segments = sorted(segments, key=lambda s: s['index'])
     links = []
     for i, seg in enumerate(segments):
@@ -194,6 +257,27 @@ def build_card(name, text, segments, whole=False):
     for link in uniq:
         if link['from'] == link['to'] and link['kind'] == 'anaphora':
             link['kind'] = 'intra'
+    wlinks = _whole_phrase_links(segments, whole)
+    if wlinks:
+        heuristic_phrase = {(_ref_key(l)) for l in uniq
+                            if l.get('detail') in (
+                                'this way', 'that many', 'the rest',
+                                'those cards', 'that card')}
+        whole_map = {_ref_key(l): l for l in wlinks}
+        # Use tree-derived phrase links only when they change a target/kind
+        # and never introduce a quantity/anaphora self-link.
+        better = False
+        for key in heuristic_phrase & set(whole_map):
+            h = next(l for l in uniq if _ref_key(l) == key)
+            w = whole_map[key]
+            if (w['to'], w['kind']) != (h['to'], h['kind']):
+                better = True
+        if better and all(not (l['from'] == l['to'] and
+                               l['kind'] in ('quantity', 'anaphora'))
+                          for l in wlinks):
+            uniq = [l for l in uniq if l.get('detail') not in (
+                'this way', 'that many', 'the rest',
+                'those cards', 'that card')] + wlinks
     _assign_link_ids(uniq)
     _apply_scalars(segments, uniq)
     return {
@@ -204,5 +288,6 @@ def build_card(name, text, segments, whole=False):
                       'output': s.get('output')} for s in segments],
         'links': uniq,
         'entities': _entity_names(segments),
-        'whole_text_parse': bool(whole),
+        'whole_text_parse': bool(whole.get('ok')) if isinstance(whole, dict)
+        else bool(whole),
     }

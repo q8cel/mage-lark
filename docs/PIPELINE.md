@@ -309,9 +309,11 @@ and `self` (`this creature`/`this card`). A quantity/anaphora link always
 points at a preceding segment; `intra` is only for a genuinely same-segment
 referent. The scalar then carries the link id
 (`count_of.of.link`, `that_many.link`, or `card_type={kind:link,link}`), not
-the surface phrase. `whole_text_parse` records
-whether the grammar's `start: sentence+ (DOT sentence+)*` accepted the card's
-normalized text; sentence records remain the atomic fallback either way.
+the surface phrase. `whole_text_parse` is true only when the grammar's
+`start: sentence+ (DOT sentence+)*` accepted the card's normalized text; when
+true, phrase links are derived from the tree's sentence spans if every
+compiled segment maps to one sentence, otherwise the index heuristic remains.
+Sentence records remain the atomic fallback either way.
 
 Quoted abilities are parsed independently (`Interpreter._quoted_ability`) and
 kept as `{kind:'quoted_ability', quoted_text, sentence, token?}`. A named token

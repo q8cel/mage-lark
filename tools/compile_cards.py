@@ -29,7 +29,7 @@ _WHOLE = {}
 
 def _init_whole():
     from larkparser import build_parser
-    _WHOLE['parser'] = build_parser('interp')
+    _WHOLE['parser'] = build_parser('ptree')
 
 
 def _whole_one(text):
@@ -37,16 +37,24 @@ def _whole_one(text):
     t = re.sub(r'\n+', '. ', text)
     t = re.sub(r'\.\s*\.', '.', t).strip('. ')
     if not t:
-        return False
+        return {'ok': False, 'sentences': []}
     def _alarm(_signum, _frame):
         raise TimeoutError
     old = signal.signal(signal.SIGALRM, _alarm)
     signal.alarm(6)
     try:
-        parser.parse(t)
-        return True
+        tree = parser.parse(t)
+        spans = []
+        for node in tree.find_data('sentence'):
+            starts = getattr(node.meta, 'start_pos', None)
+            ends = getattr(node.meta, 'end_pos', None)
+            if starts is None or ends is None:
+                continue
+            spans.append({'start': starts, 'end': ends,
+                          'text': t[starts:ends]})
+        return {'ok': True, 'sentences': spans}
     except Exception:
-        return False
+        return {'ok': False, 'sentences': []}
     finally:
         signal.alarm(0)
         signal.signal(signal.SIGALRM, old)
@@ -91,7 +99,7 @@ def main():
     for name in sorted(by_card):
         segs = by_card[name]
         rec = card_ir.build_card(name, raw.get(name, ''), segs,
-                                 whole=whole.get(name, False))
+                                 whole=whole.get(name))
         if rec['links']:
             with_link += 1
         out.append(rec)
@@ -103,7 +111,9 @@ def main():
     dig = hashlib.sha256(payload).hexdigest()
     print(json.dumps({'cards': len(out), 'with_links': with_link,
                       'links': sum(len(r['links']) for r in out),
-                      'whole_text_parse': sum(whole.values()) if whole else None,
+                      'whole_text_parse': (sum(1 for v in whole.values()
+                                                if v.get('ok'))
+                                            if whole else None),
                       'sha256': dig, 'out': args.out}, indent=1))
 
 
