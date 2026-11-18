@@ -5716,6 +5716,19 @@ class Interpreter:
                             d['text'] = val['text']
                     else:
                         d['text'] = val
+                        raw = ' '.join(str(t) for t in ch.scan_values(
+                            lambda v: isinstance(v, Token)))
+                        if ('play a land from exile' in raw and
+                                'cast a spell from exile' in raw):
+                            d['event'] = {'any_of': [
+                                {'subject': 'you', 'verb': 'play',
+                                 'object': {'card_type': {'kind': 'type',
+                                                          'value': 'land'},
+                                            'from': 'exile'}},
+                                {'subject': 'you', 'verb': 'cast',
+                                 'object': {'card_type': {'kind': 'type',
+                                                          'value': 'spell'},
+                                            'from': 'exile'}}]}
             elif isinstance(ch, Token):
                 if ch.value == '\u2014' or ch.type == 'EMDASH':
                     continue
