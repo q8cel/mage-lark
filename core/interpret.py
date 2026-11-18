@@ -3912,6 +3912,11 @@ class Interpreter:
             d['except_by'] = self.interp(cts[-1])
         elif 'by' in toks and len(cts) > 1:
             d['blocked_by'] = self.interp(cts[-1])
+            amt = self._find_one(children, 'amount')
+            if 'more' in toks and 'than' in toks and amt is not None and \
+                    self._text(amt.children).strip().lower() == 'one':
+                if isinstance(d['blocked_by'], dict):
+                    d['blocked_by']['max'] = 1
         at = self._find_one(children, 'any_text')
         if at is not None:
             if 'unless' in toks:
