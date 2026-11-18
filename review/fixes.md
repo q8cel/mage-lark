@@ -869,3 +869,25 @@ cat /tmp/final_sets/{BIG,BLB,DFT,DSK,ECL,EOE,FDN,FIN,FRA,HOB,LCI,MKM,MSH,OM1,OTJ
 
 Final sequential rebuild: 22,217 records, SHA-256
 `7c4a588f7be92bc8ac1575091482a7e7e2cc32ea9a04b5358093943f22abaadf`.
+
+### Clean artifact build (post-v8 audit)
+
+Do not attach card IR links inside `compile_card.py`; that work belongs in a
+separate additive pass. Fresh-compile each set sequentially with `--workers 2`
+and a 900 s per-set timeout, concatenate in Standard order, then:
+
+```bash
+python tools/attach_card_links.py compile_standard.jsonl compile_standard.linked
+mv compile_standard.linked compile_standard.jsonl
+python tools/compile_cards.py --artifact compile_standard.jsonl \
+  --data Standard.json --out compile_cards.jsonl --whole-parse
+```
+
+The post-pass adds only `link` keys. On the v8 build: 230 links added,
+0 removed, 0 changed; a second run added 0 (idempotent). Fresh sets:
+`BIG ef...` etc.
+
+Timing: BIG 31 s with in-compiler links, 32 s without (282 cards; 0.11 s/card
+both ways). Full sequential build: 5,302 s (~88 min), 21 sets, workers=2.
+Final SHAs: fresh `ef223b4a68b0489e2cd06267ae80be22254d55ac0cae2b7c4277f979b797200d`;
+post-pass `14f713fe4fa8409c12532dffcc904f405918478c12bb937b66a90c0ee0f82d1f`.

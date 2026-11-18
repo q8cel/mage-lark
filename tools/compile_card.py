@@ -190,21 +190,6 @@ def _compile_card(card):
             'output': out,
         }
         records.append(rec)
-    # Card-local link ids are part of the sentence contract now, not only
-    # the card IR. Build them once per card and mutate private output copies.
-    try:
-        from card_ir import build_card
-        segs = []
-        for rec in records:
-            rec['output'] = copy.deepcopy(rec['output'])
-            segs.append({'index': rec['sentence_index'],
-                         'text': rec['original_text'],
-                         'resolved_text': rec['resolved_text'],
-                         'output': rec['output'],
-                         'anaphora': rec.get('anaphora')})
-        build_card(name, text, segs, whole=None)
-    except Exception:
-        pass
     return records, dict(stats), new_cache
 
 
