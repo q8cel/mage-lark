@@ -14,7 +14,7 @@ cd /home/q8/Documents/mage-lark
 
 Stdlib only (`http.server`), no build step, no CDN, no external requests.
 Defaults: `--port 8765`, `--artifact compile_standard.jsonl` (or `meta.json`'s
-`source`), claims read from the repo's `review/`.
+`source`), `--cards compile_cards.jsonl`, claims read from the repo's `review/`.
 
 ## Semantic views
 
@@ -29,13 +29,29 @@ is a stdlib schema-aware renderer over the interpreted output:
   and coverage stats. Every fragment carries the JSON `path` it came from.
   Unmapped constructs render as `⟨key: value⟩` and are counted as fallback.
 
-The UI has three views, cycled with `v` or the buttons in the output header:
+The UI has four views, cycled with `v` or the buttons in the output header:
 
 | view | content |
 | --- | --- |
 | semantic (default) | logic-form lines; click any fragment to select its JSON path for the bug note |
 | graph | layered left→right DAG (condition/cost gates, verb, object/amount); click a node to select it |
+| card | card-level pane: segments, cross-segment links, entities, `whole_text_parse` |
 | json | the raw tree, kept for debugging; the claim and token links jump here |
+
+The **card view** reads `compile_cards.jsonl` (indexed once by card name at
+startup, `--cards PATH` to override) and shows the card as one unit rather than
+dot-separated sentences: every segment in order with its index, text, link
+badges and its own semantic render; each `links` entry as `from → to · kind ·
+detail` (a click scrolls to the target segment and writes `segment 2 → 1:
+event_positive — condition refers to the previous segment event` inline under
+it); a segment badge `↔ N links (kinds)`; a red `self-link — suspicious` flag
+and tint whenever `from == to` (the current fixer bug), plus `dangling segment`
+when the target does not exist; a `whole_text_parse: true|false` badge so cards
+that rely on the link fallback are visible; and an entities pane with the quoted
+text and its parsed sentence side by side (the quote is located inside the
+segment output, e.g. Beau on Bonny Pall). Missing cards or a missing
+`compile_cards.jsonl` say so instead of failing; the view is additive and loads
+lazily on first open.
 
 The **parser view** (`p`, or the button under the sentence) runs
 `core/ptree.structure(text)` on demand — falling back to `ptree.nodes(text)` on a

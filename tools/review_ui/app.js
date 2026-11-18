@@ -25,6 +25,9 @@ const S = {
   view: 'semantic',
   parserOn: false,
   parserData: null,
+  cardData: null,
+  cardCache: new Map(),
+  cardLoading: new Set(),
   warnedBugNoAxis: false,
   busy: false,
 };
@@ -316,7 +319,7 @@ function renderOutput() {
   applyView();
 }
 
-const VIEWS = ['semantic', 'graph', 'json'];
+const VIEWS = ['semantic', 'graph', 'card', 'json'];
 
 function setView(view, opts = {}) {
   if (!VIEWS.includes(view)) return;
@@ -336,6 +339,7 @@ function applyView() {
   const toggle = $('#treeToggle');
   if (toggle) toggle.style.display = S.view === 'json' ? '' : 'none';
   applyStatusClasses();
+  if (S.view === 'card') ensureCard();
 }
 
 function hostFor(view) {
@@ -665,6 +669,234 @@ function gotoPath(path) {
   applyStatusClasses();
 }
 
+async function ensureCard() {
+  if (!S.item) return;
+  const id = S.item.id;
+  if (S.cardCache.has(id)) {
+    S.cardData = S.cardCache.get(id);
+    renderCard();
+    return;
+  }
+  if (S.cardLoading.has(id)) return;
+  S.cardLoading.add(id);
+  const host = $('#cardhost');
+  host.innerHTML = '<div class="cardloading"><span class="spin"></span> loading card…</div>';
+  const res = await api('/api/card?id=' + encodeURIComponent(id));
+  S.cardLoading.delete(id);
+  if (res.error) {
+    if (S.item && S.item.id === id && S.view === 'card') {
+      host.textContent = 'card view failed: ' + res.error;
+    }
+    return;
+  }
+  S.cardCache.set(id, res);
+  if (S.item && S.item.id === id) {
+    S.cardData = res;
+    if (S.view === 'card') renderCard();
+  }
+}
+
+function plainFragments(host, frags) {
+  let prev = '';
+  for (const frag of frags || []) {
+    if (prev && !/^[,;:.)\]]/.test(frag.text) && !/[([[]$/.test(prev)) {
+      host.appendChild(document.createTextNode(' '));
+    }
+    const span = document.createElement('span');
+    span.className = 'cfrag' + (frag.kind === 'fallback' ? ' fb' : '');
+    span.textContent = frag.text;
+    host.appendChild(span);
+    prev = frag.text;
+  }
+}
+
+function irLineEl(line, clickable) {
+  const row = document.createElement('div');
+  row.className = 'irline' + (line.kind === 'fallback' ? ' has-fallback' : '');
+  const role = document.createElement('span');
+  role.className = 'role role-' + line.role.replace(/[^A-Z_]/g, '_');
+  role.textContent = line.role;
+  row.appendChild(role);
+  const body = document.createElement('span');
+  body.className = 'irtext';
+  if (clickable) appendFragments(body, line.fragments || []);
+  else plainFragments(body, line.fragments || []);
+  row.appendChild(body);
+  return row;
+}
+
+function renderCard() {
+  const host = $('#cardhost');
+  host.textContent = '';
+  const data = S.cardData;
+  if (!data) {
+    host.textContent = 'card data not loaded';
+    return;
+  }
+  if (!data.found) {
+    const missing = document.createElement('div');
+    missing.className = 'cardmissing';
+    missing.textContent = 'card view unavailable — ' + (data.reason || 'not found');
+    host.appendChild(missing);
+    return;
+  }
+
+  const head = document.createElement('div');
+  head.className = 'cardhead';
+  head.innerHTML =
+    `<span class="cardtitle">${esc(data.card)}</span>
+     <span class="muted">${data.segments.length} segments · ${data.links.length} links</span>
+     <span class="wtp ${data.whole_text_parse ? 'on' : 'off'}"
+       title="${data.whole_text_parse
+         ? 'the whole card text was parsed in one pass'
+         : 'whole-card parse was not used — segments are joined by links'}">
+       whole_text_parse: ${data.whole_text_parse ? 'true' : 'false'}</span>`;
+  host.appendChild(head);
+
+  const links = document.createElement('div');
+  links.className = 'cardlinks';
+  if (!data.links.length) {
+    const none = document.createElement('div');
+    none.className = 'muted';
+    none.textContent = 'no cross-segment links';
+    links.appendChild(none);
+  }
+  for (const link of data.links) {
+    const row = document.createElement('div');
+    row.className = 'cardlink' +
+      (link.self ? ' selflink' : '') + (link.dangling ? ' dangling' : '');
+    const arrow = document.createElement('span');
+    arrow.className = 'larrow';
+    arrow.textContent = `${link.from} → ${link.to}`;
+    const kind = document.createElement('span');
+    kind.className = 'lkind kind-' + link.kind.replace(/[^a-z_]/g, '_');
+    kind.textContent = link.kind;
+    const detail = document.createElement('span');
+    detail.className = 'ldetail';
+    detail.textContent = link.detail_text;
+    row.appendChild(arrow);
+    row.appendChild(kind);
+    row.appendChild(detail);
+    if (link.self) {
+      const flag = document.createElement('span');
+      flag.className = 'selfflag';
+      flag.textContent = 'self-link — suspicious';
+      row.appendChild(flag);
+    }
+    if (link.dangling) {
+      const flag = document.createElement('span');
+      flag.className = 'selfflag';
+      flag.textContent = 'dangling segment';
+      row.appendChild(flag);
+    }
+    row.title = 'open the target segment with this detail';
+    row.addEventListener('click', () => focusLink(link));
+    links.appendChild(row);
+  }
+  host.appendChild(links);
+
+  for (const seg of data.segments) {
+    const wrap = document.createElement('div');
+    wrap.className = 'cardseg';
+    wrap.dataset.seg = String(seg.index);
+    const segHead = document.createElement('div');
+    segHead.className = 'seghead';
+    const num = document.createElement('span');
+    num.className = 'segnum';
+    num.textContent = `#${seg.index}`;
+    const text = document.createElement('span');
+    text.className = 'segtext';
+    text.textContent = seg.text;
+    segHead.appendChild(num);
+    segHead.appendChild(text);
+    if (seg.links.length) {
+      const badge = document.createElement('span');
+      badge.className = 'seglinks';
+      const kinds = [...new Set(seg.links.map((i) => data.links[i].kind))].join(', ');
+      badge.textContent = `↔ ${seg.links.length} link${seg.links.length === 1 ? '' : 's'} (${kinds})`;
+      badge.title = seg.links.map((i) => {
+        const link = data.links[i];
+        return `${link.from} → ${link.to}: ${link.kind} — ${link.detail_text}`;
+      }).join('\n');
+      segHead.appendChild(badge);
+    }
+    wrap.appendChild(segHead);
+    const ir = document.createElement('div');
+    ir.className = 'segir';
+    for (const line of (seg.ir && seg.ir.lines) || []) ir.appendChild(irLineEl(line, false));
+    wrap.appendChild(ir);
+    const detail = document.createElement('div');
+    detail.className = 'segdetail hidden';
+    wrap.appendChild(detail);
+    host.appendChild(wrap);
+  }
+
+  const ents = document.createElement('div');
+  ents.className = 'cardentities';
+  const title = document.createElement('div');
+  title.className = 'cardhead sub';
+  title.innerHTML = `<span class="cardtitle small">entities</span>
+    <span class="muted">${data.entities.length}</span>`;
+  ents.appendChild(title);
+  if (!data.entities.length) {
+    const none = document.createElement('div');
+    none.className = 'muted';
+    none.textContent = 'no entities';
+    ents.appendChild(none);
+  }
+  for (const ent of data.entities) {
+    const row = document.createElement('div');
+    row.className = 'entity';
+    const entHead = document.createElement('div');
+    entHead.className = 'enthead';
+    entHead.innerHTML = `<b>${esc(ent.id)}</b>
+      <span class="entkind">${esc(ent.kind)}</span>` +
+      (ent.self ? '<span class="entkind">self</span>' : '') +
+      (ent.segment_index !== null && ent.segment_index !== undefined
+        ? `<span class="muted">segment ${ent.segment_index}</span>` : '');
+    row.appendChild(entHead);
+    const grid = document.createElement('div');
+    grid.className = 'entgrid';
+    const quoted = document.createElement('div');
+    quoted.innerHTML = '<div class="lbl">quoted text</div>';
+    const pre = document.createElement('pre');
+    pre.textContent = ent.quoted_text || '(no quoted ability found)';
+    quoted.appendChild(pre);
+    const parsed = document.createElement('div');
+    parsed.innerHTML = '<div class="lbl">parsed sentence</div>';
+    if (ent.quote_ir && ent.quote_ir.lines && ent.quote_ir.lines.length) {
+      const mini = document.createElement('div');
+      mini.className = 'segir mini';
+      for (const line of ent.quote_ir.lines) mini.appendChild(irLineEl(line, false));
+      parsed.appendChild(mini);
+    } else {
+      const none = document.createElement('div');
+      none.className = 'muted';
+      none.textContent = '(not parsed)';
+      parsed.appendChild(none);
+    }
+    grid.appendChild(quoted);
+    grid.appendChild(parsed);
+    row.appendChild(grid);
+    ents.appendChild(row);
+  }
+  host.appendChild(ents);
+}
+
+function focusLink(link) {
+  const target = document.querySelector(`.cardseg[data-seg="${link.to}"]`);
+  if (!target) return;
+  target.scrollIntoView({ block: 'nearest' });
+  target.classList.add('flash');
+  setTimeout(() => target.classList.remove('flash'), 1400);
+  const detail = target.querySelector('.segdetail');
+  if (detail) {
+    detail.classList.remove('hidden');
+    detail.textContent = `segment ${link.from} → ${link.to}: ${link.kind} — ` +
+      `${link.detail_text}` + (link.self ? '  (self-link: suspicious)' : '');
+  }
+}
+
 async function toggleParser(force) {
   S.parserOn = force === undefined ? !S.parserOn : !!force;
   const btn = $('#parserBtn');
@@ -976,6 +1208,7 @@ async function loadItem(index) {
   S.accepted = new Set((res.claim_state && res.claim_state.accepted) || []);
   S.rejected = new Set((res.claim_state && res.claim_state.rejected) || []);
   S.claims = res.claims || [];
+  S.cardData = null;
   S.claimCur = 0;
   S.hits = new Set(S.path ? [S.path] : []);
   S.focusPath = S.path || null;

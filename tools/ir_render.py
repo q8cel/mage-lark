@@ -215,6 +215,11 @@ class Renderer:
         if "count" in node and "count" not in consumed:
             prefix = self.scalar(node["count"], path + ".count")
             consumed = consumed | {"count"}
+        if "status" in node and "status" not in consumed:
+            status = node["status"]
+            text = " ".join(str(v) for v in status) if isinstance(status, list) else str(status)
+            body = body + [self.tok(text, path + ".status")]
+            consumed = consumed | {"status"}
         if "unit" in node and "unit" not in consumed:
             body = body + [self.tok(str(node["unit"]), path + ".unit")]
             consumed = consumed | {"unit"}
@@ -574,7 +579,8 @@ class Renderer:
         return out, {"object", "of"}
 
     def _k_quoted_ability(self, node, path):
-        out = [self.tok("quote:", path)]
+        token = node.get("token")
+        out = [self.tok(f"quote({token}):" if token else "quote:", path)]
         sentence = node.get("sentence")
         if isinstance(sentence, list):
             for i, sub in enumerate(sentence):
@@ -588,7 +594,7 @@ class Renderer:
                     out += self.phrase(sub, sub_path, "value")
         else:
             out += self.phrase(sentence, path + ".sentence", "value")
-        return out, {"sentence"}
+        return out, {"sentence", "quoted_text", "token"}
 
     KIND_HANDLERS = {
         "type": _k_type, "this_card": _k_this_card, "number": _k_number,
@@ -637,9 +643,16 @@ class Renderer:
             consumed.add("up_to")
 
         this_that = node.get("this_that")
-        if this_that:
+        this_card = isinstance(node.get("card_type"), dict) and \
+            node["card_type"].get("kind") == "this_card"
+        if this_that and not this_card:
             out.append(self.tok(str(this_that), path + ".this_that"))
+        if this_that:
             consumed.add("this_that")
+        if node.get("anaphor"):
+            out.append(self.tok("ref", path + ".anaphor"))
+        if "anaphor" in node:
+            consumed.add("anaphor")
 
         if "power_toughness" in node:
             pt = node["power_toughness"]
@@ -696,6 +709,9 @@ class Renderer:
         if "library_position" in node:
             out.append(self.tok(pretty(node["library_position"]), path + ".library_position"))
             consumed.add("library_position")
+        if "target" in node and isinstance(node["target"], dict):
+            out += self.object_phrase(node["target"], path + ".target")
+            consumed.add("target")
         if "damage" in node:
             out.append(self.tok(f"{node['damage']} damage", path + ".damage"))
             consumed.add("damage")
@@ -1150,6 +1166,18 @@ class Renderer:
             out.append(self.tok(str(value), sub))
         elif key == "modal":
             out.append(self.tok(str(value), sub))
+        elif key == "relation":
+            out.append(self.tok(str(value), sub))
+        elif key == "subject":
+            out += self.phrase(value, sub, "obj")
+        elif key == "multiplier":
+            out += [self.tok("x", sub), self.scalar(value, sub)]
+        elif key == "shared":
+            out.append(self.tok("shared", sub))
+            out += self.phrase(value, sub, "obj") if isinstance(value, dict) else \
+                self.scalar(value, sub)
+        elif key == "value":
+            out += self.phrase(value, sub, "value")
         elif key == "direction":
             out.append(self.tok(str(value), sub))
         elif key == "instead":
@@ -1255,8 +1283,14 @@ class Renderer:
         handler = getattr(self, "clause_" + str(ctype), None) if ctype else None
         word = node.get("ability_word")
         xdef = node.get("xdef")
-        if word is not None or xdef is not None:
-            node = {k: v for k, v in node.items() if k not in ("ability_word", "xdef")}
+        loose_keywords = None
+        if ctype != "static_keyword":
+            loose_keywords = node.get("keywords", node.get("keyword"))
+        drop = {"ability_word", "xdef"} if (word is not None or xdef is not None) else set()
+        if loose_keywords is not None:
+            drop |= {"keywords", "keyword"}
+        if drop:
+            node = {k: v for k, v in node.items() if k not in drop}
         lines = []
         if handler is not None:
             lines = handler(node, path)
@@ -1275,6 +1309,10 @@ class Renderer:
         if word:
             lines.insert(0, self.line("WORD", path + ".ability_word",
                                       [self.tok(f"[{word}]", path + ".ability_word")]))
+        if loose_keywords is not None:
+            lines.append(self.line("KEYWORDS", path + ".keywords",
+                                   self._keyword_list(loose_keywords,
+                                                      path + ".keywords")))
         if xdef is not None:
             lines.append(self.line("XDEF", path + ".xdef",
                                    [self.tok("xdef =", path + ".xdef")] +

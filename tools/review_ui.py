@@ -430,9 +430,58 @@ class ApiError(Exception):
         self.message = message
 
 
+def link_detail_text(detail):
+    if isinstance(detail, str):
+        return detail
+    if isinstance(detail, dict):
+        if "surface" in detail or "antecedent" in detail:
+            return f"{detail.get('surface', '?')} -> {detail.get('antecedent', '?')}"
+        return ", ".join(f"{k}={v}" for k, v in detail.items())
+    return "" if detail is None else str(detail)
+
+
+def collect_quotes(output, segment_index):
+    """Quoted abilities inside one segment's output, with their token names."""
+    quotes = []
+
+    def walk(node, path, names):
+        if isinstance(node, dict):
+            local = set(names)
+            for key in ("token", "named", "name"):
+                value = node.get(key)
+                if isinstance(value, str):
+                    local.add(value)
+                elif isinstance(value, list):
+                    local |= {str(v) for v in value if isinstance(v, (str, int))}
+            if node.get("quoted_text") or node.get("kind") == "quoted_ability":
+                quotes.append({"segment_index": segment_index, "path": path,
+                               "quoted_text": node.get("quoted_text") or "",
+                               "sentence": node.get("sentence"),
+                               "names": sorted(local)})
+            for key, value in node.items():
+                walk(value, path + "." + key, local)
+        elif isinstance(node, list):
+            for i, value in enumerate(node):
+                walk(value, f"{path}[{i}]", names)
+
+    walk(output, f"segment:{segment_index}", set())
+    return quotes
+
+
+def entity_quote(entity_id, quotes):
+    target = (entity_id or "").lower()
+    for quote in quotes:
+        if target and target in {name.lower() for name in quote["names"]}:
+            return quote
+    for quote in quotes:
+        if target and target in (quote["quoted_text"] or "").lower():
+            return quote
+    return None
+
+
 class Pack:
     def __init__(self, pack_dir, artifact=None, claims_dir=None,
-                 import_path=None, do_import=True):
+                 import_path=None, do_import=True, cards=None):
         self.dir = Path(pack_dir).resolve()
         if not self.dir.is_dir():
             raise SystemExit(f"pack directory not found: {self.dir}")
@@ -466,6 +515,13 @@ class Pack:
         self.claims_mode = "none"
         self.claims_meta = {}
         self.parser_cache = {}
+        self.card_cache = {}
+        self.cards_path = self._find_cards(cards)
+        self.card_index = {}
+        if self.cards_path is not None:
+            self._index_cards()
+        else:
+            self.warnings.append("compile_cards.jsonl not found; the card view is disabled")
         self.artifact_path = self._find_artifact(
             artifact, required=any(hid not in self.embedded for hid in self.ids))
         self.claims_dir = Path(claims_dir).resolve() if claims_dir else ROOT / "review"
@@ -517,6 +573,33 @@ class Pack:
             return None
         raise SystemExit("artifact not found; pass --artifact compile_standard.jsonl "
                          f"(tried: {', '.join(str(c) for c in cands)})")
+
+    def _find_cards(self, cards):
+        cands = [Path(cards)] if cards else []
+        if not cards:
+            cands += [ROOT / "compile_cards.jsonl",
+                      self.dir.parent.parent / "compile_cards.jsonl"]
+        for cand in cands:
+            path = Path(cand)
+            if not path.is_absolute():
+                path = Path.cwd() / path
+            if path.exists():
+                return path.resolve()
+        return None
+
+    def _index_cards(self):
+        wanted = {self.key[hid]["card"] for hid in self.ids}
+        with self.cards_path.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                if not line.strip():
+                    continue
+                rec = json.loads(line)
+                if rec.get("card") in wanted:
+                    self.card_index[rec["card"]] = rec
+        missing = wanted - set(self.card_index)
+        if missing:
+            self.warnings.append(
+                f"{len(missing)} pack card(s) missing from {self.cards_path.name}")
 
     def _merge_items_json(self):
         """Fold items.json entries into the key map and cache embedded payloads."""
@@ -1108,6 +1191,73 @@ class Pack:
         atomic_write(out, payload)
         return {"path": str(out), "rows": written, "lines": len(lines) - 1}
 
+    def _render_card(self, rec, name):
+        segments = []
+        quotes = []
+        for seg in rec.get("segments") or []:
+            index = seg.get("index")
+            output = seg.get("output")
+            ir = ir_render.render(output)
+            segments.append({
+                "index": index,
+                "text": seg.get("text", ""),
+                "resolved_text": seg.get("resolved_text", ""),
+                "ir": {"lines": ir["lines"], "stats": ir["stats"]},
+                "links": [],
+            })
+            quotes += collect_quotes(output, index)
+        known = {seg["index"] for seg in segments}
+        links = []
+        for i, link in enumerate(rec.get("links") or []):
+            frm, to = link.get("from"), link.get("to")
+            entry = {"i": i, "from": frm, "to": to,
+                     "kind": link.get("kind") or "",
+                     "detail": link.get("detail"),
+                     "detail_text": link_detail_text(link.get("detail")),
+                     "self": frm == to,
+                     "dangling": frm not in known or to not in known}
+            links.append(entry)
+            for seg in segments:
+                if seg["index"] in (frm, to):
+                    seg["links"].append(i)
+        entities = []
+        for ent in rec.get("entities") or []:
+            quote = entity_quote(ent.get("id"), quotes)
+            quote_ir = None
+            if quote is not None and quote.get("sentence") is not None:
+                quote_ir = {"lines": ir_render.render(quote["sentence"])["lines"]}
+            entities.append({
+                "id": ent.get("id", ""), "kind": ent.get("kind", ""),
+                "self": bool(ent.get("self")),
+                "quoted_text": quote["quoted_text"] if quote else "",
+                "quote_ir": quote_ir,
+                "segment_index": quote["segment_index"] if quote else None,
+                "path": quote["path"] if quote else "",
+            })
+        return {"found": True, "card": name, "text": rec.get("text", ""),
+                "whole_text_parse": bool(rec.get("whole_text_parse")),
+                "segments": segments, "links": links, "entities": entities,
+                "quotes": quotes}
+
+    def card_view(self, hid):
+        with self.lock:
+            if hid in self.card_cache:
+                return self.card_cache[hid]
+            if hid not in self.key:
+                raise ApiError(404, f"unknown item id: {hid}")
+            name = self.key[hid]["card"]
+            if self.cards_path is None:
+                payload = {"found": False, "card": name,
+                           "reason": "compile_cards.jsonl not found"}
+            else:
+                rec = self.card_index.get(name)
+                payload = (self._render_card(rec, name) if rec else
+                           {"found": False, "card": name,
+                            "reason": f"{name} is not in compile_cards.jsonl"})
+            payload["id"] = hid
+            self.card_cache[hid] = payload
+            return payload
+
     def parser_view(self, hid):
         """Parser span roles for the judged sentence (cached per item)."""
         with self.lock:
@@ -1266,6 +1416,8 @@ class Pack:
             "claims_dir": str(self.claims_dir),
             "claims_json": self.claims_json_path.exists(),
             "claims_mode": self.claims_mode,
+            "cards": {"path": str(self.cards_path or ""),
+                      "records": len(self.card_index)},
             "claims_meta": {"generated_at": self.claims_meta.get("generated_at", ""),
                             "artifact_sha256": self.claims_meta.get("artifact_sha256", "")},
             "artifact_sha256": self.artifact_sha,
@@ -1407,6 +1559,9 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/item":
                 hid = (query.get("id") or [""])[0]
                 return self._json(200, self.server.pack.item_payload(hid))
+            if path == "/api/card":
+                hid = (query.get("id") or [""])[0]
+                return self._json(200, self.server.pack.card_view(hid))
             if path == "/api/parser":
                 hid = (query.get("id") or [""])[0]
                 return self._json(200, self.server.pack.parser_view(hid))
@@ -1490,7 +1645,7 @@ HELP = {
         "y/n again": "clear the decision",
     },
     "views": {
-        "v": "cycle semantic / graph / json output views",
+        "v": "cycle semantic / graph / card / json output views",
         "p": "parser span view for the judged sentence",
     },
     "json tree": {
@@ -1533,6 +1688,8 @@ def main(argv=None):
     ap.add_argument("--pack", type=Path, required=True, help="review pack directory")
     ap.add_argument("--artifact", type=Path, default=None,
                     help="artifact jsonl (default: meta.json source, else ./compile_standard.jsonl)")
+    ap.add_argument("--cards", type=Path, default=None,
+                    help="card-level IR jsonl (default: ./compile_cards.jsonl)")
     ap.add_argument("--claims-dir", type=Path, default=None,
                     help="directory with claims.json / audit TSVs (default: repo review/)")
     ap.add_argument("--port", type=int, default=8765)
@@ -1550,7 +1707,8 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     pack = Pack(args.pack, artifact=args.artifact, claims_dir=args.claims_dir,
-                import_path=args.import_path, do_import=not args.no_import)
+                import_path=args.import_path, do_import=not args.no_import,
+                cards=args.cards)
     if args.export:
         if args.import_path or (pack.import_path and pack.import_path.exists()):
             result = pack.import_labels(args.import_path)

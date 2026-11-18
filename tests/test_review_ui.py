@@ -203,7 +203,7 @@ def real_import_case(tmp, src):
     proc, port = start_server(pack)
     try:
         status, state = request_json(port, "/api/state")
-        check("real import: server started on the v6 pack", status == 200
+        check("real import: server started on the pack", status == 200
               and state["n"] == len(key), str(state.get("n")))
         check("real import: import counts", state["counts"]["imported"] == expected_imported,
               f"got {state['counts']['imported']}, expected {expected_imported}")
@@ -367,6 +367,36 @@ def main():
         check("semantic IR has a graph",
               isinstance(ir.get("graph", {}).get("nodes"), list)
               and isinstance(ir.get("graph", {}).get("edges"), list))
+        check("card index loaded", state["cards"]["records"] > 0,
+              str(state["cards"]))
+        pack_key = json.loads((pack / "key.json").read_text(encoding="utf-8"))
+        if "A022" in pack_key:
+            status, card = request_json(port, "/api/card?id=A022")
+            check("card view: Spider-Verse loaded",
+                  status == 200 and card["found"] and card["card"] == "Spider-Verse"
+                  and len(card["segments"]) == 5, str(card.get("card")))
+            check("card view: event_positive link 2->1",
+                  any(l["from"] == 2 and l["to"] == 1
+                      and l["kind"] == "event_positive" for l in card["links"]),
+                  str([(l["from"], l["to"], l["kind"]) for l in card["links"]]))
+            check("card view: segments in a link are marked",
+                  sum(1 for seg in card["segments"] if seg["links"]) >= 2)
+            check("card view: whole_text_parse badge",
+                  isinstance(card["whole_text_parse"], bool))
+            status, bonny = request_json(port, "/api/card?id=A031")
+            beau = [e for e in bonny.get("entities", []) if e["id"] == "Beau"]
+            check("card view: Beau keeps the quoted text",
+                  bool(beau) and "power and toughness" in beau[0]["quoted_text"],
+                  str(beau))
+            check("card view: Beau keeps the parsed sentence",
+                  bool(beau) and beau[0]["quote_ir"]
+                  and len(beau[0]["quote_ir"]["lines"]) >= 1)
+            status, brazen = request_json(port, "/api/card?id=A002")
+            check("card view: self-link flagged",
+                  any(link["self"] and link["from"] == link["to"]
+                      for link in brazen.get("links", [])),
+                  str([(l["from"], l["to"], l["kind"], l["self"])
+                       for l in brazen.get("links", [])]))
         check("resolved text and card context present",
               item.get("resolved_text") and len(item.get("cards", [])) >= 1)
         items_json = pack / "items.json"
