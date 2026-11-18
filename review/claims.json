@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "198a60b56d951c161d33552c597c3fad84c76fea8ce9fccca47a2b1243a78a5f",
- "generated_at": "2026-11-18T19:10:26",
- "artifact_mtime": "2026-11-18T18:43:00",
+ "artifact_sha256": "2e9019cab85d16e2ebee1c5c384259aebf098c42499e198f9fc8439f1285dc0b",
+ "generated_at": "2026-11-18T22:04:35",
+ "artifact_mtime": "2026-11-18T21:57:57",
  "counts": {
-  "records": 2671,
-  "claims": 3535,
+  "records": 2670,
+  "claims": 3536,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1681,
+   "content_loss": 1683,
    "empty_slot": 14,
    "invariant": 209,
-   "stringy": 1562
+   "stringy": 1561
   }
  },
  "records": [
@@ -11479,11 +11479,25 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.amount.set.card_type[].value",
-     "detail": "cards shuffled into your library this way",
+     "kind": "content_loss",
+     "path": null,
+     "detail": "cards",
      "severity": "medium",
-     "source": "artifact:output"
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "shuffled",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "library",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -23228,20 +23242,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "get",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Mica, Reader of Ruins",
-   "sid": "5c3a5ca68e9b",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }

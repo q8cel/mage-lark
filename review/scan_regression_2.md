@@ -39,3 +39,10 @@ Two different things were being counted; they are not comparable.
 ## 3. Claims
 
 Regenerated against `198a60b5` with the artifact-scan content-loss source (`review/certain_defects_artifact.tsv`: 2,175 lossy rows): **3,535 claims / 2,671 records** — stringy 1,562, content_loss 1,681, invariant 209, anaphora_agreement 69, empty_slot 14. Previous `7c4a588f` claims: 3,543 (stringy 1,570, content_loss 1,681); delta -8, entirely stringy.
+
+## 4. Follow-up artifact `2e9019ca…` (link propagation, keyword actions)
+
+- `amount.of` / `count_of.of` nodes with `kind: that_many|this_way`: **41 total, 0 without `link`** (all carry a link).
+- `type: static_ability` keyword lines for {Surveil, Scry, Discover, Saddle, Station, Spree, Bargain}: **0**.
+- Unresolved keyword items: **201 items / 85 values** (vs 321 / 90 on `198a60b5`); the seven keyword actions above no longer appear. Remaining top values: Teamwork 12, Mobilize 11, Storied 9, Increment 9, Dinosaurs 6, Tiered 6, Earthbend 6, Vehicles 5, Goblins 5, Spiders 5.
+- Claims against `2e9019ca`: **3,536** (2,670 records) — stringy 1,561 (-1), content_loss 1,683 (+2), invariant 209, anaphora_agreement 69, empty_slot 14. Total +1 vs `198a60b5` (3,535).

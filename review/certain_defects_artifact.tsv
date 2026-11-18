@@ -118,6 +118,7 @@ Portent of Calamity	af43420c4e47	3	24	mana cost	48	You may cast a spell from amo
 Portent of Calamity	af43420c4e47	3	24	mana cost	48	You may cast a spell from among the exiled cards without paying its mana cost if you exiled four or more cards this way
 Mockingbird	e1f149d88022	1	46	enter	46	You may have this creature enter as a copy of any creature on the battlefield with mana value less than or equal to the amount of mana spent to cast this creature, except it's a Bird in addition to its other types and it has flying
 Mockingbird	e1f149d88022	1	46	enter	46	You may have this creature enter as a copy of any creature on the battlefield with mana value less than or equal to the amount of mana spent to cast this creature, except it's a Bird in addition to its other types and it has flying
+Elixir	aca396050e56	2	15	cards shuffled library	45	You gain life equal to the number of cards shuffled into your library this way
 Captain Mar-Vell, Space-Born	6a8239716e05	1	22	though flash	44	Cosmic Awareness — As long as an opponent has cast a spell this turn, you may cast spells as though they had flash
 Captain Mar-Vell, Space-Born	6a8239716e05	1	22	though flash	44	Cosmic Awareness — As long as an opponent has cast a spell this turn, you may cast spells as though they had flash
 Close Encounter	53c62f83150f	0	22	cast spell	44	As an additional cost to cast this spell, choose a creature you control or a warped creature card you own in exile
@@ -1528,7 +1529,6 @@ Lupinflower Village	8304946eca79	3	15	land	15	{1}{W}, {T}, Sacrifice this land: 
 Maelstrom Pulse	6f2b49585798	0	15	name	15	Destroy target nonland permanent and all other permanents with the same name as that permanent
 Master's Councillors	5bf61493bdf1	1	15	creature	15	This creature gets +2/+0 for each graveyard with seven or more cards in it
 Meltstrider's Resolve	3e5c3f60f536	1	15	aura	15	When this Aura enters, enchanted creature fights up to one target creature an opponent controls
-Mica, Reader of Ruins	5c3a5ca68e9b	2	15	spell	15	If you do, copy that spell and you may choose new targets for the copy
 Morcant's Loyalist	78e1cb78d638	1	15	creature	15	When this creature dies, return another target Elf card from your graveyard to your hand
 Morcant's Loyalist	78e1cb78d638	1	15	creature	15	When this creature dies, return another target Elf card from your graveyard to your hand
 Mouth of the Storm	6da92071f813	2	15	get	15	When this creature enters, creatures your opponents control get -3/-0 until your next turn
