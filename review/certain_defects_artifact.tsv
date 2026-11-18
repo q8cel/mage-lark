@@ -85,8 +85,6 @@ Quistis Trepe	ef765334e8b7	0	27	spent spell	54	Blue Magic — When ~ enters, you
 Scarlet Spider, Ben Reilly	59e14f9e15fc	2	27	sensational save	54	Sensational Save — If ~ was cast using web-slinging, he enters with X +1/+1 counters on him, where X is the mana value of the returned creature
 Scarlet Spider, Ben Reilly	59e14f9e15fc	2	27	sensational save	54	Sensational Save — If ~ was cast using web-slinging, he enters with X +1/+1 counters on him, where X is the mana value of the returned creature
 Scarlet Spider, Ben Reilly	59e14f9e15fc	2	27	sensational save	54	Sensational Save — If ~ was cast using web-slinging, he enters with X +1/+1 counters on him, where X is the mana value of the returned creature
-The Masamune	4e232de51d5b	1	27	dying time	54	"Equipped creature has ""If a creature dying causes a triggered ability of this creature or an emblem you own to trigger, that ability triggers an additional time."""
-The Masamune	4e232de51d5b	1	27	dying time	54	"Equipped creature has ""If a creature dying causes a triggered ability of this creature or an emblem you own to trigger, that ability triggers an additional time."""
 Black Widow, Super Spy	110ba3a3b129	3	26	nonland spent	52	If you don't, you may cast the exiled nonland card until end of turn and mana of any type can be spent to cast that spell
 Black Widow, Super Spy	110ba3a3b129	3	26	nonland spent	52	If you don't, you may cast the exiled nonland card until end of turn and mana of any type can be spent to cast that spell
 Black Widow, Super Spy	110ba3a3b129	3	26	nonland spent	52	If you don't, you may cast the exiled nonland card until end of turn and mana of any type can be spent to cast that spell
@@ -165,8 +163,6 @@ Mindsparker	6da928a37087	1	20	creature player	40	Whenever an opponent casts a wh
 Scalding Viper // Steam Clean	d29b0ddb826b	0	20	creature player	40	Whenever an opponent casts a spell with mana value 3 or less, this creature deals 1 damage to that player
 Scalding Viper // Steam Clean	d29b0ddb826b	0	20	creature player	40	Whenever an opponent casts a spell with mana value 3 or less, this creature deals 1 damage to that player
 Spectacular Skywhale	2ca32a778aa5	2	20	cast creature	40	If five or more mana was spent to cast that spell, put three +1/+1 counters on this creature instead
-Summon: Bahamut	a715e7456d3d	2	20	creature equal	40	Mega Flare — This creature deals damage equal to the total mana value of other permanents you control to each opponent
-Summon: Bahamut	a715e7456d3d	2	20	creature equal	40	Mega Flare — This creature deals damage equal to the total mana value of other permanents you control to each opponent
 Sunspine Lynx	bddf7d003b8c	2	20	creature equal	40	When this creature enters, it deals damage to each player equal to the number of nonbasic lands that player controls
 Sunspine Lynx	bddf7d003b8c	2	20	creature equal	40	When this creature enters, it deals damage to each player equal to the number of nonbasic lands that player controls
 Tackle Artist	a54ae4c57942	2	20	cast creature	40	If five or more mana was spent to cast that spell, put two +1/+1 counters on this creature instead
@@ -187,10 +183,6 @@ Azula, Cunning Usurper	e4997ce20014	2	19	though flash	38	During your turn, you m
 Azula, Cunning Usurper	e4997ce20014	2	19	though flash	38	During your turn, you may cast cards exiled with ~ and you may cast them as though they had flash
 Floodpits Drowner	c7c08a932515	3	19	owners' libraries	38	{1}{U}, {T}: Shuffle this creature and target creature with a stun counter on it into their owners' libraries
 Fynn, the Fangbearer	8e58442ca4df	1	19	gets counters	38	Whenever a creature you control with deathtouch deals combat damage to a player, that player gets two poison counters
-Gwen Stacy // Ghost-Spider	67827a5a3379	1	19	play land	38	Whenever you play a land from exile or cast a spell from exile, put a +1/+1 counter on ~
-Gwen Stacy // Ghost-Spider	67827a5a3379	1	19	play land	38	Whenever you play a land from exile or cast a spell from exile, put a +1/+1 counter on ~
-Gwen Stacy // Ghost-Spider	67827a5a3379	1	19	play land	38	Whenever you play a land from exile or cast a spell from exile, put a +1/+1 counter on ~
-Gwen Stacy // Ghost-Spider	67827a5a3379	1	19	play land	38	Whenever you play a land from exile or cast a spell from exile, put a +1/+1 counter on ~
 Mightform Harmonizer	4d2b9892889c	0	19	power creature	38	Landfall — Whenever a land you control enters, double the power of target creature you control until end of turn
 Mightform Harmonizer	4d2b9892889c	0	19	power creature	38	Landfall — Whenever a land you control enters, double the power of target creature you control until end of turn
 Unlucky Cabbage Merchant	da779923d3aa	2	19	creature owner	38	If you search your library this way, put this creature on the bottom of its owner's library, then shuffle
@@ -361,8 +353,6 @@ Bagel and Schmear	af01b9d85543	3	14	nosh artifact	28	Nosh — {2}, {T}, Sacrific
 Bilbo, Thief in the Night	699742b7fef9	0	14	anywhere hand	28	Spells you cast from anywhere other than your hand cost {1} less to cast
 Bilbo, Thief in the Night	699742b7fef9	0	14	anywhere hand	28	Spells you cast from anywhere other than your hand cost {1} less to cast
 Bilbo, Thief in the Night	699742b7fef9	0	14	anywhere hand	28	Spells you cast from anywhere other than your hand cost {1} less to cast
-Branch of Vitu-Ghazi	7c52402b1752	3	14	steps phases	28	Until end of turn, you don't lose this mana as steps and phases end
-Brazen Collector	7c52402b1752	2	14	steps phases	28	Until end of turn, you don't lose this mana as steps and phases end
 Caustic Exhale	ebd30b1f1b39	0	14	cast spell	28	As an additional cost to cast this spell, behold a Dragon or pay {1}
 Champion of the Clachan	e3518f5abe3e	1	14	cast spell	28	As an additional cost to cast this spell, behold a Kithkin and exile it
 Champion of the Clachan	e3518f5abe3e	1	14	cast spell	28	As an additional cost to cast this spell, behold a Kithkin and exile it
@@ -407,9 +397,6 @@ Mudbutton Cursetosser	a94ebd85d16c	0	14	cast spell	28	As an additional cost to c
 Nettle Guard	773b33aa3eed	0	28	creature	28	Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, it gets +0/+2 until end of turn
 Pumpkin Bombardment	2cd25046f990	0	14	cast spell	28	As an additional cost to cast this spell, discard a card or pay {2}
 Pumpkin Bombardment	2cd25046f990	0	14	cast spell	28	As an additional cost to cast this spell, discard a card or pay {2}
-Raphael, Ninja Destroyer	7c52402b1752	2	14	steps phases	28	Until end of turn, you don't lose this mana as steps and phases end
-Raphael, Ninja Destroyer	7c52402b1752	2	14	steps phases	28	Until end of turn, you don't lose this mana as steps and phases end
-Raphael, Ninja Destroyer	7c52402b1752	2	14	steps phases	28	Until end of turn, you don't lose this mana as steps and phases end
 Redirect Lightning	18a7e0d96e77	0	14	cast spell	28	As an additional cost to cast this spell, pay 5 life or pay {2}
 Redirect Lightning	18a7e0d96e77	0	14	cast spell	28	As an additional cost to cast this spell, pay 5 life or pay {2}
 Rite of Renewal	68534a12072e	1	14	player library	28	Target player shuffles up to four target cards from their graveyard into their library
@@ -419,7 +406,6 @@ Robot Domination	301df3352e5a	0	28	enchantment	28	Whenever one or more creature 
 Rust Harvester	b57e1134ec21	1	28	creature	28	{2}, {T}, Exile an artifact card from your graveyard: Put a +1/+1 counter on this creature, then it deals damage equal to its power to any target
 Rust Harvester	b57e1134ec21	1	28	creature	28	{2}, {T}, Exile an artifact card from your graveyard: Put a +1/+1 counter on this creature, then it deals damage equal to its power to any target
 Sage of the Fang	f7b3178e00af	1	28	renew	28	Renew — {3}{G}, Exile this card from your graveyard: Put a +1/+1 counter on target creature, then double the number of +1/+1 counters on that creature
-Savage Ventmaw	7c52402b1752	2	14	steps phases	28	Until end of turn, you don't lose this mana as steps and phases end
 Sidequest: Raise a Chocobo // Black Chocobo	73a35fa1f217	0	28	enchantment	28	"When this enchantment enters, create a 2/2 green Bird creature token with ""Whenever a land you control enters, this token gets +1/+0 until end of turn."""
 Silvergill Mentor	73ea14bf905f	0	14	cast spell	28	As an additional cost to cast this spell, behold a Merfolk or pay {2}
 Silvergill Mentor	73ea14bf905f	0	14	cast spell	28	As an additional cost to cast this spell, behold a Merfolk or pay {2}
@@ -470,8 +456,6 @@ The Earth Crystal	6e498839a208	1	27	twice	27	If one or more +1/+1 counters would
 The Earth Crystal	6e498839a208	1	27	twice	27	If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead
 The Rise of Sozin // Fire Lord Sozin	f796f14d6f4d	2	27	total	27	When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control
 The Rise of Sozin // Fire Lord Sozin	f796f14d6f4d	2	27	total	27	When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control
-The Sentry, Golden Guardian	59d35cde9bbf	1	27	able	27	"When ~ enters, target opponent creates The Void, a legendary 5/5 black Horror Villain creature token with flying, indestructible, and ""The Void attacks each combat if able."""
-The Sentry, Golden Guardian	59d35cde9bbf	1	27	able	27	"When ~ enters, target opponent creates The Void, a legendary 5/5 black Horror Villain creature token with flying, indestructible, and ""The Void attacks each combat if able."""
 Traveling Chocobo	894a7626c4f1	2	27	time	27	If a land or Bird you control entering the battlefield causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time
 Traveling Chocobo	894a7626c4f1	2	27	time	27	If a land or Bird you control entering the battlefield causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time
 Traveling Chocobo	894a7626c4f1	2	27	time	27	If a land or Bird you control entering the battlefield causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time
@@ -486,14 +470,11 @@ Unstoppable Slasher	180b46a51c75	2	27	creature	27	When this creature dies, if it
 Unstoppable Slasher	180b46a51c75	2	27	creature	27	When this creature dies, if it had no counters on it, return it to the battlefield tapped under its owner's control with two stun counters on it
 Yoshimaru, Beloved Companion	7496bca0b293	0	27	plus	27	If one or more +1/+1 counters would be put on a creature you control, that many plus one +1/+1 counters are put on it instead
 Abzan Monument	8187c5624567	1	26	artifact	26	{1}{W}{B}{G}, {T}, Sacrifice this artifact: Create an X/X white Spirit creature token, where X is the greatest toughness among creatures you control
-Alien Invasion	111de245f810	0	26	able	26	"At the beginning of combat on your turn, create a 1/1 red Alien creature token with haste and ""This token attacks each combat if able."""
-Alien Invasion	111de245f810	0	26	able	26	"At the beginning of combat on your turn, create a 1/1 red Alien creature token with haste and ""This token attacks each combat if able."""
 Analyze the Pollen	b6d066f600d7	0	13	cast spell	26	As an additional cost to cast this spell, you may collect evidence 8
 Analyze the Pollen	b6d066f600d7	0	13	cast spell	26	As an additional cost to cast this spell, you may collect evidence 8
 Behind the Mask	bd72c535f25f	0	13	cast spell	26	As an additional cost to cast this spell, you may collect evidence 6
 Bite Down on Crime	bd72c535f25f	0	13	cast spell	26	As an additional cost to cast this spell, you may collect evidence 6
 Bogslither's Embrace	4723b177111d	0	13	cast spell	26	As an additional cost to cast this spell, blight 1 or pay {3}
-Conductive Machete	f89ab9de957e	0	13	equipment creature	26	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 Construct a Cosmic Cube	6f6e9943b8b4	0	26	enchantment	26	Whenever you draw your second card each turn, create a 2/1 black Villain creature token with menace and put a plan counter on this enchantment
 Construct a Cosmic Cube	6f6e9943b8b4	0	26	enchantment	26	Whenever you draw your second card each turn, create a 2/1 black Villain creature token with menace and put a plan counter on this enchantment
 Crimestopper Sprite	bd72c535f25f	0	13	cast spell	26	As an additional cost to cast this spell, you may collect evidence 6
@@ -502,7 +483,6 @@ Curator of Destinies	adfa4e678fc0	2	26	creature	26	When this creature enters, lo
 Curator of Destinies	adfa4e678fc0	2	26	creature	26	When this creature enters, look at the top five cards of your library and separate them into a face-down pile and a face-up pile
 Curator of Destinies	adfa4e678fc0	2	26	creature	26	When this creature enters, look at the top five cards of your library and separate them into a face-down pile and a face-up pile
 Curator of Destinies	adfa4e678fc0	2	26	creature	26	When this creature enters, look at the top five cards of your library and separate them into a face-down pile and a face-up pile
-Cursed Windbreaker	f89ab9de957e	0	13	equipment creature	26	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 Daily Bugle Building	7ed9a014bd3d	2	13	smear campaign	26	Smear Campaign — {1}, {T}: Target legendary creature gains menace until end of turn
 Daily Bugle Building	7ed9a014bd3d	2	13	smear campaign	26	Smear Campaign — {1}, {T}: Target legendary creature gains menace until end of turn
 Dashing Bloodsucker	8ec8cde52333	0	26	creature	26	Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, this creature gets +2/+0 and gains lifelink until end of turn
@@ -510,8 +490,6 @@ Deadly Cover-Up	bd72c535f25f	0	13	cast spell	26	As an additional cost to cast th
 Deadly Cover-Up	bd72c535f25f	0	13	cast spell	26	As an additional cost to cast this spell, you may collect evidence 6
 Digsite Conservator	e6377f2cdb93	0	13	creature single	26	Sacrifice this creature: Exile up to four target cards from a single graveyard
 Dispelling Exhale	01b104ec4014	0	13	cast spell	26	As an additional cost to cast this spell, you may behold a Dragon
-Dissection Tools	f89ab9de957e	0	13	equipment creature	26	When this Equipment enters, manifest dread, then attach this Equipment to that creature
-Dissection Tools	f89ab9de957e	0	13	equipment creature	26	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 Doran, Besieged by Time	c14382ff6406	1	26	between	26	Whenever a creature you control attacks or blocks, it gets +X/+X until end of turn, where X is the difference between its power and toughness
 Doran, Besieged by Time	c14382ff6406	1	26	between	26	Whenever a creature you control attacks or blocks, it gets +X/+X until end of turn, where X is the difference between its power and toughness
 Doubling Season	6f444c4118f0	1	26	twice	26	If an effect would put one or more counters on a permanent you control, it puts twice that many of those counters on that permanent instead
@@ -541,7 +519,6 @@ Infinite Coursework	57d271502149	3	13	controller step	26	Enchanted creature lose
 Inverted Iceberg // Iceberg Titan	1c43f369516a	0	13	tap untap	26	Whenever this creature attacks, you may tap or untap target artifact or creature
 Karn, Gilded Guardian	60ceefbc81ad	1	13	color among	26	When ~ enters, draw a card for each color among other artifacts you control
 Karn, Gilded Guardian	60ceefbc81ad	1	13	color among	26	When ~ enters, draw a card for each color among other artifacts you control
-Killer's Mask	f89ab9de957e	0	13	equipment creature	26	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 Omnipresence	d2621649ce38	0	26	costs	26	You may cast spells with mana value less than or equal to the number of creatures you control from your hand without paying their mana costs
 Omnipresence	d2621649ce38	0	26	costs	26	You may cast spells with mana value less than or equal to the number of creatures you control from your hand without paying their mana costs
 Omnipresence	d2621649ce38	0	26	costs	26	You may cast spells with mana value less than or equal to the number of creatures you control from your hand without paying their mana costs
@@ -797,8 +774,6 @@ Rotisserie Elemental	5a1321a2d8cd	3	22	creature	22	If you do, exile the top X ca
 Thornplate Intimidator	21f56ee79f44	1	22	creature	22	When this creature enters, target opponent loses 3 life unless they sacrifice a nonland permanent of their choice or discard a card
 Treasure Map // Treasure Cove	7af74c43f8ce	2	22	artifact	22	Then if there are three or more landmark counters on it, remove those counters, transform this artifact, and create three Treasure tokens
 Treasure Map // Treasure Cove	7af74c43f8ce	2	22	artifact	22	Then if there are three or more landmark counters on it, remove those counters, transform this artifact, and create three Treasure tokens
-Ygra, Eater of All	f12adbfce1a8	1	22	permanent	22	"Other creatures are Food artifacts in addition to their other types and have ""{2}, {T}, Sacrifice this permanent: You gain 3 life."""
-Ygra, Eater of All	f12adbfce1a8	1	22	permanent	22	"Other creatures are Food artifacts in addition to their other types and have ""{2}, {T}, Sacrifice this permanent: You gain 3 life."""
 Ark of Hunger	749ba011dee3	0	21	artifact	21	Whenever one or more cards leave your graveyard, this artifact deals 1 damage to each opponent and you gain 1 life
 Ark of Hunger	749ba011dee3	0	21	artifact	21	Whenever one or more cards leave your graveyard, this artifact deals 1 damage to each opponent and you gain 1 life
 Ashling, Rekindled // Ashling, Rimebound	5b1275c6be90	0	21	creature	21	Whenever this creature transforms into ~ and at the beginning of your first main phase, add two mana of any one color
@@ -927,6 +902,8 @@ Shepherd of the Clouds	10a0ccadd853	1	20	creature	20	When this creature enters, 
 Spelunking	460aa5593d1b	0	20	enchantment	20	When this enchantment enters, draw a card, then you may put a land card from your hand onto the battlefield
 Stalactite Stalker	932cf1585bf6	1	20	creature	20	At the beginning of your end step, if you descended this turn, put a +1/+1 counter on this creature
 Stalactite Stalker	932cf1585bf6	1	20	creature	20	At the beginning of your end step, if you descended this turn, put a +1/+1 counter on this creature
+Summon: Bahamut	a715e7456d3d	2	20	creature	20	Mega Flare — This creature deals damage equal to the total mana value of other permanents you control to each opponent
+Summon: Bahamut	a715e7456d3d	2	20	creature	20	Mega Flare — This creature deals damage equal to the total mana value of other permanents you control to each opponent
 Sunstar Lightsmith	9ff905d4292f	0	20	creature	20	Whenever you cast your second spell each turn, put a +1/+1 counter on this creature and draw a card
 Symbiote Spider-Man	6968778ca82f	0	20	creature	20	Whenever this creature deals combat damage to a player, look at that many cards from the top of your library
 Symbiote Spider-Man	6968778ca82f	0	20	creature	20	Whenever this creature deals combat damage to a player, look at that many cards from the top of your library
@@ -1104,8 +1081,6 @@ Mind Drill Assailant	76800fb3d32a	0	18	creature	18	Threshold — As long as ther
 Most Decrepit Old Bird // Speak Secrets	174c75524a21	1	18	creature	18	Threshold — This creature gets +1/+1 as long as there are seven or more cards in your graveyard
 Most Decrepit Old Bird // Speak Secrets	174c75524a21	1	18	creature	18	Threshold — This creature gets +1/+1 as long as there are seven or more cards in your graveyard
 Most Decrepit Old Bird // Speak Secrets	174c75524a21	1	18	creature	18	Threshold — This creature gets +1/+1 as long as there are seven or more cards in your graveyard
-Ms. Marvel, Kamala Khan	648792583a40	3	18	base	18	"Until end of turn, ~ gains ""~'s base power is equal to the number of cards in your hand."""
-Ms. Marvel, Kamala Khan	648792583a40	3	18	base	18	"Until end of turn, ~ gains ""~'s base power is equal to the number of cards in your hand."""
 Old-Growth Educator	8f8281d90a56	1	18	creature	18	Infusion — When this creature enters, put two +1/+1 counters on it if you gained life this turn
 Pummeler for Hire	6c346caec232	2	18	creature	18	When this creature enters, you gain X life, where X is the greatest power among Giants you control
 Rakdos, Patron of Chaos	7b4cc802ddfd	1	18	choice	18	At the beginning of your end step, target opponent may sacrifice two nonland, nontoken permanents of their choice
@@ -1149,8 +1124,6 @@ Stingcaster Mage	18bae6de316e	1	18	creature	18	When this creature enters, target
 Stingcaster Mage	18bae6de316e	1	18	creature	18	When this creature enters, target instant or sorcery card in your graveyard gains flashback until end of turn
 Stone by Sunlight	ed12c49e5392	1	18	types	18	Until end of turn, target creature becomes an artifact in addition to its other types and gains indestructible
 Strongbox Raider	b6d45f910cb6	0	18	creature	18	Raid — When this creature enters, if you attacked this turn, exile the top two cards of your library
-Summon: Primal Odin	94af75f09986	1	18	creature	18	"Zantetsuken — This creature gains ""Whenever this creature deals combat damage to a player, that player loses the game."""
-Summon: Primal Odin	94af75f09986	1	18	creature	18	"Zantetsuken — This creature gains ""Whenever this creature deals combat damage to a player, that player loses the game."""
 Sunpearl Kirin	b6ee793cf520	2	18	creature	18	When this creature enters, return up to one other target nonland permanent you control to its owner's hand
 Survey Mechan	d0c92be89be6	4	18	activate	18	This ability costs {X} less to activate, where X is the number of differently named lands you control
 The Endstone	6132219f9de0	1	18	becomes	18	At the beginning of your end step, your life total becomes half your starting life total, rounded up
@@ -1165,8 +1138,6 @@ The Thing, Ben Grimm	08f5d929c0ba	1	18	damage	18	Whenever one or more Heroes you
 The Thing, Ben Grimm	08f5d929c0ba	1	18	damage	18	Whenever one or more Heroes you control deal damage to a player, put two +1/+1 counters on ~
 Thranduil's Company	10998deb358b	0	18	turns	18	As long as you control another Elf, you may play an additional land on each of your turns
 Thranduil's Company	10998deb358b	0	18	turns	18	As long as you control another Elf, you may play an additional land on each of your turns
-Toby, Beastie Befriender	b2287c0bf674	0	18	alone	18	"When ~ enters, create a 4/4 white Beast creature token with ""This token can't attack or block alone."""
-Toby, Beastie Befriender	b2287c0bf674	0	18	alone	18	"When ~ enters, create a 4/4 white Beast creature token with ""This token can't attack or block alone."""
 Trystan, Callous Cultivator // Trystan, Penitent Culler	b94567e33183	1	18	creature	18	Whenever this creature transforms into ~, mill three cards, then you may exile an Elf card from your graveyard
 Trystan, Callous Cultivator // Trystan, Penitent Culler	b94567e33183	1	18	creature	18	Whenever this creature transforms into ~, mill three cards, then you may exile an Elf card from your graveyard
 Unliving Legionnaire	d5f6964888e7	1	18	power	18	Power-up — {5}{B}{B}: Return up to one target creature card from your graveyard to your hand
@@ -1498,8 +1469,6 @@ Case of the Filched Falcon	3ba7ceef9a89	2	15	solved	15	Solved — {2}{U}, Sacrif
 Casey Jones, Jury-Rig Justiciar	e2e52ae21e80	2	15	among	15	You may reveal an artifact card from among them and put it into your hand
 Casey Jones, Jury-Rig Justiciar	e2e52ae21e80	2	15	among	15	You may reveal an artifact card from among them and put it into your hand
 Cathartic Parting	87c60d056fbf	0	15	library	15	The owner of target artifact or enchantment an opponent controls shuffles it into their library
-Choreographed Sparks	c5a4edfb7e76	5	15	token	15	"The copy gains haste and ""At the beginning of the end step, sacrifice this token."""
-Choreographed Sparks	c5a4edfb7e76	5	15	token	15	"The copy gains haste and ""At the beginning of the end step, sacrifice this token."""
 Chrome Companion	48a01f1efea3	1	15	owner	15	{2}, {T}: Put target card from a graveyard on the bottom of its owner's library
 Cinder Strike	94cabc184034	2	15	instead	15	It deals 4 damage to that creature instead if this spell's additional cost was paid
 Close Encounter	ebb334da45ce	1	15	chosen	15	~ deals damage equal to the power of the chosen creature or card to target creature
@@ -1830,6 +1799,7 @@ Claim Jumper	867d1b2a784b	2	13	process	13	Then if an opponent controls more land
 Claim Jumper	867d1b2a784b	2	13	process	13	Then if an opponent controls more lands than you, repeat this process once
 Clinquant Skymage	7ce7f028dced	1	13	creature	13	Whenever you draw a card, put a +1/+1 counter on this creature
 Codecracker Hound	d9d1e1087f85	0	13	creature	13	When this creature enters, look at the top two cards of your library
+Conductive Machete	f89ab9de957e	0	13	equipment	13	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 Contested Game Ball	c9545ba39fd6	1	13	artifact	13	{2}, {T}: Draw a card and put a point counter on this artifact
 Corpses of the Lost	d9605c8229b4	1	13	enchantment	13	When this enchantment enters, create a 2/2 black Skeleton Pirate creature token
 Corpses of the Lost	d9605c8229b4	1	13	enchantment	13	When this enchantment enters, create a 2/2 black Skeleton Pirate creature token
@@ -1841,8 +1811,11 @@ Crystal Barricade	5af5abae39f8	2	13	dealt	13	Prevent all noncombat damage that w
 Crystal Barricade	5af5abae39f8	2	13	dealt	13	Prevent all noncombat damage that would be dealt to other creatures you control
 Crystal Fragments // Summon: Alexander	ac19310102cb	0	13	dealt	13	Prevent all damage that would be dealt to creatures you control this turn
 Crystal Fragments // Summon: Alexander	ac19310102cb	0	13	dealt	13	Prevent all damage that would be dealt to creatures you control this turn
+Cursed Windbreaker	f89ab9de957e	0	13	equipment	13	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 Dauntless Dismantler	e4ca50db282a	1	13	creature	13	{X}{X}{W}, Sacrifice this creature: Destroy each artifact with mana value X
 Demonic Pact	78df64efd9f8	1	13	enchantment	13	This enchantment deals 4 damage to any target and you gain 4 life
+Dissection Tools	f89ab9de957e	0	13	equipment	13	When this Equipment enters, manifest dread, then attach this Equipment to that creature
+Dissection Tools	f89ab9de957e	0	13	equipment	13	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 District Mascot	2465a9b221a7	2	13	creature	13	Whenever this creature attacks while saddled, put a +1/+1 counter on it
 District Mascot	2465a9b221a7	2	13	creature	13	Whenever this creature attacks while saddled, put a +1/+1 counter on it
 District Mascot	2465a9b221a7	2	13	creature	13	Whenever this creature attacks while saddled, put a +1/+1 counter on it
@@ -1904,6 +1877,7 @@ K'un-Lun Warrior	f35856e93009	0	13	creature	13	When this creature enters, you ma
 Kalastria Highborn	92853d917bf1	0	13	creature	13	Whenever this creature or another Vampire you control dies, you may pay {B}
 Kalastria Highborn	92853d917bf1	0	13	creature	13	Whenever this creature or another Vampire you control dies, you may pay {B}
 Kaslem's Stonetree // Kaslem's Strider	78c36e60dc80	0	13	artifact	13	When this artifact enters, look at the top six cards of your library
+Killer's Mask	f89ab9de957e	0	13	equipment	13	When this Equipment enters, manifest dread, then attach this Equipment to that creature
 Last Light of Durin's Day	035ece265e1e	0	13	enchantment	13	Whenever a Mountain you control enters, put a quest counter on this enchantment
 Last Light of Durin's Day	035ece265e1e	0	13	enchantment	13	Whenever a Mountain you control enters, put a quest counter on this enchantment
 Last Light of Durin's Day	035ece265e1e	0	13	enchantment	13	Whenever a Mountain you control enters, put a quest counter on this enchantment
@@ -2142,7 +2116,6 @@ Nita, Forum Conciliator	de2ad195b074	3	12	spell	12	If that spell would be put in
 Peculiar Lighthouse	1ace79da412e	0	12	land	12	This land enters tapped unless a player has 13 or less life
 Pest Mascot	fd5d6a40416f	1	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
 Pit of Offerings	dcbaf300639a	1	12	land	12	When this land enters, exile up to three target cards from graveyards
-Practiced Scrollsmith	ba5bf320a3ae	1	12	creature	12	When this creature enters, exile target noncreature, nonland card from your graveyard
 Prosperity Tycoon	68971d795e38	1	12	creature	12	{2}, Sacrifice a token: This creature gains indestructible until end of turn
 Qiqirn Merchant	6ffcf51bcfe7	2	12	activate	12	This ability costs {1} less to activate for each Town you control
 Quistis Trepe	de2ad195b074	1	12	spell	12	If that spell would be put into a graveyard, exile it instead

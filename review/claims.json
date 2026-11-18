@@ -1,19 +1,33 @@
 {
- "artifact_sha256": "45b5f4230b2c032b8e4a9483b5316a268d6fe9fe52a47fbc5de30ee99eb2b959",
- "generated_at": "2026-11-17T02:44:12",
- "artifact_mtime": "2026-11-17T02:35:47",
+ "artifact_sha256": "7c4a588f7be92bc8ac1575091482a7e7e2cc32ea9a04b5358093943f22abaadf",
+ "generated_at": "2026-11-18T06:00:51",
+ "artifact_mtime": "2026-11-18T05:57:26",
  "counts": {
-  "records": 2562,
-  "claims": 3399,
+  "records": 2685,
+  "claims": 3543,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1706,
+   "content_loss": 1681,
    "empty_slot": 14,
    "invariant": 209,
-   "stringy": 1401
+   "stringy": 1570
   }
  },
  "records": [
+  {
+   "card": "A Realm Reborn",
+   "sid": "f0132bb92a12",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add one mana of any color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
   {
    "card": "A.I.M. Scientists",
    "sid": "1cab687d012a",
@@ -336,9 +350,9 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "to their owner's hand",
-     "severity": "medium",
+     "path": "[].effect.to.owner.of.ref",
+     "detail": "its",
+     "severity": "high",
      "source": "artifact:output"
     }
    ]
@@ -578,6 +592,20 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Ajani Resolute",
+   "sid": "c2dcf0bb6c98",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Creatures you control get +2/+2.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -853,11 +881,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "able",
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token attacks each combat if able.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -1785,7 +1813,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.token.quote",
+     "path": "[].effect.token.quote.quoted_text",
      "detail": "\"At the beginning of combat on your turn, if a card was put into exile this turn, put a +1/+1 counter on this token.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -1890,6 +1918,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell and whenever you draw your third card each turn, put a +1/+1 counter on this creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect[].quote.sentence[].trigger.event.object.card_type[].value",
      "detail": "noncreature spell",
      "severity": "medium",
@@ -1913,6 +1948,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "Job select",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "At Knifepoint",
+   "sid": "f7df999982f4",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2094,6 +2143,20 @@
    ]
   },
   {
+   "card": "Avatar of Burgeoning Echoes",
+   "sid": "2eaa17716d86",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[\u221210]: Put a +1/+1 counter on target creature for each land you control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Avengers Assemble!",
    "sid": "4360099ee0a6",
    "sentence_index": 2,
@@ -2256,6 +2319,20 @@
      "kind": "stringy",
      "path": "[].instead_of",
      "detail": "putting it into your hand",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Back on Track",
+   "sid": "a8a7328c1dc3",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2904,6 +2981,13 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"This creature's power and toughness are each equal to the number of lands you control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "enchantment",
@@ -3122,7 +3206,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature deals combat damage to a player, draw a card for each modified creature you control.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -3255,7 +3339,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever you cast a noncreature spell, this creature deals 1 damage to each opponent,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -3320,6 +3404,20 @@
      "kind": "stringy",
      "path": "[].effect.duration",
      "detail": "until they exile a nonland card",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Blacksmith's Talent",
+   "sid": "0b61c0455204",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Equipped creature gets +1/+1\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -3886,6 +3984,20 @@
    ]
   },
   {
+   "card": "Bonny Pall, Clearcutter",
+   "sid": "e9a0892b0dbc",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Beau's power and toughness are each equal to the number of lands you control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Boom Scholar",
    "sid": "defea5a4d247",
    "sentence_index": 0,
@@ -4220,18 +4332,11 @@
    "sentence_index": 3,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "steps",
+     "kind": "stringy",
+     "path": "[].effect.when",
+     "detail": "steps and phases end",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "phases",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -4325,18 +4430,11 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "steps",
+     "kind": "stringy",
+     "path": "[].effect.when",
+     "detail": "steps and phases end",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "phases",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -4361,8 +4459,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.duration",
-     "detail": "until you exile a nonland card",
+     "path": "[].effect.duration.card.value",
+     "detail": "a nonland card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -4375,8 +4473,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.duration",
-     "detail": "until you exile a nonland card",
+     "path": "[].effect.duration.card.value",
+     "detail": "a nonland card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -4565,6 +4663,20 @@
    ]
   },
   {
+   "card": "Brimstone Roundup",
+   "sid": "4f4b4c2a1564",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Brineborn Cutthroat",
    "sid": "0ac68f939ca4",
    "sentence_index": 1,
@@ -4624,6 +4736,20 @@
      "detail": "artifact",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Broodrage Mycoid",
+   "sid": "420ba302da35",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -5069,6 +5195,20 @@
    ]
   },
   {
+   "card": "Call the Mountain Chocobo",
+   "sid": "2c183fee8de8",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Call the Spirit Dragons",
    "sid": "55915f6ecc24",
    "sentence_index": 2,
@@ -5128,6 +5268,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Candlestick",
+   "sid": "130e88b20cfe",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, surveil 2.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -6110,6 +6264,13 @@
    "sentence_index": 6,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever you cast a spell, draw a card.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "get",
@@ -6167,7 +6328,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"Whenever an artifact you control enters, this emblem deals 3 damage to any target.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -6188,7 +6349,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"Whenever you cast a spell, this emblem deals 5 damage to any target.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -6343,6 +6504,20 @@
    ]
   },
   {
+   "card": "Choco-Comet",
+   "sid": "2c183fee8de8",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Chocobo Kick",
    "sid": "1893bbd0313f",
    "sentence_index": 2,
@@ -6392,6 +6567,20 @@
    ]
   },
   {
+   "card": "Chocobo Racetrack",
+   "sid": "7eee51b56691",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Chomping Changeling",
    "sid": "6f32d67b357a",
    "sentence_index": 1,
@@ -6411,11 +6600,11 @@
    "sentence_index": 5,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "token",
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"At the beginning of the end step, sacrifice this token.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     },
     {
      "kind": "empty_slot",
@@ -6526,6 +6715,20 @@
   },
   {
    "card": "Circle of Power",
+   "sid": "0f84ee3b9431",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Circle of Power",
    "sid": "9558d37c602b",
    "sentence_index": 2,
    "claims": [
@@ -6617,6 +6820,20 @@
      "kind": "stringy",
      "path": "[].keywords.modifier",
      "detail": "for {'card_type': {'kind': 'type', 'value': 'Cats', 'note': 'unresolved'}}",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Clement, the Worrywort",
+   "sid": "79701842c073",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add {G} or {U}. Spend this mana only to cast a creature spell.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -6792,6 +7009,20 @@
      "kind": "stringy",
      "path": "[].xdef.xdef.fragment[]",
      "detail": "Mounts and/or Vehicles that entered the battlefield under your control this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Cloudspire Coordinator",
+   "sid": "e4cab2c656a8",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -7228,13 +7459,6 @@
      "detail": "equipment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -7491,6 +7715,20 @@
    ]
   },
   {
+   "card": "Cornered by Black Mages",
+   "sid": "0f84ee3b9431",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Corpses of the Lost",
    "sid": "6967421d0fab",
    "sentence_index": 0,
@@ -7698,6 +7936,13 @@
    "sid": "28b9c9463d36",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -8296,6 +8541,20 @@
    ]
   },
   {
+   "card": "Curious Inquiry",
+   "sid": "ec660f239c1d",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature deals combat damage to a player, investigate.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Curse-Marred Demon",
    "sid": "c7b49e940692",
    "sentence_index": 1,
@@ -8381,13 +8640,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "equipment",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -9017,6 +9269,20 @@
    ]
   },
   {
+   "card": "Deconstruction Hammer",
+   "sid": "10abc701a35e",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"{3}, {T}, Sacrifice ~: Destroy target artifact or enchantment.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Deep Goblin Skulltaker",
    "sid": "932cf1585bf6",
    "sentence_index": 1,
@@ -9027,6 +9293,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Defend the Rider",
+   "sid": "a8a7328c1dc3",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -9213,6 +9493,20 @@
    ]
   },
   {
+   "card": "Desculpting Blast",
+   "sid": "b47aba6fac63",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can block only creatures with flying.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Desecration Demon",
    "sid": "97943e364a45",
    "sentence_index": 1,
@@ -9305,6 +9599,20 @@
      "kind": "stringy",
      "path": "[].effect.inner.card.items[]",
      "detail": "an artifact",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Diamond Pick-Axe",
+   "sid": "287b9bfeb1c9",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, create a Treasure token.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -9465,6 +9773,20 @@
    ]
   },
   {
+   "card": "Dire Flail // Dire Blunderbuss",
+   "sid": "3a2de521f270",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, you may sacrifice an artifact other than ~. When you do, this creature deals damage equal to its power to target creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Discerning Peddler",
    "sid": "16a76f88b44a",
    "sentence_index": 1,
@@ -9571,13 +9893,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "equipment",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -9859,6 +10174,20 @@
      "path": "[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Down in the Valley",
+   "sid": "435133ba1c37",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Landfall \u2014 Whenever a land you control enters, create a 1/1 green Elf creature token.\"",
+     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -10185,7 +10514,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature deals combat damage to a player, destroy target artifact a player controls.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -10297,7 +10626,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"When this creature deals combat damage, sacrifice this creature.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -10588,6 +10917,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "D\u00e1in Ironfoot",
+   "sid": "29fa4d099b70",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Equipped creature gets +1/+0\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -10945,6 +11288,20 @@
      "detail": "bad_amount: amount='one mana of the chosen color'",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Edgewall Pack",
+   "sid": "0437e215688f",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -11572,6 +11929,20 @@
    ]
   },
   {
+   "card": "Enduring Vitality",
+   "sid": "44b29bc2e34f",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add one mana of any color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Enigma Drake",
    "sid": "2517fd145099",
    "sentence_index": 1,
@@ -11715,6 +12086,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Ertha Jo, Frontier Mentor",
+   "sid": "49822ec2e21e",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -11901,6 +12286,20 @@
    ]
   },
   {
+   "card": "Essenceknit Scholar",
+   "sid": "efd75e44367f",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever this token attacks, you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Etali, Primal Storm",
    "sid": "fc90d1c5827a",
    "sentence_index": 0,
@@ -11970,7 +12369,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"{2}{U}{B}: Turn this creature face up. If you can't, exile it, then you may cast the exiled card without paying its mana cost.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -12154,6 +12553,20 @@
      "kind": "stringy",
      "path": "[].effect.object",
      "detail": "a number between 0 and 10",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Experimental Confectioner",
+   "sid": "4fdc44e90cbd",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -12406,6 +12819,20 @@
   },
   {
    "card": "Faerie Slumber Party",
+   "sid": "532598e16ddd",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can block only creatures with flying.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Faerie Slumber Party",
    "sid": "88a86f60059e",
    "sentence_index": 0,
    "claims": [
@@ -12452,6 +12879,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"When this creature dies, return target creature to the battlefield tapped under its owner's control and you create a Treasure token.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "anaphora_agreement",
      "path": null,
      "detail": "self_binding",
@@ -12469,6 +12903,20 @@
      "kind": "stringy",
      "path": "[].effect.items[].keywords[]",
      "detail": "ward {1}",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Falcon, Winged Wonder",
+   "sid": "7181d894683f",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever Redwing attacks, surveil 1.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -13288,6 +13736,20 @@
   },
   {
    "card": "Fishing Pole",
+   "sid": "0fc6fc9ab85b",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{1}, {T}, Tap ~: Put a bait counter on ~.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Fishing Pole",
    "sid": "5aefe1c07999",
    "sentence_index": 2,
    "claims": [
@@ -13651,13 +14113,27 @@
    ]
   },
   {
+   "card": "Foggy Swamp Spirit Keeper",
+   "sid": "7203ca6f6bc7",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block or be blocked by non-Spirit creatures.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Food Fight",
    "sid": "95a4cde95c2c",
    "sentence_index": 0,
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"{2}, Sacrifice this artifact: this artifact deals damage to any target equal to 1 plus the number of permanents named ~ you control.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -13687,6 +14163,34 @@
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
      "detail": "evidence 3",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Forgotten Monument",
+   "sid": "b32e1ebd3ff7",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}, Pay 1 life: Add one mana of any color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Form a Posse",
+   "sid": "447a29c8fd58",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -13775,6 +14279,13 @@
    "sentence_index": 2,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "land",
@@ -13850,6 +14361,20 @@
      "detail": "aura",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Friendly Neighborhood",
+   "sid": "d167b564532b",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{1}, {T}: Target creature gets +1/+1 until end of turn for each creature you control. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -14022,6 +14547,20 @@
    ]
   },
   {
+   "card": "Full Steam Ahead",
+   "sid": "c0cc96eeefe1",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"This creature can't be blocked by more than one creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Furtive Courier",
    "sid": "315fe5584b6f",
    "sentence_index": 0,
@@ -14154,7 +14693,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"When this creature dies, put a number of +1/+1 counters equal to its power on up to one target creature.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -14644,7 +15183,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"{T}: Create a token that's a copy of target token you control that entered this turn.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -15089,6 +15628,20 @@
      "detail": "bare_condition: condition=that creature would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Gnawing Crescendo",
+   "sid": "52f8b73bfb6b",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -15674,10 +16227,31 @@
    ]
   },
   {
+   "card": "Great Divide Guide",
+   "sid": "e9ed2bc463ce",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add one mana of any color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Great Hall of the Biblioplex",
    "sid": "754183e8b57d",
    "sentence_index": 3,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever you cast an instant or sorcery spell, this creature gets +1/+0 until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.quote.sentence[].trigger.event.object.items[]",
@@ -15775,6 +16349,20 @@
      "detail": "among",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Greenhouse // Rickety Gazebo",
+   "sid": "6abb7d1680bb",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add one mana of any color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -16095,27 +16683,6 @@
   },
   {
    "card": "Gwen Stacy // Ghost-Spider",
-   "sid": "67827a5a3379",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "play",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "land",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Gwen Stacy // Ghost-Spider",
    "sid": "a70a0d6255fe",
    "sentence_index": 1,
    "claims": [
@@ -16139,6 +16706,20 @@
      "detail": "rather",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Gysahl Greens",
+   "sid": "2c183fee8de8",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -16360,6 +16941,20 @@
    ]
   },
   {
+   "card": "Harried Spearguard",
+   "sid": "0d1fd9ce394d",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Harsh Annotation",
    "sid": "fc949c81b839",
    "sentence_index": 1,
@@ -16556,6 +17151,20 @@
    ]
   },
   {
+   "card": "Hellspur Posse Boss",
+   "sid": "7c21875c174b",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Herald of Eternal Dawn",
    "sid": "05e60726f9aa",
    "sentence_index": 2,
@@ -16580,6 +17189,20 @@
      "detail": "bad_amount: amount='one mana of the chosen color'",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Herd Heirloom",
+   "sid": "45cdba32b275",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever this creature deals combat damage to a player, draw a card.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -16727,6 +17350,20 @@
      "detail": "bare_modifier: modifier=pay 2 life",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Hexing Squelcher",
+   "sid": "de8d0cd6a3d6",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Ward\u2014Pay 2 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -17143,7 +17780,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"Creatures you control have '{T}: Add {R}, {G}, or {W}.'\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -17221,6 +17858,20 @@
    ]
   },
   {
+   "card": "Hunter's Axe",
+   "sid": "b08040acbe52",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, Equipped creature gains your choice of trample or deathtouch until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Hurl into History",
    "sid": "6e13e61d7056",
    "sentence_index": 0,
@@ -17292,6 +17943,20 @@
      "kind": "stringy",
      "path": "[].effect.target.items[]",
      "detail": "sorcery spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Hydro-Man, Fluid Felon",
+   "sid": "2e6898723d5e",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"{T}: Add {U}.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -17599,6 +18264,20 @@
    ]
   },
   {
+   "card": "Imprisoned in the Moon",
+   "sid": "45c2a7a191ef",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add {C}\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Improvisation Capstone",
    "sid": "d2935142b033",
    "sentence_index": 1,
@@ -17626,9 +18305,9 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.duration",
-     "detail": "until you exile cards with total mana value 4 or greater",
-     "severity": "medium",
+     "path": "[].effect.duration.card.value",
+     "detail": "cards with total mana value 4 or greater",
+     "severity": "high",
      "source": "artifact:output"
     }
    ]
@@ -17914,6 +18593,20 @@
    ]
   },
   {
+   "card": "Insidious Roots",
+   "sid": "591b1d248144",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add one mana of any color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Inspired Tethermage",
    "sid": "a679d3a805bf",
    "sentence_index": 0,
@@ -18118,6 +18811,20 @@
      "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "creature card",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Into the Fae Court",
+   "sid": "ceb22802c8f0",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can block only creatures with flying.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18377,6 +19084,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "Double strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Iron Hills Blacksmith",
+   "sid": "cadc7d28b026",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Equipped creature gets +1/+0\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18852,6 +19573,20 @@
    ]
   },
   {
+   "card": "Judith, Carnage Connoisseur",
+   "sid": "a8e055aa9f77",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"When this token dies, an instant or sorcery spell deals 2 damage to each opponent.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Jumbo Cactuar",
    "sid": "ad6698746456",
    "sentence_index": 0,
@@ -18957,10 +19692,45 @@
    ]
   },
   {
+   "card": "Ka-Zar of the Savage Land",
+   "sid": "846a34b8dea0",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Landfall \u2014 Whenever a land you control enters, put a +1/+1 counter on Zabu.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Kaito, Bane of Nightmares",
+   "sid": "bb422c9f3f2f",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Ninjas you control get +1/+1.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Kaito, Cunning Infiltrator",
    "sid": "244ee8e7db6d",
    "sentence_index": 4,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever a player casts a spell, you create a 2/1 blue Ninja creature token.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -19256,6 +20026,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever ~ deals combat damage to a player, exile the top card of your library. You may play that card this turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: if=~ is a scout",
@@ -19350,13 +20127,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "equipment",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -19476,6 +20246,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "First strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Kiora of Salt and Sand",
+   "sid": "c56794b57e8b",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[\u22128]: Create an 8/8 blue Leviathan creature token with hexproof.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -19833,6 +20617,20 @@
   },
   {
    "card": "Kuja, Genome Sorcerer // Trance Kuja, Fate Defied",
+   "sid": "a4020ba077a7",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Kuja, Genome Sorcerer // Trance Kuja, Fate Defied",
    "sid": "c920649b7424",
    "sentence_index": 0,
    "claims": [
@@ -19892,6 +20690,13 @@
    "sid": "88b623a0f5f0",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}, Sacrifice this token: Add three mana of any one color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.token.quote.sentence[].cost[].card.card_type.value",
@@ -20095,6 +20900,13 @@
    "sid": "6c15b75472dd",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -20784,6 +21596,20 @@
    ]
   },
   {
+   "card": "Lindblum, Industrial Regency // Mage Siege",
+   "sid": "0f84ee3b9431",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Lita, Little Orphan Amphibian",
    "sid": "12b02f84ceab",
    "sentence_index": 0,
@@ -20862,6 +21688,20 @@
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
      "detail": "creature card from your graveyard",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Lluwen, Exchange Student // Pest Friend",
+   "sid": "41072e45881d",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever this token attacks, you gain 1 life.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -21057,6 +21897,34 @@
    ]
   },
   {
+   "card": "Lord Skitter's Butcher",
+   "sid": "96fa55c3d6c7",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Lord Skitter, Sewer King",
+   "sid": "1de039b2ec8f",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Lord Skitter, Sewer King",
    "sid": "8cff53c522e1",
    "sentence_index": 0,
@@ -21122,6 +21990,20 @@
      "path": "[].effect.owner.of.ref",
      "detail": "its",
      "severity": "high",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Lotus Ring",
+   "sid": "7b5f754fc2c6",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"{T}, Sacrifice this creature: Add three mana of any one color.\"",
+     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -21361,6 +22243,20 @@
      "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Mabel, Heir to Cragflame",
+   "sid": "926baf0073a9",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Equipped creature gets +1/+1 and has vigilance, trample, and haste\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -22226,6 +23122,20 @@
    ]
   },
   {
+   "card": "Medic's Kitesail",
+   "sid": "8247c62e407e",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Melancholic Poet",
    "sid": "0f1fbc73aed3",
    "sentence_index": 0,
@@ -22953,7 +23863,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"{T}: Add {U}. Spend this mana only to cast a spell from anywhere other than your hand.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -23027,6 +23937,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Mole Man, Moloid Master",
+   "sid": "0cd8c02b5a59",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever this token attacks, you may mill a card.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -23423,6 +24347,20 @@
    ]
   },
   {
+   "card": "Moseo, Vein's New Dean",
+   "sid": "de20dffc2ab8",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever this token attacks, you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Mossborn Hydra",
    "sid": "be74d57143d6",
    "sentence_index": 2,
@@ -23480,6 +24418,20 @@
      "kind": "stringy",
      "path": "[].effect.items[].keywords[]",
      "detail": "first strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Mourner's Surprise",
+   "sid": "f972bf57b778",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -23554,11 +24506,11 @@
    "sentence_index": 3,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "base",
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"~'s base power is equal to the number of cards in your hand.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -23815,6 +24767,20 @@
    ]
   },
   {
+   "card": "Mysidian Elder",
+   "sid": "fc52649bd4a8",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Mystical Tether",
    "sid": "b82c016ec826",
    "sentence_index": 0,
@@ -24053,6 +25019,34 @@
    ]
   },
   {
+   "card": "New Horizons",
+   "sid": "994c259bc116",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add two mana of any one color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Nezumi Linkbreaker",
+   "sid": "90be7103e105",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Nick Fury, Agent of S.H.I.E.L.D.",
    "sid": "4f70243002e6",
    "sentence_index": 0,
@@ -24105,6 +25099,20 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Night of the Sweets' Revenge",
+   "sid": "a2daf9abefe7",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add {G}.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -24248,7 +25256,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature deals combat damage to a player, draw a card, then discard a card. A player loses life equal to the discarded card's mana value.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -24437,7 +25445,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"When this creature dies, return target creature to the battlefield tapped under its owner's control, then create a Wicked Role token attached to a Wicked Role ",
      "severity": "medium",
      "source": "artifact:output"
@@ -24760,6 +25768,20 @@
    ]
   },
   {
+   "card": "Ogre Chitterlord",
+   "sid": "a906e518ed4b",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Oildeep Gearhulk",
    "sid": "7cef6b71fdf5",
    "sentence_index": 0,
@@ -24806,6 +25828,13 @@
    "sid": "a376f585f7bc",
    "sentence_index": 6,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Creatures you control of the chosen type get +3/+3 and have vigilance and hexproof.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.quote.sentence[].effect.shared.target.controller",
@@ -25395,6 +26424,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"When this creature dies, return target creature to the battlefield tapped under its owner's control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "anaphora_agreement",
      "path": null,
      "detail": "self_binding",
@@ -25647,6 +26683,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"When this creature dies, return another target creature to the battlefield tapped under its owner's control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "anaphora_agreement",
      "path": null,
      "detail": "self_binding",
@@ -25740,6 +26783,20 @@
    ]
   },
   {
+   "card": "Pestbrood Sloth",
+   "sid": "883c5fd0fe49",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever this token attacks, you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Pests of Honor",
    "sid": "b566f5c57497",
    "sentence_index": 0,
@@ -25797,6 +26854,20 @@
      "kind": "stringy",
      "path": "[].effect.object",
      "detail": "a land card name",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Petrified Hamlet",
+   "sid": "9e8e7ff44e42",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add {C}.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -25929,6 +27000,20 @@
    ]
   },
   {
+   "card": "Pinnacle Emissary",
+   "sid": "5c615f600b47",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can block only creatures with flying.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Pinnacle Starcage",
    "sid": "d338b07a792d",
    "sentence_index": 1,
@@ -25939,6 +27024,20 @@
      "detail": "owner",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Pirate Hat",
+   "sid": "bc8852f4e842",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, draw a card, then discard a card.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -26380,13 +27479,6 @@
      "detail": "nonland card",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -26516,7 +27608,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"When this creature dies, return target creature to the battlefield under its owner's control and suspect the battlefield.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -26546,6 +27638,20 @@
      "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target artifact",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Prickly Pair",
+   "sid": "a151ccd7ea0e",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -26632,13 +27738,6 @@
      "detail": "twice x",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.counter.count",
-     "detail": "twice x",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -26661,6 +27760,13 @@
    "sid": "81da002b210f",
    "sentence_index": 3,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever you gain life, target opponent loses that much life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -26765,6 +27871,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Prosperity Tycoon",
+   "sid": "a151ccd7ea0e",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -27077,6 +28197,20 @@
    ]
   },
   {
+   "card": "Queen Brahne",
+   "sid": "e79d702efc15",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Queen's Bay Paladin",
    "sid": "2ef2464430be",
    "sentence_index": 1,
@@ -27272,7 +28406,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature deals combat damage, untap Equipped creature and you gain 2 life.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -27371,6 +28505,20 @@
    ]
   },
   {
+   "card": "Rabid Attack",
+   "sid": "d8b2b971e10e",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"When this creature dies, draw a card.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Radiant Lotus",
    "sid": "efe15d5f2ace",
    "sentence_index": 1,
@@ -27442,6 +28590,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "Double strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Ragost, Deft Gastronaut",
+   "sid": "5bd00a7e292c",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"{2}, {T}, Sacrifice this artifact: You gain 3 life.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -27544,6 +28706,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "enchantment",
@@ -27586,6 +28755,13 @@
    "sentence_index": 4,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Instant and sorcery spells you cast have storm.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "get",
@@ -27601,9 +28777,9 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.inner.to",
-     "detail": "to their owner's hand",
-     "severity": "medium",
+     "path": "[].effect.inner.to.owner.of.ref",
+     "detail": "its",
+     "severity": "high",
      "source": "artifact:output"
     }
    ]
@@ -27713,9 +28889,9 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "to their owner's hand",
-     "severity": "medium",
+     "path": "[].effect.to.owner.of.ref",
+     "detail": "its",
+     "severity": "high",
      "source": "artifact:output"
     }
    ]
@@ -27761,18 +28937,11 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "steps",
+     "kind": "stringy",
+     "path": "[].effect.when",
+     "detail": "steps and phases end",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "phases",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -27791,6 +28960,20 @@
    ]
   },
   {
+   "card": "Rat Out",
+   "sid": "6d273f3b9831",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Ratcatcher Trainee // Pest Problem",
    "sid": "1d92780339a1",
    "sentence_index": 0,
@@ -27799,6 +28982,20 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "first strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Ratcatcher Trainee // Pest Problem",
+   "sid": "d93cff89ef14",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -27994,6 +29191,20 @@
    ]
   },
   {
+   "card": "Realm of Koh",
+   "sid": "5493707f7398",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block or be blocked by non-Spirit creatures.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Realm-Scorcher Hellkite",
    "sid": "0c53bf47f771",
    "sentence_index": 2,
@@ -28107,6 +29318,20 @@
   },
   {
    "card": "Red Mage's Rapier",
+   "sid": "3760a1b8ac71",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever you cast a noncreature spell, this creature gets +2/+0 until end of turn\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Red Mage's Rapier",
    "sid": "fe9098ec253c",
    "sentence_index": 0,
    "claims": [
@@ -28137,6 +29362,20 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Redcap Gutter-Dweller",
+   "sid": "a8689fecf963",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -28194,6 +29433,13 @@
    "sid": "6f3197620a3a",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -28387,6 +29633,20 @@
   },
   {
    "card": "Requiem Monolith",
+   "sid": "164255d7a318",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever this creature is dealt damage, you draw that many cards and lose that much life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Requiem Monolith",
    "sid": "82fd1df33b8e",
    "sentence_index": 1,
    "claims": [
@@ -28471,6 +29731,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "protection from {'kind': 'type', 'value': 'Coyotes', 'note': 'unresolved'}",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Resonating Lute",
+   "sid": "830b18be22c2",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{T}: Add two mana of any one color. Spend this mana only to cast instant and sorcery spells.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -28677,6 +29951,13 @@
    "sid": "7fa1927a03f4",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"During your turn, this creature has first strike.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.quote.sentence[].effect.keywords[]",
@@ -29051,6 +30332,20 @@
    ]
   },
   {
+   "card": "Ringing Strike Mastery",
+   "sid": "d5384b056e45",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{5}: Untap this creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Rip, Spawn Hunter",
    "sid": "55e52ca187d2",
    "sentence_index": 0,
@@ -29183,9 +30478,9 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "to their owner's hand",
-     "severity": "medium",
+     "path": "[].effect.to.owner.of.ref",
+     "detail": "its",
+     "severity": "high",
      "source": "artifact:output"
     }
    ]
@@ -29265,6 +30560,13 @@
    "sid": "4ae116887a03",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -29399,6 +30701,13 @@
    "sentence_index": 2,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "land",
@@ -29509,6 +30818,20 @@
      "detail": "land",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Root Manipulation",
+   "sid": "bdf7e912a92f",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -29696,6 +31019,34 @@
      "kind": "stringy",
      "path": "[].effect.for_each.items.value",
      "detail": "creature that attacked this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Roxanne, Starfall Savant",
+   "sid": "79d496ec8fad",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"When this token enters, a tapped colorless artifact deals 2 damage to any target\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quotes[].quoted_text",
+     "detail": "\"When this token enters, a tapped colorless artifact deals 2 damage to any target\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quotes[].quoted_text",
+     "detail": "\"{T}: Add one mana of any color.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -30086,7 +31437,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature attacks, untap target attacking creature,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -30206,6 +31557,20 @@
    ]
   },
   {
+   "card": "Sanctum Lurker",
+   "sid": "0e907749dc7f",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[+2]: This planeswalker deals 1 damage to each opponent and you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Sandbender Scavengers",
    "sid": "2a59221ee082",
    "sentence_index": 0,
@@ -30309,18 +31674,11 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "steps",
+     "kind": "stringy",
+     "path": "[].effect.when",
+     "detail": "steps and phases end",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "phases",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -31081,6 +32439,34 @@
    ]
   },
   {
+   "card": "Selvala, Eager Trailblazer",
+   "sid": "75b050d703eb",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Send in the Pest",
+   "sid": "0025a7dc2ea6",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever this token attacks, you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Sephiroth, Fabled SOLDIER // Sephiroth, One-Winged Angel",
    "sid": "16a76f88b44a",
    "sentence_index": 1,
@@ -31099,6 +32485,13 @@
    "sid": "ea7a1c1181ec",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever a creature dies, target opponent loses 1 life and you gain 1 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -31702,6 +33095,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "enchantment",
@@ -31854,6 +33254,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Simulacrum Synthesizer",
+   "sid": "d2e2acd5ba09",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token gets +1/+1 for each artifact you control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -32424,8 +33838,22 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.duration",
-     "detail": "until you exile a nonland card",
+     "path": "[].effect.duration.card.value",
+     "detail": "a nonland card",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Song of Totentanz",
+   "sid": "d39b89917279",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -33573,6 +35001,20 @@
    ]
   },
   {
+   "card": "Station Monitor",
+   "sid": "af52db9d9217",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can block only creatures with flying.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Staunch Crewmate",
    "sid": "2a9521c6e006",
    "sentence_index": 1,
@@ -34103,6 +35545,13 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever this creature is dealt damage, put that many +1/+1 counters on target creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "anaphora_agreement",
      "path": null,
      "detail": "self_binding",
@@ -34266,6 +35715,20 @@
    ]
   },
   {
+   "card": "Sugar Coat",
+   "sid": "e021eb0ab8e0",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{2}, {T}, Sacrifice this artifact: You gain 3 life\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Sultai Monument",
    "sid": "9398a9e560da",
    "sentence_index": 1,
@@ -34320,23 +35783,9 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.amount",
-     "detail": "the total mana value of other permanents you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -34353,6 +35802,20 @@
      "detail": "get",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Summon: Fat Chocobo",
+   "sid": "f5b08a12349b",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -34418,11 +35881,11 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever this creature deals combat damage to a player, a player loses the game.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -34447,7 +35910,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature attacks, you may put a creature card from your hand onto the battlefield. If a creature card is an enchantment card, a creature card ent",
      "severity": "medium",
      "source": "artifact:output"
@@ -34535,6 +35998,20 @@
      "detail": "owner",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Sunfire Torch",
+   "sid": "7572c7b9bb0b",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, you may sacrifice ~. When you do, this creature deals 2 damage to any target.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -34741,8 +36218,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.inner.duration",
-     "detail": "until you exile another card with this creature",
+     "path": "[].effect.inner.duration.card.value",
+     "detail": "another card with this creature",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -34759,6 +36236,20 @@
      "detail": "bare_condition: condition=that creature would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Supper for Spiders",
+   "sid": "dd8149a0d84e",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{2}, {T}, Sacrifice this artifact: You gain 3 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -35029,6 +36520,20 @@
    ]
   },
   {
+   "card": "Synapse Necromage",
+   "sid": "3508228d795a",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Synchronized Charge",
    "sid": "0efd1f624af0",
    "sentence_index": 0,
@@ -35294,7 +36799,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.token.quote",
+     "path": "[].effect.token.quote.quoted_text",
      "detail": "\"This token can't block,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -35812,8 +37317,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.duration",
-     "detail": "until you exile a nonland card",
+     "path": "[].effect.duration.card.value",
+     "detail": "a nonland card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -35903,7 +37408,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"At the beginning of combat on your turn, put three +1/+1 counters on target artifact you control. If target artifact not a creature, target artifact becomes a ",
      "severity": "medium",
      "source": "artifact:output"
@@ -36100,6 +37605,20 @@
    ]
   },
   {
+   "card": "The Coming of Galactus",
+   "sid": "a6101c64401e",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Whenever Galactus attacks, destroy target land.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "The Dawning Archaic",
    "sid": "4fd8f30e2b5b",
    "sentence_index": 2,
@@ -36145,6 +37664,20 @@
      "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "The Dominion Bracelet",
+   "sid": "f49b2fbffbd9",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"{15}, Exile ~: You control target opponent during their next turn. This ability costs {X} less to activate, where X is this creature's power. Activate only as ",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -36288,8 +37821,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.duration",
-     "detail": "until you exile a nonland card",
+     "path": "[].effect.duration.card.value",
+     "detail": "a nonland card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36338,6 +37871,20 @@
    ]
   },
   {
+   "card": "The Legend of Kuruk // Avatar Kuruk",
+   "sid": "f8d150b9ce76",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block or be blocked by non-Spirit creatures.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "The Legend of Roku // Avatar Roku",
    "sid": "8659b419c961",
    "sentence_index": 1,
@@ -36371,18 +37918,11 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "dying",
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"If a creature dying causes a triggered ability of this creature or an emblem you own to trigger, that ability triggers an additional time.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "time",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -36428,7 +37968,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.token.quote",
+     "path": "[].effect.token.quote.quoted_text",
      "detail": "\"This token can't block,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -36491,7 +38031,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature deals combat damage to a player, draw cards equal to its toughness,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -36581,11 +38121,18 @@
      "source": "artifact:output"
     },
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "able",
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"The Void attacks each combat if able.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.token",
+     "detail": "The Void",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -36799,7 +38346,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature deals combat damage to a player, draw a card,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -36953,6 +38500,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token's power and toughness are each equal to the number of artifacts and/or creatures you control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.token.quote.sentence[].effect.value[]",
      "detail": "artifacts and/or creatures you control",
      "severity": "high",
@@ -36965,6 +38519,13 @@
    "sid": "b468901d9b99",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token's power and toughness are each equal to the number of artifacts and/or creatures you control.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.token.quote.sentence[].effect.value[]",
@@ -37463,11 +39024,11 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "alone",
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't attack or block alone.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
@@ -37520,7 +39081,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"No more than one creature can attack this planeswalker each combat.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -37654,6 +39215,20 @@
    ]
   },
   {
+   "card": "Totentanz, Swarm Piper",
+   "sid": "6b201d69e1bc",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Town Greeter",
    "sid": "26cebf7b06c9",
    "sentence_index": 2,
@@ -37781,6 +39356,20 @@
      "kind": "stringy",
      "path": "[].cost[].card.card_type.value",
      "detail": "three artifact tokens",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Trash the Town",
+   "sid": "00654a6dc354",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Whenever this creature deals combat damage to a player, draw two cards.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -38122,6 +39711,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"{1}, {T}: Tap target creature. Return ~ to its owner's hand.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.quote.sentence[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
@@ -38438,6 +40034,20 @@
    ]
   },
   {
+   "card": "Twisted Sewer-Witch",
+   "sid": "5b9f4d6bd8e7",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This creature can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Twists and Turns // Mycoid Maze",
    "sid": "34d90acb5631",
    "sentence_index": 1,
@@ -38502,6 +40112,20 @@
      "kind": "stringy",
      "path": "[].cost[].target.card_type[].value",
      "detail": "another untapped creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "U.S.Agent, John Walker",
+   "sid": "fcc12a9f2184",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"Equipped creature gets +1/+2\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -38773,7 +40397,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.quote",
+     "path": "[].effect.quote.quoted_text",
      "detail": "\"When this creature dies, return target creature to the battlefield tapped under its owner's control with a +1/+1 counter on target creature.\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -38854,6 +40478,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Unfortunate Accident",
+   "sid": "35c86611bdc4",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -39377,6 +41015,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "first strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Valor's Flagship",
+   "sid": "4646c4bfdb3a",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -39998,6 +41650,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Creatures you control get +2/+2 and have vigilance, trample, and indestructible.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.quote.sentence[].effect.shared.target.controller",
      "detail": "you control",
      "severity": "medium",
@@ -40139,6 +41798,20 @@
    ]
   },
   {
+   "card": "Voracious Vermin",
+   "sid": "0437e215688f",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Voyage Home",
    "sid": "02a4fac1e7d9",
    "sentence_index": 0,
@@ -40187,6 +41860,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}, Sacrifice this token: Add one mana of any color.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.token.quote.sentence[].cost[].card.card_type.value",
      "detail": "this token",
      "severity": "medium",
@@ -40201,7 +41881,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.token.quote",
+     "path": "[].effect.token.quote.quoted_text",
      "detail": "\"This token gets +1/+1 for each other Rat you control,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -40342,6 +42022,20 @@
    ]
   },
   {
+   "card": "Wanted Griffin",
+   "sid": "90be7103e105",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "War Squeak",
    "sid": "711600770bf9",
    "sentence_index": 1,
@@ -40380,6 +42074,20 @@
      "detail": "bare_condition: if=a creature died this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Warehouse Tabby",
+   "sid": "431657c6df1d",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token can't block.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -40517,6 +42225,90 @@
    ]
   },
   {
+   "card": "Way of the Cryomancer",
+   "sid": "e12b3c2e1749",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[\u22123]: When you next cast an instant or sorcery spell this turn, copy an instant or sorcery spell. You may choose new targets for the copy.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Way of the Deathbringer",
+   "sid": "cf1c5e63266a",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[\u22122]: You may sacrifice a creature. If you do, create a 4/4 green Beast creature token with trample.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Way of the Healer",
+   "sid": "9555a8e5b408",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[\u22122]: Create a 2/2 colorless Wizard Soldier creature token named Cadet. Surveil 1.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Way of the Pyromancer",
+   "sid": "81d44ceb7718",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[+1]: Add {R}.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Way of the Warlord",
+   "sid": "1921cf344154",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[\u22124]: This planeswalker deals 2 damage to up to one target creature or planeswalker and 2 damage to target player.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Way of the Wildspeaker",
+   "sid": "f2d909264c04",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"[\u22124]: Create a 4/4 green Beast creature token with trample.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Wayspeaker Bodyguard",
    "sid": "4eccccf1fe32",
    "sentence_index": 0,
@@ -40527,6 +42319,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Weapons Manufacturing",
+   "sid": "5488804f2a2f",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"When this token leaves the battlefield, a colorless artifact token deals 2 damage to any target.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -40583,6 +42389,20 @@
      "detail": "cards",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Web-Shooters",
+   "sid": "3cc46f44dc23",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"Whenever this creature attacks, tap target creature an opponent controls.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -40733,7 +42553,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].quote",
+     "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature attacks, you gain 1 life,\"",
      "severity": "medium",
      "source": "artifact:output"
@@ -40762,6 +42582,20 @@
     {
      "kind": "stringy",
      "path": "[].effect[].token.named[]",
+     "detail": "The Tiger God",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].token.quote.quoted_text",
+     "detail": "\"The Tiger God can't be blocked by more than one creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].token.quote.token",
      "detail": "The Tiger God",
      "severity": "medium",
      "source": "artifact:output"
@@ -40857,6 +42691,13 @@
    "sid": "60816ed7b6f9",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.token.quote.quoted_text",
+     "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -41066,6 +42907,20 @@
      "detail": "exhaust",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Winter, Cursed Rider",
+   "sid": "d609717e281f",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.quoted_text",
+     "detail": "\"Ward\u2014Pay 2 life.\"",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -41428,6 +43283,20 @@
   },
   {
    "card": "Wrench",
+   "sid": "166c1a6c3f2d",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"{3}, {T}: Tap target creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Wrench",
    "sid": "f8e8725b8fed",
    "sentence_index": 1,
    "claims": [
@@ -41488,11 +43357,11 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "permanent",
+     "kind": "stringy",
+     "path": "[].effect[].quote.quoted_text",
+     "detail": "\"{2}, {T}, Sacrifice this permanent: You gain 3 life.\"",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     }
    ]
   },
