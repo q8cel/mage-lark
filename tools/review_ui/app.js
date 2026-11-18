@@ -360,9 +360,13 @@ function paneAView() {
   return S.view === 'json' ? 'semantic' : S.view;
 }
 
+let lastNarrow = null;
+
 function resolvedLayout() {
-  if (window.innerWidth < 1000) return 'stacked';
-  return S.splitLayout === 'auto' ? 'columns' : S.splitLayout;
+  if (S.splitLayout !== 'auto') return S.splitLayout;
+  // side by side at every width; stacked only as an explicit choice or when
+  // two panes would fall under ~240 px each
+  return window.innerWidth < 560 ? 'stacked' : 'columns';
 }
 
 function applyLayout() {
@@ -389,6 +393,12 @@ function applyLayout() {
     $('#paneAhost').appendChild(tree);
     $('#paneAhead').appendChild(toggle);
   }
+  const narrow = window.innerWidth < 1000;
+  document.body.classList.toggle('narrow', narrow);
+  if (narrow && lastNarrow !== true) {
+    document.querySelectorAll('#left .fold').forEach((det) => { det.open = false; });
+  }
+  lastNarrow = narrow;
   const claims = $('#claims');
   claims.classList.toggle('collapsed', S.claimsCollapsed);
   $('#claimsToggle').textContent = S.claimsCollapsed ? 'show' : 'hide';

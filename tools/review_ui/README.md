@@ -41,21 +41,25 @@ The UI has four views, cycled with `v` or the buttons in the output header:
 ### Split pane and narrow windows
 
 `w` (or the header `split` button) shows two panes at once: the selected
-semantic/graph/card view on the left, the JSON tree on the right. Above 1000px
-they sit side by side; below that they stack vertically with the sentence pinned
-at the top (capped at 30 vh, scrolls internally), the verdict/axis/note bar
-pinned at the bottom, and each pane given a 35 vh minimum and its own scroll, so
-the JSON pane scrolls horizontally inside its own box instead of the page. The
-claims panel starts collapsed on a narrow first run to keep that bottom bar
-compact, and the batch strip stays at the very bottom. The `layout` button cycles
-`auto → columns → stacked` (auto = stacked under 1000px, columns above). The
-choice, the split state and the claims-collapsed state live in `localStorage`
-under `review-ui-layout` and are restored on reload; wide windows default to
-side-by-side split, narrow ones to stacked split with both panes visible. Claims
-collapse with the `hide/show` button on their header. Switching views in split
-mode replaces only the left pane; the JSON tree keeps its own container. The
-verdict bar stays at the bottom of the right column (and of the viewport when
-stacked), so labelling never needs scrolling.
+semantic/graph/card view on the left, the JSON tree on the right. The panes are
+**side by side at every width** — 400 px each at 800 px, 300 px each at 600 px —
+and each scrolls inside itself (the JSON pane also scrolls horizontally inside
+its own box; card text wraps). The app fills `100dvh` and never scrolls the page:
+above 1000 px the three-column page is unchanged; below 1000 px the context strip
+(sentence, oracle text, parser) is compacted to at most 18 vh with its folds
+collapsed by default, the two panes take all remaining height in one row, and
+the verdict/axis/note bar sits at the bottom in normal flow (it never covers a
+pane). The claims panel starts collapsed on a narrow first run, and the batch
+strip stays at the very bottom.
+
+The `layout` button cycles `auto → columns → stacked`; `auto` means columns at
+every width down to a 560 px floor (below that two 240 px panes no longer fit,
+so `auto` stacks), and `stacked` remains an explicit fallback that splits the
+available height between the panes instead of stacking the page. Split, layout
+and claims state live in `localStorage` under `review-ui-layout`, restore on
+reload, and split defaults to on (stacked only at the floor or by choice).
+Switching views in split mode replaces only the left pane; the JSON tree keeps
+its own container.
 
 The **card view** reads `compile_cards.jsonl` (indexed once by card name at
 startup, `--cards PATH` to override) and shows the card as one unit rather than

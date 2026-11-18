@@ -358,10 +358,13 @@ def main():
         check("split layout is remembered in localStorage",
               "review-ui-layout" in app_js and "localStorage" in app_js
               and "case 'w'" in app_js and "toggleSplit" in app_js)
-        check("narrow layout is CSS-driven",
-              "max-width: 999px" in css and "layout-stacked" in css
-              and "position: fixed" in css and "overflow-x: hidden" in css
-              and ".panehost" in css)
+        check("narrow layout fills the viewport and keeps panes side by side",
+              "max-width: 999px" in css and "100dvh" in css
+              and "overflow: hidden" in css and "18vh" in css
+              and "grid-template-columns: 1fr 1fr" in css
+              and "layout-stacked" in css and "det.open = false" in app_js)
+        check("auto layout is columns with a narrow floor",
+              "innerWidth < 560" in app_js and "lastNarrow" in app_js)
 
         # ---- imported label shape ----------------------------------
         status, item = request_json(port, f"/api/item?id={rich_id}")
