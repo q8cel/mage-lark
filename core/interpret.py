@@ -3769,7 +3769,10 @@ class Interpreter:
         return str(children[0]).lower() if children else None
 
     def i_gift_action(self, children):
-        return self._card_action('gift', children)
+        d = self._card_action('gift', children)
+        d['kind'] = 'gift_ability'
+        d['gift_self'] = True
+        return d
 
     def i_explore_action(self, children):
         d = {'verb': 'explore'}
