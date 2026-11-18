@@ -57,7 +57,8 @@ def build_card(name, text, segments, whole=False):
                 ('this way', 'quantity'),
                 ('that many', 'quantity'),
                 ('the rest', 'anaphora'),
-                ('those cards', 'anaphora')):
+                ('those cards', 'anaphora'),
+                ('that card', 'anaphora')):
             if phrase not in low:
                 continue
             # "that many" / "this way" normally count an action in the same
