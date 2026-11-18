@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "2e9019cab85d16e2ebee1c5c384259aebf098c42499e198f9fc8439f1285dc0b",
- "generated_at": "2026-11-18T22:04:35",
- "artifact_mtime": "2026-11-18T21:57:57",
+ "artifact_sha256": "e35ef8b411a6e0faaac775994576f1755b7265b19590271525700aa3c90bdd70",
+ "generated_at": "2026-11-19T00:38:21",
+ "artifact_mtime": "2026-11-19T00:13:24",
  "counts": {
-  "records": 2670,
-  "claims": 3536,
+  "records": 2671,
+  "claims": 3538,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1683,
+   "content_loss": 1687,
    "empty_slot": 14,
    "invariant": 209,
-   "stringy": 1561
+   "stringy": 1559
   }
  },
  "records": [
@@ -11478,13 +11478,6 @@
    "sid": "aca396050e56",
    "sentence_index": 2,
    "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "cards",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -23249,6 +23242,20 @@
   },
   {
    "card": "Mica, Reader of Ruins",
+   "sid": "5c3a5ca68e9b",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "spell",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Mica, Reader of Ruins",
    "sid": "a7f9a7ef9673",
    "sentence_index": 1,
    "claims": [
@@ -23463,11 +23470,18 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.with.for_each.items.value",
-     "detail": "creature card exiled this way",
+     "kind": "content_loss",
+     "path": null,
+     "detail": "creature",
      "severity": "medium",
-     "source": "artifact:output"
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "exiled",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -30802,6 +30816,27 @@
   },
   {
    "card": "Rottenmouth Viper",
+   "sid": "4b9b32546d1e",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "permanent",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "sacrificed",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Rottenmouth Viper",
    "sid": "993d82711c4f",
    "sentence_index": 0,
    "claims": [
@@ -36813,13 +36848,6 @@
     },
     {
      "kind": "stringy",
-     "path": "[].condition.label.card_type[].value",
-     "detail": "sorcery card is exiled this way",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].condition.lists[].items[]",
      "detail": "an instant",
      "severity": "medium",
@@ -36838,6 +36866,13 @@
      "detail": "for as long as you control this creature",
      "severity": "medium",
      "source": "artifact:output"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "exiled",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
     },
     {
      "kind": "content_loss",
@@ -39659,20 +39694,6 @@
      "detail": "that crewed it this turn",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Turtles Forever",
-   "sid": "cf482a72c5b3",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "rest",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },

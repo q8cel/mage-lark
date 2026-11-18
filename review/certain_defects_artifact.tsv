@@ -33,6 +33,8 @@ Shadow of the Goblin	1879673ffaf4	2	25	play land enchantment	75	Undying Vengeanc
 Shadow of the Goblin	1879673ffaf4	2	25	play land enchantment	75	Undying Vengeance — Whenever you play a land or cast a spell from anywhere other than your hand, this enchantment deals 1 damage to each opponent
 Shadow of the Goblin	1879673ffaf4	2	25	play land enchantment	75	Undying Vengeance — Whenever you play a land or cast a spell from anywhere other than your hand, this enchantment deals 1 damage to each opponent
 Bark of Doran	6ae50147e2a1	1	23	damage equal rather	69	As long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness rather than its power
+Taster of Wares	b4f695693bae	3	34	exiled spent	68	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
+Taster of Wares	b4f695693bae	3	34	exiled spent	68	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
 Symbiote Spider-Man	753737f89df7	2	22	find new host	66	Find New Host — {2}{U/B}, Exile this card from your graveyard: Put a +1/+1 counter on target creature you control
 Symbiote Spider-Man	753737f89df7	2	22	find new host	66	Find New Host — {2}{U/B}, Exile this card from your graveyard: Put a +1/+1 counter on target creature you control
 Symbiote Spider-Man	753737f89df7	2	22	find new host	66	Find New Host — {2}{U/B}, Exile this card from your graveyard: Put a +1/+1 counter on target creature you control
@@ -118,7 +120,6 @@ Portent of Calamity	af43420c4e47	3	24	mana cost	48	You may cast a spell from amo
 Portent of Calamity	af43420c4e47	3	24	mana cost	48	You may cast a spell from among the exiled cards without paying its mana cost if you exiled four or more cards this way
 Mockingbird	e1f149d88022	1	46	enter	46	You may have this creature enter as a copy of any creature on the battlefield with mana value less than or equal to the amount of mana spent to cast this creature, except it's a Bird in addition to its other types and it has flying
 Mockingbird	e1f149d88022	1	46	enter	46	You may have this creature enter as a copy of any creature on the battlefield with mana value less than or equal to the amount of mana spent to cast this creature, except it's a Bird in addition to its other types and it has flying
-Elixir	aca396050e56	2	15	cards shuffled library	45	You gain life equal to the number of cards shuffled into your library this way
 Captain Mar-Vell, Space-Born	6a8239716e05	1	22	though flash	44	Cosmic Awareness — As long as an opponent has cast a spell this turn, you may cast spells as though they had flash
 Captain Mar-Vell, Space-Born	6a8239716e05	1	22	though flash	44	Cosmic Awareness — As long as an opponent has cast a spell this turn, you may cast spells as though they had flash
 Close Encounter	53c62f83150f	0	22	cast spell	44	As an additional cost to cast this spell, choose a creature you control or a warped creature card you own in exile
@@ -228,8 +229,6 @@ Fear of Exposure	a90d7e969f1a	0	17	cast spell	34	As an additional cost to cast t
 Fear of Isolation	35e0f7df7515	0	17	cast spell	34	As an additional cost to cast this spell, return a permanent you control to its owner's hand
 Frilled Sparkshooter	f2e4f3ef9052	1	17	creature lost	34	This creature enters with a +1/+1 counter on it if an opponent lost life this turn
 Jolene, Plundering Pugilist	363d0247b60a	0	17	power greater	34	Whenever you attack with one or more creatures with power 4 or greater, create a Treasure token
-Taster of Wares	b4f695693bae	3	34	spent	34	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
-Taster of Wares	b4f695693bae	3	34	spent	34	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
 The Rollercrusher Ride	3dab1c64af81	0	34	double	34	Delirium — If a source you control would deal noncombat damage to a permanent or player while there are four or more card types among cards in your graveyard, it deals double that damage instead
 The Rollercrusher Ride	3dab1c64af81	0	34	double	34	Delirium — If a source you control would deal noncombat damage to a permanent or player while there are four or more card types among cards in your graveyard, it deals double that damage instead
 The Rollercrusher Ride	3dab1c64af81	0	34	double	34	Delirium — If a source you control would deal noncombat damage to a permanent or player while there are four or more card types among cards in your graveyard, it deals double that damage instead
@@ -265,6 +264,11 @@ Lasyd Prowler	15f64ba2d864	0	16	creature equal	32	When this creature enters, you
 Lasyd Prowler	15f64ba2d864	0	16	creature equal	32	When this creature enters, you may mill cards equal to the number of lands you control
 Michelangelo's Technique	d01690d313f5	2	32	among	32	Put up to two creature cards with total mana value 6 or less from among them onto the battlefield and the rest on the bottom of your library in a random order
 Michelangelo's Technique	d01690d313f5	2	32	among	32	Put up to two creature cards with total mana value 6 or less from among them onto the battlefield and the rest on the bottom of your library in a random order
+Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
+Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
+Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
+Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
+Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
 Misleading Motes	816e16e56e0c	0	16	target creature	32	Target creature's owner puts it on their choice of the top or bottom of their library
 Nine-Lives Familiar	1d93dbaddc40	1	32	creature	32	When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
 Nine-Lives Familiar	1d93dbaddc40	1	32	creature	32	When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
@@ -302,6 +306,7 @@ Demand Answers	6650a14f7501	0	15	cast spell	30	As an additional cost to cast thi
 Demand Answers	6650a14f7501	0	15	cast spell	30	As an additional cost to cast this spell, sacrifice an artifact or discard a card
 Eaten Alive	6babf0406980	0	15	cast spell	30	As an additional cost to cast this spell, sacrifice a creature or pay {3}{B}
 Elixir	084acb14c3d2	1	15	artifact library	30	{5}, {T}, Exile this artifact: Shuffle all nonland cards from your graveyard into your library
+Elixir	aca396050e56	2	15	shuffled library	30	You gain life equal to the number of cards shuffled into your library this way
 Flowerfoot Swordmaster	c03eae390d28	1	30	creature	30	Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, Mice you control get +1/+0 until end of turn
 Illusion Spinners	747331e97a81	0	15	though flash	30	You may cast this spell as though it had flash if you control a Faerie
 Improvisation Capstone	d2935142b033	1	15	mana costs	30	You may cast any number of spells from among them without paying their mana costs
@@ -534,6 +539,8 @@ Raphael, Most Attitude	741031c9189b	2	13	until end	26	Whenever ~ attacks, until 
 Rebellious Captives	e73672bae0df	0	13	exhaust creature	26	Exhaust — {6}: Put two +1/+1 counters on this creature, then earthbend 2
 Restless Spire	7fa1927a03f4	2	26	land	26	"{U}{R}: Until end of turn, this land becomes a 2/1 blue and red Elemental creature with ""During your turn, this creature has first strike."""
 Restless Spire	7fa1927a03f4	2	26	land	26	"{U}{R}: Until end of turn, this land becomes a 2/1 blue and red Elemental creature with ""During your turn, this creature has first strike."""
+Rottenmouth Viper	4b9b32546d1e	1	13	permanent sacrificed	26	This spell costs {1} less to cast for each permanent sacrificed this way
+Rottenmouth Viper	4b9b32546d1e	1	13	permanent sacrificed	26	This spell costs {1} less to cast for each permanent sacrificed this way
 Scrounge for Eternity	24175650b649	0	13	cast spell	26	As an additional cost to cast this spell, sacrifice an artifact or creature
 Sephiroth, Fabled SOLDIER // Sephiroth, One-Winged Angel	ea7a1c1181ec	1	26	get	26	"Super Nova — As this creature transforms into ~, you get an emblem with ""Whenever a creature dies, target opponent loses 1 life and you gain 1 life."""
 Sephiroth, Fabled SOLDIER // Sephiroth, One-Winged Angel	ea7a1c1181ec	1	26	get	26	"Super Nova — As this creature transforms into ~, you get an emblem with ""Whenever a creature dies, target opponent loses 1 life and you gain 1 life."""
@@ -1529,6 +1536,7 @@ Lupinflower Village	8304946eca79	3	15	land	15	{1}{W}, {T}, Sacrifice this land: 
 Maelstrom Pulse	6f2b49585798	0	15	name	15	Destroy target nonland permanent and all other permanents with the same name as that permanent
 Master's Councillors	5bf61493bdf1	1	15	creature	15	This creature gets +2/+0 for each graveyard with seven or more cards in it
 Meltstrider's Resolve	3e5c3f60f536	1	15	aura	15	When this Aura enters, enchanted creature fights up to one target creature an opponent controls
+Mica, Reader of Ruins	5c3a5ca68e9b	2	15	spell	15	If you do, copy that spell and you may choose new targets for the copy
 Morcant's Loyalist	78e1cb78d638	1	15	creature	15	When this creature dies, return another target Elf card from your graveyard to your hand
 Morcant's Loyalist	78e1cb78d638	1	15	creature	15	When this creature dies, return another target Elf card from your graveyard to your hand
 Mouth of the Storm	6da92071f813	2	15	get	15	When this creature enters, creatures your opponents control get -3/-0 until your next turn
@@ -1745,8 +1753,6 @@ Thanos, the Mad Titan	5f7932747a7d	1	14	power	14	Power-up — {C}{W}{U}{B}{R}{G}
 Thanos, the Mad Titan	5f7932747a7d	1	14	power	14	Power-up — {C}{W}{U}{B}{R}{G}: Put two +1/+1 counters on ~
 Thanos, the Mad Titan	5f7932747a7d	1	14	power	14	Power-up — {C}{W}{U}{B}{R}{G}: Put two +1/+1 counters on ~
 Trained Arynx	447398689f8c	0	14	creature	14	Whenever this creature attacks while saddled, it gains first strike until end of turn
-Turtles Forever	cf482a72c5b3	2	14	rest	14	Put the chosen cards into your hand and shuffle the rest into your library
-Turtles Forever	cf482a72c5b3	2	14	rest	14	Put the chosen cards into your hand and shuffle the rest into your library
 Twinblade Paladin	fdbf29104d4f	1	14	creature	14	As long as you have 25 or more life, this creature has double strike
 Ty Lee, Chi Blocker	1aa33078f6a4	3	14	step	14	It doesn't untap during its controller's untap step for as long as you control ~
 Ty Lee, Chi Blocker	1aa33078f6a4	3	14	step	14	It doesn't untap during its controller's untap step for as long as you control ~

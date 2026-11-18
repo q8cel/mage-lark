@@ -46,3 +46,13 @@ Regenerated against `198a60b5` with the artifact-scan content-loss source (`revi
 - `type: static_ability` keyword lines for {Surveil, Scry, Discover, Saddle, Station, Spree, Bargain}: **0**.
 - Unresolved keyword items: **201 items / 85 values** (vs 321 / 90 on `198a60b5`); the seven keyword actions above no longer appear. Remaining top values: Teamwork 12, Mobilize 11, Storied 9, Increment 9, Dinosaurs 6, Tiered 6, Earthbend 6, Vehicles 5, Goblins 5, Spiders 5.
 - Claims against `2e9019ca`: **3,536** (2,670 records) — stringy 1,561 (-1), content_loss 1,683 (+2), invariant 209, anaphora_agreement 69, empty_slot 14. Total +1 vs `198a60b5` (3,535).
+
+## 5. Follow-up artifact `e35ef8b4…` (link post-pass, keyword actions)
+
+Artifact `e35ef8b4…` (fresh compile `ef223b4a…` + bounded link post-pass: 230 link keys added, 11 prose referents replaced), card IR `5fd3ca9f…`. 22,217 records / 13,357 unique.
+
+- (a) Referent slots (`ref`, `referent`, `antecedent`, `of`) holding one of {this way, that many, the rest, that card, them} as a string: **0**.
+- Adjacent phrase strings remain (not referent slots): `card:"the rest"` 85 (all carry `rest:true`), `zone:"them"` 78 (nested `card.zone.zone`), `quantifier:"that many"` 12, `up_to:"that many"` 3, `on:"them"` 7, `controller` "…gained control of this way" 2; `raw:"them"` 87 and `fragment` prose are free-text fallbacks.
+- (b) `type: keyword_action` nodes: **149** — Saddle 30, Station 27, Surveil 26, Scry 22, Spree 21, Bargain 20, Discover 3. Records combining a `keyword_action` with any `note:"unresolved"`: **0**.
+- Unresolved keyword items overall: **201 items / 85 values** (unchanged from `2e9019ca`); top Teamwork 12, Mobilize 11, Storied 9, Increment 9, Dinosaurs 6, Tiered 6, Earthbend 6, Vehicles 5.
+- Claims against `e35ef8b4`: **3,538** (2,671 records) — stringy 1,559 (-2), content_loss 1,687 (+4), invariant 209, anaphora_agreement 69, empty_slot 14. Total +2 vs `2e9019ca` (3,536); artifact-loss scan 2,181 lossy rows (+6).
