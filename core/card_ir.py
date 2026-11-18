@@ -190,6 +190,10 @@ def build_card(name, text, segments, whole=False):
         if key not in seen:
             seen.add(key)
             uniq.append(link)
+    # A same-segment referent is explicit intra, never an anaphora self-link.
+    for link in uniq:
+        if link['from'] == link['to'] and link['kind'] == 'anaphora':
+            link['kind'] = 'intra'
     _assign_link_ids(uniq)
     _apply_scalars(segments, uniq)
     return {
