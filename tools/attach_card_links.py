@@ -13,6 +13,7 @@ from card_ir import build_card
 
 
 PHRASES = ('that many', 'this way', 'the rest', 'those cards', 'that card', 'them')
+REF_FIELDS = {'set', 'of', 'card', 'card_type', 'who', 'target'}
 
 
 def walk(obj):
@@ -57,6 +58,39 @@ def add_paths(obj, phrase, lid):
     return added
 
 
+def replace_values(obj, phrase, lid, changes):
+    """Replace a phrase-valued referent with a link object; bounded only."""
+    n = 0
+    def walk_node(node, field=None):
+        nonlocal n
+        if isinstance(node, dict):
+            # Direct field string, e.g. card_type: "that card".
+            if field in REF_FIELDS and isinstance(node.get(field), str):
+                v = node[field]
+                if phrase in v.lower() and len(v) < 120:
+                    node[field] = ({'link': lid} if field == 'of'
+                                   else {'kind': 'link', 'link': lid})
+                    changes.append({'field': field, 'old': v, 'new': node[field],
+                                    'phrase': phrase})
+                    n += 1
+            # Common shaped value: {kind:type, value:"cards discarded this way"}.
+            if isinstance(node.get('value'), str) and \
+                    node.get('kind') in ('type', 'anaphora'):
+                v = node['value']
+                if phrase in v.lower() and len(v) < 120:
+                    node['value'] = {'kind': 'link', 'link': lid}
+                    changes.append({'field': 'value', 'old': v,
+                                    'new': node['value'], 'phrase': phrase})
+                    n += 1
+            for k, v in list(node.items()):
+                walk_node(v, k)
+        elif isinstance(node, list):
+            for v in node:
+                walk_node(v, field)
+    walk_node(obj)
+    return n
+
+
 def verify(fresh, post):
     """No removed/changed values; only extra link keys allowed."""
     changed = removed = 0
@@ -93,7 +127,9 @@ def main():
     for i, r in enumerate(records):
         by.setdefault(r['card'], []).append(i)
     added = 0
+    replaced = 0
     phrases = {}
+    changes = []
     for card, idxs in by.items():
         segs = [{'index': records[i]['sentence_index'],
                  'text': records[i]['original_text'],
@@ -114,7 +150,9 @@ def main():
                     continue
                 n = add_paths(r['output'], phrase, lid)
                 added += n
-                phrases[phrase] = phrases.get(phrase, 0) + n
+                nr = replace_values(r['output'], phrase, lid, changes)
+                replaced += nr
+                phrases[phrase] = phrases.get(phrase, 0) + n + nr
     # Verify additive-only against the original
     fresh = [json.loads(l) for l in open(art)]
     post = records
@@ -125,10 +163,16 @@ def main():
     payload = b''.join((json.dumps(r, ensure_ascii=False, sort_keys=True) + '\n').encode()
                        for r in records)
     open(out, 'wb').write(payload)
-    print(json.dumps({'records': len(records), 'added': added,
-                      'removed': removed, 'changed': changed,
-                      'phrases': phrases, 'out': out,
-                      'idempotent_second_run': added == 0}, indent=1))
+    # Every logged replacement must be phrase -> link object.
+    assert all(isinstance(x['old'], str) and x['phrase'].lower() in x['old'].lower()
+               and isinstance(x['new'], dict) for x in changes)
+    print(json.dumps({'records': len(records), 'added_link_keys': added,
+                      'replaced_values': replaced, 'removed': removed,
+                      'changed': changed, 'phrases': phrases,
+                      'changes': changes[:50],
+                      'out': out,
+                      'idempotent_second_run': added == 0 and replaced == 0},
+                      indent=1))
 
 if __name__ == '__main__':
     main()
