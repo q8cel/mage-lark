@@ -523,9 +523,10 @@ class Interpreter:
     _quote_parser = None
     _quote_depth = 0
 
-    def _quoted_ability(self, text, depth=0):
+    def _quoted_ability(self, text, depth=0, token_name=None):
         if depth >= 2:
             return None
+        quoted_text = text.strip()
         raw = text.strip()
         if len(raw) >= 2 and raw[0] == raw[-1] and raw[0] in ('"', "'"):
             quote = raw[0]
@@ -535,13 +536,17 @@ class Interpreter:
         raw = raw.rstrip('.').strip()
         if not raw:
             return None
+        if token_name:
+            raw = raw.replace(token_name + "'s", 'this token\'s')
+            raw = re.sub(rf'\b{re.escape(token_name)}\b', 'this token', raw)
         if Interpreter._quote_parser is None:
             from larkparser import build_parser
             Interpreter._quote_parser = build_parser('interp')
         try:
             tree = Interpreter._quote_parser.parse(raw)
         except Exception:
-            return None
+            return {'kind': 'quoted_ability', 'quoted_text': quoted_text,
+                    'unparsed': True}
         res = self.interp(tree)
 
         def _has_unparsed(x):
@@ -552,7 +557,8 @@ class Interpreter:
                 return any(_has_unparsed(v) for v in x)
             return False
         if not res or _has_unparsed(res):
-            return None
+            return {'kind': 'quoted_ability', 'quoted_text': quoted_text,
+                    'unparsed': True}
 
         def _nested_quotes(x, level):
             if isinstance(x, dict):
@@ -574,7 +580,11 @@ class Interpreter:
                     _nested_quotes(v, level)
 
         _nested_quotes(res, depth + 1)
-        return {'kind': 'quoted_ability', 'sentence': res}
+        out = {'kind': 'quoted_ability', 'quoted_text': quoted_text,
+               'sentence': res}
+        if token_name:
+            out['token'] = token_name
+        return out
 
     def _late_normalize(self, obj):
         """Structure values created after the normal child-finalizer pass."""
@@ -1129,7 +1139,13 @@ class Interpreter:
                             item['zone'] = item['zone'].replace('your ', '')
             qv = obj.get('quote')
             if isinstance(qv, str):
-                qobj = self._quoted_ability(qv)
+                token_name = None
+                named = obj.get('named')
+                if isinstance(named, list) and named and isinstance(named[0], str):
+                    token_name = named[0]
+                elif isinstance(obj.get('name'), str):
+                    token_name = obj['name']
+                qobj = self._quoted_ability(qv, token_name=token_name)
                 if qobj:
                     obj['quote'] = qobj
             qvs = obj.get('quotes')
