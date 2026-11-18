@@ -843,3 +843,29 @@ the player-context filter. Wrong self-bindings in this shape: **14 -> 0**.
 Z067 resolved_text is now unchanged from the original and the output card is
 `{raw:'it',ref:'anaphora'}` with metadata antecedent
 `a Goblin, Swamp, or Mountain card`.
+
+### V7 card IR / artifact build recipe
+
+`core/card_ir.py` + `tools/compile_cards.py` add card-level links and scalar
+link references. Quantity links never self-link: `this way` points to the
+preceding segment, `that many` prefers a preceding quantity action and uses
+`kind:intra` when the referent is the trigger in the same segment, and
+`the rest`/`those cards` point to the preceding look-at/top-of-library source.
+
+The full `compile_card.py --workers 8` rebuild was killed after 53 min with
+exit 137/BrokenPipe (parent RSS 7.3 GB; workers ~95% CPU each): OOM, not a
+deadlock. `core/card_ir.py` is not imported by `compile_card.py`; quoted
+ability parsing is per-quote and was not the hang. Use the sequential
+per-set recipe instead:
+
+```bash
+for s in BIG BLB DFT DSK ECL EOE FDN FIN FRA HOB LCI MKM MSH OM1 OTJ SOS SPM TDM TLA TMT WOE; do
+  ./myenv/bin/python tools/compile_card.py --data Standard.json --sets "$s" \
+    --out /tmp/final_sets/$s.jsonl --workers 2
+done
+cat /tmp/final_sets/{BIG,BLB,DFT,DSK,ECL,EOE,FDN,FIN,FRA,HOB,LCI,MKM,MSH,OM1,OTJ,SOS,SPM,TDM,TLA,TMT,WOE}.jsonl \
+  > compile_standard.jsonl
+```
+
+Final sequential rebuild: 22,217 records, SHA-256
+`7c4a588f7be92bc8ac1575091482a7e7e2cc32ea9a04b5358093943f22abaadf`.

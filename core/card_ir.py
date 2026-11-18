@@ -1,11 +1,15 @@
 """Card-level IR over the sentence compiler.
 
-The grammar/interpreter remains segment-oriented.  This module only assembles
-the already-compiled segments into one card record and adds deterministic
-cross-segment links.  Links never invent a semantic parse: they point at the
-previous segment whose output contains the relevant action/event.
+The grammar/interpreter remains segment-oriented.  This module assembles the
+already-compiled segments into one card record and adds deterministic links.
+A demonstrative/reference link always points at a *preceding* segment.  When
+the quantity is genuinely inside one segment (a trigger's "one or more" and
+its effect's "that many"), the link is explicitly kind=intra and the scalar
+points at that link id; it is never emitted as a self-link in the quantity
+namespace.
 """
 
+import json
 import re
 
 
@@ -41,11 +45,92 @@ def _entity_names(segments):
     return out
 
 
+def _low(seg):
+    return (seg.get('text') or '').strip().lower()
+
+
+def _has_quantity(seg):
+    """An action that can be the antecedent of 'that many'/'this way'."""
+    return bool(re.search(
+        r'\b(discard|mill|exile|look at|reveal|draw|sacrifice|search)\b',
+        _low(seg)))
+
+
+def _is_source(seg):
+    """A set-producing action for 'the rest'/'those cards'."""
+    return bool(re.search(
+        r'(look at|reveal|exile|search|top .*library|from among them)',
+        _low(seg)))
+
+
+def _pick_back(segments, i, predicate):
+    for j in range(i - 1, -1, -1):
+        if predicate(segments[j]):
+            return segments[j]['index']
+    return None
+
+
+def _assign_link_ids(links):
+    seen = {}
+    for link in links:
+        detail = link.get('detail')
+        if isinstance(detail, dict):
+            slug = str(detail.get('surface') or detail.get('antecedent') or 'ref')
+        else:
+            slug = str(detail or '')
+        slug = re.sub(r'[^a-z0-9]+', '_', slug.lower()).strip('_')
+        base = 'L{}->{}:{}:{}'.format(link['from'], link['to'],
+                                      link['kind'], slug or 'ref')
+        n = seen.get(base, 0)
+        seen[base] = n + 1
+        link['id'] = base if n == 0 else base + ':' + str(n)
+    return links
+
+
+def _ref_key(link):
+    return (link['from'], link.get('detail'))
+
+
+def _apply_scalars(segments, links):
+    """Make prose demonstratives point at their link id."""
+    by_from = {}
+    for link in links:
+        by_from.setdefault(link['from'], []).append(link)
+    for seg in segments:
+        out = seg.get('output')
+        if not out:
+            continue
+        ls = by_from.get(seg['index'], [])
+        ids = {str(l.get('detail')).lower(): l['id'] for l in ls}
+        for d in _iter_dicts(out):
+            # A095: "cards discarded this way" -> count_of.of.link
+            if d.get('kind') == 'count_of' and 'this way' in json.dumps(
+                    d, ensure_ascii=False).lower():
+                lid = ids.get('this way')
+                if lid:
+                    d.clear()
+                    d.update({'kind': 'count_of', 'relation': 'equal',
+                              'of': {'link': lid}})
+                    continue
+            # A033/A070: that many scalar points at the link.
+            if d.get('kind') == 'that_many' and 'that many' in ids:
+                d['link'] = ids['that many']
+            # A004/A070: that card points at its link instead of prose.
+            ct = d.get('card_type')
+            if isinstance(ct, dict) and ct.get('ref') == 'that_card' \
+                    and 'that card' in ids:
+                d['link'] = ids['that card']
+                d['card_type'] = {'kind': 'link',
+                                  'link': ids['that card']}
+                d.pop('this_that', None)
+                d['anaphor'] = True
+
+
 def build_card(name, text, segments, whole=False):
     segments = sorted(segments, key=lambda s: s['index'])
     links = []
     for i, seg in enumerate(segments):
-        low = seg['text'].strip().lower()
+        low = _low(seg)
         prev = segments[i - 1]['index'] if i else None
         if re.match(r'^if you (do|don\'t)\b', low) and prev is not None:
             links.append({
@@ -61,20 +146,31 @@ def build_card(name, text, segments, whole=False):
                 ('that card', 'anaphora')):
             if phrase not in low:
                 continue
-            # "that many" / "this way" normally count an action in the same
-            # segment (discard two, draw that many); cross-segment is only
-            # right for "the rest"/"those cards" of a prior look/reveal.
-            target = (seg['index'] if phrase in ('that many', 'this way')
-                      and prev is None else prev)
-            if phrase in ('that many', 'this way') and prev is not None:
-                source = seg['text'].lower()
-                if any(w in source for w in (
-                        'discard', 'exile', 'look at', 'reveal', 'draw',
-                        'sacrifice', 'mill', 'search')):
-                    target = seg['index']
+            if phrase == 'this way':
+                target = prev
+                lkind = 'quantity'
+            elif phrase == 'that many':
+                target = _pick_back(segments, i, _has_quantity)
+                lkind = 'quantity' if target is not None else 'intra'
+            elif phrase in ('the rest', 'those cards'):
+                # Prefer the actual set-producing action (look at/top of
+                # library); reveal-from-among is only a fallback.
+                target = _pick_back(
+                    segments, i,
+                    lambda x: bool(re.search(
+                        r'(look at|top .*library)', _low(x))))
+                if target is None:
+                    target = _pick_back(segments, i, _is_source)
+                lkind = 'anaphora'
+            else:  # that card
+                target = _pick_back(segments, i, _has_quantity)
+                lkind = 'anaphora'
             if target is not None:
                 links.append({'from': seg['index'], 'to': target,
-                              'kind': kind, 'detail': phrase})
+                              'kind': lkind, 'detail': phrase})
+            elif phrase == 'that many':
+                links.append({'from': seg['index'], 'to': seg['index'],
+                              'kind': 'intra', 'detail': phrase})
         if re.search(r'\b(this creature|this card)\b', low):
             links.append({'from': seg['index'], 'to': seg['index'],
                           'kind': 'self', 'detail': '~'})
@@ -87,7 +183,6 @@ def build_card(name, text, segments, whole=False):
                 'from': seg['index'], 'to': prev, 'kind': 'anaphora',
                 'detail': {'surface': an.get('surface'),
                            'antecedent': an.get('antecedent')}})
-    # links are emitted deterministically, one per (from,to,kind,detail)
     uniq = []
     seen = set()
     for link in links:
@@ -95,6 +190,8 @@ def build_card(name, text, segments, whole=False):
         if key not in seen:
             seen.add(key)
             uniq.append(link)
+    _assign_link_ids(uniq)
+    _apply_scalars(segments, uniq)
     return {
         'card': name,
         'text': text,

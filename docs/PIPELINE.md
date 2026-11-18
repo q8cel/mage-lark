@@ -301,10 +301,15 @@ python tools/compile_cards.py --artifact compile_standard.jsonl \
 ```
 
 Records are `{card, text, segments:[{index,text,resolved_text,output}],
-links:[{from,to,kind,detail}], entities, whole_text_parse}`. Link kinds are
+links:[{id,from,to,kind,detail}], entities, whole_text_parse}`. Link kinds are
 `event_positive`/`event_negative` (`If you do`/`If you don't`), `quantity`
-(`that many`/`this way`), `anaphora` (`the rest`, `those cards`, resolved
-pronouns) and `self` (`this creature`/`this card`). `whole_text_parse` records
+(`that many`/`this way`), `anaphora` (`the rest`, `those cards`, `that card`,
+resolved pronouns), `intra` (a quantity produced and consumed in one segment)
+and `self` (`this creature`/`this card`). A quantity/anaphora link always
+points at a preceding segment; `intra` is only for a genuinely same-segment
+referent. The scalar then carries the link id
+(`count_of.of.link`, `that_many.link`, or `card_type={kind:link,link}`), not
+the surface phrase. `whole_text_parse` records
 whether the grammar's `start: sentence+ (DOT sentence+)*` accepted the card's
 normalized text; sentence records remain the atomic fallback either way.
 
