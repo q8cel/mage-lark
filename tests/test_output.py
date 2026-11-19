@@ -85,7 +85,7 @@ add("during-turn-event",
     lambda o: has(o, lambda d: d.get('condition') == 'during your turn'))
 add("event-during-subject-verb",
     "Whenever an opponent loses life during your turn, you draw that many cards",
-    lambda o: has(o, lambda d: d.get('verb') == 'loses'
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
                   and d.get('subject') == 'an opponent'
                   and d.get('condition') == 'during your turn'))
 add("enchanted-for-each-no-empty-card",
@@ -1025,12 +1025,12 @@ add("event-without-object",
     lambda o: has(o, lambda d: d.get('verb') == 'attacks' and d.get('object') == {}))
 add("event-combat-damage",
     "Whenever this creature deals combat damage to a player, draw a card",
-    lambda o: has(o, lambda d: d.get('verb') == 'deals'
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
                   and d.get('object', {}).get('damage') == 'combat'
                   and d.get('object', {}).get('to') == {'kind': 'player', 'quantifier': 'a'}))
 add("event-plain-damage-no-kind",
     "Whenever this creature deals damage to an opponent, you may draw a card",
-    lambda o: has(o, lambda d: d.get('verb') == 'deals'
+    lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
                   and d.get('object', {}).get('to') == {'kind': 'opponent', 'quantifier': 'an'}
                   and 'damage' not in d.get('object', {})))
 add("event-passive-combat-damage",

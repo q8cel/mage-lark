@@ -1218,6 +1218,11 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # Verb aliases are render-layer only: one canonical verb per effect.
+            if obj.get('verb') == 'deals':
+                obj['verb'] = 'deal_damage'
+            elif obj.get('verb') == 'loses':
+                obj['verb'] = 'lose_life'
             # --- v8 audit normalizations
             # Z044: expose the inner block inside the must wrapper.
             if obj.get('type') == 'effect' and obj.get('if_able') \
