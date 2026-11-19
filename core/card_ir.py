@@ -102,7 +102,25 @@ def _apply_scalars(segments, links):
             continue
         ls = by_from.get(seg['index'], [])
         ids = {str(l.get('detail')).lower(): l['id'] for l in ls}
+        an_ids = {}
+        for l in ls:
+            det = l.get('detail')
+            if isinstance(det, dict) and det.get('surface'):
+                an_ids[str(det['surface']).lower()] = l['id']
         for d in _iter_dicts(out):
+            # Copy-of / target anaphora must carry a link id, never bare raw.
+            raw = d.get('raw')
+            if isinstance(raw, str) and d.get('ref') == 'anaphora':
+                lid = an_ids.get(raw.lower())
+                if lid:
+                    d.setdefault('link', lid)
+            ct = d.get('card_type')
+            if isinstance(ct, dict) and ct.get('ref') == 'anaphora':
+                raw = ct.get('raw')
+                if isinstance(raw, str):
+                    lid = an_ids.get(raw.lower())
+                    if lid:
+                        ct.setdefault('link', lid)
             # A095: "cards discarded this way" -> count_of.of.link
             if d.get('kind') == 'count_of' and 'this way' in json.dumps(
                     d, ensure_ascii=False).lower():
