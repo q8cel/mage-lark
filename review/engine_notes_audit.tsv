@@ -1,49 +1,39 @@
-item	metric	count	examples	notes
-1 modal	bullet records (text starts with •)	0	—	compile_card drops modal/bullet segments
-1 modal	choose-one rows	137	012686e0f57c;06adf03342d3;079eb7c6c978	41 unique texts, 82 cards
-1 modal	choose-one cards present	82	—	41 unique texts
-1 modal	source choose-one cards missing from artifact	131	Abrade;Aerith Rescue Mission;Agate Assault	213 source cards; shell and options both absent
-1 modal	source unique option bullets	427	—	over 213 unique source texts
-1 modal	options nested under parent	0	—	no option survives
-1 modal	effect verb choose/object one rows	73	301690228448;1be7199f5149;5a1e39044d70	useless shell effects
-2 duplicates	artifact rows	22217	—	Standard compile
-2 duplicates	artifact unique records (card,sid,index,text)	13357	—	
-2 duplicates	artifact duplicate rows	8860	—	rows minus unique records
-2 duplicates	artifact unique sentence texts	7966	—	
-2 duplicates	FDN items	763	—	setdata.load
-2 duplicates	FDN unique name+text	509	—	
-2 duplicates	FDN extra printings	254	Herald of Eternal Dawn x6;Bloodthirsty Conqueror x6;Twinflame Tyrant x6	all same-text duplicates
-2 duplicates	FDN unique texts	506	—	3 texts shared across names
-2 duplicates	FDN max printings per name	6	Herald of Eternal Dawn;Bloodthirsty Conqueror;Twinflame Tyrant	
-3 reminder	parenthetical-only rows	0	—	artifact contains no parentheses at all
-3 reminder	basic land rows	0	—	
-3 reminder	FDN basic items	20	Plains;Island;Swamp;Mountain;Forest	5 unique texts, 4 copies each
-3 reminder	FDN parenthetical unique texts	5	({T}: Add {W}.)	basics only
-4 verbs	deals occurrences	87	4382fe970c98;90c8cffa6656;33d3aa76a7df	80 records
-4 verbs	deal_damage occurrences	451	4ebabb7051af;8b284919ff34;f7776c394958	339 records
-4 verbs	loses occurrences	3	5bd8f6c8aa2f;8a72e4586809;c1974d8c9373	3 records
-4 verbs	lose_life occurrences	217	d8bc7f431969;ee7588be3238;1b4d4e7c2010	183 records
-5 player slots	player-string slots total	2039	—	19 key/value groups
-5 player slots	to:"you"	6	a1ee7564c3a7;0a326301ccaf;d50b90d5360e	card-set slot
-5 player slots	card:"you"	0	—	card-set slot
-5 player slots	controller:"you control"	1563	91a4f4845615;2bdc4d205269;65e993a398e4	1273 records
-5 player slots	controller:"an opponent controls"	203	09141fe24add;f3378aa3b04c;768172cd8c98	163 records
-5 player slots	controller:"you"	153	d2e2acd5ba09;9098be5e8ccd;349fa8ae09f1	144 records
-6 can't	records with verb can't	192	dd22519ddb95;299449f86f17;e3008c13033d	151 unique texts
-7 X	kind number value X sites	33	fe78da50972d;03c3a74d477b;e514e2d9b2b8	records 185 with any X string
-7 X	other X-as-string sites	211	—	token.count 67, power 51, toughness 34, up_to 17, quantifier 7, etc.
-8 who	who fields total	938	—	24 distinct values
-8 who	values outside 5-value vocabulary	180	5f2f60c76549;e3008c13033d;1b4d4e7c2010	17 values; top Target player 49, Target opponent 40
-9 enters	verb enters occurrences	1761	—	1075 records
-9 enters	enters tapped	233	7621cf5dc729;7621cf5dc729;a8f4fb6b28ab	
-9 enters	enters with	85	f2e4f3ef9052;f2e4f3ef9052;0c2bf062d101	
-9 enters	enters trigger (neither)	1443	—	"when ... enters" effects
-10 nontoken	nontoken fields	189	d9fe4fe165b9;2d2a06898ef3;09141fe24add	all list-valued
-10 nontoken	flattened to true	0	—	no flattening in artifact; nonland 137, nontoken 43, noncreature 22
-11 linkless	copy_of raw without link	11	8f7477a51f62;d58320563b2b;09b961ef7f20	raw "it"/"them" anaphora
-11 linkless	anaphor/raw target without link	0	—	
-12 cross-check	fdn_notes top-issue rows	25	—	482 note occurrences
-12 cross-check	parser-side note occurrences	256	—	duplicates 116, no-exec 47, target you 33, modal 16, player ref 14, can't 14, nontoken 8, static_text 8
-12 cross-check	engine-side note occurrences	226	—	trigger verbs/ability types/missing verbs; not parser work
-12 cross-check	unparsed static_text occurrences	95	—	plus 711 parse_fail
-12 cross-check	unparsed-only records	797	—	no empty outputs
+item	metric	before (e35ef8b4)	after (cae5db66)	status	examples	notes
+1 modal	bullet records	0	0	REMAINING	—	no option survives
+1 modal	choose-one rows	137	137	REMAINING	012686e0f57c;06adf03342d3;079eb7c6c978	41 unique texts, 82 cards
+1 modal	source option bullets	427	427	REMAINING	—	no options nested
+1 modal	choose-one cards missing from artifact	131	131	REMAINING	Abrade;Aerith Rescue Mission;Agate Assault	of 213 source cards
+1 modal	choose verb/object one rows	73	73	REMAINING	301690228448;1be7199f5149;5a1e39044d70	useless shells unchanged
+2 duplicates	artifact rows	22217	22585	REMAINING	—	duplicate printings still compiled
+2 duplicates	artifact unique records	13357	13362	REMAINING	—	
+2 duplicates	artifact duplicate rows	8860	9223	REMAINING	—	worse by 363
+2 duplicates	artifact unique texts	7966	7966	REMAINING	—	
+2 duplicates	FDN items / unique name+text / extra printings	763 / 509 / 254	763 / 509 / 254	REMAINING	Herald of Eternal Dawn x6;Bloodthirsty Conqueror x6;Twinflame Tyrant x6	setdata dedupe not landed
+3 reminder	parenthetical-only rows	0	0	CLOSED	—	artifact has no parentheses
+3 reminder	basic land rows	0	368	CLOSED	3d92cee0031a;0236cb9f94ef;1bf267e87e8b	basics now present with clean frames
+3 reminder	FDN basic items / parenthetical texts	20 / 5	20 / 5	CLOSED	Plains;Island;Swamp;Mountain;Forest	5 unique texts, 4 copies each
+4 verbs	deals occurrences	87	0	CLOSED	—	canonical deal_damage
+4 verbs	deal_damage occurrences	451	538	CLOSED	4ebabb7051af;8b284919ff34;4382fe970c98	418 records
+4 verbs	loses occurrences	3	0	CLOSED	—	canonical lose_life
+4 verbs	lose_life occurrences	217	220	CLOSED	d8bc7f431969;ee7588be3238;1b4d4e7c2010	186 records
+5 player slots	player-string slots total	2039	2033	PARTIAL	—	controller strings remain
+5 player slots	to:"you"	6	0	CLOSED	—	card-set slot cleaned
+5 player slots	card:"you"	0	0	CLOSED	—	
+5 player slots	controller:"you control"	1563	1563	REMAINING	91a4f4845615;2bdc4d205269;65e993a398e4	1273 records
+5 player slots	controller:"an opponent" (was "an opponent controls")	203	203	REMAINING	09141fe24add;f3378aa3b04c;768172cd8c98	value normalized, still a string
+5 player slots	controller:"you"	153	153	REMAINING	d2e2acd5ba09;9098be5e8ccd;349fa8ae09f1	144 records
+6 can't	records with verb can't	192	0	CLOSED	—	restriction shape now
+7 X	kind number value X sites	33	0	CLOSED	—	explicit X shape
+7 X	other X-as-string sites	211	126	PARTIAL	e.g. token.count 76, value 21, up_to 17	113 records
+8 who	who fields total	938	938	PARTIAL	—	
+8 who	outside 5-value vocabulary	180	110	PARTIAL	players e3008c13033d;Target player c95c622218e1;defending player 1b4d4e7c2010	15 values; top Target player 49, target player 20
+9 enters	verb enters occurrences	1761	1443	CLOSED	—	state forms removed
+9 enters	enters tapped	233	0	CLOSED	—	
+9 enters	enters with	85	0	CLOSED	—	
+9 enters	enters trigger (legitimate)	1443	1443	CLOSED	e26277873414;93635c37f3ef;5f5d4a864d25	997 records
+10 nontoken	nontoken fields	189	249	NO PARSER ACTION	d9fe4fe165b9;2d2a06898ef3;09141fe24add	all list-valued; 0 flattened
+11 linkless	copy_of raw without link	11	11	REMAINING	8f7477a51f62;d58320563b2b;09b961ef7f20	raw it/them anaphora
+11 linkless	anaphor/raw target without link	0	0	CLOSED	—	
+12 cross-check	unparsed static_text occurrences	95	95	REMAINING	—	plus parse_fail 711
+12 cross-check	unparsed-only records	797	797	REMAINING	—	no empty outputs
+12 cross-check	fdn_notes top-issue occurrences (parser/engine)	256 / 226	256 / 226	INFO	—	note table predates rebuild

@@ -1,13 +1,13 @@
 {
- "artifact_sha256": "e35ef8b411a6e0faaac775994576f1755b7265b19590271525700aa3c90bdd70",
- "generated_at": "2026-11-19T00:38:21",
- "artifact_mtime": "2026-11-19T00:13:24",
+ "artifact_sha256": "cae5db665e610b8640a229d6a395634db924f1471938c99996674e1cd9fbafe2",
+ "generated_at": "2026-11-20T00:37:55",
+ "artifact_mtime": "2026-11-19T23:24:45",
  "counts": {
-  "records": 2671,
-  "claims": 3538,
+  "records": 2680,
+  "claims": 3552,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1687,
+   "content_loss": 1701,
    "empty_slot": 14,
    "invariant": 209,
    "stringy": 1559
@@ -715,6 +715,20 @@
    ]
   },
   {
+   "card": "Al Bhed Salvagers",
+   "sid": "be778b104495",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
    "card": "Alacrian Armory",
    "sid": "252a5a3d1c66",
    "sentence_index": 0,
@@ -940,6 +954,13 @@
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -1765,6 +1786,20 @@
    ]
   },
   {
+   "card": "Arnyn, Deathbloom Botanist",
+   "sid": "a942f214dd87",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
    "card": "Artifist Acumen",
    "sid": "28429dfce26f",
    "sentence_index": 0,
@@ -2557,6 +2592,13 @@
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -3523,6 +3565,20 @@
      "kind": "content_loss",
      "path": null,
      "detail": "land",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Blood Hustler",
+   "sid": "77a26410f57a",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -5804,7 +5860,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.owner.of.controller",
-     "detail": "an opponent controls",
+     "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -10096,6 +10152,20 @@
      "kind": "content_loss",
      "path": null,
      "detail": "costs",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Doom Reigns Supreme",
+   "sid": "cab70fbdd743",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -23351,6 +23421,13 @@
      "source": "review/certain_defects_artifact.tsv"
     },
     {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_xdef: xdef={'xdef': ['the', 'amount', 'of', 'life', 'you', 'gained', 'this', 'turn']}",
@@ -26133,6 +26210,20 @@
      "kind": "content_loss",
      "path": null,
      "detail": "enchantment",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Outrageous Robbery",
+   "sid": "f118e0ecfe1c",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -32377,6 +32468,20 @@
   },
   {
    "card": "Sephiroth, Fabled SOLDIER // Sephiroth, One-Winged Angel",
+   "sid": "6a7cd8b6f61c",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Sephiroth, Fabled SOLDIER // Sephiroth, One-Winged Angel",
    "sid": "ea7a1c1181ec",
    "sentence_index": 1,
    "claims": [
@@ -34882,6 +34987,20 @@
    ]
   },
   {
+   "card": "Starseer Mentor",
+   "sid": "7d6343637a3d",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
    "card": "Starting Column",
    "sid": "723cb595f57b",
    "sentence_index": 2,
@@ -36262,6 +36381,20 @@
      "kind": "content_loss",
      "path": null,
      "detail": "choice",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Susurian Voidborn",
+   "sid": "be778b104495",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -38322,6 +38455,13 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -39481,7 +39621,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.owner.of.controller",
-     "detail": "an opponent controls",
+     "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -41007,6 +41147,20 @@
    ]
   },
   {
+   "card": "Vengeful Bloodwitch",
+   "sid": "69bda80db6d0",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
    "card": "Vengeful Creeper",
    "sid": "e7115a354b19",
    "sentence_index": 1,
@@ -41263,6 +41417,13 @@
    "sid": "7b518facb994",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "target",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
     {
      "kind": "content_loss",
      "path": null,
