@@ -9,6 +9,7 @@ that many, the rest, those cards, pronouns, self references).
 import argparse
 import hashlib
 import json
+import re
 import multiprocessing as mp
 import os
 import re
@@ -21,6 +22,7 @@ import paths
 paths.bootstrap()
 
 import card_ir
+from preprocess import segment
 from setdata import load, normalize_text
 
 
@@ -60,6 +62,78 @@ def _whole_one(text):
         signal.signal(signal.SIGALRM, old)
 
 
+def _nest_modal(rec, raw_text, names):
+    """Fold choose-one bullets/continuations under a synthetic parent segment."""
+    pieces = segment(raw_text, names)
+    def is_modal(p):
+        return bool(p.get('modal') or re.search(
+            r'\bchoose\s+(?:one|two|three|four|five|six|seven|eight|nine|ten)\b',
+            p.get('text', ''), re.I))
+    if not any(is_modal(p) for p in pieces):
+        return rec
+    by_text = {s['text']: s for s in rec['segments']}
+    groups = []
+    i = 0
+    while i < len(pieces):
+        if not is_modal(pieces[i]):
+            i += 1
+            continue
+        opts = []
+        j = i + 1
+        while j < len(pieces):
+            p = pieces[j]
+            if is_modal(p):
+                break
+            if p.get('bullet'):
+                opts.append({'text': p['text'],
+                             'output': (by_text.get(p['text']) or {}).get('output'),
+                             'continuations': []})
+            elif opts:
+                seg = by_text.get(p['text']) or {}
+                opts[-1]['continuations'].append({
+                    'text': p['text'], 'output': seg.get('output')})
+            else:
+                break
+            j += 1
+        if opts:
+            parent_text = pieces[i]['text']
+            idxs = []
+            for opt in opts:
+                for q in [opt] + opt['continuations']:
+                    if q['text'] in by_text:
+                        idxs.append(by_text[q['text']]['index'])
+            parent_idx = min(idxs) if idxs else 0
+            groups.append((parent_text, parent_idx, opts))
+            i = j
+        else:
+            i += 1
+    if not groups:
+        return rec
+    consume = set()
+    for _, _, opts in groups:
+        for opt in opts:
+            consume.add(opt['text'])
+            for c in opt['continuations']:
+                consume.add(c['text'])
+    segs = [s for s in rec['segments'] if s['text'] not in consume]
+    for text, idx, opts in groups:
+        clean = []
+        for opt in opts:
+            clean.append({'text': opt['text'], 'output': opt['output'],
+                          'continuations': [
+                              {'text': c['text'], 'output': c['output']}
+                              for c in opt['continuations']]})
+        node = {'index': idx, 'text': text,
+                'output': [{'type': 'choose_one', 'options': clean}]}
+        old = next((s for s in segs if s['text'] == text), None)
+        if old is not None:
+            old['output'] = node['output']
+        else:
+            segs.append(node)
+    rec['segments'] = sorted(segs, key=lambda s: s['index'])
+    return rec
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--artifact', default='compile_standard.jsonl')
@@ -68,12 +142,15 @@ def main():
     ap.add_argument('--whole-parse', action='store_true',
                     help='attempt the whole-card grammar path and report it')
     ap.add_argument('--workers', type=int, default=8)
+    ap.add_argument('--card', default=None)
     args = ap.parse_args()
 
     by_card = defaultdict(list)
     with open(args.artifact) as fh:
         for line in fh:
             r = json.loads(line)
+            if args.card and r['card'] != args.card:
+                continue
             segs = by_card[r['card']]
             key = (r['sentence_index'], r['original_text'])
             if any((x['index'], x['text']) == key for x in segs):
@@ -100,6 +177,7 @@ def main():
         segs = by_card[name]
         rec = card_ir.build_card(name, raw.get(name, ''), segs,
                                  whole=whole.get(name))
+        rec = _nest_modal(rec, raw.get(name, ''), names)
         if rec['links']:
             with_link += 1
         out.append(rec)
