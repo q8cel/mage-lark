@@ -1078,7 +1078,7 @@ add("counter-with-modifier",
                   and isinstance(d.get('spell'), dict)
                   and d['spell'].get('modifier') == {
                       'kind': 'stat_filter', 'stat': 'mana value',
-                      'op': '=', 'value': 'X'}))
+                      'op': '=', 'value': {'kind': 'x'}}))
 
 add("unparsed-static-fallback",
     "Activate only if you control a Sliver",
