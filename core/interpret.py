@@ -1218,6 +1218,13 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # X is a variable, not a numeric literal.
+            if obj.get('kind') == 'number' and str(obj.get('value')).upper() == 'X':
+                obj.clear()
+                obj.update({'kind': 'x'})
+            for xkey in ('power', 'toughness'):
+                if obj.get(xkey) == 'X':
+                    obj[xkey] = {'kind': 'x'}
             # Restrictions are not actions.
             if obj.get('verb') == "can't":
                 obj['type'] = 'restriction'
