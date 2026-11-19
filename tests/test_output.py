@@ -512,7 +512,7 @@ add("life-loss-equal-to-count",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
                   and 'number' in str(d.get('amount', ''))))
 add("enters-counters", "This creature enters with three wish counters on it",
-    lambda o: has(o, lambda d: d.get('verb') == 'enters' and d.get('with', {}).get('count') == 3))
+    lambda o: has(o, lambda d: d.get('type') == 'enters_with' and d.get('with', {}).get('count') == 3))
 add("put-zone", "put it into your hand",
     lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'hand'))
 add("exile-top-card", "Exile the top card of your library",
@@ -724,7 +724,7 @@ add("become-base-pt-in-addition",
     lambda o: has(o, lambda d: d.get('verb') == 'become'))
 add("xdef-life-youve-gained",
     "This creature enters with X +1/+1 counters on it, where X is the amount of life you've gained this turn",
-    lambda o: has(o, lambda d: d.get('verb') == 'enters'))
+    lambda o: has(o, lambda d: d.get('type') == 'enters_with'))
 add("earthbend",
     "At the beginning of your end step, earthbend 2",
     lambda o: has(o, lambda d: d.get('verb') == 'earthbend'

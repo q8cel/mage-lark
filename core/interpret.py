@@ -1218,6 +1218,14 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # 'enters' is a state rule, not an effect action.
+            if obj.get('verb') == 'enters' and (obj.get('tapped') or obj.get('with')):
+                if obj.get('tapped'):
+                    obj['type'] = 'enters_tapped'
+                    obj.pop('tapped', None)
+                else:
+                    obj['type'] = 'enters_with'
+                obj.pop('verb', None)
             # Normalize only who/controller values that are semantically one of
             # the engine's five player buckets; leave target-player/owner forms.
             WHO = {'you': 'you', 'opponent': 'opponent',
