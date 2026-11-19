@@ -43,7 +43,7 @@ def _whole_one(text):
     def _alarm(_signum, _frame):
         raise TimeoutError
     old = signal.signal(signal.SIGALRM, _alarm)
-    signal.alarm(6)
+    signal.setitimer(signal.ITIMER_REAL, 6)
     try:
         tree = parser.parse(t)
         spans = []
@@ -58,7 +58,7 @@ def _whole_one(text):
     except Exception:
         return {'ok': False, 'sentences': []}
     finally:
-        signal.alarm(0)
+        signal.setitimer(signal.ITIMER_REAL, 0)
         signal.signal(signal.SIGALRM, old)
 
 
