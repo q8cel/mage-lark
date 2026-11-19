@@ -1260,6 +1260,11 @@ class Interpreter:
                     'you control': {'kind': 'player', 'ref': 'you'},
                     'an opponent controls': {'kind': 'player', 'ref': 'an opponent'}}.get(
                         cv.strip().lower(), cv)
+            # A number wrapper around X collapses to the X marker itself.
+            if obj.get('kind') == 'number' and isinstance(obj.get('value'), dict) \
+                    and obj['value'].get('kind') == 'x':
+                obj.clear()
+                obj.update({'kind': 'x'})
             # X is a variable, not a numeric literal (all residual sites).
             for xkey in ('count', 'value', 'up_to', 'quantifier', 'modifier',
                          'times', 'power', 'toughness'):
