@@ -894,3 +894,30 @@ both ways). Full sequential build: 5,302 s (~88 min), 21 sets, workers=2.
 Final SHAs: fresh `ef223b4a68b0489e2cd06267ae80be22254d55ac0cae2b7c4277f979b797200d`;
 post-pass `e35ef8b411a6e0faaac775994576f1755b7265b19590271525700aa3c90bdd70`;
 card IR `5fd3ca9fcdc32d5bc490e28aa0f27728244f67670c5d1a5db18971b9c6cf8c12`.
+
+### Engine-notes parser items (coordinated rebuild)
+
+Items landed: modal choose-one nesting; canonical deal_damage/lose_life;
+player objects in target slots; can't -> restriction; X as {kind:x}; who
+five-bucket normalization; enters_tapped/enters_with; list-valued nontoken;
+copy_of anaphora link ids. FDN modal IR: 15 choose_one groups, 34 options,
+3 continuations; no top-level bullet segments. FDN verb counts: deals 16->0,
+lose_life canonical; can't 0, restrict 26; enters_tapped 33 / enters_with 22;
+nontoken booleans 0, list-valued 42.
+
+Coordinated rebuild (preprocessing + interpretation at HEAD): sequential
+per-set, workers=2, 900 s per-set timeout; part1 2,595 s + part2 2,488 s =
+5,083 s total. Fresh artifact SHA `0203e399...`; bounded link post-pass adds
+230 link keys + 11 this-way value replacements, 0 removed/other changes
+(idempotent); final artifact SHA
+`cae5db665e610b8640a229d6a395634db924f1471938c99996674e1cd9fbafe2`,
+22,585 records / 13,362 unique (card,sid,index) keys / 7,966 unique texts /
+5,158 cards. Card IR with --whole-parse SHA
+`b9a3c973917df4795a2de75ce767c7b7a50b6b8eb2513b904958d5801f7e7609`
+(5,158 cards, 5,128 links, whole parse 4,199).
+
+Coverage after rebuild: FDN parse 1673/1673, honest 1592/1673 = 95.2%;
+classic parse 4397/4460 = 98.6%, honest 4183/4460 = 93.8%; Standard parse
+21250/22585 = 94.1%, honest 19558/22585 = 86.6%. Dedupe: FDN 763 rows ->
+509 with dedupe_printings=True; Standard 8,921 -> 5,412. Artifact uses the
+per-printing rows by default.
