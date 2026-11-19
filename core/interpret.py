@@ -1257,6 +1257,14 @@ class Interpreter:
                     'you control': {'kind': 'player', 'ref': 'you'},
                     'an opponent controls': {'kind': 'player', 'ref': 'an opponent'}}.get(
                         cv.strip().lower(), cv)
+            # X is a variable, not a numeric literal (all residual sites).
+            for xkey in ('count', 'value', 'up_to', 'quantifier', 'modifier',
+                         'times', 'power', 'toughness'):
+                xv = obj.get(xkey)
+                if isinstance(xv, str) and xv.strip().upper() in ('X', '-X', '+X'):
+                    obj[xkey] = {'kind': 'x'}
+                    if xv.strip().startswith('-'):
+                        obj[xkey]['negated'] = True
             # X is a variable, not a numeric literal.
             if obj.get('kind') == 'number' and str(obj.get('value')).upper() == 'X':
                 obj.clear()
