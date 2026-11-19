@@ -330,7 +330,7 @@ add("prevent-damage-object-duration",
     "Until your next turn, prevent all damage that would be dealt to you",
     lambda o: has(o, lambda d: d.get('verb') == 'prevent_damage'
                   and d.get('object') == 'damage'
-                  and d.get('to') == 'you'
+                  and d.get('to') == {'kind': 'player', 'ref': 'you'}
                   and d.get('duration') == {'kind': 'until', 'event': 'next_turn', 'player': 'you'}))
 add("prevent-combat-kind-this-turn",
     "Prevent all combat damage that would be dealt this turn",

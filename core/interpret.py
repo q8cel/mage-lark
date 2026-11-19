@@ -1218,6 +1218,14 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # Player references must not sit in card-target slots.
+            PLAYER_REFS = {'you', 'opponent', 'an opponent', 'each opponent',
+                           'each player', 'target player', 'target opponent'}
+            for pkey in ('to', 'card'):
+                pv = obj.get(pkey)
+                if isinstance(pv, str) and pv.strip().lower() in PLAYER_REFS:
+                    obj[pkey] = {'kind': 'player',
+                                 'ref': pv.strip().lower()}
             # Verb aliases are render-layer only: one canonical verb per effect.
             if obj.get('verb') == 'deals':
                 obj['verb'] = 'deal_damage'
