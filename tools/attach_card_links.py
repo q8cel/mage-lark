@@ -91,6 +91,38 @@ def replace_values(obj, phrase, lid, changes):
     return n
 
 
+def add_copy_links(records, ir_path):
+    """Add link ids to copy_of anaphora from an already-built card IR."""
+    cards = {}
+    for r in map(json.loads, open(ir_path)):
+        cards[r['card']] = r.get('links') or []
+    added = 0
+    for r in records:
+        for link in cards.get(r['card'], []):
+            det = link.get('detail')
+            if not (isinstance(det, dict) and det.get('surface')):
+                continue
+            surf = str(det['surface']).lower()
+            def walk(o):
+                nonlocal added
+                if isinstance(o, dict):
+                    cp = o.get('copy_of')
+                    if isinstance(cp, dict):
+                        ct = cp.get('card_type')
+                        if isinstance(ct, dict) and ct.get('ref') == 'anaphora' \
+                                and str(ct.get('raw', '')).lower() == surf \
+                                and 'link' not in ct:
+                            ct['link'] = link['id']
+                            added += 1
+                    for v in o.values():
+                        walk(v)
+                elif isinstance(o, list):
+                    for v in o:
+                        walk(v)
+            walk(r['output'])
+    return added
+
+
 def verify(fresh, post):
     """No removed/changed values; only extra link keys allowed."""
     changed = removed = 0
@@ -153,6 +185,9 @@ def main():
                 nr = replace_values(r['output'], phrase, lid, changes)
                 replaced += nr
                 phrases[phrase] = phrases.get(phrase, 0) + n + nr
+    copy_added = 0
+    if len(sys.argv) > 3 and os.path.exists(sys.argv[3]):
+        copy_added = add_copy_links(records, sys.argv[3])
     # Verify additive-only against the original
     fresh = [json.loads(l) for l in open(art)]
     post = records
@@ -170,6 +205,7 @@ def main():
                       'replaced_values': replaced, 'removed': removed,
                       'changed': changed, 'phrases': phrases,
                       'changes': changes[:50],
+                      'copy_link_added': copy_added,
                       'out': out,
                       'idempotent_second_run': added == 0 and replaced == 0},
                       indent=1))
