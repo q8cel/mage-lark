@@ -344,7 +344,7 @@ add("damage-cant-be-prevented",
 add("may-gain-life-actor",
     "You may gain 4 life",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_life'
-                  and d.get('who') == 'You'))
+                  and d.get('who') == 'you'))
 add("cast-permission-as-long",
     "You may cast this card for as long as it remains exiled",
     lambda o: has(o, lambda d: d.get('verb') == 'cast'
@@ -637,7 +637,7 @@ add("opponent-life-total",
     "Target opponent's life total becomes 10",
     lambda o: has(o, lambda d: d.get('verb') == 'life_total'
                   and d.get('amount') == 10
-                  and d.get('who') == 'Target opponent'))
+                  and d.get('who') == 'an opponent'))
 add("control-player-turn",
     "You control target player during that player's next turn",
     lambda o: has(o, lambda d: d.get('verb') == 'control_player'

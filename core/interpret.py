@@ -1218,6 +1218,25 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # Normalize only who/controller values that are semantically one of
+            # the engine's five player buckets; leave target-player/owner forms.
+            WHO = {'you': 'you', 'opponent': 'opponent',
+                   'an opponent': 'an opponent',
+                   'each opponent': 'each opponent',
+                   'each player': 'each player',
+                   'target opponent': 'an opponent',
+                   'each of your opponents': 'each opponent',
+                   'all opponents': 'each opponent'}
+            wv = obj.get('who')
+            if isinstance(wv, str):
+                obj['who'] = WHO.get(wv.strip().lower(), wv)
+            cv = obj.get('controller')
+            if isinstance(cv, str):
+                obj['controller'] = {
+                    'you control': 'you',
+                    'an opponent controls': 'an opponent',
+                    'target player controls': 'target player'}.get(
+                        cv.strip().lower(), cv)
             # X is a variable, not a numeric literal.
             if obj.get('kind') == 'number' and str(obj.get('value')).upper() == 'X':
                 obj.clear()
