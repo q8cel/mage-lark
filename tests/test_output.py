@@ -324,7 +324,7 @@ add("look-possessor", "As this creature enters, look at an opponent's hand",
     lambda o: has(o, lambda d: d.get('verb') == 'look'
                   and d.get('possessor') == "an opponent's"))
 add("cant-block-duration", "Target creature can't block this turn",
-    lambda o: has(o, lambda d: d.get('verb') == "can't"
+    lambda o: has(o, lambda d: d.get('verb') == 'restrict'
                   and d.get('duration') == {'kind': 'for', 'event': 'this_turn'}))
 add("prevent-damage-object-duration",
     "Until your next turn, prevent all damage that would be dealt to you",
@@ -339,7 +339,7 @@ add("prevent-combat-kind-this-turn",
                   and d.get('duration') == {'kind': 'for', 'event': 'this_turn'}))
 add("damage-cant-be-prevented",
     "The damage can't be prevented",
-    lambda o: has(o, lambda d: d.get('verb') == "can't"
+    lambda o: has(o, lambda d: d.get('verb') == 'restrict'
                   and d.get('predicate') == {'kind': 'predicate', 'verbs': ['prevented'], 'voice': 'passive'}))
 add("may-gain-life-actor",
     "You may gain 4 life",
@@ -559,7 +559,7 @@ add("stat-for-each", "This creature gets +1/+1 for each other creature on the ba
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and 'battlefield' in str(d.get('for_each', ''))))
 add("cant-except", "This creature can't be blocked except by black creatures",
-    lambda o: has(o, lambda d: d.get('verb') == "can't" and d.get('predicate') == {'kind': 'predicate', 'verbs': ['blocked'], 'voice': 'passive'}
+    lambda o: has(o, lambda d: d.get('verb') == 'restrict' and d.get('predicate') == {'kind': 'predicate', 'verbs': ['blocked'], 'voice': 'passive'}
                   and d.get('except_by')))
 add("search-zone", "Search your library for a card named Test Card",
     lambda o: has(o, lambda d: d.get('verb') == 'search' and d.get('zone') == 'library'))
@@ -695,7 +695,7 @@ add("phase-out-controlled-creatures",
                   and d.get('direction') == 'out'))
 add("cant-phase-in",
     "Until the end of your next turn, they can't phase in",
-    lambda o: has(o, lambda d: d.get('verb') == "can't"
+    lambda o: has(o, lambda d: d.get('verb') == 'restrict'
                   and d.get('predicate') == 'phase in'))
 add("return-tapped-attacking",
     "Return that card to the battlefield tapped and attacking",
@@ -757,7 +757,7 @@ add("enchant-player",
                   and d.get('targets') == ['player']))
 add("cant-gain-life",
     "Enchanted player can't gain life",
-    lambda o: has(o, lambda d: d.get('verb') == "can't"
+    lambda o: has(o, lambda d: d.get('verb') == 'restrict'
                   and d.get('predicate') == 'gain life'))
 add("half-life-rounded",
     "Whenever enchanted player is dealt damage, they lose half their life, rounded up",
@@ -865,7 +865,7 @@ add("investigate", "Investigate",
 add("exile-all-graveyards", "Exile all graveyards",
     lambda o: has(o, lambda d: d.get('verb') == 'exile'))
 add("cant-cast-or-activate", "Your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments",
-    lambda o: has(o, lambda d: d.get('verb') == "can't" and 'activate' in str(d.get('predicate'))))
+    lambda o: has(o, lambda d: d.get('verb') == 'restrict' and 'activate' in str(d.get('predicate'))))
 add("additional-phase", "After this phase, there is an additional combat phase",
     lambda o: has(o, lambda d: d.get('verb') == 'additional_phase'))
 add("must-block", "Creatures you control must be blocked this turn if able",
@@ -976,7 +976,7 @@ add("lose-life-per-card",
                   and d.get('for_each', {}).get('card_type', {}).get('value') == 'creature'))
 add("cant-counter-duration",
     "It can't have counters put on it for as long as this creature remains on the battlefield",
-    lambda o: has(o, lambda d: d.get('verb') == "can't"
+    lambda o: has(o, lambda d: d.get('verb') == 'restrict'
                   and 'remains on the battlefield' in str(d.get('condition', ''))))
 add("sacrifice-choice-modifier",
     "Target opponent sacrifices a creature of their choice with flying",

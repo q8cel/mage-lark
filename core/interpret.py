@@ -1218,6 +1218,11 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # Restrictions are not actions.
+            if obj.get('verb') == "can't":
+                obj['type'] = 'restriction'
+                obj['verb'] = 'restrict'
+                obj['negated'] = True
             # Player references must not sit in card-target slots.
             PLAYER_REFS = {'you', 'opponent', 'an opponent', 'each opponent',
                            'each player', 'target player', 'target opponent'}
