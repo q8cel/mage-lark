@@ -1246,6 +1246,9 @@ class Interpreter:
                    'each opponent': 'each opponent',
                    'each player': 'each player',
                    'target opponent': 'an opponent',
+                   'defending player': 'opponent',
+                   'that opponent': 'an opponent',
+                   'any opponent': 'an opponent',
                    'each of your opponents': 'each opponent',
                    'all opponents': 'each opponent'}
             wv = obj.get('who')
