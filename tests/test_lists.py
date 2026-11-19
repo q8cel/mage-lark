@@ -154,6 +154,19 @@ def main():
     assert not has_tokens(list_text)
     assert has_tokens(parse_ready(list_text))
 
+    # Reminder text never reaches the parser.  A card whose entire text is a
+    # reminder keeps its body, so the five basics arrive as mana abilities
+    # instead of disappearing (or being parsed as `unparsed`).
+    ward = segment('Ward {2} (Whenever this creature becomes the target of a '
+                   'spell or ability an opponent controls, counter it unless '
+                   'that player pays {2}.)')
+    assert [d['text'] for d in ward] == ['Ward {2}'], ward
+    basics = segment('({T}: Add {W}.)')
+    assert [d['text'] for d in basics] == ['{T}: Add {W}'], basics
+    out = interp.interp(parser.parse(basics[0]['text']))
+    assert out[0]['type'] == 'activated'
+    assert out[0]['effect']['verb'] == 'add_mana'
+
     print('list tests passed')
 
 

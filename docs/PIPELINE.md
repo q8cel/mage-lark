@@ -13,11 +13,11 @@ puts `core/`/`coref/` on `sys.path`.
 
 ```
                       setdata.load(path)
-              items=(name, text, code), types, names, sets
+         items=(name, text, set_code), types, names, sets
                               │
                               ▼
-             preprocess.segment(text, names)        names→`~`, strip reminders,
-             [{text, modal, bullet}]                split lines → sentences
+     preprocess.segment(text, names)     strip reminders, names→`~`,
+     [{text, modal, bullet}]             split lines → sentences
                               │
         ┌─────────────────────┼──────────────────────┬──────────────────────────┐
         │                     │                      │                          │
@@ -44,7 +44,7 @@ puts `core/`/`coref/` on `sys.path`.
 
 | # | stage | function | output | cache file |
 |---|---|---|---|---|
-| 1 | load | `setdata.load(path)` | `items (name, text, code)`, `types`, `names`, `sets` | `seg_<data>_<setdata>.pkl` |
+| 1 | load | `setdata.load(path)` / `load_cards(path, dedupe_printings=)` | `items (name, text, set_code)` or printing dicts, `types`, `names`, `sets` | `seg_<data>_<setdata>.pkl` |
 | 2 | normalise + segment | `setdata.normalize_with_map` / `normalize_text` -> `preprocess.segment` | `[{text, modal, bullet}]` + optional `OffsetMap` | `sent_<data>_<preprocess>_<setdata>.pkl` |
 | 3 | parse | `larkparser.build_parser(kind)` | tree | `parse_<grammarhash>.json` (coverage only: 1/0 per sentence) |
 | 4a | interpret | `Interpreter.interp(tree)` | typed dicts (`effect`, `if`, …) | — |
@@ -80,6 +80,43 @@ One function produces every canonical text, and it has to satisfy two properties
 Anything that re-derives text must go through this function. Historical datasets
 were built with an earlier normalizer, so `remap_dataset.py` maps old text/span
 coordinates -> source -> current text/span deterministically (no surface search).
+
+### Reminder text
+
+Parenthetical reminder text is never card text. `preprocess.strip_reminders` (and
+its offset-carrying twin `setdata._strip_reminder_units`) removes every balanced
+`(...)` group, nested groups included, before segmentation; text outside the
+parentheses is untouched and line breaks survive so abilities stay separate.
+
+- **Sole-reminder cards.** When the whole text is one parenthetical group the body
+  is kept and only the parentheses are dropped: the basic lands ship as
+  `"({T}: Add {W}.)"`, whose parenthetical *is* the rules text. Stripping it
+  would delete the card. These five abilities now reach the parser as
+  `{T}: Add {W}` (-> `add_mana`) instead of producing no segments at all.
+- **Escape hatch.** `segment(text, names, keep_reminders=True)` and
+  `normalize_with_map(raw, names, keep_reminders=True)` reproduce the old
+  behaviour, where reminder text was split and parsed as card text. Only useful
+  for diffing against pre-stripping coverage runs; the default strips.
+
+### Loader rows and duplicate printings
+
+`setdata.load(path)` still yields `(name, text, set_code)` tuples (`set_code` is
+the card's own `setCode`, so the custom `FDN.json` rows carry `FDN`, not the old
+placeholder `<fdn>`). `setdata.load_cards(path)` returns the same
+`(rows, types, names, sets)` shape with `{name, text, set_code,
+collector_number}` dicts for callers that need the printing identity.
+
+`load(..., dedupe_printings=True)` (and `load_cards`) collapses printings with
+identical `(name, setdata.normalize_text(text))`: the alphabetically first set
+code wins, ties broken by the numerically smallest collector number, then corpus
+order. The name is part of the key — masked text alone would merge different
+cards that share a template. `types`, `names` and `sets` are unaffected, and the
+default keeps every printing so coverage runs stay per-row.
+
+| corpus | rows | deduped | collapsed |
+|---|---|---|---|
+| `FDN.json` | 763 | 509 | 254 |
+| `classic.json` | 2,486 | 1,694 | 792 |
 
 ## Canonical parser configurations
 

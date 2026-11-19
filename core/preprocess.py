@@ -13,8 +13,28 @@ _paths.bootstrap()
 import re
 
 
-def strip_reminders(text):
-    """Remove all parenthetical (reminder) groups, handling nested parens."""
+def _sole_reminder_body(text):
+    """The body of `text` when it is exactly one balanced parenthetical group.
+
+    Returns None otherwise.  Used for cards whose whole oracle text is reminder
+    text: the five basics ship as `"({T}: Add {W}.)"`, where the parenthetical
+    *is* the rules text, so dropping its contents would delete the card.
+    """
+    t = text.strip()
+    if len(t) < 2 or t[0] != '(' or t[-1] != ')':
+        return None
+    depth = 0
+    for i, ch in enumerate(t):
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth -= 1
+            if depth == 0:
+                return t[1:-1] if i == len(t) - 1 else None
+    return None
+
+
+def _strip_reminder_text(text):
     out = []
     depth = 0
     for ch in text:
@@ -27,6 +47,28 @@ def strip_reminders(text):
         if depth == 0:
             out.append(ch)
     return re.sub(r'[ \t]*\n[ \t]*', '\n', ''.join(out)).strip()
+
+
+def strip_reminders(text, unwrap_sole_reminder=True):
+    """Remove all parenthetical (reminder) groups, handling nested parens.
+
+    Invariants: text outside parentheses is untouched, line breaks survive
+    (they separate abilities), and the result is `strip()`ed.  `setdata`'s
+    `_strip_reminder_units` is the offset-carrying twin of this function; keep
+    the two in step (tests/test_normalize_map.py compares them corpus-wide).
+
+    `unwrap_sole_reminder`: when the whole text is one parenthetical group --
+    `"({T}: Add {W}.)"` on the basic lands -- keep the body and drop only the
+    parentheses.  There is no text outside them, so nothing is "outside
+    parentheses" to preserve; removing the span would leave the card empty.
+    """
+    stripped = _strip_reminder_text(text)
+    if stripped or not unwrap_sole_reminder:
+        return stripped
+    body = _sole_reminder_body(text)
+    if body is None:
+        return stripped
+    return re.sub(r'[ \t]*\n[ \t]*', '\n', body).strip()
 
 _NAME_RE_CACHE = {}
 
@@ -117,11 +159,18 @@ def split_sentences(line):
     parts.append(line[start:].strip())
     return [p for p in parts if p]
 
-def segment(text, names=None):
+def segment(text, names=None, keep_reminders=False):
     """Return a list of sentence dicts: {text, modal, bullet}.
-    Modal markers ('Choose one —') are kept as their own items (modal=True)."""
+    Modal markers ('Choose one —') are kept as their own items (modal=True).
+
+    Reminder stripping happens before name masking, so the output matches
+    `setdata.normalize_text` character for character.  `keep_reminders=True`
+    reproduces the pre-normalisation behaviour: parenthetical text is split and
+    handed to the parser as if it were card text (only useful for diffing old
+    coverage runs against new ones)."""
+    if not keep_reminders:
+        text = strip_reminders(text)
     text = normalize_names(text, names)
-    text = strip_reminders(text)
     items = []
     for raw_line in text.split('\n'):
         line = raw_line.strip()

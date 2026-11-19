@@ -65,6 +65,48 @@ def t_reminder_inside_span():
     assert normalize_text(raw[os_:oe], names) == "target creature"
 
 
+def t_nested_parens():
+    names = {"Test Card"}
+    raw = ("Flying (this creature can't be blocked "
+           "(except by creatures with flying))\nTrample")
+    text, omap = normalize_with_map(raw, names)
+    assert text == "Flying\nTrample", repr(text)
+    # Text outside the spans is untouched, on both sides of the newline.
+    s, e = omap.to_original(0, len("Flying"))
+    assert raw[s:e] == "Flying"
+    p = text.index("Trample")
+    s, e = omap.to_original(p, p + len("Trample"))
+    assert raw[s:e] == "Trample"
+
+
+def t_sole_reminder_unwrap():
+    # Basic lands ship as one parenthetical span holding the whole rules text;
+    # dropping it would leave the card empty, so only the parentheses go.
+    raw = "({T}: Add {W}.)"
+    text, omap = normalize_with_map(raw)
+    assert text == "{T}: Add {W}.", repr(text)
+    assert omap.to_original(0, 3) == (1, 4), omap.to_original(0, 3)
+    assert all(raw[s:e] == ch for (s, e), ch in zip(omap.spans, text))
+    assert normalize_text(raw) == "{T}: Add {W}."
+    # Nested groups drop only the outer pair; the inner text is unchanged.
+    assert normalize_text("((nested))") == "(nested)"
+    # A span plus real text still behaves like ordinary reminder text.
+    assert normalize_text("({T}: Add {W}.)\nTrample") == "Trample"
+
+
+def t_keep_reminders_flag():
+    raw = ("Ward {2} (Whenever this creature becomes the target of a spell or "
+           "ability an opponent controls, counter it unless that player pays "
+           "{2}.)")
+    assert normalize_text(raw) == "Ward {2}", normalize_text(raw)
+    kept = normalize_text(raw, keep_reminders=True)
+    assert "counter it unless" in kept, kept
+    from preprocess import segment
+    assert [d["text"] for d in segment(raw)] == ["Ward {2}"]
+    kept_segments = [d["text"] for d in segment(raw, keep_reminders=True)]
+    assert any("counter it unless" in s for s in kept_segments), kept_segments
+
+
 def t_whitespace_and_roundtrip():
     names = {"Test Card"}
     raw = "  a  \t b\n c  Test Card  "
