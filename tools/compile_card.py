@@ -25,6 +25,7 @@ _paths.bootstrap()
 import argparse
 import copy
 import hashlib
+import re
 import json
 import multiprocessing as mp
 import os
@@ -191,6 +192,72 @@ def _compile_card(card):
             'output': out,
         }
         records.append(rec)
+    # Keep choose-one options nested on the parent sentence record.
+    try:
+        pieces = segment(text, W.get('names') or set())
+        def is_modal(p):
+            return bool(p.get('modal') or re.search(
+                r'\bchoose\s+(?:one|two|three|four|five|six|seven|eight|nine|ten)\b',
+                p.get('text', ''), re.I))
+        by_text = {r['original_text']: r for r in records}
+        consume = set()
+        groups = []
+        i = 0
+        while i < len(pieces):
+            if not is_modal(pieces[i]):
+                i += 1
+                continue
+            opts = []
+            j = i + 1
+            while j < len(pieces):
+                p = pieces[j]
+                if is_modal(p):
+                    break
+                if p.get('bullet'):
+                    opts.append({'text': p['text'],
+                                 'output': (by_text.get(p['text']) or {}).get('output'),
+                                 'continuations': []})
+                elif opts:
+                    opts[-1]['continuations'].append({
+                        'text': p['text'],
+                        'output': (by_text.get(p['text']) or {}).get('output')})
+                else:
+                    break
+                j += 1
+            if opts:
+                groups.append((pieces[i]['text'], opts))
+                for opt in opts:
+                    consume.add(opt['text'])
+                    for c in opt['continuations']:
+                        consume.add(c['text'])
+                i = j
+            else:
+                i += 1
+        if groups:
+            records = [r for r in records if r['original_text'] not in consume]
+            for text0, opts in groups:
+                nested = [{'text': o['text'], 'output': o['output'],
+                           'continuations': [{'text': c['text'],
+                                              'output': c['output']}
+                                             for c in o['continuations']]}
+                          for o in opts]
+                parent = next((r for r in records
+                               if r['original_text'] == text0), None)
+                if parent is None:
+                    idx0 = min((o.get('sentence_index', 0) for o in
+                                [by_text.get(x) for x in consume] if o), default=0)
+                    parent = {'card': name, 'set_code': _code,
+                              'sentence_index': idx0,
+                              'sid': hashlib.sha1(text0.encode()).hexdigest()[:12],
+                              'original_text': text0, 'resolved_text': text0,
+                              'anaphora': [],
+                              'output': [{'type': 'choose_one', 'options': nested}]}
+                    records.append(parent)
+                else:
+                    parent['output'] = [{'type': 'choose_one', 'options': nested}]
+            records.sort(key=lambda r: r['sentence_index'])
+    except Exception:
+        pass
     return records, dict(stats), new_cache
 
 
