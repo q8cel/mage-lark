@@ -27,7 +27,7 @@ Artifact `compile_standard.jsonl` SHA `a8bd9eb4062b34c7…`, 21,996 records / 12
 | 12 set_code | codes / records missing | 21 / 0 | CLOSED |
 | 12 unparsed | static_text / parse_fail | 95 / 711 | REMAINING |
 
-Claims against `a8bd9eb4`: **4,313 claims / 2,886 records** — stringy 2,270, content_loss 1,758, invariant 203, anaphora_agreement 69, empty_slot 13. Vs `cae5db66` (3,552): +761 total, stringy +711, content_loss +57, invariant -6, empty_slot -1; content-loss scan 2,207 lossy rows (was 2,197).
+Claims against `a8bd9eb4`: **3,831 claims / 2,812 records** — stringy 1,788, content_loss 1,758, invariant 203, anaphora_agreement 69, empty_slot 13. The stringy policy excludes `text` leaves nested under choose_one `options[]`/`continuations[]` (source text by design), which removed 482 claims from the naive 2,270. Vs `cae5db66` (3,552): +279 total, stringy +229, content_loss +57, invariant -6, empty_slot -1; the stringy delta is real output movement (147 new option-output claims now nested under `options[].output`, controller player-object refs, and old shared-controller paths renamed), not modal prose. Content-loss scan: 2,207 lossy rows (was 2,197).
 
 ## Reconciliation notes
 

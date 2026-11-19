@@ -1,16 +1,16 @@
 {
  "artifact_sha256": "a8bd9eb4062b34c79d0f40a60d928fe76d8841cb82eb7931efaa937e99469f99",
- "generated_at": "2026-11-20T02:45:09",
+ "generated_at": "2026-11-20T02:47:31",
  "artifact_mtime": "2026-11-20T02:40:30",
  "counts": {
-  "records": 2886,
-  "claims": 4313,
+  "records": 2812,
+  "claims": 3831,
   "by_kind": {
    "anaphora_agreement": 69,
    "content_loss": 1758,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 2270
+   "stringy": 1788
   }
  },
  "records": [
@@ -144,27 +144,6 @@
      "detail": "power",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Abrade",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -406,29 +385,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Take the Elevator \u2014 Create three 1/1 colorless Hero creature tokens",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Put a stun counter on one of them",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Take 59 Flights of Stairs",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Take 59 Flights of Stairs \u2014 Tap up to three target creatures",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -508,34 +466,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Agate Assault",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If that creature would die this turn, exile it instead",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 4 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -697,27 +627,6 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Airbender's Reversal",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target attacking creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Airbend target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -1108,27 +1017,6 @@
      "kind": "stringy",
      "path": "[].trigger.event.object.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Amazing Acrobatics",
-   "sid": "44e5ed6aaf9b",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target spell",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Tap one or two target creatures",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -1534,48 +1422,6 @@
    ]
   },
   {
-   "card": "Apothecary Stomper",
-   "sid": "5a1e39044d70",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put two +1/+1 counters on target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You gain 4 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Appa, Loyal Sky Bison",
-   "sid": "b04a18af6802",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control gains flying until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Airbend another target nonland permanent you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "April O'Neil, Hacktivist",
    "sid": "3a7547c18918",
    "sentence_index": 0,
@@ -1736,50 +1582,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Put it onto the battlefield tapped if it's a land card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Otherwise, put it into your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Then shuffle",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Search your library for a creature or land card and reveal it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.to.controller",
      "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It deals damage equal to its power to target creature you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -1803,13 +1607,6 @@
      "detail": "enchantment creature",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target artifact or enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -1829,34 +1626,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "planeswalker creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target creature or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return one or two target creature and/or planeswalker cards from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains lifelink until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put two +1/+1 counters on target creature you control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -1885,20 +1654,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "nonland permanent creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target noncreature, nonland permanent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You gain 4 life",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2156,36 +1911,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 6 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.to.controller",
      "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 2 damage to each creature you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains haste until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 3/3 blue and red Elemental creature token with flying",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2226,22 +1953,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a token that's a copy of target Elemental you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "Target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player draws two cards",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -2254,22 +1967,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 2 damage to each creature target player controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.actor",
      "detail": "Target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player creates two Treasure tokens",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2513,13 +2212,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You choose a nonland permanent card from it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.card.card_type.value",
      "detail": "nonland permanent",
      "severity": "medium",
@@ -2529,27 +2221,6 @@
      "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.who",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "That player discards that card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent reveals their hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets -2/-2 until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2716,13 +2387,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to each creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect[].inner.card.card_type.value",
      "detail": "basic land",
      "severity": "medium",
@@ -2739,20 +2403,6 @@
      "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect[].card.card_type.value",
      "detail": "basic land",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target land",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2852,27 +2502,6 @@
      "path": "[].effect.who[]",
      "detail": "Its",
      "severity": "high",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Azula Always Lies",
-   "sid": "44e5ed6aaf9b",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets -1/-1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature",
-     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -3382,41 +3011,6 @@
    ]
   },
   {
-   "card": "Battle Menu",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Attack \u2014 Create a 2/2 white Knight creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Ability \u2014 Target creature gets +0/+4 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Magic \u2014 Destroy target creature with power 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Item \u2014 You gain 4 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Baxter Stockman",
    "sid": "3786a682118f",
    "sentence_index": 1,
@@ -3546,27 +3140,6 @@
      "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Bejeweled Warg",
-   "sid": "b41245d528bf",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target Wolf you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Treasure token",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -4026,27 +3599,6 @@
    ]
   },
   {
-   "card": "Black Panther, Vanguard",
-   "sid": "4378f4302670",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 white Soldier creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +1/+1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Black Widow, Double Agent",
    "sid": "44c11c38edd0",
    "sentence_index": 1,
@@ -4130,21 +3682,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put two +1/+1 counters on this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Put target exiled card with warp on the bottom of its owner's library",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Put target exiled card with warp on the bottom of its owner's library",
      "severity": "medium",
      "source": "artifact:output"
@@ -4774,29 +4312,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 4 damage to target player or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Permanents you control gain indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.keywords[]",
      "detail": "double strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gains double strike until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -4830,22 +4347,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Discard your hand, then draw cards equal to the number of cards in target opponent's hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect[].amount.set.card_type[].value",
      "detail": "cards discarded this way",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Discard your hand, then draw cards equal to the number of cards discarded this way",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -5279,34 +4782,6 @@
    ]
   },
   {
-   "card": "Break Down the Door",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Manifest dread",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Break Out",
    "sid": "4c599d44346c",
    "sentence_index": 2,
@@ -5353,34 +4828,6 @@
    "sid": "946bb3bfc241",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Treasure token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature can't block this turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You may play it this turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile the top card of your library",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -5488,13 +4935,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a token that's a copy of target Kithkin you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.actor",
      "detail": "Target player",
      "severity": "medium",
@@ -5502,29 +4942,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player creates a 1/1 green and white Kithkin creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control gets +3/+3 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.fights.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control fights target creature an opponent controls",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -5551,13 +4970,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 5 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].if.fragment",
      "detail": "it's an artifact creature card",
      "severity": "medium",
@@ -5565,29 +4977,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Return it to the battlefield if it's an artifact creature card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].fragment",
      "detail": "Otherwise, return it to the battlefield and it's a 3/3 Robot artifact creature with flying",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Otherwise, return it to the battlefield and it's a 3/3 Robot artifact creature with flying",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Choose target artifact card in your graveyard",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -5852,13 +5243,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals damage equal to the number of lands you control to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target land creature",
      "severity": "medium",
@@ -5882,13 +5266,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "nonbasic land creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target land creature or nonbasic land",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -6097,22 +5474,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.fights.controller",
      "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control fights target creature you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -7021,36 +6384,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent discards two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You choose a nonland card from it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.who",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "That player discards that card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent reveals their hand",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -7490,29 +6825,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +2/+0 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Put a +1/+1 counter on it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.items[].keywords[]",
      "detail": "first strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets +2/+0 and gains first strike until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -7539,64 +6853,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Scry 2",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You gain 3 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Return it to the battlefield under your control at the beginning of the next end step",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.controller",
      "detail": "you own",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile another target creature you own",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Charming Scoundrel",
-   "sid": "5a1e39044d70",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Discard a card, then draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Treasure token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Wicked Role token attached to target creature you control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -7798,20 +7056,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You may choose new targets for the copy",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Copy target instant or sorcery spell you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.quote.quoted_text",
      "detail": "\"At the beginning of the end step, sacrifice this token.\"",
      "severity": "medium",
@@ -7819,22 +7063,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "The copy gains haste and \"At the beginning of the end step, sacrifice this token.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.target.card_type.value",
      "detail": "creature spell",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Copy target creature spell you control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -8038,27 +7268,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.fights.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control fights target creature an opponent controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Remove a lore counter from target Saga you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a lore counter on target Saga you control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -8411,20 +7620,6 @@
      "detail": "enchantment creature",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact or enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -8521,20 +7716,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].xdef.xdef.of.modifier.fragment",
      "detail": "that are creatures and/or Vehicles",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals X damage to target creature, where X is the number of permanents you control that are creatures and/or Vehicles",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -8723,27 +7904,6 @@
    ]
   },
   {
-   "card": "Compel Brutality",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control deals damage equal to its power to target creature or planeswalker an opponent controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target planeswalker you control deals damage equal to its loyalty to target creature or planeswalker an opponent controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Concealed Courtyard",
    "sid": "6ada57068b04",
    "sentence_index": 0,
@@ -8806,29 +7966,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Put one of them into your hand and the rest into your graveyard",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Look at the top four cards of your library",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.unless.fragment",
      "detail": "its controller pays {4}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target spell unless its controller pays {4}",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -8843,20 +7982,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.unless.fragment",
      "detail": "its controller pays {4}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target spell unless its controller pays {4}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw two cards, then discard a card",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -9074,27 +8199,6 @@
      "kind": "stringy",
      "path": "[].effect.to.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Coordinated Maneuver",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals damage equal to the number of creatures you control to target creature or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -9325,27 +8429,6 @@
    ]
   },
   {
-   "card": "Cosmogrand Zenith",
-   "sid": "dd6b7315c3fd",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create two 1/1 white Human Soldier creature tokens",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on each creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Council of Echoes",
    "sid": "438d122c7069",
    "sentence_index": 1,
@@ -9489,55 +8572,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Craftwork Crusher",
-   "sid": "c184702c62ef",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "This creature deals 4 damage to target creature or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 2/2 colorless Wizard Soldier creature token named Cadet",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Crash and Burn",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target Vehicle",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 6 damage to target creature or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -10157,13 +9191,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You choose a nonland permanent card from it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.card.card_type.value",
      "detail": "nonland permanent",
      "severity": "medium",
@@ -10173,27 +9200,6 @@
      "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.who",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "That player discards that card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent reveals their hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Earthbend 2",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10234,13 +9240,6 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Puff Piece \u2014 Put a +1/+1 counter on each of up to two target creatures",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Investigative Journalism",
      "severity": "medium",
@@ -10250,13 +9249,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.modifier.stat",
      "detail": "mana value",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Investigative Journalism \u2014 Return target creature card with mana value 2 or less from your graveyard to your hand",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10318,13 +9310,6 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Repair \u2014 Return target card with mana value 4 or greater from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -10341,13 +9326,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "enchantment creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Impound \u2014 Exile target artifact or enchantment",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10647,28 +9625,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You may have it become no longer suspected",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Put a +1/+1 counter on target suspected creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Put a +1/+1 counter on target suspected creature you control",
      "severity": "medium",
      "source": "artifact:output"
@@ -10745,22 +9702,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.card_type.value",
      "detail": "Zombie creature card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target Zombie creature card from your graveyard to the battlefield tapped",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10948,22 +9891,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target Villain card from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.card_type.value",
      "detail": "Hero card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target Hero card from your graveyard to your hand",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10990,22 +9919,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target permanent you control gains hexproof and indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.token.quote.quoted_text",
      "detail": "\"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 colorless Pilot creature token with \"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -11186,13 +10101,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "This enchantment deals 4 damage to any target and you gain 4 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "an opponent",
      "severity": "medium",
@@ -11200,28 +10108,7 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent discards two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "You lose the game",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "You lose the game",
      "severity": "medium",
      "source": "artifact:output"
@@ -11824,34 +10711,6 @@
    ]
   },
   {
-   "card": "Divining Duelist",
-   "sid": "5a1e39044d70",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Tap target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Untap target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card, then discard a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Doc Ock's Tentacles",
    "sid": "803e2c5af69b",
    "sentence_index": 0,
@@ -12061,22 +10920,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature an opponent controls gets -1/-1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature an opponent controls that was dealt damage this turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -12510,27 +11355,6 @@
    ]
   },
   {
-   "card": "Drill Too Deep",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put five charge counters on target Spacecraft or Planet you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Drogskol Reaver",
    "sid": "ca385067dfee",
    "sentence_index": 1,
@@ -12929,13 +11753,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.controller",
      "detail": "they control",
      "severity": "medium",
@@ -12945,13 +11762,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent exiles an enchantment they control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -13605,20 +12415,6 @@
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Tap target creature an opponent controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Untap target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -13678,21 +12474,7 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a token that's a copy of target creature you control, except it's not legendary and it's a 4/4 Hero in addition to its other types",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Create a token that's a copy of target creature an opponent controls, except it's not legendary and it's a 2/2 Coward in addition to its other types",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Create a token that's a copy of target creature an opponent controls, except it's not legendary and it's a 2/2 Coward in addition to its other types",
      "severity": "medium",
      "source": "artifact:output"
@@ -14112,22 +12894,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Double target creature's power and toughness until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.fights.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control fights target creature an opponent controls",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -14721,21 +13489,7 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Turn target face-down creature face up",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Exile any number of face-up creatures you control with disguise in a face-down pile, shuffle that pile, then cloak them",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Exile any number of face-up creatures you control with disguise in a face-down pile, shuffle that pile, then cloak them",
      "severity": "medium",
      "source": "artifact:output"
@@ -15093,27 +13847,6 @@
    ]
   },
   {
-   "card": "Family Reunion",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +1/+1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control gain hexproof until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Fanatical Offering",
    "sid": "24175650b649",
    "sentence_index": 0,
@@ -15131,34 +13864,6 @@
      "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Fangkeeper's Familiar",
-   "sid": "5a1e39044d70",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You gain 3 life and surveil 3",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target creature spell",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -15183,65 +13888,9 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Empower Jace 2",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target spell or creature to its owner's hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +1/+2 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Fateshaper Aspirant",
-   "sid": "5a1e39044d70",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target legendary card from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains vigilance and indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature",
-     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -15555,34 +14204,6 @@
    ]
   },
   {
-   "card": "Felidar Retreat",
-   "sid": "27e3329c078e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 2/2 white Cat Beast creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Those creatures gain vigilance until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on each creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Fell Horseman // Deathly Ride",
    "sid": "8c2abc135129",
    "sentence_index": 0,
@@ -15642,27 +14263,6 @@
      "detail": "single",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Ferocification",
-   "sid": "dba9de293227",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control gets +2/+0 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control gains menace and haste until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -16205,22 +14805,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Heckle \u2014 Tap target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Hero Worship",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Hero Worship \u2014 Untap target creature",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -16892,27 +15478,6 @@
    ]
   },
   {
-   "card": "Frontline Rush",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create two 1/1 red Goblin creature tokens",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets +X/+X until end of turn, where X is the number of creatures you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Frostbite Pyromental",
    "sid": "afa17cc729db",
    "sentence_index": 1,
@@ -16991,20 +15556,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.to.controller",
      "detail": "your opponents control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 1 damage to each creature and planeswalker your opponents control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 5 damage to target creature or planeswalker",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -17103,27 +15654,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "each player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each player sacrifices a creature token of their choice",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each player sacrifices a nontoken creature of their choice",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each player sacrifices an enchantment of their choice",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -17515,34 +16045,6 @@
    ]
   },
   {
-   "card": "Gearbane Orangutan",
-   "sid": "5a1e39044d70",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy up to one target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If you do, put two +1/+1 counters on this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Sacrifice an artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Gearseeker Serpent",
    "sid": "02a4fac1e7d9",
    "sentence_index": 0,
@@ -17710,21 +16212,7 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target creature or enchantment spell",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Return one or two target creatures and/or enchantments you own to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Return one or two target creatures and/or enchantments you own to your hand",
      "severity": "medium",
      "source": "artifact:output"
@@ -17830,27 +16318,6 @@
    ]
   },
   {
-   "card": "Giant-Sized Flying Ant",
-   "sid": "5a1e39044d70",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Tap target nonland permanent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Untap target nonland permanent",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Giantfall",
    "sid": "4238dc412264",
    "sentence_index": 0,
@@ -17859,20 +16326,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.to.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control deals damage equal to its power to target creature an opponent controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18061,27 +16514,6 @@
    ]
   },
   {
-   "card": "Glamermite",
-   "sid": "5a1e39044d70",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Tap target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Untap target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Glass Casket",
    "sid": "148d8ed857e9",
    "sentence_index": 0,
@@ -18179,22 +16611,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Search your library for a basic Forest card, put that card onto the battlefield tapped, then shuffle",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.card_type.value",
      "detail": "Cave card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target Cave card from your graveyard to the battlefield tapped",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18237,41 +16655,6 @@
      "kind": "stringy",
      "path": "[].effect[].target.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Glorious Decay",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 4 damage to target creature with flying",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target card from a graveyard",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18354,29 +16737,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If that creature would die this turn, exile it instead",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets -5/-5 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.target.controller",
      "detail": "target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures target player controls get -1/-1 until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18403,22 +16765,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target creature you control, then return it to the battlefield under its owner's control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.to.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals damage equal to the greatest power among creatures you control to target creature an opponent controls",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18505,27 +16853,6 @@
      "detail": "equipment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Goblin Surprise",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +2/+0 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create two 1/1 red Goblin creature tokens",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -18690,29 +17017,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on ~",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect[].who",
      "detail": "each opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent loses 2 life and you gain 2 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -19348,22 +17654,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a token that's a copy of target Goblin you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.shared.target.controller",
      "detail": "target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures target player controls get +1/+1 and gain haste until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -19383,13 +17675,6 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact or creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect[].who",
      "detail": "Target player",
      "severity": "medium",
@@ -19399,13 +17684,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect[].card.card_type.value",
      "detail": "Goblin card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player mills five cards, then puts each Goblin card milled this way into their hand",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -20013,21 +18291,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with no counters on it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Remove up to three counters from target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Remove up to three counters from target creature",
      "severity": "medium",
      "source": "artifact:output"
@@ -20168,41 +18432,6 @@
    ]
   },
   {
-   "card": "Heritage Reclamation",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile up to one target card from a graveyard",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Hero's Downfall",
    "sid": "0c9ff882e8a6",
    "sentence_index": 0,
@@ -20267,13 +18496,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Date Night",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Date Night \u2014 Exile the top two cards of your library",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -20447,22 +18669,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.fights.card_type.value",
      "detail": "creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "This creature fights target creature token",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -20484,13 +18692,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "enchantment creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact or enchantment",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -21029,34 +19230,6 @@
    ]
   },
   {
-   "card": "Hylda of the Icy Crown",
-   "sid": "5931dab7e968",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 4/4 white and blue Elemental creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on each creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Scry 2, then draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Hylderblade",
    "sid": "424644bdf0f7",
    "sentence_index": 1,
@@ -21233,20 +19406,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.unless.fragment",
      "detail": "its controller pays {3}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target creature or legendary spell unless its controller pays {3}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets -5/-0 until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -21722,41 +19881,6 @@
    ]
   },
   {
-   "card": "Insidious Fungus",
-   "sid": "012686e0f57c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Then you may put a land card from your hand onto the battlefield tapped",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Insidious Roots",
    "sid": "591b1d248144",
    "sentence_index": 0,
@@ -22220,20 +20344,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.to.controller",
      "detail": "your opponents control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 1 damage to each creature your opponents control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 4 damage to target creature",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -22764,22 +20874,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "That spell gains deathtouch and lifelink",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.token.quote.quoted_text",
      "detail": "\"When this token dies, an instant or sorcery spell deals 2 damage to each opponent.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 2/2 red Imp creature token with \"When this token dies, it deals 2 damage to each opponent.\"",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -22996,27 +21092,6 @@
    ]
   },
   {
-   "card": "Karai's Technique",
-   "sid": "44e5ed6aaf9b",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets +3/+3 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets -3/-3 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Karakyk Guardian",
    "sid": "6bda0ce5448b",
    "sentence_index": 1,
@@ -23095,27 +21170,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.inner.on.card_type.value",
      "detail": "Bird creature card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You may put a Bird creature card from your hand or graveyard onto the battlefield with a finality counter on it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on each Bird you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -23207,27 +21261,6 @@
      "kind": "stringy",
      "path": "[].effect.shared.target.modifier",
      "detail": "with this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Keep Out",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 4 damage to target tapped creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -23780,41 +21813,6 @@
    ]
   },
   {
-   "card": "Konstrari Charm",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 6 damage to target creature with flying",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains trample until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put two +1/+1 counters on target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Add {C}{C}{C}",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Kotis, the Fangkeeper",
    "sid": "56bfc80dd154",
    "sentence_index": 2,
@@ -24031,29 +22029,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on this creature for each creature that left the battlefield under your control this turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You gain 2 life and scry 2",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.possessor",
      "detail": "target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target player's graveyard",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -24089,34 +22066,6 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "ward {2}",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Kykar, Zephyr Awakener",
-   "sid": "bd9650cb11ca",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Return that card to the battlefield under its owner's control at the beginning of the next end step",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile another target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 white Spirit creature token with flying",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -24640,13 +22589,6 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures your opponents control get -1/-1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "each opponent",
      "severity": "medium",
@@ -24654,22 +22596,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent discards two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect[].who",
      "detail": "each opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent loses 3 life and you gain 3 life",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -25101,27 +23029,6 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on ~",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Food token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Scry 1",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
@@ -25162,27 +23069,6 @@
      "detail": "turn",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Live or Die",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target creature card from your graveyard to the battlefield",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -25484,34 +23370,6 @@
      "detail": "\"This token can't block.\"",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 black Rat creature token with \"This token can't block.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If you do, scry 2, then draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You may sacrifice another creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control gain menace until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -25557,29 +23415,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent sacrifices a nontoken artifact of their choice",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.modifier.stat",
      "detail": "mana value",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target artifact or creature card with mana value 2 or less from your graveyard to the battlefield",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +1/+1 and gain trample until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -25596,41 +23433,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Lost Jitte",
-   "sid": "301690228448",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Untap target land",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature can't block this turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Equip {1}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on equipped creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -27602,34 +25404,6 @@
    ]
   },
   {
-   "card": "Mister Hyde, Monster Within",
-   "sid": "1353bac3e324",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on ~",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If you do, draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Remove a counter from a creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Mistrise Village",
    "sid": "0f8e960dd1ef",
    "sentence_index": 0,
@@ -27889,34 +25663,6 @@
    ]
   },
   {
-   "card": "Moment of Valor",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gets +1/+0 and gains indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Untap target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with power 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Momentum Breaker",
    "sid": "d436613a23a2",
    "sentence_index": 1,
@@ -27934,34 +25680,6 @@
      "detail": "choice",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Momo, Playful Pet",
-   "sid": "06adf03342d3",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Food token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Scry 2",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -28077,29 +25795,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Treasure token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "each opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent loses 3 life",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -28350,22 +26047,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 colorless Robot artifact creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.items[].keywords[]",
      "detail": "first strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets +3/+0 and gains first strike until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -29891,49 +27574,14 @@
    ]
   },
   {
-   "card": "Oltec Archaeologists",
-   "sid": "5a1e39044d70",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target artifact card from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Scry 3",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Oltec Matterweaver",
    "sid": "1be7199f5149",
    "sentence_index": 0,
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 colorless Gnome artifact creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.token.copy_of.card_type.value",
      "detail": "artifact token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a token that's a copy of target artifact token you control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -30052,34 +27700,6 @@
    ]
   },
   {
-   "card": "Opera Love Song",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You may play those cards until your next end step",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile the top two cards of your library",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "One or two target creatures each get +2/+0 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Orazca Puzzle-Door",
    "sid": "b6f8a850c335",
    "sentence_index": 0,
@@ -30165,27 +27785,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "enchantment creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact or enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -30328,20 +27927,6 @@
      "detail": "enchantment creature",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact or enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control explores, then it explores again",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -30384,27 +27969,6 @@
      "detail": "permanent",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Overwhelming Surge",
-   "sid": "44e5ed6aaf9b",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target noncreature artifact",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -30640,41 +28204,6 @@
    ]
   },
   {
-   "card": "Pawpatch Formation",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with flying",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Create a Food token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Pawpatch Recruit",
    "sid": "e454594c4455",
    "sentence_index": 2,
@@ -30788,41 +28317,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent exiles two cards from their hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Remove all counters from target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Perfected Theory",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature has base power and toughness 1/1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature has base power and toughness 4/5 until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -31094,13 +28588,6 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target creature card with mana value 4 or less from your graveyard to the battlefield tapped",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target Skeleton",
      "severity": "medium",
@@ -31126,13 +28613,6 @@
      "detail": "zombie creature",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target Skeleton, Spirit, or Zombie",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -31145,27 +28625,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "each opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent sacrifices an artifact of their choice",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent sacrifices an enchantment of their choice",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent sacrifices a creature with flying of their choice",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -31255,29 +28714,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If that creature would die this turn, exile it instead",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.card_type.value",
      "detail": "artifact token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact token",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -31427,20 +28865,6 @@
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature you control fights target creature an opponent controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target Vehicle",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -31479,36 +28903,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "All creatures get -1/-1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You choose an artifact or creature card from it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.who",
      "detail": "Target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "That player discards that card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player reveals their hand",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -32060,21 +29456,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Surveil 2, then draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "~ deals 1 damage to each of one or two targets",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "~ deals 1 damage to each of one or two targets",
      "severity": "medium",
      "source": "artifact:output"
@@ -32084,13 +29466,6 @@
      "path": "[].options[].output[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target nonland permanent to its owner's hand",
-     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -32596,27 +29971,6 @@
      "detail": "its controller pays {2}",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target spell unless its controller pays {2}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature has base power and toughness 5/5 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -32922,27 +30276,6 @@
    ]
   },
   {
-   "card": "Qutrub Forayer",
-   "sid": "5a1e39044d70",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature that was dealt damage this turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile up to two target cards from a single graveyard",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Rabaroo Troop",
    "sid": "581d86fd74ac",
    "sentence_index": 0,
@@ -33223,34 +30556,6 @@
    ]
   },
   {
-   "card": "Rally the Monastery",
-   "sid": "4238dc412264",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create two 1/1 white Monk creature tokens with prowess",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Up to two target creatures you control each get +2/+2 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with power 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Rambling Possum",
    "sid": "15c140185abc",
    "sentence_index": 1,
@@ -33371,27 +30676,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "each player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each player discards two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each player loses 4 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each player sacrifices two creatures of their choice",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -34157,20 +31441,6 @@
      "detail": "Target artifact",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target artifact or creature gains indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 2 damage to target tapped creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -34612,27 +31882,6 @@
      "detail": "basic land",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Search your library for a basic land card, put it onto the battlefield tapped, then shuffle",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 white Human creature token",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a Food token",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -34701,20 +31950,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect[].who",
      "detail": "Target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player draws two cards and loses 2 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets +2/+2 and gains lifelink until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -34990,27 +32225,6 @@
      "detail": "cards drawn this way",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You lose life equal to the number of cards drawn this way",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw cards equal to the greatest power among creatures you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "All creatures get -3/-3 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -35149,20 +32363,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.owner.of.card_type.value",
      "detail": "nonland permanent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "The owner of target nonland permanent puts it on their choice of the top or bottom of their library",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target noncreature spell",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -35805,22 +33005,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to each opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.modifier.stat",
      "detail": "mana value",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile all artifacts with mana value 3 or less",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36052,27 +33238,6 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "double strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rydia's Return",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +3/+3 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return up to two target permanent cards from your graveyard to your hand",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36359,27 +33524,6 @@
    ]
   },
   {
-   "card": "Sandbenders' Storm",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with power 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Earthbend 3",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Sanguine Indulgence",
    "sid": "f75dd55ea9bd",
    "sentence_index": 0,
@@ -36430,27 +33574,6 @@
      "kind": "stringy",
      "path": "[].keywords.modifier",
      "detail": "for {'card_type': {'kind': 'type', 'value': 'Forests', 'note': 'unresolved'}}",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Sarkhan's Resolve",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets +3/+3 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with flying",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36708,29 +33831,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Do Homework \u2014 Draw three cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Fight Crime",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Fight Crime \u2014 Counter target spell",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36800,45 +33902,10 @@
    ]
   },
   {
-   "card": "Scour for Scrap",
-   "sid": "44e5ed6aaf9b",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Search your library for an artifact card, reveal it, put it into your hand, then shuffle",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target artifact card from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Scout the City",
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You may put a permanent card from among them into your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You gain 3 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].ability_word",
@@ -36848,22 +33915,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Look Around \u2014 Mill three cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Bring ~",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Bring ~ \u2014 Destroy target creature with flying",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -37185,27 +34238,6 @@
    ]
   },
   {
-   "card": "Secret Identity",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Conceal \u2014 Until end of turn, target creature you control becomes a Citizen with base power and toughness 1/1 and gains hexproof",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Reveal \u2014 Until end of turn, target creature you control becomes a Hero with base power and toughness 3/4 and gains flying and vigilance",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Secret Invasion",
    "sid": "e5c79e4883c9",
    "sentence_index": 3,
@@ -37324,22 +34356,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent discards two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.target.controller",
      "detail": "your opponents control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures your opponents control get -1/-1 until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -37402,34 +34420,6 @@
    ]
   },
   {
-   "card": "Seize Opportunity",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Until the end of your next turn, you may play those cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile the top two cards of your library",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Up to two target creatures each get +2/+1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Seized from Slumber",
    "sid": "c9e244bbecf7",
    "sentence_index": 0,
@@ -37485,21 +34475,7 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target card you own in exile that has an Adventure to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Put target card you don't own in exile that has an Adventure on the bottom of its owner's library",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Put target card you don't own in exile that has an Adventure on the bottom of its owner's library",
      "severity": "medium",
      "source": "artifact:output"
@@ -37508,13 +34484,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.possessor",
      "detail": "target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target player's graveyard",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -38024,22 +34993,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player discards two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect[].who",
      "detail": "Target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player draws two cards and loses 2 life",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -38317,27 +35272,6 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put two +1/+1 counters on this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "This creature becomes a copy of another target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "deals",
@@ -38430,29 +35364,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put two +1/+1 counters on target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target creature with power 2 or less",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect[].who",
      "detail": "each opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Each opponent loses 3 life and you gain 3 life",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -38726,27 +35639,6 @@
      "kind": "stringy",
      "path": "[].cost[].card.card_type[].value",
      "detail": "another artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Slagstorm",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to each creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to each player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -39481,34 +36373,6 @@
    ]
   },
   {
-   "card": "Spectacular Tactics",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains hexproof until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with power 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Speedball, New Warrior",
    "sid": "668b2115d5ed",
    "sentence_index": 0,
@@ -39531,27 +36395,6 @@
      "kind": "stringy",
      "path": "[].effect.spell.modifier.stat",
      "detail": "mana value",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Spellgyre",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target spell",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Surveil 2, then draw two cards",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -40013,27 +36856,6 @@
    ]
   },
   {
-   "card": "Splatter Technique",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw four cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 4 damage to each creature and planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Splinter, Radical Rat",
    "sid": "067dce2123a1",
    "sentence_index": 0,
@@ -40044,27 +36866,6 @@
      "detail": "time",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Split Up",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy all tapped creatures",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy all untapped creatures",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -40513,20 +37314,6 @@
      "detail": "Target player",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player discards any number of cards, then draws that many cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals damage equal to the number of instant and sorcery cards in your graveyard to target creature or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -40677,36 +37464,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to any target",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.keywords[]",
      "detail": "first strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gains first strike and deathtouch until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains haste until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 2/2 colorless Wizard Soldier creature token named Cadet",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -40868,27 +37627,6 @@
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
      "detail": "this card",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Stone by Sunlight",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with power 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Until end of turn, target creature becomes an artifact in addition to its other types and gains indestructible",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -41798,34 +38536,6 @@
    ]
   },
   {
-   "card": "Suplex",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If that creature would die this turn, exile it instead",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "~ deals 3 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Exile target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Supper for Spiders",
    "sid": "dd8149a0d84e",
    "sentence_index": 1,
@@ -41848,34 +38558,6 @@
      "kind": "stringy",
      "path": "[].effect.items[].keywords[]",
      "detail": "first strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Surgical Precision",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You gain 1 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with toughness 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You draw a card and gain 2 life",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -42077,13 +38759,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a token that's a copy of target Merfolk you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.target.controller",
      "detail": "target player",
      "severity": "medium",
@@ -42091,36 +38766,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures target player controls gain lifelink until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "Target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target player draws a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Put a stun counter on it",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Tap target creature",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -42135,27 +38782,6 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "protection from each color",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Sylvan Scavenging",
-   "sid": "e179757ef24e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 3/3 green Raccoon creature token if you control a creature with power 4 or greater",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -43939,29 +40565,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Solar Beam \u2014 ~ gains double strike until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Density Control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Density Control \u2014 ~ gains indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Technopathy \u2014 Draw a card",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -44083,27 +40688,6 @@
      "detail": "its controller pays {2}",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target noncreature spell unless its controller pays {2}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets -2/-2 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Mill three cards, then draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -44205,20 +40789,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures you control get +2/+1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You gain 2 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -44235,13 +40805,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "enchantment creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact or enchantment",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -44447,41 +41010,6 @@
      "detail": "among",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Three Bowls of Porridge",
-   "sid": "e0051e12cec7",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "This artifact deals 2 damage to target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Tap target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "You gain 3 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Sacrifice this artifact",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -45633,20 +42161,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a token that's a copy of target Elf you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return one or two target permanent cards from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -45661,29 +42175,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature or enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Untap them",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.target.controller",
      "detail": "target player",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures target player controls get +3/+3 until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -45964,27 +42457,6 @@
      "kind": "stringy",
      "path": "[].keywords.cost.card_target.card_type[].value",
      "detail": "'card_class': 'card'}",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Twist Reality",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Counter target spell",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Manifest dread",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -46277,22 +42749,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target creature card from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.relative",
      "detail": "that share a creature type",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return two target creature cards that share a creature type from your graveyard to your hand",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -46484,34 +42942,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Unforgiving Aim",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with flying",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 2/2 black and green Elf creature token",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -46736,34 +43166,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Untimely Malfunction",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Change the target of target spell or ability with a single target",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "One or two target creatures can't block this turn",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -47111,27 +43513,6 @@
    ]
   },
   {
-   "card": "Valorous Stance",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gains indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with toughness 4 or greater",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Vampire Gourmand",
    "sid": "156a55a3cb60",
    "sentence_index": 1,
@@ -47204,27 +43585,6 @@
      "path": "[].effect.owner.of.ref",
      "detail": "its",
      "severity": "high",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Vannifar, Evolved Enigma",
-   "sid": "dba9de293227",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Cloak a card from your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on each colorless creature you control",
-     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -47502,36 +43862,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target permanent you control gains hexproof and indestructible until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You draw a card and gain 3 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].effect.fights.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Then it fights target creature an opponent controls",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -48073,27 +44405,6 @@
      "detail": "planeswalker creature",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Destroy target creature or planeswalker",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You lose 2 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Empower Jace 6",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -48199,20 +44510,6 @@
      "detail": "target opponent controls",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Creatures target opponent controls get -1/-1 until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return up to two target creature cards from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -48230,36 +44527,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target nonland permanent to its owner's hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.who",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target opponent discards a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "Put one of them into your hand and the rest into your graveyard",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Look at the top three cards of your library",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -48446,20 +44715,6 @@
    "sentence_index": 0,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You gain 2 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You draw a card and you lose 1 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "morbid",
@@ -48532,34 +44787,6 @@
    ]
   },
   {
-   "card": "Warg Tactics",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target creature with flying",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "It gains trample and hexproof until end of turn",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on target creature you control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Warleader's Call",
    "sid": "226e581b0d66",
    "sentence_index": 1,
@@ -48582,27 +44809,6 @@
      "kind": "stringy",
      "path": "[].effect.to.controller.ref",
      "detail": "an opponent",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Warren Warleader",
-   "sid": "80ef19477094",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Create a 1/1 white Rabbit creature token that's tapped and attacking",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Attacking creatures you control get +1/+1 until end of turn",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -49169,27 +45375,6 @@
    ]
   },
   {
-   "card": "White Widow, Free Agent",
-   "sid": "4208ef08725b",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on each of up to two target creatures",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Return target artifact or enchantment card from your graveyard to your hand",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Whoosh!",
    "sid": "9bc4dce97785",
    "sentence_index": 1,
@@ -49728,36 +45913,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].text",
-     "detail": "If you do, draw two cards",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You may sacrifice a permanent",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "You gain 5 life",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].effect.card.modifier.stat",
      "detail": "mana value",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Destroy target nonland permanent with mana value 2 or less",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -50072,27 +46229,6 @@
    ]
   },
   {
-   "card": "Yuriko, Hope from the Shadows",
-   "sid": "4208ef08725b",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Target creature gets -X/-0 until end of turn, where X is the number of cards in your graveyard",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Surveil 2",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Yuyan Archers",
    "sid": "16a76f88b44a",
    "sentence_index": 2,
@@ -50288,35 +46424,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Draw a card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Put a +1/+1 counter on ~",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
-     "detail": "Add {R}",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].output[].fragment",
-     "detail": "Exile ~, then return him to the battlefield under an opponent's control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].text",
      "detail": "Exile ~, then return him to the battlefield under an opponent's control",
      "severity": "medium",
      "source": "artifact:output"
