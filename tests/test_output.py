@@ -46,7 +46,7 @@ add("keywords-list", "Flying, first strike, and deathtouch",
 add("attach-target-controller",
     "When this Equipment enters, attach it to target creature you control",
     lambda o: has(o, lambda d: d.get('verb') == 'attach'
-                  and d.get('to', {}).get('controller') == 'you control'))
+                  and d.get('to', {}).get('controller') == {'kind': 'player', 'ref': 'you'}))
 add("exile-each-opponent-graveyard",
     "{T}, Sacrifice this artifact: Exile each opponent's graveyard",
     lambda o: has(o, lambda d: d.get('verb') == 'exile'
@@ -275,7 +275,7 @@ add("choice-of-keywords",
 add("put-under-your-control",
     "Put up to two creature cards from graveyards onto the battlefield under your control",
     lambda o: has(o, lambda d: d.get('verb') == 'put'
-                  and d.get('controller') == 'you control'))
+                  and d.get('controller') == {'kind': 'player', 'ref': 'you'}))
 add("activated-xdef",
     "{4}{R}{G}: ~ gets +X/+X until end of turn, where X is the number of lands you control",
     lambda o: has(o, lambda d: d.get('type') == 'activated' and d.get('xdef')))
@@ -397,7 +397,7 @@ add("for-each-put-counter",
 add("fight-second-target",
     "Target creature you control fights target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'fight'
-                  and d.get('fights', {}).get('controller') == 'an opponent'))
+                  and d.get('fights', {}).get('controller') == {'kind': 'player', 'ref': 'an opponent'}))
 add("life-total-equal", "your life total becomes equal to X",
     lambda o: has(o, lambda d: d.get('verb') == 'life_total'
                   and d.get('amount') == {'kind': 'x'}))

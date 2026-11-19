@@ -1254,8 +1254,8 @@ class Interpreter:
             cv = obj.get('controller')
             if isinstance(cv, str):
                 obj['controller'] = {
-                    'an opponent controls': 'an opponent',
-                    'target player controls': 'target player'}.get(
+                    'you control': {'kind': 'player', 'ref': 'you'},
+                    'an opponent controls': {'kind': 'player', 'ref': 'an opponent'}}.get(
                         cv.strip().lower(), cv)
             # X is a variable, not a numeric literal.
             if obj.get('kind') == 'number' and str(obj.get('value')).upper() == 'X':
