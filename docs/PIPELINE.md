@@ -98,6 +98,20 @@ parentheses is untouched and line breaks survive so abilities stay separate.
   behaviour, where reminder text was split and parsed as card text. Only useful
   for diffing against pre-stripping coverage runs; the default strips.
 
+Measured on the corpora (`keep_reminders=True` vs default; segments include the
+modal-marker rows):
+
+| corpus | cards with spans | spans | chars | segments before → after | sole-reminder cards |
+|---|---|---|---|---|---|
+| `FDN.json` | 265 / 763 | 309 | 20,673 | 1,854 → 1,685 | 20 (the basics) |
+| `classic.json` | 731 / 2,486 | 788 | 48,482 | 4,801 → 4,468 | 180 (the basics) |
+| `Standard.json` | 3,675 / 8,921 | 3,936 | 341,256 | 26,866 → 22,732 | 368 (the basics) |
+
+Every removed span is a balanced parenthetical group, and every non-whitespace
+character outside parentheses survives in order. Coverage (`tools/run.py`):
+FDN occurrences 1,653 → 1,673, honest 1,572 (95.1%) → 1,592 (95.2%), parse 100%
+both sides — the five basics now yield `{T}: Add {W}` → `add_mana`.
+
 ### Loader rows and duplicate printings
 
 `setdata.load(path)` still yields `(name, text, set_code)` tuples (`set_code` is
@@ -117,6 +131,7 @@ default keeps every printing so coverage runs stay per-row.
 |---|---|---|---|
 | `FDN.json` | 763 | 509 | 254 |
 | `classic.json` | 2,486 | 1,694 | 792 |
+| `Standard.json` | 8,921 | 5,412 | 3,509 |
 
 ## Canonical parser configurations
 
