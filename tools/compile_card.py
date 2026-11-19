@@ -176,6 +176,7 @@ def _compile_card(card):
                     'fragment': otext, 'source': 'compile_card'}]
         rec = {
             'card': name,
+            'set_code': _code,
             'sentence_index': idx,
             'sid': hashlib.sha1(otext.encode()).hexdigest()[:12],
             'original_text': otext,
