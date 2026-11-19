@@ -1218,6 +1218,19 @@ class Interpreter:
                 obj['quotes'] = [self._quoted_ability(x) if isinstance(x, str)
                                  and self._quoted_ability(x) else x
                                  for x in qvs]
+            # Keep negated-type lists as lists; strip list punctuation/case.
+            ntv = obj.get('nontoken')
+            if isinstance(ntv, list):
+                vals = []
+                for v in ntv:
+                    if not isinstance(v, str) or v.strip() in (',', ''):
+                        continue
+                    v = v.strip()
+                    if v.lower().startswith('non'):
+                        v = 'non' + v[3:].lower()
+                    if v not in vals:
+                        vals.append(v)
+                obj['nontoken'] = vals
             # 'enters' is a state rule, not an effect action.
             if obj.get('verb') == 'enters' and (obj.get('tapped') or obj.get('with')):
                 if obj.get('tapped'):
