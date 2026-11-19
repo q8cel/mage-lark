@@ -108,9 +108,18 @@ modal-marker rows):
 | `Standard.json` | 3,675 / 8,921 | 3,936 | 341,256 | 26,866 → 22,732 | 368 (the basics) |
 
 Every removed span is a balanced parenthetical group, and every non-whitespace
-character outside parentheses survives in order. Coverage (`tools/run.py`):
-FDN occurrences 1,653 → 1,673, honest 1,572 (95.1%) → 1,592 (95.2%), parse 100%
-both sides — the five basics now yield `{T}: Add {W}` → `add_mana`.
+character outside parentheses survives in order. Coverage (`tools/run.py`,
+honest means the output carries no unparsed marker):
+
+| corpus | occurrences | parse | honest | failures (parse / interpret) |
+|---|---|---|---|---|
+| `FDN.json` before | 1,653 | 100.0% | 1,572 (95.1%) | 0 / 81 |
+| `FDN.json` after | 1,673 | 100.0% | 1,592 (95.2%) | 0 / 81 |
+| `classic.json` before | 4,280 | 98.5% | 4,003 (93.5%) | 63 / 214 |
+| `classic.json` after | 4,460 | 98.6% | 4,183 (93.8%) | 63 / 214 |
+
+The five basics now yield `{T}: Add {W}` → `add_mana`; the added occurrences are
+exactly the previously-invisible basic lands, and no failure class regressed.
 
 ### Loader rows and duplicate printings
 
