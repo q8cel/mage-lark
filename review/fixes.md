@@ -921,3 +921,33 @@ classic parse 4397/4460 = 98.6%, honest 4183/4460 = 93.8%; Standard parse
 21250/22585 = 94.1%, honest 19558/22585 = 86.6%. Dedupe: FDN 763 rows ->
 509 with dedupe_printings=True; Standard 8,921 -> 5,412. Artifact uses the
 per-printing rows by default.
+
+### Engine-notes second pass (modal sentence records + residual normalization)
+
+Modal options now live on the parent sentence record as
+`{type:choose_one, options:[{text,output,continuations}]}`; artifact has
+259 choose_one groups / 626 options / 96 continuations and 0 top-level
+bullet rows (Charming Prince has 3 options, option-3 continuation nested).
+Controller strings `you control` and `an opponent controls` become
+`{kind:player,ref:...}`; remaining controller strings are unmapped
+long-tail forms. Residual X strings collapse to `{kind:x}` (0 residual
+strings; 850 X markers). Obvious `who` aliases mapped; 180/1557 remain
+outside the 5-bucket vocabulary (target player etc.). `copy_of` links added
+from card IR: 26 rows linked; 6 rows remain raw on The Notary Hobbits and
+Impostor Syndrome because their card IR has no antecedent link. Every record
+carries `set_code` (21 codes); collector number is not available from
+setdata/load. Dedupe path remains `load(..., dedupe_printings=True)`:
+FDN 763->509, Standard 8,921->5,412; artifact keeps per-printing rows.
+
+Final engine rebuild: sequential per-set workers=2, 900 s timeout, part1
+2,907 s + part2 2,568 s = 5,475 s. Fresh SHA
+`cd5519284a1e7cb8625e2b8a1d631b9f2f8f5e49f5834c5fa63d1afe37cc1fc8`,
+22,585 sentence rows; after bounded post-pass + X-wrapper correction +
+copy-link pass: 21,996 records, SHA
+`a8bd9eb4062b34c79d0f40a60d928fe76d8841cb82eb7931efaa937e99469f99`;
+card IR SHA `bf9d167d032022f66c8f47e98d8afb5f646b5e0ef014df259b8a8cb714611d2a`.
+Unique: 12,981 (card,sid,index), 7,738 texts, 5,158 cards. FDN artifact
+rows 1,628 (1,673 sentences minus 45 nested options/continuations).
+Coverage: FDN 1673/1673 parse, 1592/1673 honest 95.2%; classic 4397/4460
+parse 98.6%, 4183/4460 honest 93.8%; Standard 21250/22585 parse 94.1%,
+19558/22585 honest 86.6%.

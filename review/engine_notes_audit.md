@@ -1,6 +1,6 @@
 # Engine notes audit — post-rebuild `cae5db66…`
 
-Artifact `compile_standard.jsonl` SHA `cae5db665e610b86…`, 22,585 rows / 13,362 unique records / 7,966 unique sentence texts / 5,158 cards; fresh compile `0203e399…` + post-pass; card IR `b9a3c973…`. Comparison baseline: `e35ef8b4…` (22,217 rows / 13,357 unique). Occurrences are on unique records unless marked rows. fdn_notes.md predates this rebuild (mtime 21:20 vs artifact 23:24), so its top-issue table is a static classification, not a fresh count.
+Artifact `compile_standard.jsonl` SHA `a8bd9eb4062b34c7…`, 22,585 rows / 13,362 unique records / 7,966 unique sentence texts / 5,158 cards; fresh compile `0203e399…` + post-pass; card IR `b9a3c973…`. Comparison baseline: `e35ef8b4…` (22,217 rows / 13,357 unique). Occurrences are on unique records unless marked rows. fdn_notes.md predates this rebuild (mtime 21:20 vs artifact 23:24), so its top-issue table is a static classification, not a fresh count.
 
 ## Summary
 
@@ -29,7 +29,7 @@ Artifact `compile_standard.jsonl` SHA `cae5db665e610b86…`, 22,585 rows / 13,36
 | 12 | unparsed static_text / parse_fail | 95 / 711 | 95 / 711 | REMAINING |
 | 12 | unparsed-only records / empty outputs | 797 / 0 | 797 / 0 | REMAINING |
 
-Claims against `cae5db66`: **3,552 claims / 2,680 records** — stringy 1,559, content_loss 1,701, invariant 209, anaphora_agreement 69, empty_slot 14. Vs `e35ef8b4` (3,538): +14 total, entirely content_loss (+14); stringy unchanged. Artifact-loss scan: 2,197 lossy rows (was 2,181).
+Claims against `a8bd9eb4`: **3,552 claims / 2,680 records** — stringy 1,559, content_loss 1,701, invariant 209, anaphora_agreement 69, empty_slot 14. Vs `e35ef8b4` (3,538): +14 total, entirely content_loss (+14); stringy unchanged. Artifact-loss scan: 2,197 lossy rows (was 2,181).
 
 ## Closed / zero
 
