@@ -1254,7 +1254,6 @@ class Interpreter:
             cv = obj.get('controller')
             if isinstance(cv, str):
                 obj['controller'] = {
-                    'you control': 'you',
                     'an opponent controls': 'an opponent',
                     'target player controls': 'target player'}.get(
                         cv.strip().lower(), cv)

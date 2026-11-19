@@ -397,7 +397,7 @@ add("for-each-put-counter",
 add("fight-second-target",
     "Target creature you control fights target creature an opponent controls",
     lambda o: has(o, lambda d: d.get('verb') == 'fight'
-                  and d.get('fights', {}).get('controller') == 'an opponent controls'))
+                  and d.get('fights', {}).get('controller') == 'an opponent'))
 add("life-total-equal", "your life total becomes equal to X",
     lambda o: has(o, lambda d: d.get('verb') == 'life_total'
                   and d.get('amount') == {'kind': 'x'}))
