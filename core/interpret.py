@@ -1387,6 +1387,11 @@ class Interpreter:
                     and 'that was put there this turn' in str(mod.get('fragment', '')).lower():
                 obj['modifier'] = {'kind': 'event_filter', 'event': 'put',
                                    'zone': 'there', 'this_turn': True}
+            # Triggered abilities expose their condition under `condition`
+            # as well as the legacy `if` key.
+            if obj.get('type') == 'triggered' and 'if' in obj \
+                    and 'condition' not in obj:
+                obj['condition'] = obj['if']
             # Unresolved copy_of anaphora are explicit, never bare raw.
             if isinstance(obj.get('copy_of'), dict):
                 cp = obj['copy_of']
