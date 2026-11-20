@@ -1,0 +1,63 @@
+parser_shape	builder_location	builder_behavior	engine_ir	loss_or_note
+card_type this_card	norm_card_type_one 196	this_card flag	this_card true	none
+card_type kind type (+list)	norm_card_type_one 198-205	copy, lowercase	CardType::Type	none
+card_type anaphora/ref/raw	norm_card_type_one 206-213	CardType Raw + adapted note	CardType::Raw	no link id
+card_type kind link	norm_card_type_one 214-215	gap note, None	dropped	link not modelled
+card_type list union	norm_card_type 178-187	one or Union list	CardTypeSel::Union	none
+card_type creature_type	norm_card_type_one 206	note, type creature	CardType::Type	detail lost
+quantifier int/word	norm_quantifier 119-150	int or One	string/number	none
+quantifier up_to/at_least	norm_quantifier 125-131	passthrough	Quantifier::UpTo/AtLeast	none
+quantifier {amount,relation}	norm_quantifier 132-136	gap note, None	dropped	unsupported shape
+colors string/list	norm_target_set 249-252	wrap/list lowercase	TargetSet.colors	none
+controller string	norm_player_ref 103-117	PLAYER_ALIASES	TargetSet.controller PlayerRef	relation lost
+controller {kind:player,ref,relation,of}	norm_player_ref 105-107	only ref read	PlayerRef	relation/of dropped
+status list	norm_target_set 243-247	lowercased strings	TargetSet.status	status_logic not carried
+zone {zone,prep,possessor}	norm_zone 152-176	from->in_zone; destination dropped	TargetSet.in_zone	possessor/source lost
+otherness	norm_target_set 234-236	lowercase	TargetSet.otherness	none
+nontoken list	norm_target_set 236-241	flattened to True + note	TargetSet.nontoken bool	list detail lost (builder-side)
+modifier unparsed	norm_target_set 254-258	gap note, dropped	absent	dropped
+anaphor/this_that/card_class/label	norm_target_set 260-262	popped	absent	silent
+target set link	not read	absent	absent	link only survives via amount.that_many
+target set non-dict	norm_target_set 223-228	gap, None	dropped	none
+effect verb known	VERB_MAP 401-419	map	Effect.verb	none
+effect verb unknown	norm_effect 430-436	skipped note, None	Unsupported	engine lacks verb
+effect may	norm_effect 426-432	unwrap inner, adapted note	inner Effect	optionality lost
+who string/dict	norm_player_ref 103-117	PlayerRef	Effect.who	relation/of ignored
+who actor list	norm_effect 438-455	gap actor list	absent	dropped
+object card/target/object/on/to	norm_effect 457-470	first present to TargetSet	Effect.card	others ignored
+player string object	norm_effect 461-468	player_target	Effect.player_target	none
+amount int/digit	norm_amount 268-280	int	Amount::N	none
+amount number N	norm_amount 282-292	int	Amount::N	none
+amount X	norm_amount 285-291	note, 0	Amount::N(0)	X lost, noted
+amount mana symbols	norm_amount 293-296	mana list	Effect.mana (first symbol)	extra symbols lost
+amount mana_choice	norm_amount 297-307	all symbols + adapted note	Effect.mana first	choice lost
+amount that_many	norm_amount 298-299	{that_many: link}	Amount::ThatMany expects {link}	mismatch; does not deserialize
+add_mana choose_one	norm_effect 424-574	unhandled; effect field dropped note	Effect.mana None	builder-side gap
+add_mana symbols	norm_effect 499-512	first symbol + note	Effect.mana	choice lost
+effect zone / to	OBJECT_KEYS 421; return special 461-468	to can be object; Effect.zone never set	Effect.zone/from	parser zone key ignored
+duration	norm_duration 308-330	end of turn/permanent	Duration	while→permanent
+condition	not whitelisted 554-563	effect field dropped	Effect.condition never set	dropped
+then/and	norm_effect 531-536	recursive list	Effect.then	none
+shared_effects top-level	norm_effect 433-435	None	absent	lost
+shared_effects in as_long	convert_segment 770-790	expand items	multiple Static	none
+restriction type	convert_segment 846-849	output type unknown	Unsupported	engine lacks restriction
+enters_tapped (effect type)	convert_segment 680-684	EntersTapped ability	Ability::EntersTapped	none
+enters_with (effect type)	convert_segment 684-710	static counters; dynamic unsupported	EntersTapped counters	dynamic lost
+enters_tapped top-level type	convert_segment no case	unknown type	Unsupported	builder-side mismatch
+static_ability type	convert_segment no case	unknown type	Unsupported	builder-side mismatch
+keyword_action type	convert_segment 807-813	skipped note	Unsupported	engine lacks action
+static_keyword type	convert_segment 660-677	map keywords; costs dropped	Ability::Keyword	cost dropped
+triggered enters/dies/attacks	norm_trigger 608-636	Event	Triggered	none
+triggered when upkeep/end_step	norm_trigger 619-631	Event Upkeep/EndOfTurn	Triggered	other phases unsupported
+triggered other event	norm_trigger 632-636	skipped note	Unsupported	engine event gap
+if/replacement/loyalty/during/additional_cost	convert_segment 842-845	unsupported with reason	Unsupported	engine type gap
+choose_one type	convert_segment 814-841	options->modes	Ability::Modal	continuations lack type effect and are skipped
+choice continuation {output}	convert_segment 819-825	requires type effect; skipped	absent	builder-side loss
+token count/digit	norm_token 332-345	count	Effect.amount	none
+token fields except/quote/xdef/for_each	norm_token 386-392	dropped + adapted notes	absent	lost
+copy_of	norm_token 377-384	copy_of bool, name Copy	TokenDef.copy_of	details lost
+frame P/T *	 frame_from_mtgjson 870-875	None + adapted note	Option<i32>	lost
+parenthetical segment	convert_segment 642-646	bug note only	n/a	parser input issue
+set_code	not read	absent	Card has no set_code	artifact-only
+dedupe printings	build_cards 984-1000	(sentence_index,original_text,resolved_text,output) per card	adapted note	does not use setdata/set_code
+no executable abilities	build_cards 1020-1023	unsupported fallback	Unsupported	engine/frame
