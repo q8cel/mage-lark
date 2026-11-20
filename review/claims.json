@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "a8bd9eb4062b34c79d0f40a60d928fe76d8841cb82eb7931efaa937e99469f99",
- "generated_at": "2026-11-20T02:47:31",
- "artifact_mtime": "2026-11-20T02:40:30",
+ "artifact_sha256": "2d8c4bdba3b13378a6704c4e80b156af1f4294eae0f03bffc61fd941133a9c2f",
+ "generated_at": "2026-11-21T00:24:31",
+ "artifact_mtime": "2026-11-21T00:19:38",
  "counts": {
-  "records": 2812,
-  "claims": 3831,
+  "records": 2939,
+  "claims": 4101,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1758,
+   "content_loss": 1754,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 1788
+   "stringy": 2062
   }
  },
  "records": [
@@ -274,6 +274,27 @@
    ]
   },
   {
+   "card": "Adaptive Automaton",
+   "sid": "059dd1cd31a4",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "addition",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "types",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
    "card": "Additive Evolution",
    "sid": "a4203f723412",
    "sentence_index": 0,
@@ -494,6 +515,20 @@
      "detail": "player",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Agatha's Champion",
+   "sid": "c56eac47882a",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.fights.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -770,6 +805,76 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.items[]",
+     "detail": "the first instant spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.items[]",
+     "detail": "the first sorcery spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.items[]",
+     "detail": "the first Otter spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.label.card_type[].value",
+     "detail": "it's the first instant spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.label.card_type[].value",
+     "detail": "first otter spell other than ~ you've cast this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].items[]",
+     "detail": "the first instant spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].items[]",
+     "detail": "the first sorcery spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].items[]",
+     "detail": "the first Otter spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].label.card_type[].value",
+     "detail": "first otter spell other than ~ you've cast this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].shared_suffix",
+     "detail": "other than ~ you've cast this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].if.items[]",
      "detail": "the first instant spell",
      "severity": "medium",
@@ -882,8 +987,15 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "with mana value less than or equal to ~ 's power from your graveyard to the battlefield",
+     "path": "[].effect.card.filter.stat",
+     "detail": "mana value",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.filter.value.of",
+     "detail": "~'s power",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -1099,8 +1211,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
@@ -1400,6 +1512,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect[].card.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].xdef.xdef.fragment[]",
      "detail": "artifacts that were put into graveyards from the battlefield this turn",
      "severity": "medium",
@@ -1540,6 +1659,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].xdef.xdef.of",
      "detail": "mana spent to cast this spell",
      "severity": "medium",
@@ -1582,7 +1715,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.to.controller",
+     "path": "[].options[].continuations[].effect.to.controller.ref",
      "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
@@ -1911,7 +2044,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.to.controller",
+     "path": "[].options[].output[].effect.to.controller.ref",
      "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
@@ -1929,6 +2062,27 @@
      "detail": "among",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Ashiok, Wicked Manipulator",
+   "sid": "09d7a37ddca7",
+   "sentence_index": 4,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -1953,15 +2107,22 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.who",
-     "detail": "Target player",
+     "path": "[].options[].output[].effect.who.ref",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.to.controller",
+     "path": "[].options[].output[].effect.who.selection",
      "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.to.controller.ref",
+     "detail": "target player controls",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -2011,6 +2172,20 @@
   },
   {
    "card": "Asinine Antics",
+   "sid": "18f6e1f8888b",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].on.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Asinine Antics",
    "sid": "b82c016ec826",
    "sentence_index": 0,
    "claims": [
@@ -2046,6 +2221,27 @@
      "kind": "stringy",
      "path": "[].effect.card.controller.ref",
      "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Assassin's Trophy",
+   "sid": "c0c80b887c7a",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "its controller",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -2212,14 +2408,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.card.card_type.value",
+     "path": "[].options[].continuations[].effect.card.card_type.value",
      "detail": "nonland permanent",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.who",
+     "path": "[].options[].continuations[].effect.who",
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
@@ -2366,6 +2562,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.event.object.with.card_target.card_type[].value",
+     "detail": "Hero this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.event.object.with.card_target.card_type[].value",
+     "detail": "a Hero entered the battlefield under your control",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].if.event.object.with.card_target.card_type[].value",
      "detail": "Hero this turn",
      "severity": "medium",
@@ -2387,22 +2597,43 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect[].inner.card.card_type.value",
+     "path": "[].options[].continuations[].effect[].inner.card.card_type.value",
      "detail": "basic land",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect[].who",
-     "detail": "Its controller",
+     "path": "[].options[].continuations[].effect[].who.ref",
+     "detail": "its controller",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect[].card.card_type.value",
+     "path": "[].options[].continuations[].effect[].who.selection",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].continuations[].effect[].card.card_type.value",
      "detail": "basic land",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Avengers Tower",
+   "sid": "b6aa809867b5",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast a Hero spell or to activate an ability of a Hero source",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -3164,6 +3395,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
@@ -3294,6 +3532,20 @@
      "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Bewildering Blizzard",
+   "sid": "633f308eb1f3",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -3481,6 +3733,20 @@
   },
   {
    "card": "Bite Down on Crime",
+   "sid": "634518d80ca1",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Bite Down on Crime",
    "sid": "bd72c535f25f",
    "sentence_index": 0,
    "claims": [
@@ -3642,6 +3908,20 @@
      "kind": "stringy",
      "path": "[].effect.duration",
      "detail": "until they exile a nonland card",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -3875,6 +4155,27 @@
      "detail": "opponent",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Bloodline Recollector // Ancestral Craving",
+   "sid": "b351b94518fa",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -4473,8 +4774,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
@@ -4970,13 +5271,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].if.fragment",
-     "detail": "it's an artifact creature card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].options[].continuations[].output[].fragment",
      "detail": "Otherwise, return it to the battlefield and it's a 3/3 Robot artifact creature with flying",
      "severity": "medium",
@@ -5028,6 +5322,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "ward {2}",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Broadcast Takeover",
+   "sid": "494aec1ced15",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -5301,9 +5609,30 @@
   },
   {
    "card": "Buried in the Garden",
+   "sid": "0b56b49907e4",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Buried in the Garden",
    "sid": "f94dd788f524",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.controller.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -5474,7 +5803,7 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.fights.controller",
+     "path": "[].options[].output[].effect.fights.controller.ref",
      "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
@@ -5769,6 +6098,20 @@
    ]
   },
   {
+   "card": "Captain America's Shield",
+   "sid": "18c037f604fa",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "defending player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Captain America, Super-Soldier",
    "sid": "617b6a3834d9",
    "sentence_index": 0,
@@ -6042,6 +6385,20 @@
    ]
   },
   {
+   "card": "Case of the Gateway Express",
+   "sid": "c22a1bb98cc1",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.object.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Case of the Pilfered Proof",
    "sid": "e3bc08f81b30",
    "sentence_index": 0,
@@ -6280,6 +6637,41 @@
    ]
   },
   {
+   "card": "Cease // Desist",
+   "sid": "e67a5618995b",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Celebrate the Mountain-king",
+   "sid": "69adc681d1bd",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.effect.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Celestial Reunion",
    "sid": "241ec719537d",
    "sentence_index": 2,
@@ -6384,7 +6776,7 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.who",
+     "path": "[].options[].continuations[].effect.who",
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
@@ -6847,20 +7239,6 @@
    ]
   },
   {
-   "card": "Charming Prince",
-   "sid": "5a1e39044d70",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].output[].effect.card.controller",
-     "detail": "you own",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Chart a Course",
    "sid": "118511751d47",
    "sentence_index": 1,
@@ -6879,6 +7257,20 @@
    "sid": "d123cec3e9bb",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -7054,13 +7446,6 @@
    "sid": "44e5ed6aaf9b",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.quote.quoted_text",
-     "detail": "\"At the beginning of the end step, sacrifice this token.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.target.card_type.value",
@@ -7420,6 +7805,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.of.card_type[].value",
+     "detail": "an Equipment attached to it",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].if.of.card_type[].value",
      "detail": "an Equipment attached to it",
      "severity": "medium",
@@ -7687,20 +8079,6 @@
    ]
   },
   {
-   "card": "Colleen Wing, Street Samurai",
-   "sid": "fa0a3cc1f774",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "targets",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "Collision Course",
    "sid": "4238dc412264",
    "sentence_index": 0,
@@ -7809,6 +8187,27 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Combat Tutorial",
+   "sid": "a6d4667bb905",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -8429,6 +8828,27 @@
    ]
   },
   {
+   "card": "Cost of Brilliance",
+   "sid": "f598032828cc",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Council of Echoes",
    "sid": "438d122c7069",
    "sentence_index": 1,
@@ -8547,15 +8967,36 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.cards.controller",
-     "detail": "they gained control of this way",
+     "path": "[].effect.cards.controller.of",
+     "detail": "this way",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].effect.for_each.controller",
-     "detail": "they gained control of this way",
+     "path": "[].effect.for_each.controller.of",
+     "detail": "this way",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Cracked Skull",
+   "sid": "d20f16ef07ce",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -8603,8 +9044,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
@@ -8752,6 +9193,27 @@
      "kind": "stringy",
      "path": "[].xdef.xdef.fragment[]",
      "detail": "cards that were put into target player's graveyard from their library this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Cruel Somnophage // Can't Wake Up",
+   "sid": "0ee0dffede01",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -8933,6 +9395,20 @@
    ]
   },
   {
+   "card": "Crystal Fragments // Summon: Alexander",
+   "sid": "d7dcf81771ce",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Cult Healer",
    "sid": "bc0566500970",
    "sentence_index": 0,
@@ -9017,6 +9493,20 @@
    ]
   },
   {
+   "card": "Curious Colossus",
+   "sid": "d2362d9db944",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].target.controller.ref",
+     "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Curious Farm Animals",
    "sid": "eea1378f1093",
    "sentence_index": 1,
@@ -9039,6 +9529,20 @@
      "kind": "stringy",
      "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature deals combat damage to a player, investigate.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Curse of the Werefox",
+   "sid": "c409b6a4b590",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.fights.controller.ref",
+     "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -9191,14 +9695,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.card.card_type.value",
+     "path": "[].options[].continuations[].effect.card.card_type.value",
      "detail": "nonland permanent",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.who",
+     "path": "[].options[].continuations[].effect.who",
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
@@ -9466,6 +9970,27 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "Job select",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Dark Leo & Shredder",
+   "sid": "8e5e8c723262",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "a player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -9878,6 +10403,27 @@
    ]
   },
   {
+   "card": "Decorum Dissertation",
+   "sid": "f598032828cc",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Decoy Ploy",
    "sid": "44e5ed6aaf9b",
    "sentence_index": 0,
@@ -9973,6 +10519,13 @@
    "sid": "9a139bd17125",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].condition.card_target.modifier",
+     "detail": "with a counter on a creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].if.card_target.modifier",
@@ -10081,6 +10634,27 @@
    ]
   },
   {
+   "card": "Demolition Field",
+   "sid": "d11f1a09ad1e",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "that land 's controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "that land 's controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Demonic Junker",
    "sid": "02a4fac1e7d9",
    "sentence_index": 0,
@@ -10089,6 +10663,20 @@
      "kind": "stringy",
      "path": "[].keywords.modifier",
      "detail": "for {'card_type': {'kind': 'type', 'value': 'artifacts'}}",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Demonic Junker",
+   "sid": "be4a4dc5c660",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.effect.card.controller.ref",
+     "detail": "that player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10221,6 +10809,27 @@
    ]
   },
   {
+   "card": "Desperate Bloodseeker",
+   "sid": "90cafccb5338",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Destined Confrontation",
    "sid": "f833e811d4b3",
    "sentence_index": 0,
@@ -10231,13 +10840,6 @@
      "detail": "any number of creatures they control with total power 4 or less",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "player",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -10343,6 +10945,27 @@
      "detail": "activate",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Dictate of Kruphix",
+   "sid": "339878da442a",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -10488,6 +11111,27 @@
      "kind": "stringy",
      "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature attacks, you may sacrifice an artifact other than ~. When you do, this creature deals damage equal to its power to target creature.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Discerning Financier",
+   "sid": "0b16c19b6fac",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "another player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "another player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -10774,6 +11418,20 @@
    ]
   },
   {
+   "card": "Don & Leo, Problem Solvers",
+   "sid": "6c35a074c890",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "their owners",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Donatello, Mutant Mechanic",
    "sid": "efeb1bb04775",
    "sentence_index": 3,
@@ -10803,20 +11461,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "costs",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Doom Reigns Supreme",
-   "sid": "cab70fbdd743",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -11733,31 +12377,10 @@
    ]
   },
   {
-   "card": "Eagle's Rescue",
-   "sid": "8b0dac3e23c5",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "from your graveyard to the battlefield attached to",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Early Winter",
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].output[].effect.card.controller",
-     "detail": "they control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.who",
@@ -12279,6 +12902,20 @@
    ]
   },
   {
+   "card": "Eliminate the Impossible",
+   "sid": "0cdb3554bc1d",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Elixir",
    "sid": "084acb14c3d2",
    "sentence_index": 1,
@@ -12558,8 +13195,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
@@ -12618,6 +13255,27 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Emeritus of Ideation // Ancestral Recall",
+   "sid": "c95c622218e1",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -12958,6 +13616,27 @@
    ]
   },
   {
+   "card": "Erode",
+   "sid": "3b237fa7ae90",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Erratic Apparition",
    "sid": "382fec2bd1e9",
    "sentence_index": 1,
@@ -13032,6 +13711,20 @@
    "sid": "6da5a85d6381",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].condition.event.object.card_type[].value",
+     "detail": "creature spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.event.object.card_type[].value",
+     "detail": "a noncreature spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].if.event.object.card_type[].value",
@@ -13250,25 +13943,25 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "artifact",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Evil Reawakened",
-   "sid": "7f705cae5990",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "from your graveyard to the battlefield with two additional +1/+1 counter s on it",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -13355,6 +14048,20 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "cast",
@@ -13368,6 +14075,20 @@
    "sid": "f47e31f6edac",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].trigger.event.object.items[]",
@@ -13416,6 +14137,27 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Expedited Inheritance",
+   "sid": "b542ff4a89c2",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -13696,6 +14438,13 @@
      "detail": ", except it has haste and \"At the beginning of the end step, if you don't control a planeswalker, sacrifice this creature.\"",
      "severity": "medium",
      "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].on.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -13847,6 +14596,20 @@
    ]
   },
   {
+   "card": "Faller's Faithful",
+   "sid": "a43653ed6a9a",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.controller.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Fanatical Offering",
    "sid": "24175650b649",
    "sentence_index": 0,
@@ -13920,6 +14683,20 @@
      "detail": "bare_condition: condition=that creature would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Faunsbane Troll",
+   "sid": "e513a419b664",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.fights.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -14315,8 +15092,15 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "with mana value less than or equal to this creature 's power from your graveyard to the battlefield",
+     "path": "[].effect.card.filter.stat",
+     "detail": "mana value",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.filter.value.of",
+     "detail": "this creature's power",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -14718,6 +15502,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Flamebraider",
+   "sid": "e498385d3ad1",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast Elemental spells or activate abilities of Elemental sources",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -15124,6 +15922,13 @@
      "detail": "evidence 3",
      "severity": "medium",
      "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -15334,6 +16139,20 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Freya Crescent",
+   "sid": "0591a9dbea98",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast an Equipment spell or activate an equip ability",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -15554,8 +16373,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.to.controller",
-     "detail": "your opponents control",
+     "path": "[].options[].output[].effect.to.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -15580,6 +16399,20 @@
    "sid": "8e58442ca4df",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -15973,6 +16806,20 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "choice",
@@ -16083,27 +16930,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Generous Revival",
-   "sid": "5726f757ce90",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "from your graveyard to the battlefield with an additional +1/+1 counter on it",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -16184,8 +17010,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
@@ -16478,6 +17304,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].trigger.event.object.items[]",
      "detail": "an instant",
      "severity": "medium",
@@ -16584,6 +17424,20 @@
    ]
   },
   {
+   "card": "Glen Elendra's Answer",
+   "sid": "e03fdc08b861",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Glidedive Duo",
    "sid": "a17167242c0c",
    "sentence_index": 1,
@@ -16675,6 +17529,20 @@
    ]
   },
   {
+   "card": "Gl\u00f3in the Mighty // Easy Pickings",
+   "sid": "1f4ec2080c04",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Gnarlback Rhino",
    "sid": "35cc5a6f35a2",
    "sentence_index": 1,
@@ -16737,8 +17605,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.target.controller",
-     "detail": "target player",
+     "path": "[].options[].output[].effect.target.controller.ref",
+     "detail": "target player controls",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -17063,6 +17931,27 @@
      "detail": "hasn't",
      "severity": "high",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Gollum, Silent Slinker // Meager Meal",
+   "sid": "d291ec251595",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -17654,8 +18543,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.shared.target.controller",
-     "detail": "target player",
+     "path": "[].options[].output[].effect.shared.target.controller.ref",
+     "detail": "target player controls",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -17675,8 +18564,15 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect[].who",
-     "detail": "Target player",
+     "path": "[].options[].output[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect[].who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -17740,6 +18636,20 @@
      "kind": "stringy",
      "path": "[].effect.until",
      "detail": "end of turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Guidelight Optimizer",
+   "sid": "1f812bce42e0",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast an artifact spell or activate an ability",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18026,6 +18936,34 @@
    ]
   },
   {
+   "card": "Hapatra, the Desert Fang",
+   "sid": "58b2c2fd1fa0",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.effect.on.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Hapatra, the Desert Frost",
+   "sid": "10e7754b3275",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.effect.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Harbinger of the Tides",
    "sid": "13f9a183f6e5",
    "sentence_index": 1,
@@ -18186,8 +19124,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
@@ -18313,6 +19251,20 @@
    ]
   },
   {
+   "card": "Helga, Skittish Seer",
+   "sid": "b5d1820965a3",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast creature spells with mana value 4 or greater or creature spells with {X} in their mana costs",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Hellcat, Undying Vigilante",
    "sid": "592366988c8c",
    "sentence_index": 1,
@@ -18322,6 +19274,13 @@
      "path": "[].effect.card.card_type.raw",
      "detail": "her",
      "severity": "high",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "her owner",
+     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -18593,6 +19552,20 @@
    ]
   },
   {
+   "card": "Hide on the Ceiling",
+   "sid": "16237fd3364c",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "their owners",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Hidetsugu's Second Rite",
    "sid": "617253931438",
    "sentence_index": 0,
@@ -18761,6 +19734,27 @@
    ]
   },
   {
+   "card": "Homesickness",
+   "sid": "a6d4667bb905",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Homunculus Horde",
    "sid": "77bc8d1e9853",
    "sentence_index": 0,
@@ -18858,7 +19852,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.owner.of.controller",
+     "path": "[].effect.owner.of.controller.ref",
      "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
@@ -18985,6 +19979,20 @@
    ]
   },
   {
+   "card": "How to Start a Riot",
+   "sid": "79e52453c6c3",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Howler's Heavy",
    "sid": "0e894ea192ab",
    "sentence_index": 1,
@@ -19064,6 +20072,13 @@
      "path": "[].effect[].card.card_type.raw",
      "detail": "her",
      "severity": "high",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].to.controller.ref",
+     "detail": "her owner",
+     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -19153,6 +20168,20 @@
    ]
   },
   {
+   "card": "Hunter's Talent",
+   "sid": "8eb320b466cb",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Hurl into History",
    "sid": "6e13e61d7056",
    "sentence_index": 0,
@@ -19224,6 +20253,27 @@
      "kind": "stringy",
      "path": "[].effect[].quote.quoted_text",
      "detail": "\"{T}: Add {U}.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Hylda's Crown of Winter",
+   "sid": "2c3d6aecf03a",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.cards.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.for_each.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -19643,6 +20693,20 @@
    ]
   },
   {
+   "card": "Incinerator of the Guilty",
+   "sid": "3ce764babae5",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Inevitable Defeat",
    "sid": "66d9f937bda8",
    "sentence_index": 2,
@@ -19723,6 +20787,27 @@
      "detail": "step",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Infirmary Healer // Stream of Life",
+   "sid": "16109420047b",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -19847,6 +20932,27 @@
      "kind": "stringy",
      "path": "[].effect.target",
      "detail": "Unlock cost s you pay",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Insatiable Avarice",
+   "sid": "27a875805bbf",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -20189,6 +21295,20 @@
    ]
   },
   {
+   "card": "Intrepid Stablemaster",
+   "sid": "4b00ddc24635",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast Mount or Vehicle spells",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Intrude on the Mind",
    "sid": "bc0737d65213",
    "sentence_index": 1,
@@ -20342,8 +21462,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.to.controller",
-     "detail": "your opponents control",
+     "path": "[].options[].output[].effect.to.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -20770,6 +21890,20 @@
    ]
   },
   {
+   "card": "Jill, Shiva's Dominant // Shiva, Warden of Ice",
+   "sid": "adc579f5504b",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Johann's Stopgap",
    "sid": "9bc4dce97785",
    "sentence_index": 2,
@@ -20802,6 +21936,13 @@
    "sid": "cd019cbf8213",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].condition.object",
+     "detail": "cards in hand",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].if.object",
@@ -21001,6 +22142,27 @@
    ]
   },
   {
+   "card": "Kain, Traitorous Dragoon",
+   "sid": "739c74aee902",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Kaito, Bane of Nightmares",
    "sid": "bb422c9f3f2f",
    "sentence_index": 2,
@@ -21040,6 +22202,20 @@
    "sid": "5d5b29333c79",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "invariant",
      "path": null,
@@ -21235,6 +22411,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Kaya, Spirits' Justice",
+   "sid": "135608c12dc0",
+   "sentence_index": 5,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -21659,6 +22849,41 @@
    ]
   },
   {
+   "card": "Kitesail Larcenist",
+   "sid": "e165b23f13e9",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.object.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Klaw, Sonic Subjugator",
+   "sid": "d20f16ef07ce",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Knife",
    "sid": "97fbb7776528",
    "sentence_index": 0,
@@ -21905,9 +23130,37 @@
   },
   {
    "card": "Krenko's Buzzcrusher",
+   "sid": "5a44f50b3618",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Krenko's Buzzcrusher",
    "sid": "b27f8df9aaea",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.effect.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -22429,6 +23682,20 @@
    ]
   },
   {
+   "card": "Leatherhead, Swamp Stalker",
+   "sid": "998bae99d2af",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Lecturing Scornmage",
    "sid": "993be9fd58fd",
    "sentence_index": 0,
@@ -22582,8 +23849,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.target.controller",
-     "detail": "your opponents control",
+     "path": "[].options[].output[].effect.target.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -22838,6 +24105,20 @@
      "detail": "bare_condition: condition=this card is in your opening hand",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Lich's Relic",
+   "sid": "db145ea1b0a2",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.effect.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -23451,6 +24732,20 @@
    ]
   },
   {
+   "card": "Lost in the Maze",
+   "sid": "28f604f2233b",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.on.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Lotus Ring",
    "sid": "7b5f754fc2c6",
    "sentence_index": 1,
@@ -23699,6 +24994,20 @@
      "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "M.O.D.O.K.",
+   "sid": "d2785e9bc62b",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -23973,13 +25282,6 @@
    "sid": "2a420e2a4d80",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "from your graveyard to the battlefield attached to",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -24367,8 +25669,57 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].trigger.event.subject.controller.ref",
      "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Massacre Wurm",
+   "sid": "b5f07538b1c7",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Master Pakku",
+   "sid": "196c4448b474",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -24383,6 +25734,27 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "First strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Master's Councillors",
+   "sid": "001ed96f29b4",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -24865,6 +26237,27 @@
    ]
   },
   {
+   "card": "Metamorphic Blast",
+   "sid": "65ce19a9e584",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Meteor Golem",
    "sid": "a50fe2bcedad",
    "sentence_index": 0,
@@ -25173,6 +26566,27 @@
    ]
   },
   {
+   "card": "Mind Roots",
+   "sid": "b38ca9d8ebb1",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Mind Spiral",
    "sid": "11dc0334405d",
    "sentence_index": 2,
@@ -25181,6 +26595,27 @@
      "kind": "stringy",
      "path": "[].effect[].card.controller.ref",
      "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Mind Spiral",
+   "sid": "c95c622218e1",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -25218,6 +26653,20 @@
      "detail": "player",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Mindwhisker",
+   "sid": "bb12fc750cc3",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -25456,6 +26905,13 @@
      "detail": "\"{T}: Add {U}. Spend this mana only to cast a spell from anywhere other than your hand.\"",
      "severity": "medium",
      "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.sentence[].use",
+     "detail": "Spend this mana only to cast a spell from anywhere other than your hand",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -25498,20 +26954,6 @@
      "detail": "Double strike",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Mockingbird, Ace Agent",
-   "sid": "fa0a3cc1f774",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "targets",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -25911,6 +27353,27 @@
      "detail": "dealt",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Mornsong Aria",
+   "sid": "bc878853f515",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -26622,6 +28085,20 @@
    ]
   },
   {
+   "card": "Neutralize the Guards",
+   "sid": "f68ffae6cad9",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "New Horizons",
    "sid": "66f20d984634",
    "sentence_index": 1,
@@ -26903,6 +28380,20 @@
   },
   {
    "card": "Nita, Forum Conciliator",
+   "sid": "a1eb9c466265",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].trigger.event.object.controller.ref",
+     "detail": "you don't own",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Nita, Forum Conciliator",
    "sid": "c0cf66ab2be6",
    "sentence_index": 2,
    "claims": [
@@ -26947,6 +28438,27 @@
      "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Niv-Mizzet, Guildpact",
+   "sid": "7b1dbeab0e09",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -27129,6 +28641,20 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Nowhere to Run",
+   "sid": "ef0907502128",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.targets[].controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -27406,6 +28932,20 @@
    ]
   },
   {
+   "card": "Officious Interrogation",
+   "sid": "383caf113d08",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].xdef.xdef[].controller.ref",
+     "detail": "those players",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Ogre Chitterlord",
    "sid": "a906e518ed4b",
    "sentence_index": 1,
@@ -27428,6 +28968,27 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "ward {1}",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Oildeep Gearhulk",
+   "sid": "837bd0314ccd",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -27588,6 +29149,20 @@
    ]
   },
   {
+   "card": "Omega, Heartless Evolution",
+   "sid": "07459bd2033c",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.effect.card.controller.ref",
+     "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Omenpath Journey",
    "sid": "71bab82cd4b2",
    "sentence_index": 1,
@@ -27682,20 +29257,6 @@
      "detail": "costs",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "One Last Job",
-   "sid": "f98578eaafbf",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "from your graveyard to the battlefield attached to",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -27889,20 +29450,6 @@
    ]
   },
   {
-   "card": "Outrageous Robbery",
-   "sid": "f118e0ecfe1c",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "Over the Edge",
    "sid": "4238dc412264",
    "sentence_index": 0,
@@ -27925,6 +29472,20 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Overgrown Zealot",
+   "sid": "883241d61c73",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to turn permanents face up",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -28029,6 +29590,27 @@
    ]
   },
   {
+   "card": "Ozai's Cruelty",
+   "sid": "267e8d896c0d",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Ozai, the Phoenix King",
    "sid": "b6a8aa8e4d73",
    "sentence_index": 0,
@@ -28097,6 +29679,20 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: unless=they discard a card",
@@ -28128,6 +29724,27 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "Job select",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Panther Pounce",
+   "sid": "39bfd7ec2e24",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -28903,8 +30520,15 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.who",
-     "detail": "Target player",
+     "path": "[].options[].continuations[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].continuations[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -28957,6 +30581,13 @@
    "sid": "dae26fb123e0",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -29191,6 +30822,20 @@
    ]
   },
   {
+   "card": "Practiced Offense",
+   "sid": "efda7d70252c",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.on.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Practiced Scrollsmith",
    "sid": "10ae65ca39e1",
    "sentence_index": 2,
@@ -29395,6 +31040,27 @@
   },
   {
    "card": "Price of Freedom",
+   "sid": "3b237fa7ae90",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Price of Freedom",
    "sid": "76cb37166cb0",
    "sentence_index": 0,
    "claims": [
@@ -29430,6 +31096,20 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "double strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Primal Might",
+   "sid": "4731a59d4e06",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.fights.controller.ref",
+     "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -29481,20 +31161,6 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Prison Break",
-   "sid": "a1ecbe9bc2df",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "from your graveyard to the battlefield with an additional +1/+1 counter on it",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -29628,6 +31294,20 @@
      "detail": "enters",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Prophesied End",
+   "sid": "5627728477b7",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.controller.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -29789,6 +31469,20 @@
      "detail": "bare_modifier: modifier=pay 2 life",
      "severity": "high",
      "source": "invariant_flags.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Purple Dragon Punks",
+   "sid": "8bb6b6dc4b05",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast an artifact spell or to activate an ability",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -30304,10 +31998,52 @@
    ]
   },
   {
+   "card": "Rabid Bite",
+   "sid": "60cdfa420c08",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Rabid Gnaw",
+   "sid": "3c788c3031e8",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Radiant Lotus",
    "sid": "efe15d5f2ace",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -30389,20 +32125,6 @@
      "kind": "stringy",
      "path": "[].effect[].quote.quoted_text",
      "detail": "\"{2}, {T}, Sacrifice this artifact: You gain 3 life.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rakdos Joins Up",
-   "sid": "839cf6797941",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "from your graveyard to the battlefield with two additional +1/+1 counter s on it",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -30527,7 +32249,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.who",
+     "path": "[].effect.who.ref",
+     "detail": "any number of target players",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
      "detail": "any number of target players",
      "severity": "medium",
      "source": "artifact:output"
@@ -31401,11 +33130,39 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that creature 's controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that creature 's controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "anaphora_agreement",
      "path": null,
      "detail": "kind_mismatch",
      "severity": "high",
      "source": "review/anaphora_agreement.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Requisition Raid",
+   "sid": "33ed5c8fcb09",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.on.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -31670,6 +33427,27 @@
   },
   {
    "card": "Restless Reef",
+   "sid": "09386798de10",
+   "sentence_index": 4,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Restless Reef",
    "sid": "6fbb13b2fdb5",
    "sentence_index": 2,
    "claims": [
@@ -31837,6 +33615,27 @@
    ]
   },
   {
+   "card": "Restorative Technique",
+   "sid": "32a866058384",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Retched Wretch",
    "sid": "c52c074821e3",
    "sentence_index": 0,
@@ -31948,8 +33747,15 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect[].who",
-     "detail": "Target player",
+     "path": "[].options[].output[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect[].who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -31988,6 +33794,13 @@
    "sid": "6c859399632d",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].condition.event.object.modifier.stat",
+     "detail": "mana value",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].if.event.object.modifier.stat",
@@ -32185,6 +33998,13 @@
    "sentence_index": 2,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.effect.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
@@ -32221,7 +34041,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.amount[]",
+     "path": "[].options[].continuations[].effect.amount[]",
      "detail": "cards drawn this way",
      "severity": "medium",
      "source": "artifact:output"
@@ -32291,6 +34111,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
@@ -32305,7 +34132,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.who",
+     "path": "[].effect.who.ref",
+     "detail": "any number of target players",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
      "detail": "any number of target players",
      "severity": "medium",
      "source": "artifact:output"
@@ -32333,7 +34167,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.who",
+     "path": "[].effect.who.ref",
+     "detail": "any number of target players",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
      "detail": "any number of target players",
      "severity": "medium",
      "source": "artifact:output"
@@ -32421,6 +34262,27 @@
      "detail": "Harmonize {4}{G}",
      "severity": "medium",
      "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Roaming Throne",
+   "sid": "059dd1cd31a4",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "addition",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "types",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -32608,6 +34470,20 @@
      "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "up to one target creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Ronin, Shadow Stalker",
+   "sid": "1ac5eedead35",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast Equipment spells or activate equip abilities",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -33062,6 +34938,20 @@
    ]
   },
   {
+   "card": "Run Away Together",
+   "sid": "f7cbc83da9a8",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.object.controller.ref",
+     "detail": "controlled by different players",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Run Behind",
    "sid": "816e16e56e0c",
    "sentence_index": 1,
@@ -33238,6 +35128,20 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "double strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Rustler Rampage",
+   "sid": "ed53bda15315",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "target player controls",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -33516,8 +35420,50 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.to",
-     "detail": "with mana value less than or equal to this creature 's power from your graveyard to the battlefield",
+     "path": "[].effect.card.filter.stat",
+     "detail": "mana value",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.filter.value.of",
+     "detail": "this creature's power",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Sandman's Quicksand",
+   "sid": "5b91245fdb9f",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Sandworm",
+   "sid": "3b237fa7ae90",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "its controller",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -33664,6 +35610,27 @@
    ]
   },
   {
+   "card": "Sazacap's Brew",
+   "sid": "a6d4667bb905",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Sazh's Chocobo",
    "sid": "19ee4a57752b",
    "sentence_index": 0,
@@ -33776,6 +35743,27 @@
    ]
   },
   {
+   "card": "Scavenger's Talent",
+   "sid": "1866b50652b6",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Scavenging Ooze",
    "sid": "0104dca3ae6d",
    "sentence_index": 1,
@@ -33814,6 +35802,27 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Scheming Silvertongue // Sign in Blood",
+   "sid": "f598032828cc",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -33917,6 +35926,27 @@
      "kind": "stringy",
      "path": "[].options[].output[].ability_word",
      "detail": "Bring ~",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Scrabbling Skullcrab",
+   "sid": "ce0c305378b7",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -34356,8 +36386,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.target.controller",
-     "detail": "your opponents control",
+     "path": "[].options[].output[].effect.target.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -34553,6 +36583,20 @@
    ]
   },
   {
+   "card": "Sephiroth, Planet's Heir",
+   "sid": "f483b2eb350b",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Seraphic Steed",
    "sid": "3b027cb4a6a5",
    "sentence_index": 0,
@@ -34619,6 +36663,41 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Settle the Wreckage",
+   "sid": "0ef0f48ce1cf",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Settle the Wreckage",
+   "sid": "e42383eec887",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -34710,6 +36789,20 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Shang-Chi, Master of Kung Fu",
+   "sid": "00bfa0bfbe65",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to activate abilities of creature sources",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -34866,6 +36959,13 @@
    "sentence_index": 3,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.who.controller.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "tapped",
@@ -34986,15 +37086,29 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.who",
-     "detail": "Target player",
+     "path": "[].options[].output[].effect.who.ref",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect[].who",
-     "detail": "Target player",
+     "path": "[].options[].output[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect[].who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -35037,6 +37151,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "double strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Shrouded Shepherd // Cleave Shadows",
+   "sid": "bad6381fbd46",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -35406,7 +37534,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].who",
+     "path": "[].effect[].who.ref",
+     "detail": "any number of target players",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
      "detail": "any number of target players",
      "severity": "medium",
      "source": "artifact:output"
@@ -35779,6 +37914,34 @@
      "kind": "stringy",
      "path": "[].effect.items[].keywords[]",
      "detail": "first strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Smaug, Wicked Worm",
+   "sid": "4c4f8ca4f66a",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].xdef.xdef.of.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Smoky Lounge // Misty Salon",
+   "sid": "f96491d48d61",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast Room spells and unlock doors",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36290,6 +38453,27 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "firebending 5",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Space-Time Anomaly",
+   "sid": "eeb1fc4f191b",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36875,11 +39059,39 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "choice",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Spring Splasher",
+   "sid": "c1c4ad879c18",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.controller.ref",
+     "detail": "defending player",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -37310,8 +39522,15 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect[].who",
-     "detail": "Target player",
+     "path": "[].options[].output[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect[].who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -37367,6 +39586,20 @@
    ]
   },
   {
+   "card": "Steelswarm Operator",
+   "sid": "4f25921158fc",
+   "sentence_index": 4,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to activate abilities of artifact sources",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Stegron the Dinosaur Man",
    "sid": "de2e1f012794",
    "sentence_index": 1,
@@ -37412,6 +39645,20 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Sting, Bilbo's Sword",
+   "sid": "c29e84906f6e",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.for_each.controller.ref",
+     "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -37842,8 +40089,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
@@ -38175,6 +40422,41 @@
      "detail": "\"Whenever this creature deals combat damage to a player, a player loses the game.\"",
      "severity": "medium",
      "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.sentence[].effect.who.ref",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.quote.sentence[].effect.who.selection",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Summon: Shiva",
+   "sid": "428849725d7a",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.cards.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.for_each.controller.ref",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -38319,6 +40601,20 @@
    ]
   },
   {
+   "card": "Sunken Citadel",
+   "sid": "9af1ec58c297",
+   "sentence_index": 4,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to activate abilities of land sources",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Sunpearl Kirin",
    "sid": "b6ee793cf520",
    "sentence_index": 2,
@@ -38373,16 +40669,16 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "creature",
+     "kind": "stringy",
+     "path": "[].effect.amount.xdef[].controller.ref",
+     "detail": "that player",
      "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
+     "source": "artifact:output"
     },
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "equal",
+     "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -38451,6 +40747,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].trigger.when.phase",
      "detail": "upkeep of enchanted creature 's controller",
      "severity": "medium",
@@ -38502,6 +40812,27 @@
      "kind": "stringy",
      "path": "[].effect.card.controller.ref",
      "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Super-Skrull",
+   "sid": "49ff83edb838",
+   "sentence_index": 4,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -38614,6 +40945,27 @@
   },
   {
    "card": "Survey Mechan",
+   "sid": "ad61f8d35ba0",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Survey Mechan",
    "sid": "d0c92be89be6",
    "sentence_index": 4,
    "claims": [
@@ -38697,6 +41049,27 @@
    ]
   },
   {
+   "card": "Sweettooth Witch",
+   "sid": "8b1a77dbe3f5",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Swiftblade Vindicator",
    "sid": "ca385067dfee",
    "sentence_index": 0,
@@ -38759,15 +41132,22 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.target.controller",
+     "path": "[].options[].output[].effect.target.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.who.ref",
      "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.who",
-     "detail": "Target player",
+     "path": "[].options[].output[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -39230,6 +41610,27 @@
      "kind": "stringy",
      "path": "[].effect.object",
      "detail": "of X cards",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Taster of Wares",
+   "sid": "93716fdcb002",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "that player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -39822,6 +42223,20 @@
      "source": "artifact:output"
     },
     {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "equal",
@@ -40301,6 +42716,27 @@
      "kind": "stringy",
      "path": "[].effect[].keywords[]",
      "detail": "first strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "The Master of Lake-town",
+   "sid": "c1974d8c9373",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "a player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -41050,6 +43486,20 @@
   },
   {
    "card": "Throw from the Saddle",
+   "sid": "3c788c3031e8",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.to.controller.ref",
+     "detail": "you don't control",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Throw from the Saddle",
    "sid": "50dcd1918c68",
    "sentence_index": 1,
    "claims": [
@@ -41085,6 +43535,20 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "double strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Thunder Lasso",
+   "sid": "18c037f604fa",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "defending player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -41259,13 +43723,34 @@
    ]
   },
   {
+   "card": "Tin Street Gossip",
+   "sid": "2a26968ff6e0",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast face-down spells or to turn creatures face up",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Tinybones Joins Up",
    "sid": "49ac884d706b",
    "sentence_index": 0,
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.who",
+     "path": "[].effect.who.ref",
+     "detail": "any number of target players",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
      "detail": "any number of target players",
      "severity": "medium",
      "source": "artifact:output"
@@ -41279,7 +43764,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.shared.who",
+     "path": "[].effect.shared.who.ref",
+     "detail": "any number of target players",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.shared.who.selection",
      "detail": "any number of target players",
      "severity": "medium",
      "source": "artifact:output"
@@ -41291,6 +43783,13 @@
    "sid": "2be6262bec7a",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].inner.card.controller.ref",
+     "detail": "you don't own",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -41410,6 +43909,20 @@
    "sid": "9cf2cf27c429",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].xdef.xdef.of",
@@ -42106,6 +44619,20 @@
    ]
   },
   {
+   "card": "Troyan, Gutsy Explorer",
+   "sid": "50869789b9d0",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast spells with mana value 5 or greater or spells with {X} in their mana costs",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Trumpeting Carnosaur",
    "sid": "d70720b9ab8d",
    "sentence_index": 2,
@@ -42146,6 +44673,13 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect.inner.card.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
@@ -42175,8 +44709,8 @@
     },
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.target.controller",
-     "detail": "target player",
+     "path": "[].options[].output[].effect.target.controller.ref",
+     "detail": "target player controls",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -42219,6 +44753,20 @@
      "kind": "stringy",
      "path": "[].effect.object.controller.ref",
      "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Turtle Lair",
+   "sid": "03d777c0ed90",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast a Ninja or Turtle spell",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -42463,6 +45011,20 @@
    ]
   },
   {
+   "card": "Twisted Fates",
+   "sid": "efda7d70252c",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.on.controller.ref",
+     "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Twisted Sewer-Witch",
    "sid": "5b9f4d6bd8e7",
    "sentence_index": 0,
@@ -42667,6 +45229,20 @@
      "kind": "stringy",
      "path": "[].effect.card.controller.ref",
      "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Ultimecia, Temporal Threat",
+   "sid": "aeb5f33bed05",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.controller.ref",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -43086,6 +45662,27 @@
    ]
   },
   {
+   "card": "Unscrupulous Contractor",
+   "sid": "1479603fc885",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Unsparing Boltcaster",
    "sid": "5af3b709ec4f",
    "sentence_index": 0,
@@ -43094,6 +45691,41 @@
      "kind": "stringy",
      "path": "[].effect.to.controller.ref",
      "detail": "an opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Unstable Experiment",
+   "sid": "7e9be7ef081f",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Unstable Glyphbridge // Sandswirl Wanderglyph",
+   "sid": "19ce2dc0330c",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.object.controller.ref",
+     "detail": "that player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -43198,6 +45830,20 @@
    ]
   },
   {
+   "card": "Unyielding Gatekeeper",
+   "sid": "c19d95ddf1ee",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.actor.controller.ref",
+     "detail": "its controller",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Urban Retreat",
    "sid": "2861e2d525a5",
    "sentence_index": 2,
@@ -43285,6 +45931,20 @@
      "detail": "opponents",
      "severity": "high",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Vaan, Street Thief",
+   "sid": "bd93edc0b5bf",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].trigger.event.object.controller.ref",
+     "detail": "you don't own",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -43595,6 +46255,20 @@
    "sentence_index": 0,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
@@ -43862,7 +46536,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.fights.controller.ref",
+     "path": "[].options[].continuations[].effect.fights.controller.ref",
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
@@ -43919,6 +46593,20 @@
    ]
   },
   {
+   "card": "Villainous Hideout",
+   "sid": "a1cb59638591",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast a Villain spell or to activate an ability of a Villain source",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Villainous Wrath",
    "sid": "7b518facb994",
    "sentence_index": 0,
@@ -43927,13 +46615,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "equal",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -44077,6 +46758,20 @@
    "sid": "1db8783212c5",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "a player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -44262,6 +46957,27 @@
    ]
   },
   {
+   "card": "Volatile Fault",
+   "sid": "3268031776da",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect[].who.selection",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Volatile Wanderglyph",
    "sid": "16a76f88b44a",
    "sentence_index": 1,
@@ -44394,14 +47110,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.card.items[]",
+     "path": "[].options[].continuations[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].options[].continuations[].output[].effect.card.label.card_type[].value",
+     "path": "[].options[].continuations[].effect.card.label.card_type[].value",
      "detail": "planeswalker creature",
      "severity": "medium",
      "source": "artifact:output"
@@ -44506,8 +47222,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].options[].output[].effect.target.controller",
-     "detail": "target opponent controls",
+     "path": "[].options[].output[].effect.target.controller.ref",
+     "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -44858,6 +47574,27 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "Job select",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Watcher of the Wayside",
+   "sid": "90cafccb5338",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.ref",
+     "detail": "target player",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.who.selection",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -45305,6 +48042,20 @@
    ]
   },
   {
+   "card": "White Lotus Hideout",
+   "sid": "bed1942a9bae",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast a Lesson or Shrine spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "White Lotus Tile",
    "sid": "2f56026b0da5",
    "sentence_index": 1,
@@ -45662,6 +48413,20 @@
    ]
   },
   {
+   "card": "Winnowing",
+   "sid": "68e55f55449d",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.object.controller.ref",
+     "detail": "that player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Winter, Cursed Rider",
    "sid": "606ac6402c91",
    "sentence_index": 0,
@@ -45973,6 +48738,20 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Woodland Weavemaster",
+   "sid": "1996aeaa99c8",
+   "sentence_index": 3,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].use",
+     "detail": "Spend this mana only to cast Elf spells and activate abilities of Elf sources",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -46396,8 +49175,8 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.actor[]",
-     "detail": "Its",
+     "path": "[].effect.actor.of.ref",
+     "detail": "its",
      "severity": "high",
      "source": "artifact:output"
     }
