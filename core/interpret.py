@@ -344,6 +344,10 @@ class Interpreter:
         out = [self._finalize(x, top=True) for x in cleaned]
         for x in out:
             self._late_normalize(x)
+        # Second pass: some target labels/relations are created by the first
+        # late pass; lift their fields after they exist.
+        for x in out:
+            self._late_normalize(x)
         return out
 
     @staticmethod
@@ -1394,8 +1398,7 @@ class Interpreter:
                 obj['condition'] = obj['if']
             # Coordinated/property targets must expose the resolved set at the
             # top level; label is display/aux data, never the only carrier.
-            if obj.get('kind') in ('property', 'set', 'choice') \
-                    and isinstance(obj.get('label'), dict):
+            if isinstance(obj.get('label'), dict):
                 lab = obj['label']
                 for key in ('card_type', 'colors', 'quantifier',
                             'controller', 'status', 'card_class'):
@@ -1629,8 +1632,7 @@ class Interpreter:
                 obj['xdef'] = {'kind': 'x', 'source': 'mana_cost'}
             # Final target-set lift: colour/status normalizers may have enriched
             # label after the earlier lift pass.
-            if obj.get('kind') in ('property', 'set', 'choice') \
-                    and isinstance(obj.get('label'), dict):
+            if isinstance(obj.get('label'), dict):
                 lab = obj['label']
                 for key in ('card_type', 'colors', 'quantifier',
                             'controller', 'status', 'card_class'):
