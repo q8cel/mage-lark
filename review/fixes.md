@@ -979,3 +979,32 @@ artifact rows 1,628 (1,673 sentences - 45 nested option rows). Coverage:
 FDN 1673/1673 parse, 1592/1673 honest 95.2%; classic 4397/4460 parse 98.6%,
 4183/4460 honest 93.8%; Standard 21250/22585 parse 94.1%, 19558/22585 honest
 86.6%.
+
+### Engine contract alignment (final)
+
+Quantifier: "one or more" -> `{at_least:1}`, "up to" -> `{up_to:n}`; 0 residual
+`{amount,relation}` quantifiers; every target-taking effect now carries an
+explicit quantifier (0 missing after scan). Colours: 226 target-set colour
+lists (`Deathmark` green/white, `Devout Decree` black/red). "Any target":
+132 explicit `{card_type:{kind:any},quantifier:any,player_target:true}`;
+0 bare empty target sets. Modal continuations: builder reads
+`continuations[].type == 'effect'` + `.effect` (build_cards.py:819-825);
+Charming continuation is `{type:effect,effect:{...},text:...}`. Artifact
+has 259 choose_one groups / 626 options / 96 continuations / 0 bullets.
+Alesha has `filter` mana-value<=power, graveyard zone, battlefield `to`, and
+`condition` alias (470 rows got condition). Four notes cards: Bushwhack
+fixed; Chandra/Muldrotha/Strongbox have no bullet modal structure
+(Chandra's "Choose one" lines are separate loyalty abilities; Muldrotha has
+no choose-one text; Strongbox says "Choose one of them" without bullets).
+`Amount::ThatMany` remains `{kind:that_many,link}` parser-side; builder
+emits `{that_many:link}` (builder-side mismatch, noted).
+
+Final artifact SHA
+`2d8c4bdba3b13378a6704c4e80b156af1f4294eae0f03bffc61fd941133a9c2f` (22k? 21,996
+records; 12,981 keys / 7,738 texts / 5,158 cards); card IR SHA
+`1c8ecbcfa59a565284a0c137c29b2c2dcbb9650c578b7fc23751a18dcdc3d4fe`.
+Fresh SHA was `a388d8d0d4a907a3a42009d9df37f8bb3dc0e4c7302abf7a9d1e4aa46f8fe672`;
+post-pass added 222 links + 10 replacements + 20 copy links. Coverage:
+FDN 1673/1673 parse, 1592/1673 honest 95.2%; classic 4397/4460 parse 98.6%,
+4183/4460 honest 93.8%; Standard 21250/22585 parse 94.1%, 19558/22585 honest
+86.6%.
