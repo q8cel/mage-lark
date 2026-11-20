@@ -1253,7 +1253,12 @@ class Interpreter:
                    'all opponents': 'each opponent'}
             wv = obj.get('who')
             if isinstance(wv, str):
-                obj['who'] = WHO.get(wv.strip().lower(), wv)
+                low = wv.strip().lower()
+                if low in WHO:
+                    obj['who'] = WHO[low]
+                else:
+                    obj['who'] = {'kind': 'player', 'ref': low,
+                                  'selection': low}
             cv = obj.get('controller')
             if isinstance(cv, str):
                 obj['controller'] = {
@@ -1293,6 +1298,160 @@ class Interpreter:
                 if isinstance(pv, str) and pv.strip().lower() in PLAYER_REFS:
                     obj[pkey] = {'kind': 'player',
                                  'ref': pv.strip().lower()}
+            # Long return target strings: split target filter, source zone,
+            # and destination into structured fields.
+            tov = obj.get('to')
+            if isinstance(tov, str) and 'from your graveyard to the battlefield' in tov.lower():
+                low = tov.lower()
+                card = obj.get('card')
+                if isinstance(card, dict):
+                    card.setdefault('zone', {'prep': 'from', 'zone': 'graveyard',
+                                             'possessor': 'your'})
+                    m = re.search(
+                        r'with mana value less than or equal to (.+?) from your graveyard',
+                        low)
+                    if m:
+                        ref = m.group(1).replace(" 's", "'s").strip()
+                        card['filter'] = {
+                            'kind': 'stat_filter', 'stat': 'mana value',
+                            'op': '<=', 'value': {
+                                'kind': 'reference', 'stat': 'power', 'of': ref}}
+                    if 'two additional +1/+1 counter' in low:
+                        card.setdefault('to', {})['counters'] = [
+                            {'kind': '+1/+1', 'count': 2, 'additional': True}]
+                    elif 'an additional +1/+1 counter' in low:
+                        card.setdefault('to', {})['counters'] = [
+                            {'kind': '+1/+1', 'count': 1, 'additional': True}]
+                obj['to'] = {'zone': 'battlefield'}
+                if 'attached to' in low:
+                    obj['to']['attached_to'] = True
+                if 'counter' in low:
+                    obj['to']['counters'] = (
+                        [{'kind': '+1/+1', 'count': 2, 'additional': True}]
+                        if 'two additional' in low else
+                        [{'kind': '+1/+1', 'count': 1, 'additional': True}])
+            # Actor lists are one controller reference, not string tuples.
+            actor = obj.get('actor')
+            if isinstance(actor, list) and len(actor) == 2                     and str(actor[1]).lower() == 'controller':
+                poss = str(actor[0]).lower()
+                obj['actor'] = {'kind': 'controller', 'possessive': poss,
+                                'of': {'kind': 'anaphora', 'ref': poss,
+                                       'status': 'unresolved'}}
+            # Structure the top static_text shapes; leave the long tail marked.
+            if obj.get('type') == 'unparsed' and obj.get('reason') == 'static_text':
+                frag = str(obj.get('fragment') or '')
+                flow = frag.lower()
+                if flow.startswith('transform ~'):
+                    obj.clear(); obj.update({'type': 'transform', 'card': {
+                        'kind': 'this_card', 'value': '~'}})
+                elif 'is the chosen type in addition to its other types' in flow:
+                    obj.clear(); obj.update({'type': 'static_ability',
+                                             'ability': 'chosen_type',
+                                             'scope': 'this_creature'})
+                elif flow.startswith('spend this mana only'):
+                    obj.clear(); obj.update({'type': 'mana_restriction',
+                                             'use': frag,
+                                             'source': 'mana'})
+                elif flow.startswith('activate only if'):
+                    obj.clear(); obj.update({'type': 'activation_condition',
+                                             'condition': {'kind': 'unparsed',
+                                                           'reason': 'activation_condition',
+                                                           'fragment': frag}})
+                elif "players can't gain life" in flow:
+                    obj.clear(); obj.update({'type': 'restriction',
+                                             'subject': 'players',
+                                             'predicate': 'gain_life',
+                                             'negated': True})
+                elif "damage can't be prevented" in flow:
+                    obj.clear(); obj.update({'type': 'restriction',
+                                             'subject': 'damage',
+                                             'predicate': 'be_prevented',
+                                             'negated': True})
+            # Add-mana choose-one-of-N keeps alternatives explicit.
+            amt = obj.get('amount')
+            if isinstance(amt, dict) and amt.get('kind') == 'mana_choice':
+                choices = []
+                for option in amt.get('options') or []:
+                    if isinstance(option, list):
+                        syms = option
+                    elif isinstance(option, dict):
+                        syms = option.get('symbols') or option.get('options') or []
+                    else:
+                        syms = [option]
+                    choices.append({'symbols': syms})
+                obj['choose_one'] = choices
+                obj.pop('amount', None)
+            # Target event filters that are genuinely structured.
+            mod = obj.get('modifier')
+            if isinstance(mod, dict) and mod.get('reason') == 'modifier_text' \
+                    and 'that was put there this turn' in str(mod.get('fragment', '')).lower():
+                obj['modifier'] = {'kind': 'event_filter', 'event': 'put',
+                                   'zone': 'there', 'this_turn': True}
+            # Unresolved copy_of anaphora are explicit, never bare raw.
+            if isinstance(obj.get('copy_of'), dict):
+                cp = obj['copy_of']
+                for ct in ([cp.get('card_type')] if isinstance(cp, dict) else []):
+                    if isinstance(ct, dict) and ct.get('ref') == 'anaphora' \
+                            and 'link' not in ct:
+                        ct['status'] = 'unresolved'
+                        cp['status'] = 'unresolved'
+            # Canonical controller objects: player refs plus explicit relations.
+            cv = obj.get('controller')
+            if isinstance(cv, str):
+                low = cv.strip().lower()
+                CTRL = {
+                    'you': {'kind': 'player', 'ref': 'you'},
+                    'opponent': {'kind': 'player', 'ref': 'opponent'},
+                    'target player': {'kind': 'player', 'ref': 'target player'},
+                    'target opponent': {'kind': 'player', 'ref': 'an opponent'},
+                    'defending player': {'kind': 'player', 'ref': 'defending player'},
+                    'that player': {'kind': 'player', 'ref': 'that player'},
+                    'you control': {'kind': 'player', 'ref': 'you'},
+                    'an opponent controls': {'kind': 'player', 'ref': 'an opponent',
+                                            'relation': 'controls'},
+                    'that player controls': {'kind': 'player', 'ref': 'that player',
+                                             'relation': 'controls'},
+                    'target opponent controls': {'kind': 'player', 'ref': 'an opponent',
+                                                 'relation': 'controls'},
+                    'defending player controls': {'kind': 'player',
+                                                  'ref': 'defending player',
+                                                  'relation': 'controls'},
+                    'that opponent controls': {'kind': 'player', 'ref': 'an opponent',
+                                               'relation': 'controls'},
+                    'those players control': {'kind': 'player', 'ref': 'those players',
+                                              'relation': 'controls',
+                                              'unresolved': True},
+                    'your opponents control': {'kind': 'player', 'ref': 'each opponent',
+                                               'relation': 'controls'},
+                    'you own': {'kind': 'player', 'ref': 'you', 'relation': 'owns'},
+                    'you cast': {'kind': 'player', 'ref': 'you', 'relation': 'cast',
+                                 'unresolved': True},
+                    "you don't control": {'kind': 'controller',
+                                          'ref': "you don't control",
+                                          'unresolved': True},
+                    "you don't own": {'kind': 'controller', 'ref': "you don't own",
+                                      'unresolved': True},
+                    'owner': {'kind': 'controller', 'ref': 'owner',
+                              'unresolved': True},
+                    'its controller': {'kind': 'controller', 'ref': 'its controller',
+                                       'unresolved': True},
+                    'her owner': {'kind': 'controller', 'ref': 'her owner',
+                                  'unresolved': True},
+                    'their owners': {'kind': 'controller', 'ref': 'their owners',
+                                     'unresolved': True},
+                    'they control': {'kind': 'player', 'ref': 'they',
+                                     'relation': 'controls', 'unresolved': True},
+                    'they gained control of this way': {
+                        'kind': 'player', 'ref': 'they',
+                        'relation': 'gained_control', 'of': 'this way'},
+                    'controlled by different players': {
+                        'kind': 'controller',
+                        'ref': 'controlled by different players',
+                        'unresolved': True},
+                }
+                obj['controller'] = CTRL.get(low, {'kind': 'controller',
+                                                   'ref': cv,
+                                                   'unresolved': True})
             # Verb aliases are render-layer only: one canonical verb per effect.
             if obj.get('verb') == 'deals':
                 obj['verb'] = 'deal_damage'

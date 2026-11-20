@@ -1082,9 +1082,8 @@ add("counter-with-modifier",
 
 add("unparsed-static-fallback",
     "Activate only if you control a Sliver",
-    lambda o: has(o, lambda d: d.get('type') == 'unparsed'
-                  and d.get('reason') == 'static_text'
-                  and 'Sliver' in str(d.get('fragment', ''))))
+    lambda o: has(o, lambda d: d.get('type') == 'activation_condition'
+                  and 'Sliver' in str(d.get('condition', {}))))
 add("unparsed-raw-fallback",
     "If X is 6 or more, return a creature card put into a graveyard this way to the battlefield",
     lambda o: has(o, lambda d: d.get('verb') == 'raw'
