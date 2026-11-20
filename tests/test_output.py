@@ -301,14 +301,14 @@ add("cast-from-among",
 add("may-actor",
     "Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle",
     lambda o: has(o, lambda d: d.get('verb') == 'may'
-                  and d.get('who') == 'Its controller'))
+                  and d.get('who') == {'kind': 'player', 'ref': 'its controller', 'selection': 'its controller'}))
 add("coordinated-who",
     "Target player draws three cards and loses 3 life",
     lambda o: has(o, lambda d: d.get('verb') == 'lose_life'
-                  and d.get('who') == 'Target player'))
+                  and d.get('who') == {'kind': 'player', 'ref': 'target player', 'selection': 'target player'}))
 add("mill-actor", "Target player mills four cards",
     lambda o: has(o, lambda d: d.get('verb') == 'mill'
-                  and d.get('who') == 'Target player'))
+                  and d.get('who') == {'kind': 'player', 'ref': 'target player', 'selection': 'target player'}))
 add("mill-no-actor-no-empty-who", "Mill four cards",
     lambda o: has(o, lambda d: d.get('verb') == 'mill'
                   and 'who' not in d))
@@ -842,7 +842,7 @@ add("if-relative-life", "If you would gain life, you gain twice that much life i
                   and 'twice' in str(d.get('instead', {}).get('amount', ''))))
 add("put-with-subject", "that player puts it into their hand",
     lambda o: has(o, lambda d: d.get('verb') == 'put' and d.get('zone') == 'hand'
-                  and d.get('who') == 'that player'))
+                  and d.get('who') == {'kind': 'player', 'ref': 'that player', 'selection': 'that player'}))
 add("stat-loses-kw", "Equipped creature gets +10/+10 and loses flying",
     lambda o: has(o, lambda d: d.get('verb') == 'stat_change'
                   and d.get('change') == {'power': 10, 'toughness': 10}
@@ -853,7 +853,7 @@ add("deal-damage-plus", "it deals that much damage plus 2 to that creature",
     lambda o: has(o, lambda d: d.get('verb') == 'deal_damage'
                   and 'plus 2' in str(d.get('amount', ''))))
 add("lose-game", "that player loses the game",
-    lambda o: has(o, lambda d: d.get('verb') == 'lose_game' and d.get('who') == 'that player'))
+    lambda o: has(o, lambda d: d.get('verb') == 'lose_game' and d.get('who') == {'kind': 'player', 'ref': 'that player', 'selection': 'that player'}))
 add("regenerate-target", "Regenerate target creature",
     lambda o: has(o, lambda d: d.get('verb') == 'regenerate'))
 add("suspect-target", "Suspect target creature",
