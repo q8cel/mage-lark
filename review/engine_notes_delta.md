@@ -76,3 +76,11 @@ Counts are note occurrences: `top` = top-table count, `card` = per-card observed
 | unparsed-only records | 791 | — |
 
 The notes' 116 duplicate-printings claim is only stale after a rebuild with `setdata.load(..., dedupe_printings=True)`; this artifact still contains the duplicates despite `set_code` on every record.
+
+## Questions sent to the engine agent
+
+Verify the channel first: `sha256sum compile_standard.jsonl` must start `a8bd9eb4…`.
+
+(d) **Quantifier shape:** the artifact emits `{amount: 1, relation: ">="}` for "one or more" (72 sites). What shape does the engine consume — that object, `{at_least: 1}`, or something else? The parser adopted `{relation, amount}` from the reviewer's earlier feedback, so we need the schema before changing it.
+
+(e) **Duplicates:** the engine can dedupe itself with `set_code` + `setdata.load(..., dedupe_printings=True)` (FDN 763→509, Standard 8,921→5,412). If it prefers a shipped artifact, we can publish `compile_standard_deduped.jsonl` (same records, winners only, ~5,412 rows) — awaiting which it wants.
