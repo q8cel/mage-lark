@@ -1395,6 +1395,57 @@ class Interpreter:
                             and 'link' not in ct:
                         ct['status'] = 'unresolved'
                         cp['status'] = 'unresolved'
+            # "any target" is a first-class any/player target, not an empty set.
+            for akey in ('to', 'target', 'card'):
+                av = obj.get(akey)
+                if isinstance(av, dict) and av.get('kind') == 'any_target':
+                    obj[akey] = {'card_type': {'kind': 'any'},
+                                 'quantifier': 'any',
+                                 'player_target': True}
+            # Always give target-taking verbs an explicit quantifier.
+            if obj.get('verb') in ('deal_damage', 'destroy', 'exile', 'return',
+                                   'counter', 'tap', 'untap', 'sacrifice',
+                                   'fight', 'gain_control', 'attach',
+                                   'prevent_damage', 'put_counter'):
+                for tkey in ('card', 'target', 'to', 'on', 'spell'):
+                    tv = obj.get(tkey)
+                    if isinstance(tv, dict) and 'card_type' in tv \
+                            and 'quantifier' not in tv:
+                        tv['quantifier'] = 'target'
+            # Colour-word target sets carry colours explicitly.
+            def colour_target(t):
+                if not isinstance(t, dict):
+                    return
+                ct = t.get('card_type')
+                vals = ct if isinstance(ct, list) else [ct]
+                cols = []
+                for x in vals:
+                    if not isinstance(x, dict):
+                        continue
+                    v = str(x.get('value', '')).lower().split()
+                    cs = [w for w in v if w in
+                          ('white', 'blue', 'black', 'red', 'green')]
+                    cols.extend(cs)
+                    if cs:
+                        rest = [w for w in v if w not in cs]
+                        if rest:
+                            x['value'] = ' '.join(rest)
+                if cols:
+                    t['colors'] = list(dict.fromkeys(cols))
+            colour_target(obj.get('card'))
+            colour_target(obj.get('target'))
+            lab = obj.get('label')
+            if isinstance(lab, dict):
+                colour_target(lab)
+            # Owner actors are a single controller ref.
+            actor = obj.get('actor')
+            if isinstance(actor, list) and len(actor) >= 2 \
+                    and str(actor[-1]).lower() == 'owner':
+                first = actor[0]
+                obj['actor'] = {'kind': 'controller', 'ref': 'owner',
+                                'of': first if isinstance(first, dict) else
+                                {'kind': 'anaphora', 'ref': str(first),
+                                 'status': 'unresolved'}}
             # Canonical controller objects: player refs plus explicit relations.
             cv = obj.get('controller')
             if isinstance(cv, str):
@@ -3102,7 +3153,7 @@ class Interpreter:
             # "one or more creatures" is a batched quantity, not the number 1.
             n = self._first_number(children)
             if n == 1:
-                return {'relation': '>=', 'amount': 1}
+                return {'at_least': 1}
             if n is not None:
                 return '%s or more' % n
         if trees:
@@ -3713,6 +3764,9 @@ class Interpreter:
 
     def i_exile_action(self, children):
         d = self._card_action('exile', children)
+        cols = self._find_one(children, 'colors')
+        if cols is not None and isinstance(d.get('card'), dict):
+            d['card']['colors'] = self.interp(cols)
         words = self._token_words(children)
         pl = self._find_one(children, 'player')
         if pl is not None and "'s" in words:
@@ -3727,6 +3781,9 @@ class Interpreter:
 
     def i_destroy_action(self, children):
         d = self._card_action('destroy', children)
+        cols = self._find_one(children, 'colors')
+        if cols is not None and isinstance(d.get('card'), dict):
+            d['card']['colors'] = self.interp(cols)
         if 'except' in self._token_words(children):
             cts = self._find(children, 'card_target')
             if len(cts) > 1:

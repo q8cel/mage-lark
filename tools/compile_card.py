@@ -236,9 +236,15 @@ def _compile_card(card):
         if groups:
             records = [r for r in records if r['original_text'] not in consume]
             for text0, opts in groups:
+                def cont_item(c):
+                    out = c.get('output') or []
+                    if out and isinstance(out[0], dict) and out[0].get('type') == 'effect':
+                        return {'type': 'effect', 'effect': out[0].get('effect'),
+                                'text': c['text']}
+                    return {'type': 'effect', 'effect': {}, 'text': c['text'],
+                            'output': out}
                 nested = [{'text': o['text'], 'output': o['output'],
-                           'continuations': [{'text': c['text'],
-                                              'output': c['output']}
+                           'continuations': [cont_item(c)
                                              for c in o['continuations']]}
                           for o in opts]
                 parent = next((r for r in records

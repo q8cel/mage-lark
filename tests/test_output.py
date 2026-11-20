@@ -381,7 +381,7 @@ add("other-target",
                   and d.get('card', {}).get('quantifier') == {'up_to': 1}))
 add("one-or-more-quantifier",
     "Whenever one or more creatures you control attack, you gain life equal to the number of attacking creatures",
-    lambda o: has(o, lambda d: d.get('quantifier') == {'relation': '>=', 'amount': 1}))
+    lambda o: has(o, lambda d: d.get('quantifier') == {'at_least': 1}))
 add("for-each-gain-life",
     "When this creature enters, you gain 2 life for each Gate you control",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_life'
