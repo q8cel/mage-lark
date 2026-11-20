@@ -16,7 +16,7 @@ Usage:
     out = it.interp(parser.parse(sentence)) # -> list of sentence dicts
 """
 
-import os as _os, sys as _sys, re
+import os as _os, sys as _sys, re, json
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import paths as _paths
 _paths.bootstrap()
@@ -1392,6 +1392,23 @@ class Interpreter:
             if obj.get('type') == 'triggered' and 'if' in obj \
                     and 'condition' not in obj:
                 obj['condition'] = obj['if']
+            # Coordinated/property targets must expose the resolved set at the
+            # top level; label is display/aux data, never the only carrier.
+            if obj.get('kind') in ('property', 'set', 'choice') \
+                    and isinstance(obj.get('label'), dict):
+                lab = obj['label']
+                for key in ('card_type', 'colors', 'quantifier',
+                            'controller', 'status', 'card_class'):
+                    if key in lab and key not in obj:
+                        obj[key] = lab[key]
+                ct = obj.get('card_type')
+                if isinstance(ct, list):
+                    seen = set(); dedup = []
+                    for item in ct:
+                        sig = json.dumps(item, sort_keys=True)
+                        if sig not in seen:
+                            seen.add(sig); dedup.append(item)
+                    obj['card_type'] = dedup
             # Unresolved copy_of anaphora are explicit, never bare raw.
             if isinstance(obj.get('copy_of'), dict):
                 cp = obj['copy_of']
@@ -1610,6 +1627,23 @@ class Interpreter:
                     isinstance(chg0.get(k), str) and 'X' in chg0[k]
                     for k in ('power', 'toughness')):
                 obj['xdef'] = {'kind': 'x', 'source': 'mana_cost'}
+            # Final target-set lift: colour/status normalizers may have enriched
+            # label after the earlier lift pass.
+            if obj.get('kind') in ('property', 'set', 'choice') \
+                    and isinstance(obj.get('label'), dict):
+                lab = obj['label']
+                for key in ('card_type', 'colors', 'quantifier',
+                            'controller', 'status', 'card_class'):
+                    if key in lab:
+                        obj[key] = lab[key]
+                ct = obj.get('card_type')
+                if isinstance(ct, list):
+                    seen = set(); dedup = []
+                    for item in ct:
+                        sig = json.dumps(item, sort_keys=True)
+                        if sig not in seen:
+                            seen.add(sig); dedup.append(item)
+                    obj['card_type'] = dedup
             for v in obj.values():
                 self._late_normalize(v)
         elif isinstance(obj, list):
