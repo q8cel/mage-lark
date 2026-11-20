@@ -951,3 +951,31 @@ rows 1,628 (1,673 sentences minus 45 nested options/continuations).
 Coverage: FDN 1673/1673 parse, 1592/1673 honest 95.2%; classic 4397/4460
 parse 98.6%, 4183/4460 honest 93.8%; Standard 21250/22585 parse 94.1%,
 19558/22585 honest 86.6%.
+
+### Open engine-notes parser items (final)
+
+Controller strings are now objects: artifact has 0 bare controller strings;
+3,472 player refs + 195 controller refs, 244 unresolved long-tail refs.
+`who`: five-bucket strings remain for exact cases; 180 outside-vocabulary
+values became `{kind:player,ref,selection}` (target player 111, that player
+22, any number of target players 15, a player 13, controller forms 12+).
+Modal sentence records: 259 choose_one groups / 626 options / 96 continuations,
+0 top-level bullets. Add-mana choice: 227 `choose_one` statements, 0
+`mana_choice` amounts. Long target strings 0; actor lists reduced 14->2
+(remaining `the exiled card's owner` tuple). `copy_of`: 26 linked, 6
+unresolved raw rows (`The Notary Hobbits`, `Impostor Syndrome`) now carry
+`status:"unresolved"` and no fabricated link. `static_text`: 30 remain;
+structured 86 activation_condition / 29 mana_restriction / 8 transform.
+Target modifier `that was put there this turn`: 4 event_filter rows;
+25 modifier_text remain.
+
+Final 21996-record artifact SHA
+`eb1baa8e03487bb7dc3553d20a0a5a82cac329a5ea412df593fbbd3bf460a7dd`
+(fresh `d026cc96dd76f9096d13dc802c04ac92a48d985b851ca0d6f0515d2b0019d063`;
+bounded postpass 222 links/10 replacements + 20 copy links). Card IR SHA
+`46ea69cfa077bcec7ca3732585524bcd7c6ed7221ab05798c94d7275d2e2fe28`.
+Unique 12,981 keys / 7,738 texts / 5,158 cards / 21 set codes. FDN
+artifact rows 1,628 (1,673 sentences - 45 nested option rows). Coverage:
+FDN 1673/1673 parse, 1592/1673 honest 95.2%; classic 4397/4460 parse 98.6%,
+4183/4460 honest 93.8%; Standard 21250/22585 parse 94.1%, 19558/22585 honest
+86.6%.
