@@ -84,3 +84,25 @@ Verify the channel first: `sha256sum compile_standard.jsonl` must start `a8bd9eb
 (d) **Quantifier shape:** the artifact emits `{amount: 1, relation: ">="}` for "one or more" (72 sites). What shape does the engine consume — that object, `{at_least: 1}`, or something else? The parser adopted `{relation, amount}` from the reviewer's earlier feedback, so we need the schema before changing it.
 
 (e) **Duplicates:** the engine can dedupe itself with `set_code` + `setdata.load(..., dedupe_printings=True)` (FDN 763→509, Standard 8,921→5,412). If it prefers a shipped artifact, we can publish `compile_standard_deduped.jsonl` (same records, winners only, ~5,412 rows) — awaiting which it wants.
+
+## Pull 2026-11-23 — no engine commits since `b5d0c90`
+
+`git -C /home/q8/Documents/mage-ng pull --ff-only` reports **already up to date**. HEAD is still `b5d0c90492556f6e2d8d3cda705d2111918bd74a`; `git log b5d0c90..HEAD` is empty. `notes/parser_issues.md` (334 lines) and `notes/fdn_notes.md` are unchanged, and `tools/build_cards.py` / `crates/mage-ir/src/lib.rs` are unchanged, so none of the previously reported builder-side fixes have landed. Artifact is still `2d8c4bdb…`, so `review/claims.json` was not regenerated. The label-lift work (`f0ef083`, `0c4f6de` in mage-lark) is live-only and not in this artifact; the next rebuild will include it.
+
+### New-note classification (items 13-19, the live-play batch added at `b5d0c90`)
+
+| note | card(s) | artifact field (2d8c4bdb) | side | rows / unique |
+|---|---|---|---|---:|
+| 13 zone restrictions lost | Ambush Wolf; Burglar Rat | Ambush Wolf: `effect.zone:"graveyard"`, target `card` has no `in_zone`; Burglar Rat: `discard` card has no `in_zone`/effect zone | **builder** (effect.zone never copied) + **parser** (no `in_zone` on discard) | 1,062 / 605 effect.zone-without-card-zone; 426 / 183 discard-no-zone |
+| 14 modal flattened | Deadly Plot; Abrade | nested `type:"choose_one"` with 626 options / 96 continuations; no sibling flattening | **fixed** (parser); builder now handles it | 259 groups |
+| 15 any target dropped | Burst Lightning | `to:{card_type:{kind:"any"}, player_target:true, quantifier:"any"}` | **fixed parser** | 130 / 76 |
+| 16 colour filters lost | Deathmark | `colors:["green","white"]` inside `label`; 917 colour sites total, 2 inside `label` | **builder** (`norm_target_set` pops `label`); parser label lift is live-only | 2 / 2 label cases |
+| 17 return destination is destination | Aetherize | `to:{zone:"hand",prep:"to"}` on all 738 return effects; target set carries the battlefield status | **fixed parser**; builder return bug still reads `obj['to']` | 734 / 426 |
+| 18 predicate-less target sets | — | 0 empty `card:{}` sets for card-using verbs in this artifact | **fixed parser** | 0 |
+| 19 quantifier inconsistency | Feed the Cycle; Explosive Getaway; Coordinated Clobbering; Pox Plague | absent 96 sites; `{at_least,at_most}` 16; `{kind}` 8; `half` 4; `that many` 13; coordinated targets keep quantifier inside `label` | **parser** (normalize/label lift, live-only) + **builder** (`norm_quantifier` rejects these; label popped) | 131 / 88 |
+
+Modal follow-up: Bushwhack is fixed; Chandra/Muldrotha/Strongbox are not bullet modals (their notes are about loyalty/during/choose-one-of-them paths, not modal flattening).
+
+### Builder status after the pull
+
+Still unfixed in `b5d0c90` (verified in code): return destination (`build_cards.py:476-483` reads `obj['to']`), `add_mana.choose_one` (no branch; `Effect.mana` single symbol), top-level `restriction`/`static_ability`/`enters_tapped`/`enters_with` (fall through to unknown), `Effect.zone/from/condition` never populated, `Amount::ThatMany` emits `{that_many:link}` vs `{link}`, `nontoken` lists flattened, `norm_target_set` pops `label`. No `ReturnToBattlefield` verb has been added (`lib.rs` still has only `ReturnToHand`/`ReturnToLibrary`). Remaining parser list: zone emissions for discard/hand, normalize quantifier long tail (`at_most`, `half`, `that many`, `kind`, absent), label lift (live-only until rebuild), and the already-known zero-target/label fields.
