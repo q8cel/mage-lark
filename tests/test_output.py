@@ -931,7 +931,8 @@ add("exile-two-shared-zone",
     "When ~ enters, exile up to one target nonland permanent and up to one target nonland permanent card from a graveyard",
     lambda o: has(o, lambda d: d.get('verb') == 'exile'
                   and len(d.get('cards', [])) == 2
-                  and all(c.get('zone') == 'graveyard' for c in d['cards'])))
+                  and all((c.get('zone') or {}).get('zone') == 'graveyard'
+                          for c in d['cards'])))
 add("coordinated-card-target",
     "Equipped creature can't be blocked and has shroud",
     lambda o: has(o, lambda d: d.get('verb') == 'gain_kw'

@@ -40,6 +40,144 @@ import rulecoref
 
 _W = {}
 
+# ---------------------------------------------------------------------------
+# Target-set quantifier contract.  Enforced on every emitted record (including
+# cached interpretations) so the engine always sees an explicit quantifier for
+# an effect target set.  Mirrors Interpreter._normalize_effect_quantifiers; the
+# compiler is the boundary that guarantees the IR contract.
+
+TARGET_KEYS = ('card', 'target', 'object', 'spell', 'on')
+_WORD_NUM = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+             'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+             'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14,
+             'fifteen': 15, 'sixteen': 16, 'seventeen': 17, 'eighteen': 18,
+             'nineteen': 19, 'twenty': 20}
+
+
+def _is_target_set(v):
+    if not isinstance(v, dict):
+        return False
+    if any(k in v for k in ('card_type', 'quantifier', 'colors',
+                             'this_that', 'ref', 'status', 'controller')):
+        return True
+    return v.get('kind') in ('set', 'property') and (
+        'items' in v or 'label' in v)
+
+
+def _type_values(ct):
+    out = []
+    if isinstance(ct, dict):
+        if isinstance(ct.get('value'), str):
+            out.append(ct['value'])
+    elif isinstance(ct, list):
+        for item in ct:
+            out.extend(_type_values(item))
+    return out
+
+
+def _normalize_card_types(ts):
+    ct = ts.get('card_type')
+    if not isinstance(ct, list):
+        return
+    out = []
+    for item in ct:
+        if (isinstance(item, dict) and isinstance(item.get('value'), str)
+                and re.search(r'\s+or\s+', item['value'])):
+            for part in re.split(r'\s+or\s+', item['value']):
+                part = part.strip()
+                if not part:
+                    continue
+                entry = {'kind': item.get('kind', 'type'), 'value': part}
+                if entry not in out:
+                    out.append(entry)
+        elif item not in out:
+            out.append(item)
+    ct[:] = out
+
+
+def _normalize_quantifier_shape(ts):
+    _normalize_card_types(ts)
+    q = ts.get('quantifier')
+    if not isinstance(q, dict):
+        return
+    if 'at_least' in q and 'at_most' in q:
+        ts['quantifier'] = {'up_to': q['at_most']}
+    elif set(q) == {'kind'}:
+        if str(q.get('kind')).lower() == 'x':
+            ts['quantifier'] = 'any'
+    elif 'up_to' in q:
+        val = q['up_to']
+        if isinstance(val, dict) and str(val.get('kind')).lower() == 'x':
+            ts['quantifier'] = 'any'
+        elif isinstance(val, str) and val.lower() in _WORD_NUM:
+            ts['quantifier'] = {'up_to': _WORD_NUM[val.lower()]}
+
+
+def _infer_quantifier(ts):
+    if ts.get('quantifier') is not None:
+        return
+    ct = ts.get('card_type')
+    if isinstance(ct, dict) and ct.get('kind') == 'this_card':
+        ts['quantifier'] = 'a'
+        return
+    if isinstance(ct, dict) and ct.get('ref') == 'anaphora':
+        raw = str(ct.get('raw') or '').lower()
+        ts['quantifier'] = ('all' if raw in ('they', 'them', 'their')
+                            else 'a')
+        return
+    values = ' '.join(_type_values(ct)).lower()
+    words = [w for w in re.split(r'[^a-z+]+', values) if w]
+    plural = any(w.endswith('s') and not w.endswith('ss')
+                 and w not in ('this', 'its') for w in words)
+    ts['quantifier'] = 'all' if plural else 'a'
+
+
+ZONE_WORDS = {'hand', 'library', 'battlefield', 'graveyard', 'exile', 'stack'}
+# These verbs' effect-level `zone` is the destination, not the source.
+DEST_VERBS = {'put', 'return', 'shuffle', 'mill'}
+
+
+def _effect_source_zone(obj):
+    if obj.get('verb') in DEST_VERBS:
+        return None
+    z = obj.get('zone')
+    if isinstance(z, str) and z in ZONE_WORDS:
+        return {'prep': 'from', 'zone': z}
+    if isinstance(z, dict) and z.get('zone') in ZONE_WORDS:
+        out = dict(z)
+        out.setdefault('prep', 'from')
+        return out
+    return None
+
+
+def _ensure_target_quantifiers(obj, in_effect=False):
+    if isinstance(obj, dict):
+        if _is_target_set(obj):
+            _normalize_card_types(obj)
+            if isinstance(obj.get('quantifier'), dict):
+                _normalize_quantifier_shape(obj)
+        if in_effect and isinstance(obj.get('verb'), str):
+            sets = [obj.get(k) for k in TARGET_KEYS]
+            cards = obj.get('cards')
+            if isinstance(cards, list):
+                sets.extend(cards)
+            src = _effect_source_zone(obj)
+            if src:
+                for ts in sets:
+                    if _is_target_set(ts) and not ts.get('zone'):
+                        ts['zone'] = dict(src)
+            for ts in sets:
+                if _is_target_set(ts):
+                    _normalize_quantifier_shape(ts)
+                    _infer_quantifier(ts)
+        for k, v in obj.items():
+            if k == 'text':
+                continue
+            _ensure_target_quantifiers(v, in_effect or k == 'effect')
+    elif isinstance(obj, list):
+        for v in obj:
+            _ensure_target_quantifiers(v, in_effect)
+
 
 def _has_unparsed(obj):
     if isinstance(obj, dict):
@@ -175,6 +313,8 @@ def _compile_card(card):
         if out is None:
             out = [{'type': 'unparsed', 'reason': 'parse_fail',
                     'fragment': otext, 'source': 'compile_card'}]
+        else:
+            _ensure_target_quantifiers(out)
         rec = {
             'card': name,
             'set_code': _code,

@@ -590,8 +590,91 @@ class Interpreter:
             out['token'] = token_name
         return out
 
-    def _late_normalize(self, obj):
+    EFFECT_TARGET_KEYS = ('card', 'target', 'object', 'spell', 'on')
+
+    def _normalize_card_types(self, ts):
+        """Split "creature or planeswalker" alternatives inside a type list.
+
+        A protected list NP can leave a combined alternative as one entry
+        ("red creature or planeswalker"), silently hiding the second type.
+        """
+        ct = ts.get('card_type')
+        if not isinstance(ct, list):
+            return
+        out = []
+        for item in ct:
+            if (isinstance(item, dict) and isinstance(item.get('value'), str)
+                    and re.search(r'\s+or\s+', item['value'])):
+                for part in re.split(r'\s+or\s+', item['value']):
+                    part = part.strip()
+                    if not part:
+                        continue
+                    entry = {'kind': item.get('kind', 'type'), 'value': part}
+                    if entry not in out:
+                        out.append(entry)
+            elif item not in out:
+                out.append(item)
+        # Mutate in place: a lifted label may share this exact list object.
+        ct[:] = out
+
+    def _normalize_quantifier_shape(self, ts):
+        """Map every target-set quantifier onto an engine-accepted shape."""
+        self._normalize_card_types(ts)
+        q = ts.get('quantifier')
+        if not isinstance(q, dict):
+            return
+        if 'at_least' in q and 'at_most' in q:
+            # "one or two target creatures" -> up_to 2; the engine has no
+            # between-shape, and the lower bound only rejects a legal 0.
+            ts['quantifier'] = {'up_to': q['at_most']}
+        elif set(q) == {'kind'}:
+            if str(q.get('kind')).lower() == 'x':
+                # X targets: the closest engine shape is "any number".
+                ts['quantifier'] = 'any'
+        elif 'up_to' in q:
+            val = q['up_to']
+            if isinstance(val, dict) and str(val.get('kind')).lower() == 'x':
+                ts['quantifier'] = 'any'
+            elif isinstance(val, str) and val.lower() in self.WORD_NUM:
+                ts['quantifier'] = {'up_to': self.WORD_NUM[val.lower()]}
+
+    def _infer_target_quantifier(self, ts):
+        if ts.get('quantifier') is not None:
+            return
+        ct = ts.get('card_type')
+        if isinstance(ct, dict) and ct.get('kind') == 'this_card':
+            ts['quantifier'] = 'a'
+            return
+        if isinstance(ct, dict) and ct.get('ref') == 'anaphora':
+            raw = str(ct.get('raw') or '').lower()
+            ts['quantifier'] = ('all' if raw in ('they', 'them', 'their')
+                                else 'a')
+            return
+        values = ' '.join(self._type_values(ct)).lower()
+        words = [w for w in re.split(r'[^a-z+]+', values) if w]
+        plural = any(w.endswith('s') and not w.endswith('ss')
+                     and w not in ('this', 'its') for w in words)
+        ts['quantifier'] = 'all' if plural else 'a'
+
+    def _normalize_effect_quantifiers(self, obj):
+        sets = [obj.get(k) for k in self.EFFECT_TARGET_KEYS]
+        cards = obj.get('cards')
+        if isinstance(cards, list):
+            sets.extend(cards)
+        for ts in sets:
+            if not self._is_target_set(ts):
+                continue
+            self._normalize_quantifier_shape(ts)
+            self._infer_target_quantifier(ts)
+
+    def _late_normalize(self, obj, in_effect=False):
         """Structure values created after the normal child-finalizer pass."""
+        if isinstance(obj, dict) and self._is_target_set(obj):
+            self._normalize_card_types(obj)
+            if isinstance(obj.get('quantifier'), dict):
+                self._normalize_quantifier_shape(obj)
+        if isinstance(obj, dict) and in_effect and isinstance(obj.get('verb'), str):
+            self._normalize_effect_quantifiers(obj)
         if isinstance(obj, dict) and obj.get('verb') == 'raw' \
                 and isinstance(obj.get('fragment'), str):
             frag = obj['fragment'].strip()
@@ -1646,11 +1729,14 @@ class Interpreter:
                         if sig not in seen:
                             seen.add(sig); dedup.append(item)
                     obj['card_type'] = dedup
-            for v in obj.values():
-                self._late_normalize(v)
+                self._normalize_card_types(obj)
+            for k, v in obj.items():
+                # Any `effect` value is effect context regardless of the
+                # wrapper's type name ("if", "during", "as_long", ...).
+                self._late_normalize(v, in_effect or k == 'effect')
         elif isinstance(obj, list):
             for v in obj:
-                self._late_normalize(v)
+                self._late_normalize(v, in_effect)
 
     def _owner_ref(self, text):
         """Structured owner reference; "owner of X" keeps X as a card target."""
@@ -3657,6 +3743,78 @@ class Interpreter:
                 return z
         return None
 
+    # "from a graveyard" / "from the top of your library" / "from exile":
+    # a source zone named in the clause.  The zone word is the last token.
+    SOURCE_ZONE_RE = re.compile(
+        r'\bfrom\s+(?:[A-Za-z\'’-]+\s+){0,5}?'
+        r'(graveyard|hand|library|exile|battlefield)\b', re.I)
+
+    def _source_zone_from_text(self, children):
+        m = self.SOURCE_ZONE_RE.search(' '.join(self._text(children).split()))
+        if not m:
+            return None
+        return {'prep': 'from', 'zone': m.group(1).lower()}
+
+    @staticmethod
+    def _is_target_set(v):
+        if not isinstance(v, dict):
+            return False
+        if any(k in v for k in ('card_type', 'quantifier', 'colors',
+                                 'this_that', 'ref', 'status', 'controller')):
+            return True
+        # Protected list NPs arrive as {kind: set|property, items, label}
+        # before the label lift; they are target sets already.
+        return v.get('kind') in ('set', 'property') and (
+            'items' in v or 'label' in v)
+
+    def _attach_target_zone(self, d, zoned, keys):
+        """Attach the source zone to every target set in `d`."""
+        for k in keys:
+            v = d.get(k)
+            if self._is_target_set(v):
+                v.setdefault('zone', dict(zoned))
+
+    @staticmethod
+    def _type_values(ct):
+        out = []
+        if isinstance(ct, dict):
+            if isinstance(ct.get('value'), str):
+                out.append(ct['value'])
+        elif isinstance(ct, list):
+            for item in ct:
+                out.extend(Interpreter._type_values(item))
+        return out
+
+    def _merge_extra_card_kinds(self, d, children, key='card'):
+        """Keep "or <card_kind>" alternatives outside the card_target.
+
+        "Exile target creature or planeswalker that's black or red" parses the
+        second `planeswalker` as a sibling card_kind; without this the target
+        silently narrows to creature.
+        """
+        target = d.get(key)
+        if not isinstance(target, dict):
+            return
+        kinds = [self.interp(t) for t in self._find(children, 'card_kind')]
+        kinds = [k for k in kinds if isinstance(k, dict)]
+        if not kinds:
+            return
+        values = []
+        for v in self._type_values(target.get('card_type')):
+            for part in re.split(r'\s+or\s+', v):
+                part = part.strip()
+                if part and part not in values:
+                    values.append(part)
+        for k in kinds:
+            for v in self._type_values(k):
+                for part in re.split(r'\s+or\s+', v):
+                    part = part.strip()
+                    if part and part not in values:
+                        values.append(part)
+        if len(values) > 1:
+            target['card_type'] = [{'kind': 'type', 'value': v}
+                                   for v in values]
+
     def _card_action(self, verb, children, key='card'):
         d = {'verb': verb}
         who = self._find_one(children, 'who')
@@ -3690,27 +3848,42 @@ class Interpreter:
         if amt is not None:
             d['amount'] = self.interp(amt)
         zns = self._find_one(children, 'zones')
+        zoned = None
         if zns is not None:
             zlist = self.interp(zns)
             if zlist:
                 if len(zlist) == 1:
                     d['zone'] = zlist[0]
+                    zoned = {'prep': 'from', 'zone': zlist[0]}
                 else:
                     d['zones'] = zlist
         else:
             zn = self._find_one(children, 'zone') or self._find_one(children, 'in_zone')
             if zn is not None:
-                d['zone'] = self.interp(zn)
+                zv = self.interp(zn)
+                d['zone'] = zv
+                if isinstance(zv, dict) and zv.get('zone'):
+                    zoned = dict(zv)
+                    zoned.setdefault('prep', 'from')
+                elif isinstance(zv, str):
+                    zoned = {'prep': 'from', 'zone': zv}
             else:
                 z = self._zone_from_tokens(children)
                 if z is not None:
                     d['zone'] = z
-        if d.get('cards') and d.get('zone'):
+                    zoned = {'prep': 'from', 'zone': z}
+        if zoned is None:
+            # The grammar sometimes leaves a trailing "from <zone>" outside the
+            # card_target (cast/play tails); recover it from the clause text.
+            zoned = self._source_zone_from_text(children)
+        if zoned:
+            self._attach_target_zone(d, zoned, (key, 'target', 'object', 'spell'))
+        if d.get('cards') and zoned:
             # "exile A and B from a graveyard": the shared source zone
             # belongs to every conjunct.
             for card in d['cards']:
-                if isinstance(card, dict):
-                    card.setdefault('zone', d['zone'])
+                if isinstance(card, dict) and self._is_target_set(card):
+                    card.setdefault('zone', dict(zoned))
         wm = self._find_one(children, 'with_modifier')
         if wm is not None:
             d['modifier'] = self.interp(wm)
@@ -3796,6 +3969,14 @@ class Interpreter:
 
     def i_discard_action(self, children):
         d = self._card_action('discard', children)
+        # A discarded card comes from its owner's hand unless the text names a
+        # different source zone ("from the top of their library").
+        card = d.get('card')
+        if isinstance(card, dict) and not card.get('zone'):
+            card['zone'] = {'zone': 'hand'}
+        for other in d.get('cards') or []:
+            if isinstance(other, dict) and not other.get('zone'):
+                other['zone'] = {'zone': 'hand'}
         words = self._token_words(children)
         if 'at' in words and 'random' in words:
             d['random'] = True
@@ -3808,6 +3989,7 @@ class Interpreter:
         cols = self._find_one(children, 'colors')
         if cols is not None and isinstance(d.get('card'), dict):
             d['card']['colors'] = self.interp(cols)
+        self._merge_extra_card_kinds(d, children)
         words = self._token_words(children)
         pl = self._find_one(children, 'player')
         if pl is not None and "'s" in words:
@@ -3825,6 +4007,7 @@ class Interpreter:
         cols = self._find_one(children, 'colors')
         if cols is not None and isinstance(d.get('card'), dict):
             d['card']['colors'] = self.interp(cols)
+        self._merge_extra_card_kinds(d, children)
         if 'except' in self._token_words(children):
             cts = self._find(children, 'card_target')
             if len(cts) > 1:
@@ -3877,6 +4060,12 @@ class Interpreter:
             if to.lower().endswith(timing.lower()):
                 to = to[:-len(timing)].strip()
         d['to'] = to
+        zoned = self._source_zone_from_text(children)
+        if zoned:
+            self._attach_target_zone(d, zoned, ('card',))
+            for other in d.get('cards') or []:
+                if isinstance(other, dict) and self._is_target_set(other):
+                    other.setdefault('zone', dict(zoned))
         ca = self._find_one(children, 'counter_amount')
         ck = self._find_one(children, 'counter_kind')
         if ck is not None:
@@ -5439,6 +5628,20 @@ class Interpreter:
             z = self._zone_from_tokens(children)
             if z is not None:
                 d['zone'] = z
+        zoned = None
+        z = d.get('zone')
+        if isinstance(z, dict) and z.get('zone'):
+            zoned = dict(z)
+            zoned.setdefault('prep', 'from')
+        elif isinstance(z, str) and z in self.ZONE_WORDS:
+            zoned = {'prep': 'from', 'zone': z}
+        if zoned is None:
+            zoned = self._source_zone_from_text(children)
+        if zoned:
+            self._attach_target_zone(d, zoned, ('card',))
+            for other in d.get('cards') or []:
+                if isinstance(other, dict) and self._is_target_set(other):
+                    other.setdefault('zone', dict(zoned))
         d.update(self._placement(children))
         toks = self._token_words(children)
         if 'reveal' in toks:
