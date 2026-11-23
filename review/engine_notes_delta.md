@@ -166,3 +166,28 @@ Current artifact has **1,050 `if` records, 0 type-of-target conditions**. Condit
 | Hauntwoods Shrieker | `09ca145cd06f` | If it's a creature card, you may turn it face up | `{"kind":"state","state":{"card_type":{"kind":"type","value":"creature"}},"subject":{"card_type":{"kind":"this_card","value":"~"}}}` |
 
 Fixer shape to consume: `{"kind":"type","of":"target","value":"zombie"}` (value lowercased; target = the card/target of the clause the `if` follows). The parser will replace this `state/this_card` shape with it. Counts to expect after the fix: 45 current `state`+`card_type` records become type-of-target; `if` total stays 1,050.
+
+## Pull 2026-11-24b — engine HEAD `2f67c0d` (changed opinions)
+
+Pull `2c074fd..2f67c0d` (5 commits): `d7caf60` conditions on previous clause's target, `2a00860` may/if note correction, `490608a` measured if/may status, `d840525` player words in card_type → player_target, `2f67c0d` only target-word quantifiers require target at cast. `notes/parser_issues.md` +80/−? and `fdn_notes.md` regenerated; builder +43 lines, IR +`Condition::PreviousTargetType`.
+
+### Reversed / withdrawn asks
+
+| old ask (2c074fd notes) | new opinion (2f67c0d) | evidence |
+|---|---|---|
+| type-of-target: emit `{"kind":"type","of":"target","value":"zombie"}` | **withdrawn**; emit `{"kind":"state","subject":{"ref":"previous_target"},"state":{"card_type":…}}`. Builder already maps the existing `state`+`this_card` shape to `previous_target_type` and logs `adapted` | parser_issues.md:196, 214; `norm_condition` (build_cards.py) maps `state`→`previous_target_type`; *Cemetery Recruitment* is now `[adapted]`, not `[skipped]` |
+| `may` flag so optional actions survive | **withdrawn** — "`may` needs no parser change"; builder unwraps `{verb:"may",inner}` and executes mandatory | parser_issues.md:184-186 |
+| player words in card sets (old: emit `{kind:"player",ref}`/player object) | **shape changed**: builder now routes player `card_type.value` words to `player_target`; parser should emit `player_target` on the effect instead of a card set whose type is a player | parser_issues.md:167-181; *Boltwave* artifact `to.card_type:{kind:type,value:opponent}` is worked around by `PLAYER_TYPE_WORDS` |
+
+### New asks (not reversals)
+
+- `if` fragments: `{"kind":"did","what":"sacrifice"}` for "did something this way" (*Deadly Brew*); `{"kind":"life","player":"target","op":"eq","n":10}` for life conditions (engine will add); replacement/pre-game stay unparsed (parser_issues.md:205-221).
+- If the branch effect is a **list**, emit a single effect dict or `then:[…]`; `draw`-with-list records currently fail even with a good condition (parser_issues.md:223-225).
+- Keep quantifier `{at_least}`/`{up_to}`, `card_type:{kind:"any"}` + `player_target`, `add_mana.choose_one`, typed modal continuations, `enters_*`; those opinions did not change. `restriction`/`static_ability` still fall through; controller remains flat `PlayerRef` (relation/of not modelled).
+
+### Conflicts with our latest parser commit `f3b00b1`
+
+- `f3b00b1` emits `{kind:"type","of":"target","value":...}` for "if it's a <type> card" (core/interpret.py:687). **This is now the withdrawn shape.** Artifact `733af921` predates f3b00b1 (mtime 00:25 < commit 00:45) and still emits `state`+`this_card`, which the new builder adapts; the next rebuild would ship the conflicting `type/of` shape. Change f3b00b1 to emit `{"kind":"state","subject":{"ref":"previous_target"},"state":{"card_type":{…}}}` instead.
+- `f3b00b1` controller residual mappings (`owner`/`their owners`/`her owner` keep relation; `you`/cast, `they`/controls drop unresolved) are inert for the engine: builder still models flat `PlayerRef` and ignores `relation` (parser_issues.md:239). Not a reversal, but these forms will remain residual/unmapped until the engine models relations; no parser conflict.
+- Static/modifier tail work is unaffected by the new notes (static_text 14 sites/3 shapes, modifier 0 in `733af921`).
+- Player-in-card_type: our parser still emits Boltwave as `to.card_type:{value:"opponent"}`; new builder compensates, but next parser change should emit `player_target` on the effect.
