@@ -2280,8 +2280,11 @@ class Interpreter:
             verdict = classify_clause(key, node[key])
             if verdict in (CLAUSE, EXPRESSION):
                 orig = node[key]
-                node[key] = {'unparsed': True, 'reason': reason,
-                             'fragment': orig, 'source': src}
+                shaped = (self._modifier_shape(orig)
+                          if reason == 'modifier_text' else None)
+                node[key] = shaped if shaped is not None else {
+                    'unparsed': True, 'reason': reason,
+                    'fragment': orig, 'source': src}
         av = node.get('amount')
         if isinstance(av, str):
             low_a = av.strip().lower().replace(' ,', ',')
@@ -5268,7 +5271,18 @@ class Interpreter:
         cards = [self.interp(c) for c in children
                  if isinstance(c, Tree) and c.data == 'card_target']
         if not cards:
-            return self._text(children)
+            text = ' '.join(self._text(children).split())
+            m = re.fullmatch(
+                r'each of up to (\w+) other target\s*s?', text, re.I)
+            if m:
+                raw = m.group(1).lower()
+                n = (int(raw) if raw.isdigit()
+                     else self.WORD_NUM.get(raw, raw))
+                return {'quantifier': {'up_to': n},
+                        'otherness': 'other',
+                        'card_type': {'kind': 'any'},
+                        'player_target': True}
+            return text
         val = cards[0] if len(cards) == 1 else {'or': cards}
         if any(isinstance(c, Token) and str(c).lower() == 'attacking'
                for c in children):
@@ -6781,6 +6795,39 @@ class Interpreter:
         attach(eff)
         return {'type': 'static', 'target': target, 'effect': eff}
 
+    def _modifier_shape(self, text):
+        """Closed shapes for the residual event/type/cost modifiers."""
+        low = ' '.join(str(text).split()).strip().rstrip('.').lower()
+        low = low.replace("~ 's", "~'s").replace(" 's", "'s")
+        if low == "you've discarded this turn":
+            return {'kind': 'event_filter', 'event': 'discard',
+                    'actor': 'you', 'this_turn': True}
+        if low == "you've cast this turn":
+            return {'kind': 'event_filter', 'event': 'cast',
+                    'actor': 'you', 'this_turn': True}
+        if low == 'that are creatures and/or vehicles':
+            return {'kind': 'type_filter', 'connector': 'and/or',
+                    'card_type': [{'kind': 'type', 'value': 'creature'},
+                                  {'kind': 'type', 'value': 'vehicle'}]}
+        if low == 'that are exactly two colors':
+            return {'kind': 'color_filter', 'exactly': 2,
+                    'property': 'colors'}
+        if low.startswith('pay life equal to ') and 'power' in low:
+            return {'kind': 'cost_modifier',
+                    'cost': {'action': 'pay_life',
+                             'amount': {'kind': 'relative',
+                                        'relation': 'equal',
+                                        'stat': 'power', 'of': '~'}}}
+        if low == 'discard a card or pay {2}':
+            return {'kind': 'cost_modifier',
+                    'cost': {'or': [
+                        {'action': 'discard',
+                         'card': {'quantifier': 'a',
+                                  'card_type': {'kind': 'type',
+                                                'value': 'card'}}},
+                        {'action': 'pay_mana', 'mana': ['{2}']}]}}
+        return None
+
     def i_static_sentence(self, children):
         toks = [str(ch).lower() for ch in children if isinstance(ch, Token)]
         txt = ' '.join(self._text(children).split()).rstrip('.').lower()
@@ -6807,6 +6854,45 @@ class Interpreter:
         }
         if txt in fixed:
             return {'type': 'static', **fixed[txt]}
+        m = re.fullmatch(r'you control enchanted (creature|permanent)', txt)
+        if m:
+            return {'type': 'static_ability', 'kind': 'control',
+                    'controller': 'you',
+                    'of': {'card_type': {'kind': 'type', 'value': m.group(1)},
+                           'status': ['Enchanted']}}
+        if txt == 'you lose the game':
+            return {'type': 'effect',
+                    'effect': {'verb': 'lose_game',
+                               'who': {'kind': 'player', 'ref': 'you'}}}
+        m = re.fullmatch(r"it's an? (.+?) in addition to its other types", txt)
+        if m:
+            return {'type': 'static', 'kind': 'type_addition',
+                    'card_type': m.group(1)}
+        m = re.fullmatch(r'(.+?) enter tapped', txt)
+        if m:
+            subj = m.group(1)
+            controller = None
+            if subj.endswith(' your opponents control'):
+                subj = subj[:-len(' your opponents control')]
+                controller = {'kind': 'player', 'ref': 'opponent'}
+            elif subj.endswith(' you control'):
+                subj = subj[:-len(' you control')]
+                controller = {'kind': 'player', 'ref': 'you'}
+            if subj.endswith('s') and not subj.endswith('ss'):
+                subj = subj[:-1]
+            ct = {'kind': 'type', 'value': subj}
+            card = {'card_type': ct}
+            if controller:
+                card['controller'] = controller
+            return {'type': 'enters_tapped', 'card': card}
+        m = re.fullmatch(
+            r"(.+?) you control can attack as though they didn't have defender",
+            txt)
+        if m:
+            return {'type': 'static_ability', 'kind': 'can_attack_as_though',
+                    'card': {'card_type': {'kind': 'type', 'value': m.group(1)},
+                             'controller': {'kind': 'player', 'ref': 'you'}},
+                    'without_keywords': ['defender']}
         if txt == 'enchant creature you control':
             return {'type': 'static', 'kind': 'enchant',
                     'card_target': {'card_type': {'kind': 'type',
