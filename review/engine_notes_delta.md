@@ -106,3 +106,47 @@ Modal follow-up: Bushwhack is fixed; Chandra/Muldrotha/Strongbox are not bullet 
 ### Builder status after the pull
 
 Still unfixed in `b5d0c90` (verified in code): return destination (`build_cards.py:476-483` reads `obj['to']`), `add_mana.choose_one` (no branch; `Effect.mana` single symbol), top-level `restriction`/`static_ability`/`enters_tapped`/`enters_with` (fall through to unknown), `Effect.zone/from/condition` never populated, `Amount::ThatMany` emits `{that_many:link}` vs `{link}`, `nontoken` lists flattened, `norm_target_set` pops `label`. No `ReturnToBattlefield` verb has been added (`lib.rs` still has only `ReturnToHand`/`ReturnToLibrary`). Remaining parser list: zone emissions for discard/hand, normalize quantifier long tail (`at_most`, `half`, `that many`, `kind`, absent), label lift (live-only until rebuild), and the already-known zero-target/label fields.
+
+## Pull 2026-11-24 — engine HEAD `2c074fd`
+
+`git pull --ff-only` moved the engine `bcd4a0e..2c074fd` (10 commits): `764af49` indestructible/scry, `71e168c` reanimation/scry lands, `10358e8` verb docs, `8aac216` planeswalker loyalty, `0bcb756` attack planeswalkers, `35a14a3` Raid trigger conditions, `adefbb9` auras/equipment, `59951a2` cost modifiers, `0c0f1c4` "if you do" branches, `2c074fd` if-condition contract docs. `notes/parser_issues.md` gained the if-condition contract and updated the engine-side table; `notes/fdn_notes.md` was regenerated (694 lines changed).
+
+### Builder fixes (diff `bcd4a0e..2c074fd`)
+
+| outstanding item | status |
+|---|---|
+| return destination read | **fixed**: reads `eff.get('to')`; maps `battlefield`→`return_to_battlefield` (+`tapped`), library→`return_to_library` (`build_cards.py` ~496-510) |
+| top-level `enters_tapped`/`enters_with` | **fixed** per notes table |
+| top-level `restriction`/`static_ability` | still fall through to unknown |
+| general `Effect.condition` | `if` conditions + Raid/unless populated via new `norm_condition`; arbitrary effect conditions still not |
+| `add_mana.choose_one` | fixed earlier; notes confirm `mana_choice` |
+| `Amount::ThatMany` | fixed earlier (`{"link":…}`) |
+| `set_code` | **fixed**: `Card.set_code` |
+| `nontoken` flattening | still flattened |
+| `label` | still popped (`norm_target_set`) |
+| controller `relation`/`of`, target `link` | still not modelled |
+
+### New IR / verbs
+
+`Verb::{Scry, Attach, CostMod}`; `Condition::PreviousHappened`; `Effect.raised_cost`/`tapped`; `Ability::Loyalty`. New supported verbs/abilities: scry, enchant/attach, cost_mod, loyalty, "if you do" branches, Raid trigger conditions, auras/equipment.
+
+### New parser-side notes vs artifact `4ea84d68`
+
+| new note | artifact count (4ea84d68) | classification |
+|---|---:|---|
+| `if` `event_ref` skipped (5) | 421 `event_ref` conditions, shape `{actor,anaphor:true,kind,event_ref,polarity}` | already-fixed shape (builder handles `anaphor:true`); 5 residual are conditions outside the `if` branch → builder-side |
+| `if` `spell_state kicked` (5) | 75 `spell_state` conditions | builder/engine: needs kicker model; notes say parser should keep emitting |
+| "if it's a <type> card" (32 `if` remaining) | `if` types 1,050; no type-of-target condition shape yet | **parser-side**: emit `{"kind":"type","of":"target","value":...}` |
+| `may` flag for optional actions | 1,316 `verb:"may"` wrappers | parser emits may; builder unwraps by design → engine decision (engine-side) |
+| `restrict` verb (16) | 306 `verb:"restrict"` sites / 314 restriction types | builder-side (top-level restriction unhandled) |
+| `put` verb (12) | 888 `verb:"put"` | builder-side (engine lacks verb) |
+| `surveil`/`gain_quote`/`become`/`pay` (5+5+6+7) | 176/136/300/164 sites | builder-side (engine verbs) |
+| effect field `action`/`targets`/`direction` dropped (11+10+10) | 242/124/215 sites | builder-side normalization gaps |
+| `indestructible`/`double strike` keyword (9+5) | 166 indestructible keyword values; double strike absent from set | builder-side keyword set |
+| anaphora raw copy_of (7) | 26 raw no-link rows / 11 cards / 3 shapes | parser-side residual tail (already counted) |
+| `amount {kind:"x"}` (7) | 809 `kind:"x"` | engine-side (explicit X, no value) |
+| `nontoken` flattened (10) | 428 list-valued sites | builder-side flattening |
+| no executable abilities (33) | 30 static_text sites / 717 unparsed-only | parser unparsed + frame-only engine mix |
+| duplicate printings (116) | 9,015 duplicate rows | parser/compiler dedupe |
+
+Nothing in the new batch is a regression in the tails: copy_of/who/controller/Drakuseth/modifier/static counts are unchanged from `4ea84d68`, and the new `if` contract is the main parser-side request (`type`/`kicked` shapes, `may` flag).
