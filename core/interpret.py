@@ -673,6 +673,19 @@ class Interpreter:
             self._normalize_card_types(obj)
             if isinstance(obj.get('quantifier'), dict):
                 self._normalize_quantifier_shape(obj)
+        if isinstance(obj, dict):
+            # "if it's a <type> card": the condition is about the clause's own
+            # target, not about this card.  Emit the engine's type shape.
+            for ckey in ('condition', 'if', 'unless'):
+                cv = obj.get(ckey)
+                if not isinstance(cv, dict) or cv.get('kind') != 'state':
+                    continue
+                st = cv.get('state')
+                ct = st.get('card_type') if isinstance(st, dict) else None
+                vals = self._type_values(ct)
+                if vals:
+                    obj[ckey] = {'kind': 'type', 'of': 'target',
+                                 'value': str(vals[0]).lower()}
         if isinstance(obj, dict) and in_effect and isinstance(obj.get('verb'), str):
             self._normalize_effect_quantifiers(obj)
         if isinstance(obj, dict) and obj.get('verb') == 'raw' \

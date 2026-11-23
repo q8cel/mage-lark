@@ -160,6 +160,14 @@ CONTROLLER_MAP = {
     'target player controls': {'kind': 'player', 'ref': 'target player',
                                'relation': 'controls'},
     'its controller': {'kind': 'player', 'ref': 'its controller'},
+    # owner semantics: keep the relation, but the owner of X is not resolved
+    # unless the text names X.
+    'owner': {'kind': 'controller', 'ref': 'owner',
+              'relation': 'owner', 'unresolved': True},
+    'their owners': {'kind': 'controller', 'ref': 'their owners',
+                     'relation': 'owner', 'unresolved': True},
+    'her owner': {'kind': 'controller', 'ref': 'her owner',
+                  'relation': 'owner', 'unresolved': True},
 }
 WHO_REF_FIX = {"that creature 's controller": 'its controller',
                "that land 's controller": 'its controller'}
@@ -182,9 +190,17 @@ def _normalize_refs(obj):
                 w['selection'] = fixed
     c = obj.get('controller')
     if isinstance(c, dict) and c.get('unresolved') is True:
-        repl = CONTROLLER_MAP.get(str(c.get('ref')))
-        if repl:
-            obj['controller'] = dict(repl)
+        ref, rel = str(c.get('ref')), str(c.get('relation') or '')
+        if ref == 'you' and rel == 'cast':
+            obj['controller'] = {'kind': 'player', 'ref': 'you',
+                                 'relation': 'cast'}
+        elif ref == 'they' and rel == 'controls':
+            obj['controller'] = {'kind': 'player', 'ref': 'they',
+                                 'relation': 'controls'}
+        else:
+            repl = CONTROLLER_MAP.get(ref)
+            if repl:
+                obj['controller'] = dict(repl)
 
 
 def _ensure_target_quantifiers(obj, in_effect=False):
