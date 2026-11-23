@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "4ea84d687423cb1a7df6ffde6d38fdab719d85d0bb16afd99d5524e5bc2d5033",
- "generated_at": "2026-11-23T22:31:13",
- "artifact_mtime": "2026-11-23T22:13:09",
+ "artifact_sha256": "733af9214bd22da251388c366006649761093ba9bef163c4093a86e3d1769a21",
+ "generated_at": "2026-11-24T00:30:23",
+ "artifact_mtime": "2026-11-24T00:25:47",
  "counts": {
   "records": 2908,
-  "claims": 4159,
+  "claims": 4157,
   "by_kind": {
    "anaphora_agreement": 69,
    "content_loss": 1715,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 2159
+   "stringy": 2157
   }
  },
  "records": [
@@ -8124,13 +8124,6 @@
      "detail": "permanents you control",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].output[].xdef.xdef.of.modifier.fragment",
-     "detail": "that are creatures and/or Vehicles",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -10730,13 +10723,6 @@
      "source": "artifact:output"
     },
     {
-     "kind": "stringy",
-     "path": "[].options[].output[].fragment",
-     "detail": "You lose the game",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "beginning",
@@ -11869,20 +11855,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Drakuseth, Maw of Flames",
-   "sid": "38f9ce3ec91d",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect[].to",
-     "detail": "each of up to two other target s",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -49282,6 +49254,20 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "double strike",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Zhao, the Moon Slayer",
+   "sid": "17a139443201",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].card.card_type.value",
+     "detail": "nonbasic land",
      "severity": "medium",
      "source": "artifact:output"
     }
