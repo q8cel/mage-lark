@@ -1,8 +1,8 @@
 card	sid	sentence_index	words	missing_units	score	sentence
-Wishing Well	1edbdcd6de43	1	32	mana equal coin counters artifact graveyard paying cost	256	When you do, you may cast target instant or sorcery card with mana value equal to the number of coin counters on this artifact from your graveyard without paying its mana cost
-Wishing Well	1edbdcd6de43	1	32	mana equal coin counters artifact graveyard paying cost	256	When you do, you may cast target instant or sorcery card with mana value equal to the number of coin counters on this artifact from your graveyard without paying its mana cost
 Oblivious Bookworm	984269b68e5b	1	28	unless permanent entered battlefield face control turn turned	224	If you do, discard a card unless a permanent entered the battlefield face down under your control this turn or you turned a permanent face up this turn
 Oblivious Bookworm	984269b68e5b	1	28	unless permanent entered battlefield face control turn turned	224	If you do, discard a card unless a permanent entered the battlefield face down under your control this turn or you turned a permanent face up this turn
+Wishing Well	1edbdcd6de43	1	32	mana equal coin counters artifact paying cost	224	When you do, you may cast target instant or sorcery card with mana value equal to the number of coin counters on this artifact from your graveyard without paying its mana cost
+Wishing Well	1edbdcd6de43	1	32	mana equal coin counters artifact paying cost	224	When you do, you may cast target instant or sorcery card with mana value equal to the number of coin counters on this artifact from your graveyard without paying its mana cost
 Zuko, Conflicted	0d308e12e437	0	19	beginning first main phase hasn't chosen lose life	152	At the beginning of your first main phase, choose one that hasn't been chosen and you lose 2 life
 Zuko, Conflicted	0d308e12e437	0	19	beginning first main phase hasn't chosen lose life	152	At the beginning of your first main phase, choose one that hasn't been chosen and you lose 2 life
 Rakdos, the Muscle	d18384878aa5	2	22	until next end step spent spells	132	Until your next end step, you may play those cards, and mana of any type can be spent to cast those spells
@@ -21,8 +21,6 @@ Wardens of the Cycle	d6dabe310d39	0	16	morbid beginning end step creature died t
 Bloomvine Regent // Claim Territory	420032220dc4	0	26	library put battlefield tapped	104	Search your library for up to two basic Forest cards, reveal them, put one onto the battlefield tapped and the other into your hand, then shuffle
 Perimeter Enforcer	5a6a024a553a	1	25	detective control enters creature	100	Whenever another Detective you control enters and whenever a Detective you control is turned face up, this creature gets +1/+1 until end of turn
 Projektor Inspector	a22499eee5a1	0	24	creature detective control enters	96	Whenever this creature or another Detective you control enters and whenever a Detective you control is turned face up, you may draw a card
-Drag to the Roots	a9afab0bd06e	0	23	4 types among graveyard	92	Delirium — This spell costs {2} less to cast as long as there are four or more card types among cards in your graveyard
-Drag to the Roots	a9afab0bd06e	0	23	4 types among graveyard	92	Delirium — This spell costs {2} less to cast as long as there are four or more card types among cards in your graveyard
 Conspiracy Unraveler	1fa843f8ed81	1	15	rather pay mana cost spells cast	90	You may collect evidence 10 rather than pay the mana cost for spells you cast
 Conspiracy Unraveler	1fa843f8ed81	1	15	rather pay mana cost spells cast	90	You may collect evidence 10 rather than pay the mana cost for spells you cast
 Conspiracy Unraveler	1fa843f8ed81	1	15	rather pay mana cost spells cast	90	You may collect evidence 10 rather than pay the mana cost for spells you cast
@@ -47,6 +45,8 @@ Let's Play a Game	95652c5951a9	1	18	4 types graveyard instead	72	If there are fo
 The Vision	edc232ba6f4d	1	14	cast noncreature spell hasn't chosen	70	Whenever you cast a noncreature spell, choose one that hasn't been chosen this turn
 The Vision	edc232ba6f4d	1	14	cast noncreature spell hasn't chosen	70	Whenever you cast a noncreature spell, choose one that hasn't been chosen this turn
 Bark of Doran	6ae50147e2a1	1	23	damage equal rather	69	As long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness rather than its power
+Drag to the Roots	a9afab0bd06e	0	23	4 types graveyard	69	Delirium — This spell costs {2} less to cast as long as there are four or more card types among cards in your graveyard
+Drag to the Roots	a9afab0bd06e	0	23	4 types graveyard	69	Delirium — This spell costs {2} less to cast as long as there are four or more card types among cards in your graveyard
 Taster of Wares	b4f695693bae	3	34	exiled spent	68	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
 Taster of Wares	b4f695693bae	3	34	exiled spent	68	If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell
 Symbiote Spider-Man	753737f89df7	2	22	find new host	66	Find New Host — {2}{U/B}, Exile this card from your graveyard: Put a +1/+1 counter on target creature you control
@@ -193,8 +193,6 @@ Mindsparker	6da928a37087	1	20	creature player	40	Whenever an opponent casts a wh
 Scalding Viper // Steam Clean	d29b0ddb826b	0	20	creature player	40	Whenever an opponent casts a spell with mana value 3 or less, this creature deals 1 damage to that player
 Scalding Viper // Steam Clean	d29b0ddb826b	0	20	creature player	40	Whenever an opponent casts a spell with mana value 3 or less, this creature deals 1 damage to that player
 Spectacular Skywhale	2ca32a778aa5	2	20	cast creature	40	If five or more mana was spent to cast that spell, put three +1/+1 counters on this creature instead
-Sunspine Lynx	bddf7d003b8c	2	20	creature equal	40	When this creature enters, it deals damage to each player equal to the number of nonbasic lands that player controls
-Sunspine Lynx	bddf7d003b8c	2	20	creature equal	40	When this creature enters, it deals damage to each player equal to the number of nonbasic lands that player controls
 Tackle Artist	a54ae4c57942	2	20	cast creature	40	If five or more mana was spent to cast that spell, put two +1/+1 counters on this creature instead
 Thunderdrum Soloist	9c2fc974bbd0	2	20	cast creature	40	If five or more mana was spent to cast that spell, this creature deals 3 damage to each opponent instead
 Loot, the Anomaly	b6cffb424828	1	13	threshold creature planeswalker	39	Threshold — Sacrifice another creature or planeswalker: ~ gets -2/-0 until end of turn
@@ -228,12 +226,7 @@ Asinine Antics	b82c016ec826	0	18	though flash	36	You may cast this spell as thou
 Bitter Work	fa9afcbb6bcd	0	18	power greater	36	Whenever you attack a player with one or more creatures with power 4 or greater, draw a card
 Cantankerous Keepers	f36e0f46cf3e	1	18	creature among	36	When this creature enters, mill four cards, then put all Elf cards from among them into your hand
 Cantankerous Keepers	f36e0f46cf3e	1	18	creature among	36	When this creature enters, mill four cards, then put all Elf cards from among them into your hand
-Generous Plunderer	4ebabb7051af	3	18	creature equal	36	Whenever this creature attacks, it deals damage to defending player equal to the number of artifacts they control
-Generous Plunderer	4ebabb7051af	3	18	creature equal	36	Whenever this creature attacks, it deals damage to defending player equal to the number of artifacts they control
-Generous Plunderer	4ebabb7051af	3	18	creature equal	36	Whenever this creature attacks, it deals damage to defending player equal to the number of artifacts they control
 Harbinger of the Tides	b82c016ec826	0	18	though flash	36	You may cast this spell as though it had flash if you pay {2} more to cast it
-Mutagen Man, Living Ooze	80f0690e151f	1	12	activated abilities activate	36	Activated abilities of artifact tokens you control cost {1} less to activate
-Mutagen Man, Living Ooze	80f0690e151f	1	12	activated abilities activate	36	Activated abilities of artifact tokens you control cost {1} less to activate
 Mystical Tether	b82c016ec826	0	18	though flash	36	You may cast this spell as though it had flash if you pay {2} more to cast it
 Nita, Forum Conciliator	c0cf66ab2be6	2	18	spent spell	36	You may cast it this turn, and mana of any type can be spent to cast that spell
 Nita, Forum Conciliator	c0cf66ab2be6	2	18	spent spell	36	You may cast it this turn, and mana of any type can be spent to cast that spell
@@ -276,7 +269,6 @@ Bloodtithe Collector	e0d24ce59203	1	16	creature lost	32	When this creature enter
 Bloodtithe Collector	e0d24ce59203	1	16	creature lost	32	When this creature enters, if an opponent lost life this turn, each opponent discards a card
 Bold Biochemist	cf0f85a01f5e	0	16	power creature	32	Power-up — {5}{U}: Put a +1/+1 counter on this creature and draw two cards
 Deadly Precision	25deaef1a166	0	16	cast spell	32	As an additional cost to cast this spell, pay {4} or sacrifice an artifact or creature
-Dire Downdraft	816e16e56e0c	1	16	target creature	32	Target creature's owner puts it on their choice of the top or bottom of their library
 Dream Harvest	d0eba42a7d84	1	16	mana costs	32	Until end of turn, you may cast cards exiled this way without paying their mana costs
 Dream Harvest	d0eba42a7d84	1	16	mana costs	32	Until end of turn, you may cast cards exiled this way without paying their mana costs
 Enlightened Confidant	862b5f80e3dc	2	32	graveyard	32	If you put a card with mana value less than or equal to the amount of life you gained this turn into your graveyard this way, put that card into your hand
@@ -299,14 +291,12 @@ Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with thre
 Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
 Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
 Mimeoplasm, Revered One	23377e972d45	1	16	creature exiled	32	It enters with three +1/+1 counters on it for each creature card exiled this way
-Misleading Motes	816e16e56e0c	0	16	target creature	32	Target creature's owner puts it on their choice of the top or bottom of their library
 Nine-Lives Familiar	1d93dbaddc40	1	32	creature	32	When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
 Nine-Lives Familiar	1d93dbaddc40	1	32	creature	32	When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
 Nine-Lives Familiar	1d93dbaddc40	1	32	creature	32	When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
 Nine-Lives Familiar	1d93dbaddc40	1	32	creature	32	When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step
 Realm-Scorcher Hellkite	0c53bf47f771	2	16	creature colors	32	When this creature enters, if it was bargained, add four mana in any combination of colors
 Realm-Scorcher Hellkite	0c53bf47f771	2	16	creature colors	32	When this creature enters, if it was bargained, add four mana in any combination of colors
-Return to the Sewers	816e16e56e0c	0	16	target creature	32	Target creature's owner puts it on their choice of the top or bottom of their library
 Rottenmouth Viper	993d82711c4f	0	16	cast spell	32	As an additional cost to cast this spell, you may sacrifice any number of nonland permanents
 Rottenmouth Viper	993d82711c4f	0	16	cast spell	32	As an additional cost to cast this spell, you may sacrifice any number of nonland permanents
 Silence the Echo	cad249274f54	0	16	cast spell	32	As an additional cost to cast this spell, sacrifice a creature or planeswalker or pay {3}
@@ -314,7 +304,6 @@ Stir Up Trouble	7bd4a8d9752f	0	16	cast spell	32	As an additional cost to cast th
 Stuck in Summoner's Sanctum	4937c7a017b6	3	16	controller step	32	Enchanted permanent doesn't untap during its controller's untap step and its activated abilities can't be activated
 Treacherous Greed	8376941727d9	0	16	cast spell	32	As an additional cost to cast this spell, sacrifice a creature that dealt damage this turn
 Treacherous Greed	8376941727d9	0	16	cast spell	32	As an additional cost to cast this spell, sacrifice a creature that dealt damage this turn
-Uncharted Voyage	816e16e56e0c	0	16	target creature	32	Target creature's owner puts it on their choice of the top or bottom of their library
 Veteran Guardmouse	5a3e93baa430	0	32	creature	32	Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, it gets +1/+0 and gains first strike until end of turn
 Eshki Dragonclaw	6da5a85d6381	1	31	both	31	At the beginning of combat on your turn, if you've cast both a creature spell and a noncreature spell this turn, draw a card and put two +1/+1 counters on ~
 Eshki Dragonclaw	6da5a85d6381	1	31	both	31	At the beginning of combat on your turn, if you've cast both a creature spell and a noncreature spell this turn, draw a card and put two +1/+1 counters on ~
@@ -534,7 +523,6 @@ Dusk Rose Reliquary	24175650b649	0	13	cast spell	26	As an additional cost to cas
 Embrace Oblivion	24175650b649	0	13	cast spell	26	As an additional cost to cast this spell, sacrifice an artifact or creature
 Enchanted River's Grasp	57d271502149	2	13	controller step	26	Enchanted creature loses all abilities and doesn't untap during its controller's untap step
 Extract a Confession	bd72c535f25f	0	13	cast spell	26	As an additional cost to cast this spell, you may collect evidence 6
-Eye of Jace	19b463d4dce8	1	26	artifact	26	Then if there are seven or more cards in your graveyard, sacrifice this artifact, it deals 2 damage to each opponent, and you gain 2 life
 Fanatical Offering	24175650b649	0	13	cast spell	26	As an additional cost to cast this spell, sacrifice an artifact or creature
 Fear of Abduction	2f9b95e0b42a	0	13	cast spell	26	As an additional cost to cast this spell, exile a creature you control
 Fell Horseman // Deathly Ride	8c2abc135129	0	13	creature owner	26	When this creature dies, put it on the bottom of its owner's library
@@ -559,7 +547,6 @@ Omnipresence	d2621649ce38	0	26	costs	26	You may cast spells with mana value less
 Omnipresence	d2621649ce38	0	26	costs	26	You may cast spells with mana value less than or equal to the number of creatures you control from your hand without paying their mana costs
 Omnipresence	d2621649ce38	0	26	costs	26	You may cast spells with mana value less than or equal to the number of creatures you control from your hand without paying their mana costs
 Osseous Exhale	01b104ec4014	0	13	cast spell	26	As an additional cost to cast this spell, you may behold a Dragon
-Phantom Train	7c09e71a9d5a	1	13	artifact creature	26	Sacrifice another artifact or creature: Put a +1/+1 counter on this Vehicle
 Piercing Exhale	01b104ec4014	0	13	cast spell	26	As an additional cost to cast this spell, you may behold a Dragon
 Possessed Goat	0327879ef362	0	26	creature	26	{3}, Discard a card: Put three +1/+1 counters on this creature and it becomes a black Demon in addition to its other colors and types
 Prairie Dog	25eaf7fbaef0	1	26	creature	26	At the beginning of your end step, if you haven't cast a spell from your hand this turn, put a +1/+1 counter on this creature
@@ -617,6 +604,7 @@ Sun-Blessed Healer	8d53cdbd53a3	2	25	creature	25	When this creature enters, if i
 Tuinvale Guide	c1fcb70c1888	1	25	creature	25	Celebration — This creature gets +1/+0 and has lifelink as long as two or more nonland permanents entered the battlefield under your control this turn
 Visage Bandit	f94cf8dca09f	0	25	enter	25	You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in addition to its other types
 Whiskerquill Scribe	99d3dde317f5	0	25	creature	25	Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, you may discard a card
+Adaptive Automaton	059dd1cd31a4	1	12	addition types	24	This creature is the chosen type in addition to its other types
 Aerial Doombot	62b3827968ed	1	12	power creature	24	Power-up — {5}{U}: Put three +1/+1 counters on this creature
 Afterburner Expert	95d54c1c5782	0	12	exhaust creature	24	Exhaust — {2}{G}{G}: Put two +1/+1 counters on this creature
 Afterburner Expert	95d54c1c5782	0	12	exhaust creature	24	Exhaust — {2}{G}{G}: Put two +1/+1 counters on this creature
@@ -671,6 +659,8 @@ Reluctant Role Model	3e52f352c873	0	24	creature	24	Survival — At the beginning
 Reluctant Role Model	3e52f352c873	0	24	creature	24	Survival — At the beginning of your second main phase, if this creature is tapped, put a flying, lifelink, or +1/+1 counter on it
 Requiting Hex	569437df5ed6	0	12	cast spell	24	As an additional cost to cast this spell, you may blight 1
 Rewrite History	a7ce9da6f336	0	24	enchantment	24	Whenever one or more creatures you control become tapped, draw a card, then discard a card and put a plan counter on this enchantment
+Roaming Throne	059dd1cd31a4	2	12	addition types	24	This creature is the chosen type in addition to its other types
+Roaming Throne	059dd1cd31a4	2	12	addition types	24	This creature is the chosen type in addition to its other types
 Ruinous Waterbending	5bd0f95f2b5a	0	12	cast spell	24	As an additional cost to cast this spell, you may waterbend {4}
 Sabotage Strategist	1fdc20b9b916	2	12	exhaust creature	24	Exhaust — {5}{U}{U}: Put three +1/+1 counters on this creature
 Secret of Bloodbending	6fa0696b7d01	0	12	cast spell	24	As an additional cost to cast this spell, you may waterbend {10}
@@ -695,9 +685,6 @@ The Endstone	e0be379e4475	0	12	play land	24	Whenever you play a land or cast a s
 The Endstone	e0be379e4475	0	12	play land	24	Whenever you play a land or cast a spell, draw a card
 Transcendent Archaic	2c7454fcaf23	1	24	creature	24	Converge — When this creature enters, you may draw X cards, where X is the number of colors of mana spent to cast this spell
 Twin Bolt	e0778dc00bd0	0	12	choose targets	24	~ deals 2 damage divided as you choose among one or two targets
-Villainous Wrath	7b518facb994	0	12	target equal	24	Target opponent loses life equal to the number of creatures they control
-Villainous Wrath	7b518facb994	0	12	target equal	24	Target opponent loses life equal to the number of creatures they control
-Villainous Wrath	7b518facb994	0	12	target equal	24	Target opponent loses life equal to the number of creatures they control
 Vnwxt, Verbose Host	038e1f9ad822	2	12	max speed	24	Max speed — If you would draw a card, draw two cards instead
 Vnwxt, Verbose Host	038e1f9ad822	2	12	max speed	24	Max speed — If you would draw a card, draw two cards instead
 Vnwxt, Verbose Host	038e1f9ad822	2	12	max speed	24	Max speed — If you would draw a card, draw two cards instead
@@ -789,7 +776,6 @@ Cult Healer	bc0566500970	0	22	creature	22	Eerie — Whenever an enchantment you 
 Curse-Marred Demon	c7b49e940692	1	22	creature	22	When this creature enters, search your library for a card, put it into your hand, shuffle, then discard a card at random
 Curse-Marred Demon	c7b49e940692	1	22	creature	22	When this creature enters, search your library for a card, put it into your hand, shuffle, then discard a card at random
 Curse-Marred Demon	c7b49e940692	1	22	creature	22	When this creature enters, search your library for a card, put it into your hand, shuffle, then discard a card at random
-Destined Confrontation	f833e811d4b3	0	22	player	22	Each player chooses any number of creatures they control with total power 4 or less, then sacrifices all other creatures they control
 Due Diligence	7a05dcd939e0	1	22	aura	22	When this Aura enters, target creature you control other than enchanted creature gets +2/+2 and gains vigilance until end of turn
 Dust Animus	139b7f889e14	1	22	creature	22	If you control five or more untapped lands, this creature enters with two +1/+1 counters and a lifelink counter on it
 Dust Animus	139b7f889e14	1	22	creature	22	If you control five or more untapped lands, this creature enters with two +1/+1 counters and a lifelink counter on it
@@ -814,8 +800,6 @@ Riddles in the Dark	4952fe9131c9	0	22	cards	22	Look at the top four cards of you
 Riddles in the Dark	4952fe9131c9	0	22	cards	22	Look at the top four cards of your library and separate them into a face-down pile and a face-up pile
 Rotisserie Elemental	5a1321a2d8cd	3	22	creature	22	If you do, exile the top X cards of your library, where X is the number of skewer counters on this creature
 Rotisserie Elemental	5a1321a2d8cd	3	22	creature	22	If you do, exile the top X cards of your library, where X is the number of skewer counters on this creature
-Treasure Map // Treasure Cove	7af74c43f8ce	2	22	artifact	22	Then if there are three or more landmark counters on it, remove those counters, transform this artifact, and create three Treasure tokens
-Treasure Map // Treasure Cove	7af74c43f8ce	2	22	artifact	22	Then if there are three or more landmark counters on it, remove those counters, transform this artifact, and create three Treasure tokens
 Al Bhed Salvagers	be778b104495	0	21	target	21	Whenever this creature or another creature or artifact you control dies, target opponent loses 1 life and you gain 1 life
 Ark of Hunger	749ba011dee3	0	21	artifact	21	Whenever one or more cards leave your graveyard, this artifact deals 1 damage to each opponent and you gain 1 life
 Ark of Hunger	749ba011dee3	0	21	artifact	21	Whenever one or more cards leave your graveyard, this artifact deals 1 damage to each opponent and you gain 1 life
@@ -947,6 +931,8 @@ Stalactite Stalker	932cf1585bf6	1	20	creature	20	At the beginning of your end st
 Stalactite Stalker	932cf1585bf6	1	20	creature	20	At the beginning of your end step, if you descended this turn, put a +1/+1 counter on this creature
 Summon: Bahamut	a715e7456d3d	2	20	creature	20	Mega Flare — This creature deals damage equal to the total mana value of other permanents you control to each opponent
 Summon: Bahamut	a715e7456d3d	2	20	creature	20	Mega Flare — This creature deals damage equal to the total mana value of other permanents you control to each opponent
+Sunspine Lynx	bddf7d003b8c	2	20	creature	20	When this creature enters, it deals damage to each player equal to the number of nonbasic lands that player controls
+Sunspine Lynx	bddf7d003b8c	2	20	creature	20	When this creature enters, it deals damage to each player equal to the number of nonbasic lands that player controls
 Sunstar Lightsmith	9ff905d4292f	0	20	creature	20	Whenever you cast your second spell each turn, put a +1/+1 counter on this creature and draw a card
 Symbiote Spider-Man	6968778ca82f	0	20	creature	20	Whenever this creature deals combat damage to a player, look at that many cards from the top of your library
 Symbiote Spider-Man	6968778ca82f	0	20	creature	20	Whenever this creature deals combat damage to a player, look at that many cards from the top of your library
@@ -1056,10 +1042,6 @@ Wistfulness	67e93e44c6de	1	19	creature	19	When this creature enters, if {U}{U} w
 Wood Elves	2d6fd21e123a	0	19	creature	19	When this creature enters, search your library for a Forest card, put that card onto the battlefield, then shuffle
 Adrenaline Jockey	4b4028e7a85a	0	18	creature	18	Whenever a player casts a spell, if it's not their turn, this creature deals 4 damage to them
 Ancient Vendetta	422fbef39c5d	1	18	opponent	18	Search target opponent's graveyard, hand, and library for up to four cards with that name and exile them
-Banner of Kinship	babcf53850a5	1	18	artifact	18	This artifact enters with a fellowship counter on it for each creature you control of the chosen type
-Banner of Kinship	babcf53850a5	1	18	artifact	18	This artifact enters with a fellowship counter on it for each creature you control of the chosen type
-Banner of Kinship	babcf53850a5	1	18	artifact	18	This artifact enters with a fellowship counter on it for each creature you control of the chosen type
-Banner of Kinship	babcf53850a5	1	18	artifact	18	This artifact enters with a fellowship counter on it for each creature you control of the chosen type
 Barbed Servitor	5a23a38099ef	2	18	creature	18	Whenever this creature deals combat damage to a player, you draw a card and you lose 1 life
 Barbed Servitor	5a23a38099ef	2	18	creature	18	Whenever this creature deals combat damage to a player, you draw a card and you lose 1 life
 Billowing Shriekmass	2e00a112f1b7	2	18	creature	18	Threshold — This creature gets +2/+1 as long as there are seven or more cards in your graveyard
@@ -1085,6 +1067,9 @@ Elemental Mascot	642154888be9	1	18	creature	18	Opus — Whenever you cast an ins
 Elemental Mascot	d1e36f23607c	2	18	cast	18	If five or more mana was spent to cast that spell, exile the top card of your library
 Equilibrium Adept	ef198206ede3	2	18	creature	18	Flurry — Whenever you cast your second spell each turn, this creature gains double strike until end of turn
 Expressive Firedancer	952ce1d089af	0	18	creature	18	Opus — Whenever you cast an instant or sorcery spell, this creature gets +1/+1 until end of turn
+Generous Plunderer	4ebabb7051af	3	18	creature	18	Whenever this creature attacks, it deals damage to defending player equal to the number of artifacts they control
+Generous Plunderer	4ebabb7051af	3	18	creature	18	Whenever this creature attacks, it deals damage to defending player equal to the number of artifacts they control
+Generous Plunderer	4ebabb7051af	3	18	creature	18	Whenever this creature attacks, it deals damage to defending player equal to the number of artifacts they control
 Goldfury Strider	cc41693780eb	1	18	gets	18	Tap two untapped artifacts and/or creatures you control: Target creature gets +2/+0 until end of turn
 Gorehorn Raider	bbe744f8451d	0	18	creature	18	Raid — When this creature enters, if you attacked this turn, this creature deals 2 damage to any target
 Guiding Hydra	91df2fbe1de4	1	18	creature	18	At the beginning of combat on your turn, you may remove a +1/+1 counter from this creature
@@ -1165,7 +1150,6 @@ Stingcaster Mage	18bae6de316e	1	18	creature	18	When this creature enters, target
 Stingcaster Mage	18bae6de316e	1	18	creature	18	When this creature enters, target instant or sorcery card in your graveyard gains flashback until end of turn
 Strongbox Raider	b6d45f910cb6	0	18	creature	18	Raid — When this creature enters, if you attacked this turn, exile the top two cards of your library
 Sunpearl Kirin	b6ee793cf520	2	18	creature	18	When this creature enters, return up to one other target nonland permanent you control to its owner's hand
-Survey Mechan	d0c92be89be6	4	18	activate	18	This ability costs {X} less to activate, where X is the number of differently named lands you control
 The Endstone	6132219f9de0	1	18	becomes	18	At the beginning of your end step, your life total becomes half your starting life total, rounded up
 The Endstone	6132219f9de0	1	18	becomes	18	At the beginning of your end step, your life total becomes half your starting life total, rounded up
 The Endstone	6132219f9de0	1	18	becomes	18	At the beginning of your end step, your life total becomes half your starting life total, rounded up
@@ -1306,7 +1290,6 @@ Ticket Tortoise	c4f12d7f376f	1	17	creature	17	When this creature enters, if an o
 Torch the Tower	ad28861c66b1	2	17	permanent	17	If this spell was bargained, instead it deals 3 damage to that permanent and you scry 1
 Torch the Tower	ad28861c66b1	2	17	permanent	17	If this spell was bargained, instead it deals 3 damage to that permanent and you scry 1
 Tributary Vaulter	77470d311925	1	17	creature	17	Whenever this creature becomes tapped, another target Merfolk you control gets +2/+0 until end of turn
-Warrior's Blades	11982c2aef51	3	17	activate	17	This ability costs {1} less to activate for each +1/+1 counter on the creature it targets
 Web of Life and Destiny	fb57b04b0690	1	17	cards	17	At the beginning of combat on your turn, look at the top five cards of your library
 Web of Life and Destiny	fb57b04b0690	1	17	cards	17	At the beginning of combat on your turn, look at the top five cards of your library
 Web of Life and Destiny	fb57b04b0690	1	17	cards	17	At the beginning of combat on your turn, look at the top five cards of your library
@@ -1341,6 +1324,7 @@ Crime Novelist	da4afebedb86	0	16	creature	16	Whenever you sacrifice an artifact,
 Cruel Administrator	210d8bcd0493	0	16	creature	16	Raid — This creature enters with a +1/+1 counter on it if you attacked this turn
 Cryogen Relic	8daccbb1e032	1	16	artifact	16	{1}{U}, Sacrifice this artifact: Put a stun counter on up to one target tapped creature
 Defiant Survivor	9c2a1c85d5d4	0	16	creature	16	Survival — At the beginning of your second main phase, if this creature is tapped, manifest dread
+Dire Downdraft	816e16e56e0c	1	16	creature	16	Target creature's owner puts it on their choice of the top or bottom of their library
 Disruptor of Currents	31d9aff6f385	2	16	creature	16	When this creature enters, return up to one other target nonland permanent to its owner's hand
 Disruptor of Currents	31d9aff6f385	2	16	creature	16	When this creature enters, return up to one other target nonland permanent to its owner's hand
 Drake Hatcher	acf3c3194219	1	16	creature	16	Whenever this creature deals combat damage to a player, put that many incubation counters on it
@@ -1403,6 +1387,7 @@ Mardu Monument	ae5ec96de74d	1	16	artifact	16	{2}{R}{W}{B}, {T}, Sacrifice this a
 Messenger Hawk	0c8708596d78	2	16	creature	16	This creature gets +2/+0 as long as you've drawn two or more cards this turn
 Mirror Room // Fractured Realm	0a937d7b75d3	0	16	time	16	If a triggered ability of a permanent you control triggers, that ability triggers an additional time
 Mirror Room // Fractured Realm	0a937d7b75d3	0	16	time	16	If a triggered ability of a permanent you control triggers, that ability triggers an additional time
+Misleading Motes	816e16e56e0c	0	16	creature	16	Target creature's owner puts it on their choice of the top or bottom of their library
 Molten Note	0d6483d19573	0	16	equal	16	~ deals damage to target creature equal to the amount of mana spent to cast this spell
 Most Decrepit Old Bird // Speak Secrets	5c5907450016	0	16	among	16	Mill four cards, then put an instant or sorcery card from among them into your hand
 Most Decrepit Old Bird // Speak Secrets	5c5907450016	0	16	among	16	Mill four cards, then put an instant or sorcery card from among them into your hand
@@ -1437,6 +1422,7 @@ Redshift, Rocketeer Chief	0dbfaddcc98c	3	16	exhaust	16	Exhaust — {10}{R}{G}: P
 Remnant Elemental	808dabf46a10	1	16	creature	16	Landfall — Whenever a land you control enters, this creature gets +2/+0 until end of turn
 Resplendent Angel	c218ab43c7f0	2	16	creature	16	{3}{W}{W}{W}: Until end of turn, this creature gets +2/+2 and gains lifelink
 Resplendent Angel	c218ab43c7f0	2	16	creature	16	{3}{W}{W}{W}: Until end of turn, this creature gets +2/+2 and gains lifelink
+Return to the Sewers	816e16e56e0c	0	16	creature	16	Target creature's owner puts it on their choice of the top or bottom of their library
 Rotisserie Elemental	6b68cbee935c	1	16	creature	16	Whenever this creature deals combat damage to a player, put a skewer counter on this creature
 Rotisserie Elemental	6b68cbee935c	1	16	creature	16	Whenever this creature deals combat damage to a player, put a skewer counter on this creature
 Rune-Brand Juggler	ced771c5d717	1	16	gets	16	{3}{B}{R}, Sacrifice a suspected creature: Target creature gets -5/-5 until end of turn
@@ -1476,6 +1462,7 @@ Ugin, Eye of the Storms	d2bb601e4500	0	16	colors	16	When you cast this spell, ex
 Ugin, Eye of the Storms	d2bb601e4500	0	16	colors	16	When you cast this spell, exile up to one target permanent that's one or more colors
 Ugin, Eye of the Storms // Ugin, Eye of the Storms	d2bb601e4500	0	16	colors	16	When you cast this spell, exile up to one target permanent that's one or more colors
 Ugin, Eye of the Storms // Ugin, Eye of the Storms	d2bb601e4500	0	16	colors	16	When you cast this spell, exile up to one target permanent that's one or more colors
+Uncharted Voyage	816e16e56e0c	0	16	creature	16	Target creature's owner puts it on their choice of the top or bottom of their library
 Unstoppable Slasher	616b5f65cff9	1	16	creature	16	Whenever this creature deals combat damage to a player, they lose half their life, rounded up
 Unstoppable Slasher	616b5f65cff9	1	16	creature	16	Whenever this creature deals combat damage to a player, they lose half their life, rounded up
 Unstoppable Slasher	616b5f65cff9	1	16	creature	16	Whenever this creature deals combat damage to a player, they lose half their life, rounded up
@@ -1490,8 +1477,6 @@ Waxen Shapethief	4fae2967ec03	1	16	enter	16	You may have this creature enter as 
 Waxen Shapethief	4fae2967ec03	1	16	enter	16	You may have this creature enter as a copy of an artifact or creature you control
 Zealous Lorecaster	8283669b8929	0	16	creature	16	When this creature enters, return target instant or sorcery card from your graveyard to your hand
 Action News Crew	5843bc319355	1	15	channel	15	Channel — {6}, Discard this card: Put a +1/+1 counter on each creature you control
-Ashe, Princess of Dalmasca	e2e52ae21e80	1	15	among	15	You may reveal an artifact card from among them and put it into your hand
-Ashe, Princess of Dalmasca	e2e52ae21e80	1	15	among	15	You may reveal an artifact card from among them and put it into your hand
 Attack-in-the-Box	9b74da707c26	0	15	creature	15	Whenever this creature attacks, you may have it get +4/+0 until end of turn
 Beetle-Headed Merchants	97359742dfc5	1	15	creature	15	If you do, draw a card and put a +1/+1 counter on this creature
 Bloom Tender	3a664959ee14	0	15	vivid	15	Vivid — {T}: For each color among permanents you control, add one mana of that color
@@ -1501,11 +1486,7 @@ Bloom Tender	3a664959ee14	0	15	vivid	15	Vivid — {T}: For each color among perm
 Captain Marvel, Earth's Protector	aeec9ec1a4ba	2	15	power	15	Power-up — {5}{W}{W}: Put a +1/+1 counter and an indestructible counter on ~
 Captain Marvel, Earth's Protector	aeec9ec1a4ba	2	15	power	15	Power-up — {5}{W}{W}: Put a +1/+1 counter and an indestructible counter on ~
 Captain Marvel, Earth's Protector	aeec9ec1a4ba	2	15	power	15	Power-up — {5}{W}{W}: Put a +1/+1 counter and an indestructible counter on ~
-Case File Auditor	cb6beb130b34	1	15	among	15	You may reveal an enchantment card from among them and put it into your hand
-Case File Auditor	cb6beb130b34	1	15	among	15	You may reveal an enchantment card from among them and put it into your hand
 Case of the Filched Falcon	3ba7ceef9a89	2	15	solved	15	Solved — {2}{U}, Sacrifice this Case: Put four +1/+1 counters on target noncreature artifact
-Casey Jones, Jury-Rig Justiciar	e2e52ae21e80	2	15	among	15	You may reveal an artifact card from among them and put it into your hand
-Casey Jones, Jury-Rig Justiciar	e2e52ae21e80	2	15	among	15	You may reveal an artifact card from among them and put it into your hand
 Cathartic Parting	87c60d056fbf	0	15	library	15	The owner of target artifact or enchantment an opponent controls shuffles it into their library
 Chrome Companion	48a01f1efea3	1	15	owner	15	{2}, {T}: Put target card from a graveyard on the bottom of its owner's library
 Cinder Strike	94cabc184034	2	15	instead	15	It deals 4 damage to that creature instead if this spell's additional cost was paid
@@ -1513,15 +1494,9 @@ Close Encounter	ebb334da45ce	1	15	chosen	15	~ deals damage equal to the power of
 Courier of Comestibles	88a6db683b25	1	15	hand	15	If you don't put a card into your hand this way, create a Food token
 Crackling Cyclops	e05d105ae1fb	0	15	creature	15	Whenever you cast a noncreature spell, this creature gets +3/+0 until end of turn
 Crowd of True Believers	5823444f81e5	0	15	gets	15	{T}: Target creature you control that's attacking alone gets +1/+0 until end of turn
-Cursed Recording	a675b5bca4e2	0	15	artifact	15	Whenever you cast an instant or sorcery spell, put a time counter on this artifact
-Cursed Recording	a675b5bca4e2	0	15	artifact	15	Whenever you cast an instant or sorcery spell, put a time counter on this artifact
-Cursed Recording	a675b5bca4e2	0	15	artifact	15	Whenever you cast an instant or sorcery spell, put a time counter on this artifact
 Desecration Demon	97943e364a45	1	15	choice	15	At the beginning of each combat, any opponent may sacrifice a creature of their choice
 Desecration Demon	fb356f6f46fd	2	15	creature	15	If a player does, tap this creature and put a +1/+1 counter on it
-Diary of Dreams	67bcd5e45a2e	0	15	artifact	15	Whenever you cast an instant or sorcery spell, put a page counter on this artifact
 Diversion Unit	764f7db22097	1	15	creature	15	{U}, Sacrifice this creature: Counter target instant or sorcery spell unless its controller pays {3}
-Dragonfire Blade	dd7148a9672d	2	15	activate	15	This ability costs {1} less to activate for each color of the creature it targets
-Dragonfire Blade	dd7148a9672d	2	15	activate	15	This ability costs {1} less to activate for each color of the creature it targets
 Dragonfly Swarm	34444da60e81	2	15	creature	15	When this creature dies, if there's a Lesson card in your graveyard, draw a card
 Druid of the Spade	80450d8f0e28	0	15	creature	15	As long as you control a token, this creature gets +2/+0 and has trample
 Emeritus of Abundance // Regrowth	643853ec1e80	2	15	creature	15	Whenever this creature attacks, if you control eight or more lands, this creature becomes prepared
@@ -1567,8 +1542,6 @@ Lord Skitter's Blessing	317d13c38a9e	0	15	enchantment	15	When this enchantment e
 Lupinflower Village	8304946eca79	3	15	land	15	{1}{W}, {T}, Sacrifice this land: Look at the top six cards of your library
 Maelstrom Pulse	6f2b49585798	0	15	name	15	Destroy target nonland permanent and all other permanents with the same name as that permanent
 Master's Councillors	5bf61493bdf1	1	15	creature	15	This creature gets +2/+0 for each graveyard with seven or more cards in it
-Meltstrider's Resolve	3e5c3f60f536	1	15	aura	15	When this Aura enters, enchanted creature fights up to one target creature an opponent controls
-Mica, Reader of Ruins	5c3a5ca68e9b	2	15	spell	15	If you do, copy that spell and you may choose new targets for the copy
 Morcant's Loyalist	78e1cb78d638	1	15	creature	15	When this creature dies, return another target Elf card from your graveyard to your hand
 Morcant's Loyalist	78e1cb78d638	1	15	creature	15	When this creature dies, return another target Elf card from your graveyard to your hand
 Mouth of the Storm	6da92071f813	2	15	get	15	When this creature enters, creatures your opponents control get -3/-0 until your next turn
@@ -1576,11 +1549,9 @@ Muse Seeker	8605888099dd	1	15	cast	15	Then discard a card unless five or more ma
 Naga Fleshcrafter	5207ddb7d81f	0	15	enter	15	You may have this creature enter as a copy of any creature on the battlefield
 Naga Fleshcrafter	5207ddb7d81f	0	15	enter	15	You may have this creature enter as a copy of any creature on the battlefield
 Nurturing Pixie	f9ec7aebb1b5	2	15	creature	15	If a permanent was returned this way, put a +1/+1 counter on this creature
-Ordeal of Nylea	c25fb4dec06b	2	15	aura	15	Then if it has three or more +1/+1 counters on it, sacrifice this Aura
 Pensive Professor	116cc46754bd	1	15	creature	15	Whenever one or more +1/+1 counters are put on this creature, draw a card
 Pensive Professor	116cc46754bd	1	15	creature	15	Whenever one or more +1/+1 counters are put on this creature, draw a card
 Persistent Marshstalker	1a1bc3f32465	2	15	attacking	15	If you do, return this card from your graveyard to the battlefield tapped and attacking
-Pitiless Fists	3e5c3f60f536	1	15	aura	15	When this Aura enters, enchanted creature fights up to one target creature an opponent controls
 Quicksilver, Brash Blur	82ff74404131	2	15	power	15	Power-up — {4}{R}: Put a +1/+1 counter and a double strike counter on ~
 Quicksilver, Brash Blur	82ff74404131	2	15	power	15	Power-up — {4}{R}: Put a +1/+1 counter and a double strike counter on ~
 Raven Eagle	05210a309cd2	1	15	creature	15	Whenever this creature enters or attacks, exile up to one target card from a graveyard
@@ -1605,10 +1576,6 @@ Spring-Loaded Sawblades // Bladewheel Chariot	ab0b6aad8f04	1	15	artifact	15	When
 Stargaze	b3c95992ac36	1	15	among	15	Put X cards from among them into your hand and the rest into your graveyard
 Summon: G.F. Cerberus	d13d614a39d7	3	15	twice	15	Triple — When you next cast an instant or sorcery spell this turn, copy it twice
 Summon: G.F. Cerberus	d13d614a39d7	3	15	twice	15	Triple — When you next cast an instant or sorcery spell this turn, copy it twice
-Tony Stark // The Invincible Iron Man	e2e52ae21e80	1	15	among	15	You may reveal an artifact card from among them and put it into your hand
-Tony Stark // The Invincible Iron Man	e2e52ae21e80	1	15	among	15	You may reveal an artifact card from among them and put it into your hand
-Tony Stark // The Invincible Iron Man	e2e52ae21e80	1	15	among	15	You may reveal an artifact card from among them and put it into your hand
-Tony Stark // The Invincible Iron Man	e2e52ae21e80	1	15	among	15	You may reveal an artifact card from among them and put it into your hand
 Town Greeter	26cebf7b06c9	2	15	hand	15	If you put a Town card into your hand this way, you gain 2 life
 Twinflame Travelers	e9ac487c8a45	1	15	time	15	If a triggered ability of another Elemental you control triggers, it triggers an additional time
 Twinflame Travelers	e9ac487c8a45	1	15	time	15	If a triggered ability of another Elemental you control triggers, it triggers an additional time
@@ -1668,7 +1635,6 @@ Corroding Dragonstorm	cd16f6607473	0	14	enchantment	14	When this enchantment ent
 Coruscation Mage	86eff0d6e70d	1	14	creature	14	Whenever you cast a noncreature spell, this creature deals 1 damage to each opponent
 Dawn-Blessed Pennant	51f80f0062c2	0	14	artifact	14	As this artifact enters, choose Elemental, Elf, Faerie, Giant, Goblin, Kithkin, Merfolk, or Treefolk
 Deathless Pilot	5e81ea76c0f5	0	14	creature	14	This creature saddles Mounts and crews Vehicles as though its power were 2 greater
-Diary of Dreams	eabe2184ee95	2	14	activate	14	This ability costs {1} less to activate for each page counter on this artifact
 Diviner of Victory // Unwind History	bd45e1d12276	1	14	creature	14	Whenever you scry or surveil, this creature gets +1/+1 until end of turn
 Diviner of Victory // Unwind History	bd45e1d12276	1	14	creature	14	Whenever you scry or surveil, this creature gets +1/+1 until end of turn
 Draconautics Engineer	8dd9b27b11c1	2	14	exhaust	14	Exhaust — {3}{R}: Create a 4/4 red Dinosaur Dragon creature token with flying
@@ -1702,7 +1668,6 @@ Gaelicat	9507d50eebe2	1	14	creature	14	As long as you control two or more artifa
 Gideon the Oathless	6328af5de731	2	14	player	14	Whenever an opponent activates a loyalty ability, Gideon deals 1 damage to that player
 Gideon the Oathless	6328af5de731	2	14	player	14	Whenever an opponent activates a loyalty ability, Gideon deals 1 damage to that player
 Gigantoad	51b091728d19	0	14	creature	14	As long as you control seven or more lands, this creature gets +2/+2
-Gilt-Leaf's Embrace	1a2f17d483f5	2	14	aura	14	When this Aura enters, enchanted creature gains trample and indestructible until end of turn
 Glidedive Duo	a17167242c0c	1	14	creature	14	When this creature enters, each opponent loses 2 life and you gain 2 life
 Gnarlid Colony	40d86c27c017	1	14	creature	14	If this creature was kicked, it enters with two +1/+1 counters on it
 Hopeful Vigil	600a77daa678	0	14	enchantment	14	When this enchantment enters, create a 2/2 white Knight creature token with vigilance
@@ -1810,8 +1775,6 @@ Arbiter of Woe	fe286ecb69b7	2	13	creature	13	When this creature enters, each opp
 Archway Angel	862464f4c81e	1	13	creature	13	When this creature enters, you gain 2 life for each Gate you control
 Armored Kincaller	ebfa5db436e9	0	13	creature	13	When this creature enters, you may reveal a Dinosaur card from your hand
 Bakersbane Duo	c85014882811	1	13	creature	13	Whenever you expend 4, this creature gets +1/+1 until end of turn
-Balamb Garden, SeeD Academy // Balamb Garden, Airborne	99bc04205716	3	13	activate	13	This ability costs {1} less to activate for each other Town you control
-Balamb Garden, SeeD Academy // Balamb Garden, Airborne	99bc04205716	3	13	activate	13	This ability costs {1} less to activate for each other Town you control
 Biotech Specialist	5336bb40739b	1	13	creature	13	Whenever you sacrifice an artifact, this creature deals 2 damage to target opponent
 Biotech Specialist	5336bb40739b	1	13	creature	13	Whenever you sacrifice an artifact, this creature deals 2 damage to target opponent
 Blood Hustler	ca1c29776832	0	13	creature	13	Whenever you commit a crime, put a +1/+1 counter on this creature
@@ -1834,7 +1797,6 @@ Claim Jumper	867d1b2a784b	2	13	process	13	Then if an opponent controls more land
 Clinquant Skymage	7ce7f028dced	1	13	creature	13	Whenever you draw a card, put a +1/+1 counter on this creature
 Codecracker Hound	d9d1e1087f85	0	13	creature	13	When this creature enters, look at the top two cards of your library
 Conductive Machete	f89ab9de957e	0	13	equipment	13	When this Equipment enters, manifest dread, then attach this Equipment to that creature
-Contested Game Ball	c9545ba39fd6	1	13	artifact	13	{2}, {T}: Draw a card and put a point counter on this artifact
 Corpses of the Lost	d9605c8229b4	1	13	enchantment	13	When this enchantment enters, create a 2/2 black Skeleton Pirate creature token
 Corpses of the Lost	d9605c8229b4	1	13	enchantment	13	When this enchantment enters, create a 2/2 black Skeleton Pirate creature token
 Corroding Dragonstorm	f711909e312f	2	13	enchantment	13	When a Dragon you control enters, return this enchantment to its owner's hand
@@ -1853,8 +1815,6 @@ District Mascot	2465a9b221a7	2	13	creature	13	Whenever this creature attacks whi
 District Mascot	2465a9b221a7	2	13	creature	13	Whenever this creature attacks while saddled, put a +1/+1 counter on it
 District Mascot	2465a9b221a7	2	13	creature	13	Whenever this creature attacks while saddled, put a +1/+1 counter on it
 District Mascot	2465a9b221a7	2	13	creature	13	Whenever this creature attacks while saddled, put a +1/+1 counter on it
-Doom Reigns Supreme	cab70fbdd743	3	13	target	13	When you do, target opponent exiles the top five cards of their library
-Doom Reigns Supreme	cab70fbdd743	3	13	target	13	When you do, target opponent exiles the top five cards of their library
 Dracosaur Auxiliary	cf34f2905a37	1	13	creature	13	Whenever this creature attacks while saddled, it deals 2 damage to any target
 Dragonologist	9daaaaff67c7	0	13	creature	13	When this creature enters, look at the top six cards of your library
 Dragonologist	9daaaaff67c7	0	13	creature	13	When this creature enters, look at the top six cards of your library
@@ -1876,13 +1836,11 @@ Eclipsed Merrow	afffd7d24618	0	13	creature	13	When this creature enters, look at
 Eclipsed Merrow	afffd7d24618	0	13	creature	13	When this creature enters, look at the top four cards of your library
 Elusive Otter // Grove's Bounty	4f5dbbeee5ec	0	13	control	13	Distribute X +1/+1 counters among any number of target creatures you control
 Elusive Otter // Grove's Bounty	4f5dbbeee5ec	0	13	control	13	Distribute X +1/+1 counters among any number of target creatures you control
-Enchanted River's Grasp	9df89400b182	1	13	aura	13	When this Aura enters, tap enchanted creature and remove all counters from it
 Encroaching Dragonstorm	f711909e312f	1	13	enchantment	13	When a Dragon you control enters, return this enchantment to its owner's hand
 Encroaching Dragonstorm	f711909e312f	1	13	enchantment	13	When a Dragon you control enters, return this enchantment to its owner's hand
 Encroaching Dragonstorm	f711909e312f	1	13	enchantment	13	When a Dragon you control enters, return this enchantment to its owner's hand
 Fear of Failed Tests	e57b93f59bf5	0	13	creature	13	Whenever this creature deals combat damage to a player, draw that many cards
 Festerleech	a76cdd17f21d	0	13	creature	13	Whenever this creature deals combat damage to a player, you mill two cards
-Fire-Rim Form	c0123157ab2a	2	13	aura	13	When this Aura enters, enchanted creature gains first strike until end of turn
 Flourishing Grapple	d076d4facca3	1	13	permanent	13	Target creature you control deals damage equal to its power to that permanent
 Flourishing Grapple	d076d4facca3	1	13	permanent	13	Target creature you control deals damage equal to its power to that permanent
 Frontier Seeker	b41b73578705	0	13	creature	13	When this creature enters, look at the top five cards of your library
@@ -1904,7 +1862,6 @@ Gurmag Nightwatch	3933398297c7	0	13	creature	13	When this creature enters, look 
 Gurmag Nightwatch	a4b010bfbd9b	1	13	cards	13	You may put one of those cards back on top of your library
 Gutless Plunderer	a4b010bfbd9b	2	13	cards	13	You may put one of those cards back on top of your library
 Hollow Scavenger // Bakery Raid	49658fd344d1	0	13	creature	13	{1}, Sacrifice a Food: This creature gets +2/+2 until end of turn
-Honest Work	9df89400b182	1	13	aura	13	When this Aura enters, tap enchanted creature and remove all counters from it
 Illicit Masquerade	90c84e1c3839	1	13	enchantment	13	When this enchantment enters, put an impostor counter on each creature you control
 Illicit Masquerade	90c84e1c3839	1	13	enchantment	13	When this enchantment enters, put an impostor counter on each creature you control
 Junkblade Bruiser	56fb21280ac1	1	13	creature	13	Whenever you expend 4, this creature gets +2/+1 until end of turn
@@ -1923,7 +1880,6 @@ Loot, Exuberant Explorer	85575b439430	1	13	cards	13	{4}{G}{G}, {T}: Look at the 
 Loot, Exuberant Explorer	85575b439430	1	13	cards	13	{4}{G}{G}, {T}: Look at the top six cards of your library
 Magnetic Snuffler	c864d8d25d81	1	13	creature	13	Whenever you sacrifice an artifact, put a +1/+1 counter on this creature
 Magnetic Snuffler	c864d8d25d81	1	13	creature	13	Whenever you sacrifice an artifact, put a +1/+1 counter on this creature
-Mazemind Tome	9363f9b7cec9	2	13	artifact	13	When there are four or more page counters on this artifact, exile it
 Mechanical Mobster	afd1aaa398a6	0	13	creature	13	When this creature enters, exile up to one target card from a graveyard
 Mechanical Mobster	afd1aaa398a6	0	13	creature	13	When this creature enters, exile up to one target card from a graveyard
 Mine Raider	8b1d25a3e3cf	1	13	creature	13	When this creature enters, if you control another outlaw, create a Treasure token
@@ -1945,6 +1901,7 @@ Overlord of the Floodpits	aba19db7032e	2	13	permanent	13	Whenever this permanent
 Overlord of the Floodpits	aba19db7032e	2	13	permanent	13	Whenever this permanent enters or attacks, draw two cards, then discard a card
 Overlord of the Floodpits	aba19db7032e	2	13	permanent	13	Whenever this permanent enters or attacks, draw two cards, then discard a card
 Paradox Surveyor	b41b73578705	1	13	creature	13	When this creature enters, look at the top five cards of your library
+Phantom Train	7c09e71a9d5a	1	13	creature	13	Sacrifice another artifact or creature: Put a +1/+1 counter on this Vehicle
 Picnic Ruiner // Stolen Goodies	622d2fe9712f	0	13	control	13	Distribute three +1/+1 counters among any number of target creatures you control
 Pictures of Spider-Man	e504fb0c67ae	0	13	artifact	13	When this artifact enters, look at the top five cards of your library
 Pictures of Spider-Man	e504fb0c67ae	0	13	artifact	13	When this artifact enters, look at the top five cards of your library
@@ -1995,7 +1952,6 @@ Stone-Giant of High Pass	0ba6e8517f34	1	13	creature	13	{2}{R}, Sacrifice an arti
 Storm Fleet Spy	77d7229ee096	0	13	creature	13	Raid — When this creature enters, if you attacked this turn, draw a card
 Summon: Anima	d658abedaa40	1	13	choice	13	Oblivion — Each opponent sacrifices a creature of their choice and loses 3 life
 Summon: Anima	d658abedaa40	1	13	choice	13	Oblivion — Each opponent sacrifices a creature of their choice and loses 3 life
-Super Speed	c0123157ab2a	2	13	aura	13	When this Aura enters, enchanted creature gains first strike until end of turn
 Susurian Dirgecraft	92de307da1b7	0	13	choice	13	When this Spacecraft enters, each opponent sacrifices a nontoken creature of their choice
 Synchronized Charge	0efd1f624af0	0	13	control	13	Distribute two +1/+1 counters among one or two target creatures you control
 Technodrome	56d4e8e7de5c	1	13	creature	13	This creature can't attack or block unless its power is 6 or greater
@@ -2025,8 +1981,6 @@ Abyssal Gorestalker	f96489e4115e	0	12	choice	12	When this creature enters, each 
 Ajani's Pridemate	fd5d6a40416f	0	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
 Ajani's Pridemate	fd5d6a40416f	0	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
 Ancient Adamantoise	c6ee0eff3a31	3	12	creature	12	When this creature dies, exile it and create ten tapped Treasure tokens
-Aquitect's Defenses	e78bb6028ddb	2	12	aura	12	When this Aura enters, enchanted creature gains hexproof until end of turn
-Bandit's Haul	c07f9891fd15	0	12	artifact	12	Whenever you commit a crime, put a loot counter on this artifact
 Bark-Knuckle Boxer	f9d59d0533bc	0	12	creature	12	Whenever you expend 4, this creature gains indestructible until end of turn
 Barrels of Blasting Jelly	0bac5db61333	2	12	artifact	12	{5}, {T}, Sacrifice this artifact: It deals 5 damage to target creature
 Bear Trap	e2f964a07259	1	12	artifact	12	{3}, {T}, Sacrifice this artifact: It deals 3 damage to target creature
@@ -2084,8 +2038,6 @@ Exemplar of Light	fd5d6a40416f	1	12	creature	12	Whenever you gain life, put a +1
 Exemplar of Light	fd5d6a40416f	1	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
 Exemplar of Light	fd5d6a40416f	1	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
 Exemplar of Light	fd5d6a40416f	1	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
-Fae Flight	e78bb6028ddb	2	12	aura	12	When this Aura enters, enchanted creature gains hexproof until end of turn
-Fae Flight	e78bb6028ddb	2	12	aura	12	When this Aura enters, enchanted creature gains hexproof until end of turn
 Faunsbane Troll	04072fa3cf8f	0	12	creature	12	When this creature enters, create a Monster Role token attached to it
 Faunsbane Troll	04072fa3cf8f	0	12	creature	12	When this creature enters, create a Monster Role token attached to it
 Fiendish Panda	fd5d6a40416f	0	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
@@ -2147,13 +2099,10 @@ Nimble Brigand	5b34c260c1c5	0	12	creature	12	This creature can't be blocked if y
 Nimble Brigand	177a73abe917	1	12	creature	12	Whenever this creature deals combat damage to a player, draw a card
 Nita, Forum Conciliator	de2ad195b074	3	12	spell	12	If that spell would be put into a graveyard, exile it instead
 Nita, Forum Conciliator	de2ad195b074	3	12	spell	12	If that spell would be put into a graveyard, exile it instead
-Outrageous Robbery	f118e0ecfe1c	0	12	target	12	Target opponent exiles the top X cards of their library face down
-Outrageous Robbery	f118e0ecfe1c	0	12	target	12	Target opponent exiles the top X cards of their library face down
 Peculiar Lighthouse	1ace79da412e	0	12	land	12	This land enters tapped unless a player has 13 or less life
 Pest Mascot	fd5d6a40416f	1	12	creature	12	Whenever you gain life, put a +1/+1 counter on this creature
 Pit of Offerings	dcbaf300639a	1	12	land	12	When this land enters, exile up to three target cards from graveyards
 Prosperity Tycoon	68971d795e38	1	12	creature	12	{2}, Sacrifice a token: This creature gains indestructible until end of turn
-Qiqirn Merchant	6ffcf51bcfe7	2	12	activate	12	This ability costs {1} less to activate for each Town you control
 Quistis Trepe	de2ad195b074	1	12	spell	12	If that spell would be put into a graveyard, exile it instead
 Quistis Trepe	de2ad195b074	1	12	spell	12	If that spell would be put into a graveyard, exile it instead
 Raucous Carnival	1ace79da412e	0	12	land	12	This land enters tapped unless a player has 13 or less life
@@ -2185,10 +2134,6 @@ Teeming Dragonstorm	0d55082b64f4	0	12	enchantment	12	When this enchantment enter
 Teeming Dragonstorm	0d55082b64f4	0	12	enchantment	12	When this enchantment enters, create two 2/2 white Soldier creature tokens
 The Dawning Archaic	f8da90f101e3	3	12	spell	12	If that spell would be put into your graveyard, exile it instead
 The Dawning Archaic	f8da90f101e3	3	12	spell	12	If that spell would be put into your graveyard, exile it instead
-The Lonely Mountain	f309a69e4fcd	2	12	activate	12	This ability costs {1} less to activate for each Equipment you control
-The Lonely Mountain	f309a69e4fcd	2	12	activate	12	This ability costs {1} less to activate for each Equipment you control
-The Lonely Mountain	f309a69e4fcd	2	12	activate	12	This ability costs {1} less to activate for each Equipment you control
-The Lonely Mountain	f309a69e4fcd	2	12	activate	12	This ability costs {1} less to activate for each Equipment you control
 Threefold Thunderhulk	66308a814573	2	12	creature	12	{2}, Sacrifice another artifact: Put a +1/+1 counter on this creature
 Threefold Thunderhulk	66308a814573	2	12	creature	12	{2}, Sacrifice another artifact: Put a +1/+1 counter on this creature
 Throw from the Saddle	50dcd1918c68	1	12	instead	12	Put a +1/+1 counter on it instead if it's a Mount
@@ -2202,7 +2147,9 @@ Unflinching Hortimancer	fd5d6a40416f	1	12	creature	12	Whenever you gain life, pu
 Unscrupulous Agent	90b996f3d740	0	12	creature	12	When this creature enters, target opponent exiles a card from their hand
 Unyielding Gatekeeper	1f013d6031ab	1	12	creature	12	When this creature is turned face up, exile another target nonland permanent
 Unyielding Gatekeeper	1f013d6031ab	1	12	creature	12	When this creature is turned face up, exile another target nonland permanent
+Villainous Wrath	7b518facb994	0	12	target	12	Target opponent loses life equal to the number of creatures they control
+Villainous Wrath	7b518facb994	0	12	target	12	Target opponent loses life equal to the number of creatures they control
+Villainous Wrath	7b518facb994	0	12	target	12	Target opponent loses life equal to the number of creatures they control
 Wandertale Mentor	7d2586ae3b0d	0	12	creature	12	Whenever you expend 4, put a +1/+1 counter on this creature
-Waterbending Scroll	b718b3fae5fc	1	12	activate	12	This ability costs {1} less to activate for each Island you control
 Wishing Well	f8da90f101e3	2	12	spell	12	If that spell would be put into your graveyard, exile it instead
 Wishing Well	f8da90f101e3	2	12	spell	12	If that spell would be put into your graveyard, exile it instead
