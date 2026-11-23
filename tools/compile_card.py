@@ -150,8 +150,46 @@ def _effect_source_zone(obj):
     return None
 
 
+# Exact-semantics controller mappings.  Anything not listed keeps the
+# {kind:"controller", ref, unresolved:true} form instead of a guessed shape.
+CONTROLLER_MAP = {
+    "you don't control": {'kind': 'player', 'ref': 'you',
+                          'relation': 'controls', 'negated': True},
+    "you don't own": {'kind': 'player', 'ref': 'you',
+                      'relation': 'own', 'negated': True},
+    'target player controls': {'kind': 'player', 'ref': 'target player',
+                               'relation': 'controls'},
+    'its controller': {'kind': 'player', 'ref': 'its controller'},
+}
+WHO_REF_FIX = {"that creature 's controller": 'its controller',
+               "that land 's controller": 'its controller'}
+
+
+def _normalize_refs(obj):
+    co = obj.get('copy_of')
+    if isinstance(co, dict) and not co.get('link'):
+        ct = co.get('card_type')
+        if isinstance(ct, dict) and ct.get('ref') == 'anaphora':
+            ct.setdefault('kind', 'anaphora')
+            ct.setdefault('status', 'unresolved')
+            co.setdefault('status', 'unresolved')
+    w = obj.get('who')
+    if isinstance(w, dict) and w.get('kind') == 'player':
+        fixed = WHO_REF_FIX.get(str(w.get('ref')))
+        if fixed:
+            w['ref'] = fixed
+            if 'selection' in w:
+                w['selection'] = fixed
+    c = obj.get('controller')
+    if isinstance(c, dict) and c.get('unresolved') is True:
+        repl = CONTROLLER_MAP.get(str(c.get('ref')))
+        if repl:
+            obj['controller'] = dict(repl)
+
+
 def _ensure_target_quantifiers(obj, in_effect=False):
     if isinstance(obj, dict):
+        _normalize_refs(obj)
         if _is_target_set(obj):
             _normalize_card_types(obj)
             if isinstance(obj.get('quantifier'), dict):
