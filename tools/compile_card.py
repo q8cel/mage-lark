@@ -173,7 +173,31 @@ WHO_REF_FIX = {"that creature 's controller": 'its controller',
                "that land 's controller": 'its controller'}
 
 
+PLAYER_CARD_WORDS = {
+    'you': 'you', 'opponent': 'opponent', 'an opponent': 'opponent',
+    'each opponent': 'each opponent', 'each player': 'each player',
+    'all players': 'each player', 'every player': 'each player',
+    'players': 'each player', 'target player': 'opponent',
+    'target opponent': 'opponent', 'defending player': 'opponent',
+    'that player': 'opponent', 'its controller': 'opponent',
+    'any player': 'each player', 'a player': 'each player',
+    'another player': 'each player',
+}
+
+
 def _normalize_refs(obj):
+    if isinstance(obj.get('verb'), str):
+        for key in ('to', 'card', 'object', 'target', 'spell'):
+            ts = obj.get(key)
+            ct = ts.get('card_type') if isinstance(ts, dict) else None
+            if not isinstance(ct, dict) or ct.get('kind') != 'type':
+                continue
+            mapped = PLAYER_CARD_WORDS.get(str(ct.get('value', '')).lower())
+            if mapped:
+                obj['player_target'] = mapped
+                del obj[key]
+    if obj.get('type') in ('if', 'branch') and isinstance(obj.get('effect'), list):
+        obj['then'] = obj.pop('effect')
     co = obj.get('copy_of')
     if isinstance(co, dict) and not co.get('link'):
         ct = co.get('card_type')

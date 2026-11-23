@@ -674,18 +674,25 @@ class Interpreter:
             if isinstance(obj.get('quantifier'), dict):
                 self._normalize_quantifier_shape(obj)
         if isinstance(obj, dict):
-            # "if it's a <type> card": the condition is about the clause's own
-            # target, not about this card.  Emit the engine's type shape.
             for ckey in ('condition', 'if', 'unless'):
                 cv = obj.get(ckey)
-                if not isinstance(cv, dict) or cv.get('kind') != 'state':
+                if not isinstance(cv, dict):
                     continue
-                st = cv.get('state')
-                ct = st.get('card_type') if isinstance(st, dict) else None
-                vals = self._type_values(ct)
-                if vals:
-                    obj[ckey] = {'kind': 'type', 'of': 'target',
-                                 'value': str(vals[0]).lower()}
+                if cv.get('kind') == 'state':
+                    st = cv.get('state')
+                    ct = st.get('card_type') if isinstance(st, dict) else None
+                    vals = self._type_values(ct)
+                    if vals:
+                        obj[ckey] = {
+                            'kind': 'state',
+                            'subject': {'ref': 'previous_target'},
+                            'state': {'card_type': {
+                                'kind': 'type',
+                                'value': str(vals[0]).lower()}}}
+                elif cv.get('unparsed') and cv.get('fragment'):
+                    shaped = self._condition_shape(cv['fragment'])
+                    if shaped is not None:
+                        obj[ckey] = shaped
         if isinstance(obj, dict) and in_effect and isinstance(obj.get('verb'), str):
             self._normalize_effect_quantifiers(obj)
         if isinstance(obj, dict) and obj.get('verb') == 'raw' \
@@ -6807,6 +6814,46 @@ class Interpreter:
                     attach(x)
         attach(eff)
         return {'type': 'static', 'target': target, 'effect': eff}
+
+    def _condition_shape(self, text):
+        """Closed condition shapes the engine evaluates."""
+        low = ' '.join(str(text).split()).strip().rstrip('.').lower()
+        m = re.fullmatch(r'you (sacrificed|drew|discarded|milled|created) .* this way',
+                         low)
+        if m:
+            what = {'sacrificed': 'sacrifice', 'drew': 'draw',
+                    'discarded': 'discard', 'milled': 'mill',
+                    'created': 'create'}[m.group(1)]
+            return {'kind': 'did', 'what': what}
+        m = re.fullmatch(r'you have (\d+) or more life', low)
+        if m:
+            return {'kind': 'life', 'player': 'you', 'op': 'gte',
+                    'n': int(m.group(1))}
+        m = re.fullmatch(
+            r'(an? opponent|target player|that player) has (\d+) or (more|less) life',
+            low)
+        if m:
+            player = ('opponent' if m.group(1) in ('an opponent', 'that player')
+                      else 'target')
+            return {'kind': 'life', 'player': player,
+                    'op': 'gte' if m.group(3) == 'more' else 'lte',
+                    'n': int(m.group(2))}
+        m = re.fullmatch(r'target player has exactly (\d+) life', low)
+        if m:
+            return {'kind': 'life', 'player': 'target', 'op': 'eq',
+                    'n': int(m.group(1))}
+        m = re.fullmatch(
+            r"(?:it's|that (?:creature|card|permanent|land|spell)|"
+            r'the exiled card|the token|the copy) is (?:a|an) '
+            r'(?:another )?(.+?)(?: card)?(?: spell)?', low)
+        if m:
+            value = m.group(1).strip()
+            if value and value not in ('creature', 'attacking', 'token'):
+                return {'kind': 'state',
+                        'subject': {'ref': 'previous_target'},
+                        'state': {'card_type': {'kind': 'type',
+                                                'value': value}}}
+        return None
 
     def _modifier_shape(self, text):
         """Closed shapes for the residual event/type/cost modifiers."""
