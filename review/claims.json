@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "63650de69faeab2c0501193501bf89494ad0f367f8d7fcbbd456d39aa3d83ae4",
- "generated_at": "2026-11-23T06:38:37",
- "artifact_mtime": "2026-11-23T06:19:22",
+ "artifact_sha256": "4ea84d687423cb1a7df6ffde6d38fdab719d85d0bb16afd99d5524e5bc2d5033",
+ "generated_at": "2026-11-23T22:31:13",
+ "artifact_mtime": "2026-11-23T22:13:09",
  "counts": {
-  "records": 2924,
-  "claims": 4180,
+  "records": 2908,
+  "claims": 4159,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1713,
+   "content_loss": 1715,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 2182
+   "stringy": 2159
   }
  },
  "records": [
@@ -515,20 +515,6 @@
      "detail": "player",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Agatha's Champion",
-   "sid": "c56eac47882a",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.fights.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -1617,13 +1603,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].card.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].xdef.xdef.fragment[]",
      "detail": "artifacts that were put into graveyards from the battlefield this turn",
      "severity": "medium",
@@ -1804,13 +1783,6 @@
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].continuations[].effect.to.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.card_type[].value",
@@ -2157,20 +2129,6 @@
    ]
   },
   {
-   "card": "Artistic Process",
-   "sid": "4238dc412264",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].options[].output[].effect.to.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Ashiok, Wicked Manipulator",
    "sid": "09d7a37ddca7",
    "sentence_index": 4,
@@ -2227,7 +2185,7 @@
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.to.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -3465,13 +3423,6 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.card.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
      "path": "[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
@@ -3798,20 +3749,6 @@
      "detail": "bad_amount: amount='its power'",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Bite Down on Crime",
-   "sid": "634518d80ca1",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -5742,20 +5679,6 @@
   },
   {
    "card": "Buried in the Garden",
-   "sid": "0b56b49907e4",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.card.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Buried in the Garden",
    "sid": "f94dd788f524",
    "sentence_index": 2,
    "claims": [
@@ -5931,13 +5854,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect[].card.card_type.value",
      "detail": "basic land",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].options[].output[].effect.fights.controller.ref",
-     "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -6500,20 +6416,6 @@
      "detail": "solved",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Case of the Gateway Express",
-   "sid": "c22a1bb98cc1",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.object.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -9661,20 +9563,6 @@
    ]
   },
   {
-   "card": "Curse of the Werefox",
-   "sid": "c409b6a4b590",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.fights.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Curse-Marred Demon",
    "sid": "c7b49e940692",
    "sentence_index": 1,
@@ -10788,14 +10676,14 @@
     {
      "kind": "stringy",
      "path": "[].effect[].who.ref",
-     "detail": "that land 's controller",
+     "detail": "its controller",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
      "path": "[].effect[].who.selection",
-     "detail": "that land 's controller",
+     "detail": "its controller",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -14568,7 +14456,7 @@
     {
      "kind": "stringy",
      "path": "[].on.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -14795,20 +14683,6 @@
      "detail": "bare_condition: condition=that creature would die this turn",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Faunsbane Troll",
-   "sid": "e513a419b664",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.fights.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -16039,13 +15913,6 @@
      "kind": "stringy",
      "path": "[].cost[].target.card_type.value",
      "detail": "evidence 3",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.card.controller.ref",
-     "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -17725,7 +17592,7 @@
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.target.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -18684,7 +18551,7 @@
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.shared.target.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -20007,20 +19874,6 @@
    ]
   },
   {
-   "card": "Horned Loch-Whale // Lagoon Breach",
-   "sid": "79882cccc4b9",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.owner.of.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Host of the Hereafter",
    "sid": "a21b0167b81c",
    "sentence_index": 1,
@@ -20147,7 +20000,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.target.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -20323,20 +20176,6 @@
      "kind": "stringy",
      "path": "[].effect[].quote.quoted_text",
      "detail": "\"Whenever this creature attacks, Equipped creature gains your choice of trample or deathtouch until end of turn.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Hunter's Talent",
-   "sid": "8eb320b466cb",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -24907,20 +24746,6 @@
    ]
   },
   {
-   "card": "Lost in the Maze",
-   "sid": "28f604f2233b",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.on.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Lotus Ring",
    "sid": "7b5f754fc2c6",
    "sentence_index": 1,
@@ -28555,20 +28380,6 @@
   },
   {
    "card": "Nita, Forum Conciliator",
-   "sid": "a1eb9c466265",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].trigger.event.object.controller.ref",
-     "detail": "you don't own",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Nita, Forum Conciliator",
    "sid": "c0cf66ab2be6",
    "sentence_index": 2,
    "claims": [
@@ -30785,13 +30596,6 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "twice",
@@ -31032,7 +30836,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.on.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -31327,20 +31131,6 @@
      "kind": "stringy",
      "path": "[].effect.keywords[]",
      "detail": "double strike",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Primal Might",
-   "sid": "4731a59d4e06",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.fights.controller.ref",
-     "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -32237,34 +32027,6 @@
      "kind": "stringy",
      "path": "[].effect[].quote.quoted_text",
      "detail": "\"When this creature dies, draw a card.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rabid Bite",
-   "sid": "60cdfa420c08",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rabid Gnaw",
-   "sid": "3c788c3031e8",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -33405,16 +33167,30 @@
     {
      "kind": "stringy",
      "path": "[].effect.who.ref",
-     "detail": "that creature 's controller",
+     "detail": "its controller",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
      "path": "[].effect.who.selection",
-     "detail": "that creature 's controller",
+     "detail": "its controller",
      "severity": "medium",
      "source": "artifact:output"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "creature",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    },
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "artifact",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
     },
     {
      "kind": "anaphora_agreement",
@@ -33433,7 +33209,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.on.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -34385,7 +34161,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.card.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -35414,7 +35190,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.card.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -36961,7 +36737,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.card.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -41476,7 +41252,7 @@
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.target.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -43899,20 +43675,6 @@
   },
   {
    "card": "Throw from the Saddle",
-   "sid": "3c788c3031e8",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "you don't control",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Throw from the Saddle",
    "sid": "50dcd1918c68",
    "sentence_index": 1,
    "claims": [
@@ -44196,13 +43958,6 @@
    "sid": "2be6262bec7a",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect[].inner.card.controller.ref",
-     "detail": "you don't own",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -45109,7 +44864,7 @@
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.target.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -45431,7 +45186,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.on.controller.ref",
-     "detail": "target player controls",
+     "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -46330,20 +46085,6 @@
      "detail": "opponents",
      "severity": "high",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Vaan, Street Thief",
-   "sid": "bd93edc0b5bf",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].trigger.event.object.controller.ref",
-     "detail": "you don't own",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
