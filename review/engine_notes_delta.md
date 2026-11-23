@@ -150,3 +150,19 @@ Still unfixed in `b5d0c90` (verified in code): return destination (`build_cards.
 | duplicate printings (116) | 9,015 duplicate rows | parser/compiler dedupe |
 
 Nothing in the new batch is a regression in the tails: copy_of/who/controller/Drakuseth/modifier/static counts are unchanged from `4ea84d68`, and the new `if` contract is the main parser-side request (`type`/`kicked` shapes, `may` flag).
+
+## Type-of-target condition — exact examples (artifact `733af921`)
+
+Engine note (`notes/parser_issues.md:188-190`):
+
+> **"if it's a <type> card"** (e.g. *Cemetery Recruitment*): the condition refers to the clause's own target. Shape I can consume: `{"kind":"type","of":"target","value":"zombie"}` — I will evaluate it against the target chosen for that clause.
+
+Current artifact has **1,050 `if` records, 0 type-of-target conditions**. Condition kinds: `event_ref` 421, none 386, `state` 50 (45 with `card_type`), `spell_state` 74, `event` 26, `gift` 25, `control` 22, `triggered_ability` 19, `set` 10, `xdef_compare` 9, `count` 6, `causes_trigger` 2. The 45 `state`+`card_type` cases all use `subject:{this_card}` — the wrong referent (should be the previous clause's target).
+
+| card | sid | sentence | current condition |
+|---|---|---|---|
+| Cemetery Recruitment | `2300faa320df` | If it's a Zombie card, draw a card | `{"kind":"state","state":{"card_type":{"kind":"type","value":"Zombie"}},"subject":{"card_type":{"kind":"this_card","value":"~"}}}` |
+| Fecund Greenshell | `4388e36d8a16` | If it's a land card, you may put it onto the battlefield tapped | `{"kind":"state","state":{"card_type":{"kind":"type","value":"land"}},"subject":{"card_type":{"kind":"this_card","value":"~"}}}` |
+| Hauntwoods Shrieker | `09ca145cd06f` | If it's a creature card, you may turn it face up | `{"kind":"state","state":{"card_type":{"kind":"type","value":"creature"}},"subject":{"card_type":{"kind":"this_card","value":"~"}}}` |
+
+Fixer shape to consume: `{"kind":"type","of":"target","value":"zombie"}` (value lowercased; target = the card/target of the clause the `if` follows). The parser will replace this `state/this_card` shape with it. Counts to expect after the fix: 45 current `state`+`card_type` records become type-of-target; `if` total stays 1,050.

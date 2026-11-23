@@ -1,19 +1,20 @@
-item	metric	final (4ea84d68)	status	examples	notes
+item	metric	final (733af921)	status	examples	notes
 1 modal	groups / options / continuations / typed effect clauses	259 / 626 / 96 / 673	CLOSED	—	96 continuations type:effect
 2 duplicates	rows / unique / duplicate rows	21996 / 12981 / 9015	REMAINING	—	FDN 763/509/254
 3 reminder	parenthetical-only / basic rows	0 / 368	CLOSED	—	no parentheses
 4 verbs	deals / loses / can't	0 / 0 / 0	CLOSED	—	deal_damage 890; lose_life 393
-5 players	controller strings / objects / mapped / residual	0 / 3759 / 3577 / 182	PARTIAL	—	3,626 player refs; residual forms owner 121, you 24, they 23, their owners 5, her owner 4
-5 players	who objects / aliasable / unmappable	180 / 166 / 14	PARTIAL	—	unmappable: a player 13, another player 1; 1,377 five-value strings
+5 controller	strings / objects / mapped / residual	0 / 3772 / 3590 / 182	PARTIAL	—	residual owner 121, you 24, they 23, their owners 5, her owner 4
+5 who	objects / aliasable / unmappable	181 / 167 / 14	PARTIAL	—	unmappable a player 13, another player 1; 1377 strings, 0 outside
 6 X	X string sites	0	CLOSED	—	
-7 copy_of	unresolved rows / cards / shapes	40 / 17 / 6	PARTIAL	0499f86df2d5;8f7477a51f62	raw no-link tail: 26 rows / 11 cards / 3 shapes, all {kind:anaphora,raw,ref,status:unresolved}
-8 add_mana	choose_one / mana_choice	227 / 0	CLOSED	—	parser structured; builder branch still missing
-9 targets	any-target / long prose / malformed strings	132 / 0 / 2	PARTIAL	8b284919ff34;38f9ce3ec91d	2 rows/1 unique sid for "each of up to two other target s"
+7 copy_of	unresolved rows / shapes / no-link	40 / 6 / 34	PARTIAL	—	raw tail 26 rows / 11 cards / 3 shapes
+8 add_mana	choose_one / mana_choice	227 / 0	CLOSED	—	builder consumes choose_one
+9 targets	any-target / malformed long strings	132 / 2	PARTIAL	38f9ce3ec91d	2 rows / 1 unique sid
 10 actor	actor lists	0	CLOSED	—	
-11 zone	discard effects missing zone	0	CLOSED	—	Ambush Wolf and Burglar Rat carry card.zone
-12 quantifier	missing effect-target / bad dict shapes	0 / 0	CLOSED	—	target 1180, a 1002, int 111, all 206, up_to 301, at_least 2
-13 colours	top-level / label sites	919 / 2	PARTIAL	—	Deathmark-style label colors
-14 static	static_text sites / unique shapes	30 / 12	PARTIAL	—	top: you control 5, You control enchanted creature 3
-15 modifier	modifier_text sites / unique	25 / 6	PARTIAL	—	"you've discarded this turn" 5
-16 set_code	codes / missing	21 / 0	CLOSED	—	
-17 claims	claims / records	4159 / 2908	INFO	stringy 2159; content_loss 1715; invariant 203; anaphora 69; empty_slot 13
+11 zone	discard effects missing zone	0	CLOSED	—	
+12 quantifier	missing effect-target / bad dict shapes	0 / 0	CLOSED	—	
+13 colours	top-level / label	919 / 2	PARTIAL	—	Deathmark-style labels
+14 static	static_text sites / unique shapes	14 / 3	CLOSED	—	you control 9, you control without flying 4, entered this turn 1
+15 modifier	modifier_text sites / unique	0 / 0	CLOSED	—	
+16 unparsed	parse_fail sites / unparsed-only records	1332 / 697	REMAINING	—	static_text 14; no empty outputs
+17 set_code	codes / missing	21 / 0	CLOSED	—	
+18 claims	claims / records	4157 / 2908	INFO	stringy 2157; content_loss 1715; invariant 203; anaphora 69; empty_slot 13
