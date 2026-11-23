@@ -1,49 +1,43 @@
-# Engine notes audit — final artifact `a8bd9eb4…`
+# Engine notes audit — artifact `63650de6…`
 
-Artifact `compile_standard.jsonl` SHA `a8bd9eb4062b34c7…`, 21,996 records / 12,981 unique records / 7,738 unique sentence texts / 5,158 cards; card IR `bf9d167d…`. Every record now carries `set_code`. Comparison baseline `cae5db66…` (22,585 rows / 13,362 unique). fdn_notes.md still predates this rebuild, so its top-issue table remains a classification, not a fresh count.
+Artifact `compile_standard.jsonl` SHA `63650de69faeab2c…`, 21,996 rows / 12,981 unique records / 7,738 unique texts / 5,158 cards; card IR `f1f4ad8a…`. FDN honest 1,601/1,673 = 95.7%, classic 94.1%. This rebuild includes zone/quantifier semantics, typed modal continuations, label lift, and the Devout changes.
+
+## Claims
+
+**4,180 claims / 2,924 records** — stringy 2,182, content_loss 1,713, invariant 203, anaphora_agreement 69, empty_slot 13. Content-loss scan: 2,154 lossy rows. Previous artifact `2d8c4bdb`: 4,101 claims (stringy 2,062, content_loss 1,754).
 
 ## Summary
 
 | item | metric | final | status |
 |---|---|---:|---|
-| 1 modal | choose_one groups / nested options / continuations | 259 / 626 / 96 | CLOSED |
-| 1 modal | bullet records | 0 | CLOSED |
-| 2 duplicates | rows / unique records / duplicate rows | 21,996 / 12,981 / 9,015 | REMAINING |
-| 2 duplicates | unique texts / cards | 7,738 / 5,158 | REMAINING |
-| 2 duplicates | FDN items / unique name+text / extra printings | 763 / 509 / 254 | REMAINING |
-| 3 reminder | parenthetical-only rows / basic rows | 0 / 368 | CLOSED |
-| 4 verbs | `deals` / `loses` | 0 / 0 | CLOSED |
-| 4 verbs | `deal_damage` / `lose_life` | 536 (401 rec) / 219 (188 rec) | CLOSED |
-| 5 player strings | controller string values (rows) | 671 | REMAINING |
-| 5 player strings | controller player objects (rows) | 2,996 | INFO |
-| 5 player strings | `to:"you"` / `card:"you"` | 0 / 0 | CLOSED |
-| 6 can't | records with `verb:"can't"` | 0 | CLOSED |
-| 7 X | number-X / any X string sites | 0 / 0 | CLOSED |
-| 8 who | who fields (rows) / outside vocabulary | 1,557 / 180 | PARTIAL |
-| 9 enters | state forms `enters tapped` / `with` | 0 | CLOSED |
-| 9 enters | legitimate trigger `enters` | 1,413 (989 rec) | CLOSED |
-| 10 nontoken | nontoken fields / flattened true | 248 / 0 | NO PARSER ACTION |
-| 11 copy_of | linked / unresolved | 26 / 6 | PARTIAL (links done, 6 unresolved) |
-| 12 set_code | codes / records missing | 21 / 0 | CLOSED |
-| 12 unparsed | static_text / parse_fail | 95 / 711 | REMAINING |
+| 1 modal | groups / options / continuations / typed effect clauses | 259 / 626 / 96 / 673 | CLOSED |
+| 2 duplicates | rows / unique / duplicate rows | 21,996 / 12,981 / 9,015 | REMAINING |
+| 3 reminder | parenthetical-only / basic rows | 0 / 368 | CLOSED |
+| 4 verbs | `deals` / `loses` / `can't` | 0 / 0 / 0 | CLOSED |
+| 5 players | controller bare strings; player/controller objects; unresolved | 0; 3,753 / 3,564; 244 | CLOSED |
+| 5 players | `who` objects / five-value strings / outside strings | 180 / 1,377 / 0 | PARTIAL |
+| 6 X | X string sites | 0 | CLOSED |
+| 7 copy_of | unresolved rows / unique / no-link | 40 / 17 / 6 | PARTIAL |
+| 8 add_mana | choose_one / mana_choice | 227 / 0 | CLOSED (parser) |
+| 9 targets | any-target / long prose / malformed long | 132 / 0 / 2 | CLOSED |
+| 10 actor | actor lists | 0 | CLOSED |
+| 11 zone | discard effects missing zone | 0 | CLOSED |
+| 12 quantifier | missing effect-target / bad dict shapes | 0 / 0 | CLOSED |
+| 13 colours | top-level / label sites | 919 / 2 | PARTIAL |
+| 14 static | static_text unique / rows | 21 / 30 | PARTIAL |
+| 15 set_code | codes / missing | 21 / 0 | CLOSED |
 
-Claims against `a8bd9eb4`: **3,831 claims / 2,812 records** — stringy 1,788, content_loss 1,758, invariant 203, anaphora_agreement 69, empty_slot 13. The stringy policy excludes `text` leaves nested under choose_one `options[]`/`continuations[]` (source text by design), which removed 482 claims from the naive 2,270. Vs `cae5db66` (3,552): +279 total, stringy +229, content_loss +57, invariant -6, empty_slot -1; the stringy delta is real output movement (147 new option-output claims now nested under `options[].output`, controller player-object refs, and old shared-controller paths renamed), not modal prose. Content-loss scan: 2,207 lossy rows (was 2,197).
+## Detail
 
-## Reconciliation notes
+- **Zone/discard:** 0 discard effects lack a zone (`Burglar Rat` now has `card.zone:{zone:"hand"}`); `Ambush Wolf` has both `effect.zone:"graveyard"` and `card.zone:{prep:"from",zone:"graveyard"}`. There are 1,809 `effect.zone` sites, of which 554 have no card zone — those are destination-style zones (library/hand) rather than missing filters.
+- **Quantifier:** 0 target-taking effects lack a quantifier and 0 use unsupported dict shapes. Distribution: `target` 1,180, `a` 1,002, int 111, `all` 206, `{up_to}` 301, `{at_least}` 2, `any` 18, `that many` 13, `half` 4, `an` 56, `each` 30, `any number of` 30, `another` 3.
+- **Modal:** 259 groups, 626 options, 96 continuations, and 673 recursively typed effect clauses; all 96 continuation entries are `type:"effect"`.
+- **Any target:** 132 sites use `card_type:{kind:"any"}` + `player_target:true` + `quantifier:"any"`.
+- **Colours:** 919 top-level colour sites; 2 remain inside `label` (Deathmark-style coordinated targets); the label lift is now in the compiler.
+- **copy_of:** 40 unresolved rows / 17 unique; 6 unique cases carry `status:"unresolved"` with no fabricated link.
+- **Players:** 0 controller strings; 3,753 `{kind:"player",ref}` objects overall, 3,564 controller refs, 244 `unresolved:true`; `who` is 180 objects + 1,377 five-value strings, 0 outside-vocabulary strings.
+- **Static/unparsed:** 21 unique / 30 rows `static_text`, 25 `modifier_text` rows remain.
+- **Duplicates:** unchanged (9,015 duplicate rows; FDN 254 extra printings); `set_code` still 21 codes / 0 missing.
+- **Residuals:** 2 malformed long target strings (`38f9ce3ec91d`, "each of up to two other target s"); actor lists now 0.
 
-- **Modal** is now nested and closed: 259 `choose_one` groups across 178 cards, 626 option objects (all parsed), 96 continuations, and 0 standalone bullet records. Option texts: 321 distinct.
-- **Controller strings:** 671 is the count of `controller` values that are still strings across all rows (20 distinct forms; 255 on unique records). Top forms: `you` 307, `owner` 121, `your opponents control` 45, `that player controls` 33, `you don't control` 26, `you cast` 24, `they control` 23, `target player` 20, `you own` 15, `target opponent controls` 11, `you don't own` 10, then controller/owner/opponent one-offs. The other 2,996 controller values are already `{kind:player,...}` (`you` 2,711, `an opponent` 285).
-- **Who:** 1,557 / 180 outside is the all-rows count; on unique records it is 937 / 104. The earlier report's 110 / 938 used the unique-record definition, so this is the same definition with the small post-rebuild delta (110 -> 104, 938 -> 937), not a change in semantics. Outside forms: Target player 49, target player 20, that player 8, any number of target players 6, a player 6, Its controller 5, defending player 4, That player 4, its controller 2, plus `players`, `that opponent`, `any opponent`, `Another player`, and controller-of forms.
-- **X:** 0 sites — no `"X"` string in outputs anywhere, including `{kind:number}`.
-- **copy_of:** 26 linked sites across rows (11 unique records), 6 unresolved unique cases (`that_card`, `that_creature`, `that_permanent`; 14 row-sites). The 6 is the unique-case count; linked 26 is the row count.
-- **Set_code:** 21 codes, 0 missing — FIN 1,815, FDN 1,628, DFT 1,554, MSH 1,308, LCI 1,149, MKM 1,141, FRA 1,115, ECL 1,090, TDM 1,086, BLB 1,078, TLA 1,056, DSK 1,044, OTJ 1,025, EOE 956, WOE 955, SOS 876, HOB 810, SPM 792, TMT 768, OM1 486, BIG 264.
-- **Printings/dedupe:** 21,996 rows collapse to 12,981 unique records (9,015 duplicate rows) and 7,738 unique texts. FDN still 763 items / 509 unique name+text / 254 extra printings (6 max); set_code now lets downstream tools dedupe, but the compile still emits duplicate rows.
-- **Basics:** 368 rows now present (Plains 80, Island/Swamp/Mountain/Forest 72 each), 0 parenthetical-only text, 0 parentheses anywhere.
-
-## Closed / remaining
-
-**Closed:** modal nesting (259/626/96, 0 bullets); `deals`/`loses`; `to:"you"`/`card:"you"`; `verb:"can't"`; X strings; `enters tapped`/`enters with`; `copy_of` links; `set_code` coverage; reminder/basics.
-
-**Remaining:** duplicate printings (9,015 duplicate rows; FDN 254 extra printings); 671 controller strings by form; `who` outside vocabulary (180 rows / 104 unique); 6 unresolved `copy_of` cases; 791 unparsed-only records (711 parse_fail + 95 static_text).
-
-**Not parser work:** trigger verbs the engine lacks, ability types (if/loyalty/replacement), keyword Flash, missing effect verbs (enchant/cost_mod/put/scry/counter), equip cost, trigger phases — 226 of the 482 fdn_notes top-issue occurrences; and `nontoken` is all list-valued (builder-side flattening only).
+Builder-side items from `engine_notes_delta.md` are unchanged (add_mana choose_one branch, return destination read, top-level ability types, Effect.zone/condition population, ThatMany wire shape, nontoken flattening, label handling). The parser side for zone/quantifier/label is now in this artifact; the engine should rebuild `cards/fdn.jsonl` against `63650de6…`.

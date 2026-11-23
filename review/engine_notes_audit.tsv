@@ -1,24 +1,18 @@
-item	metric	final (a8bd9eb4)	status	examples	notes
-1 modal	choose_one groups	259	CLOSED	—	259 nodes; 178 cards
-1 modal	nested option objects	626	CLOSED	—	all with parsed output
-1 modal	option continuations	96	CLOSED	—	nested under option
-1 modal	bullet records	0	CLOSED	—	options no longer separate top-level rows
-2 duplicates	rows / unique records / duplicate rows	21996 / 12981 / 9015	REMAINING	—	dedupe not applied
-2 duplicates	unique texts / unique cards	7738 / 5158	REMAINING	—	
-2 duplicates	FDN items / unique name+text / extra printings	763 / 509 / 254	REMAINING	Herald of Eternal Dawn x6;Bloodthirsty Conqueror x6;Twinflame Tyrant x6	setdata dedupe not landed
-3 reminder	parenthetical-only / basic rows	0 / 368	CLOSED	Plains 80;Island 72;Swamp 72;Mountain 72;Forest 72	no parentheses in artifact
-4 verbs	deals / loses	0 / 0	CLOSED	—	canonicalised to deal_damage/lose_life
-4 verbs	deal_damage / lose_life occurrences	536 (401 rec) / 219 (188 rec)	CLOSED	—	
-5 player strings	controller string values (rows)	671	REMAINING	—	20 forms; 255 on unique records
-5 player strings	controller normalized objects (rows)	2996	INFO	{"kind":"player","ref":"you"} 2711; an opponent 285	not strings
-5 player strings	to:"you" / card:"you"	0 / 0	CLOSED	—	
-6 can't	records with verb can't	0	CLOSED	—	restriction shape
-7 X	number-X / any X string sites	0 / 0	CLOSED	—	
-8 who	who fields (rows) / outside vocabulary	1557 / 180	PARTIAL	—	unique records: 937 / 104 (same definition as earlier 938/110)
-9 enters	state forms entered tapped/with	0	CLOSED	—	
-9 enters	trigger enters	1413 (989 rec)	CLOSED	—	legitimate trigger use
-10 nontoken	nontoken fields / flattened	248 / 0	NO PARSER ACTION	—	all list-valued
-11 copy_of	linked	26	CLOSED	—	11 on unique records
-11 copy_of	unresolved	6	REMAINING	that_card;that_creature;that_permanent	6 unique cases (14 row-sites)
-12 set_code	codes / records missing	21 / 0	CLOSED	FIN 1815;FDN 1628;DFT 1554;MSH 1308;...	all records carry set_code
-12 unparsed	static_text / parse_fail	95 / 711	REMAINING	—	791 unparsed-only records, 0 empty
+item	metric	final (63650de6)	status	examples	notes
+1 modal	choose_one groups / options / continuations / typed effect clauses	259 / 626 / 96 / 673	CLOSED	—	96 continuation entries all type:effect; 673 effect clauses recursively
+2 duplicates	rows / unique / duplicate rows	21996 / 12981 / 9015	REMAINING	—	FDN 763/509/254
+3 reminder	parenthetical-only / basic rows	0 / 368	CLOSED	—	no parentheses
+4 verbs	deals / loses / can't	0 / 0 / 0	CLOSED	—	deal_damage 890; lose_life 393
+5 players	controller bare strings	0	CLOSED	—	3,753 player objects; 3,564 controller refs; 244 unresolved:true
+5 players	who objects / five-value strings / outside strings	180 / 1377 / 0	PARTIAL	—	five-value strings still need engine decision
+6 X	X string sites	0	CLOSED	—	no number-X either
+7 copy_of	unresolved rows / unique / no-link cases	40 / 17 / 6	PARTIAL	0499f86df2d5;8f7477a51f62	6 status-unresolved with no fabricated link
+8 add_mana	choose_one statements / mana_choice	227 / 0	CLOSED	—	parser structured; builder branch still missing
+9 targets	any-target sites / long prose targets / malformed long	132 / 0 / 2	CLOSED	8b284919ff34;38f9ce3ec91d	any = card_type kind any + player_target true
+10 actor	actor lists	0	CLOSED	—	was 2
+11 zone	discard effects missing zone	0	CLOSED	—	Burglar Rat card.zone hand; effect.zone sites 1809, 554 effect-only destinations
+12 quantifier	missing effect-target / bad dict shapes	0 / 0	CLOSED	—	distribution: target 1180, a 1002, int 111, all 206, up_to 301, at_least 2, any 18, that many 13, half 4
+13 colours	top-level sites / label sites	919 / 2	PARTIAL	93635c37f3ef;Deathmark label	label lift live in compiler; 2 label cases remain
+14 static	unparsed static_text unique / rows	21 / 30	PARTIAL	—	modifier_text 25 rows
+15 set_code	codes / missing	21 / 0	CLOSED	—	
+16 claims	claims / records	4180 / 2924	INFO	stringy 2182; content_loss 1713; invariant 203; anaphora 69; empty_slot 13

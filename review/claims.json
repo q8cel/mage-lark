@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "2d8c4bdba3b13378a6704c4e80b156af1f4294eae0f03bffc61fd941133a9c2f",
- "generated_at": "2026-11-21T00:24:31",
- "artifact_mtime": "2026-11-21T00:19:38",
+ "artifact_sha256": "63650de69faeab2c0501193501bf89494ad0f367f8d7fcbbd456d39aa3d83ae4",
+ "generated_at": "2026-11-23T06:38:37",
+ "artifact_mtime": "2026-11-23T06:19:22",
  "counts": {
-  "records": 2939,
-  "claims": 4101,
+  "records": 2924,
+  "claims": 4180,
   "by_kind": {
    "anaphora_agreement": 69,
-   "content_loss": 1754,
+   "content_loss": 1713,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 2062
+   "stringy": 2182
   }
  },
  "records": [
@@ -805,6 +805,27 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "it's the first instant spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "first sorcery spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "first otter spell other than ~ you've cast this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].condition.items[]",
      "detail": "the first instant spell",
      "severity": "medium",
@@ -834,6 +855,27 @@
     {
      "kind": "stringy",
      "path": "[].condition.label.card_type[].value",
+     "detail": "first otter spell other than ~ you've cast this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].card_type[].value",
+     "detail": "first instant spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].card_type[].value",
+     "detail": "first sorcery spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].card_type[].value",
      "detail": "first otter spell other than ~ you've cast this turn",
      "severity": "medium",
      "source": "artifact:output"
@@ -875,6 +917,27 @@
     },
     {
      "kind": "stringy",
+     "path": "[].if.card_type[].value",
+     "detail": "it's the first instant spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].if.card_type[].value",
+     "detail": "first sorcery spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].if.card_type[].value",
+     "detail": "first otter spell other than ~ you've cast this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].if.items[]",
      "detail": "the first instant spell",
      "severity": "medium",
@@ -904,6 +967,27 @@
     {
      "kind": "stringy",
      "path": "[].if.label.card_type[].value",
+     "detail": "first otter spell other than ~ you've cast this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].if.lists[].card_type[].value",
+     "detail": "first instant spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].if.lists[].card_type[].value",
+     "detail": "first sorcery spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].if.lists[].card_type[].value",
      "detail": "first otter spell other than ~ you've cast this turn",
      "severity": "medium",
      "source": "artifact:output"
@@ -1080,6 +1164,20 @@
      "kind": "stringy",
      "path": "[].keywords.modifier",
      "detail": "for {'card_type': {'kind': 'type', 'value': 'Allies', 'note': 'unresolved'}}",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Along the Crooked Way",
+   "sid": "54a06f03d449",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.card_type[].value",
+     "detail": "{1}{b}: goblin",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -1400,6 +1498,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -1576,20 +1681,6 @@
    ]
   },
   {
-   "card": "Aquitect's Defenses",
-   "sid": "e78bb6028ddb",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "Arachne, Psionic Weaver",
    "sid": "c7e808439a4e",
    "sentence_index": 1,
@@ -1722,6 +1813,20 @@
     },
     {
      "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -1750,6 +1855,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -1769,6 +1881,13 @@
    "sid": "5a1e39044d70",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "nonland permanent creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
@@ -2048,20 +2167,6 @@
      "detail": "you don't control",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Ashe, Princess of Dalmasca",
-   "sid": "e2e52ae21e80",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -2864,20 +2969,6 @@
    ]
   },
   {
-   "card": "Balamb Garden, SeeD Academy // Balamb Garden, Airborne",
-   "sid": "99bc04205716",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "Balmor, Battlemage Captain",
    "sid": "864a616add79",
    "sentence_index": 1,
@@ -2909,20 +3000,6 @@
      "detail": "two loot counter s from this artifact",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Bandit's Haul",
-   "sid": "c07f9891fd15",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -2965,13 +3042,6 @@
      "detail": "creature you control of the chosen type",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -3773,6 +3843,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -4559,6 +4636,20 @@
   },
   {
    "card": "Boom Scholar",
+   "sid": "8b1c34e7d594",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.target.card_type[].value",
+     "detail": "exhaust \u2014 {4}{r}{g}: creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Boom Scholar",
    "sid": "defea5a4d247",
    "sentence_index": 0,
    "claims": [
@@ -4758,6 +4849,13 @@
    "sid": "a57b60a4ad84",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -5467,6 +5565,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "enchantment was a legendary enchantment",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].condition.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -5495,6 +5600,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type.card_type[].value",
+     "detail": "nonland permanent",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.card_type.items[]",
      "detail": "target noncreature",
      "severity": "medium",
@@ -5514,6 +5626,13 @@
    "sid": "e91c33d8a2d9",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].trigger.event.subject.card_type[].value",
+     "detail": "more noncreature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].trigger.event.subject.items[]",
@@ -5549,6 +5668,20 @@
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "land creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "nonbasic land creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
@@ -6315,20 +6448,6 @@
    ]
   },
   {
-   "card": "Case File Auditor",
-   "sid": "cb6beb130b34",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "Case of the Burning Masks",
    "sid": "4c235dae6021",
    "sentence_index": 0,
@@ -6491,20 +6610,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "control",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Casey Jones, Jury-Rig Justiciar",
-   "sid": "e2e52ae21e80",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -7994,6 +8099,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -8073,6 +8192,20 @@
      "kind": "content_loss",
      "path": null,
      "detail": "cost",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Colleen Wing, Street Samurai",
+   "sid": "fa0a3cc1f774",
+   "sentence_index": 0,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "targets",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -8541,20 +8674,6 @@
    ]
   },
   {
-   "card": "Contested Game Ball",
-   "sid": "c9545ba39fd6",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "Cool but Rude",
    "sid": "16a76f88b44a",
    "sentence_index": 1,
@@ -8622,6 +8741,13 @@
    "sid": "9347f51f22e6",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.unless.card_type[].value",
+     "detail": "you control a plain",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.unless.items[]",
@@ -9615,13 +9741,6 @@
      "detail": "sorcery spell",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -9765,6 +9884,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.unless.card_type[].value",
+     "detail": "you control a swamp",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.unless.items[]",
      "detail": "a Swamp",
      "severity": "medium",
@@ -9809,6 +9935,20 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.modifier.stat",
      "detail": "mana value",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -10211,6 +10351,13 @@
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
@@ -10917,13 +11064,6 @@
      "detail": "sorcery spell",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -10938,13 +11078,6 @@
      "detail": "this artifact",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -11089,13 +11222,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
@@ -11170,6 +11296,20 @@
    "sid": "6c020f20b0cd",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -11635,13 +11775,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "among",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "graveyard",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
@@ -11736,13 +11869,6 @@
      "detail": "color of the creature the creature targets",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -12509,6 +12635,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -13181,6 +13314,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "spacecraft creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -13379,20 +13519,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "step",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Enchanted River's Grasp",
-   "sid": "9df89400b182",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -13606,6 +13732,13 @@
    "sid": "0c9ff882e8a6",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -14315,6 +14448,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -14361,20 +14501,6 @@
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Eye of Jace",
-   "sid": "19b463d4dce8",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -14445,20 +14571,6 @@
      "detail": "target player controls",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Fae Flight",
-   "sid": "e78bb6028ddb",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -14910,6 +15022,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -14957,6 +15076,13 @@
    "sid": "1bac76fc7ee2",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -15306,13 +15432,6 @@
      "detail": "first strike",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -16996,6 +17115,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -17222,20 +17355,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Gilt-Leaf's Embrace",
-   "sid": "1a2f17d483f5",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -18123,6 +18242,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -18228,6 +18354,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "spacecraft creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -18254,6 +18387,13 @@
    "sid": "0f76affe060a",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.unless.card_type[].value",
+     "detail": "you control a forest",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.unless.items[]",
@@ -18545,6 +18685,13 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.shared.target.controller.ref",
      "detail": "target player controls",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -19313,6 +19460,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "vehicle creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -19395,6 +19549,13 @@
    "sid": "0c9ff882e8a6",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -19649,6 +19810,20 @@
     },
     {
      "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -19763,20 +19938,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "creature",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Honest Work",
-   "sid": "9df89400b182",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -22589,6 +22750,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.target.card_type[].value",
+     "detail": "max speed \u2014 sacrifice this enchantment: creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.target.label.card_type[].value",
      "detail": "max speed \u2014 sacrifice this enchantment: creature",
      "severity": "medium",
@@ -22783,6 +22951,13 @@
    "sid": "dc5511cc361a",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.unless.card_type[].value",
+     "detail": "you control an island",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.unless.items[]",
@@ -25088,6 +25263,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.target.card_type[].value",
+     "detail": "dragon spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.target.items[]",
      "detail": "a Dragon spell",
      "severity": "medium",
@@ -25885,13 +26067,6 @@
      "source": "artifact:output"
     },
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: condition=there are four or more page counters on this artifact",
@@ -26086,13 +26261,6 @@
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -26171,6 +26339,13 @@
    "sid": "6f3cabff7e9a",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -26280,20 +26455,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "get",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Mica, Reader of Ruins",
-   "sid": "5c3a5ca68e9b",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "spell",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -26797,13 +26958,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
@@ -26857,6 +27011,13 @@
    "sid": "0f8e960dd1ef",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.unless.card_type[].value",
+     "detail": "you control a mountain",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.unless.items[]",
@@ -26958,6 +27119,20 @@
    ]
   },
   {
+   "card": "Mockingbird, Ace Agent",
+   "sid": "fa0a3cc1f774",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "content_loss",
+     "path": null,
+     "detail": "targets",
+     "severity": "medium",
+     "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
    "card": "Mold Adder",
    "sid": "c8868e8d5ff8",
    "sentence_index": 0,
@@ -27006,6 +27181,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -27018,6 +27200,20 @@
    "sid": "e2957803a63c",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "nonland permanent with mana value 1",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "less creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -27384,6 +27580,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -27731,34 +27934,6 @@
      "detail": "sorcery spell",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Mutagen Man, Living Ooze",
-   "sid": "80f0690e151f",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activated",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "abilities",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -29294,13 +29469,6 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: condition=it has three or more +1/+1 counters on it",
@@ -29328,6 +29496,20 @@
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
@@ -29454,6 +29636,20 @@
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
@@ -30178,13 +30374,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
@@ -30200,6 +30389,27 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.modifier.stat",
      "detail": "mana value",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "skeleton creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "spirit creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "zombie creature",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -30419,13 +30629,6 @@
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -30842,6 +31045,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.inner.card.card_type[].value",
+     "detail": "nonland card creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.inner.card.items[]",
      "detail": "target noncreature",
      "severity": "medium",
@@ -30875,6 +31085,13 @@
    "sid": "ba5bf320a3ae",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "nonland card creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -31064,6 +31281,20 @@
    "sid": "76cb37166cb0",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "land creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -31346,6 +31577,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "attacking creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "blocking creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target attacking",
      "severity": "medium",
@@ -31598,6 +31843,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -31621,20 +31880,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "renew",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Qiqirn Merchant",
-   "sid": "6ffcf51bcfe7",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -32086,6 +32331,20 @@
    "sid": "9556eae44a33",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "tapped creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -32611,6 +32870,20 @@
    "sid": "aba11dfac769",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "vehicle creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "nonbasic land creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -33699,13 +33972,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
@@ -33885,6 +34151,13 @@
    "sid": "31ebec00d4f7",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "vehicle creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -34966,13 +35239,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
@@ -35047,6 +35313,13 @@
    "sid": "70deaceaef5b",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].trigger.event.object.card_type[].value",
+     "detail": "noncreature spell",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].trigger.event.object.items[]",
@@ -36365,6 +36638,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -36841,6 +37128,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -37121,6 +37415,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -37357,6 +37658,13 @@
    "sid": "0c9ff882e8a6",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -38836,6 +39144,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "vehicle creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -39004,8 +39319,22 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "creature is a bird",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].condition.items[]",
      "detail": "target creature is a Bird",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].card_type[].value",
+     "detail": "creature is a bird",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -39303,6 +39632,13 @@
    "sid": "e61894bfeee1",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect[].card.card_type[].value",
+     "detail": "vehicle creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect[].card.items[]",
@@ -39970,6 +40306,20 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -40220,6 +40570,20 @@
    "sid": "672aff644a93",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "attacking creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "blocking creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -40779,13 +41143,6 @@
      "detail": "first strike",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "aura",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -40961,20 +41318,6 @@
      "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Survey Mechan",
-   "sid": "d0c92be89be6",
-   "sentence_index": 4,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -41293,6 +41636,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "creature a spacecraft",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].condition.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -41302,6 +41652,13 @@
      "kind": "stringy",
      "path": "[].condition.items[]",
      "detail": "creature a Spacecraft",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].card_type[].value",
+     "detail": "creature a spacecraft",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -41340,6 +41697,13 @@
    "sid": "cb75a62503bf",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -41424,6 +41788,13 @@
    "sid": "a57b60a4ad84",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -42168,6 +42539,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "creature an artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].condition.items[]",
      "detail": "target artifact",
      "severity": "medium",
@@ -42176,6 +42554,13 @@
     {
      "kind": "stringy",
      "path": "[].condition.items[]",
+     "detail": "creature an artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].card_type[].value",
      "detail": "creature an artifact creature",
      "severity": "medium",
      "source": "artifact:output"
@@ -42483,6 +42868,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -42676,20 +43068,6 @@
      "detail": "firebending 4",
      "severity": "medium",
      "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "The Lonely Mountain",
-   "sid": "f309a69e4fcd",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -43176,6 +43554,27 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "equipment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "instant creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "sorcery card creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target Equipment",
      "severity": "medium",
@@ -43223,6 +43622,20 @@
    "sid": "4238dc412264",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
@@ -44017,20 +44430,6 @@
    ]
   },
   {
-   "card": "Tony Stark // The Invincible Iron Man",
-   "sid": "e2e52ae21e80",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "among",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
    "card": "Toph, the Blind Bandit",
    "sid": "e48e82bceb8a",
    "sentence_index": 1,
@@ -44419,13 +44818,6 @@
      "detail": "those counters",
      "severity": "high",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "artifact",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -44695,6 +45087,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].options[].output[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].options[].output[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -44779,8 +45178,22 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "creature is a mutant",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].condition.items[]",
      "detail": "target creature is a Mutant",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].condition.lists[].card_type[].value",
+     "detail": "creature is a mutant",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -45361,13 +45774,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
@@ -45476,13 +45882,6 @@
      "detail": "its",
      "severity": "high",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "target",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     },
     {
      "kind": "content_loss",
@@ -45997,6 +46396,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].trigger.event.subject.card_type[].value",
+     "detail": "angel creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].trigger.event.subject.items[]",
      "detail": "a nontoken",
      "severity": "medium",
@@ -46016,6 +46422,13 @@
    "sid": "538b221ea553",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].condition.card_type[].value",
+     "detail": "raccoon you control would deal damage to a permanent",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].condition.items[]",
@@ -46079,6 +46492,13 @@
    "sid": "4444d531b3ac",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].trigger.event.subject.card_type[].value",
+     "detail": "more other rabbit",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].trigger.event.subject.items[]",
@@ -46641,6 +47061,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -47110,6 +47537,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].options[].continuations[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].options[].continuations[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -47541,13 +47975,6 @@
      "detail": "the creature the creature targets",
      "severity": "medium",
      "source": "artifact:output"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
     }
    ]
   },
@@ -47609,20 +48036,6 @@
      "kind": "content_loss",
      "path": null,
      "detail": "enchantment",
-     "severity": "medium",
-     "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Waterbending Scroll",
-   "sid": "b718b3fae5fc",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "content_loss",
-     "path": null,
-     "detail": "activate",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
     }
@@ -47815,6 +48228,20 @@
    "sid": "6c020f20b0cd",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -48567,13 +48994,6 @@
     {
      "kind": "content_loss",
      "path": null,
-     "detail": "graveyard",
-     "severity": "high",
-     "source": "review/certain_defects_artifact.tsv"
-    },
-    {
-     "kind": "content_loss",
-     "path": null,
      "detail": "paying",
      "severity": "high",
      "source": "review/certain_defects_artifact.tsv"
@@ -48706,6 +49126,13 @@
    "claims": [
     {
      "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target creature",
      "severity": "medium",
@@ -48816,6 +49243,13 @@
    "sid": "04186edb9670",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "planeswalker creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
@@ -49187,6 +49621,20 @@
    "sid": "9ac006569d0f",
    "sentence_index": 0,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "artifact creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].effect.card.card_type[].value",
+     "detail": "enchantment creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "stringy",
      "path": "[].effect.card.items[]",
