@@ -1,0 +1,59 @@
+sid	card	json_path	value	verb	parent_path
+37647d76e6e7	Hostile Investigator	[].trigger.event.subject	players		[].trigger.event
+37647d76e6e7	Hostile Investigator	[].trigger.event.subject	players		[].trigger.event
+37647d76e6e7	Hostile Investigator	[].trigger.event.subject	players		[].trigger.event
+dc8520f7a724	March of the World Ooze	[].trigger.event.subject	opponent		[].trigger.event
+dc8520f7a724	March of the World Ooze	[].trigger.event.subject	opponent		[].trigger.event
+dc8520f7a724	March of the World Ooze	[].trigger.event.subject	opponent		[].trigger.event
+dc8520f7a724	March of the World Ooze	[].trigger.event.subject	opponent		[].trigger.event
+dc8520f7a724	March of the World Ooze	[].trigger.event.subject	opponent		[].trigger.event
+840ca9957606	Riptide Gearhulk	[].effect.on	opponent		[].effect
+840ca9957606	Riptide Gearhulk	[].effect.on	opponent		[].effect
+840ca9957606	Riptide Gearhulk	[].effect.on	opponent		[].effect
+840ca9957606	Riptide Gearhulk	[].effect.on	opponent		[].effect
+c0c29f5854bc	Razorkin Needlehead	[].trigger.event.subject	opponent		[].trigger.event
+c0c29f5854bc	Razorkin Needlehead	[].trigger.event.subject	opponent		[].trigger.event
+bb66308db324	Entropic Battlecruiser	[].trigger.event.subject	opponent		[].trigger.event
+bb66308db324	Entropic Battlecruiser	[].trigger.event.subject	opponent		[].trigger.event
+5bd8f6c8aa2f	Bloodthirsty Conqueror	[].trigger.event.subject	opponent		[].trigger.event
+5bd8f6c8aa2f	Bloodthirsty Conqueror	[].trigger.event.subject	opponent		[].trigger.event
+5bd8f6c8aa2f	Bloodthirsty Conqueror	[].trigger.event.subject	opponent		[].trigger.event
+5bd8f6c8aa2f	Bloodthirsty Conqueror	[].trigger.event.subject	opponent		[].trigger.event
+5bd8f6c8aa2f	Bloodthirsty Conqueror	[].trigger.event.subject	opponent		[].trigger.event
+5bd8f6c8aa2f	Bloodthirsty Conqueror	[].trigger.event.subject	opponent		[].trigger.event
+6da928a37087	Mindsparker	[].trigger.event.subject	opponent		[].trigger.event
+c8868e8d5ff8	Mold Adder	[].trigger.event.subject	opponent		[].trigger.event
+99694aced97e	Painful Quandary	[].trigger.event.subject	opponent		[].trigger.event
+03b4eb90e966	Scrawling Crawler	[].trigger.event.subject	opponent		[].trigger.event
+03b4eb90e966	Scrawling Crawler	[].trigger.event.subject	opponent		[].trigger.event
+03b4eb90e966	Scrawling Crawler	[].trigger.event.subject	opponent		[].trigger.event
+03b4eb90e966	Scrawling Crawler	[].trigger.event.subject	opponent		[].trigger.event
+9be654967406	Taurean Mauler	[].trigger.event.subject	opponent		[].trigger.event
+906dbba36111	Tinybones, Bauble Burglar	[].trigger.event.subject	opponent		[].trigger.event
+906dbba36111	Tinybones, Bauble Burglar	[].trigger.event.subject	opponent		[].trigger.event
+906dbba36111	Tinybones, Bauble Burglar	[].trigger.event.subject	opponent		[].trigger.event
+906dbba36111	Tinybones, Bauble Burglar	[].trigger.event.subject	opponent		[].trigger.event
+07459bd2033c	Omega, Heartless Evolution	[].effect.on	opponent		[].effect
+07459bd2033c	Omega, Heartless Evolution	[].effect.on	opponent		[].effect
+07459bd2033c	Omega, Heartless Evolution	[].effect.on	opponent		[].effect
+58b2c2fd1fa0	Hapatra, the Desert Fang	[].effect.on	opponent		[].effect
+10e7754b3275	Hapatra, the Desert Frost	[].effect.on	opponent		[].effect
+db145ea1b0a2	Lich's Relic	[].effect.on	opponent		[].effect
+db145ea1b0a2	Lich's Relic	[].effect.on	opponent		[].effect
+08432ce59ab2	Massacre Girl, Most Wanted	[].trigger.event.subject	opponent		[].trigger.event
+2fbfe035f8fb	Solarium Sentry	[].trigger.event.subject	opponent		[].trigger.event
+2fbfe035f8fb	Solarium Sentry	[].trigger.event.subject	opponent		[].trigger.event
+69adc681d1bd	Celebrate the Mountain-king	[].effect.on	opponent		[].effect
+8e9e5726c371	Aclazotz, Deepest Betrayal // Temple of the Dead	[].trigger.event.subject	opponent		[].trigger.event
+8e9e5726c371	Aclazotz, Deepest Betrayal // Temple of the Dead	[].trigger.event.subject	opponent		[].trigger.event
+3176b5cd6883	Tomik, Wielder of Law	[].trigger.event.subject	opponent		[].trigger.event
+2d3e3f754c4c	Vengeful Tracker	[].trigger.event.subject	opponent		[].trigger.event
+e998d1b7ca75	Black Cat, Cunning Thief	[].effect[].of	opponent		[].effect[]
+e998d1b7ca75	Black Cat, Cunning Thief	[].effect[].of	opponent		[].effect[]
+e998d1b7ca75	Black Cat, Cunning Thief	[].effect[].of	opponent		[].effect[]
+8185d00e0e93	Dai Li Agents	[].xdef.xdef.on	opponent		[].xdef.xdef
+8185d00e0e93	Dai Li Agents	[].xdef.xdef.on	opponent		[].xdef.xdef
+532598e16ddd	Faerie Slumber Party	[].on	opponent		[]
+532598e16ddd	Faerie Slumber Party	[].on	opponent		[]
+d29b0ddb826b	Scalding Viper // Steam Clean	[].trigger.event.subject	opponent		[].trigger.event
+d29b0ddb826b	Scalding Viper // Steam Clean	[].trigger.event.subject	opponent		[].trigger.event

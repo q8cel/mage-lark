@@ -1,0 +1,7 @@
+sid	card	sentence	literal_value	json_path	expected_x_slot	verification
+50e3c2707317	Lathril, Blade of the Elves	{T}, Tap ten untapped Elves you control: Each opponent loses 10 life and you gain 10 life	ten untapped Elve	[].cost[].target.card_type[].value	tap-count (X = number of Elves)	CORRUPTED - X substituted in source/segmentation
+50e3c2707317	Lathril, Blade of the Elves	{T}, Tap ten untapped Elves you control: Each opponent loses 10 life and you gain 10 life	10	[].effect[].amount.value	both life amounts (X = number of Elves)	CORRUPTED - two literal 10 amounts
+194ec203f4ef	Ajani, Outland Chaperone	[-8]: Look at the top X cards of your library where X is your life total	-8	[].cost.amount	loyalty cost (literal by design)	NOT corrupted - effect amount is {kind:x}
+272e1539e875	Ajani, Caller of the Pride	[-8]: Create X 2/2 white Cat creature tokens where X is your life total	-8	[].cost.amount	loyalty cost (literal by design)	NOT corrupted - token count is {kind:x}
+dd12694c4727	Jace, Reality Sculptor	[+1]: Empower Jace X where X is the number of Islands you control	1	[].cost.amount	loyalty cost (literal by design)	NOT corrupted - effect amount is {kind:x}
+09d7a37ddca7	Ashiok, Wicked Manipulator	[-7]: Target player exiles the top X cards of their library where X is the total mana value of cards you own in exile	-7	[].cost.amount	loyalty cost (literal by design)	NOT corrupted - effect amount is {kind:x}
