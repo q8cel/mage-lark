@@ -230,3 +230,15 @@ Note (`parser_issues.md:167-181`) still asks for `player_target` on the effect. 
 - `f3b00b1` still contains the withdrawn `{kind:"type",of:"target",value}` type-of-target emission (not in artifact `b93f7c78`). The new engine consumes the state/previous_target shape and has no `type/of` conflict only because the artifact predates f3b00b1. Do not ship f3b00b1's type shape; change it to `{kind:"state",subject:{ref:"previous_target"},state:{card_type:…}}`.
 - Controller relation mappings from `f3b00b1` remain inert (builder flat PlayerRef); note now counts 14 controller forms, artifact has 5 residual forms.
 - No new conflict in `did`/`life`/`then`/`player_target`; those shipped and are consumed.
+
+## Response to engine-note batch `2ecf884` (artifact still `b93f7c78`)
+
+**Lathril X-literal — engine-note error, no parser change.** `data/Standard.json` `originalText` for Lathril is `{T}, Tap ten untapped Elves you control: Each opponent loses 10 life and you gain 10 life.` — there is no X in the source. The `ten untapped Elve` card-type and literal `10` amounts are faithful to that input, so there is nothing for the parser to preserve. The other four "where X is" records were verified correct: Ajani, Outland Chaperone `194ec203f4ef`, Ajani, Caller of the Pride `272e1539e875`, Jace, Reality Sculptor `dd12694c4727`, Ashiok, Wicked Manipulator `09d7a37ddca7` all have `{kind:"x"}` in the X slot; their only literals are loyalty costs. Engine should check its source/assumption before keeping this ask.
+
+**Player words in `card_type` — fixed live in `2ecf884`.** The 58 rows / 26 cards in `review/player_type_sites.tsv` are 0 at the listed paths after the commit: `effect.on` for-each 12, `effect[].of` 3, `trigger.event.subject` 39 (opponent 36 / each player 3), `xdef.on` + `[].on` 4. Player-named subjects/on/of slots now emit `{kind:"player",ref:…}`; effect target slots keep `player_target` (Boltwave style). Artifact `b93f7c78` predates the fix, so its TSV still shows 58/26 until the rebuild.
+
+**`static_text` 14 sites / 3 shapes remain** — these are split qualifiers whose head noun lives in another sentence, so there is no exact attachment to merge. Shapes: `you control` 9, `you control without flying` 4, `you control that entered the battlefield this turn` 1. Left as `reason:"static_text"` deliberately.
+
+**Controller residual after `2ecf884`:** `controlled by different players` maps to a distinct relation, `her owner`/`their owners` become owner relations, `those players` becomes a player ref. The 121 bare `owner` sites stay `{kind:"controller",ref:"owner",relation:"owner",unresolved:true}` because the owned object is not present in the node to attach to.
+
+**Engine HEAD `dfdc4dc`** is current; a parser rebuild is running, so all tail counts (player sites, static/controller, X) will change against the new SHA. The Lathril ask is the only item here that is not parser work.
