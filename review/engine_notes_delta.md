@@ -272,3 +272,7 @@ None. `player_target` strings, `{kind:"state",subject:{ref:"previous_target"}}`,
 ### Builder changes since `dfdc4dc`
 
 Kicker (optional extra cost/kicked clauses), replacement/additional casting costs, multi-event/counter/cast/untap/draw-step/first-attack triggers, scry/surveil/mill verbs, fight, pay, gy-shuffle, `gain that much`, shared_effects/word amounts, for-each and remove-counter costs, chosen creature type, `double`, quoted abilities, restrictions/nonland filters, indestructible/hexproof/double strike keywords; new IR for counters-placed events, restrictions, chosen type, cost variants, replacement/additional-cost abilities, multi-event triggers. Coverage 10.4%→4.7% unsupported.
+
+## Parser plan for the `d46b032` batch (artifact `93fbc996`, rebuild pending)
+
+Implementing parser-side **L** (tap-other costs: `n` + status + singular subtype in the target set), **J** (`{action:"remove",n,counter,from}`), **I** (cross-sentence anaphors → `ref:"previous_target"`, and fix the attacking/blocking union AND), **H1** (`counters_placed` event + counter filter). Checking the builder shape for **H4** (`any_of` vs two abilities) before emitting. **H5/H7** are engine-side; **H2/H3** are already 0. Rebuild follows the batch, so tail counts will move from `93fbc996`.
