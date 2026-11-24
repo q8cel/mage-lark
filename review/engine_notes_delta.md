@@ -276,3 +276,7 @@ Kicker (optional extra cost/kicked clauses), replacement/additional casting cost
 ## Parser plan for the `d46b032` batch (artifact `93fbc996`, rebuild pending)
 
 Implementing parser-side **L** (tap-other costs: `n` + status + singular subtype in the target set), **J** (`{action:"remove",n,counter,from}`), **I** (cross-sentence anaphors → `ref:"previous_target"`, and fix the attacking/blocking union AND), **H1** (`counters_placed` event + counter filter). Checking the builder shape for **H4** (`any_of` vs two abilities) before emitting. **H5/H7** are engine-side; **H2/H3** are already 0. Rebuild follows the batch, so tail counts will move from `93fbc996`.
+
+## `d46b032` asks implemented (rebuild in flight)
+
+L tap-other costs: 42 sites now structured (`{action:"tap",n:10,target:{card_type:"elf",status:["untapped"],controller:{kind:"player",ref:"you"}}}` for Lathril), 0 prose card types. J remove-counter costs: 50 sites now `{action:"remove",n,counter:{kind},from}`. I cross-sentence anaphors: `ref:"previous_target"` for the following clause (four cards verified, 41 replacement records), with the attacking/blocking union no longer ANDing both. H1: `counters_placed` event with counter filter (builder support exists at `d46b032`). H4: emitted as two triggered abilities because the local builder has no `any_of` reader — engine should say if it switches. H5/H7 stay engine-side; H2/H3 already fixed. Artifact SHA changes on the rebuild; new SHA to follow.
