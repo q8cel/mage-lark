@@ -189,6 +189,16 @@ PLAYER_CARD_WORDS = {
 
 
 def _normalize_refs(obj):
+    if (obj.get('verb') == 'put'
+            and isinstance(obj.get('counter'), dict)
+            and obj.get('object') is not None):
+        # "Whenever you put one or more +1/+1 counters on this creature":
+        # a counters-placed event, with the permanent as its subject.
+        actor = obj.pop('subject', None)
+        obj['subject'] = obj.pop('object')
+        if actor is not None:
+            obj['actor'] = actor
+        obj['verb'] = 'counters_placed'
     if isinstance(obj.get('verb'), str):
         for key in ('to', 'card', 'object', 'target', 'spell'):
             ts = obj.get(key)
@@ -245,6 +255,44 @@ def _normalize_refs(obj):
             repl = CONTROLLER_MAP.get(ref)
             if repl:
                 obj['controller'] = dict(repl)
+
+
+def _split_multi_event(node):
+    """Duplicate a triggered ability once per event verb.
+
+    The builder reads a single event; "enters or attacks" therefore becomes
+    two triggered abilities that share the same effect.
+    """
+    if isinstance(node, list):
+        out = []
+        for x in node:
+            xs = _split_multi_event(x)
+            out.extend(xs if isinstance(xs, list) else [xs])
+        return out
+    if isinstance(node, dict):
+        for k, v in list(node.items()):
+            node[k] = _split_multi_event(v)
+        if node.get('type') != 'triggered':
+            return node
+        tr = node.get('trigger')
+        ev = tr.get('event') if isinstance(tr, dict) else node.get('event')
+        if not isinstance(ev, dict):
+            return node
+        verb = ev.get('verb')
+        if not (isinstance(verb, dict) and verb.get('kind') == 'event'
+                and isinstance(verb.get('verbs'), list)
+                and len(verb['verbs']) > 1):
+            return node
+        out = []
+        for v in verb['verbs']:
+            w = json.loads(json.dumps(node))
+            if isinstance(w.get('trigger'), dict):
+                w['trigger']['event']['verb'] = v
+            else:
+                w['event']['verb'] = v
+            out.append(w)
+        return out
+    return node
 
 
 def _ensure_target_quantifiers(obj, in_effect=False):
@@ -413,6 +461,7 @@ def _compile_card(card):
                     'fragment': otext, 'source': 'compile_card'}]
         else:
             _ensure_target_quantifiers(out)
+            out = _split_multi_event(out)
         rec = {
             'card': name,
             'set_code': _code,
