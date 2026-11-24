@@ -164,10 +164,13 @@ CONTROLLER_MAP = {
     # unless the text names X.
     'owner': {'kind': 'controller', 'ref': 'owner',
               'relation': 'owner', 'unresolved': True},
-    'their owners': {'kind': 'controller', 'ref': 'their owners',
-                     'relation': 'owner', 'unresolved': True},
-    'her owner': {'kind': 'controller', 'ref': 'her owner',
-                  'relation': 'owner', 'unresolved': True},
+    'their owners': {'kind': 'controller', 'ref': 'owner',
+                     'relation': 'owner', 'plural': True},
+    'her owner': {'kind': 'controller', 'ref': 'owner',
+                  'relation': 'owner', 'possessive': 'her'},
+    'controlled by different players': {
+        'kind': 'controller', 'ref': 'different players',
+        'relation': 'controls', 'distinct': True},
 }
 WHO_REF_FIX = {"that creature 's controller": 'its controller',
                "that land 's controller": 'its controller'}
@@ -196,6 +199,20 @@ def _normalize_refs(obj):
             if mapped:
                 obj['player_target'] = mapped
                 del obj[key]
+    # Trigger event subjects and for_each/count slots that name a player are
+    # player refs, not card types.
+    for key in ('subject', 'on', 'of'):
+        v = obj.get(key)
+        ct = v.get('card_type') if isinstance(v, dict) else None
+        if not isinstance(ct, dict) or ct.get('kind') != 'type':
+            continue
+        mapped = PLAYER_CARD_WORDS.get(str(ct.get('value', '')).lower())
+        if not mapped:
+            continue
+        new = {'kind': 'player', 'ref': mapped}
+        if key == 'subject' and isinstance(v.get('quantifier'), dict):
+            new['quantifier'] = v['quantifier']
+        obj[key] = new
     if obj.get('type') in ('if', 'branch') and isinstance(obj.get('effect'), list):
         obj['then'] = obj.pop('effect')
     co = obj.get('copy_of')
@@ -220,6 +237,9 @@ def _normalize_refs(obj):
                                  'relation': 'cast'}
         elif ref == 'they' and rel == 'controls':
             obj['controller'] = {'kind': 'player', 'ref': 'they',
+                                 'relation': 'controls'}
+        elif ref == 'those players' and rel == 'controls':
+            obj['controller'] = {'kind': 'player', 'ref': 'those players',
                                  'relation': 'controls'}
         else:
             repl = CONTROLLER_MAP.get(ref)
