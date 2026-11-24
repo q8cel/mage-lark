@@ -191,3 +191,42 @@ Pull `2c074fd..2f67c0d` (5 commits): `d7caf60` conditions on previous clause's t
 - `f3b00b1` controller residual mappings (`owner`/`their owners`/`her owner` keep relation; `you`/cast, `they`/controls drop unresolved) are inert for the engine: builder still models flat `PlayerRef` and ignores `relation` (parser_issues.md:239). Not a reversal, but these forms will remain residual/unmapped until the engine models relations; no parser conflict.
 - Static/modifier tail work is unaffected by the new notes (static_text 14 sites/3 shapes, modifier 0 in `733af921`).
 - Player-in-card_type: our parser still emits Boltwave as `to.card_type:{value:"opponent"}`; new builder compensates, but next parser change should emit `player_target` on the effect.
+
+## Pull 2026-11-24c — engine HEAD `dfdc4dc`
+
+Pull `2f67c0d..dfdc4dc` (13 commits): may-optionality/list effects/fetch lands (`3ebbb98`), attack-block restrictions (`60e1605`), reveal+mill (`202d038`), `@@L<hex-json>@@` decoding (`b086937`), copy-on-write/become (`3ab80c6`), granted quoted abilities (`b00e986`), combat window + put destinations (`07b9088`), did/life conditions (`66b72ca`), eedbf3b-shape docs (`dc4b656`), then-branch folding (`3cb90dd`), X-literal refusal (`03e9445`), string `player_target` (`dfdc4dc`). Unsupported count 225→176→158. `notes/parser_issues.md` +50 lines; `fdn_notes.md` regenerated (1,137 lines changed).
+
+### Builder fixes since `2f67c0d`
+
+- `may` is preserved as `Effect.may` and offered as a choice.
+- List effects / `then:[…]` branch lists execute sequentially; fetch-land `search/shuffle/put` works.
+- `reveal` + `mill` (until type), put-to-library/hand, attack/block restrictions (`Restrict` verb, predicate/negated).
+- `did` / `life` conditions (`previous_happened`, `life_compare`), previous-target state, string `player_target`.
+- `@@L<hex-json>@@` list tokens decode in card_type/target/label slots.
+- New verbs: `PutInBattlefield`, `Shuffle`, `Restrict`, `Reveal`, `Become`; new IR fields `may`, `until_type`, `become_types`, `lose_abilities`, `become_abilities`, `predicate`, `negated`.
+- X-as-literal is refused (engine-side guard), and cost actions that tap other permanents are unsupported.
+
+### New / changed parser asks
+
+**1. X-values replaced by a literal number (new, parser-side, still true).**
+Note: *Lathril, Blade of the Elves* — "Tap ten untapped Elves… each opponent loses 10 life…" where X was the number of Elves; the parser substituted `ten` into the cost and `10` into the amounts. Current artifact `b93f7c78` still has it:
+
+- Lathril `50e3c2707317`: `cost:[{action:"tap", target:{card_type:[{kind:"type",value:"ten untapped Elve"}]}}]`, effects `{"kind":"number","unit":"life","value":10}`.
+- Ajani, Outland Chaperone `194ec203f4ef` (top X cards, X = life) and Ajani, Caller of the Pride `272e1539e875` (create X tokens, X = life) also carry literal amounts.
+
+Artifact counts: 393 records / 216 cards with "where X is"; **4 unique sids** with literal amounts under a where-X clause, plus Lathril = **5 unique records/cards** of X-corruption. Side: parser-side; keep `{"kind":"x"}` + `where_x` or drop the ability, never substitute a constant.
+
+**2. Player words in `card_type` slots (open, parser-side).**
+Note (`parser_issues.md:167-181`) still asks for `player_target` on the effect. Boltwave is fixed in the artifact (`b08ed2e03cc9`: `player_target:"opponent"`; 360 `player_target` sites), but **58 sites** still put a player word in `card_type` (e.g. Hostile Investigator `37647d76e6e7` value `players`; March of the World Ooze `dc8520f7a724` value `opponent`).
+
+**3. `@@L<hex-json>@@` tokens** — handled by the builder (decoded in card_type/target/label); no parser action. New `kind` values will log a gap.
+
+**4. `eedbf3b` shapes all consumed** — `did` / `previous_target` state / `life` / `then:[…]` / string `player_target`; the note explicitly thanks us for dropping the `this_card` guess. Current artifact has `did` 4, `life` 7 conditions, `then` 105 sites, `player_target` 360 sites.
+
+**5. Still-open list in the note vs artifact:** `static_text` 14 sites / 3 shapes (note says 8), controller residual 135 sites (5 forms: owner 121, their owners 5, her owner 4, controlled by different players 3, those players 2; note says 14 forms), `who` outside five values 0, duplicate printings 9,015 rows.
+
+### Conflicts with our parser commits
+
+- `f3b00b1` still contains the withdrawn `{kind:"type",of:"target",value}` type-of-target emission (not in artifact `b93f7c78`). The new engine consumes the state/previous_target shape and has no `type/of` conflict only because the artifact predates f3b00b1. Do not ship f3b00b1's type shape; change it to `{kind:"state",subject:{ref:"previous_target"},state:{card_type:…}}`.
+- Controller relation mappings from `f3b00b1` remain inert (builder flat PlayerRef); note now counts 14 controller forms, artifact has 5 residual forms.
+- No new conflict in `did`/`life`/`then`/`player_target`; those shipped and are consumed.
