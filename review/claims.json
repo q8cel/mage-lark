@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "b93f7c78bb94c34524d01c4c90cc906425f2081afe4ff4d2e3f9ad8be83860fc",
- "generated_at": "2026-11-24T03:08:27",
- "artifact_mtime": "2026-11-24T03:03:49",
+ "artifact_sha256": "93fbc99644b44521ab41bdbecd5fad0a72a8adbcb532e388aeac19fc000d0369",
+ "generated_at": "2026-11-24T04:41:02",
+ "artifact_mtime": "2026-11-24T04:36:23",
  "counts": {
-  "records": 2917,
-  "claims": 4175,
+  "records": 2916,
+  "claims": 4172,
   "by_kind": {
    "anaphora_agreement": 69,
    "content_loss": 1715,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 2175
+   "stringy": 2172
   }
  },
  "records": [
@@ -11460,20 +11460,6 @@
    ]
   },
   {
-   "card": "Don & Leo, Problem Solvers",
-   "sid": "6c35a074c890",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "their owners",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Donatello, Mutant Mechanic",
    "sid": "efeb1bb04775",
    "sentence_index": 3,
@@ -19324,13 +19310,6 @@
      "detail": "her",
      "severity": "high",
      "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "her owner",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -19609,20 +19588,6 @@
      "kind": "stringy",
      "path": "[].effect.quote.quoted_text",
      "detail": "\"Ward\u2014Pay 2 life.\"",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Hide on the Ceiling",
-   "sid": "16237fd3364c",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].effect.to.controller.ref",
-     "detail": "their owners",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -19930,6 +19895,20 @@
    ]
   },
   {
+   "card": "Hostile Investigator",
+   "sid": "37647d76e6e7",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].trigger.event.subject.ref",
+     "detail": "each player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Hotshot Investigators",
    "sid": "898d7ef88f9e",
    "sentence_index": 0,
@@ -20121,13 +20100,6 @@
      "path": "[].effect[].card.card_type.raw",
      "detail": "her",
      "severity": "high",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].effect[].to.controller.ref",
-     "detail": "her owner",
-     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -35071,7 +35043,7 @@
     {
      "kind": "stringy",
      "path": "[].effect.object.controller.ref",
-     "detail": "controlled by different players",
+     "detail": "different players",
      "severity": "medium",
      "source": "artifact:output"
     }
