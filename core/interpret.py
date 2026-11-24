@@ -693,6 +693,27 @@ class Interpreter:
                     shaped = self._condition_shape(cv['fragment'])
                     if shaped is not None:
                         obj[ckey] = shaped
+        if isinstance(obj, dict) and obj.get('type') == 'replacement':
+            # "If target X would die this turn, exile target X instead": both
+            # mentions refer to the previous clause's target.
+            cond = obj.get('if') or obj.get('condition')
+            if isinstance(cond, dict):
+                subj = cond.get('subject')
+                if isinstance(subj, dict):
+                    is_target = subj.get('quantifier') == 'target'
+                    is_anaphor = subj.get('ref') == 'anaphora'
+                    if isinstance(subj.get('or'), list):
+                        is_anaphor = any(
+                            isinstance(x, dict) and x.get('ref') == 'anaphora'
+                            for x in subj['or'])
+                    if is_target or is_anaphor:
+                        cond['subject'] = {'ref': 'previous_target'}
+            ins = obj.get('instead')
+            if isinstance(ins, dict):
+                for k in ('card', 'target'):
+                    v = ins.get(k)
+                    if isinstance(v, dict) and v.get('quantifier') == 'target':
+                        ins[k] = {'ref': 'previous_target'}
         if isinstance(obj, dict) and in_effect and isinstance(obj.get('verb'), str):
             self._normalize_effect_quantifiers(obj)
         if isinstance(obj, dict) and obj.get('verb') == 'raw' \
@@ -6470,32 +6491,80 @@ class Interpreter:
                                'unit': 'life'}}
         if low.startswith('tap '):
             rest = raw[4:].strip()
-            q = None
-            status = []
-            for word, qv in (('four ', 'four'), ('three ', 'three'),
-                             ('two ', 'two'), ('one ', 'one')):
-                if rest.lower().startswith(word):
-                    q = qv
-                    rest = rest[len(word):]
+            n = 1
+            mnum = re.match(
+                r'(any number of|a|[0-9]+|one|two|three|four|five|six|seven|'
+                r'eight|nine|ten|eleven|twelve|x)\s+', rest, re.I)
+            if mnum:
+                word = mnum.group(1).lower()
+                rest = rest[mnum.end():]
+                if word in ('any number of', 'x'):
+                    n = 'X'
+                elif word.isdigit():
+                    n = int(word)
+                elif word != 'a':
+                    n = self.WORD_NUM.get(word, 1)
+            controller = None
+            if rest.lower().endswith(' you control'):
+                rest = rest[:-len(' you control')]
+                controller = {'kind': 'player', 'ref': 'you'}
+            otherness = None
+            for pre in ('another ', 'other '):
+                if rest.lower().startswith(pre):
+                    rest = rest[len(pre):]
+                    otherness = 'other'
                     break
+            m = re.match(r'(a|an)\s+', rest, re.I)
+            if m:
+                rest = rest[m.end():]
+            status = []
             if rest.lower().startswith('untapped '):
                 status.append('untapped')
                 rest = rest[len('untapped '):]
-            if rest.lower().endswith(' you control'):
-                rest = rest[:-len(' you control')]
-                controller = 'you'
-            else:
-                controller = None
-            if rest.lower().endswith('s'):
+            low_rest = rest.lower()
+            if low_rest.endswith('ves'):
+                rest = rest[:-3] + 'f'
+            elif low_rest.endswith('ies'):
+                rest = rest[:-3] + 'y'
+            elif low_rest.endswith('s') and not low_rest.endswith('ss'):
                 rest = rest[:-1]
-            target = {'card_type': [{'kind': 'type', 'value': rest}]}
-            if q:
-                target['quantifier'] = q
+            target = {'card_type': {'kind': 'type',
+                                    'value': rest.strip().lower()}}
             if status:
                 target['status'] = status
             if controller:
                 target['controller'] = controller
-            return {'kind': 'cost', 'action': 'tap', 'target': target}
+            if otherness:
+                target['otherness'] = otherness
+            return {'kind': 'cost', 'action': 'tap', 'n': n,
+                    'target': target}
+        mrm = re.match(r'remove\s+(.+?)\s+counter\s*s?\s+from\s+(.+)$',
+                       low)
+        if mrm:
+            amount, from_text = mrm.group(1).strip(), mrm.group(2).strip()
+            n = 1
+            mnum = re.match(
+                r'(any number of|a|[0-9]+|one|two|three|four|five|six|'
+                r'seven|eight|nine|ten|eleven|twelve|x)\b', amount)
+            if mnum:
+                word = mnum.group(1)
+                amount = amount[mnum.end():].strip()
+                if word in ('any number of', 'x'):
+                    n = 'X'
+                elif word.isdigit():
+                    n = int(word)
+                elif word != 'a':
+                    n = self.WORD_NUM.get(word, 1)
+            counter = {'kind': amount or 'any'}
+            if from_text in ('~', 'this creature', 'this artifact',
+                             'this enchantment', 'this land',
+                             'this permanent'):
+                src = {'card_type': {'kind': 'this_card', 'value': '~'}}
+            else:
+                src = self._simple_target(from_text) or {
+                    'card_type': {'kind': 'type', 'value': from_text}}
+            return {'kind': 'cost', 'action': 'remove', 'n': n,
+                    'counter': counter, 'from': src}
         if low.startswith('sacrifice '):
             target = self._simple_target(raw[len('sacrifice '):])
             if target:
