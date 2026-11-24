@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "733af9214bd22da251388c366006649761093ba9bef163c4093a86e3d1769a21",
- "generated_at": "2026-11-24T00:30:23",
- "artifact_mtime": "2026-11-24T00:25:47",
+ "artifact_sha256": "b93f7c78bb94c34524d01c4c90cc906425f2081afe4ff4d2e3f9ad8be83860fc",
+ "generated_at": "2026-11-24T03:08:27",
+ "artifact_mtime": "2026-11-24T03:03:49",
  "counts": {
-  "records": 2908,
-  "claims": 4157,
+  "records": 2917,
+  "claims": 4175,
   "by_kind": {
    "anaphora_agreement": 69,
    "content_loss": 1715,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 2157
+   "stringy": 2175
   }
  },
  "records": [
@@ -3615,6 +3615,20 @@
      "path": "[].effect.to.owner.of.ref",
      "detail": "its",
      "severity": "high",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Bilbo's Gambit",
+   "sid": "a596a06a229e",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.player_target",
+     "detail": "each player",
+     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -9247,8 +9261,15 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].inner.duration",
+     "path": "[].then[].inner.duration",
      "detail": "for as long as a nonland card remains exiled",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].then[].mana",
+     "detail": "any type",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -10407,6 +10428,13 @@
    "sid": "e7df53999db9",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].who",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -12674,6 +12702,20 @@
      "detail": "land",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Eddie Brock // Venom, Lethal Protector",
+   "sid": "f30ae8fce064",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].inner.card.modifier.stat",
+     "detail": "mana value",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -15765,6 +15807,20 @@
    ]
   },
   {
+   "card": "Flow State",
+   "sid": "3226b34b70b3",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].card",
+     "detail": "the rest",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Flowerfoot Swordmaster",
    "sid": "c03eae390d28",
    "sentence_index": 1,
@@ -18506,6 +18562,13 @@
    "sid": "fec8e0d3b15a",
    "sentence_index": 2,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].card.card_type.value",
+     "detail": "basic land",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "invariant",
      "path": null,
@@ -22176,14 +22239,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].who.ref",
+     "path": "[].then[].who.ref",
      "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].effect[].who.selection",
+     "path": "[].then[].who.selection",
      "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
@@ -23470,6 +23533,13 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].then[].card.card_type.value",
+     "detail": "basic land",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: condition=you do",
@@ -23524,6 +23594,20 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Last Light of Durin's Day",
+   "sid": "415de49557fb",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].card.card_type.value",
+     "detail": "Dragon card",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -25158,7 +25242,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].keywords[]",
+     "path": "[].then[].keywords[]",
      "detail": "first strike",
      "severity": "medium",
      "source": "artifact:output"
@@ -26551,7 +26635,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].card.controller.ref",
+     "path": "[].then[].card.controller.ref",
      "detail": "an opponent",
      "severity": "medium",
      "source": "artifact:output"
@@ -28904,6 +28988,20 @@
    ]
   },
   {
+   "card": "Officious Interrogation",
+   "sid": "384ac5cc4cba",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].effect.player_target",
+     "detail": "each player",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "Ogre Chitterlord",
    "sid": "a906e518ed4b",
    "sentence_index": 1,
@@ -28938,14 +29036,14 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].who.ref",
+     "path": "[].then[].who.ref",
      "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
     },
     {
      "kind": "stringy",
-     "path": "[].effect[].who.selection",
+     "path": "[].then[].who.selection",
      "detail": "target player",
      "severity": "medium",
      "source": "artifact:output"
@@ -33031,6 +33129,13 @@
    "sid": "8e280ac8ae22",
    "sentence_index": 3,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].mana",
+     "detail": "any type",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "content_loss",
      "path": null,
@@ -38366,6 +38471,13 @@
    "sentence_index": 1,
    "claims": [
     {
+     "kind": "stringy",
+     "path": "[].then[].who",
+     "detail": "each opponent",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
      "kind": "invariant",
      "path": null,
      "detail": "bare_condition: condition=at least one creature card was exiled this way",
@@ -38735,6 +38847,20 @@
      "detail": "named",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
+    }
+   ]
+  },
+  {
+   "card": "Sphinx's Approach",
+   "sid": "54550f7dd098",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].card.card_type.value",
+     "detail": "Sphinx creature card",
+     "severity": "medium",
+     "source": "artifact:output"
     }
    ]
   },
@@ -39212,6 +39338,13 @@
    "sid": "6a6fd3e9df73",
    "sentence_index": 1,
    "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].card.card_type.value",
+     "detail": "basic land",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
     {
      "kind": "invariant",
      "path": null,
@@ -40280,6 +40413,20 @@
      "kind": "stringy",
      "path": "[].effect.who.modifier",
      "detail": "that crewed it this turn",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Subway Train",
+   "sid": "b3ce84cd18be",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].card.card_type.value",
+     "detail": "basic land",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -41790,8 +41937,15 @@
     },
     {
      "kind": "stringy",
-     "path": "[].effect[].inner.duration",
+     "path": "[].then[].inner.duration",
      "detail": "for as long as you control this creature",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].then[].mana",
+     "detail": "any type",
      "severity": "medium",
      "source": "artifact:output"
     },
@@ -42722,6 +42876,27 @@
    ]
   },
   {
+   "card": "The Huntsman's Redemption",
+   "sid": "1a143fe5ba08",
+   "sentence_index": 2,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].card.card_type.value",
+     "detail": "basic land",
+     "severity": "medium",
+     "source": "artifact:output"
+    },
+    {
+     "kind": "stringy",
+     "path": "[].then[].cards[].card_type.value",
+     "detail": "basic land",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
    "card": "The Infamous Cruelclaw",
    "sid": "3abaf23d7cfa",
    "sentence_index": 1,
@@ -43456,7 +43631,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect[].object",
+     "path": "[].then[].object",
      "detail": "a nonland card from it",
      "severity": "medium",
      "source": "artifact:output"
@@ -45656,6 +45831,20 @@
      "kind": "stringy",
      "path": "[].effect.token.quote.quoted_text",
      "detail": "\"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+     "severity": "medium",
+     "source": "artifact:output"
+    }
+   ]
+  },
+  {
+   "card": "Unholy Annex // Ritual Chamber",
+   "sid": "7e73ec8c4b61",
+   "sentence_index": 1,
+   "claims": [
+    {
+     "kind": "stringy",
+     "path": "[].then[].who",
+     "detail": "each opponent",
      "severity": "medium",
      "source": "artifact:output"
     }
