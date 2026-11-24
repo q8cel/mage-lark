@@ -242,3 +242,33 @@ Note (`parser_issues.md:167-181`) still asks for `player_target` on the effect. 
 **Controller residual after `2ecf884`:** `controlled by different players` maps to a distinct relation, `her owner`/`their owners` become owner relations, `those players` becomes a player ref. The 121 bare `owner` sites stay `{kind:"controller",ref:"owner",relation:"owner",unresolved:true}` because the owned object is not present in the node to attach to.
 
 **Engine HEAD `dfdc4dc`** is current; a parser rebuild is running, so all tail counts (player sites, static/controller, X) will change against the new SHA. The Lathril ask is the only item here that is not parser work.
+
+## Pull 2026-11-25 — engine origin/master `d46b032` (local checkout `dfdc4dc`)
+
+Fetched `dfdc4dc..d46b032` (24 commits): `7246fbb` keywords/restrictions/filters, `95d0b3c` draw triggers + anaphoric it, `f9444e4` shared_effects/word amounts, `dfb8236` mill/surveil + gap audit, `c87d902` kicker, `fef70a4` pay/fight/gy-shuffle/did, `287f25f` gain-that-much + lose-life triggers, `2baef87` multi-event triggers/scry-surveil/enter-tapped statics, `d48a2cc` begin-combat, `96aaa5a` replacement/additional costs, `1b05066` for-each/remove-counter costs (fix), `618cde9` during-turn + if, `2ca24a2` standalone if/life/previous-target, `3a437ed` chosen type/double, `80dc239` counter triggers/draw-step, `a33d830` quoted abilities/costs/cast-untap triggers, `7f25b99` first-attack/controls-subtype/tap-others, plus harness/coverage docs. Unsupported 10.4%→4.7%.
+
+### New/changed parser asks (checked on artifact `93fbc996`)
+
+| ask | note/cards | artifact output | rows/unique | side |
+|---|---|---|---:|---|
+| H1 counter-placement triggers: emit `{"event":{"verb":"counters_placed","subject":…,"counter":"+1/+1"}}` | Exemplar of Light, Stocking the Pantry, Terrasymbiosis, Ant-Man | event is `{"verb":"put","counter":{…},"subject":"you"}` — no `counters_placed` | 7 records / 7 cards matched | parser |
+| H2 em-dash ability words leak into segment lists | Threshold sentence | top-level list with strings + dict | 0 rows (already fixed) | — |
+| H3 `previous_happened` placeholder | Crossway Troublemakers, Desecration Demon | no `previous_happened`; event_ref used | 0 sites | fixed |
+| H4 multi-event triggers: two abilities or `any_of` | Crow of Dark Tidings, Dreadwing Scavenger | one triggered record per "enters or attacks/dies" text | 117 records / 59 cards (broader than note's 3) | parser/engine |
+| H5 replacement/continuous text | Authority of Consuls, Confiscate, Doubling Season, Crusader of Odric | still unsupported static/replacement | 10 abilities (note) | engine |
+| H6 optional pay-cost effects | — | `may` + `pay` + event_ref/then present | no action | done |
+| H7 missing verbs | Bulk Up (double), Brass's Bounty (for each land) | `double` 54 sites, `for_each` 69, `fight` 47, `shuffle` 312, `pay` 164 | counts | engine |
+| I anaphors across sentences: emit `ref:"previous_target"` instead of fresh target | Elspeth's Smite, Fiery Annihilation, Obliterating Bolt, Scorching Dragonfire | replacement `if.subject` uses `quantifier:"target"` | 30 records / 20 cards; status attacking+blocking 13 sites | parser |
+| J remove-counter costs: `{action:"remove",n,counter,from}` | Drake Hatcher and friends | `action:"remove"` target `card_type.value` holds "three incubation counter s…" | 50 sites | parser |
+| K 49 unsupported list | parser gaps: no compiled record (Crusader of Odric, Fynn, Goblin Boarders, Harmless Offering, Maze's End, Mazemind Tome, Pyromancer's Goggles, Teach by Example, Thousand-Year Storm, Time Stop, Uncharted Haven), activation-condition fragments (Ayli, Cryptic Caves), unparsed fragments (Carnelian Orb, Doubling Season, Elenda, Leyline Axe, Skyknight Squire, Venom Connoisseur, Wilt-Leaf Liege) | — | 49 | parser + engine |
+| L plural/state in tap-other costs: `{action:"tap",n:10,target:{card_type:"Elf",status:["untapped"],controller:…}}` | Lathril, Blade of the Elves | `card_type.value:"ten untapped Elve"` | 42 tap-other cost sites, 3 with number words | parser |
+
+H1 current shape example: Exemplar of Light `195622c5bb75` trigger is `{"event":{"verb":"put","counter":{"kind":"+1/+1","count":{"at_least":1}}, "subject":"you","object":{this_card}}}`, not `counters_placed`.
+
+### Reversals of shipped shapes
+
+None. `player_target` strings, `{kind:"state",subject:{ref:"previous_target"}}`, `did`/`life`, `then:[…]`, `{kind:"any"}`, `{at_least}`, typed modal continuations and `enters_*` are all still consumed. The only correction is Lathril: the X-literal complaint remains an engine-note error (source text has no X), but ask **L** separately asks for structured plural tap costs; that part is parser-side. H4 broadens multi-event beyond the note's 3 examples.
+
+### Builder changes since `dfdc4dc`
+
+Kicker (optional extra cost/kicked clauses), replacement/additional casting costs, multi-event/counter/cast/untap/draw-step/first-attack triggers, scry/surveil/mill verbs, fight, pay, gy-shuffle, `gain that much`, shared_effects/word amounts, for-each and remove-counter costs, chosen creature type, `double`, quoted abilities, restrictions/nonland filters, indestructible/hexproof/double strike keywords; new IR for counters-placed events, restrictions, chosen type, cost variants, replacement/additional-cost abilities, multi-event triggers. Coverage 10.4%→4.7% unsupported.
