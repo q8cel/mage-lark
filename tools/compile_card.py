@@ -552,8 +552,12 @@ def main():
     disk_path = None
     disk_cache = {}
     if not args.no_out_cache:
+        # The contract pass lives in this file and runs after cache lookup, but
+        # a change here must never silently reuse outputs from a different
+        # compiler contract.
         key = (_file_hash(_paths.source('interpret.py')) + '_'
-               + _file_hash(_paths.GRAMMAR))
+               + _file_hash(_paths.GRAMMAR) + '_'
+               + _file_hash(os.path.abspath(__file__)))
         disk_path = os.path.join(_paths.CACHE, 'compile_out_%s.json' % key)
         disk_cache = _load_cache(disk_path)
 
