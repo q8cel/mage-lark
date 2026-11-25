@@ -1,16 +1,16 @@
 {
- "artifact_sha256": "93fbc99644b44521ab41bdbecd5fad0a72a8adbcb532e388aeac19fc000d0369",
- "generated_at": "2026-11-24T04:41:02",
- "artifact_mtime": "2026-11-24T04:36:23",
+ "artifact_sha256": "e0d4ffbe457aec85d574719f46f10bf92e083924ec3b39a199289d41dd26a19c",
+ "generated_at": "2026-11-25T03:26:54",
+ "artifact_mtime": "2026-11-25T03:22:18",
  "counts": {
-  "records": 2916,
-  "claims": 4172,
+  "records": 2881,
+  "claims": 4119,
   "by_kind": {
    "anaphora_agreement": 69,
    "content_loss": 1715,
    "empty_slot": 13,
    "invariant": 203,
-   "stringy": 2172
+   "stringy": 2119
   }
  },
  "records": [
@@ -2948,20 +2948,6 @@
    ]
   },
   {
-   "card": "Bandit's Haul",
-   "sid": "19430933f0ff",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "two loot counter s from this artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Banishing Betrayal",
    "sid": "9bc4dce97785",
    "sentence_index": 0,
@@ -3696,7 +3682,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[][]",
+     "path": "[]",
      "detail": "there are seven or more cards in your graveyard",
      "severity": "medium",
      "source": "artifact:output"
@@ -4404,20 +4390,6 @@
    ]
   },
   {
-   "card": "Boiling Rock Rioter",
-   "sid": "f3f340326fa4",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "an untapped Ally",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Bold Biochemist",
    "sid": "cf0f85a01f5e",
    "sentence_index": 0,
@@ -4873,20 +4845,6 @@
    ]
   },
   {
-   "card": "Braided Net // Braided Quipu",
-   "sid": "cea5ff45bdf9",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "net counter from this artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Bramble Familiar // Fetch Quest",
    "sid": "b193ea714eff",
    "sentence_index": 1,
@@ -4904,20 +4862,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Brambleback Brute",
-   "sid": "60e4abea9c0f",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "counter from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -5658,20 +5602,6 @@
      "kind": "stringy",
      "path": "[].options[].output[].effect.card.label.card_type[].value",
      "detail": "nonbasic land creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Burdened Stoneback",
-   "sid": "cf6f0795ebac",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "counter from this creature",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -6769,7 +6699,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[][]",
+     "path": "[]",
      "detail": "there are seven or more cards in your graveyard",
      "severity": "medium",
      "source": "artifact:output"
@@ -9205,7 +9135,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[][]",
+     "path": "[]",
      "detail": "you attacked this turn",
      "severity": "medium",
      "source": "artifact:output"
@@ -9966,20 +9896,6 @@
    "sid": "f8da90f101e3",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target instant",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "sorcery card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -11306,20 +11222,6 @@
    ]
   },
   {
-   "card": "District Mascot",
-   "sid": "b5ce87a31ee5",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "two +1/+1 counter s from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Diversion Specialist",
    "sid": "d68c50443d55",
    "sentence_index": 1,
@@ -11685,20 +11587,6 @@
   },
   {
    "card": "Dragonbroods' Relic",
-   "sid": "212a31b97669",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "an untapped creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Dragonbroods' Relic",
    "sid": "d98ce93ca44c",
    "sentence_index": 2,
    "claims": [
@@ -11839,20 +11727,6 @@
      "kind": "stringy",
      "path": "[].keywords[]",
      "detail": "Job select",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Drake Hatcher",
-   "sid": "178b36d33a69",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "three incubation counter s from this creature",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -15681,20 +15555,6 @@
    ]
   },
   {
-   "card": "Flitterwing Nuisance",
-   "sid": "080174ec4043",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "counter from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Flock Impostor",
    "sid": "69401e65c789",
    "sentence_index": 3,
@@ -16906,20 +16766,6 @@
    ]
   },
   {
-   "card": "Gene Pollinator",
-   "sid": "92823cf009ef",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "an untapped permanent",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Generous Plunderer",
    "sid": "4ebabb7051af",
    "sentence_index": 3,
@@ -17397,20 +17243,6 @@
   },
   {
    "card": "Glen Elendra Guardian",
-   "sid": "ae6cd9a313dc",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "counter from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Glen Elendra Guardian",
    "sid": "f3ac80c53bcf",
    "sentence_index": 4,
    "claims": [
@@ -17564,20 +17396,6 @@
    ]
   },
   {
-   "card": "Gnarlbark Elm",
-   "sid": "9bf02d742f95",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "two counter s from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Gnarlid Colony",
    "sid": "40d86c27c017",
    "sentence_index": 1,
@@ -17675,7 +17493,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[][]",
+     "path": "[]",
      "detail": "you attacked this turn",
      "severity": "medium",
      "source": "artifact:output"
@@ -18161,20 +17979,6 @@
      "path": "[].condition.of.counter",
      "detail": "dread counters",
      "severity": "high",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Grasping Shadows // Shadows' Lair",
-   "sid": "b4b2f8fa776b",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "dread counter from this land",
-     "severity": "medium",
      "source": "artifact:output"
     }
    ]
@@ -18827,20 +18631,6 @@
      "detail": "support",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Gwen Stacy // Ghost-Spider",
-   "sid": "4537712886b1",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "two counter s from ~",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -19975,20 +19765,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Hovel Hurler",
-   "sid": "0a3ee88173ec",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "counter from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -23652,13 +23428,6 @@
    "sentence_index": 2,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "ten untapped Elve",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "elves",
@@ -24518,34 +24287,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Loch Mare",
-   "sid": "d17006aee0e2",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "two counter s from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Loch Mare",
-   "sid": "d294e4937272",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "counter from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -27336,20 +27077,6 @@
    ]
   },
   {
-   "card": "Moonlit Lamenter",
-   "sid": "a0a05bb211f4",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "counter from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Morbius the Living Vampire",
    "sid": "e1cbe970576a",
    "sentence_index": 1,
@@ -27482,7 +27209,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[][]",
+     "path": "[]",
      "detail": "there are seven or more cards in your graveyard",
      "severity": "medium",
      "source": "artifact:output"
@@ -27815,20 +27542,6 @@
      "detail": "speed",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Myojin of Night's Reach",
-   "sid": "863f714c3c16",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "divinity counter from ~",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -28433,20 +28146,6 @@
    "sentence_index": 3,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target instant",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "sorcery card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "spell",
@@ -28838,13 +28537,6 @@
    "sid": "af24448bacf6",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -30161,13 +29853,6 @@
    "sid": "1c9fe87dc030",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "film counter from this artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "stringy",
      "path": "[].effect.target.card_type[].value",
@@ -32003,20 +31688,6 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target instant",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "sorcery card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "spell",
@@ -32376,20 +32047,6 @@
    ]
   },
   {
-   "card": "Ramos, Dragon Engine",
-   "sid": "ad59a89e6752",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "five +1/+1 counter s from ~",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Rampaging Soulrager",
    "sid": "3e73a43ce23b",
    "sentence_index": 0,
@@ -32656,20 +32313,6 @@
    ]
   },
   {
-   "card": "Ray Fillet, Man Ray",
-   "sid": "94f483023649",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "+1/+1 counter from a creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Ray of Ruin",
    "sid": "aba11dfac769",
    "sentence_index": 0,
@@ -32792,20 +32435,6 @@
      "detail": "colors",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Reaping Willow",
-   "sid": "9edec8f6b8d8",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "two counter s from this creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -34015,20 +33644,6 @@
      "kind": "stringy",
      "path": "[].xdef.xdef.fragment[]",
      "detail": "times you chose a mode for that spell",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Rimefire Torque",
-   "sid": "3a65b2e4504d",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "three charge counter s from this artifact",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -35876,20 +35491,6 @@
    ]
   },
   {
-   "card": "Scene of the Crime",
-   "sid": "212a31b97669",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "an untapped creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Scheming Silvertongue // Sign in Blood",
    "sid": "41c877d766c0",
    "sentence_index": 1,
@@ -35978,13 +35579,6 @@
    "sid": "af24448bacf6",
    "sentence_index": 1,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "invariant",
      "path": null,
@@ -36352,20 +35946,6 @@
    ]
   },
   {
-   "card": "Secluded Starforge",
-   "sid": "a293287bbea2",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "X untapped artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Secret Invasion",
    "sid": "e5c79e4883c9",
    "sentence_index": 3,
@@ -36524,20 +36104,6 @@
    "sid": "f8da90f101e3",
    "sentence_index": 2,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target instant",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "sorcery card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -39066,13 +38632,6 @@
    "sentence_index": 1,
    "claims": [
     {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "another untapped Mount",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
      "kind": "content_loss",
      "path": null,
      "detail": "exhaust",
@@ -39272,20 +38831,6 @@
   },
   {
    "card": "Spring-Loaded Sawblades // Bladewheel Chariot",
-   "sid": "4db2d3e1284e",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "other untapped artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Spring-Loaded Sawblades // Bladewheel Chariot",
    "sid": "ab0b6aad8f04",
    "sentence_index": 1,
    "claims": [
@@ -39323,20 +38868,6 @@
      "detail": "bare_condition: condition=you do",
      "severity": "high",
      "source": "invariant_flags.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Springleaf Drum",
-   "sid": "212a31b97669",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "an untapped creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -39974,20 +39505,6 @@
      "detail": "enchantment",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Stocking the Pantry",
-   "sid": "b306c6481876",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "supply counter from this enchantment",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -40912,20 +40429,6 @@
      "detail": "creature",
      "severity": "medium",
      "source": "review/certain_defects_artifact.tsv"
-    }
-   ]
-  },
-  {
-   "card": "Sunstar Chaplain",
-   "sid": "5771e6b99885",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "+1/+1 counter from a creature",
-     "severity": "medium",
-     "source": "artifact:output"
     }
    ]
   },
@@ -42533,20 +42036,6 @@
    ]
   },
   {
-   "card": "The Astonishing Ant-Man",
-   "sid": "7dca4525c4c3",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "any number of +1/+1 counter s from ~",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "The Belligerent",
    "sid": "af6c6371f23f",
    "sentence_index": 1,
@@ -42670,20 +42159,6 @@
    "sid": "f8da90f101e3",
    "sentence_index": 3,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target instant",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "sorcery card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "content_loss",
      "path": null,
@@ -42959,7 +42434,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[].effect.token.kw[][]",
+     "path": "[].effect.token.kw[]",
      "detail": "firebending 4",
      "severity": "medium",
      "source": "artifact:output"
@@ -45382,20 +44857,6 @@
    ]
   },
   {
-   "card": "Tyvar, the Pummeler",
-   "sid": "59250e439603",
-   "sentence_index": 0,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "another untapped creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "U.S.Agent, John Walker",
    "sid": "fcc12a9f2184",
    "sentence_index": 0,
@@ -47215,7 +46676,7 @@
    "claims": [
     {
      "kind": "stringy",
-     "path": "[][]",
+     "path": "[]",
      "detail": "there are seven or more cards in your graveyard",
      "severity": "medium",
      "source": "artifact:output"
@@ -47385,20 +46846,6 @@
      "kind": "stringy",
      "path": "[].keywords.modifier",
      "detail": "for {'card_type': {'kind': 'type', 'value': 'artifacts'}}",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Voyager Glidecar",
-   "sid": "19d4d3c791fa",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "other untapped creature",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -47619,13 +47066,6 @@
    "sid": "6c2f7d3f0408",
    "sentence_index": 0,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type[].value",
-     "detail": "another untapped creature",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "stringy",
      "path": "[].effect.card.controller.ref",
@@ -48120,34 +47560,6 @@
      "kind": "stringy",
      "path": "[].effect.card.items[]",
      "detail": "target artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Weather Maker",
-   "sid": "6ba36ac68c1e",
-   "sentence_index": 2,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "two charge counter s from this artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
-   "card": "Weather Maker",
-   "sid": "9559370f5155",
-   "sentence_index": 3,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "three charge counter s from this artifact",
      "severity": "medium",
      "source": "artifact:output"
     }
@@ -48805,20 +48217,6 @@
    ]
   },
   {
-   "card": "Wishclaw Talisman",
-   "sid": "cc8b60641082",
-   "sentence_index": 1,
-   "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].cost[].target.card_type.value",
-     "detail": "wish counter from this artifact",
-     "severity": "medium",
-     "source": "artifact:output"
-    }
-   ]
-  },
-  {
    "card": "Wishing Well",
    "sid": "1edbdcd6de43",
    "sentence_index": 1,
@@ -48886,20 +48284,6 @@
    "sid": "f8da90f101e3",
    "sentence_index": 2,
    "claims": [
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "target instant",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
-    {
-     "kind": "stringy",
-     "path": "[].if.subject.items[]",
-     "detail": "sorcery card",
-     "severity": "medium",
-     "source": "artifact:output"
-    },
     {
      "kind": "content_loss",
      "path": null,
